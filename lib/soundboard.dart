@@ -1,5 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_midi_command/flutter_midi_command_messages.dart';
+import 'package:flutter_sound_board/services/utils.dart';
+import 'package:provider/provider.dart';
+
+class Settings extends ChangeNotifier {
+  bool noteNames = false;
+
+  void showNoteNames(bool setting) {
+    noteNames = setting;
+    notifyListeners();
+  }
+}
 
 class SoundBoard extends StatelessWidget {
   const SoundBoard({Key? key, this.lowestNote = 36, this.channel = 1})
@@ -10,32 +21,37 @@ class SoundBoard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        height: MediaQuery.of(context).orientation.name == "portrait"
-            ? MediaQuery.of(context).size.width
-            : double.infinity,
-        padding: MediaQuery.of(context).orientation.name == "landscape"
-            ? EdgeInsets.symmetric(horizontal: 100.0)
-            : EdgeInsets.all(0.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Expanded(
-                flex: 1,
-                child:
-                    ButtonRow(channel: channel, lowestNote: lowestNote + 12)),
-            Expanded(
-                flex: 1,
-                child: ButtonRow(channel: channel, lowestNote: lowestNote + 8)),
-            Expanded(
-                flex: 1,
-                child: ButtonRow(channel: channel, lowestNote: lowestNote + 4)),
-            Expanded(
-                flex: 1,
-                child: ButtonRow(channel: channel, lowestNote: lowestNote)),
-          ],
+    return ChangeNotifierProvider(
+      create: (context) => Settings(),
+      child: Center(
+        child: Container(
+          height: MediaQuery.of(context).orientation.name == "portrait"
+              ? MediaQuery.of(context).size.width
+              : double.infinity,
+          padding: MediaQuery.of(context).orientation.name == "landscape"
+              ? EdgeInsets.symmetric(horizontal: 100.0)
+              : EdgeInsets.all(0.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Expanded(
+                  flex: 1,
+                  child:
+                      ButtonRow(channel: channel, lowestNote: lowestNote + 12)),
+              Expanded(
+                  flex: 1,
+                  child:
+                      ButtonRow(channel: channel, lowestNote: lowestNote + 8)),
+              Expanded(
+                  flex: 1,
+                  child:
+                      ButtonRow(channel: channel, lowestNote: lowestNote + 4)),
+              Expanded(
+                  flex: 1,
+                  child: ButtonRow(channel: channel, lowestNote: lowestNote)),
+            ],
+          ),
         ),
       ),
     );
@@ -89,11 +105,6 @@ class SoundButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // var _winWidth = MediaQuery.of(context).size.width;
-    // var _winHeight = MediaQuery.of(context).size.height;
-    // var _orientation = MediaQuery.of(context).orientation.name;
-    // var _divider = 4.6;
-
     return Container(
       padding: const EdgeInsets.all(5.0),
       height: double.infinity,
@@ -119,8 +130,15 @@ class SoundButton extends StatelessWidget {
           splashColor: Colors.purple[900],
           child: Padding(
             padding: const EdgeInsets.all(2.5),
-            child: Text(paramNote.toString(),
-                style: TextStyle(color: Colors.grey[400])),
+            child: Consumer<Settings>(
+              builder: (context, settings, child) {
+                return Text(
+                    settings.noteNames
+                        ? getNoteName(paramNote)
+                        : paramNote.toString(),
+                    style: TextStyle(color: Colors.grey[400]));
+              },
+            ),
           ),
         ),
       ),

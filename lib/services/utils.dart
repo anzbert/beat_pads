@@ -50,8 +50,8 @@ String getNoteName(int value, {NoteSigns sign = NoteSigns.sharps}) {
   int note = value % 12;
 
   if (sign == NoteSigns.sharps) {
-    return "${midiNotesSharps[note]} ${octave - 1}";
+    return "${midiNotesSharps[note]}${octave - 1}";
   } else {
-    return "${midiNotesFlats[note]} ${octave - 1}";
+    return "${midiNotesFlats[note]}${octave - 1}";
   }
 }
