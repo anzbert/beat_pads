@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 
-/// Prints only when in  Debug Mode
+/// Prints only in  Debug Mode
 void log(String input) {
   if (kDebugMode) {
     print(input);
@@ -24,18 +24,12 @@ Map<int, String> midiNotesSharps = {
 };
 
 Map<int, String> midiNotesFlats = {
-  0: "C",
+  ...midiNotesSharps,
   1: "Db",
-  2: "D",
   3: "Eb",
-  4: "E",
-  5: "F",
   6: "Gb",
-  7: "G",
   8: "Ab",
-  9: "A",
   10: "Bb",
-  11: "B",
 };
 
 enum NoteSigns { sharps, flats }
@@ -43,7 +37,7 @@ enum NoteSigns { sharps, flats }
 /// Get Note Name String from Midi Value (0 - 127) as NoteSigns.sharps (default) or NoteSigns.flats
 String getNoteName(int value, {NoteSigns sign = NoteSigns.sharps}) {
   if (value < 0 || value > 127) {
-    return "Val_Err";
+    return "Out of range";
   }
 
   int octave = value ~/ 12;

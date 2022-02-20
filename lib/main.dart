@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_midi_command/flutter_midi_command.dart';
 
+import 'package:provider/provider.dart';
+
 import './soundboard.dart';
 import './midilist.dart';
 import './services/utils.dart';
-
-// void main() {
-//   runApp(App());
-// }
+import './settings.dart';
 
 Future<void> main() async {
   // finish all binding initializations:
@@ -35,14 +34,14 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  final MidiCommand _midi = MidiCommand();
+  final MidiCommand _midiCommand = MidiCommand();
 
   MidiDevice? currentDevice;
 
   void setDevice(MidiDevice device) {
     log("...connecting to : ${device.name}");
 
-    _midi.connectToDevice(device).then((_) => setState(() {
+    _midiCommand.connectToDevice(device).then((_) => setState(() {
           currentDevice = device;
         }));
   }
@@ -51,9 +50,10 @@ class _AppState extends State<App> {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData.dark(),
-      home: Scaffold(
-        body: currentDevice != null
-            ? MidiList(_midi, setDevice)
+      home: ChangeNotifierProvider(
+        create: (context) => Settings(),
+        child: currentDevice == null
+            ? MidiList(_midiCommand, setDevice)
             : SoundBoard(lowestNote: 36),
       ),
     );
@@ -61,7 +61,7 @@ class _AppState extends State<App> {
 
   @override
   void dispose() {
-    _midi.dispose();
+    _midiCommand.dispose();
     super.dispose();
   }
 }

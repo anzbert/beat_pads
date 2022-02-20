@@ -3,14 +3,7 @@ import 'package:flutter_midi_command/flutter_midi_command_messages.dart';
 import 'package:flutter_sound_board/services/utils.dart';
 import 'package:provider/provider.dart';
 
-class Settings extends ChangeNotifier {
-  bool noteNames = false;
-
-  void showNoteNames(bool setting) {
-    noteNames = setting;
-    notifyListeners();
-  }
-}
+import './settings.dart';
 
 class SoundBoard extends StatelessWidget {
   const SoundBoard({Key? key, this.lowestNote = 36, this.channel = 1})
@@ -21,9 +14,8 @@ class SoundBoard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => Settings(),
-      child: Center(
+    return Scaffold(
+      body: Center(
         child: Container(
           height: MediaQuery.of(context).orientation.name == "portrait"
               ? MediaQuery.of(context).size.width
