@@ -27,27 +27,30 @@ class SoundBoard extends StatelessWidget {
           padding: !inPortrait
               ? EdgeInsets.symmetric(horizontal: 100.0)
               : EdgeInsets.all(0.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Expanded(
-                  flex: 1,
-                  child:
-                      ButtonRow(channel: channel, lowestNote: lowestNote + 12)),
-              Expanded(
-                  flex: 1,
-                  child:
-                      ButtonRow(channel: channel, lowestNote: lowestNote + 8)),
-              Expanded(
-                  flex: 1,
-                  child:
-                      ButtonRow(channel: channel, lowestNote: lowestNote + 4)),
-              Expanded(
-                  flex: 1,
-                  child: ButtonRow(channel: channel, lowestNote: lowestNote)),
-            ],
-          ),
+          child: Consumer<Settings>(builder: (context, settings, child) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Expanded(
+                    flex: 1,
+                    child: ButtonRow(
+                        channel: channel, lowestNote: settings.baseNote + 12)),
+                Expanded(
+                    flex: 1,
+                    child: ButtonRow(
+                        channel: channel, lowestNote: settings.baseNote + 8)),
+                Expanded(
+                    flex: 1,
+                    child: ButtonRow(
+                        channel: channel, lowestNote: settings.baseNote + 4)),
+                Expanded(
+                    flex: 1,
+                    child: ButtonRow(
+                        channel: channel, lowestNote: settings.baseNote)),
+              ],
+            );
+          }),
         ),
       ),
     );
