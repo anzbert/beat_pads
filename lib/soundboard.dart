@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_midi_command/flutter_midi_command_messages.dart';
+import 'package:flutter_sound_board/main_menu.dart';
 import 'package:flutter_sound_board/services/utils.dart';
 import 'package:provider/provider.dart';
 
@@ -14,13 +15,16 @@ class SoundBoard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool inPortrait = MediaQuery.of(context).orientation.name == "portrait";
+
     return Scaffold(
+      appBar: inPortrait ? AppBar(title: Text("Beat Pads")) : null,
+      drawer: inPortrait ? MainMenu() : null,
       body: Center(
         child: Container(
-          height: MediaQuery.of(context).orientation.name == "portrait"
-              ? MediaQuery.of(context).size.width
-              : double.infinity,
-          padding: MediaQuery.of(context).orientation.name == "landscape"
+          height:
+              inPortrait ? MediaQuery.of(context).size.width : double.infinity,
+          padding: !inPortrait
               ? EdgeInsets.symmetric(horizontal: 100.0)
               : EdgeInsets.all(0.0),
           child: Column(

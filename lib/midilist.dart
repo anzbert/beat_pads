@@ -19,6 +19,7 @@ class MidiList extends StatelessWidget {
         child: MainMenu(),
       ),
       body: FutureBuilder(
+        future: _midi.devices,
         builder:
             ((BuildContext context, AsyncSnapshot<List<MidiDevice>?> snapshot) {
           if (snapshot.hasData && snapshot.data!.isNotEmpty) {
@@ -42,7 +43,6 @@ class MidiList extends StatelessWidget {
             return Center(child: Text("No Midi Devices Detected"));
           }
         }),
-        future: _midi.devices,
       ),
     );
   }
