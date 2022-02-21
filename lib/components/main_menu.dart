@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_sound_board/screens/config_screen.dart';
-import 'package:flutter_sound_board/screens/soundboard_screen.dart';
+
 import 'package:provider/provider.dart';
 import '../state/settings.dart';
 import '../services/utils.dart';
