@@ -1,6 +1,6 @@
 # Beat Pads
 
-A USB Midi Controller app for Android and iPhone. For now the app just has classic 4x4 Drum Machine-style Beat Pads, for producing on the go.
+A USB Midi Controller app for Android and iPhone made with Flutter. For now the app just has classic 4x4 Drum Machine-style Beat Pads, for producing on the go.
 
 ## Usage
 
