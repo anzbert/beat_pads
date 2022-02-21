@@ -1,4 +1,4 @@
-# flutter_sound_board
+# beat_pads
 
 A new Flutter project.
 

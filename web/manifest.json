@@ -1,6 +1,6 @@
 {
-    "name": "flutter_sound_board",
-    "short_name": "flutter_sound_board",
+    "name": "beat_pads",
+    "short_name": "beat_pads",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
