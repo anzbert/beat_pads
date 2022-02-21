@@ -119,14 +119,18 @@ class SoundButton extends StatelessWidget {
         color: Colors.green[800],
         child: InkWell(
           borderRadius: BorderRadius.all(Radius.circular(5.0)),
-          onTapDown: (details) {
+          onTapDown: (_details) {
             NoteOnMessage(
                     channel: paramChannel,
                     note: paramNote,
                     velocity: paramVelocity)
                 .send();
           },
-          onTapUp: (details) {
+          onTapUp: (_details) {
+            NoteOffMessage(channel: paramChannel, note: paramNote, velocity: 0)
+                .send();
+          },
+          onTapCancel: () {
             NoteOffMessage(channel: paramChannel, note: paramNote, velocity: 0)
                 .send();
           },
