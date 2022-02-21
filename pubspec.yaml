@@ -1,5 +1,5 @@
 name: beat_pads
-description: A new Flutter project.
+description: USB Midi Beat Pad Controller for music production.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -32,12 +32,12 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.2
+  # cupertino_icons: ^1.0.2
 
-  provider: any
-  flutter_midi_command: any
+  provider: ^6.0.2
+  flutter_midi_command: ^0.4.3
   rive: ^0.8.1
-  animated_text_kit: any
+  animated_text_kit: ^4.2.1
 
 dev_dependencies:
   flutter_test:
@@ -81,6 +81,7 @@ flutter:
     - family: Righteous
       fonts:
         - asset: assets/fonts/Righteous-Regular.ttf
+
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro
