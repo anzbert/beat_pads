@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_sound_board/screens/config_screen.dart';
+import 'package:flutter_sound_board/screens/soundboard_screen.dart';
 import 'package:provider/provider.dart';
 import '../state/settings.dart';
 import '../services/utils.dart';
@@ -51,14 +52,28 @@ class MainMenu extends StatelessWidget {
             ),
             Divider(),
             Center(
-              child: ElevatedButton(
-                child: Text("Choose Midi Device"),
-                onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => ConfigScreen()),
-                  );
-                },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                    child: Text("Choose Midi Device"),
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => ConfigScreen()),
+                      );
+                    },
+                  ),
+                  ElevatedButton(
+                    child: Text("Beat Pads"),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => SoundBoard()),
+                      );
+                    },
+                  ),
+                ],
               ),
             ),
             Divider(),

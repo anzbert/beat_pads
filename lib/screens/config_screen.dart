@@ -23,6 +23,8 @@ class _ConfigScreenState extends State<ConfigScreen> {
   void setDevice(MidiDevice device) {
     log("...connecting to : ${device.name}");
 
+    if (currentDevice != null) _midiCommand.disconnectDevice(currentDevice!);
+
     _midiCommand.connectToDevice(device).then((_) => setState(() {
           currentDevice = device;
         }));
@@ -30,14 +32,10 @@ class _ConfigScreenState extends State<ConfigScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => Settings(),
-      child: currentDevice == null
-          ? MidiList(_midiCommand, setDevice)
-          : SoundBoard(),
-    );
+    return MidiList(_midiCommand, setDevice);
   }
 
+  // dispose only seems to dispose of bluetooth ressources?!
   @override
   void dispose() {
     _midiCommand.dispose();
