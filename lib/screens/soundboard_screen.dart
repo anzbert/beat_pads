@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_midi_command/flutter_midi_command_messages.dart';
-import 'package:flutter_sound_board/main_menu.dart';
+import 'package:flutter_sound_board/components/main_menu.dart';
 import 'package:flutter_sound_board/services/utils.dart';
 import 'package:provider/provider.dart';
 
-import './settings.dart';
+import '../state/settings.dart';
 
 class SoundBoard extends StatelessWidget {
   const SoundBoard({Key? key, this.lowestNote = 36, this.channel = 1})
