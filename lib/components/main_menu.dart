@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_sound_board/screens/config_screen.dart';
+import 'package:beat_pads/screens/config_screen.dart';
 
 import 'package:provider/provider.dart';
 import '../state/settings.dart';
@@ -72,6 +72,7 @@ class MainMenu extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Text("BeatPads v0.1\n      February 2022"),
                     Text("Made by Anzio\n      [www.anzgraph.com]\n"),
                     Text("Logo by 'catalyststuff'\n      [freepik.com]\n"),
                     Text("Logo Animated with Rive\n      [rive.app]"),
