@@ -52,38 +52,31 @@ class MainMenu extends StatelessWidget {
             ),
             Divider(),
             Center(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  ElevatedButton(
-                    child: Text("Choose Midi Device"),
-                    onPressed: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => ConfigScreen()),
-                      );
-                    },
-                  ),
-                  ElevatedButton(
-                    child: Text("Beat Pads"),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => SoundBoard()),
-                      );
-                    },
-                  ),
-                ],
+              child: ElevatedButton(
+                child: Text("Select Midi Devices"),
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => ConfigScreen()),
+                  );
+                },
               ),
             ),
             Divider(),
             Card(
-              margin: EdgeInsets.all(10),
+              margin: EdgeInsets.fromLTRB(8, 30, 8, 8),
               elevation: 5,
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                    "Resources:\n\nLogo by 'catalyststuff' [freepik.com]\n      Animated with Rive"),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Made by Anzio\n      [www.anzgraph.com]\n"),
+                    Text("Logo by 'catalyststuff'\n      [freepik.com]\n"),
+                    Text("Logo Animated with Rive\n      [rive.app]"),
+                  ],
+                ),
               ),
             )
           ],

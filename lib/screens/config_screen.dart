@@ -3,20 +3,27 @@ import 'package:flutter_midi_command/flutter_midi_command.dart';
 
 import '../services/utils.dart';
 import '../components/main_menu.dart';
+import 'soundboard_screen.dart';
 
 class _ConfigScreenState extends State<ConfigScreen> {
   final MidiCommand _midiCommand = MidiCommand();
 
-  MidiDevice? currentDevice;
+  bool connecting = false;
 
   void setDevice(MidiDevice device) {
     log("...connecting to : ${device.name}");
 
-    if (currentDevice != null) _midiCommand.disconnectDevice(currentDevice!);
-
-    _midiCommand.connectToDevice(device).then((_) => setState(() {
-          currentDevice = device;
-        }));
+    if (device.connected) {
+      _midiCommand.disconnectDevice(device);
+      setState(() {});
+    } else {
+      setState(() {
+        connecting = true;
+      });
+      _midiCommand.connectToDevice(device).then((_) => setState(() {
+            connecting = false;
+          }));
+    }
   }
 
   @override
@@ -28,25 +35,60 @@ class _ConfigScreenState extends State<ConfigScreen> {
       drawer: Drawer(
         child: MainMenu(),
       ),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: FloatingActionButton.large(
+          backgroundColor: Colors.green,
+          child: Icon(
+            Icons.view_comfortable_rounded,
+            size: 50,
+          ),
+          onPressed: (() {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => SoundBoard()),
+            );
+          }),
+        ),
+      ),
       body: FutureBuilder(
         future: _midiCommand.devices,
         builder:
             ((BuildContext context, AsyncSnapshot<List<MidiDevice>?> snapshot) {
           if (snapshot.hasData && snapshot.data!.isNotEmpty) {
             List<MidiDevice>? _devices = snapshot.data;
-            return ListView(
-              children: _devices!.map((device) {
-                return TextButton(
-                  onPressed: () {
-                    setDevice(device);
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    child: Text(device.name),
-                  ),
-                );
-              }).toList(),
-            );
+            return connecting
+                ? Center(
+                    child: SizedBox(
+                    width: 100,
+                    height: 100,
+                    child: CircularProgressIndicator(
+                      color: Colors.grey[400],
+                    ),
+                  ))
+                : ListView(
+                    children: _devices!.map((device) {
+                      return Container(
+                        color: device.connected
+                            ? Colors.green[800]
+                            : Colors.transparent,
+                        child: TextButton(
+                          onPressed: () {
+                            setDevice(device);
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                            child: Text(
+                              device.name,
+                              style: TextStyle(
+                                color: Colors.grey[200],
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  );
           } else if (snapshot.hasError) {
             return Text(snapshot.error.toString());
           } else {
