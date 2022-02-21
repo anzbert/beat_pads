@@ -18,7 +18,11 @@ class SoundBoard extends StatelessWidget {
     bool inPortrait = MediaQuery.of(context).orientation.name == "portrait";
 
     return Scaffold(
-      appBar: inPortrait ? AppBar(title: Text("Beat Pads")) : null,
+      appBar: inPortrait
+          ? AppBar(
+              title: Text("Beat Pads"),
+            )
+          : null,
       drawer: inPortrait ? MainMenu() : null,
       body: Center(
         child: Container(
