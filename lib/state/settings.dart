@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 
 class Settings extends ChangeNotifier {
-  bool noteNames = false;
   int _base = 36;
 
-  reset() {
+  bool noteNames = false;
+
+  resetAll() {
     _base = 36;
     noteNames = false;
+    notifyListeners();
+  }
+
+  resetBaseNote() {
+    _base = 36;
     notifyListeners();
   }
 

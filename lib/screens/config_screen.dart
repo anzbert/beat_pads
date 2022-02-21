@@ -4,18 +4,18 @@ import '../services/utils.dart';
 
 import 'package:provider/provider.dart';
 import 'soundboard_screen.dart';
-import '../components/midilist.dart';
+import '../components/midi_dev_list.dart';
 
 import '../state/settings.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+class ConfigScreen extends StatefulWidget {
+  const ConfigScreen({Key? key}) : super(key: key);
 
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  _ConfigScreenState createState() => _ConfigScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _ConfigScreenState extends State<ConfigScreen> {
   final MidiCommand _midiCommand = MidiCommand();
 
   MidiDevice? currentDevice;
