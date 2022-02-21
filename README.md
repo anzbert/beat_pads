@@ -1,16 +1,12 @@
-# beat_pads
+# Beat Pads
 
-A new Flutter project.
+A USB Midi Controller app for Android and iPhone. For now the app just has classic 4x4 Drum Machine-style Beat Pads, for producing on the go.
 
-## Getting Started
+## Usage
 
-This project is a starting point for a Flutter application.
+- Connect USB to your PC, Mac or other device.
+- Where applicable, set device USB connection to Midi mode.
+- Start the App and select the built-in midi device.
+- Switch to the pads and start playing.
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Works best in Landscape mode.
