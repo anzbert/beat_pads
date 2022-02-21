@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import './settings.dart';
+import 'settings.dart';
 import "./services/utils.dart";
 
 class MainMenu extends StatelessWidget {
@@ -11,7 +11,6 @@ class MainMenu extends StatelessWidget {
     return Drawer(
       child: Consumer<Settings>(builder: (context, settings, child) {
         return ListView(
-          // padding: EdgeInsets.fromLTRB(10, 100, 10, 100),
           children: <Widget>[
             ListTile(
               title: Text("Show Note Names"),
@@ -44,12 +43,13 @@ class MainMenu extends StatelessWidget {
             Divider(),
             Center(
               child: ElevatedButton(
-                child: Text("Reset To Default"),
+                child: Text("Reset To Defaults"),
                 onPressed: () {
                   settings.reset();
                 },
               ),
             ),
+            Divider(),
             Card(
               child: Text("3rd Party sources from:\n Blabla.com"),
             )
