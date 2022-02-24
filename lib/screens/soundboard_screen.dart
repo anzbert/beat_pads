@@ -7,11 +7,9 @@ import 'package:provider/provider.dart';
 import '../state/settings.dart';
 
 class SoundBoard extends StatelessWidget {
-  const SoundBoard({Key? key, this.lowestNote = 36, this.channel = 1})
-      : super(key: key);
+  const SoundBoard({Key? key}) : super(key: key);
 
-  final int lowestNote;
-  final int channel;
+  // final int lowestNote;
 
   @override
   Widget build(BuildContext context) {
@@ -38,20 +36,15 @@ class SoundBoard extends StatelessWidget {
               children: <Widget>[
                 Expanded(
                     flex: 1,
-                    child: ButtonRow(
-                        channel: channel, lowestNote: settings.baseNote + 12)),
+                    child: ButtonRow(lowestNote: settings.baseNote + 12)),
                 Expanded(
                     flex: 1,
-                    child: ButtonRow(
-                        channel: channel, lowestNote: settings.baseNote + 8)),
+                    child: ButtonRow(lowestNote: settings.baseNote + 8)),
                 Expanded(
                     flex: 1,
-                    child: ButtonRow(
-                        channel: channel, lowestNote: settings.baseNote + 4)),
+                    child: ButtonRow(lowestNote: settings.baseNote + 4)),
                 Expanded(
-                    flex: 1,
-                    child: ButtonRow(
-                        channel: channel, lowestNote: settings.baseNote)),
+                    flex: 1, child: ButtonRow(lowestNote: settings.baseNote)),
               ],
             );
           }),
@@ -62,11 +55,9 @@ class SoundBoard extends StatelessWidget {
 }
 
 class ButtonRow extends StatelessWidget {
-  const ButtonRow({Key? key, this.lowestNote = 0, this.channel = 1})
-      : super(key: key);
+  const ButtonRow({Key? key, this.lowestNote = 0}) : super(key: key);
 
   final int lowestNote;
-  final int channel;
 
   @override
   Widget build(BuildContext context) {
@@ -74,37 +65,22 @@ class ButtonRow extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Expanded(
-            flex: 1,
-            child: SoundButton(paramChannel: channel, paramNote: lowestNote)),
-        Expanded(
-            flex: 1,
-            child:
-                SoundButton(paramChannel: channel, paramNote: lowestNote + 1)),
-        Expanded(
-            flex: 1,
-            child:
-                SoundButton(paramChannel: channel, paramNote: lowestNote + 2)),
-        Expanded(
-            flex: 1,
-            child:
-                SoundButton(paramChannel: channel, paramNote: lowestNote + 3)),
+        Expanded(flex: 1, child: SoundButton(paramNote: lowestNote)),
+        Expanded(flex: 1, child: SoundButton(paramNote: lowestNote + 1)),
+        Expanded(flex: 1, child: SoundButton(paramNote: lowestNote + 2)),
+        Expanded(flex: 1, child: SoundButton(paramNote: lowestNote + 3)),
       ],
     );
   }
 }
 
 class SoundButton extends StatelessWidget {
-  const SoundButton(
-      {Key? key,
-      this.paramNote = 36,
-      this.paramVelocity = 127,
-      this.paramChannel = 1})
-      : super(key: key);
+  const SoundButton({
+    Key? key,
+    this.paramNote = 36,
+  }) : super(key: key);
 
   final int paramNote;
-  final int paramVelocity;
-  final int paramChannel;
 
   @override
   Widget build(BuildContext context) {
@@ -117,37 +93,37 @@ class SoundButton extends StatelessWidget {
         elevation: 5.0,
         shadowColor: Colors.black,
         color: Colors.green[800],
-        child: InkWell(
-          borderRadius: BorderRadius.all(Radius.circular(5.0)),
-          onTapDown: (_details) {
-            NoteOnMessage(
-                    channel: paramChannel,
-                    note: paramNote,
-                    velocity: paramVelocity)
-                .send();
-          },
-          onTapUp: (_details) {
-            NoteOffMessage(channel: paramChannel, note: paramNote, velocity: 0)
-                .send();
-          },
-          onTapCancel: () {
-            NoteOffMessage(channel: paramChannel, note: paramNote, velocity: 0)
-                .send();
-          },
-          splashColor: Colors.purple[900],
-          child: Padding(
-            padding: const EdgeInsets.all(2.5),
-            child: Consumer<Settings>(
-              builder: (context, settings, child) {
-                return Text(
-                    settings.noteNames
-                        ? getNoteName(paramNote)
-                        : paramNote.toString(),
-                    style: TextStyle(color: Colors.grey[400]));
-              },
+        child: Consumer<Settings>(builder: (context, settings, child) {
+          return InkWell(
+            borderRadius: BorderRadius.all(Radius.circular(5.0)),
+            onTapDown: (_details) {
+              NoteOnMessage(
+                      channel: settings.channel,
+                      note: paramNote,
+                      velocity: settings.velocity)
+                  .send();
+            },
+            onTapUp: (_details) {
+              NoteOffMessage(
+                      channel: settings.channel, note: paramNote, velocity: 0)
+                  .send();
+            },
+            onTapCancel: () {
+              NoteOffMessage(
+                      channel: settings.channel, note: paramNote, velocity: 0)
+                  .send();
+            },
+            splashColor: Colors.purple[900],
+            child: Padding(
+              padding: const EdgeInsets.all(2.5),
+              child: Text(
+                  settings.noteNames
+                      ? getNoteName(paramNote)
+                      : paramNote.toString(),
+                  style: TextStyle(color: Colors.grey[400])),
             ),
-          ),
-        ),
+          );
+        }),
       ),
     );
   }

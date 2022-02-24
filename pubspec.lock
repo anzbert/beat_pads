@@ -189,10 +189,12 @@ packages:
   rive:
     dependency: "direct main"
     description:
-      name: rive
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.8.1"
+      path: "."
+      ref: master
+      resolved-ref: bfd06baf1b4434dea7d80d2d8bfa575cc13fdc08
+      url: "https://github.com/rive-app/rive-flutter.git"
+    source: git
+    version: "0.8.3"
   sky_engine:
     dependency: transitive
     description: flutter

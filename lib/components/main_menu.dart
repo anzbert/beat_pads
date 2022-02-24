@@ -73,8 +73,8 @@ class MainMenu extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text("BeatPads v0.1\n      February 2022\n"),
-                    Text("Made by anzbert\n      [www.anzgraph.com]\n"),
-                    Text("Logo by 'catalyststuff'\n      [freepik.com]\n"),
+                    Text("Made by anzbert\n      [anzgraph.com]\n"),
+                    Text("Dog Icon by 'catalyststuff'\n      [freepik.com]\n"),
                     Text("Logo Animated with Rive\n      [rive.app]"),
                   ],
                 ),
