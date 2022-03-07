@@ -24,7 +24,7 @@ class App extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => Settings()),
-        ChangeNotifierProvider(create: (context) => NoteReceiver()),
+        ChangeNotifierProvider(create: (context) => MidiReceiver()),
       ],
       child: MaterialApp(
         theme: appTheme,

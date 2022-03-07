@@ -1,3 +1,4 @@
+import 'package:beat_pads/services/receiver.dart';
 import 'package:flutter/material.dart';
 import 'package:beat_pads/screens/config_screen.dart';
 
@@ -49,6 +50,96 @@ class MainMenu extends StatelessWidget {
                 ),
               ],
             ),
+            Divider(),
+            Consumer<MidiReceiver>(
+              builder: (context, receiver, child) {
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    ListTile(
+                      title: Text("Channel"),
+                      trailing: Text("${receiver.channel + 1}"),
+                    ),
+                    Slider(
+                      min: 0,
+                      max: 15,
+                      value: receiver.channel.toDouble(),
+                      onChanged: (value) {
+                        receiver.channel = value.toInt();
+                      },
+                    ),
+                  ],
+                );
+              },
+            ),
+            Divider(),
+            ListTile(
+              title: Text("Randomised Velocity"),
+              trailing: Switch(
+                  value: settings.randomVelocity,
+                  onChanged: (value) {
+                    settings.randomizeVelocity(value);
+                  }),
+            ),
+            if (!settings.randomVelocity)
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ListTile(
+                    title: Row(
+                      children: [
+                        Text("Velocity"),
+                        TextButton(
+                          onPressed: () => settings.resetVelocity(),
+                          child: Text("Reset"),
+                        )
+                      ],
+                    ),
+                    trailing: Text(settings.velocity.toString()),
+                  ),
+                  Slider(
+                    min: 0,
+                    max: 127,
+                    value: settings.velocity.toDouble(),
+                    onChanged: (value) {
+                      settings.velocity = value.toInt();
+                    },
+                  ),
+                ],
+              ),
+            if (settings.randomVelocity)
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ListTile(
+                    title: Row(
+                      children: [
+                        Text("Set Range"),
+                        TextButton(
+                          onPressed: () => settings.resetVelocity(),
+                          child: Text("Reset"),
+                        ),
+                      ],
+                    ),
+                    trailing: Text(
+                        "${settings.velocityMin} - ${settings.velocityMax}"),
+                  ),
+                  RangeSlider(
+                    values: RangeValues(settings.velocityMin.toDouble(),
+                        settings.velocityMax.toDouble()),
+                    max: 127,
+                    // divisions: 127,
+                    labels: RangeLabels(
+                      "Min",
+                      "Max",
+                    ),
+                    onChanged: (RangeValues values) {
+                      settings.velocityMin = values.start.toInt();
+                      settings.velocityMax = values.end.toInt();
+                    },
+                  ),
+                ],
+              ),
             Divider(),
             Center(
               child: ElevatedButton(

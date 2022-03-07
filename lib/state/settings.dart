@@ -2,30 +2,25 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 
 class Settings extends ChangeNotifier {
-// channel:
-  int _channel = 1;
+// velocity:
+  final _random = Random();
 
-  set channel(int chan) {
-    if (chan < 0 || chan > 15) return;
-    _channel = chan;
+  bool randomVelocity = false;
+  randomizeVelocity(bool setTo) {
+    randomVelocity = setTo;
     notifyListeners();
   }
 
-  int get channel {
-    return _channel;
-  }
-
-// velocity:
-  final _random = Random();
-  int _velocityMin = 127;
+  int _velocityMin = 100;
   int _velocityMax = 127;
+  int _velocity = 100;
 
   int get velocity {
-    if (_velocityMin == _velocityMax) return _velocityMin;
+    if (!randomVelocity) return _velocity;
 
-    int randomVelocity =
+    int randVelocity =
         _random.nextInt(_velocityMax - _velocityMin) + _velocityMin;
-    return randomVelocity > 127 ? 127 : randomVelocity;
+    return randVelocity > 127 ? 127 : randVelocity;
   }
 
   set velocityMin(int min) {
@@ -40,6 +35,12 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
+  set velocity(int vel) {
+    if (vel < 0 || vel > 127) return;
+    _velocity = vel;
+    notifyListeners();
+  }
+
   int get velocityMin {
     return _velocityMin;
   }
@@ -49,18 +50,12 @@ class Settings extends ChangeNotifier {
   }
 
   resetVelocity() {
-    _velocityMax = 127;
-    _velocityMin = 127;
-    notifyListeners();
-  }
-
-// default:
-  resetAll() {
-    _channel = 1;
-    _baseNote = 36;
-    noteNames = false;
-    _velocityMax = 127;
-    _velocityMin = 127;
+    if (!randomVelocity) {
+      _velocity = 100;
+    } else {
+      _velocityMax = 127;
+      _velocityMin = 100;
+    }
     notifyListeners();
   }
 

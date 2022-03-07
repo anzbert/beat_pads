@@ -59,9 +59,11 @@ class _SoundBoardState extends State<SoundBoard> {
 }
 
 class ButtonRow extends StatelessWidget {
-  const ButtonRow({Key? key, this.lowestNote = 0}) : super(key: key);
+  const ButtonRow({Key? key, this.lowestNote = 0, this.channel = 0})
+      : super(key: key);
 
   final int lowestNote;
+  final int channel;
 
   @override
   Widget build(BuildContext context) {
@@ -69,10 +71,18 @@ class ButtonRow extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Expanded(flex: 1, child: SoundButton(paramNote: lowestNote)),
-        Expanded(flex: 1, child: SoundButton(paramNote: lowestNote + 1)),
-        Expanded(flex: 1, child: SoundButton(paramNote: lowestNote + 2)),
-        Expanded(flex: 1, child: SoundButton(paramNote: lowestNote + 3)),
+        Expanded(
+            flex: 1,
+            child: SoundButton(channel: channel, paramNote: lowestNote)),
+        Expanded(
+            flex: 1,
+            child: SoundButton(channel: channel, paramNote: lowestNote + 1)),
+        Expanded(
+            flex: 1,
+            child: SoundButton(channel: channel, paramNote: lowestNote + 2)),
+        Expanded(
+            flex: 1,
+            child: SoundButton(channel: channel, paramNote: lowestNote + 3)),
       ],
     );
   }
@@ -82,9 +92,11 @@ class SoundButton extends StatelessWidget {
   const SoundButton({
     Key? key,
     this.paramNote = 36,
+    this.channel = 0,
   }) : super(key: key);
 
   final int paramNote;
+  final int channel;
 
   @override
   Widget build(BuildContext context) {
@@ -92,33 +104,33 @@ class SoundButton extends StatelessWidget {
       padding: const EdgeInsets.all(5.0),
       height: double.infinity,
       width: double.infinity,
-      child: Consumer<NoteReceiver>(
+      child: Consumer<MidiReceiver>(
         builder: (context, receiver, child) {
           return Material(
             borderRadius: BorderRadius.all(Radius.circular(5.0)),
             elevation: 5.0,
             shadowColor: Colors.black,
-            color: receiver.notesArray[paramNote],
+            color: receiver.notes[paramNote] != 0 ? Colors.amber : Colors.green,
             child: Consumer<Settings>(builder: (context, settings, child) {
               return InkWell(
                 borderRadius: BorderRadius.all(Radius.circular(5.0)),
                 onTapDown: (_details) {
                   NoteOnMessage(
-                          channel: settings.channel,
+                          channel: receiver.channel,
                           note: paramNote,
                           velocity: settings.velocity)
                       .send();
                 },
                 onTapUp: (_details) {
                   NoteOffMessage(
-                          channel: settings.channel,
+                          channel: receiver.channel,
                           note: paramNote,
                           velocity: 0)
                       .send();
                 },
                 onTapCancel: () {
                   NoteOffMessage(
-                          channel: settings.channel,
+                          channel: receiver.channel,
                           note: paramNote,
                           velocity: 0)
                       .send();
