@@ -1,3 +1,4 @@
+import 'package:beat_pads/services/receiver.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_midi_command/flutter_midi_command_messages.dart';
 import 'package:beat_pads/components/main_menu.dart';
@@ -6,11 +7,14 @@ import 'package:provider/provider.dart';
 
 import '../state/settings.dart';
 
-class SoundBoard extends StatelessWidget {
+class SoundBoard extends StatefulWidget {
   const SoundBoard({Key? key}) : super(key: key);
 
-  // final int lowestNote;
+  @override
+  State<SoundBoard> createState() => _SoundBoardState();
+}
 
+class _SoundBoardState extends State<SoundBoard> {
   @override
   Widget build(BuildContext context) {
     bool inPortrait = MediaQuery.of(context).orientation.name == "portrait";
@@ -88,42 +92,50 @@ class SoundButton extends StatelessWidget {
       padding: const EdgeInsets.all(5.0),
       height: double.infinity,
       width: double.infinity,
-      child: Material(
-        borderRadius: BorderRadius.all(Radius.circular(5.0)),
-        elevation: 5.0,
-        shadowColor: Colors.black,
-        color: Colors.green[800],
-        child: Consumer<Settings>(builder: (context, settings, child) {
-          return InkWell(
+      child: Consumer<NoteReceiver>(
+        builder: (context, receiver, child) {
+          return Material(
             borderRadius: BorderRadius.all(Radius.circular(5.0)),
-            onTapDown: (_details) {
-              NoteOnMessage(
-                      channel: settings.channel,
-                      note: paramNote,
-                      velocity: settings.velocity)
-                  .send();
-            },
-            onTapUp: (_details) {
-              NoteOffMessage(
-                      channel: settings.channel, note: paramNote, velocity: 0)
-                  .send();
-            },
-            onTapCancel: () {
-              NoteOffMessage(
-                      channel: settings.channel, note: paramNote, velocity: 0)
-                  .send();
-            },
-            splashColor: Colors.purple[900],
-            child: Padding(
-              padding: const EdgeInsets.all(2.5),
-              child: Text(
-                  settings.noteNames
-                      ? getNoteName(paramNote)
-                      : paramNote.toString(),
-                  style: TextStyle(color: Colors.grey[400])),
-            ),
+            elevation: 5.0,
+            shadowColor: Colors.black,
+            color: receiver.notesArray[paramNote],
+            child: Consumer<Settings>(builder: (context, settings, child) {
+              return InkWell(
+                borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                onTapDown: (_details) {
+                  NoteOnMessage(
+                          channel: settings.channel,
+                          note: paramNote,
+                          velocity: settings.velocity)
+                      .send();
+                },
+                onTapUp: (_details) {
+                  NoteOffMessage(
+                          channel: settings.channel,
+                          note: paramNote,
+                          velocity: 0)
+                      .send();
+                },
+                onTapCancel: () {
+                  NoteOffMessage(
+                          channel: settings.channel,
+                          note: paramNote,
+                          velocity: 0)
+                      .send();
+                },
+                splashColor: Colors.purple[900],
+                child: Padding(
+                  padding: const EdgeInsets.all(2.5),
+                  child: Text(
+                      settings.noteNames
+                          ? getNoteName(paramNote)
+                          : paramNote.toString(),
+                      style: TextStyle(color: Colors.grey[400])),
+                ),
+              );
+            }),
           );
-        }),
+        },
       ),
     );
   }

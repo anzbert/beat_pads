@@ -1,3 +1,4 @@
+import 'package:beat_pads/services/receiver.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -20,8 +21,11 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => Settings(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => Settings()),
+        ChangeNotifierProvider(create: (context) => NoteReceiver()),
+      ],
       child: MaterialApp(
         theme: appTheme,
         home: SplashScreen(),

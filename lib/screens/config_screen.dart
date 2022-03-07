@@ -8,6 +8,8 @@ import 'soundboard_screen.dart';
 class _ConfigScreenState extends State<ConfigScreen> {
   final MidiCommand _midiCommand = MidiCommand();
 
+  // Stream<MidiPacket>? midiReceiver;
+
   bool connecting = false;
 
   void setDevice(MidiDevice device) {
@@ -31,6 +33,13 @@ class _ConfigScreenState extends State<ConfigScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Select Midi Device"),
+        actions: [
+          IconButton(
+              onPressed: () {
+                setState(() {});
+              },
+              icon: Icon(Icons.refresh)),
+        ],
       ),
       drawer: Drawer(
         child: MainMenu(),
@@ -99,7 +108,7 @@ class _ConfigScreenState extends State<ConfigScreen> {
     );
   }
 
-  // MidiCommand.dispose() only seems to dispose of bluetooth ressources?!
+  // ? MidiCommand.dispose() only seems to dispose of bluetooth ressources?!
   @override
   void dispose() {
     _midiCommand.dispose();

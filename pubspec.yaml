@@ -35,13 +35,19 @@ dependencies:
   # cupertino_icons: ^1.0.2
 
   provider: ^6.0.2
-  flutter_midi_command: ^0.4.3
+  flutter_midi_command:
+    git:
+      url: https://github.com/anzbert/FlutterMidiCommand.git
+      ref: master
+    # path: /Users/anz/localDev/FlutterMidiCommand
+
   animated_text_kit: ^4.2.1
   # rive: ^0.8.1
   rive:
     git:
-      url: https://github.com/rive-app/rive-flutter.git
-      ref: master # branch name
+      url: https://github.com/anzbert/rive-flutter.git
+      ref: master
+    # path: /Users/anz/localDev/rive-flutter
 
 dev_dependencies:
   flutter_test:

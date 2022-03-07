@@ -38,7 +38,6 @@ class MainMenu extends StatelessWidget {
                   ),
                   trailing: Text(
                       "${getNoteName(settings.baseNote)}  (${settings.baseNote.toString()})"),
-                  // dense: true,
                 ),
                 Slider(
                   min: 0,
