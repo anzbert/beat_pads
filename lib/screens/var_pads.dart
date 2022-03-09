@@ -1,31 +1,23 @@
 import 'package:beat_pads/state/receiver.dart';
+import 'package:beat_pads/state/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_midi_command/flutter_midi_command_messages.dart';
 import 'package:provider/provider.dart';
 import '../services/midi_utils.dart';
 
 class VariablePads extends StatelessWidget {
-  final int width;
-  final int height;
-  final int baseNote;
-  final String scale;
-
-  final int channel;
-  final int velocity;
-  final bool showNoteNames;
-
-  const VariablePads({
-    this.width = 4,
-    this.height = 4,
-    this.baseNote = 36,
-    this.channel = 0,
-    this.velocity = 127,
-    this.showNoteNames = false,
-    this.scale = 'minor',
-  });
-
   @override
   Widget build(BuildContext context) {
+    final int width = Provider.of<Settings>(context, listen: true).width;
+    final int height = Provider.of<Settings>(context, listen: true).height;
+    final int baseNote = Provider.of<Settings>(context, listen: true).baseNote;
+    final int velocity = Provider.of<Settings>(context, listen: true).velocity;
+    final String scale = Provider.of<Settings>(context, listen: true).scale;
+    final bool showNoteNames =
+        Provider.of<Settings>(context, listen: true).noteNames;
+    final int channel =
+        Provider.of<MidiReceiver>(context, listen: true).channel;
+
     return Center(
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 50.0),

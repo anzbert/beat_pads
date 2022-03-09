@@ -4,7 +4,7 @@ import 'package:beat_pads/state/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../state/receiver.dart';
+// import '../state/receiver.dart';
 
 class MainScreen extends StatelessWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -25,14 +25,14 @@ class MainScreen extends StatelessWidget {
       return Scaffold(body: Consumer<Settings>(
         builder: (context, settings, child) {
           return VariablePads(
-            velocity: settings.velocity,
-            baseNote: settings.baseNote,
-            showNoteNames: settings.noteNames,
-            channel: Provider.of<MidiReceiver>(context, listen: true).channel,
-            // scale: settings.scale,
-            // width:settings.width,
-            // height:settings.height,
-          );
+              // velocity: settings.velocity,
+              // baseNote: settings.baseNote,
+              // showNoteNames: settings.noteNames,
+              // channel: Provider.of<MidiReceiver>(context, listen: true).channel,
+              // scale: settings.scale,
+              // width:settings.width,
+              // height:settings.height,
+              );
         },
       ));
     }

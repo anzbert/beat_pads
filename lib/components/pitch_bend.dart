@@ -1,6 +1,7 @@
 // testing a pitchbender
 import 'package:flutter/material.dart';
-import '../services/midi_messages.dart';
+import 'package:flutter_midi_command/flutter_midi_command_messages.dart';
+// import '../services/midi_messages.dart';
 
 class _PitchBenderState extends State<PitchBender> {
   double pitch = 0.5;

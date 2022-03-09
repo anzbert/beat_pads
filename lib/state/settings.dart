@@ -2,6 +2,12 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 
 class Settings extends ChangeNotifier {
+// pads
+  int width = 4;
+  int height = 4;
+
+  String scale = 'minor';
+
 // pitchbend:
   bool _pitchBend = false;
 

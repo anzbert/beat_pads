@@ -1,6 +1,7 @@
+import 'package:beat_pads/screens/config_screen.dart';
 import 'package:beat_pads/state/receiver.dart';
 import 'package:flutter/material.dart';
-import 'package:beat_pads/screens/config_screen.dart';
+// import 'package:beat_pads/screens/config_screen.dart';
 
 import 'package:provider/provider.dart';
 import '../state/settings.dart';

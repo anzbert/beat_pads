@@ -2,7 +2,7 @@ import 'package:beat_pads/components/pitch_bend.dart';
 import 'package:beat_pads/state/receiver.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_midi_command/flutter_midi_command_messages.dart';
-import 'package:beat_pads/components/main_menu.dart';
+import 'package:beat_pads/temp/main_menu.dart';
 import 'package:beat_pads/services/midi_utils.dart';
 import 'package:provider/provider.dart';
 

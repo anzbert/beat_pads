@@ -39,8 +39,7 @@ dependencies:
   flutter_midi_command:
     git:
       url: https://github.com/anzbert/FlutterMidiCommand.git
-      ref: master
-    # path: /Users/anz/localDev/FlutterMidiCommand
+      ref: messages
 
   animated_text_kit: ^4.2.1
   # rive: ^0.8.1

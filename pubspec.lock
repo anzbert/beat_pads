@@ -80,11 +80,11 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: master
-      resolved-ref: "6e186823b196958688a989718d091c7bd5fbc99e"
+      ref: messages
+      resolved-ref: add7e2c459ecafe77bbec358be38e6b5fe3261ec
       url: "https://github.com/anzbert/FlutterMidiCommand.git"
     source: git
-    version: "0.4.2"
+    version: "0.4.4"
   flutter_midi_command_linux:
     dependency: transitive
     description:

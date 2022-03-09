@@ -2,7 +2,7 @@ import 'package:beat_pads/screens/main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_midi_command/flutter_midi_command.dart';
 
-import '../components/main_menu.dart';
+import '../temp/main_menu.dart';
 
 class _ConfigScreenState extends State<ConfigScreen> {
   final MidiCommand _midiCommand = MidiCommand();
