@@ -2,6 +2,18 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 
 class Settings extends ChangeNotifier {
+// pitchbend:
+  bool _pitchBend = false;
+
+  set pitchBend(bool newValue) {
+    _pitchBend = newValue;
+    notifyListeners();
+  }
+
+  bool get pitchBend {
+    return _pitchBend;
+  }
+
 // velocity:
   final _random = Random();
 

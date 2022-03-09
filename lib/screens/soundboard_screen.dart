@@ -1,3 +1,4 @@
+import 'package:beat_pads/components/pitch_bend.dart';
 import 'package:beat_pads/services/receiver.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_midi_command/flutter_midi_command_messages.dart';
@@ -7,14 +8,9 @@ import 'package:provider/provider.dart';
 
 import '../state/settings.dart';
 
-class SoundBoard extends StatefulWidget {
+class SoundBoard extends StatelessWidget {
   const SoundBoard({Key? key}) : super(key: key);
 
-  @override
-  State<SoundBoard> createState() => _SoundBoardState();
-}
-
-class _SoundBoardState extends State<SoundBoard> {
   @override
   Widget build(BuildContext context) {
     bool inPortrait = MediaQuery.of(context).orientation.name == "portrait";
@@ -31,24 +27,44 @@ class _SoundBoardState extends State<SoundBoard> {
           height:
               inPortrait ? MediaQuery.of(context).size.width : double.infinity,
           padding: !inPortrait
-              ? EdgeInsets.symmetric(horizontal: 100.0)
+              ? EdgeInsets.symmetric(horizontal: 50.0)
               : EdgeInsets.all(0.0),
           child: Consumer<Settings>(builder: (context, settings, child) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Expanded(
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                if (settings.pitchBend)
+                  Expanded(
                     flex: 1,
-                    child: ButtonRow(lowestNote: settings.baseNote + 12)),
+                    child: RotatedBox(
+                        quarterTurns: 1,
+                        child: Consumer<MidiReceiver>(
+                          builder: (context, receiver, child) => PitchBender(
+                            channel: receiver.channel,
+                          ),
+                        )),
+                  ),
                 Expanded(
-                    flex: 1,
-                    child: ButtonRow(lowestNote: settings.baseNote + 8)),
-                Expanded(
-                    flex: 1,
-                    child: ButtonRow(lowestNote: settings.baseNote + 4)),
-                Expanded(
-                    flex: 1, child: ButtonRow(lowestNote: settings.baseNote)),
+                  flex: 5,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Expanded(
+                          flex: 1,
+                          child: ButtonRow(lowestNote: settings.baseNote + 12)),
+                      Expanded(
+                          flex: 1,
+                          child: ButtonRow(lowestNote: settings.baseNote + 8)),
+                      Expanded(
+                          flex: 1,
+                          child: ButtonRow(lowestNote: settings.baseNote + 4)),
+                      Expanded(
+                          flex: 1,
+                          child: ButtonRow(lowestNote: settings.baseNote)),
+                    ],
+                  ),
+                ),
               ],
             );
           }),

@@ -24,6 +24,15 @@ class MainMenu extends StatelessWidget {
                   }),
             ),
             Divider(),
+            ListTile(
+              title: Text("Pitch Bender"),
+              trailing: Switch(
+                  value: settings.pitchBend,
+                  onChanged: (value) {
+                    settings.pitchBend = !settings.pitchBend;
+                  }),
+            ),
+            Divider(),
             Column(
               mainAxisSize: MainAxisSize.min,
               children: [
