@@ -1,9 +1,9 @@
 import 'package:beat_pads/components/pitch_bend.dart';
-import 'package:beat_pads/services/receiver.dart';
+import 'package:beat_pads/state/receiver.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_midi_command/flutter_midi_command_messages.dart';
 import 'package:beat_pads/components/main_menu.dart';
-import 'package:beat_pads/services/utils.dart';
+import 'package:beat_pads/services/midi_utils.dart';
 import 'package:provider/provider.dart';
 
 import '../state/settings.dart';
@@ -139,17 +139,15 @@ class SoundButton extends StatelessWidget {
                 },
                 onTapUp: (_details) {
                   NoteOffMessage(
-                          channel: receiver.channel,
-                          note: paramNote,
-                          velocity: 0)
-                      .send();
+                    channel: receiver.channel,
+                    note: paramNote,
+                  ).send();
                 },
                 onTapCancel: () {
                   NoteOffMessage(
-                          channel: receiver.channel,
-                          note: paramNote,
-                          velocity: 0)
-                      .send();
+                    channel: receiver.channel,
+                    note: paramNote,
+                  ).send();
                 },
                 splashColor: Colors.purple[900],
                 child: Padding(

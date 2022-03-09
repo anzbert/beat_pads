@@ -1,8 +1,8 @@
-import 'package:beat_pads/services/receiver.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
+import '../state/receiver.dart';
 import '../state/settings.dart';
 import 'app_theme.dart';
 import 'screens/splash_screen.dart';

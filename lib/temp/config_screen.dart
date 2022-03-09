@@ -1,19 +1,16 @@
+import 'package:beat_pads/screens/main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_midi_command/flutter_midi_command.dart';
 
-import '../services/utils.dart';
 import '../components/main_menu.dart';
-import 'soundboard_screen.dart';
 
 class _ConfigScreenState extends State<ConfigScreen> {
   final MidiCommand _midiCommand = MidiCommand();
 
-  // Stream<MidiPacket>? midiReceiver;
-
   bool connecting = false;
 
   void setDevice(MidiDevice device) {
-    log("...connecting to : ${device.name}");
+    // print("BP: Connecting to : ${device.name}");
 
     if (device.connected) {
       _midiCommand.disconnectDevice(device);
@@ -55,7 +52,7 @@ class _ConfigScreenState extends State<ConfigScreen> {
           onPressed: (() {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => SoundBoard()),
+              MaterialPageRoute(builder: (context) => MainScreen()),
             );
           }),
         ),
