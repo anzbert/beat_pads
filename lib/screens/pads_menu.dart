@@ -15,6 +15,21 @@ class PadsMenu extends StatelessWidget {
     return Consumer<Settings>(builder: (context, settings, child) {
       return ListView(
         children: <Widget>[
+          Card(
+            margin: EdgeInsets.fromLTRB(8, 30, 8, 8),
+            elevation: 5,
+            child: Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("Landscape => Pads\nPortrait => Settings"),
+                ],
+              ),
+            ),
+          ),
+          Divider(),
           ListTile(
             title: Text("Show Note Names"),
             trailing: Switch(

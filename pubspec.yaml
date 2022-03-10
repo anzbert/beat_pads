@@ -31,21 +31,24 @@ dependencies:
     sdk: flutter
 
   # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
+  # Use with the CupertinoIcons class for iOS style icons:
   # cupertino_icons: ^1.0.2
 
   # shared_preferences: ^2.0.13
+
   provider: ^6.0.2
+
   flutter_midi_command:
     git:
       url: https://github.com/anzbert/FlutterMidiCommand.git
       ref: messages
 
   animated_text_kit: ^4.2.1
+
   # rive: ^0.8.1
   rive:
     git:
-      url: https://github.com/anzbert/rive-flutter.git
+      url: https://github.com/rive-app/rive-flutter.git
       ref: master
     # path: /Users/anz/localDev/rive-flutter
 

@@ -2,8 +2,6 @@ import 'package:beat_pads/screens/main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_midi_command/flutter_midi_command.dart';
 
-import '../temp/main_menu.dart';
-
 class _ConfigScreenState extends State<ConfigScreen> {
   final MidiCommand _midiCommand = MidiCommand();
 
@@ -29,7 +27,7 @@ class _ConfigScreenState extends State<ConfigScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Select Midi Device"),
+        title: Text("Select Midi Devices"),
         actions: [
           IconButton(
               onPressed: () {
@@ -37,9 +35,6 @@ class _ConfigScreenState extends State<ConfigScreen> {
               },
               icon: Icon(Icons.refresh)),
         ],
-      ),
-      drawer: Drawer(
-        child: MainMenu(),
       ),
       floatingActionButton: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -64,6 +59,7 @@ class _ConfigScreenState extends State<ConfigScreen> {
           if (snapshot.hasData && snapshot.data!.isNotEmpty) {
             List<MidiDevice>? _devices = snapshot.data;
             return connecting
+                // WHILE CONNECTING:
                 ? Center(
                     child: SizedBox(
                     width: 100,
@@ -72,31 +68,35 @@ class _ConfigScreenState extends State<ConfigScreen> {
                       color: Colors.grey[400],
                     ),
                   ))
-                : ListView(
-                    children: _devices!.map((device) {
-                      return Container(
-                        color: device.connected
-                            ? Colors.green[800]
-                            : Colors.transparent,
-                        child: TextButton(
-                          onPressed: () {
-                            setDevice(device);
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 12),
-                            child: Text(
-                              device.name,
-                              style: TextStyle(
-                                color: Colors.grey[200],
+                :
+                // WHEN NOT CONNECTING, SHOW LIST:
+                ListView(
+                    children: [
+                      ..._devices!.map((device) {
+                        return Container(
+                          color: device.connected
+                              ? Colors.green[800]
+                              : Colors.transparent,
+                          child: TextButton(
+                            onPressed: () {
+                              setDevice(device);
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                              child: Text(
+                                device.name,
+                                style: TextStyle(
+                                  color: Colors.grey[200],
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      );
-                    }).toList(),
+                        );
+                      }).toList(),
+                    ],
                   );
           } else if (snapshot.hasError) {
-            return Text(snapshot.error.toString());
+            return Center(child: Text(snapshot.error.toString()));
           } else {
             return Center(child: Text("No Midi Devices Detected"));
           }
@@ -105,7 +105,7 @@ class _ConfigScreenState extends State<ConfigScreen> {
     );
   }
 
-  // ? MidiCommand.dispose() only seems to dispose of bluetooth ressources?!
+  // ? As in example. MidiCommand.dispose() only seems to dispose of bluetooth ressources?!
   @override
   void dispose() {
     _midiCommand.dispose();

@@ -79,11 +79,12 @@ class BeatPad extends StatelessWidget {
         borderRadius: BorderRadius.all(Radius.circular(5.0)),
         elevation: 5.0,
         shadowColor: Colors.black,
-        color: Provider.of<MidiReceiver>(context, listen: true).notes[note] != 0
-            ? Colors.amber[300]
-            : withinScale(note, scale)
-                ? Colors.green
-                : Colors.green[200],
+        color:
+            Provider.of<MidiReceiver>(context, listen: true).rxNotes[note] != 0
+                ? Colors.amber[300]
+                : withinScale(note, scale)
+                    ? Colors.green
+                    : Colors.green[200],
         child: InkWell(
           borderRadius: BorderRadius.all(Radius.circular(5.0)),
           onTapDown: (_details) {

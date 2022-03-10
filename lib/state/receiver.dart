@@ -5,13 +5,12 @@ import 'package:flutter_midi_command/flutter_midi_command.dart';
 
 class MidiReceiver extends ChangeNotifier {
   StreamSubscription<MidiPacket>? _rxSubscription;
+
   final MidiCommand _midiCommand = MidiCommand();
 
-  final notes = List.filled(128, 0);
+  final rxNotes = List.filled(128, 0);
 
-  // channel setting:
   int _channel = 0;
-
   set channel(int channel) {
     if (channel < 0 || channel > 15) return;
     _channel = channel;
@@ -41,18 +40,16 @@ class MidiReceiver extends ChangeNotifier {
 
         switch (type) {
           case MidiMessageType.noteOn:
-            notes[note] = velocity;
+            rxNotes[note] = velocity;
             notifyListeners();
             break;
           case MidiMessageType.noteOff:
-            notes[note] = 0;
+            rxNotes[note] = 0;
             notifyListeners();
             break;
           default:
             return;
         }
-      } else if (type == MidiMessageType.timingClock) {
-        // receiveTick();
       }
     });
   }
@@ -63,6 +60,8 @@ class MidiReceiver extends ChangeNotifier {
     super.dispose();
   }
 }
+
+// UTILITY FUNCTIONS (not all of them in use):
 
 int lengthOfMessageType(int type) {
   // sysex not included, as it is of variable length

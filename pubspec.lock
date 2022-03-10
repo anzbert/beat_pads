@@ -193,8 +193,8 @@ packages:
     description:
       path: "."
       ref: master
-      resolved-ref: be6ef08d63075de2b67882b7a17742566af6612f
-      url: "https://github.com/anzbert/rive-flutter.git"
+      resolved-ref: "671d6ce6a2e8c4362b0f82a4385fb93598ffa999"
+      url: "https://github.com/rive-app/rive-flutter.git"
     source: git
     version: "0.8.3"
   sky_engine:
