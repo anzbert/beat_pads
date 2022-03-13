@@ -1,4 +1,4 @@
-import 'package:beat_pads/screens/config_screen.dart';
+import 'package:beat_pads/screens/screen_config.dart';
 import 'package:beat_pads/state/receiver.dart';
 import 'package:flutter/material.dart';
 // import 'package:beat_pads/screens/config_screen.dart';
@@ -24,7 +24,13 @@ class PadsMenu extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Landscape => Pads\nPortrait => Settings"),
+                  Text(
+                    "Landscape => Pads\nPortrait => Settings",
+                    style: TextStyle(
+                      height: 1.5,
+                      fontSize: 20,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -98,7 +104,7 @@ class PadsMenu extends StatelessWidget {
           ),
           Divider(),
           ListTile(
-            title: Text("Randomised Velocity"),
+            title: Text("Randomized Velocity"),
             trailing: Switch(
                 value: settings.randomVelocity,
                 onChanged: (value) {
@@ -165,18 +171,18 @@ class PadsMenu extends StatelessWidget {
               ],
             ),
           Divider(),
-          Center(
-            child: ElevatedButton(
-              child: Text("Select Midi Devices"),
-              onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => ConfigScreen()),
-                );
-              },
-            ),
-          ),
-          Divider(),
+          // Center(
+          //   child: ElevatedButton(
+          //     child: Text("Select Midi Devices"),
+          //     onPressed: () {
+          //       Navigator.pushReplacement(
+          //         context,
+          //         MaterialPageRoute(builder: (context) => ConfigScreen()),
+          //       );
+          //     },
+          //   ),
+          // ),
+          // Divider(),
           Card(
             margin: EdgeInsets.fromLTRB(8, 30, 8, 8),
             elevation: 5,

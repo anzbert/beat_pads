@@ -1,4 +1,4 @@
-import 'package:beat_pads/screens/config_screen.dart';
+import 'package:beat_pads/screens/screen_config.dart';
 import 'package:flutter/material.dart';
 import 'package:rive/rive.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';

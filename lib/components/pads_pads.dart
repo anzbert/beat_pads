@@ -71,20 +71,22 @@ class BeatPad extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    int rxNote = Provider.of<MidiReceiver>(context, listen: true).rxNotes[note];
+    var color = rxNote == 0
+        ? Colors.green
+        : Color.fromARGB((rxNote ~/ 127) * 255, 10, 100, 100);
+
     return Container(
       padding: const EdgeInsets.all(5.0),
       height: double.infinity,
       width: double.infinity,
       child: Material(
+        // PAD COLOR:
+        color: withinScale(note, scale) ? color : Colors.green[200],
+        //
         borderRadius: BorderRadius.all(Radius.circular(5.0)),
         elevation: 5.0,
         shadowColor: Colors.black,
-        color:
-            Provider.of<MidiReceiver>(context, listen: true).rxNotes[note] != 0
-                ? Colors.amber[300]
-                : withinScale(note, scale)
-                    ? Colors.green
-                    : Colors.green[200],
         child: InkWell(
           borderRadius: BorderRadius.all(Radius.circular(5.0)),
           onTapDown: (_details) {

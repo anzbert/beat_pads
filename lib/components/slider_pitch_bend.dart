@@ -4,7 +4,7 @@ import 'package:flutter_midi_command/flutter_midi_command_messages.dart';
 // import '../services/midi_messages.dart';
 
 class _PitchBenderState extends State<PitchBender> {
-  double pitch = 0.5;
+  double pitch = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +19,7 @@ class _PitchBenderState extends State<PitchBender> {
       ),
       child: Slider(
         value: pitch,
-        min: 0,
+        min: -1,
         max: 1,
         onChanged: (value) {
           setState(() {
@@ -27,12 +27,12 @@ class _PitchBenderState extends State<PitchBender> {
           });
           PitchBendMessage(
             channel: widget.channel,
-            bend: 1 - pitch,
+            bend: -pitch,
           ).send();
         },
         onChangeEnd: (details) {
           setState(() {
-            pitch = 0.5;
+            pitch = 0;
           });
           PitchBendMessage(
             channel: widget.channel,
