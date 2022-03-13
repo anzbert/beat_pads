@@ -2,11 +2,34 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 
 class Settings extends ChangeNotifier {
-// pads
-  int width = 4;
-  int height = 4;
+// pad dimensions
+  List<int> _padDimensions = [4, 4];
 
-  String scale = 'minor';
+  set width(int wid) {
+    _padDimensions[0] = wid;
+    notifyListeners();
+  }
+
+  set padDimensions(List<int> newDims) {
+    _padDimensions = newDims;
+    notifyListeners();
+  }
+
+  List<int> get padDimensions {
+    return _padDimensions;
+  }
+
+// scale:
+  String _scale = 'chromatic';
+
+  set scale(String newValue) {
+    _scale = newValue;
+    notifyListeners();
+  }
+
+  String get scale {
+    return _scale;
+  }
 
 // pitchbend:
   bool _pitchBend = false;
@@ -18,6 +41,18 @@ class Settings extends ChangeNotifier {
 
   bool get pitchBend {
     return _pitchBend;
+  }
+
+// lock screen button:
+  bool _lockScreenButton = false;
+
+  set lockScreenButton(bool newValue) {
+    _lockScreenButton = newValue;
+    notifyListeners();
+  }
+
+  bool get lockScreenButton {
+    return _lockScreenButton;
   }
 
 // velocity:

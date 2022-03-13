@@ -45,6 +45,8 @@ dependencies:
     #   url: https://github.com/anzbert/FlutterMidiCommand.git
     #   ref: messages
 
+  wakelock: ^0.6.1
+
   animated_text_kit: ^4.2.1
 
   # rive: ^0.8.1

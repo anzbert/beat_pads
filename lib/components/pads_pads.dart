@@ -8,8 +8,11 @@ import '../services/midi_utils.dart';
 class VariablePads extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final int width = Provider.of<Settings>(context, listen: true).width;
-    final int height = Provider.of<Settings>(context, listen: true).height;
+    final List<int> padDimensions =
+        Provider.of<Settings>(context, listen: true).padDimensions;
+    final width = padDimensions[0];
+    final height = padDimensions[1];
+
     final int baseNote = Provider.of<Settings>(context, listen: true).baseNote;
     final int velocity = Provider.of<Settings>(context, listen: true).velocity;
     final String scale = Provider.of<Settings>(context, listen: true).scale;

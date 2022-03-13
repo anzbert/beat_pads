@@ -1,3 +1,4 @@
+import 'package:beat_pads/components/button_lock_screen.dart';
 import 'package:beat_pads/components/slider_pitch_bend.dart';
 import 'package:beat_pads/components/pads_pads.dart';
 import 'package:beat_pads/components/pads_menu.dart';
@@ -24,6 +25,11 @@ class MainScreen extends StatelessWidget {
     // LANDSCAPE: PLAY PADS
     else {
       return Scaffold(
+        floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
+        floatingActionButton:
+            Provider.of<Settings>(context, listen: true).lockScreenButton
+                ? LockScreenButton()
+                : null,
         body: SafeArea(
           child: Provider.of<Settings>(context, listen: true).pitchBend
               ? Row(

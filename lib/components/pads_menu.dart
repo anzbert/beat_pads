@@ -1,14 +1,22 @@
-import 'package:beat_pads/screens/screen_config.dart';
+import 'package:beat_pads/components/drop_down_numbers.dart';
+import 'package:beat_pads/components/drop_down_scales.dart';
 import 'package:beat_pads/state/receiver.dart';
 import 'package:flutter/material.dart';
-// import 'package:beat_pads/screens/config_screen.dart';
 
 import 'package:provider/provider.dart';
+import 'package:wakelock/wakelock.dart';
 import '../state/settings.dart';
 import '../services/midi_utils.dart';
 
-class PadsMenu extends StatelessWidget {
+class PadsMenu extends StatefulWidget {
   const PadsMenu({Key? key}) : super(key: key);
+
+  @override
+  State<PadsMenu> createState() => _PadsMenuState();
+}
+
+class _PadsMenuState extends State<PadsMenu> {
+  bool wakeLock = false;
 
   @override
   Widget build(BuildContext context) {
@@ -21,13 +29,14 @@ class PadsMenu extends StatelessWidget {
             child: Padding(
               padding:
                   const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  Icon(Icons.rotate_right),
                   Text(
-                    "Landscape => Pads\nPortrait => Settings",
+                    " : Beat Pads",
                     style: TextStyle(
-                      height: 1.5,
+                      // height: 1.5,
                       fontSize: 20,
                     ),
                   ),
@@ -35,7 +44,6 @@ class PadsMenu extends StatelessWidget {
               ),
             ),
           ),
-          Divider(),
           ListTile(
             title: Text("Show Note Names"),
             trailing: Switch(
@@ -44,7 +52,14 @@ class PadsMenu extends StatelessWidget {
                   settings.showNoteNames(value);
                 }),
           ),
-          Divider(),
+          ListTile(
+            title: Text("Pads"),
+            trailing: DropdownNumbers(),
+          ),
+          ListTile(
+            title: Text("Scale"),
+            trailing: DropdownScales(),
+          ),
           ListTile(
             title: Text("Pitch Bender"),
             trailing: Switch(
@@ -53,7 +68,25 @@ class PadsMenu extends StatelessWidget {
                   settings.pitchBend = !settings.pitchBend;
                 }),
           ),
-          Divider(),
+          ListTile(
+            title: Text("Wake Lock"),
+            trailing: Switch(
+                value: wakeLock,
+                onChanged: (value) {
+                  setState(() {
+                    wakeLock = !wakeLock;
+                  });
+                  Wakelock.toggle(enable: wakeLock);
+                }),
+          ),
+          ListTile(
+            title: Text("Lock Screen Button (Long Press)"),
+            trailing: Switch(
+                value: settings.lockScreenButton,
+                onChanged: (value) {
+                  settings.lockScreenButton = !settings.lockScreenButton;
+                }),
+          ),
           Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -80,7 +113,6 @@ class PadsMenu extends StatelessWidget {
               ),
             ],
           ),
-          Divider(),
           Consumer<MidiReceiver>(
             builder: (context, receiver, child) {
               return Column(
@@ -102,7 +134,6 @@ class PadsMenu extends StatelessWidget {
               );
             },
           ),
-          Divider(),
           ListTile(
             title: Text("Randomized Velocity"),
             trailing: Switch(
@@ -170,19 +201,6 @@ class PadsMenu extends StatelessWidget {
                 ),
               ],
             ),
-          Divider(),
-          // Center(
-          //   child: ElevatedButton(
-          //     child: Text("Select Midi Devices"),
-          //     onPressed: () {
-          //       Navigator.pushReplacement(
-          //         context,
-          //         MaterialPageRoute(builder: (context) => ConfigScreen()),
-          //       );
-          //     },
-          //   ),
-          // ),
-          // Divider(),
           Card(
             margin: EdgeInsets.fromLTRB(8, 30, 8, 8),
             elevation: 5,
@@ -203,5 +221,11 @@ class PadsMenu extends StatelessWidget {
         ],
       );
     });
+  }
+
+  @override
+  void dispose() {
+    Wakelock.disable();
+    super.dispose();
   }
 }
