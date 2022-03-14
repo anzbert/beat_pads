@@ -1,3 +1,4 @@
+import 'package:beat_pads/components/drop_down_interval.dart';
 import 'package:beat_pads/services/midi_utils.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
@@ -48,11 +49,11 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
-// TODO row interval:
-  int _rowInterval = 4; // semitones
-  int get rowInterval => _rowInterval;
+// row interval:
+  RowInterval _rowInterval = RowInterval.majorThird; // semitones
+  RowInterval get rowInterval => _rowInterval;
 
-  set rowInterval(int newValue) {
+  set rowInterval(RowInterval newValue) {
     _rowInterval = newValue;
     notifyListeners();
   }

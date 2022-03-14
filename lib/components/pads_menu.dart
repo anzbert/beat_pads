@@ -1,3 +1,4 @@
+import 'package:beat_pads/components/drop_down_interval.dart';
 import 'package:beat_pads/components/drop_down_numbers.dart';
 import 'package:beat_pads/components/drop_down_scales.dart';
 import 'package:beat_pads/state/receiver.dart';
@@ -90,6 +91,10 @@ class _PadsMenuState extends State<PadsMenu> {
                 },
               ),
             ],
+          ),
+          ListTile(
+            title: Text("Row Interval"),
+            trailing: DropdownInterval(),
           ),
           Consumer<MidiReceiver>(
             builder: (context, receiver, child) {

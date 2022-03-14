@@ -1,3 +1,4 @@
+import 'package:beat_pads/components/drop_down_interval.dart';
 import 'package:beat_pads/state/receiver.dart';
 import 'package:beat_pads/state/settings.dart';
 import 'package:flutter/material.dart';
@@ -6,13 +7,14 @@ import 'package:provider/provider.dart';
 import '../services/midi_utils.dart';
 
 class VariablePads extends StatelessWidget {
-  // TODO BUGS!!@!#$%#$!
+  // TODO row interval generation
   List<int> _generateNotes(
     int baseNote,
     int width,
     int height,
     List<int> scaleNotes,
     bool scaleOnly,
+    RowInterval interval,
   ) {
     int totalPads = width * height;
     List<int> grid;
@@ -47,14 +49,21 @@ class VariablePads extends StatelessWidget {
     final int baseNote = Provider.of<Settings>(context, listen: true).baseNote;
     final int velocity = Provider.of<Settings>(context, listen: true).velocity;
     final String scale = Provider.of<Settings>(context, listen: true).scale;
+
     final bool showNoteNames =
         Provider.of<Settings>(context, listen: true).showNoteNames;
 
     final int channel =
         Provider.of<MidiReceiver>(context, listen: true).channel;
 
-    final pads = _generateNotes(baseNote, width, height, midiScales[scale]!,
-        Provider.of<Settings>(context, listen: true).onlyScaleNotes);
+    final pads = _generateNotes(
+      baseNote,
+      width,
+      height,
+      midiScales[scale]!,
+      Provider.of<Settings>(context, listen: true).onlyScaleNotes,
+      Provider.of<Settings>(context, listen: true).rowInterval,
+    );
 
     final padRows = _splitToReversedRows(pads, width, height);
 
