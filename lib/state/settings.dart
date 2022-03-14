@@ -2,21 +2,56 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 
 class Settings extends ChangeNotifier {
-// pad dimensions
-  List<int> _padDimensions = [4, 4];
+  // basenote:
+  int _baseNote = 36;
 
-  set width(int wid) {
-    _padDimensions[0] = wid;
+  resetBaseNote() {
+    _baseNote = 36;
     notifyListeners();
   }
 
+  set baseNote(int note) {
+    if (note < 0 || note > 127) return;
+    _baseNote = note;
+    notifyListeners();
+  }
+
+  int get baseNote {
+    return _baseNote;
+  }
+
+  // pad dimensions
+  final List<int> _padDimensions = [4, 4]; // [ W, H ]
+
   set padDimensions(List<int> newDims) {
-    _padDimensions = newDims;
+    if (newDims.length != 2) return;
+    if (baseNote + newDims[0] * newDims[1] > 127) {
+      int maxValue = 127 - newDims[0] * newDims[1];
+      baseNote = maxValue;
+    }
+    _padDimensions[0] = newDims[0];
+    _padDimensions[1] = newDims[1];
     notifyListeners();
   }
 
   List<int> get padDimensions {
     return _padDimensions;
+  }
+
+  int get width {
+    return _padDimensions[0];
+  }
+
+  set width(int newValue) {
+    padDimensions = [newValue, height];
+  }
+
+  int get height {
+    return _padDimensions[1];
+  }
+
+  set height(int newValue) {
+    padDimensions = [width, newValue];
   }
 
 // scale:
@@ -110,24 +145,6 @@ class Settings extends ChangeNotifier {
       _velocityMin = 100;
     }
     notifyListeners();
-  }
-
-// basenote:
-  int _baseNote = 36;
-
-  resetBaseNote() {
-    _baseNote = 36;
-    notifyListeners();
-  }
-
-  set baseNote(int note) {
-    if (note < 0 || note > 127) return;
-    _baseNote = note;
-    notifyListeners();
-  }
-
-  int get baseNote {
-    return _baseNote;
   }
 
 // notenames:

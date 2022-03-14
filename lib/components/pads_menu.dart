@@ -53,8 +53,12 @@ class _PadsMenuState extends State<PadsMenu> {
                 }),
           ),
           ListTile(
-            title: Text("Pads"),
-            trailing: DropdownNumbers(),
+            title: Text("Pad Grid Width"),
+            trailing: DropdownNumbers(Dimension.width),
+          ),
+          ListTile(
+            title: Text("Pad Grid Height"),
+            trailing: DropdownNumbers(Dimension.height),
           ),
           ListTile(
             title: Text("Scale"),
@@ -105,7 +109,7 @@ class _PadsMenuState extends State<PadsMenu> {
               ),
               Slider(
                 min: 0,
-                max: 112,
+                max: (127 - settings.width * settings.height).toDouble(),
                 value: settings.baseNote.toDouble(),
                 onChanged: (value) {
                   settings.baseNote = value.toInt();
