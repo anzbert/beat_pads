@@ -17,9 +17,8 @@ class MidiReceiver extends ChangeNotifier {
     notifyListeners();
   }
 
-  int get channel {
-    return _channel;
-  }
+  int get channel => _channel;
+  resetChannel() => channel = 0;
 
   MidiReceiver() {
     _rxSubscription = _midiCommand.onMidiDataReceived?.listen((packet) {

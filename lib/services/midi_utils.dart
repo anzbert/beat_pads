@@ -135,9 +135,8 @@ const Map<String, List<int>> midiScales = {
 };
 
 bool withinScale(int note, String scale) {
-  if (midiScales[scale] == null) return false;
-
   final int baseNote = note % 12;
+
   if (midiScales[scale]!.contains(baseNote)) return true;
 
   return false;

@@ -47,9 +47,9 @@ class _PadsMenuState extends State<PadsMenu> {
           ListTile(
             title: Text("Show Note Names"),
             trailing: Switch(
-                value: settings.noteNames,
+                value: settings.showNoteNames,
                 onChanged: (value) {
-                  settings.showNoteNames(value);
+                  settings.showNoteNames = value;
                 }),
           ),
           ListTile(
@@ -123,7 +123,15 @@ class _PadsMenuState extends State<PadsMenu> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   ListTile(
-                    title: Text("Channel"),
+                    title: Row(
+                      children: [
+                        Text("Channel"),
+                        TextButton(
+                          onPressed: () => receiver.resetChannel(),
+                          child: Text("Reset"),
+                        )
+                      ],
+                    ),
                     trailing: Text("${receiver.channel + 1}"),
                   ),
                   Slider(
@@ -143,7 +151,7 @@ class _PadsMenuState extends State<PadsMenu> {
             trailing: Switch(
                 value: settings.randomVelocity,
                 onChanged: (value) {
-                  settings.randomizeVelocity(value);
+                  settings.randomizeVelocity = value;
                 }),
           ),
           if (!settings.randomVelocity)

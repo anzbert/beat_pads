@@ -8,16 +8,14 @@ import '../services/midi_utils.dart';
 class VariablePads extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final List<int> padDimensions =
-        Provider.of<Settings>(context, listen: true).padDimensions;
-    final width = padDimensions[0];
-    final height = padDimensions[1];
+    final width = Provider.of<Settings>(context, listen: true).width;
+    final height = Provider.of<Settings>(context, listen: true).height;
 
     final int baseNote = Provider.of<Settings>(context, listen: true).baseNote;
     final int velocity = Provider.of<Settings>(context, listen: true).velocity;
     final String scale = Provider.of<Settings>(context, listen: true).scale;
     final bool showNoteNames =
-        Provider.of<Settings>(context, listen: true).noteNames;
+        Provider.of<Settings>(context, listen: true).showNoteNames;
     final int channel =
         Provider.of<MidiReceiver>(context, listen: true).channel;
 
@@ -63,7 +61,7 @@ class BeatPad extends StatelessWidget {
     this.channel = 0,
     this.velocity = 127,
     this.showNoteNames = false,
-    this.scale = "minor",
+    this.scale = "chromatic",
   }) : super(key: key);
 
   final bool showNoteNames;

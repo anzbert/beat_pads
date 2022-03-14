@@ -1,3 +1,4 @@
+import 'package:beat_pads/services/midi_utils.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 
@@ -5,23 +6,19 @@ class Settings extends ChangeNotifier {
   // basenote:
   int _baseNote = 36;
 
-  resetBaseNote() {
-    _baseNote = 36;
-    notifyListeners();
-  }
-
   set baseNote(int note) {
     if (note < 0 || note > 127) return;
     _baseNote = note;
     notifyListeners();
   }
 
-  int get baseNote {
-    return _baseNote;
-  }
+  int get baseNote => _baseNote;
+  resetBaseNote() => baseNote = 36;
 
   // pad dimensions
   final List<int> _padDimensions = [4, 4]; // [ W, H ]
+  int get width => _padDimensions[0];
+  int get height => _padDimensions[1];
 
   set padDimensions(List<int> newDims) {
     if (newDims.length != 2) return;
@@ -34,74 +31,55 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
-  List<int> get padDimensions {
-    return _padDimensions;
-  }
-
-  int get width {
-    return _padDimensions[0];
-  }
-
-  set width(int newValue) {
-    padDimensions = [newValue, height];
-  }
-
-  int get height {
-    return _padDimensions[1];
-  }
-
-  set height(int newValue) {
-    padDimensions = [width, newValue];
-  }
+  set width(int newValue) => padDimensions = [newValue, height];
+  set height(int newValue) => padDimensions = [width, newValue];
 
 // scale:
-  String _scale = 'chromatic';
+  String _scale = midiScales.keys.toList()[0];
+  String get scale => _scale;
 
   set scale(String newValue) {
-    _scale = newValue;
+    String validatedScale = newValue;
+    if (!midiScales.containsKey(newValue)) {
+      validatedScale = midiScales.keys.toList()[0]; // set to default
+    }
+    _scale = validatedScale;
     notifyListeners();
-  }
-
-  String get scale {
-    return _scale;
   }
 
 // pitchbend:
   bool _pitchBend = false;
+  bool get pitchBend => _pitchBend;
 
   set pitchBend(bool newValue) {
     _pitchBend = newValue;
     notifyListeners();
   }
 
-  bool get pitchBend {
-    return _pitchBend;
-  }
-
 // lock screen button:
   bool _lockScreenButton = false;
+  bool get lockScreenButton => _lockScreenButton;
 
   set lockScreenButton(bool newValue) {
     _lockScreenButton = newValue;
     notifyListeners();
   }
 
-  bool get lockScreenButton {
-    return _lockScreenButton;
-  }
-
 // velocity:
+  bool randomVelocity = false;
   final _random = Random();
 
-  bool randomVelocity = false;
-  randomizeVelocity(bool setTo) {
+  set randomizeVelocity(bool setTo) {
     randomVelocity = setTo;
     notifyListeners();
   }
 
-  int _velocityMin = 100;
-  int _velocityMax = 127;
-  int _velocity = 100;
+  int _velocity = 110;
+
+  int _velocityMin = 110;
+  int _velocityMax = 120;
+  int get velocityMin => _velocityMin;
+  int get velocityMax => _velocityMax;
 
   int get velocity {
     if (!randomVelocity) return _velocity;
@@ -129,29 +107,22 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
-  int get velocityMin {
-    return _velocityMin;
-  }
-
-  int get velocityMax {
-    return _velocityMax;
-  }
-
   resetVelocity() {
     if (!randomVelocity) {
-      _velocity = 100;
+      _velocity = 110;
     } else {
-      _velocityMax = 127;
-      _velocityMin = 100;
+      _velocityMax = 120;
+      _velocityMin = 110;
     }
     notifyListeners();
   }
 
 // notenames:
-  bool noteNames = false;
+  bool _showNoteNames = false;
+  bool get showNoteNames => _showNoteNames;
 
-  void showNoteNames(bool setting) {
-    noteNames = setting;
+  set showNoteNames(bool setting) {
+    _showNoteNames = setting;
     notifyListeners();
   }
 }
