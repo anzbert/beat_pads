@@ -58,38 +58,11 @@ class _PadsMenuState extends State<PadsMenu> {
             trailing: DropdownScales(),
           ),
           ListTile(
-            title: Text("Only Scale Notes-not working yet"),
+            title: Text("Show Only Scale Notes"),
             trailing: Switch(
                 value: settings.onlyScaleNotes,
                 onChanged: (value) {
                   settings.onlyScaleNotes = !settings.onlyScaleNotes;
-                }),
-          ),
-          ListTile(
-            title: Text("Pitch Bender"),
-            trailing: Switch(
-                value: settings.pitchBend,
-                onChanged: (value) {
-                  settings.pitchBend = !settings.pitchBend;
-                }),
-          ),
-          ListTile(
-            title: Text("Wake Lock"),
-            trailing: Switch(
-                value: wakeLock,
-                onChanged: (value) {
-                  setState(() {
-                    wakeLock = !wakeLock;
-                  });
-                  Wakelock.toggle(enable: wakeLock);
-                }),
-          ),
-          ListTile(
-            title: Text("Lock Screen Button (Long Press)"),
-            trailing: Switch(
-                value: settings.lockScreenButton,
-                onChanged: (value) {
-                  settings.lockScreenButton = !settings.lockScreenButton;
                 }),
           ),
           Column(
@@ -98,7 +71,7 @@ class _PadsMenuState extends State<PadsMenu> {
               ListTile(
                 title: Row(
                   children: [
-                    Text("Base Note"),
+                    Text("Lowest Grid Note"),
                     TextButton(
                       onPressed: () => settings.resetBaseNote(),
                       child: Text("Reset"),
@@ -126,7 +99,7 @@ class _PadsMenuState extends State<PadsMenu> {
                   ListTile(
                     title: Row(
                       children: [
-                        Text("Channel"),
+                        Text("Midi Channel"),
                         TextButton(
                           onPressed: () => receiver.resetChannel(),
                           child: Text("Reset"),
@@ -148,7 +121,7 @@ class _PadsMenuState extends State<PadsMenu> {
             },
           ),
           ListTile(
-            title: Text("Randomized Velocity"),
+            title: Text("Random Velocity"),
             trailing: Switch(
                 value: settings.randomVelocity,
                 onChanged: (value) {
@@ -162,7 +135,7 @@ class _PadsMenuState extends State<PadsMenu> {
                 ListTile(
                   title: Row(
                     children: [
-                      Text("Velocity"),
+                      Text("Fixed Velocity"),
                       TextButton(
                         onPressed: () => settings.resetVelocity(),
                         child: Text("Reset"),
@@ -214,6 +187,33 @@ class _PadsMenuState extends State<PadsMenu> {
                 ),
               ],
             ),
+          ListTile(
+            title: Text("Pitch Bender"),
+            trailing: Switch(
+                value: settings.pitchBend,
+                onChanged: (value) {
+                  settings.pitchBend = !settings.pitchBend;
+                }),
+          ),
+          ListTile(
+            title: Text("Lock Screen Button (Long Press)"),
+            trailing: Switch(
+                value: settings.lockScreenButton,
+                onChanged: (value) {
+                  settings.lockScreenButton = !settings.lockScreenButton;
+                }),
+          ),
+          ListTile(
+            title: Text("Wake Lock"),
+            trailing: Switch(
+                value: wakeLock,
+                onChanged: (value) {
+                  setState(() {
+                    wakeLock = !wakeLock;
+                  });
+                  Wakelock.toggle(enable: wakeLock);
+                }),
+          ),
           Card(
             margin: EdgeInsets.fromLTRB(8, 30, 8, 8),
             elevation: 5,
