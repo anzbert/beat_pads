@@ -6,6 +6,41 @@ import 'package:provider/provider.dart';
 import '../services/midi_utils.dart';
 
 class VariablePads extends StatelessWidget {
+  // TODO implement pad generator (will affect basenote)
+  List<int> _generatePads(
+    int baseNote,
+    int width,
+    int height,
+    List<int> scale,
+    bool scaleOnly,
+  ) {
+    int numPads = width * height;
+
+    List<int> grid = List.generate(numPads, (index) {
+      return scale[index % scale.length] + baseNote;
+    });
+
+    return grid;
+  }
+
+  List<List<int>> _splitToRows(List<int> grid, int width, int height) {
+    return List.generate(
+        height,
+        (row) => List.generate(width, (note) {
+              return grid[row * width + note];
+            }));
+  }
+
+  List<int> _rowsVerticalMirrored(List<int> grid, int width, int height) {
+    final int topLeft = width * height - width;
+    var outputGrid = List.generate(grid.length, (index) {
+      // final int padNote = topLeft + widthIndex - heightIndex * width;
+      return grid[topLeft];
+    });
+
+    return outputGrid;
+  }
+
   @override
   Widget build(BuildContext context) {
     final width = Provider.of<Settings>(context, listen: true).width;
@@ -16,8 +51,12 @@ class VariablePads extends StatelessWidget {
     final String scale = Provider.of<Settings>(context, listen: true).scale;
     final bool showNoteNames =
         Provider.of<Settings>(context, listen: true).showNoteNames;
+
     final int channel =
         Provider.of<MidiReceiver>(context, listen: true).channel;
+
+    final pads = _generatePads(baseNote, width, height, midiScales[scale]!,
+        Provider.of<Settings>(context, listen: true).onlyScaleNotes);
 
     return Center(
       child: Container(
@@ -35,6 +74,7 @@ class VariablePads extends StatelessWidget {
                     final int topLeft = baseNote + width * height - width;
                     final int padNote =
                         topLeft + widthIndex - heightIndex * width;
+
                     return Expanded(
                       flex: 1,
                       child: BeatPad(
@@ -72,47 +112,67 @@ class BeatPad extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int rxNote = Provider.of<MidiReceiver>(context, listen: true).rxNotes[note];
-    var color = rxNote == 0
-        ? Colors.green
-        : Color.fromARGB((rxNote ~/ 127) * 255, 10, 100, 100);
+    int rxNote = note < 127
+        ? Provider.of<MidiReceiver>(context, listen: true).rxNotes[note]
+        : -1;
+
+    final Color color;
+    if (rxNote > 0) {
+      color = Color.fromARGB((rxNote ~/ 127) * 255, 10, 100, 100);
+    } else if (rxNote == -1) {
+      color = Colors.grey;
+    } else if (!withinScale(note, scale)) {
+      color = Colors.green[200]!;
+    } else {
+      color = Colors.green;
+    }
 
     return Container(
       padding: const EdgeInsets.all(5.0),
       height: double.infinity,
       width: double.infinity,
       child: Material(
-        // PAD COLOR:
-        color: withinScale(note, scale) ? color : Colors.green[200],
-        //
+        color: color,
         borderRadius: BorderRadius.all(Radius.circular(5.0)),
         elevation: 5.0,
         shadowColor: Colors.black,
-        child: InkWell(
-          borderRadius: BorderRadius.all(Radius.circular(5.0)),
-          onTapDown: (_details) {
-            NoteOnMessage(channel: channel, note: note, velocity: velocity)
-                .send();
-          },
-          onTapUp: (_details) {
-            NoteOffMessage(
-              channel: channel,
-              note: note,
-            ).send();
-          },
-          onTapCancel: () {
-            NoteOffMessage(
-              channel: channel,
-              note: note,
-            ).send();
-          },
-          splashColor: Colors.purple[900],
-          child: Padding(
-            padding: const EdgeInsets.all(2.5),
-            child: Text(showNoteNames ? getNoteName(note) : note.toString(),
-                style: TextStyle(color: Colors.grey[400])),
-          ),
-        ),
+        child: note > 127
+            ? InkWell(
+                borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                splashColor: Colors.black,
+                child: Padding(
+                  padding: const EdgeInsets.all(2.5),
+                  child:
+                      Text("#Range", style: TextStyle(color: Colors.grey[400])),
+                ),
+              )
+            : InkWell(
+                borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                splashColor: Colors.purple[900],
+                onTapDown: (_details) {
+                  NoteOnMessage(
+                          channel: channel, note: note, velocity: velocity)
+                      .send();
+                },
+                onTapUp: (_details) {
+                  NoteOffMessage(
+                    channel: channel,
+                    note: note,
+                  ).send();
+                },
+                onTapCancel: () {
+                  NoteOffMessage(
+                    channel: channel,
+                    note: note,
+                  ).send();
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(2.5),
+                  child: Text(
+                      showNoteNames ? getNoteName(note) : note.toString(),
+                      style: TextStyle(color: Colors.grey[400])),
+                ),
+              ),
       ),
     );
   }

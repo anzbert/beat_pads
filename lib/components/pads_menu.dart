@@ -8,13 +8,6 @@ import 'package:wakelock/wakelock.dart';
 import '../state/settings.dart';
 import '../services/midi_utils.dart';
 
-class PadsMenu extends StatefulWidget {
-  const PadsMenu({Key? key}) : super(key: key);
-
-  @override
-  State<PadsMenu> createState() => _PadsMenuState();
-}
-
 class _PadsMenuState extends State<PadsMenu> {
   bool wakeLock = false;
 
@@ -63,6 +56,14 @@ class _PadsMenuState extends State<PadsMenu> {
           ListTile(
             title: Text("Scale"),
             trailing: DropdownScales(),
+          ),
+          ListTile(
+            title: Text("Only Scale Notes-not working yet"),
+            trailing: Switch(
+                value: settings.onlyScaleNotes,
+                onChanged: (value) {
+                  settings.onlyScaleNotes = !settings.onlyScaleNotes;
+                }),
           ),
           ListTile(
             title: Text("Pitch Bender"),
@@ -240,4 +241,11 @@ class _PadsMenuState extends State<PadsMenu> {
     Wakelock.disable();
     super.dispose();
   }
+}
+
+class PadsMenu extends StatefulWidget {
+  const PadsMenu({Key? key}) : super(key: key);
+
+  @override
+  State<PadsMenu> createState() => _PadsMenuState();
 }

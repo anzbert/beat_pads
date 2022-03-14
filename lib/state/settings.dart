@@ -19,6 +19,7 @@ class Settings extends ChangeNotifier {
   final List<int> _padDimensions = [4, 4]; // [ W, H ]
   int get width => _padDimensions[0];
   int get height => _padDimensions[1];
+  // int get totalNumPads => _padDimensions[0] * _padDimensions[1];
 
   set padDimensions(List<int> newDims) {
     if (newDims.length != 2) return;
@@ -44,6 +45,24 @@ class Settings extends ChangeNotifier {
       validatedScale = midiScales.keys.toList()[0]; // set to default
     }
     _scale = validatedScale;
+    notifyListeners();
+  }
+
+// TODO row interval:
+  int _rowInterval = 4; // semitones
+  int get rowInterval => _rowInterval;
+
+  set rowInterval(int newValue) {
+    _rowInterval = newValue;
+    notifyListeners();
+  }
+
+// only scale notes:
+  bool _onlyScaleNotes = false;
+  bool get onlyScaleNotes => _onlyScaleNotes;
+
+  set onlyScaleNotes(bool newValue) {
+    _onlyScaleNotes = newValue;
     notifyListeners();
   }
 
