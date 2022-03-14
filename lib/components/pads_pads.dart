@@ -22,7 +22,9 @@ class VariablePads extends StatelessWidget {
     if (scaleOnly) {
       grid = List.generate(totalPads, (index) {
         int currentScale = index ~/ scaleNotes.length * 12;
-        return baseNote + currentScale + scaleNotes[index % scaleNotes.length];
+        int nextNote =
+            baseNote + currentScale + scaleNotes[index % scaleNotes.length];
+        return nextNote;
       });
     } else {
       grid = List.generate(totalPads, (index) {

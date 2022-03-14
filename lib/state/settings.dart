@@ -58,6 +58,8 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
+// TODO: "only-scale-notes mode" works only when interval is continuous
+
 // only scale notes:
   bool _onlyScaleNotes = false;
   bool get onlyScaleNotes => _onlyScaleNotes;

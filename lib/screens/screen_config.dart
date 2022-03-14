@@ -2,6 +2,7 @@ import 'package:beat_pads/screens/screen_play.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_midi_command/flutter_midi_command.dart';
 
+// TODO: Bluetooth Midi
 class _ConfigScreenState extends State<ConfigScreen> {
   final MidiCommand _midiCommand = MidiCommand();
 
