@@ -24,7 +24,7 @@ class Settings extends ChangeNotifier {
   set padDimensions(List<int> newDims) {
     if (newDims.length != 2) return;
     if (baseNote + newDims[0] * newDims[1] > 127) {
-      int maxValue = 127 - newDims[0] * newDims[1];
+      int maxValue = 128 - newDims[0] * newDims[1];
       baseNote = maxValue;
     }
     _padDimensions[0] = newDims[0];

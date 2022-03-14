@@ -110,7 +110,7 @@ class _PadsMenuState extends State<PadsMenu> {
               ),
               Slider(
                 min: 0,
-                max: (127 - settings.width * settings.height).toDouble(),
+                max: (128 - settings.width * settings.height).toDouble(),
                 value: settings.baseNote.toDouble(),
                 onChanged: (value) {
                   settings.baseNote = value.toInt();

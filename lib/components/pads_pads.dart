@@ -6,39 +6,37 @@ import 'package:provider/provider.dart';
 import '../services/midi_utils.dart';
 
 class VariablePads extends StatelessWidget {
-  // TODO implement pad generator (will affect basenote)
-  List<int> _generatePads(
+  // TODO BUGS!!@!#$%#$!
+  List<int> _generateNotes(
     int baseNote,
     int width,
     int height,
-    List<int> scale,
+    List<int> scaleNotes,
     bool scaleOnly,
   ) {
-    int numPads = width * height;
+    int totalPads = width * height;
+    List<int> grid;
 
-    List<int> grid = List.generate(numPads, (index) {
-      return scale[index % scale.length] + baseNote;
-    });
+    if (scaleOnly) {
+      grid = List.generate(totalPads, (index) {
+        int currentScale = index ~/ scaleNotes.length * 12;
+        return baseNote + currentScale + scaleNotes[index % scaleNotes.length];
+      });
+    } else {
+      grid = List.generate(totalPads, (index) {
+        return index + baseNote;
+      });
+    }
 
     return grid;
   }
 
-  List<List<int>> _splitToRows(List<int> grid, int width, int height) {
+  List<List<int>> _splitToReversedRows(List<int> grid, int width, int height) {
     return List.generate(
         height,
         (row) => List.generate(width, (note) {
               return grid[row * width + note];
-            }));
-  }
-
-  List<int> _rowsVerticalMirrored(List<int> grid, int width, int height) {
-    final int topLeft = width * height - width;
-    var outputGrid = List.generate(grid.length, (index) {
-      // final int padNote = topLeft + widthIndex - heightIndex * width;
-      return grid[topLeft];
-    });
-
-    return outputGrid;
+            })).reversed.toList();
   }
 
   @override
@@ -55,8 +53,10 @@ class VariablePads extends StatelessWidget {
     final int channel =
         Provider.of<MidiReceiver>(context, listen: true).channel;
 
-    final pads = _generatePads(baseNote, width, height, midiScales[scale]!,
+    final pads = _generateNotes(baseNote, width, height, midiScales[scale]!,
         Provider.of<Settings>(context, listen: true).onlyScaleNotes);
+
+    final padRows = _splitToReversedRows(pads, width, height);
 
     return Center(
       child: Container(
@@ -64,17 +64,13 @@ class VariablePads extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
-          children: List.generate(height, (heightIndex) {
+          children: padRows.map((row) {
             return Expanded(
               flex: 1,
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
-                  children: List.generate(width, (widthIndex) {
-                    final int topLeft = baseNote + width * height - width;
-                    final int padNote =
-                        topLeft + widthIndex - heightIndex * width;
-
+                  children: row.map((padNote) {
                     return Expanded(
                       flex: 1,
                       child: BeatPad(
@@ -83,6 +79,7 @@ class VariablePads extends StatelessWidget {
                         velocity: velocity,
                         channel: channel,
                         scale: scale,
+                        scaleRootNote: baseNote,
                       ),
                     );
                   }).toList()),
@@ -102,6 +99,7 @@ class BeatPad extends StatelessWidget {
     this.velocity = 127,
     this.showNoteNames = false,
     this.scale = "chromatic",
+    this.scaleRootNote = 36,
   }) : super(key: key);
 
   final bool showNoteNames;
@@ -109,45 +107,49 @@ class BeatPad extends StatelessWidget {
   final int channel;
   final int velocity;
   final String scale;
+  final int scaleRootNote;
 
   @override
   Widget build(BuildContext context) {
-    int rxNote = note < 127
+    int _rxNote = note < 127
         ? Provider.of<MidiReceiver>(context, listen: true).rxNotes[note]
-        : -1;
+        : 0;
 
-    final Color color;
-    if (rxNote > 0) {
-      color = Color.fromARGB((rxNote ~/ 127) * 255, 10, 100, 100);
-    } else if (rxNote == -1) {
-      color = Colors.grey;
-    } else if (!withinScale(note, scale)) {
-      color = Colors.green[200]!;
+    final Color _color;
+    if (_rxNote > 0) {
+      _color = Color.fromARGB(
+          (_rxNote ~/ 127) * 255, 10, 100, 100); // receiving midi
+    } else if (note > 127) {
+      _color = Colors.grey; // out of range
+    } else if (!withinScale(note, scaleRootNote, scale)) {
+      _color = Colors.green[200]!; // outside of current scale
     } else {
-      color = Colors.green;
+      _color = Colors.green; // default color
     }
+
+    var _padRadius = BorderRadius.all(Radius.circular(5.0));
+    var _padPadding = const EdgeInsets.all(2.5);
+    var _padTextColor = Colors.grey[400];
 
     return Container(
       padding: const EdgeInsets.all(5.0),
       height: double.infinity,
       width: double.infinity,
       child: Material(
-        color: color,
+        color: _color,
         borderRadius: BorderRadius.all(Radius.circular(5.0)),
         elevation: 5.0,
         shadowColor: Colors.black,
         child: note > 127
             ? InkWell(
-                borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                splashColor: Colors.black,
+                borderRadius: _padRadius,
                 child: Padding(
-                  padding: const EdgeInsets.all(2.5),
-                  child:
-                      Text("#Range", style: TextStyle(color: Colors.grey[400])),
+                  padding: _padPadding,
+                  child: Text("#$note", style: TextStyle(color: _padTextColor)),
                 ),
               )
             : InkWell(
-                borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                borderRadius: _padRadius,
                 splashColor: Colors.purple[900],
                 onTapDown: (_details) {
                   NoteOnMessage(
@@ -167,10 +169,10 @@ class BeatPad extends StatelessWidget {
                   ).send();
                 },
                 child: Padding(
-                  padding: const EdgeInsets.all(2.5),
+                  padding: _padPadding,
                   child: Text(
                       showNoteNames ? getNoteName(note) : note.toString(),
-                      style: TextStyle(color: Colors.grey[400])),
+                      style: TextStyle(color: _padTextColor)),
                 ),
               ),
       ),
