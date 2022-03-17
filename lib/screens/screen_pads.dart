@@ -22,6 +22,7 @@ class MainScreen extends StatelessWidget {
         body: SafeArea(child: PadsMenu()),
       );
     }
+
     // LANDSCAPE: PLAY PADS
     else {
       return Scaffold(

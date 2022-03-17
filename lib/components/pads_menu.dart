@@ -30,7 +30,6 @@ class _PadsMenuState extends State<PadsMenu> {
                   Text(
                     " : Beat Pads",
                     style: TextStyle(
-                      // height: 1.5,
                       fontSize: 20,
                     ),
                   ),

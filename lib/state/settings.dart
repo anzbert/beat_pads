@@ -20,7 +20,6 @@ class Settings extends ChangeNotifier {
   final List<int> _padDimensions = [4, 4]; // [ W, H ]
   int get width => _padDimensions[0];
   int get height => _padDimensions[1];
-  // int get totalNumPads => _padDimensions[0] * _padDimensions[1];
 
   set padDimensions(List<int> newDims) {
     if (newDims.length != 2) return;

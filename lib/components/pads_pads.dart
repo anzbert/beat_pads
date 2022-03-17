@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 import '../services/midi_utils.dart';
 
 class VariablePads extends StatelessWidget {
-  // TODO row interval generation
+  
   List<int> _generateNotes(
     int baseNote,
     int width,
@@ -19,13 +19,22 @@ class VariablePads extends StatelessWidget {
     int totalPads = width * height;
     List<int> grid;
 
-    if (scaleOnly) {
+    if (scaleOnly == true && interval == RowInterval.continuous) {
       grid = List.generate(totalPads, (index) {
         int currentScale = index ~/ scaleNotes.length * 12;
         int nextNote =
             baseNote + currentScale + scaleNotes[index % scaleNotes.length];
         return nextNote;
       });
+    } else if (scaleOnly == false && interval != RowInterval.continuous) {
+      // TODO row interval generation - only in full-scale mode
+      var grid = List.generate(height, (row) {
+        return List.generate(width, (note) {
+          return [];
+        });
+      });
+
+      return [];
     } else {
       grid = List.generate(totalPads, (index) {
         return index + baseNote;

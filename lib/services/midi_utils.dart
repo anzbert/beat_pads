@@ -1,3 +1,9 @@
+// enums??
+enum PadsLayout { continuous, majorThird, minorThird, fourth, scaleOnly }
+
+// or classes??
+class Layout {}
+
 // MIDI UTILS
 const Map<int, String> midiNotes = {
   0: "C",
