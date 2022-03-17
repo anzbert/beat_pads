@@ -80,10 +80,10 @@ List<int> getScaleArray(List<int> scale, int rootNote) {
 
 // TODO not sure about the + basenote. might land on non-scale note
 List<int> getFilledPadsArray(
-    String scale, int baseNote, int rootNote, int gridLength) {
-  if (!isNoteInScale(baseNote, scale, rootNote)) throw Exception("arghhh");
+    List<int> scaleNotes, int baseNote, int rootNote, int gridLength) {
+  // if (!isNoteInScale(baseNote, scaleNotes, rootNote)) throw Exception("arghhh");
 
-  List<int> scaleNotes = midiScales[scale]!;
+  // List<int> scaleNotes = midiScales[scale]!;
   int position = scaleNotes.firstWhere((element) => element == baseNote % 12);
 
   List<int> output = List.generate(gridLength, (index) {
