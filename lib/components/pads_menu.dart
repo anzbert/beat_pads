@@ -1,41 +1,30 @@
 import 'package:beat_pads/components/drop_down_interval.dart';
+import 'package:beat_pads/components/drop_down_notes.dart';
 import 'package:beat_pads/components/drop_down_numbers.dart';
 import 'package:beat_pads/components/drop_down_scales.dart';
-import 'package:beat_pads/state/receiver.dart';
+import 'package:beat_pads/components/label_credits.dart';
+import 'package:beat_pads/components/label_rotate.dart';
+import 'package:beat_pads/components/slider_channel_selector.dart';
+import 'package:beat_pads/components/slider_midi_range.dart';
+import 'package:beat_pads/components/slider_midival_selector.dart';
+// import 'package:beat_pads/services/midi_utils.dart';
+
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
-import 'package:wakelock/wakelock.dart';
+import 'package:beat_pads/components/switch_wake_lock.dart';
 import '../state/settings.dart';
-import '../services/midi_utils.dart';
 
-class _PadsMenuState extends State<PadsMenu> {
-  bool wakeLock = false;
-
+class PadsMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<Settings>(builder: (context, settings, child) {
       return ListView(
         children: <Widget>[
-          Card(
-            margin: EdgeInsets.fromLTRB(8, 30, 8, 8),
-            elevation: 5,
-            child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.rotate_right),
-                  Text(
-                    " : Beat Pads",
-                    style: TextStyle(
-                      fontSize: 20,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+          RotateLabel(),
+          ListTile(
+            title: Text("Note Layout"),
+            trailing: DropdownLayout(),
           ),
           ListTile(
             title: Text("Show Note Names"),
@@ -54,76 +43,49 @@ class _PadsMenuState extends State<PadsMenu> {
             trailing: DropdownNumbers(Dimension.height),
           ),
           ListTile(
+            title: Text("Scale Root Note"),
+            trailing: DropdownScaleNotes(
+              setValue: (v) {
+                settings.rootNote = v;
+              },
+              readValue: settings.rootNote,
+              max: 12,
+              showOctaveIndex: false,
+            ),
+          ),
+          ListTile(
             title: Text("Scale"),
             trailing: DropdownScales(),
           ),
+          // MidiValueSelector(
+          //   label: "Root Note",
+          //   setValue: (v) => settings.rootNote = v,
+          //   readValue: settings.rootNote,
+          //   resetFunction: settings.resetRootNote,
+          //   note: true,
+          //   max: 11,
+          // ),
           ListTile(
-            title: Text("Show Only Scale Notes"),
-            trailing: Switch(
-                value: settings.onlyScaleNotes,
-                onChanged: (value) {
-                  settings.onlyScaleNotes = !settings.onlyScaleNotes;
-                }),
+            title: Text("Base Note"),
+            trailing: DropdownScaleNotes(
+              setValue: (v) {
+                settings.baseNote = v;
+                // settings.rootNote = v % 12;
+              },
+              readValue: settings.baseNote,
+              scale: settings.onlyScaleNotes ? settings.scale : null,
+              showNoteValue: true,
+            ),
           ),
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ListTile(
-                title: Row(
-                  children: [
-                    Text("Lowest Grid Note"),
-                    TextButton(
-                      onPressed: () => settings.resetBaseNote(),
-                      child: Text("Reset"),
-                    )
-                  ],
-                ),
-                trailing: Text(
-                    "${getNoteName(settings.baseNote)}  (${settings.baseNote.toString()})"),
-              ),
-              Slider(
-                min: 0,
-                max: (128 - settings.width * settings.height).toDouble(),
-                value: settings.baseNote.toDouble(),
-                onChanged: (value) {
-                  settings.baseNote = value.toInt();
-                },
-              ),
-            ],
-          ),
-          ListTile(
-            title: Text("Row Interval"),
-            trailing: DropdownInterval(),
-          ),
-          Consumer<MidiReceiver>(
-            builder: (context, receiver, child) {
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  ListTile(
-                    title: Row(
-                      children: [
-                        Text("Midi Channel"),
-                        TextButton(
-                          onPressed: () => receiver.resetChannel(),
-                          child: Text("Reset"),
-                        )
-                      ],
-                    ),
-                    trailing: Text("${receiver.channel + 1}"),
-                  ),
-                  Slider(
-                    min: 0,
-                    max: 15,
-                    value: receiver.channel.toDouble(),
-                    onChanged: (value) {
-                      receiver.channel = value.toInt();
-                    },
-                  ),
-                ],
-              );
-            },
-          ),
+          if (settings.layout == Layout.continuous)
+            ListTile(
+              title: Text("Show Only Scale Notes"),
+              trailing: Switch(
+                  value: settings.onlyScaleNotes,
+                  onChanged: (value) {
+                    settings.onlyScaleNotes = !settings.onlyScaleNotes;
+                  }),
+            ),
           ListTile(
             title: Text("Random Velocity"),
             trailing: Switch(
@@ -133,64 +95,22 @@ class _PadsMenuState extends State<PadsMenu> {
                 }),
           ),
           if (!settings.randomVelocity)
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                ListTile(
-                  title: Row(
-                    children: [
-                      Text("Fixed Velocity"),
-                      TextButton(
-                        onPressed: () => settings.resetVelocity(),
-                        child: Text("Reset"),
-                      )
-                    ],
-                  ),
-                  trailing: Text(settings.velocity.toString()),
-                ),
-                Slider(
-                  min: 0,
-                  max: 127,
-                  value: settings.velocity.toDouble(),
-                  onChanged: (value) {
-                    settings.velocity = value.toInt();
-                  },
-                ),
-              ],
+            MidiValueSelector(
+              label: "Velocity",
+              readValue: settings.velocity,
+              setValue: (v) => settings.velocity = v,
+              resetFunction: settings.resetVelocity,
             ),
           if (settings.randomVelocity)
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                ListTile(
-                  title: Row(
-                    children: [
-                      Text("Set Range"),
-                      TextButton(
-                        onPressed: () => settings.resetVelocity(),
-                        child: Text("Reset"),
-                      ),
-                    ],
-                  ),
-                  trailing:
-                      Text("${settings.velocityMin} - ${settings.velocityMax}"),
-                ),
-                RangeSlider(
-                  values: RangeValues(settings.velocityMin.toDouble(),
-                      settings.velocityMax.toDouble()),
-                  max: 127,
-                  // divisions: 127,
-                  labels: RangeLabels(
-                    "Min",
-                    "Max",
-                  ),
-                  onChanged: (RangeValues values) {
-                    settings.velocityMin = values.start.toInt();
-                    settings.velocityMax = values.end.toInt();
-                  },
-                ),
-              ],
+            MidiRangeSelector(
+              label: "Set Range",
+              readMin: settings.velocityMin,
+              readMax: settings.velocityMax,
+              setMin: (v) => settings.velocityMin = v,
+              setMax: (v) => settings.velocityMax = v,
+              resetFunction: settings.resetVelocity,
             ),
+          ChannelSelector(),
           ListTile(
             title: Text("Pitch Bender"),
             trailing: Switch(
@@ -207,49 +127,10 @@ class _PadsMenuState extends State<PadsMenu> {
                   settings.lockScreenButton = !settings.lockScreenButton;
                 }),
           ),
-          ListTile(
-            title: Text("Wake Lock"),
-            trailing: Switch(
-                value: wakeLock,
-                onChanged: (value) {
-                  setState(() {
-                    wakeLock = !wakeLock;
-                  });
-                  Wakelock.toggle(enable: wakeLock);
-                }),
-          ),
-          Card(
-            margin: EdgeInsets.fromLTRB(8, 30, 8, 8),
-            elevation: 5,
-            child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text("BeatPads v0.1\n      February 2022\n"),
-                  Text("Made by anzbert\n      [anzgraph.com]\n"),
-                  Text("Dog Icon by 'catalyststuff'\n      [freepik.com]\n"),
-                  Text("Logo Animated with Rive\n      [rive.app]"),
-                ],
-              ),
-            ),
-          )
+          SwitchWakeLock(),
+          CreditsLabel(),
         ],
       );
     });
   }
-
-  @override
-  void dispose() {
-    Wakelock.disable();
-    super.dispose();
-  }
-}
-
-class PadsMenu extends StatefulWidget {
-  const PadsMenu({Key? key}) : super(key: key);
-
-  @override
-  State<PadsMenu> createState() => _PadsMenuState();
 }

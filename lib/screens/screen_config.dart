@@ -48,7 +48,7 @@ class _ConfigScreenState extends State<ConfigScreen> {
           onPressed: (() {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => MainScreen()),
+              MaterialPageRoute(builder: (context) => PadsScreen()),
             );
           }),
         ),

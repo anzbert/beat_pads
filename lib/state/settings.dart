@@ -4,7 +4,29 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 
 class Settings extends ChangeNotifier {
-  // basenote:
+// layout:
+  Layout _layout = Layout.majorThird; // semitones
+  Layout get layout => _layout;
+
+  set layout(Layout newValue) {
+    if (layout != Layout.continuous) onlyScaleNotes = false;
+    _layout = newValue;
+    notifyListeners();
+  }
+
+  // lowest note:
+  int _rootNote = 0;
+
+  set rootNote(int note) {
+    if (note < 0 || note > 11) return;
+    _rootNote = note;
+    notifyListeners();
+  }
+
+  int get rootNote => _rootNote;
+  resetRootNote() => rootNote = 0;
+
+  // lowest note:
   int _baseNote = 36;
 
   set baseNote(int note) {
@@ -35,7 +57,7 @@ class Settings extends ChangeNotifier {
   set width(int newValue) => padDimensions = [newValue, height];
   set height(int newValue) => padDimensions = [width, newValue];
 
-// scale:
+// `scale`:
   String _scale = midiScales.keys.toList()[0];
   String get scale => _scale;
 
@@ -45,25 +67,19 @@ class Settings extends ChangeNotifier {
       validatedScale = midiScales.keys.toList()[0]; // set to default
     }
     _scale = validatedScale;
+
     notifyListeners();
   }
-
-// row interval:
-  RowInterval _rowInterval = RowInterval.majorThird; // semitones
-  RowInterval get rowInterval => _rowInterval;
-
-  set rowInterval(RowInterval newValue) {
-    _rowInterval = newValue;
-    notifyListeners();
-  }
-
-// TODO: "only-scale-notes mode" works only when interval is continuous
 
 // only scale notes:
   bool _onlyScaleNotes = false;
   bool get onlyScaleNotes => _onlyScaleNotes;
 
   set onlyScaleNotes(bool newValue) {
+// TODO: "only-scale-notes mode" works only when interval is continuous
+    if (newValue) {
+      baseNote = rootNote + 36;
+    }
     _onlyScaleNotes = newValue;
     notifyListeners();
   }
@@ -139,7 +155,7 @@ class Settings extends ChangeNotifier {
   }
 
 // notenames:
-  bool _showNoteNames = false;
+  bool _showNoteNames = true;
   bool get showNoteNames => _showNoteNames;
 
   set showNoteNames(bool setting) {

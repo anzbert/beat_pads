@@ -1,9 +1,3 @@
-// enums??
-enum PadsLayout { continuous, majorThird, minorThird, fourth, scaleOnly }
-
-// or classes??
-class Layout {}
-
 // MIDI UTILS
 const Map<int, String> midiNotes = {
   0: "C",
@@ -35,19 +29,44 @@ const Map<int, String> midiNotesFlats = {
 enum NoteSigns { sharps, flats }
 
 /// Get Note Name String from Midi Value (0 - 127) as NoteSigns.sharps (default) or NoteSigns.flats
-String getNoteName(int value, {NoteSigns sign = NoteSigns.sharps}) {
+String getNoteName(int value,
+    {NoteSigns sign = NoteSigns.sharps,
+    showOctaveIndex = true,
+    showNoteValue = false}) {
   if (value < 0 || value > 127) {
     return "Out of range";
   }
 
   int octave = value ~/ 12;
   int note = value % 12;
+  String octaveString = showOctaveIndex ? "${octave - 2}" : "";
+  String noteString = showNoteValue ? " ($value)" : "";
 
   if (sign == NoteSigns.sharps) {
-    return "${midiNotesSharps[note]}${octave - 2}";
+    return "${midiNotesSharps[note]}$octaveString$noteString";
   } else {
-    return "${midiNotesFlats[note]}${octave - 2}";
+    return "${midiNotesFlats[note]}$octaveString$noteString";
   }
+}
+
+bool isNoteInScale(int note, String scale) {
+  int baseNote = note % 12;
+  if (midiScales[scale] == null) return false;
+
+  if (midiScales[scale]!.contains(baseNote)) return true;
+
+  return false;
+}
+
+List<int> getScaleArray(List<int> scale, int rootNote) {
+  List<int> list = [];
+  for (int i = 0; i <= 127; i++) {
+    int toScale = i + rootNote;
+    if (scale.contains(toScale % 12)) {
+      list.add(i);
+    }
+  }
+  return list;
 }
 
 // Scales (thx to gleitz [https://gist.github.com/gleitz/6845751])

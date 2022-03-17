@@ -2,12 +2,12 @@ import 'package:beat_pads/state/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-enum RowInterval { minorThird, majorThird, quart, continuous }
+enum Layout { minorThird, majorThird, quart, continuous }
 
-class DropdownInterval extends StatelessWidget {
-  DropdownInterval({Key? key}) : super(key: key);
+class DropdownLayout extends StatelessWidget {
+  DropdownLayout({Key? key}) : super(key: key);
 
-  final items = RowInterval.values
+  final items = Layout.values
       .map((interval) =>
           DropdownMenuItem(child: Text(interval.name), value: interval))
       .toList();
@@ -18,12 +18,12 @@ class DropdownInterval extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: DropdownButton<RowInterval>(
-        value: Provider.of<Settings>(context, listen: true).rowInterval,
+      child: DropdownButton<Layout>(
+        value: Provider.of<Settings>(context, listen: true).layout,
         items: items,
         onChanged: (value) {
           if (value != null) {
-            Provider.of<Settings>(context, listen: false).rowInterval = value;
+            Provider.of<Settings>(context, listen: false).layout = value;
           }
         },
       ),

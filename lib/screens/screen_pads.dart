@@ -1,3 +1,4 @@
+import 'package:beat_pads/components/_menu.dart';
 import 'package:beat_pads/components/button_lock_screen.dart';
 import 'package:beat_pads/components/slider_pitch_bend.dart';
 import 'package:beat_pads/components/pads_pads.dart';
@@ -6,13 +7,13 @@ import 'package:beat_pads/state/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class MainScreen extends StatelessWidget {
-  const MainScreen({Key? key}) : super(key: key);
+class PadsScreen extends StatelessWidget {
+  const PadsScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     bool inPortrait = MediaQuery.of(context).orientation.name == "portrait";
-
+    // return Layout().commonWidgets();
     // PORTRAIT: SHOW PADS SETTINGS MENU
     if (inPortrait) {
       return Scaffold(

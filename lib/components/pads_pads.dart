@@ -7,38 +7,41 @@ import 'package:provider/provider.dart';
 import '../services/midi_utils.dart';
 
 class VariablePads extends StatelessWidget {
-  
   List<int> _generateNotes(
+    int rootNote,
     int baseNote,
     int width,
     int height,
     List<int> scaleNotes,
     bool scaleOnly,
-    RowInterval interval,
+    Layout layout,
   ) {
-    int totalPads = width * height;
-    List<int> grid;
+    List<int> grid = [];
+    if (scaleOnly == true && layout == Layout.continuous) {
+      grid = getScaleArray(scaleNotes, rootNote).map((e) => e).toList();
+      // TODO this is wrong for sure ?!
+    } else if (scaleOnly == false) {
+      int semiTones;
+      switch (layout) {
+        case Layout.minorThird:
+          semiTones = 3;
+          break;
+        case Layout.majorThird:
+          semiTones = 4;
+          break;
+        case Layout.quart:
+          semiTones = 5;
+          break;
+        default:
+          semiTones = width;
+          break;
+      }
 
-    if (scaleOnly == true && interval == RowInterval.continuous) {
-      grid = List.generate(totalPads, (index) {
-        int currentScale = index ~/ scaleNotes.length * 12;
-        int nextNote =
-            baseNote + currentScale + scaleNotes[index % scaleNotes.length];
-        return nextNote;
-      });
-    } else if (scaleOnly == false && interval != RowInterval.continuous) {
-      // TODO row interval generation - only in full-scale mode
-      var grid = List.generate(height, (row) {
-        return List.generate(width, (note) {
-          return [];
-        });
-      });
-
-      return [];
-    } else {
-      grid = List.generate(totalPads, (index) {
-        return index + baseNote;
-      });
+      for (int row = 0; row < height; row++) {
+        for (int note = 0; note < width; note++) {
+          grid.add(baseNote + row * semiTones + note);
+        }
+      }
     }
 
     return grid;
@@ -58,6 +61,7 @@ class VariablePads extends StatelessWidget {
     final height = Provider.of<Settings>(context, listen: true).height;
 
     final int baseNote = Provider.of<Settings>(context, listen: true).baseNote;
+    final int rootNote = Provider.of<Settings>(context, listen: true).rootNote;
     final int velocity = Provider.of<Settings>(context, listen: true).velocity;
     final String scale = Provider.of<Settings>(context, listen: true).scale;
 
@@ -68,12 +72,13 @@ class VariablePads extends StatelessWidget {
         Provider.of<MidiReceiver>(context, listen: true).channel;
 
     final pads = _generateNotes(
+      rootNote,
       baseNote,
       width,
       height,
       midiScales[scale]!,
       Provider.of<Settings>(context, listen: true).onlyScaleNotes,
-      Provider.of<Settings>(context, listen: true).rowInterval,
+      Provider.of<Settings>(context, listen: true).layout,
     );
 
     final padRows = _splitToReversedRows(pads, width, height);
@@ -99,7 +104,8 @@ class VariablePads extends StatelessWidget {
                         velocity: velocity,
                         channel: channel,
                         scale: scale,
-                        scaleRootNote: baseNote,
+                        scaleRootNote: rootNote,
+                        lowestNote: baseNote,
                       ),
                     );
                   }).toList()),
@@ -119,7 +125,8 @@ class BeatPad extends StatelessWidget {
     this.velocity = 127,
     this.showNoteNames = false,
     this.scale = "chromatic",
-    this.scaleRootNote = 36,
+    this.scaleRootNote = 0,
+    this.lowestNote = 36,
   }) : super(key: key);
 
   final bool showNoteNames;
@@ -128,6 +135,7 @@ class BeatPad extends StatelessWidget {
   final int velocity;
   final String scale;
   final int scaleRootNote;
+  final int lowestNote;
 
   @override
   Widget build(BuildContext context) {
@@ -143,6 +151,8 @@ class BeatPad extends StatelessWidget {
       _color = Colors.grey; // out of range
     } else if (!withinScale(note, scaleRootNote, scale)) {
       _color = Colors.green[200]!; // outside of current scale
+    } else if (note % 12 == scaleRootNote) {
+      _color = Colors.teal;
     } else {
       _color = Colors.green; // default color
     }
