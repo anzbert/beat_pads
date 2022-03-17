@@ -12,13 +12,16 @@ class VariablePads extends StatelessWidget {
     int baseNote,
     int width,
     int height,
-    List<int> scaleNotes,
+    String scale,
     bool scaleOnly,
     Layout layout,
   ) {
     List<int> grid = [];
     if (scaleOnly == true && layout == Layout.continuous) {
-      grid = getScaleArray(scaleNotes, rootNote).map((e) => e).toList();
+      grid = getFilledPadsArray(scale, baseNote, rootNote, width * height)
+          .map((e) => e)
+          .toList();
+      // grid =
       // TODO this is wrong for sure ?!
     } else if (scaleOnly == false) {
       int semiTones;
@@ -43,6 +46,8 @@ class VariablePads extends StatelessWidget {
         }
       }
     }
+
+    if (grid.length != width * height) throw Exception("PAds: wrong grid size");
 
     return grid;
   }
@@ -76,7 +81,7 @@ class VariablePads extends StatelessWidget {
       baseNote,
       width,
       height,
-      midiScales[scale]!,
+      scale,
       Provider.of<Settings>(context, listen: true).onlyScaleNotes,
       Provider.of<Settings>(context, listen: true).layout,
     );
@@ -105,7 +110,6 @@ class VariablePads extends StatelessWidget {
                         channel: channel,
                         scale: scale,
                         scaleRootNote: rootNote,
-                        lowestNote: baseNote,
                       ),
                     );
                   }).toList()),
@@ -126,7 +130,6 @@ class BeatPad extends StatelessWidget {
     this.showNoteNames = false,
     this.scale = "chromatic",
     this.scaleRootNote = 0,
-    this.lowestNote = 36,
   }) : super(key: key);
 
   final bool showNoteNames;
@@ -135,7 +138,6 @@ class BeatPad extends StatelessWidget {
   final int velocity;
   final String scale;
   final int scaleRootNote;
-  final int lowestNote;
 
   @override
   Widget build(BuildContext context) {
@@ -147,12 +149,12 @@ class BeatPad extends StatelessWidget {
     if (_rxNote > 0) {
       _color = Color.fromARGB(
           (_rxNote ~/ 127) * 255, 10, 100, 100); // receiving midi
-    } else if (note > 127) {
+    } else if (note > 127 || note < 0) {
       _color = Colors.grey; // out of range
-    } else if (!withinScale(note, scaleRootNote, scale)) {
-      _color = Colors.green[200]!; // outside of current scale
+    } else if (!isNoteInScale(note, scale, scaleRootNote)) {
+      _color = Color.fromARGB(255, 77, 109, 78); // outside of current scale
     } else if (note % 12 == scaleRootNote) {
-      _color = Colors.teal;
+      _color = Colors.teal[400]!;
     } else {
       _color = Colors.green; // default color
     }
@@ -170,7 +172,7 @@ class BeatPad extends StatelessWidget {
         borderRadius: BorderRadius.all(Radius.circular(5.0)),
         elevation: 5.0,
         shadowColor: Colors.black,
-        child: note > 127
+        child: note > 127 || note < 0
             ? InkWell(
                 borderRadius: _padRadius,
                 child: Padding(
@@ -201,7 +203,9 @@ class BeatPad extends StatelessWidget {
                 child: Padding(
                   padding: _padPadding,
                   child: Text(
-                      showNoteNames ? getNoteName(note) : note.toString(),
+                      showNoteNames
+                          ? getNoteName(note, showNoteValue: false)
+                          : note.toString(),
                       style: TextStyle(color: _padTextColor)),
                 ),
               ),

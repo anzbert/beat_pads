@@ -49,11 +49,20 @@ String getNoteName(int value,
   }
 }
 
-bool isNoteInScale(int note, String scale) {
-  int baseNote = note % 12;
-  if (midiScales[scale] == null) return false;
+transposedScale(int root, List<int> scale) {
+  return scale.map((e) => ((e + (root % 12))) % 12).toList();
+}
 
-  if (midiScales[scale]!.contains(baseNote)) return true;
+bool isNoteInScale(int note, String scale, int rootNote) {
+  if (midiScales[scale] == null) {
+    throw Exception('no such scale');
+  } // null check guard
+
+  var transp = transposedScale(rootNote, midiScales[scale]!);
+
+  if (transp.contains(note % 12)) {
+    return true;
+  }
 
   return false;
 }
@@ -67,6 +76,24 @@ List<int> getScaleArray(List<int> scale, int rootNote) {
     }
   }
   return list;
+}
+
+// TODO not sure about the + basenote. might land on non-scale note
+List<int> getFilledPadsArray(
+    String scale, int baseNote, int rootNote, int gridLength) {
+  if (!isNoteInScale(baseNote, scale, rootNote)) throw Exception("arghhh");
+
+  List<int> scaleNotes = midiScales[scale]!;
+  int position = scaleNotes.firstWhere((element) => element == baseNote % 12);
+
+  List<int> output = List.generate(gridLength, (index) {
+    return scaleNotes[index % scaleNotes.length] +
+        (index ~/ scaleNotes.length) * 12 +
+        baseNote;
+  });
+
+  // print(output.length);
+  return output;
 }
 
 // Scales (thx to gleitz [https://gist.github.com/gleitz/6845751])
@@ -159,12 +186,12 @@ const Map<String, List<int>> midiScales = {
   'bebop tonic minor': [0, 2, 3, 5, 7, 8, 9, 11]
 };
 
-bool withinScale(int note, int scaleRootNote, String scale) {
-  final rootBaseNote = scaleRootNote % 12;
+// bool withinScale(int note, int scaleRootNote, String scale) {
+//   final rootBaseNote = scaleRootNote % 12;
 
-  final int baseNote = (note - rootBaseNote) % 12;
+//   final int baseNote = (note - rootBaseNote) % 12;
 
-  if (midiScales[scale]!.contains(baseNote)) return true;
+//   if (midiScales[scale]!.contains(baseNote)) return true;
 
-  return false;
-}
+//   return false;
+// }

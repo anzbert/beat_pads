@@ -1,6 +1,7 @@
 import 'package:beat_pads/components/drop_down_interval.dart';
 import 'package:beat_pads/components/drop_down_notes.dart';
 import 'package:beat_pads/components/drop_down_numbers.dart';
+import 'package:beat_pads/components/drop_down_root_note.dart';
 import 'package:beat_pads/components/drop_down_scales.dart';
 import 'package:beat_pads/components/label_credits.dart';
 import 'package:beat_pads/components/label_rotate.dart';
@@ -44,39 +45,31 @@ class PadsMenu extends StatelessWidget {
           ),
           ListTile(
             title: Text("Scale Root Note"),
-            trailing: DropdownScaleNotes(
-              setValue: (v) {
-                settings.rootNote = v;
-              },
-              readValue: settings.rootNote,
-              max: 12,
-              showOctaveIndex: false,
-            ),
+            trailing: DropdownRootNote(
+                setValue: (v) {
+                  settings.baseNote = v + 36; // TEMP WHILE BASENOTE DISABLED
+                  settings.rootNote = v;
+                },
+                readValue: settings.rootNote),
           ),
           ListTile(
             title: Text("Scale"),
             trailing: DropdownScales(),
           ),
-          // MidiValueSelector(
-          //   label: "Root Note",
-          //   setValue: (v) => settings.rootNote = v,
-          //   readValue: settings.rootNote,
-          //   resetFunction: settings.resetRootNote,
-          //   note: true,
-          //   max: 11,
+          // TODO THIS IS FUCKED + ONLY SCALES MODE TOO
+          // ListTile(
+          //   title: Text("Base Note"),
+          //   trailing: DropdownScaleNotes(
+          //     setValue: (v) {
+          //       settings.baseNote = v;
+          //       // settings.rootNote = v % 12; // set with root note
+          //     },
+          //     readValue: settings.baseNote,
+          //     rootNote: settings.rootNote,
+          //     scale: settings.onlyScaleNotes ? settings.scale : null,
+          //     showNoteValue: true,
+          //   ),
           // ),
-          ListTile(
-            title: Text("Base Note"),
-            trailing: DropdownScaleNotes(
-              setValue: (v) {
-                settings.baseNote = v;
-                // settings.rootNote = v % 12;
-              },
-              readValue: settings.baseNote,
-              scale: settings.onlyScaleNotes ? settings.scale : null,
-              showNoteValue: true,
-            ),
-          ),
           if (settings.layout == Layout.continuous)
             ListTile(
               title: Text("Show Only Scale Notes"),

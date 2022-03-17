@@ -4,8 +4,7 @@ import 'package:beat_pads/services/midi_utils.dart';
 class DropdownScaleNotes extends StatelessWidget {
   const DropdownScaleNotes(
       {this.scale,
-      this.rootNote = 0,
-      this.max,
+      required this.rootNote,
       this.showOctaveIndex = true,
       this.showNoteValue = false,
       required this.setValue,
@@ -17,43 +16,25 @@ class DropdownScaleNotes extends StatelessWidget {
   final bool showOctaveIndex;
   final bool showNoteValue;
   final String? scale;
-  final int? max;
+
   final Function setValue;
   final int readValue;
 
   @override
   Widget build(BuildContext context) {
-    final List<int> items;
+    final List<int> items = getScaleArray(midiScales[scale]!, rootNote);
     final List<DropdownMenuItem<int>> menuItems;
 
-    if (scale == null) {
-      items = getScaleArray(midiScales['chromatic']!, rootNote);
-    } else {
-      items = getScaleArray(midiScales[scale]!, rootNote);
-    }
-    if (max == null) {
-      menuItems = items
-          .map((e) => DropdownMenuItem<int>(
-                child: Text(getNoteName(
-                  e,
-                  showOctaveIndex: showOctaveIndex,
-                  showNoteValue: showNoteValue,
-                )),
-                value: e,
-              ))
-          .toList();
-    } else {
-      menuItems = List.generate(
-          max!,
-          (e) => DropdownMenuItem<int>(
-                child: Text(getNoteName(
-                  e,
-                  showOctaveIndex: showOctaveIndex,
-                  showNoteValue: showNoteValue,
-                )),
-                value: e,
-              )).toList();
-    }
+    menuItems = items
+        .map((e) => DropdownMenuItem<int>(
+              child: Text(getNoteName(
+                e,
+                showOctaveIndex: showOctaveIndex,
+                showNoteValue: showNoteValue,
+              )),
+              value: e,
+            ))
+        .toList();
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),

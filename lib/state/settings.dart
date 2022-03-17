@@ -9,7 +9,7 @@ class Settings extends ChangeNotifier {
   Layout get layout => _layout;
 
   set layout(Layout newValue) {
-    if (layout != Layout.continuous) onlyScaleNotes = false;
+    if (layout != Layout.continuous) _onlyScaleNotes = false;
     _layout = newValue;
     notifyListeners();
   }
@@ -57,7 +57,7 @@ class Settings extends ChangeNotifier {
   set width(int newValue) => padDimensions = [newValue, height];
   set height(int newValue) => padDimensions = [width, newValue];
 
-// `scale`:
+// scale:
   String _scale = midiScales.keys.toList()[0];
   String get scale => _scale;
 
@@ -76,9 +76,8 @@ class Settings extends ChangeNotifier {
   bool get onlyScaleNotes => _onlyScaleNotes;
 
   set onlyScaleNotes(bool newValue) {
-// TODO: "only-scale-notes mode" works only when interval is continuous
-    if (newValue) {
-      baseNote = rootNote + 36;
+    if (newValue == true) {
+      _baseNote = rootNote + 36;
     }
     _onlyScaleNotes = newValue;
     notifyListeners();
