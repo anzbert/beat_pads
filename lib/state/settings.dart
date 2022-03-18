@@ -1,4 +1,4 @@
-import 'package:beat_pads/components/drop_down_interval.dart';
+import 'package:beat_pads/components/drop_down_layout.dart';
 import 'package:beat_pads/services/midi_utils.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
