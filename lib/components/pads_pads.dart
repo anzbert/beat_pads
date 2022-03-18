@@ -1,4 +1,4 @@
-import 'package:beat_pads/components/drop_down_interval.dart';
+import 'package:beat_pads/components/drop_down_layout.dart';
 import 'package:beat_pads/state/receiver.dart';
 import 'package:beat_pads/state/settings.dart';
 import 'package:flutter/material.dart';
@@ -12,43 +12,18 @@ class VariablePads extends StatelessWidget {
     int baseNote,
     int width,
     int height,
-    String scale,
+    List<int> scale,
     bool scaleOnly,
     Layout layout,
   ) {
     List<int> grid = [];
     if (scaleOnly == true && layout == Layout.continuous) {
-      grid = getFilledPadsArray(scale, baseNote, rootNote, width * height)
-          .map((e) => e)
-          .toList();
-      // grid =
-      // TODO this is wrong for sure ?!
+      grid = scaleOnlyGrid(rootNote, scale, baseNote, width * height);
     } else if (scaleOnly == false) {
-      int semiTones;
-      switch (layout) {
-        case Layout.minorThird:
-          semiTones = 3;
-          break;
-        case Layout.majorThird:
-          semiTones = 4;
-          break;
-        case Layout.quart:
-          semiTones = 5;
-          break;
-        default:
-          semiTones = width;
-          break;
-      }
-
-      for (int row = 0; row < height; row++) {
-        for (int note = 0; note < width; note++) {
-          grid.add(baseNote + row * semiTones + note);
-        }
-      }
+      grid = createGrid(layout, baseNote, width, height);
     }
 
     if (grid.length != width * height) throw Exception("PAds: wrong grid size");
-
     return grid;
   }
 
@@ -68,7 +43,8 @@ class VariablePads extends StatelessWidget {
     final int baseNote = Provider.of<Settings>(context, listen: true).baseNote;
     final int rootNote = Provider.of<Settings>(context, listen: true).rootNote;
     final int velocity = Provider.of<Settings>(context, listen: true).velocity;
-    final String scale = Provider.of<Settings>(context, listen: true).scale;
+    final String scaleName = Provider.of<Settings>(context, listen: true).scale;
+    final List<int> scale = midiScales[scaleName]!;
 
     final bool showNoteNames =
         Provider.of<Settings>(context, listen: true).showNoteNames;
@@ -128,7 +104,7 @@ class BeatPad extends StatelessWidget {
     this.channel = 0,
     this.velocity = 127,
     this.showNoteNames = false,
-    this.scale = "chromatic",
+    this.scale = const [],
     this.scaleRootNote = 0,
   }) : super(key: key);
 
@@ -136,7 +112,7 @@ class BeatPad extends StatelessWidget {
   final int note;
   final int channel;
   final int velocity;
-  final String scale;
+  final List<int> scale;
   final int scaleRootNote;
 
   @override

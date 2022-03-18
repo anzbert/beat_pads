@@ -22,7 +22,7 @@ class DropdownScaleNotes extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<int> items = getScaleArray(midiScales[scale]!, rootNote);
+    final List<int> items = allAbsoluteScaleNotes(midiScales[scale]!, rootNote);
     final List<DropdownMenuItem<int>> menuItems;
 
     menuItems = items

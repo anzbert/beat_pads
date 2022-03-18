@@ -1,5 +1,4 @@
-import 'package:beat_pads/components/drop_down_interval.dart';
-import 'package:beat_pads/components/drop_down_notes.dart';
+import 'package:beat_pads/components/drop_down_layout.dart';
 import 'package:beat_pads/components/drop_down_numbers.dart';
 import 'package:beat_pads/components/drop_down_root_note.dart';
 import 'package:beat_pads/components/drop_down_scales.dart';
@@ -8,7 +7,6 @@ import 'package:beat_pads/components/label_rotate.dart';
 import 'package:beat_pads/components/slider_channel_selector.dart';
 import 'package:beat_pads/components/slider_midi_range.dart';
 import 'package:beat_pads/components/slider_midival_selector.dart';
-// import 'package:beat_pads/services/midi_utils.dart';
 
 import 'package:flutter/material.dart';
 
@@ -56,7 +54,7 @@ class PadsMenu extends StatelessWidget {
             title: Text("Scale"),
             trailing: DropdownScales(),
           ),
-          // TODO THIS IS FUCKED + ONLY SCALES MODE TOO
+          // TODO slider instead of drop down??
           // ListTile(
           //   title: Text("Base Note"),
           //   trailing: DropdownScaleNotes(
