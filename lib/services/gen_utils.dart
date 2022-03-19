@@ -1,26 +1,27 @@
-// rotate a List
 import 'package:flutter/foundation.dart';
 
+/// Rotate a list by a given int value (positive = forward / negative = backwards)
 List<T> rotateList<T>(List<T> list, int rotateBy) {
   if (list.isEmpty || rotateBy == 0) return list;
   int i = -rotateBy % list.length;
   return list.sublist(i)..addAll(list.sublist(0, i));
 }
 
-// create a range of Iterable<int>
+/// Create a range as <Iterable<int>>
 Iterable<int> range(int start, int end) {
   return Iterable.generate(end - start, (i) => start + i++);
 }
 
-// print only in debug mode:
-logd(String text) {
-  if (kDebugMode) print(text);
+/// Print ONLY in debug mode
+logd(dynamic text) {
+  if (kDebugMode) print(text.toString());
 }
 
-logdAll(List<String> textList) {
+/// Print array of values ONLY in debug mode
+logdAll(List<dynamic> textList) {
   if (kDebugMode) {
     for (var text in textList) {
-      print(text);
+      print(text.toString());
     }
   }
 }

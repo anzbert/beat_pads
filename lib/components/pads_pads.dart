@@ -6,31 +6,12 @@ import 'package:provider/provider.dart';
 import 'package:beat_pads/state/receiver.dart';
 import 'package:beat_pads/state/settings.dart';
 
-import 'package:beat_pads/components/drop_down_layout.dart';
 import '../services/midi_utils.dart';
+import '../services/pads_utils.dart';
 
 class VariablePads extends StatelessWidget {
-  List<int> _generateNotes(
-    int rootNote,
-    int baseNote,
-    int width,
-    int height,
-    List<int> scale,
-    bool scaleOnly,
-    Layout layout,
-  ) {
-    List<int> grid = [];
-    if (scaleOnly == true && layout == Layout.continuous) {
-      grid = scaleOnlyGrid(rootNote, scale, baseNote, width * height);
-    } else if (scaleOnly == false) {
-      grid = createGrid(layout, baseNote, width, height);
-    }
-
-    if (grid.length != width * height) throw Exception("PAds: wrong grid size");
-    return grid;
-  }
-
-  List<List<int>> _splitToReversedRows(List<int> grid, int width, int height) {
+  List<List<int>> _listToReversedRowLists(
+      List<int> grid, int width, int height) {
     return List.generate(
         height,
         (row) => List.generate(width, (note) {
@@ -46,8 +27,8 @@ class VariablePads extends StatelessWidget {
     final int baseNote = Provider.of<Settings>(context, listen: true).baseNote;
     final int rootNote = Provider.of<Settings>(context, listen: true).rootNote;
     final int velocity = Provider.of<Settings>(context, listen: true).velocity;
-    final String scaleName = Provider.of<Settings>(context, listen: true).scale;
-    final List<int> scale = midiScales[scaleName]!;
+    final List<int> scale =
+        Provider.of<Settings>(context, listen: true).scaleList;
 
     final bool showNoteNames =
         Provider.of<Settings>(context, listen: true).showNoteNames;
@@ -55,7 +36,7 @@ class VariablePads extends StatelessWidget {
     final int channel =
         Provider.of<MidiReceiver>(context, listen: true).channel;
 
-    final pads = _generateNotes(
+    final pads = padNotesList(
       rootNote,
       baseNote,
       width,
@@ -65,7 +46,7 @@ class VariablePads extends StatelessWidget {
       Provider.of<Settings>(context, listen: true).layout,
     );
 
-    final padRows = _splitToReversedRows(pads, width, height);
+    final padRows = _listToReversedRowLists(pads, width, height);
 
     return Center(
       child: Container(

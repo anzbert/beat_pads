@@ -60,6 +60,7 @@ class Settings extends ChangeNotifier {
 // scale:
   String _scale = midiScales.keys.toList()[0];
   String get scale => _scale;
+  List<int> get scaleList => midiScales[_scale]!;
 
   set scale(String newValue) {
     String validatedScale = newValue;
