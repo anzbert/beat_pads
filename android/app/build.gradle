@@ -52,7 +52,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "io.anzio.beat_pads"
+        applicationId "io.anzio.beatpads"
         minSdkVersion 25
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
