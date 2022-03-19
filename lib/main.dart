@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
 
-import '../state/receiver.dart';
+import 'package:provider/provider.dart';
 import '../state/settings.dart';
+import '../state/receiver.dart';
+
 import 'app_theme.dart';
 import 'screens/screen_splash.dart';
 

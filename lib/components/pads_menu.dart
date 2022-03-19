@@ -1,3 +1,9 @@
+import 'package:beat_pads/components/drop_down_notes.dart';
+import 'package:flutter/material.dart';
+
+import 'package:provider/provider.dart';
+import '../state/settings.dart';
+
 import 'package:beat_pads/components/drop_down_layout.dart';
 import 'package:beat_pads/components/drop_down_numbers.dart';
 import 'package:beat_pads/components/drop_down_root_note.dart';
@@ -7,12 +13,7 @@ import 'package:beat_pads/components/label_rotate.dart';
 import 'package:beat_pads/components/slider_channel_selector.dart';
 import 'package:beat_pads/components/slider_midi_range.dart';
 import 'package:beat_pads/components/slider_midival_selector.dart';
-
-import 'package:flutter/material.dart';
-
-import 'package:provider/provider.dart';
 import 'package:beat_pads/components/switch_wake_lock.dart';
-import '../state/settings.dart';
 
 class PadsMenu extends StatelessWidget {
   @override
@@ -29,9 +30,7 @@ class PadsMenu extends StatelessWidget {
             title: Text("Show Note Names"),
             trailing: Switch(
                 value: settings.showNoteNames,
-                onChanged: (value) {
-                  settings.showNoteNames = value;
-                }),
+                onChanged: (value) => settings.showNoteNames = value),
           ),
           ListTile(
             title: Text("Pad Grid Width"),
@@ -54,36 +53,29 @@ class PadsMenu extends StatelessWidget {
             title: Text("Scale"),
             trailing: DropdownScales(),
           ),
-          // TODO slider instead of drop down??
-          // ListTile(
-          //   title: Text("Base Note"),
-          //   trailing: DropdownScaleNotes(
-          //     setValue: (v) {
-          //       settings.baseNote = v;
-          //       // settings.rootNote = v % 12; // set with root note
-          //     },
-          //     readValue: settings.baseNote,
-          //     rootNote: settings.rootNote,
-          //     scale: settings.onlyScaleNotes ? settings.scale : null,
-          //     showNoteValue: true,
-          //   ),
-          // ),
+          ListTile(
+            title: Text("Base Note"),
+            trailing: DropdownScaleNotes(
+              setValue: (v) => settings.baseNote = v,
+              readValue: settings.baseNote,
+              rootNote: settings.rootNote,
+              onlyScaleNotes: settings.onlyScaleNotes,
+              scale: settings.scale,
+            ),
+          ),
           if (settings.layout == Layout.continuous)
             ListTile(
               title: Text("Show Only Scale Notes"),
               trailing: Switch(
                   value: settings.onlyScaleNotes,
-                  onChanged: (value) {
-                    settings.onlyScaleNotes = !settings.onlyScaleNotes;
-                  }),
+                  onChanged: (value) =>
+                      settings.onlyScaleNotes = !settings.onlyScaleNotes),
             ),
           ListTile(
             title: Text("Random Velocity"),
             trailing: Switch(
                 value: settings.randomVelocity,
-                onChanged: (value) {
-                  settings.randomizeVelocity = value;
-                }),
+                onChanged: (value) => settings.randomizeVelocity = value),
           ),
           if (!settings.randomVelocity)
             MidiValueSelector(
@@ -106,17 +98,14 @@ class PadsMenu extends StatelessWidget {
             title: Text("Pitch Bender"),
             trailing: Switch(
                 value: settings.pitchBend,
-                onChanged: (value) {
-                  settings.pitchBend = !settings.pitchBend;
-                }),
+                onChanged: (value) => settings.pitchBend = !settings.pitchBend),
           ),
           ListTile(
             title: Text("Lock Screen Button (Long Press)"),
             trailing: Switch(
                 value: settings.lockScreenButton,
-                onChanged: (value) {
-                  settings.lockScreenButton = !settings.lockScreenButton;
-                }),
+                onChanged: (value) =>
+                    settings.lockScreenButton = !settings.lockScreenButton),
           ),
           SwitchWakeLock(),
           CreditsLabel(),

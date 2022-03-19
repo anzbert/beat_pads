@@ -1,9 +1,12 @@
-import 'package:beat_pads/components/drop_down_layout.dart';
+import 'package:flutter/material.dart';
+
+import 'package:flutter_midi_command/flutter_midi_command_messages.dart';
+
+import 'package:provider/provider.dart';
 import 'package:beat_pads/state/receiver.dart';
 import 'package:beat_pads/state/settings.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_midi_command/flutter_midi_command_messages.dart';
-import 'package:provider/provider.dart';
+
+import 'package:beat_pads/components/drop_down_layout.dart';
 import '../services/midi_utils.dart';
 
 class VariablePads extends StatelessWidget {

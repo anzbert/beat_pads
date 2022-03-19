@@ -1,7 +1,7 @@
-import 'package:beat_pads/components/drop_down_layout.dart';
-
 import 'midi_constants.dart';
 export 'midi_constants.dart';
+
+import 'package:beat_pads/components/drop_down_layout.dart';
 
 /// Get Note Name String from Midi Value (0 - 127) as NoteSign.sharps (default) or NoteSign.flats
 String getNoteName(
