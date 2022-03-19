@@ -23,7 +23,7 @@ class PadsMenu extends StatelessWidget {
         children: <Widget>[
           RotateLabel(),
           ListTile(
-            title: Text("Note Layout"),
+            title: Text("Note Layout / Row Interval"),
             trailing: DropdownLayout(),
           ),
           ListTile(
@@ -54,7 +54,7 @@ class PadsMenu extends StatelessWidget {
             trailing: DropdownScales(),
           ),
           ListTile(
-            title: Text("Base Note"),
+            title: Text("Lowest Grid Note"),
             trailing: DropdownScaleNotes(
               setValue: (v) => settings.baseNote = v,
               readValue: settings.baseNote,
@@ -79,14 +79,14 @@ class PadsMenu extends StatelessWidget {
           ),
           if (!settings.randomVelocity)
             MidiValueSelector(
-              label: "Velocity",
+              label: "Fixed Velocity",
               readValue: settings.velocity,
               setValue: (v) => settings.velocity = v,
               resetFunction: settings.resetVelocity,
             ),
           if (settings.randomVelocity)
             MidiRangeSelector(
-              label: "Set Range",
+              label: "Random Velocity Range",
               readMin: settings.velocityMin,
               readMax: settings.velocityMax,
               setMin: (v) => settings.velocityMin = v,
