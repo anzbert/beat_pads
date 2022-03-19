@@ -1,50 +1,17 @@
-import 'package:beat_pads/components/drop_down_interval.dart';
+import 'package:flutter/material.dart';
+
+import 'package:flutter_midi_command/flutter_midi_command_messages.dart';
+
+import 'package:provider/provider.dart';
 import 'package:beat_pads/state/receiver.dart';
 import 'package:beat_pads/state/settings.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_midi_command/flutter_midi_command_messages.dart';
-import 'package:provider/provider.dart';
+
 import '../services/midi_utils.dart';
+import '../services/pads_utils.dart';
 
 class VariablePads extends StatelessWidget {
-  
-  List<int> _generateNotes(
-    int baseNote,
-    int width,
-    int height,
-    List<int> scaleNotes,
-    bool scaleOnly,
-    RowInterval interval,
-  ) {
-    int totalPads = width * height;
-    List<int> grid;
-
-    if (scaleOnly == true && interval == RowInterval.continuous) {
-      grid = List.generate(totalPads, (index) {
-        int currentScale = index ~/ scaleNotes.length * 12;
-        int nextNote =
-            baseNote + currentScale + scaleNotes[index % scaleNotes.length];
-        return nextNote;
-      });
-    } else if (scaleOnly == false && interval != RowInterval.continuous) {
-      // TODO row interval generation - only in full-scale mode
-      var grid = List.generate(height, (row) {
-        return List.generate(width, (note) {
-          return [];
-        });
-      });
-
-      return [];
-    } else {
-      grid = List.generate(totalPads, (index) {
-        return index + baseNote;
-      });
-    }
-
-    return grid;
-  }
-
-  List<List<int>> _splitToReversedRows(List<int> grid, int width, int height) {
+  List<List<int>> _listToReversedRowLists(
+      List<int> grid, int width, int height) {
     return List.generate(
         height,
         (row) => List.generate(width, (note) {
@@ -58,8 +25,10 @@ class VariablePads extends StatelessWidget {
     final height = Provider.of<Settings>(context, listen: true).height;
 
     final int baseNote = Provider.of<Settings>(context, listen: true).baseNote;
+    final int rootNote = Provider.of<Settings>(context, listen: true).rootNote;
     final int velocity = Provider.of<Settings>(context, listen: true).velocity;
-    final String scale = Provider.of<Settings>(context, listen: true).scale;
+    final List<int> scale =
+        Provider.of<Settings>(context, listen: true).scaleList;
 
     final bool showNoteNames =
         Provider.of<Settings>(context, listen: true).showNoteNames;
@@ -67,16 +36,17 @@ class VariablePads extends StatelessWidget {
     final int channel =
         Provider.of<MidiReceiver>(context, listen: true).channel;
 
-    final pads = _generateNotes(
+    final pads = padNotesList(
+      rootNote,
       baseNote,
       width,
       height,
-      midiScales[scale]!,
+      scale,
       Provider.of<Settings>(context, listen: true).onlyScaleNotes,
-      Provider.of<Settings>(context, listen: true).rowInterval,
+      Provider.of<Settings>(context, listen: true).layout,
     );
 
-    final padRows = _splitToReversedRows(pads, width, height);
+    final padRows = _listToReversedRowLists(pads, width, height);
 
     return Center(
       child: Container(
@@ -99,7 +69,7 @@ class VariablePads extends StatelessWidget {
                         velocity: velocity,
                         channel: channel,
                         scale: scale,
-                        scaleRootNote: baseNote,
+                        scaleRootNote: rootNote,
                       ),
                     );
                   }).toList()),
@@ -118,15 +88,15 @@ class BeatPad extends StatelessWidget {
     this.channel = 0,
     this.velocity = 127,
     this.showNoteNames = false,
-    this.scale = "chromatic",
-    this.scaleRootNote = 36,
+    this.scale = const [],
+    this.scaleRootNote = 0,
   }) : super(key: key);
 
   final bool showNoteNames;
   final int note;
   final int channel;
   final int velocity;
-  final String scale;
+  final List<int> scale;
   final int scaleRootNote;
 
   @override
@@ -139,10 +109,12 @@ class BeatPad extends StatelessWidget {
     if (_rxNote > 0) {
       _color = Color.fromARGB(
           (_rxNote ~/ 127) * 255, 10, 100, 100); // receiving midi
-    } else if (note > 127) {
+    } else if (note > 127 || note < 0) {
       _color = Colors.grey; // out of range
-    } else if (!withinScale(note, scaleRootNote, scale)) {
-      _color = Colors.green[200]!; // outside of current scale
+    } else if (!isNoteInScale(note, scale, scaleRootNote)) {
+      _color = Color.fromARGB(255, 77, 109, 78); // outside of current scale
+    } else if (note % 12 == scaleRootNote) {
+      _color = Colors.teal[400]!;
     } else {
       _color = Colors.green; // default color
     }
@@ -160,7 +132,7 @@ class BeatPad extends StatelessWidget {
         borderRadius: BorderRadius.all(Radius.circular(5.0)),
         elevation: 5.0,
         shadowColor: Colors.black,
-        child: note > 127
+        child: note > 127 || note < 0
             ? InkWell(
                 borderRadius: _padRadius,
                 child: Padding(
@@ -191,7 +163,9 @@ class BeatPad extends StatelessWidget {
                 child: Padding(
                   padding: _padPadding,
                   child: Text(
-                      showNoteNames ? getNoteName(note) : note.toString(),
+                      showNoteNames
+                          ? getNoteName(note, showNoteValue: false)
+                          : note.toString(),
                       style: TextStyle(color: _padTextColor)),
                 ),
               ),

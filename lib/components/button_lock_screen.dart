@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../services/utils.dart';
+import '../services/device_utils.dart';
 
 class LockScreenButton extends StatefulWidget {
   const LockScreenButton({Key? key}) : super(key: key);

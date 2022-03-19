@@ -1,10 +1,32 @@
-import 'package:beat_pads/components/drop_down_interval.dart';
-import 'package:beat_pads/services/midi_utils.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 
+import 'package:beat_pads/components/drop_down_layout.dart';
+import 'package:beat_pads/services/midi_utils.dart';
+
 class Settings extends ChangeNotifier {
-  // basenote:
+// layout:
+  Layout _layout = Layout.majorThird; // semitones
+  Layout get layout => _layout;
+
+  set layout(Layout newValue) {
+    _layout = newValue;
+    notifyListeners();
+  }
+
+  // lowest note:
+  int _rootNote = 0;
+
+  set rootNote(int note) {
+    if (note < 0 || note > 11) return;
+    _rootNote = note;
+    notifyListeners();
+  }
+
+  int get rootNote => _rootNote;
+  resetRootNote() => rootNote = 0;
+
+  // lowest note:
   int _baseNote = 36;
 
   set baseNote(int note) {
@@ -38,6 +60,7 @@ class Settings extends ChangeNotifier {
 // scale:
   String _scale = midiScales.keys.toList()[0];
   String get scale => _scale;
+  List<int> get scaleList => midiScales[_scale]!;
 
   set scale(String newValue) {
     String validatedScale = newValue;
@@ -45,26 +68,19 @@ class Settings extends ChangeNotifier {
       validatedScale = midiScales.keys.toList()[0]; // set to default
     }
     _scale = validatedScale;
+
     notifyListeners();
   }
-
-// row interval:
-  RowInterval _rowInterval = RowInterval.majorThird; // semitones
-  RowInterval get rowInterval => _rowInterval;
-
-  set rowInterval(RowInterval newValue) {
-    _rowInterval = newValue;
-    notifyListeners();
-  }
-
-// TODO: "only-scale-notes mode" works only when interval is continuous
 
 // only scale notes:
   bool _onlyScaleNotes = false;
   bool get onlyScaleNotes => _onlyScaleNotes;
 
-  set onlyScaleNotes(bool newValue) {
-    _onlyScaleNotes = newValue;
+  set onlyScaleNotes(bool newSetting) {
+    if (newSetting == true) {
+      _baseNote = rootNote + 36;
+    }
+    _onlyScaleNotes = newSetting;
     notifyListeners();
   }
 
@@ -139,7 +155,7 @@ class Settings extends ChangeNotifier {
   }
 
 // notenames:
-  bool _showNoteNames = false;
+  bool _showNoteNames = true;
   bool get showNoteNames => _showNoteNames;
 
   set showNoteNames(bool setting) {
