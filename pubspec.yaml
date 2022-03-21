@@ -72,9 +72,12 @@ dev_dependencies:
 flutter_icons:
   android: true
   ios: true
-  image_path: "assets/logo/logo.png"
+  # image_path: "assets/logo/logo.png"
+  image_path_android: "assets/logo/logo.png"
+  image_path_ios: "assets/logo/logo_ios.png"
   remove_alpha_ios: true
-  adaptive_icon_background: "#222222"
+  # adaptive_icon_background: "assets/logo/logo_back.png"
+  # adaptive_icon_foreground: "assets/logo/logo.png"
 
 # Recompile icons with:
 #   flutter pub run flutter_launcher_icons:main
@@ -93,8 +96,6 @@ flutter:
   assets:
     - assets/anim/doggo3.riv
     - assets/logo/logo.png
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

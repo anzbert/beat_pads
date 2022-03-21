@@ -12,7 +12,7 @@ Unlike other generic Midi Controller apps out there, this app focuses on pad con
 
 ## Usage
 
-1. Connect your phone / tablet to your PC, Mac or other device via USB with OTG adapter or USB-C.
+1. Connect your phone / tablet to your PC, Mac or other device via USB.
 2. Where applicable, set the USB connection mode from 'Charging' / 'File-Transfer' to 'Midi' in the notification menu.
 3. In the App, select the connected midi device to establish connection.
 4. Switch to the pads, configure layout as needed, and start playing.
