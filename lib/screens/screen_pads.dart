@@ -37,16 +37,15 @@ class PadsScreen extends StatelessWidget {
           child: Provider.of<Settings>(context, listen: true).pitchBend
               ? Row(
                   children: [
-                    Expanded(
-                      flex: 1,
-                      child: SizedBox(),
+                    SizedBox(
+                      width: 50,
+                    ),
+                    RotatedBox(
+                      quarterTurns: 1,
+                      child: PitchBender(),
                     ),
                     Expanded(
                       flex: 1,
-                      child: RotatedBox(quarterTurns: 1, child: PitchBender()),
-                    ),
-                    Expanded(
-                      flex: 15,
                       child: VariablePads(),
                     )
                   ],

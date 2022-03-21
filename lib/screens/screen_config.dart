@@ -1,9 +1,11 @@
 import 'package:beat_pads/components/label_info_box.dart';
-import 'package:beat_pads/screens/screen_pads.dart';
+import 'package:beat_pads/components/button_floating_pads.dart';
+import 'package:beat_pads/services/color_const.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_midi_command/flutter_midi_command.dart';
 
-// TODO: Bluetooth Midi
+// TODO: Bluetooth Midi?!
+
 class _ConfigScreenState extends State<ConfigScreen> {
   final MidiCommand _midiCommand = MidiCommand();
 
@@ -40,19 +42,7 @@ class _ConfigScreenState extends State<ConfigScreen> {
       ),
       floatingActionButton: Padding(
         padding: const EdgeInsets.all(20.0),
-        child: FloatingActionButton.large(
-          backgroundColor: Colors.green,
-          child: Icon(
-            Icons.view_comfortable_rounded,
-            size: 50,
-          ),
-          onPressed: (() {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => PadsScreen()),
-            );
-          }),
-        ),
+        child: FloatingButtonPads(),
       ),
       body: FutureBuilder(
         future: _midiCommand.devices,
@@ -67,13 +57,33 @@ class _ConfigScreenState extends State<ConfigScreen> {
                     width: 100,
                     height: 100,
                     child: CircularProgressIndicator(
-                      color: Colors.grey[400],
+                      color: Palette.cadetBlue.color,
                     ),
                   ))
                 :
                 // WHEN NOT CONNECTING, SHOW LIST:
                 ListView(
                     children: [
+                      ..._devices!.map((device) {
+                        return Container(
+                          margin: EdgeInsets.symmetric(vertical: 8),
+                          color: device.connected
+                              ? Palette.cadetBlue.color
+                              : Palette.cadetBlue.color.withAlpha(40),
+                          child: TextButton(
+                            onPressed: () {
+                              setDevice(device);
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                              child: Text(
+                                device.name,
+                                style: Theme.of(context).textTheme.bodyText1,
+                              ),
+                            ),
+                          ),
+                        );
+                      }).toList(),
                       InfoBox(
                         [
                           "1. Connect USB device (PC, Mac, IPad...)",
@@ -83,27 +93,6 @@ class _ConfigScreenState extends State<ConfigScreen> {
                         ],
                         header: "Midi Connection",
                       ),
-                      ..._devices!.map((device) {
-                        return Container(
-                          color: device.connected
-                              ? Colors.green[800]
-                              : Colors.transparent,
-                          child: TextButton(
-                            onPressed: () {
-                              setDevice(device);
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 12),
-                              child: Text(
-                                device.name,
-                                style: TextStyle(
-                                  color: Colors.grey[200],
-                                ),
-                              ),
-                            ),
-                          ),
-                        );
-                      }).toList(),
                     ],
                   );
           } else if (snapshot.hasError) {

@@ -1,15 +1,15 @@
 import 'package:beat_pads/components/drop_down_notes.dart';
+import 'package:beat_pads/components/label_info_box.dart';
 import 'package:beat_pads/services/pads_layouts.dart';
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
-import '../state/settings.dart';
+import 'package:beat_pads/state/settings.dart';
 
 import 'package:beat_pads/components/drop_down_layout.dart';
 import 'package:beat_pads/components/drop_down_numbers.dart';
 import 'package:beat_pads/components/drop_down_root_note.dart';
 import 'package:beat_pads/components/drop_down_scales.dart';
-import 'package:beat_pads/components/label_credits.dart';
 import 'package:beat_pads/components/label_rotate.dart';
 import 'package:beat_pads/components/slider_channel_selector.dart';
 import 'package:beat_pads/components/slider_midi_range.dart';
@@ -28,7 +28,8 @@ class PadsMenu extends StatelessWidget {
           RotateLabel(),
           ListTile(
             title: Text("Layout"),
-            subtitle: Text("Choose Row Intervals and Fixed Note Layouts"),
+            subtitle:
+                Text("Choose between Row Intervals and Fixed Note Layouts"),
             trailing: DropdownLayout(),
           ),
           ListTile(
@@ -123,7 +124,16 @@ class PadsMenu extends StatelessWidget {
                     settings.lockScreenButton = !settings.lockScreenButton),
           ),
           SwitchWakeLock(),
-          CreditsLabel(),
+          InfoBox(
+            [
+              "Beat Pads v0.3.0\n",
+              "Made by A. Mueller\n      [anzgraph.com]",
+              "Dog Icon by 'catalyststuff'\n      [freepik.com]",
+              "Logo Animated with Rive\n      [rive.app]",
+              "Magic Tone Network / XpressPads by A. Samek\n      [xpresspads.com]"
+            ],
+            header: "Credits",
+          )
         ],
       );
     });

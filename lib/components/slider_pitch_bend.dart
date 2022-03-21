@@ -12,11 +12,11 @@ class _PitchBenderState extends State<PitchBender> {
   Widget build(BuildContext context) {
     return SliderTheme(
       data: SliderTheme.of(context).copyWith(
-        trackHeight: 50,
+        trackHeight: 40,
         activeTrackColor: _trackColor,
         inactiveTrackColor: _trackColor,
         thumbColor: _thumbColor,
-        thumbShape: RoundSliderThumbShape(enabledThumbRadius: 30.0),
+        thumbShape: RoundSliderThumbShape(enabledThumbRadius: 40.0),
         trackShape: CustomTrackShape(),
       ),
       child: Slider(

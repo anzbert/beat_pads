@@ -7,16 +7,16 @@ import 'package:beat_pads/services/midi_utils.dart';
 
 class Settings extends ChangeNotifier {
 // layout:
-  Layout _layout = Layout.majorThird; // semitones
+  Layout _layout = Layout.continuous;
   Layout get layout => _layout;
 
-  set layout(Layout newValue) {
-    if (newValue == Layout.xPressPads) {
+  set layout(Layout newLayout) {
+    if (newLayout.variable == false) {
       _padDimensions.setAll(0, [4, 4]);
       _showNoteNames = false;
     }
 
-    _layout = newValue;
+    _layout = newLayout;
     notifyListeners();
   }
 

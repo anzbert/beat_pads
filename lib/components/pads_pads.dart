@@ -75,10 +75,10 @@ class BeatPad extends StatelessWidget {
       _color = Palette.cadetBlue.color; // receiving midi signal
 
     } else if (note > 127 || note < 0) {
-      _color = Palette.lightGrey.color; // out of midi range
+      _color = Palette.darkGrey.color; // out of midi range
 
     } else if (!MidiUtils.isNoteInScale(note, scale, rootNote)) {
-      _color = Palette.tan.color; // not in current scale
+      _color = Palette.yellowGreen.color.withAlpha(160); // not in current scale
 
     } else if (note % 12 == rootNote) {
       _color = Palette.laserLemon.color; // root note
