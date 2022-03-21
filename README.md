@@ -2,13 +2,13 @@
 
 ## ! Important !
 
-This App is **ONLY** usable as a USB Midi Controller. It does **NOT** produce any sound on its own! If you don't know what that means, then this app is probably not useful for you, but otherwise you can keep reading :)
+This App is **ONLY** usable as a USB Midi Controller. It does **NOT** produce any sound on its own, but requires a device with Ableton, Fruity Loops, Garage Band, Logic, Software Synthesizers and many others. If you don't know what any of that that means, then this app is probably not useful for you. Otherwise, I hope you enjoy this app!
 
 ## Description
 
 Beat Pads is a USB Midi Controller app for mobile phones and tablets for producing beats at home or on the go.
 
-Unlike other generic Midi Controller apps out there, this app focuses on pad controls and finger drumming. It is designed as a beat and melody input device for people that prefer pads to pianos.
+Unlike other generic Midi Controllers and apps out there, this app focuses on pad controls and finger drumming. It is designed as a beat and melody input device for people that prefer pads to pianos.
 
 ## Usage
 
@@ -30,4 +30,4 @@ Unlike other generic Midi Controller apps out there, this app focuses on pad con
 
 ## Feature Requests
 
-If you have any ideas or suggestions, please email me at anzbert@gmail.com
+If you have any ideas or suggestions for future releases, please email me at anzbert@gmail.com
