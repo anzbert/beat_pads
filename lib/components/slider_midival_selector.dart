@@ -38,7 +38,8 @@ class MidiValueSelector extends StatelessWidget {
             ],
           ),
           trailing: note
-              ? Text("${getNoteName(readValue)}  (${readValue.toString()})")
+              ? Text(
+                  "${MidiUtils.getNoteName(readValue)}  (${readValue.toString()})")
               : Text(readValue.toString()),
         ),
         Slider(

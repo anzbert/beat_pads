@@ -1,4 +1,5 @@
 import 'package:beat_pads/screens/screen_config.dart';
+import 'package:beat_pads/services/color_const.dart';
 import 'package:flutter/material.dart';
 import 'package:rive/rive.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
@@ -37,14 +38,18 @@ class _SplashScreenState extends State<SplashScreen> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Expanded(
-                flex: 10,
+                flex: 7,
                 child: RiveAnimation.asset(
-                  'assets/anim/doggo2.riv',
+                  'assets/anim/doggo3.riv',
                   alignment: Alignment.bottomCenter,
                 ),
               ),
               Expanded(
-                flex: 5,
+                flex: 1,
+                child: SizedBox(),
+              ),
+              Expanded(
+                flex: 2,
                 child: AnimatedTextKit(
                   animatedTexts: [
                     ColorizeAnimatedText(
@@ -58,10 +63,10 @@ class _SplashScreenState extends State<SplashScreen> {
                         fontWeight: FontWeight.bold,
                       ),
                       colors: [
-                        Colors.purple,
-                        Colors.green,
-                        Colors.purple,
-                        Colors.green
+                        Palette.cadetBlue.color,
+                        Palette.lightPink.color,
+                        Palette.darkGrey.color,
+                        Palette.yellowGreen.color,
                       ],
                     ),
                   ],

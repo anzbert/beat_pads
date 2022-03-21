@@ -39,10 +39,14 @@ class PadsScreen extends StatelessWidget {
                   children: [
                     Expanded(
                       flex: 1,
+                      child: SizedBox(),
+                    ),
+                    Expanded(
+                      flex: 1,
                       child: RotatedBox(quarterTurns: 1, child: PitchBender()),
                     ),
                     Expanded(
-                      flex: 4,
+                      flex: 15,
                       child: VariablePads(),
                     )
                   ],

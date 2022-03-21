@@ -1,19 +1,21 @@
-// testing a pitchbender
+import 'package:beat_pads/services/color_const.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_midi_command/flutter_midi_command_messages.dart';
-// import '../services/midi_messages.dart';
 
 class _PitchBenderState extends State<PitchBender> {
   double pitch = 0;
+
+  final Color _trackColor = Palette.cadetBlue.color;
+  final Color _thumbColor = Palette.yellowGreen.color;
 
   @override
   Widget build(BuildContext context) {
     return SliderTheme(
       data: SliderTheme.of(context).copyWith(
         trackHeight: 50,
-        activeTrackColor: Colors.green,
-        inactiveTrackColor: Colors.green,
-        thumbColor: Colors.purple,
+        activeTrackColor: _trackColor,
+        inactiveTrackColor: _trackColor,
+        thumbColor: _thumbColor,
         thumbShape: RoundSliderThumbShape(enabledThumbRadius: 30.0),
         trackShape: CustomTrackShape(),
       ),

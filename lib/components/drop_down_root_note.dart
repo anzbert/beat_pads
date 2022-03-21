@@ -14,7 +14,7 @@ class DropdownRootNote extends StatelessWidget {
     List<DropdownMenuItem<int>> menuItems = List.generate(
         12,
         (index) => DropdownMenuItem<int>(
-              child: Text(getNoteName(index, showOctaveIndex: false)),
+              child: Text(MidiUtils.getNoteName(index, showOctaveIndex: false)),
               value: index,
             ));
 

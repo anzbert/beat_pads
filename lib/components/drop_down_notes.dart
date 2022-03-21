@@ -24,12 +24,12 @@ class DropdownScaleNotes extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<int> items =
-        allAbsoluteScaleNotes(midiScales[usedScale]!, rootNote);
+        MidiUtils.allAbsoluteScaleNotes(midiScales[usedScale]!, rootNote);
     final List<DropdownMenuItem<int>> menuItems;
 
     menuItems = items
         .map((note) => DropdownMenuItem<int>(
-              child: Text(getNoteName(
+              child: Text(MidiUtils.getNoteName(
                 note,
                 showOctaveIndex: true,
                 showNoteValue: true,

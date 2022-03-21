@@ -1,8 +1,7 @@
 import 'package:beat_pads/state/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-enum Layout { minorThird, majorThird, quart, continuous }
+import 'package:beat_pads/services/pads_layouts.dart';
 
 class DropdownLayout extends StatelessWidget {
   DropdownLayout({Key? key}) : super(key: key);

@@ -1,3 +1,4 @@
+import 'package:beat_pads/components/label_info_box.dart';
 import 'package:beat_pads/screens/screen_pads.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_midi_command/flutter_midi_command.dart';
@@ -73,6 +74,15 @@ class _ConfigScreenState extends State<ConfigScreen> {
                 // WHEN NOT CONNECTING, SHOW LIST:
                 ListView(
                     children: [
+                      InfoBox(
+                        [
+                          "1. Connect USB device (PC, Mac, IPad...)",
+                          "2. Set USB mode to 'Midi' in Notification Menu",
+                          "3. Refresh this Device List",
+                          "4. Tap Device to Connect",
+                        ],
+                        header: "Midi Connection",
+                      ),
                       ..._devices!.map((device) {
                         return Container(
                           color: device.connected

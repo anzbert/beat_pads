@@ -13,6 +13,7 @@ class ChannelSelector extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             ListTile(
+              // subtitle: Text("Select Channel to Receive and Send Midi Data"),
               title: Row(
                 children: [
                   Text("Midi Channel"),

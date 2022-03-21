@@ -1,7 +1,8 @@
+import 'package:beat_pads/services/pads_utils.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 
-import 'package:beat_pads/components/drop_down_layout.dart';
+import 'package:beat_pads/services/pads_layouts.dart';
 import 'package:beat_pads/services/midi_utils.dart';
 
 class Settings extends ChangeNotifier {
@@ -10,8 +11,26 @@ class Settings extends ChangeNotifier {
   Layout get layout => _layout;
 
   set layout(Layout newValue) {
+    if (newValue == Layout.xPressPads) {
+      _padDimensions.setAll(0, [4, 4]);
+      _showNoteNames = false;
+    }
+
     _layout = newValue;
     notifyListeners();
+  }
+
+// pads:
+  List<List<int>> get rowsLists {
+    return PadUtils.reversedRowLists(
+      rootNote,
+      baseNote,
+      width,
+      height,
+      scaleList,
+      onlyScaleNotes,
+      layout,
+    );
   }
 
   // lowest note:

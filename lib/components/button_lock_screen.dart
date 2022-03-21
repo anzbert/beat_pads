@@ -19,9 +19,9 @@ class _LockScreenButtonState extends State<LockScreenButton> {
             screenLocked = !screenLocked;
           });
           if (screenLocked) {
-            landscapeOnly();
+            DeviceUtils.landscapeOnly();
           } else {
-            enableRotation();
+            DeviceUtils.enableRotation();
           }
         },
         child: IconButton(
@@ -36,7 +36,7 @@ class _LockScreenButtonState extends State<LockScreenButton> {
 
   @override
   void dispose() {
-    enableRotation();
+    DeviceUtils.enableRotation();
     super.dispose();
   }
 }
