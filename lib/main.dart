@@ -1,5 +1,5 @@
+import 'package:beat_pads/services/device_utils.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import 'package:provider/provider.dart';
 import '../state/settings.dart';
@@ -11,8 +11,7 @@ import 'screens/screen_splash.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Hide Android Menu Bar:
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+  DeviceUtils.hideSystemUi();
 
   runApp(App());
 }

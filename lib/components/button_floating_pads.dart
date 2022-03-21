@@ -11,12 +11,17 @@ class FloatingButtonPads extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton.large(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(10),
+        ),
+      ),
       elevation: 20,
       highlightElevation: 0,
-      backgroundColor: Palette.cadetBlue.color.withAlpha(90),
+      backgroundColor: Palette.whiteLike.color.withAlpha(60),
       child: Padding(
-        padding: const EdgeInsets.all(14.0),
-        child: Image.asset("assets/logo/logo.png"),
+        padding: const EdgeInsets.all(16.0),
+        child: Image.asset("assets/logo/logo_noframe.png"),
       ),
       onPressed: (() {
         Navigator.push(

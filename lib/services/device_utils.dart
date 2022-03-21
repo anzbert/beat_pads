@@ -1,6 +1,7 @@
 import 'package:flutter/services.dart';
 
 abstract class DeviceUtils {
+// ROTATION
   static void portraitOnly() {
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
@@ -22,5 +23,24 @@ abstract class DeviceUtils {
       DeviceOrientation.landscapeLeft,
       DeviceOrientation.landscapeRight,
     ]);
+  }
+
+  // MENUBAR
+  static void hideSystemUi() {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+  }
+
+  static void showSystemUi() {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+  }
+
+  static void showSystemUiTop() {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+        overlays: [SystemUiOverlay.top]);
+  }
+
+  static void showSystemUiBottom() {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+        overlays: [SystemUiOverlay.bottom]);
   }
 }

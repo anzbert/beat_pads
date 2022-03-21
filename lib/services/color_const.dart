@@ -7,7 +7,8 @@ enum Palette {
   tan,
   lightPink,
   darkGrey,
-  lightGrey
+  lightGrey,
+  whiteLike,
 }
 
 extension RGB on Palette {
@@ -27,6 +28,8 @@ extension RGB on Palette {
         return Colors.grey[800]!;
       case Palette.lightGrey:
         return Colors.grey;
+      case Palette.whiteLike:
+        return Colors.white70;
     }
   }
 }

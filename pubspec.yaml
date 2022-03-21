@@ -70,14 +70,16 @@ dev_dependencies:
   flutter_launcher_icons: "^0.9.2"
 
 flutter_icons:
-  android: true
-  ios: true
   # image_path: "assets/logo/logo.png"
-  image_path_android: "assets/logo/logo.png"
+
+  ios: true
   image_path_ios: "assets/logo/logo_ios.png"
   remove_alpha_ios: true
-  # adaptive_icon_background: "assets/logo/logo_back.png"
-  # adaptive_icon_foreground: "assets/logo/logo.png"
+
+  android: true
+  image_path_android: "assets/logo/logo.png"
+  adaptive_icon_foreground: "assets/logo/logo_foreground.png" # this adaptive style omehow doesnt work
+  adaptive_icon_background: "assets/logo/logo_back.png"
 
 # Recompile icons with:
 #   flutter pub run flutter_launcher_icons:main
@@ -95,7 +97,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/anim/doggo3.riv
-    - assets/logo/logo.png
+    - assets/logo/logo_noframe.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
