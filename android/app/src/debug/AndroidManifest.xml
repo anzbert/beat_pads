@@ -1,4 +1,4 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="io.anzio.beatpads">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="io.anzio.beat_pads">
     <!-- Flutter needs it to communicate with the running application
          to allow setting breakpoints, to provide hot reload, etc.
     -->

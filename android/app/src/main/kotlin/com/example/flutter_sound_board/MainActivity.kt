@@ -1,4 +1,4 @@
-package io.anzio.beatpads
+package io.anzio.beat_pads
 
 import io.flutter.embedding.android.FlutterActivity
 
