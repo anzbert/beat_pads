@@ -181,4 +181,13 @@ class Settings extends ChangeNotifier {
     _showNoteNames = setting;
     notifyListeners();
   }
+
+  // send CC:
+  bool _sendCC = false;
+  bool get sendCC => _sendCC;
+
+  set sendCC(bool setting) {
+    _sendCC = setting;
+    notifyListeners();
+  }
 }

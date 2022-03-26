@@ -107,6 +107,13 @@ class PadsMenu extends StatelessWidget {
               setMax: (v) => settings.velocityMax = v,
               resetFunction: settings.resetVelocity,
             ),
+          ListTile(
+            title: Text("Send CC"),
+            subtitle: Text("Send a CC value while a pad is being held"),
+            trailing: Switch(
+                value: settings.sendCC,
+                onChanged: (value) => settings.sendCC = value),
+          ),
           ChannelSelector(),
           ListTile(
             title: Text("Pitch Bender"),

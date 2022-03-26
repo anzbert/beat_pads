@@ -60,6 +60,7 @@ class BeatPad extends StatelessWidget {
     final int velocity = Provider.of<Settings>(context, listen: true).velocity;
     final bool showNoteNames =
         Provider.of<Settings>(context, listen: true).showNoteNames;
+    final bool sendCC = Provider.of<Settings>(context, listen: true).sendCC;
 
     // variables from midi receiver:
     final int channel =
@@ -122,18 +123,30 @@ class BeatPad extends StatelessWidget {
                   NoteOnMessage(
                           channel: channel, note: note, velocity: velocity)
                       .send();
+                  if (sendCC) {
+                    CCMessage(channel: channel, controller: note, value: 127)
+                        .send();
+                  }
                 },
                 onTapUp: (_) {
                   NoteOffMessage(
                     channel: channel,
                     note: note,
                   ).send();
+                  if (sendCC) {
+                    CCMessage(channel: channel, controller: note, value: 0)
+                        .send();
+                  }
                 },
                 onTapCancel: () {
                   NoteOffMessage(
                     channel: channel,
                     note: note,
                   ).send();
+                  if (sendCC) {
+                    CCMessage(channel: channel, controller: note, value: 0)
+                        .send();
+                  }
                 },
                 child: Padding(
                   padding: _padPadding,

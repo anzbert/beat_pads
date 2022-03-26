@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'dart:math';
 
 abstract class Utils {
   /// Rotate a list by a given int value (positive = forward / negative = backwards)
@@ -11,6 +12,11 @@ abstract class Utils {
   /// Create a range as <Iterable<int>>
   static Iterable<int> range(int start, int end) {
     return Iterable.generate(end - start, (i) => start + i++);
+  }
+
+  /// get distance between 2 points
+  static num distance(num x1, num y1, num x2, num y2) {
+    return sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2));
   }
 
   /// Print ONLY in debug mode
