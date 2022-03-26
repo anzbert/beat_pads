@@ -71,18 +71,9 @@ class PadsMenu extends StatelessWidget {
                 setValue: (v) => settings.baseNote = v,
                 readValue: settings.baseNote,
                 rootNote: settings.rootNote,
-                onlyScaleNotes: settings.onlyScaleNotes,
+                layout: settings.layout,
                 scale: settings.scale,
               ),
-            ),
-          if (settings.layout == Layout.continuous && variableGrid)
-            ListTile(
-              title: Text("Show Only Scale Notes"),
-              subtitle: Text("Exclude All Notes Not in Current Scale"),
-              trailing: Switch(
-                  value: settings.onlyScaleNotes,
-                  onChanged: (value) =>
-                      settings.onlyScaleNotes = !settings.onlyScaleNotes),
             ),
           ListTile(
             title: Text("Random Velocity"),

@@ -3,23 +3,37 @@ import 'package:beat_pads/services/pads_layouts.dart';
 import './midi_utils.dart';
 
 abstract class PadUtils {
-  static List<int> padNotesList(
-    int rootNote,
-    int baseNote,
-    int width,
-    int height,
-    List<int> scale,
-    bool scaleOnly,
-    Layout layout,
-  ) {
+  static createGridList(Layout layout, int base, int width, int height,
+      int rootNote, List<int> scale, int baseNote) {
     List<int> grid = [];
-    if (scaleOnly == true && layout == Layout.continuous) {
-      grid = scaleOnlyGridList(rootNote, scale, baseNote, width * height);
-    } else if (scaleOnly == false) {
-      grid = createGridList(layout, baseNote, width, height);
+
+    int semiTones;
+    switch (layout) {
+      case Layout.minorThird:
+        semiTones = 3;
+        break;
+      case Layout.majorThird:
+        semiTones = 4;
+        break;
+      case Layout.quart:
+        semiTones = 5;
+        break;
+      case Layout.toneNetwork:
+        return createToneNetworkList(base, width, height);
+      case Layout.xPressPadsStandard:
+        return xPressPadsStandard;
+      case Layout.scaleNotesOnly:
+        return scaleOnlyGridList(rootNote, scale, baseNote, width * height);
+      default:
+        semiTones = width;
+        break;
     }
 
-    if (grid.length != width * height) throw Exception("Pads: wrong grid size");
+    for (int row = 0; row < height; row++) {
+      for (int note = 0; note < width; note++) {
+        grid.add(base + row * semiTones + note);
+      }
+    }
     return grid;
   }
 
@@ -29,11 +43,10 @@ abstract class PadUtils {
     int width,
     int height,
     List<int> scale,
-    bool scaleOnly,
     Layout layout,
   ) {
-    List<int> grid = padNotesList(
-        rootNote, baseNote, width, height, scale, scaleOnly, layout);
+    List<int> grid = createGridList(
+        layout, baseNote, width, height, rootNote, scale, baseNote);
 
     return List.generate(
       height,
@@ -66,37 +79,6 @@ abstract class PadUtils {
     return grid;
   }
 
-  static createGridList(Layout layout, int base, int width, int height) {
-    List<int> grid = [];
-
-    int semiTones;
-    switch (layout) {
-      case Layout.minorThird:
-        semiTones = 3;
-        break;
-      case Layout.majorThird:
-        semiTones = 4;
-        break;
-      case Layout.quart:
-        semiTones = 5;
-        break;
-      case Layout.toneNetwork:
-        return createToneNetworkList(base, width, height);
-      case Layout.xPressPads:
-        return createXpressPadsList();
-      default:
-        semiTones = width;
-        break;
-    }
-
-    for (int row = 0; row < height; row++) {
-      for (int note = 0; note < width; note++) {
-        grid.add(base + row * semiTones + note);
-      }
-    }
-    return grid;
-  }
-
   static List<int> createToneNetworkList(int base, int width, int height) {
     List<int> grid = [];
 
@@ -106,29 +88,5 @@ abstract class PadUtils {
       }
     }
     return grid;
-  }
-
-  // testing xpressPads
-  static List<int> createXpressPadsList() {
-    List<int> standard = [
-      36,
-      42,
-      42,
-      36,
-      38,
-      46,
-      46,
-      38,
-      43,
-      50,
-      50,
-      43,
-      49,
-      51,
-      51,
-      49
-    ];
-
-    return standard;
   }
 }

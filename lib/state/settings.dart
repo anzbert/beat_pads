@@ -14,6 +14,7 @@ class Settings extends ChangeNotifier {
     if (newLayout.variable == false) {
       _padDimensions.setAll(0, [4, 4]);
       _showNoteNames = false;
+      _scale = "chromatic";
     }
 
     _layout = newLayout;
@@ -28,7 +29,6 @@ class Settings extends ChangeNotifier {
       width,
       height,
       scaleList,
-      onlyScaleNotes,
       layout,
     );
   }
@@ -88,18 +88,6 @@ class Settings extends ChangeNotifier {
     }
     _scale = validatedScale;
 
-    notifyListeners();
-  }
-
-// only scale notes:
-  bool _onlyScaleNotes = false;
-  bool get onlyScaleNotes => _onlyScaleNotes;
-
-  set onlyScaleNotes(bool newSetting) {
-    if (newSetting == true) {
-      _baseNote = rootNote + 36;
-    }
-    _onlyScaleNotes = newSetting;
     notifyListeners();
   }
 

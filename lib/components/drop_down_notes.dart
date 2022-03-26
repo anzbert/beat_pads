@@ -1,3 +1,4 @@
+import 'package:beat_pads/services/pads_layouts.dart';
 import 'package:flutter/material.dart';
 
 import 'package:beat_pads/services/midi_utils.dart';
@@ -8,12 +9,12 @@ class DropdownScaleNotes extends StatelessWidget {
       required this.rootNote,
       required this.setValue,
       required this.readValue,
-      this.onlyScaleNotes = false,
+      this.layout = Layout.continuous,
       Key? key})
-      : usedScale = onlyScaleNotes ? scale : "chromatic",
+      : usedScale = layout == Layout.scaleNotesOnly ? scale : "chromatic",
         super(key: key);
 
-  final bool onlyScaleNotes;
+  final Layout layout;
   final int rootNote;
   final String usedScale;
   final String scale;

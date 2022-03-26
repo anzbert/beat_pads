@@ -1,16 +1,17 @@
 enum Layout {
   continuous,
+  scaleNotesOnly,
   minorThird,
   majorThird,
   quart,
   toneNetwork,
-  xPressPads
+  xPressPadsStandard
 }
 
 extension Variable on Layout {
   bool get variable {
     switch (this) {
-      case Layout.xPressPads:
+      case Layout.xPressPadsStandard:
         return false;
       default:
         return true;
