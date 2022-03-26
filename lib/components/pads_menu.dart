@@ -108,8 +108,8 @@ class PadsMenu extends StatelessWidget {
               resetFunction: settings.resetVelocity,
             ),
           ListTile(
-            title: Text("Send CC"),
-            subtitle: Text("Send a CC value while a pad is being held"),
+            title: Text("Send Control Change"),
+            subtitle: Text("CC On (127) while a pad is held"),
             trailing: Switch(
                 value: settings.sendCC,
                 onChanged: (value) => settings.sendCC = value),
