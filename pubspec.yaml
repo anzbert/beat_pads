@@ -39,11 +39,11 @@ dependencies:
   provider: ^6.0.2
 
   flutter_midi_command:
-    ^0.4.5
-
-    # git:
-    #   url: https://github.com/anzbert/FlutterMidiCommand.git
-    #   ref: messages
+    # path: /Users/anz/localDev/FlutterMidiCommand
+    # ^0.4.5
+    git:
+      url: https://github.com/anzbert/FlutterMidiCommand.git
+      ref: null_checks
 
   wakelock: ^0.6.1
 

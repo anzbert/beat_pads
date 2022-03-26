@@ -107,9 +107,11 @@ packages:
   flutter_midi_command:
     dependency: "direct main"
     description:
-      name: flutter_midi_command
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "."
+      ref: null_checks
+      resolved-ref: "1408307e458fe2ccca741b38c8483de7bf716b9b"
+      url: "https://github.com/anzbert/FlutterMidiCommand.git"
+    source: git
     version: "0.4.5"
   flutter_midi_command_linux:
     dependency: transitive
