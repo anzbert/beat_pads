@@ -34,24 +34,23 @@ class PadsScreen extends StatelessWidget {
                 ? LockScreenButton()
                 : null,
         body: SafeArea(
-          child: Provider.of<Settings>(context, listen: true).pitchBend
-              ? Row(
-                  children: [
-                    SizedBox(
-                      width: 50,
-                    ),
-                    RotatedBox(
-                      quarterTurns: 1,
-                      child: PitchBender(),
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: VariablePads(),
-                    )
-                  ],
-                )
-              : VariablePads(),
-        ),
+            child: Row(
+          children: [
+            if (Provider.of<Settings>(context, listen: true).pitchBend)
+              SizedBox(
+                width: 50,
+              ),
+            if (Provider.of<Settings>(context, listen: true).pitchBend)
+              RotatedBox(
+                quarterTurns: 1,
+                child: PitchBender(),
+              ),
+            Expanded(
+              flex: 1,
+              child: VariablePads(),
+            )
+          ],
+        )),
       );
     }
   }
