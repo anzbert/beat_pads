@@ -1,14 +1,16 @@
 import 'package:beat_pads/services/pads_layouts.dart';
-
 import './midi_utils.dart';
 
 abstract class PadUtils {
   static createGridList(Layout layout, int base, int width, int height,
-      int rootNote, List<int> scale, int baseNote) {
+      int root, List<int> scale) {
     List<int> grid = [];
 
     int semiTones;
     switch (layout) {
+      case Layout.continuous:
+        semiTones = width;
+        break;
       case Layout.minorThird:
         semiTones = 3;
         break;
@@ -23,10 +25,7 @@ abstract class PadUtils {
       case Layout.xPressPadsStandard:
         return xPressPadsStandard;
       case Layout.scaleNotesOnly:
-        return scaleOnlyGridList(rootNote, scale, baseNote, width * height);
-      default:
-        semiTones = width;
-        break;
+        return scaleOnlyGridList(root, scale, base, width * height);
     }
 
     for (int row = 0; row < height; row++) {
@@ -38,15 +37,14 @@ abstract class PadUtils {
   }
 
   static List<List<int>> reversedRowLists(
-    int rootNote,
-    int baseNote,
+    int root,
+    int base,
     int width,
     int height,
     List<int> scale,
     Layout layout,
   ) {
-    List<int> grid = createGridList(
-        layout, baseNote, width, height, rootNote, scale, baseNote);
+    List<int> grid = createGridList(layout, base, width, height, root, scale);
 
     return List.generate(
       height,
