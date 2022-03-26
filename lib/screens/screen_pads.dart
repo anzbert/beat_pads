@@ -14,7 +14,7 @@ class PadsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool inPortrait = MediaQuery.of(context).orientation.name == "portrait";
-    // return Layout().commonWidgets();
+
     // PORTRAIT: SHOW PADS SETTINGS MENU
     if (inPortrait) {
       return Scaffold(
