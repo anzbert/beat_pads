@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 import 'package:flutter_midi_command/flutter_midi_command_messages.dart';
 
-import 'package:beat_pads/state/receiver.dart';
+import 'package:beat_pads/state/midi.dart';
 import 'package:beat_pads/state/settings.dart';
 
 import 'package:beat_pads/services/midi_utils.dart';
@@ -29,10 +29,9 @@ class BeatPad extends StatelessWidget {
     final bool sendCC = Provider.of<Settings>(context, listen: true).sendCC;
 
     // variables from midi receiver:
-    final int channel =
-        Provider.of<MidiReceiver>(context, listen: true).channel;
+    final int channel = Provider.of<MidiData>(context, listen: true).channel;
     final int _rxNote = note < 127
-        ? Provider.of<MidiReceiver>(context, listen: true).rxNotes[note]
+        ? Provider.of<MidiData>(context, listen: true).rxNotes[note]
         : 0;
 
     // PAD COLOR:
@@ -60,6 +59,8 @@ class BeatPad extends StatelessWidget {
 
     BorderRadius _padRadius = BorderRadius.all(Radius.circular(5.0));
     EdgeInsets _padPadding = const EdgeInsets.all(2.5);
+
+    bool pressed = false;
 
     return Container(
       padding: const EdgeInsets.all(5.0),
@@ -92,6 +93,15 @@ class BeatPad extends StatelessWidget {
                   if (sendCC) {
                     CCMessage(channel: channel, controller: note, value: 127)
                         .send();
+                    pressed = true;
+                    // hold to bind CC
+                    Future.delayed(const Duration(milliseconds: 1500), () {
+                      if (pressed) {
+                        CCMessage(
+                                channel: channel, controller: note, value: 126)
+                            .send();
+                      }
+                    });
                   }
                 },
                 onTapUp: (_) {
@@ -102,6 +112,7 @@ class BeatPad extends StatelessWidget {
                   if (sendCC) {
                     CCMessage(channel: channel, controller: note, value: 0)
                         .send();
+                    pressed = false;
                   }
                 },
                 onTapCancel: () {
@@ -112,6 +123,7 @@ class BeatPad extends StatelessWidget {
                   if (sendCC) {
                     CCMessage(channel: channel, controller: note, value: 0)
                         .send();
+                    pressed = false;
                   }
                 },
                 child: Padding(

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:beat_pads/state/receiver.dart';
+import 'package:beat_pads/state/midi.dart';
 import 'package:provider/provider.dart';
 
 class ChannelSelector extends StatelessWidget {
@@ -7,7 +7,7 @@ class ChannelSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<MidiReceiver>(
+    return Consumer<MidiData>(
       builder: (context, receiver, child) {
         return Column(
           mainAxisSize: MainAxisSize.min,

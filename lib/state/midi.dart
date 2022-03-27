@@ -3,12 +3,14 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_midi_command/flutter_midi_command.dart';
 
-class MidiReceiver extends ChangeNotifier {
-  StreamSubscription<MidiPacket>? _rxSubscription;
+class MidiData extends ChangeNotifier {
+// public:
+  final List<int> rxNotes = List.filled(128, 0);
 
-  final MidiCommand _midiCommand = MidiCommand();
-
-  final rxNotes = List.filled(128, 0);
+  rxNotesReset() {
+    rxNotes.fillRange(0, 128, 0);
+    notifyListeners();
+  }
 
   int _channel = 0;
   set channel(int channel) {
@@ -20,7 +22,12 @@ class MidiReceiver extends ChangeNotifier {
   int get channel => _channel;
   resetChannel() => channel = 0;
 
-  MidiReceiver() {
+// private:
+  StreamSubscription<MidiPacket>? _rxSubscription;
+  final MidiCommand _midiCommand = MidiCommand();
+
+// constructor:
+  MidiData() {
     _rxSubscription = _midiCommand.onMidiDataReceived?.listen((packet) {
       int header = packet.data[0];
 
@@ -33,7 +40,7 @@ class MidiReceiver extends ChangeNotifier {
       MidiMessageType type = getMidiMessageType(header);
 
       if (type == MidiMessageType.noteOn || type == MidiMessageType.noteOff) {
-        // receiver only handling noteON(9) and noteOFF(8) at the moment:
+        // Data only handling noteON(9) and noteOFF(8) at the moment:
         int note = packet.data[1];
         int velocity = packet.data[2];
 
@@ -60,7 +67,7 @@ class MidiReceiver extends ChangeNotifier {
   }
 }
 
-// UTILITY FUNCTIONS (not all of them in use):
+// UTILITY FUNCTIONS (not in use):
 
 int lengthOfMessageType(int type) {
   // sysex not included, as it is of variable length

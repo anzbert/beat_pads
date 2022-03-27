@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 import '../state/settings.dart';
-import '../state/receiver.dart';
+import 'state/midi.dart';
 
 import 'app_theme.dart';
 import 'screens/screen_splash.dart';
@@ -24,7 +24,7 @@ class App extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => Settings()),
-        ChangeNotifierProvider(create: (context) => MidiReceiver()),
+        ChangeNotifierProvider(create: (context) => MidiData()),
       ],
       child: MaterialApp(
         theme: appTheme,

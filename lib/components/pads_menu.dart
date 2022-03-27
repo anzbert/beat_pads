@@ -1,3 +1,4 @@
+import 'package:beat_pads/components/button_reset.dart';
 import 'package:beat_pads/components/drop_down_notes.dart';
 import 'package:beat_pads/components/label_info_box.dart';
 import 'package:beat_pads/services/pads_layouts.dart';
@@ -100,7 +101,7 @@ class PadsMenu extends StatelessWidget {
             ),
           ListTile(
             title: Text("Send Control Change"),
-            subtitle: Text("CC On (127) while a pad is held"),
+            subtitle: Text("Send CC On with Pad Note."),
             trailing: Switch(
                 value: settings.sendCC,
                 onChanged: (value) => settings.sendCC = value),
@@ -122,9 +123,10 @@ class PadsMenu extends StatelessWidget {
                     settings.lockScreenButton = !settings.lockScreenButton),
           ),
           SwitchWakeLock(),
+          ResetButton(),
           InfoBox(
             [
-              "Beat Pads v0.3.1\n",
+              "Beat Pads v0.3.2\n",
               "Made by A. Mueller\n      [anzgraph.com]\n",
               "Dog Icon by 'catalyststuff'\n      [freepik.com]\n",
               "Logo Animated with Rive\n      [rive.app]\n",

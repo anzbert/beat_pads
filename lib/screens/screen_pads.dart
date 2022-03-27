@@ -5,7 +5,7 @@ import 'package:beat_pads/state/settings.dart';
 
 import 'package:beat_pads/components/button_lock_screen.dart';
 import 'package:beat_pads/components/slider_pitch_bend.dart';
-import 'package:beat_pads/components/pads_pads.dart';
+import 'package:beat_pads/components/pads_pads_grid.dart';
 import 'package:beat_pads/components/pads_menu.dart';
 
 class PadsScreen extends StatelessWidget {
@@ -20,6 +20,11 @@ class PadsScreen extends StatelessWidget {
       return Scaffold(
         appBar: AppBar(
           title: Text("Pad Settings"),
+          leading: BackButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
         ),
         body: SafeArea(child: PadsMenu()),
       );
