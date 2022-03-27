@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class CustomP extends StatelessWidget {
-  const CustomP(this.o1, this.o2);
+class PaintLine extends StatelessWidget {
+  const PaintLine(this.o1, this.o2);
   final Offset o1;
   final Offset o2;
 
@@ -17,7 +17,7 @@ final Paint brush = Paint()
   ..color = Colors.green
   ..strokeWidth = 20
   ..strokeCap = StrokeCap.round
-  ..blendMode = BlendMode.difference;
+  ..blendMode = BlendMode.darken;
 
 class Painter extends CustomPainter {
   const Painter(this.o1, this.o2);
@@ -26,7 +26,6 @@ class Painter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-//     print("painting");
     canvas.drawLine(o1, o2, brush);
   }
 

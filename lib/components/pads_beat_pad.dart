@@ -1,4 +1,5 @@
 import 'package:beat_pads/services/gen_utils.dart';
+import 'package:beat_pads/state/paint_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -9,8 +10,6 @@ import 'package:beat_pads/state/settings.dart';
 
 import 'package:beat_pads/services/midi_utils.dart';
 import 'package:beat_pads/services/color_const.dart';
-
-// import 'package:beat_pads/components/paint_line.dart';
 
 class BeatPad extends StatefulWidget {
   const BeatPad({
@@ -160,6 +159,8 @@ class _BeatPadState extends State<BeatPad> {
                         .send();
                     lastPressure = convertedToPressure;
                   }
+                  Provider.of<PaintState>(context, listen: false)
+                      .addLine(widget.note, [o1, o2]);
                 },
 
                 onPanEnd: (_) {
@@ -182,6 +183,8 @@ class _BeatPadState extends State<BeatPad> {
                           .send();
                     }
                     playing = false;
+                    Provider.of<PaintState>(context, listen: false)
+                        .removeLine(widget.note);
                   });
                 },
 
