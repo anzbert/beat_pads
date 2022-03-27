@@ -29,30 +29,29 @@ class PadsMenu extends StatelessWidget {
           RotateLabel(),
           ListTile(
             title: Text("Layout"),
-            subtitle:
-                Text("Choose between Row Intervals and Fixed Note Layouts"),
+            subtitle: Text("Row Intervals and other Note Layouts"),
             trailing: DropdownLayout(),
           ),
           ListTile(
             title: Text("Show Note Names"),
-            subtitle: Text("Switch Between Names and Midi Values"),
+            subtitle: Text("Switch between Names and Midi Values"),
             trailing: Switch(
                 value: settings.showNoteNames,
                 onChanged: (value) => settings.showNoteNames = value),
           ),
           if (variableGrid)
             ListTile(
-              title: Text("Pad Grid Width"),
+              title: Text("Grid Width"),
               trailing: DropdownNumbers(Dimension.width),
             ),
           if (variableGrid)
             ListTile(
-              title: Text("Pad Grid Height"),
+              title: Text("Grid Height"),
               trailing: DropdownNumbers(Dimension.height),
             ),
           if (variableGrid)
             ListTile(
-              title: Text("Scale Root"),
+              title: Text("Root Note"),
               trailing: DropdownRootNote(
                   setValue: (v) {
                     settings.baseNote = v + 36; // TEMP WHILE BASENOTE DISABLED
@@ -67,7 +66,8 @@ class PadsMenu extends StatelessWidget {
             ),
           if (variableGrid)
             ListTile(
-              title: Text("Lowest Grid Note"),
+              title: Text("Lowest Note"),
+              subtitle: Text("The bottom left Note in the Grid"),
               trailing: DropdownScaleNotes(
                 setValue: (v) => settings.baseNote = v,
                 readValue: settings.baseNote,
@@ -78,7 +78,7 @@ class PadsMenu extends StatelessWidget {
             ),
           ListTile(
             title: Text("Random Velocity"),
-            subtitle: Text("Random Velocity Within a Given Range"),
+            subtitle: Text("Random Velocity Within a given Range"),
             trailing: Switch(
                 value: settings.randomVelocity,
                 onChanged: (value) => settings.randomizeVelocity = value),
@@ -101,22 +101,22 @@ class PadsMenu extends StatelessWidget {
             ),
           ListTile(
             title: Text("Send Control Change"),
-            subtitle: Text("Send CC On with Pad Note."),
+            subtitle: Text("Send CC-ON (127) with Pad Note"),
             trailing: Switch(
                 value: settings.sendCC,
                 onChanged: (value) => settings.sendCC = value),
           ),
           ChannelSelector(),
           ListTile(
-            title: Text("Pitch Bender"),
-            subtitle: Text("Add a Pitch Bend Slider to Pad Screen"),
+            title: Text("Pitch Bend"),
+            subtitle: Text("Adds Pitch Bend Slider to Pad Screen"),
             trailing: Switch(
                 value: settings.pitchBend,
                 onChanged: (value) => settings.pitchBend = !settings.pitchBend),
           ),
           ListTile(
             title: Text("Lock Screen Button"),
-            subtitle: Text("Add a Rotation Lock Button. Long Press to Use"),
+            subtitle: Text("Adds Rotation Lock Button. Long Press to Use"),
             trailing: Switch(
                 value: settings.lockScreenButton,
                 onChanged: (value) =>
