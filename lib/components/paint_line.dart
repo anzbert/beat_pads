@@ -1,3 +1,4 @@
+import 'package:beat_pads/services/color_const.dart';
 import 'package:flutter/material.dart';
 
 class PaintLine extends StatelessWidget {
@@ -14,8 +15,8 @@ class PaintLine extends StatelessWidget {
 }
 
 final Paint brush = Paint()
-  ..color = Colors.green
-  ..strokeWidth = 20
+  ..color = Palette.lightPink.color
+  ..strokeWidth = 16
   ..strokeCap = StrokeCap.round
   ..blendMode = BlendMode.darken;
 

@@ -3,8 +3,8 @@ import 'package:beat_pads/state/paint_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class AfterTouchLines extends StatelessWidget {
-  const AfterTouchLines({Key? key}) : super(key: key);
+class PaintAfterTouchLines extends StatelessWidget {
+  const PaintAfterTouchLines({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

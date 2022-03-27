@@ -41,7 +41,7 @@ class VariablePads extends StatelessWidget {
         ),
 
         // Display drawn after touch lines on Top:
-        AfterTouchLines(),
+        PaintAfterTouchLines(),
       ],
     );
   }
