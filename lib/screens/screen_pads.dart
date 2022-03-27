@@ -68,7 +68,7 @@ class PadsScreen extends StatelessWidget {
                       ),
                     ),
                     // Display Aftertouch gfx on top:
-                    PaintAfterTouchLines(),
+                    // PaintAfterTouchLines(),
                   ],
                 ),
               ));
