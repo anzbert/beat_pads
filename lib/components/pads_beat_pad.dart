@@ -25,18 +25,16 @@ class BeatPad extends StatefulWidget {
 }
 
 class _BeatPadState extends State<BeatPad> {
-  double startX = 0;
-  double startY = 0;
-  double x = 0;
-  double y = 0;
-  int atValue = 0;
+  final GlobalKey _key = GlobalKey();
+
+  // int atValue = 0;
 
   Offset o1 = const Offset(0, 0);
   Offset o2 = const Offset(0, 0);
   bool showLine = false;
 
-  int distToVelocity(double x, double y, double scale) {
-    int dist = (Utils.distance(0, 0, x, y) * scale).toInt();
+  int distToVelocity(Offset o1, Offset o2, double scale) {
+    int dist = (Utils.offsetDistance(o1, o2) * scale).toInt();
     return dist.clamp(0, 127);
   }
 
@@ -83,134 +81,117 @@ class _BeatPadState extends State<BeatPad> {
     BorderRadius _padRadius = BorderRadius.all(Radius.circular(5.0));
     EdgeInsets _padPadding = const EdgeInsets.all(2.5);
 
-    // bool pressed = false;
-
     return Container(
       padding: const EdgeInsets.all(5.0),
       height: double.infinity,
       width: double.infinity,
       child: Material(
-          color: _color,
-          borderRadius: BorderRadius.all(Radius.circular(5.0)),
-          elevation: 5.0,
-          shadowColor: Colors.black,
-          child: GestureDetector(
-            onPanStart: (pan) {
-              startX = pan.globalPosition.dx;
-              startY = pan.globalPosition.dy;
-              print("panStart: x: $x / y: $y");
+        key: _key,
+        color: _color,
+        borderRadius: BorderRadius.all(Radius.circular(5.0)),
+        elevation: 5.0,
+        shadowColor: Colors.black,
+        child: widget.note > 127 || widget.note < 0
+            ?
+            // out of midi range:
+            InkWell(
+                borderRadius: _padRadius,
+                child: Padding(
+                  padding: _padPadding,
+                  child: Text("#${widget.note}",
+                      style: TextStyle(color: _padTextColor)),
+                ),
+              )
+            :
+            // within midi range:
+            GestureDetector(
+                onPanStart: (pan) {
+                  o1 = Utils.getCenterOffset(_key)!;
+                  o2 = pan.globalPosition;
 
-              o1 = pan.globalPosition;
-              o2 = pan.globalPosition;
+                  showLine = true;
+                },
+                onPanUpdate: (pan) {
+                  o2 = pan.globalPosition;
+                  int converted = distToVelocity(o1, o2, 0.5);
 
-//                         print(o1);
-              showLine = true;
-            },
-            onPanEnd: (_) {
-              print(
-                  "panEnd: x: $x / y: $y / dist: ${Utils.distance(0, 0, x, y)}");
-              x = 0;
-              y = 0;
+                  ATMessage(channel: channel, pressure: converted).send();
 
-              setState(() => showLine = false);
-            },
-            onPanUpdate: (pan) {
-              x = pan.globalPosition.dx - startX;
-              y = pan.globalPosition.dy - startY;
-              int converted = distToVelocity(x, y, 1.0);
+                  // setState(() {
+                  //   if (converted != velocity) {
+                  //     atValue = converted;
+                  //   }
+                  // });
+                },
+                onPanEnd: (_) {
+                  print("panEnd");
 
-              o2 = pan.globalPosition;
+                  ATMessage(channel: channel, pressure: 0).send();
 
-              setState(() {
-                if (converted != velocity) {
-                  atValue = converted;
-                }
-              });
-            },
-            onPanCancel: () {
-              print(
-                  "panCancel: x: $x / y: $y / dist: ${Utils.distance(0, 0, x, y)}");
-              x = 0;
-              y = 0;
-            },
-            child: widget.note > 127 || widget.note < 0
-                ?
-                // out of midi range:
-                InkWell(
-                    borderRadius: _padRadius,
-                    child: Padding(
-                      padding: _padPadding,
-                      child: Text("#${widget.note}",
-                          style: TextStyle(color: _padTextColor)),
-                    ),
-                  )
-                :
-                // within midi range:
-                InkWell(
-                    borderRadius: _padRadius,
-                    splashColor: _splashColor,
-                    onTapDown: (_) {
-                      NoteOnMessage(
+                  // setState(() => showLine = false);
+                },
+                onPanCancel: () {
+                  print("panCancel");
+
+                  // ATMessage(channel: channel, pressure: 0).send();
+                },
+                child: InkWell(
+                  borderRadius: _padRadius,
+                  splashColor: _splashColor,
+                  onTapDown: (_) {
+                    print(Utils.getOffset(_key));
+                    print(Utils.getSize(_key));
+                    NoteOnMessage(
+                            channel: channel,
+                            note: widget.note,
+                            velocity: velocity)
+                        .send();
+                    if (sendCC) {
+                      CCMessage(
                               channel: channel,
-                              note: widget.note,
-                              velocity: velocity)
+                              controller: widget.note,
+                              value: 127)
                           .send();
-                      if (sendCC) {
-                        CCMessage(
-                                channel: channel,
-                                controller: widget.note,
-                                value: 127)
-                            .send();
-                        // pressed = true;
-                        // // hold to bind CC
-                        // Future.delayed(const Duration(milliseconds: 1500), () {
-                        //   if (pressed) {
-                        //     CCMessage(
-                        //             channel: channel, controller: note, value: 126)
-                        //         .send();
-                        //   }
-                        // });
-                      }
-                    },
-                    onTapUp: (_) {
-                      NoteOffMessage(
-                        channel: channel,
-                        note: widget.note,
-                      ).send();
-                      if (sendCC) {
-                        CCMessage(
-                                channel: channel,
-                                controller: widget.note,
-                                value: 0)
-                            .send();
-                        // pressed = false;
-                      }
-                    },
-                    onTapCancel: () {
-                      NoteOffMessage(
-                        channel: channel,
-                        note: widget.note,
-                      ).send();
-                      if (sendCC) {
-                        CCMessage(
-                                channel: channel,
-                                controller: widget.note,
-                                value: 0)
-                            .send();
-                        // pressed = false;
-                      }
-                    },
-                    child: Padding(
-                      padding: _padPadding,
-                      child: Text(
-                          showNoteNames
-                              ? MidiUtils.getNoteName(widget.note,
-                                  showNoteValue: false)
-                              : widget.note.toString(),
-                          style: TextStyle(color: _padTextColor)),
-                    ),
+                    }
+                  },
+                  onTapUp: (_) {
+                    NoteOffMessage(
+                      channel: channel,
+                      note: widget.note,
+                    ).send();
+                    if (sendCC) {
+                      CCMessage(
+                              channel: channel,
+                              controller: widget.note,
+                              value: 0)
+                          .send();
+                    }
+                  },
+                  onTapCancel: () {
+                    NoteOffMessage(
+                      channel: channel,
+                      note: widget.note,
+                    ).send();
+                    if (sendCC) {
+                      CCMessage(
+                              channel: channel,
+                              controller: widget.note,
+                              value: 0)
+                          .send();
+                    }
+                  },
+                  child: Padding(
+                    padding: _padPadding,
+                    child: Text(
+                        showNoteNames
+                            ? MidiUtils.getNoteName(widget.note,
+                                showNoteValue: false)
+                            : widget.note.toString(),
+                        style: TextStyle(color: _padTextColor)),
                   ),
-          )),
+                ),
+              ),
+      ),
     );
   }
 }
