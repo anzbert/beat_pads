@@ -11,6 +11,7 @@ class FloatingButtonPads extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton.large(
+      heroTag: "toPads",
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.all(
           Radius.circular(10),

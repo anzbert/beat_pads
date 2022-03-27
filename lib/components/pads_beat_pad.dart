@@ -60,7 +60,7 @@ class BeatPad extends StatelessWidget {
     BorderRadius _padRadius = BorderRadius.all(Radius.circular(5.0));
     EdgeInsets _padPadding = const EdgeInsets.all(2.5);
 
-    bool pressed = false;
+    // bool pressed = false;
 
     return Container(
       padding: const EdgeInsets.all(5.0),
@@ -93,15 +93,15 @@ class BeatPad extends StatelessWidget {
                   if (sendCC) {
                     CCMessage(channel: channel, controller: note, value: 127)
                         .send();
-                    pressed = true;
-                    // hold to bind CC
-                    Future.delayed(const Duration(milliseconds: 1500), () {
-                      if (pressed) {
-                        CCMessage(
-                                channel: channel, controller: note, value: 126)
-                            .send();
-                      }
-                    });
+                    // pressed = true;
+                    // // hold to bind CC
+                    // Future.delayed(const Duration(milliseconds: 1500), () {
+                    //   if (pressed) {
+                    //     CCMessage(
+                    //             channel: channel, controller: note, value: 126)
+                    //         .send();
+                    //   }
+                    // });
                   }
                 },
                 onTapUp: (_) {
@@ -112,7 +112,7 @@ class BeatPad extends StatelessWidget {
                   if (sendCC) {
                     CCMessage(channel: channel, controller: note, value: 0)
                         .send();
-                    pressed = false;
+                    // pressed = false;
                   }
                 },
                 onTapCancel: () {
@@ -123,7 +123,7 @@ class BeatPad extends StatelessWidget {
                   if (sendCC) {
                     CCMessage(channel: channel, controller: note, value: 0)
                         .send();
-                    pressed = false;
+                    // pressed = false;
                   }
                 },
                 child: Padding(
