@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'dart:math';
 
+import 'package:flutter/material.dart';
+
 abstract class Utils {
   /// Rotate a list by a given int value (positive = forward / negative = backwards)
   static List<T> rotateList<T>(List<T> list, int rotateBy) {
@@ -17,6 +19,10 @@ abstract class Utils {
   /// get distance between 2 points
   static num distance(num x1, num y1, num x2, num y2) {
     return sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2));
+  }
+
+  static double offsetDistance(Offset o1, Offset o2) {
+    return sqrt(pow(o2.dx - o1.dx, 2) + pow(o2.dy - o1.dy, 2));
   }
 
   /// Print ONLY in debug mode
