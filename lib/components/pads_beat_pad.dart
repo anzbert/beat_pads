@@ -10,7 +10,7 @@ import 'package:beat_pads/state/settings.dart';
 import 'package:beat_pads/services/midi_utils.dart';
 import 'package:beat_pads/services/color_const.dart';
 
-import 'package:beat_pads/components/paint_line.dart';
+// import 'package:beat_pads/components/paint_line.dart';
 
 class BeatPad extends StatefulWidget {
   const BeatPad({
@@ -27,13 +27,15 @@ class BeatPad extends StatefulWidget {
 class _BeatPadState extends State<BeatPad> {
   final GlobalKey _key = GlobalKey();
 
+  static const int _minTriggerTime = 8; // in milliseconds
+
   // int atValue = 0;
 
   Offset o1 = const Offset(0, 0);
   Offset o2 = const Offset(0, 0);
   bool showLine = false;
 
-  int distToVelocity(Offset o1, Offset o2, double scale) {
+  int distanceToMidi(Offset o1, Offset o2, double scale) {
     int dist = (Utils.offsetDistance(o1, o2) * scale).toInt();
     return dist.clamp(0, 127);
   }
@@ -106,41 +108,60 @@ class _BeatPadState extends State<BeatPad> {
             // within midi range:
             GestureDetector(
                 onPanStart: (pan) {
+                  print("panStart");
+                  NoteOnMessage(
+                          channel: channel,
+                          note: widget.note,
+                          velocity: velocity)
+                      .send();
+                  if (sendCC) {
+                    CCMessage(
+                            channel: channel,
+                            controller: widget.note,
+                            value: 127)
+                        .send();
+                  }
+                },
+                onPanUpdate: (pan) {
                   o1 = Utils.getCenterOffset(_key)!;
                   o2 = pan.globalPosition;
 
-                  showLine = true;
-                },
-                onPanUpdate: (pan) {
-                  o2 = pan.globalPosition;
-                  int converted = distToVelocity(o1, o2, 0.5);
+                  int convertedToPressure = distanceToMidi(o1, o2, 0.5);
 
-                  ATMessage(channel: channel, pressure: converted).send();
-
-                  // setState(() {
-                  //   if (converted != velocity) {
-                  //     atValue = converted;
-                  //   }
-                  // });
+                  PolyATMessage(
+                          channel: channel,
+                          note: widget.note,
+                          pressure: convertedToPressure)
+                      .send();
                 },
                 onPanEnd: (_) {
                   print("panEnd");
 
-                  ATMessage(channel: channel, pressure: 0).send();
+                  Future.delayed(Duration(milliseconds: _minTriggerTime), () {
+                    NoteOffMessage(
+                      channel: channel,
+                      note: widget.note,
+                    ).send();
 
-                  // setState(() => showLine = false);
-                },
-                onPanCancel: () {
-                  print("panCancel");
+                    PolyATMessage(
+                            channel: channel, note: widget.note, pressure: 0)
+                        .send();
 
-                  // ATMessage(channel: channel, pressure: 0).send();
+                    if (sendCC) {
+                      CCMessage(
+                              channel: channel,
+                              controller: widget.note,
+                              value: 0)
+                          .send();
+                    }
+                  });
                 },
+                onPanCancel: () => print("panCancel (no action)"),
                 child: InkWell(
                   borderRadius: _padRadius,
                   splashColor: _splashColor,
                   onTapDown: (_) {
-                    print(Utils.getOffset(_key));
-                    print(Utils.getSize(_key));
+                    print("tapDown");
                     NoteOnMessage(
                             channel: channel,
                             note: widget.note,
@@ -155,31 +176,23 @@ class _BeatPadState extends State<BeatPad> {
                     }
                   },
                   onTapUp: (_) {
-                    NoteOffMessage(
-                      channel: channel,
-                      note: widget.note,
-                    ).send();
-                    if (sendCC) {
-                      CCMessage(
-                              channel: channel,
-                              controller: widget.note,
-                              value: 0)
-                          .send();
-                    }
+                    print("tapUp");
+                    Future.delayed(Duration(milliseconds: _minTriggerTime), () {
+                      NoteOffMessage(
+                        channel: channel,
+                        note: widget.note,
+                      ).send();
+
+                      if (sendCC) {
+                        CCMessage(
+                                channel: channel,
+                                controller: widget.note,
+                                value: 0)
+                            .send();
+                      }
+                    });
                   },
-                  onTapCancel: () {
-                    NoteOffMessage(
-                      channel: channel,
-                      note: widget.note,
-                    ).send();
-                    if (sendCC) {
-                      CCMessage(
-                              channel: channel,
-                              controller: widget.note,
-                              value: 0)
-                          .send();
-                    }
-                  },
+                  onTapCancel: () => print("tapCancel"),
                   child: Padding(
                     padding: _padPadding,
                     child: Text(
