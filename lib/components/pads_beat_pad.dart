@@ -26,7 +26,7 @@ class BeatPad extends StatefulWidget {
 class _BeatPadState extends State<BeatPad> {
   final GlobalKey _key = GlobalKey();
 
-  static const int _minTriggerTime = 8; // in milliseconds
+  static const int _minTriggerTime = 10; // in milliseconds
 
   bool playing = false;
   int lastPressure = 0;
@@ -109,25 +109,6 @@ class _BeatPadState extends State<BeatPad> {
 
             // WITHIN MIDI RANGE
             GestureDetector(
-                onTapDown: (_) {
-                  // print("tapDown - noteOn");
-                  if (!playing) {
-                    NoteOnMessage(
-                            channel: channel,
-                            note: widget.note,
-                            velocity: velocity)
-                        .send();
-                    if (sendCC) {
-                      CCMessage(
-                              channel: channel,
-                              controller: widget.note,
-                              value: 127)
-                          .send();
-                    }
-                    playing = true;
-                  }
-                },
-
                 onPanStart: (_) {
                   // print("panStart - noteOn");
                   if (!playing) {
@@ -188,29 +169,46 @@ class _BeatPadState extends State<BeatPad> {
                   });
                 },
 
-                onTapUp: (_) {
-                  // print("tapUp - NoteOff");
-                  Future.delayed(Duration(milliseconds: _minTriggerTime), () {
-                    NoteOffMessage(
-                      channel: channel,
-                      note: widget.note,
-                    ).send();
-
-                    if (sendCC) {
-                      CCMessage(
-                              channel: channel,
-                              controller: widget.note,
-                              value: 0)
-                          .send();
-                    }
-                    playing = false;
-                  });
-                },
-
                 // onPanCancel: () => print("panCancel (no action)"),
-                // onTapCancel: () => print("tapCancel - no action"),
 
                 child: InkWell(
+                  // onTapCancel: () => print("tapCancel - no action"),
+                  onTapUp: (_) {
+                    // print("tapUp - NoteOff");
+                    Future.delayed(Duration(milliseconds: _minTriggerTime), () {
+                      NoteOffMessage(
+                        channel: channel,
+                        note: widget.note,
+                      ).send();
+
+                      if (sendCC) {
+                        CCMessage(
+                                channel: channel,
+                                controller: widget.note,
+                                value: 0)
+                            .send();
+                      }
+                      playing = false;
+                    });
+                  },
+                  onTapDown: (_) {
+                    // print("tapDown - noteOn");
+                    if (!playing) {
+                      NoteOnMessage(
+                              channel: channel,
+                              note: widget.note,
+                              velocity: velocity)
+                          .send();
+                      if (sendCC) {
+                        CCMessage(
+                                channel: channel,
+                                controller: widget.note,
+                                value: 127)
+                            .send();
+                      }
+                      playing = true;
+                    }
+                  },
                   borderRadius: _padRadius,
                   splashColor: _splashColor,
                   child: Padding(

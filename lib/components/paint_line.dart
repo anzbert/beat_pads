@@ -18,7 +18,7 @@ final Paint brush = Paint()
   ..color = Palette.lightPink.color
   ..strokeWidth = 16
   ..strokeCap = StrokeCap.round
-  ..blendMode = BlendMode.darken;
+  ..blendMode = BlendMode.plus;
 
 class Painter extends CustomPainter {
   const Painter(this.o1, this.o2);
