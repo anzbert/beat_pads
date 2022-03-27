@@ -96,7 +96,8 @@ class _BeatPadState extends State<BeatPad> {
         shadowColor: Colors.black,
         child: widget.note > 127 || widget.note < 0
             ?
-            // out of midi range:
+
+            // OUT OF MIDI RANGE
             InkWell(
                 borderRadius: _padRadius,
                 child: Padding(
@@ -106,7 +107,8 @@ class _BeatPadState extends State<BeatPad> {
                 ),
               )
             :
-            // within midi range:
+
+            // WITHIN MIDI RANGE
             GestureDetector(
                 onTapDown: (_) {
                   // print("tapDown - noteOn");
@@ -126,6 +128,7 @@ class _BeatPadState extends State<BeatPad> {
                     playing = true;
                   }
                 },
+
                 onPanStart: (_) {
                   // print("panStart - noteOn");
                   if (!playing) {
@@ -144,22 +147,21 @@ class _BeatPadState extends State<BeatPad> {
                     playing = true;
                   }
                 },
+
                 onPanUpdate: (pan) {
                   o1 = Utils.getCenterOffset(_key)!;
                   o2 = pan.globalPosition;
-
                   int convertedToPressure = distanceToMidi(o1, o2, 0.5);
-
                   if (lastPressure != convertedToPressure) {
                     PolyATMessage(
                             channel: channel,
                             note: widget.note,
                             pressure: convertedToPressure)
                         .send();
-
                     lastPressure = convertedToPressure;
                   }
                 },
+
                 onPanEnd: (_) {
                   // print("panEnd - noteOff");
                   Future.delayed(Duration(milliseconds: _minTriggerTime), () {
@@ -182,6 +184,7 @@ class _BeatPadState extends State<BeatPad> {
                     playing = false;
                   });
                 },
+
                 onTapUp: (_) {
                   // print("tapUp - NoteOff");
                   Future.delayed(Duration(milliseconds: _minTriggerTime), () {
@@ -200,8 +203,10 @@ class _BeatPadState extends State<BeatPad> {
                     playing = false;
                   });
                 },
+
                 // onPanCancel: () => print("panCancel (no action)"),
                 // onTapCancel: () => print("tapCancel - no action"),
+
                 child: InkWell(
                   borderRadius: _padRadius,
                   splashColor: _splashColor,
