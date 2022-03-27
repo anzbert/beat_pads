@@ -29,7 +29,8 @@ class _BeatPadState extends State<BeatPad> {
 
   static const int _minTriggerTime = 8; // in milliseconds
 
-  // int atValue = 0;
+  bool playing = false;
+  int lastPressure = 0;
 
   Offset o1 = const Offset(0, 0);
   Offset o2 = const Offset(0, 0);
@@ -107,19 +108,40 @@ class _BeatPadState extends State<BeatPad> {
             :
             // within midi range:
             GestureDetector(
-                onPanStart: (pan) {
-                  print("panStart");
-                  NoteOnMessage(
-                          channel: channel,
-                          note: widget.note,
-                          velocity: velocity)
-                      .send();
-                  if (sendCC) {
-                    CCMessage(
+                onTapDown: (_) {
+                  // print("tapDown - noteOn");
+                  if (!playing) {
+                    NoteOnMessage(
                             channel: channel,
-                            controller: widget.note,
-                            value: 127)
+                            note: widget.note,
+                            velocity: velocity)
                         .send();
+                    if (sendCC) {
+                      CCMessage(
+                              channel: channel,
+                              controller: widget.note,
+                              value: 127)
+                          .send();
+                    }
+                    playing = true;
+                  }
+                },
+                onPanStart: (_) {
+                  // print("panStart - noteOn");
+                  if (!playing) {
+                    NoteOnMessage(
+                            channel: channel,
+                            note: widget.note,
+                            velocity: velocity)
+                        .send();
+                    if (sendCC) {
+                      CCMessage(
+                              channel: channel,
+                              controller: widget.note,
+                              value: 127)
+                          .send();
+                    }
+                    playing = true;
                   }
                 },
                 onPanUpdate: (pan) {
@@ -128,15 +150,18 @@ class _BeatPadState extends State<BeatPad> {
 
                   int convertedToPressure = distanceToMidi(o1, o2, 0.5);
 
-                  PolyATMessage(
-                          channel: channel,
-                          note: widget.note,
-                          pressure: convertedToPressure)
-                      .send();
+                  if (lastPressure != convertedToPressure) {
+                    PolyATMessage(
+                            channel: channel,
+                            note: widget.note,
+                            pressure: convertedToPressure)
+                        .send();
+
+                    lastPressure = convertedToPressure;
+                  }
                 },
                 onPanEnd: (_) {
-                  print("panEnd");
-
+                  // print("panEnd - noteOff");
                   Future.delayed(Duration(milliseconds: _minTriggerTime), () {
                     NoteOffMessage(
                       channel: channel,
@@ -154,45 +179,32 @@ class _BeatPadState extends State<BeatPad> {
                               value: 0)
                           .send();
                     }
+                    playing = false;
                   });
                 },
-                onPanCancel: () => print("panCancel (no action)"),
-                child: InkWell(
-                  borderRadius: _padRadius,
-                  splashColor: _splashColor,
-                  onTapDown: (_) {
-                    print("tapDown");
-                    NoteOnMessage(
-                            channel: channel,
-                            note: widget.note,
-                            velocity: velocity)
-                        .send();
+                onTapUp: (_) {
+                  // print("tapUp - NoteOff");
+                  Future.delayed(Duration(milliseconds: _minTriggerTime), () {
+                    NoteOffMessage(
+                      channel: channel,
+                      note: widget.note,
+                    ).send();
+
                     if (sendCC) {
                       CCMessage(
                               channel: channel,
                               controller: widget.note,
-                              value: 127)
+                              value: 0)
                           .send();
                     }
-                  },
-                  onTapUp: (_) {
-                    print("tapUp");
-                    Future.delayed(Duration(milliseconds: _minTriggerTime), () {
-                      NoteOffMessage(
-                        channel: channel,
-                        note: widget.note,
-                      ).send();
-
-                      if (sendCC) {
-                        CCMessage(
-                                channel: channel,
-                                controller: widget.note,
-                                value: 0)
-                            .send();
-                      }
-                    });
-                  },
-                  onTapCancel: () => print("tapCancel"),
+                    playing = false;
+                  });
+                },
+                // onPanCancel: () => print("panCancel (no action)"),
+                // onTapCancel: () => print("tapCancel - no action"),
+                child: InkWell(
+                  borderRadius: _padRadius,
+                  splashColor: _splashColor,
                   child: Padding(
                     padding: _padPadding,
                     child: Text(
