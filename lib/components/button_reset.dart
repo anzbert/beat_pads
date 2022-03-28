@@ -11,6 +11,8 @@ class ResetButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: () {
           Provider.of<MidiData>(context, listen: false).rxNotesReset();
+          ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text("Received Midi Buffer has been reset")));
         },
         child: Text("Clear Received Midi Buffer"),
       ),

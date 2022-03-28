@@ -15,61 +15,52 @@ class PadsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     bool inPortrait = MediaQuery.of(context).orientation.name == "portrait";
 
-    return Hero(
-        tag: 'toPads',
-        child: inPortrait
-            ?
+    return inPortrait
+        ?
 
-            // PORTRAIT: SHOW PADS SETTINGS MENU
-            Scaffold(
-                appBar: AppBar(
-                  title: Text("Pad Settings"),
-                  leading: BackButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                ),
-                body: SafeArea(child: PadsMenu()),
-              )
-            :
+        // PORTRAIT: SHOW PADS SETTINGS MENU
+        Scaffold(
+            appBar: AppBar(
+              title: Text("Pad Settings"),
+              leading: BackButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ),
+            body: Hero(tag: "toPads", child: SafeArea(child: PadsMenu())),
+          )
+        :
 
-            // LANDSCAPE: PLAY PADS
-            Scaffold(
-                floatingActionButtonLocation:
-                    FloatingActionButtonLocation.endTop,
-                floatingActionButton:
-                    Provider.of<Settings>(context, listen: true)
-                            .lockScreenButton
-                        ? LockScreenButton()
-                        : null,
-                body: Stack(
+        // LANDSCAPE: PLAY PADS
+        Scaffold(
+            floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
+            floatingActionButton:
+                Provider.of<Settings>(context, listen: true).lockScreenButton
+                    ? LockScreenButton()
+                    : null,
+            body: Hero(
+              tag: "toPads",
+              child: SafeArea(
+                child: Row(
                   children: [
-                    SafeArea(
-                      child: Row(
-                        children: [
-                          if (Provider.of<Settings>(context, listen: true)
-                              .pitchBend)
-                            SizedBox(
-                              width: 50,
-                            ),
-                          if (Provider.of<Settings>(context, listen: true)
-                              .pitchBend)
-                            RotatedBox(
-                              quarterTurns: 1,
-                              child: PitchBender(),
-                            ),
-                          Expanded(
-                            flex: 1,
-                            child: VariablePads(),
-                          )
-                        ],
+                    if (Provider.of<Settings>(context, listen: true).pitchBend)
+                      SizedBox(
+                        width: 50,
                       ),
-                    ),
-                    // Display Aftertouch gfx on top:
-                    // PaintAfterTouchLines(),
+                    if (Provider.of<Settings>(context, listen: true).pitchBend)
+                      RotatedBox(
+                        quarterTurns: 1,
+                        child: PitchBender(),
+                      ),
+                    Expanded(
+                      flex: 1,
+                      child: VariablePads(),
+                    )
                   ],
                 ),
-              ));
+              ),
+            ),
+          );
   }
 }

@@ -180,7 +180,10 @@ class Settings extends ChangeNotifier {
   }
 
   // sustain:
-  int _sustainTimeStep = 0;
+  final int _minSustainTimeStep = 2;
+  int get minSustainTimeStep => _minSustainTimeStep;
+
+  int _sustainTimeStep = 2;
   int get sustainTimeStep => _sustainTimeStep;
 
   set sustainTimeStep(int timeInMs) {
@@ -189,12 +192,12 @@ class Settings extends ChangeNotifier {
   }
 
   int get sustainTimeExp {
-    if (_sustainTimeStep <= 0) return 0;
+    if (_sustainTimeStep <= _minSustainTimeStep) return 0;
     return pow(2, _sustainTimeStep).toInt();
   }
 
   resetSustainTimeStep() {
-    _sustainTimeStep = 0;
+    _sustainTimeStep = _minSustainTimeStep;
     notifyListeners();
   }
 }

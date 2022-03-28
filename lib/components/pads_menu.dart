@@ -101,12 +101,13 @@ class PadsMenu extends StatelessWidget {
               resetFunction: settings.resetVelocity,
             ),
           NonLinearSlider(
-            label: "Sustain Time",
-            subtitle: "How long Notes are Sustained in Milliseconds",
+            label: "Sustain",
+            subtitle: "Delay before sending NoteOff Message in Milliseconds",
             readValue: settings.sustainTimeStep,
             setValue: (v) => settings.sustainTimeStep = v,
             resetFunction: () => settings.resetSustainTimeStep(),
             actualValue: settings.sustainTimeExp.toString(),
+            start: settings.minSustainTimeStep,
             steps: 11,
           ),
           ListTile(

@@ -9,10 +9,12 @@ class NonLinearSlider extends StatelessWidget {
     required this.setValue,
     this.actualValue,
     this.steps = 10,
+    this.start = 0,
     Key? key,
   }) : super(key: key);
 
   final int steps;
+  final int start;
   final Function? resetFunction;
   final Function setValue;
   final int readValue;
@@ -42,7 +44,7 @@ class NonLinearSlider extends StatelessWidget {
               : Text(readValue.toString()),
         ),
         Slider(
-          min: 0,
+          min: start.toDouble(),
           max: steps.toDouble(),
           value: readValue.toDouble(),
           onChanged: (value) {
