@@ -1,6 +1,7 @@
 import 'package:beat_pads/components/button_reset.dart';
 import 'package:beat_pads/components/drop_down_notes.dart';
 import 'package:beat_pads/components/label_info_box.dart';
+import 'package:beat_pads/components/slider_non_linear.dart';
 import 'package:beat_pads/services/pads_layouts.dart';
 import 'package:flutter/material.dart';
 
@@ -99,6 +100,15 @@ class PadsMenu extends StatelessWidget {
               setMax: (v) => settings.velocityMax = v,
               resetFunction: settings.resetVelocity,
             ),
+          NonLinearSlider(
+            label: "Sustain Time",
+            subtitle: "How long Notes are Sustained in Milliseconds",
+            readValue: settings.sustainTimeStep,
+            setValue: (v) => settings.sustainTimeStep = v,
+            resetFunction: () => settings.resetSustainTimeStep(),
+            actualValue: settings.sustainTimeExp.toString(),
+            steps: 11,
+          ),
           ListTile(
             title: Text("Send Control Change"),
             subtitle: Text("Send CC-ON (127) with Pad Note"),

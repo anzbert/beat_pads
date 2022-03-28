@@ -1,4 +1,5 @@
 import 'package:beat_pads/services/device_utils.dart';
+import 'package:beat_pads/state/_paint_state.dart';
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
@@ -25,6 +26,7 @@ class App extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (context) => Settings()),
         ChangeNotifierProvider(create: (context) => MidiData()),
+        // ChangeNotifierProvider(create: (context) => PaintState()),
       ],
       child: MaterialApp(
         theme: appTheme,

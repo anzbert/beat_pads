@@ -16,6 +16,7 @@ class BeatPad extends StatelessWidget {
   }) : super(key: key);
 
   final int note;
+  static const int _minTriggerTime = 10; // in milliseconds
 
   @override
   Widget build(BuildContext context) {
@@ -60,8 +61,6 @@ class BeatPad extends StatelessWidget {
     BorderRadius _padRadius = BorderRadius.all(Radius.circular(5.0));
     EdgeInsets _padPadding = const EdgeInsets.all(2.5);
 
-    // bool pressed = false;
-
     return Container(
       padding: const EdgeInsets.all(5.0),
       height: double.infinity,
@@ -73,7 +72,8 @@ class BeatPad extends StatelessWidget {
         shadowColor: Colors.black,
         child: note > 127 || note < 0
             ?
-            // out of midi range:
+
+            // OUT OF MIDI RANGE
             InkWell(
                 borderRadius: _padRadius,
                 child: Padding(
@@ -82,7 +82,8 @@ class BeatPad extends StatelessWidget {
                 ),
               )
             :
-            // within midi range:
+
+            // WITHIN MIDI RANGE
             InkWell(
                 borderRadius: _padRadius,
                 splashColor: _splashColor,
@@ -93,38 +94,33 @@ class BeatPad extends StatelessWidget {
                   if (sendCC) {
                     CCMessage(channel: channel, controller: note, value: 127)
                         .send();
-                    // pressed = true;
-                    // // hold to bind CC
-                    // Future.delayed(const Duration(milliseconds: 1500), () {
-                    //   if (pressed) {
-                    //     CCMessage(
-                    //             channel: channel, controller: note, value: 126)
-                    //         .send();
-                    //   }
-                    // });
                   }
                 },
                 onTapUp: (_) {
-                  NoteOffMessage(
-                    channel: channel,
-                    note: note,
-                  ).send();
-                  if (sendCC) {
-                    CCMessage(channel: channel, controller: note, value: 0)
-                        .send();
-                    // pressed = false;
-                  }
+                  Future.delayed(Duration(milliseconds: _minTriggerTime), () {
+                    NoteOffMessage(
+                      channel: channel,
+                      note: note,
+                    ).send();
+
+                    if (sendCC) {
+                      CCMessage(channel: channel, controller: note, value: 0)
+                          .send();
+                    }
+                  });
                 },
                 onTapCancel: () {
-                  NoteOffMessage(
-                    channel: channel,
-                    note: note,
-                  ).send();
-                  if (sendCC) {
-                    CCMessage(channel: channel, controller: note, value: 0)
-                        .send();
-                    // pressed = false;
-                  }
+                  Future.delayed(Duration(milliseconds: _minTriggerTime), () {
+                    NoteOffMessage(
+                      channel: channel,
+                      note: note,
+                    ).send();
+
+                    if (sendCC) {
+                      CCMessage(channel: channel, controller: note, value: 0)
+                          .send();
+                    }
+                  });
                 },
                 child: Padding(
                   padding: _padPadding,

@@ -1,8 +1,10 @@
+import 'package:beat_pads/components/pads_beat_pad_sustain.dart';
+import 'package:beat_pads/components/_pads_beat_pad.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:beat_pads/state/settings.dart';
-import 'package:beat_pads/components/pads_beat_pad.dart';
+import 'package:beat_pads/components/_pads_beat_pad_test.dart';
 
 class VariablePads extends StatelessWidget {
   @override
@@ -16,22 +18,26 @@ class VariablePads extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
-          children: rowsList.map((row) {
-            return Expanded(
-              flex: 1,
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: row.map((padNote) {
-                    return Expanded(
-                      flex: 1,
-                      child: BeatPad(
-                        note: padNote,
-                      ),
-                    );
-                  }).toList()),
-            );
-          }).toList(),
+          children: [
+            ...rowsList.map((row) {
+              return Expanded(
+                flex: 1,
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      ...row.map((padNote) {
+                        return Expanded(
+                          flex: 1,
+                          child: BeatPadSustain(
+                            note: padNote,
+                          ),
+                        );
+                      }).toList()
+                    ]),
+              );
+            }).toList()
+          ],
         ),
       ),
     );

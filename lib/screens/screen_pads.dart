@@ -1,3 +1,4 @@
+import 'package:beat_pads/components/_paint_aftertouch_lines.dart';
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
@@ -19,6 +20,7 @@ class PadsScreen extends StatelessWidget {
         tag: 'toPads',
         child: inPortrait
             ?
+
             // PORTRAIT: SHOW PADS SETTINGS MENU
             Scaffold(
                 appBar: AppBar(
@@ -32,6 +34,7 @@ class PadsScreen extends StatelessWidget {
                 body: SafeArea(child: PadsMenu()),
               )
             :
+
             // LANDSCAPE: PLAY PADS
             Scaffold(
                 floatingActionButtonLocation:
@@ -41,24 +44,33 @@ class PadsScreen extends StatelessWidget {
                             .lockScreenButton
                         ? LockScreenButton()
                         : null,
-                body: SafeArea(
-                    child: Row(
+                body: Stack(
                   children: [
-                    if (Provider.of<Settings>(context, listen: true).pitchBend)
-                      SizedBox(
-                        width: 50,
+                    SafeArea(
+                      child: Row(
+                        children: [
+                          if (Provider.of<Settings>(context, listen: true)
+                              .pitchBend)
+                            SizedBox(
+                              width: 50,
+                            ),
+                          if (Provider.of<Settings>(context, listen: true)
+                              .pitchBend)
+                            RotatedBox(
+                              quarterTurns: 1,
+                              child: PitchBender(),
+                            ),
+                          Expanded(
+                            flex: 1,
+                            child: VariablePads(),
+                          )
+                        ],
                       ),
-                    if (Provider.of<Settings>(context, listen: true).pitchBend)
-                      RotatedBox(
-                        quarterTurns: 1,
-                        child: PitchBender(),
-                      ),
-                    Expanded(
-                      flex: 1,
-                      child: VariablePads(),
-                    )
+                    ),
+                    // Display Aftertouch gfx on top:
+                    // PaintAfterTouchLines(),
                   ],
-                )),
+                ),
               ));
   }
 }
