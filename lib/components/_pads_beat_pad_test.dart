@@ -110,7 +110,7 @@ class _BeatPadTestState extends State<BeatPadTest> {
             // WITHIN MIDI RANGE
             GestureDetector(
                 onPanStart: (_) {
-                  print("panStart - noteOn");
+                  // print("panStart - noteOn");
                   if (!playing) {
                     NoteOnMessage(
                             channel: channel,
@@ -145,7 +145,7 @@ class _BeatPadTestState extends State<BeatPadTest> {
                 // },
 
                 onPanEnd: (_) {
-                  print("panEnd - noteOff");
+                  // print("panEnd - noteOff");
                   Future.delayed(Duration(milliseconds: _minTriggerTime), () {
                     NoteOffMessage(
                       channel: channel,
@@ -174,7 +174,7 @@ class _BeatPadTestState extends State<BeatPadTest> {
                 child: InkWell(
                   // onTapCancel: () => print("tapCancel - no action"),
                   onTapUp: (_) {
-                    print("tapUp - NoteOff");
+                    // print("tapUp - NoteOff");
                     Future.delayed(Duration(milliseconds: _minTriggerTime), () {
                       NoteOffMessage(
                         channel: channel,
@@ -192,7 +192,7 @@ class _BeatPadTestState extends State<BeatPadTest> {
                     });
                   },
                   onTapDown: (_) {
-                    print("tapDown - noteOn");
+                    // print("tapDown - noteOn");
                     if (!playing) {
                       NoteOnMessage(
                               channel: channel,

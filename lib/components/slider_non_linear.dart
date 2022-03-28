@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../services/midi_utils.dart';
 
 class NonLinearSlider extends StatelessWidget {
   const NonLinearSlider({

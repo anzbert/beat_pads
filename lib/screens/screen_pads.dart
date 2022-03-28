@@ -1,4 +1,3 @@
-import 'package:beat_pads/components/_paint_aftertouch_lines.dart';
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
