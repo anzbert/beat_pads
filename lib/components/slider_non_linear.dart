@@ -1,27 +1,25 @@
 import 'package:flutter/material.dart';
 import '../services/midi_utils.dart';
 
-class MidiValueSelector extends StatelessWidget {
-  const MidiValueSelector({
+class NonLinearSlider extends StatelessWidget {
+  const NonLinearSlider({
     this.label = "#Label",
     this.subtitle,
     this.resetFunction,
     required this.readValue,
     required this.setValue,
-    this.note = false,
-    this.min = 0,
-    this.max = 128,
+    this.actualValue,
+    this.steps = 10,
     Key? key,
   }) : super(key: key);
 
-  final int min;
-  final int max;
+  final int steps;
   final Function? resetFunction;
   final Function setValue;
   final int readValue;
   final String label;
   final String? subtitle;
-  final bool note;
+  final String? actualValue;
 
   @override
   Widget build(BuildContext context) {
@@ -40,14 +38,13 @@ class MidiValueSelector extends StatelessWidget {
             ],
           ),
           subtitle: subtitle != null ? Text(subtitle!) : null,
-          trailing: note
-              ? Text(
-                  "${MidiUtils.getNoteName(readValue)}  (${readValue.toString()})")
+          trailing: actualValue != null
+              ? Text(actualValue!)
               : Text(readValue.toString()),
         ),
         Slider(
-          min: min.toDouble(),
-          max: max.toDouble(),
+          min: 0,
+          max: steps.toDouble(),
           value: readValue.toDouble(),
           onChanged: (value) {
             setValue(value.toInt());

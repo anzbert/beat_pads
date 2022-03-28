@@ -1,4 +1,5 @@
-import 'package:beat_pads/components/pads_beat_pad.dart';
+import 'package:beat_pads/components/pads_beat_pad_sustain.dart';
+import 'package:beat_pads/components/_pads_beat_pad.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -28,7 +29,7 @@ class VariablePads extends StatelessWidget {
                       ...row.map((padNote) {
                         return Expanded(
                           flex: 1,
-                          child: BeatPad(
+                          child: BeatPadSustain(
                             note: padNote,
                           ),
                         );

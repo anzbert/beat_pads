@@ -16,7 +16,7 @@ class BeatPad extends StatelessWidget {
   }) : super(key: key);
 
   final int note;
-  static const int _minTriggerTime = 12; // in milliseconds
+  static const int _minTriggerTime = 10; // in milliseconds
 
   @override
   Widget build(BuildContext context) {

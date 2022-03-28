@@ -178,4 +178,23 @@ class Settings extends ChangeNotifier {
     _sendCC = setting;
     notifyListeners();
   }
+
+  // sustain:
+  int _sustainTimeStep = 0;
+  int get sustainTimeStep => _sustainTimeStep;
+
+  set sustainTimeStep(int timeInMs) {
+    _sustainTimeStep = timeInMs.clamp(0, 5000);
+    notifyListeners();
+  }
+
+  int get sustainTimeExp {
+    if (_sustainTimeStep <= 0) return 0;
+    return pow(2, _sustainTimeStep).toInt();
+  }
+
+  resetSustainTimeStep() {
+    _sustainTimeStep = 0;
+    notifyListeners();
+  }
 }

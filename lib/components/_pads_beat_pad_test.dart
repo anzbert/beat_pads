@@ -1,5 +1,5 @@
 import 'package:beat_pads/services/gen_utils.dart';
-import 'package:beat_pads/state/paint_state.dart';
+import 'package:beat_pads/state/_paint_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -110,7 +110,7 @@ class _BeatPadTestState extends State<BeatPadTest> {
             // WITHIN MIDI RANGE
             GestureDetector(
                 onPanStart: (_) {
-                  // print("panStart - noteOn");
+                  print("panStart - noteOn");
                   if (!playing) {
                     NoteOnMessage(
                             channel: channel,
@@ -128,24 +128,24 @@ class _BeatPadTestState extends State<BeatPadTest> {
                   }
                 },
 
-                onPanUpdate: (pan) {
-                  o1 = Utils.getCenterOffset(_key)!;
-                  o2 = pan.globalPosition;
-                  int convertedToPressure = distanceToMidi(o1, o2, 0.5);
-                  if (lastPressure != convertedToPressure) {
-                    PolyATMessage(
-                            channel: channel,
-                            note: widget.note,
-                            pressure: convertedToPressure)
-                        .send();
-                    lastPressure = convertedToPressure;
-                  }
-                  Provider.of<PaintState>(context, listen: false)
-                      .addLine(widget.note, [o1, o2]);
-                },
+                // onPanUpdate: (pan) {
+                //   o1 = Utils.getCenterOffset(_key)!;
+                //   o2 = pan.globalPosition;
+                //   int convertedToPressure = distanceToMidi(o1, o2, 0.5);
+                //   if (lastPressure != convertedToPressure) {
+                //     PolyATMessage(
+                //             channel: channel,
+                //             note: widget.note,
+                //             pressure: convertedToPressure)
+                //         .send();
+                //     lastPressure = convertedToPressure;
+                //   }
+                //   Provider.of<PaintState>(context, listen: false)
+                //       .addLine(widget.note, [o1, o2]);
+                // },
 
                 onPanEnd: (_) {
-                  // print("panEnd - noteOff");
+                  print("panEnd - noteOff");
                   Future.delayed(Duration(milliseconds: _minTriggerTime), () {
                     NoteOffMessage(
                       channel: channel,
@@ -174,7 +174,7 @@ class _BeatPadTestState extends State<BeatPadTest> {
                 child: InkWell(
                   // onTapCancel: () => print("tapCancel - no action"),
                   onTapUp: (_) {
-                    // print("tapUp - NoteOff");
+                    print("tapUp - NoteOff");
                     Future.delayed(Duration(milliseconds: _minTriggerTime), () {
                       NoteOffMessage(
                         channel: channel,
@@ -192,7 +192,7 @@ class _BeatPadTestState extends State<BeatPadTest> {
                     });
                   },
                   onTapDown: (_) {
-                    // print("tapDown - noteOn");
+                    print("tapDown - noteOn");
                     if (!playing) {
                       NoteOnMessage(
                               channel: channel,
