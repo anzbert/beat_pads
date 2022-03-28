@@ -137,7 +137,7 @@ class PadsMenu extends StatelessWidget {
           ResetButton(),
           InfoBox(
             [
-              "Beat Pads v0.3.2\n",
+              "Beat Pads v0.3.5\n",
               "Made by A. Mueller\n      [anzgraph.com]\n",
               "Dog Icon by 'catalyststuff'\n      [freepik.com]\n",
               "Logo Animated with Rive\n      [rive.app]\n",

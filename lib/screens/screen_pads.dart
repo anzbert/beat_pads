@@ -28,7 +28,10 @@ class PadsScreen extends StatelessWidget {
                 },
               ),
             ),
-            body: Hero(tag: "toPads", child: SafeArea(child: PadsMenu())),
+            body: Hero(
+              tag: "toPads",
+              child: SafeArea(child: PadsMenu()),
+            ),
           )
         :
 
