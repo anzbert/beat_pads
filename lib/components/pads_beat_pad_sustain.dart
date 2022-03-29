@@ -123,7 +123,7 @@ class _BeatPadSustainState extends State<BeatPadSustain> {
                 child: Padding(
                   padding: _padPadding,
                   child: Text("#${widget.note}",
-                      style: TextStyle(color: _padTextColor)),
+                      style: TextStyle(color: Colors.grey)),
                 ),
               )
             :

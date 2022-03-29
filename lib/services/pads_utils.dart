@@ -67,11 +67,18 @@ abstract class PadUtils {
     // check where grid will start in scale:
     int baseOffset = actualNotes.indexOf(validatedBase % 12);
 
+    // generate grid:
+    int octave = 0;
+    int lastResult = 0;
+
     List<int> grid = List.generate(gridLength, (gridIndex) {
-      return validatedBase -
-          actualNotes[baseOffset] +
-          actualNotes[(baseOffset + gridIndex) % actualNotes.length] +
-          (gridIndex ~/ actualNotes.length) * 12;
+      int out = actualNotes[(gridIndex + baseOffset) % actualNotes.length] +
+          base ~/ 12 * 12;
+
+      if (out < lastResult) octave++;
+      lastResult = out;
+
+      return out + 12 * octave;
     });
 
     return grid;
