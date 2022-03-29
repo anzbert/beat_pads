@@ -1,3 +1,4 @@
+import 'package:beat_pads/services/transitions.dart';
 import 'package:flutter/material.dart';
 
 import 'package:beat_pads/services/color_const.dart';
@@ -24,12 +25,8 @@ class FloatingButtonPads extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Image.asset("assets/logo/logo_noframe.png"),
       ),
-      onPressed: (() {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => PadsScreen()),
-        );
-      }),
+      onPressed: () => Navigator.of(context)
+          .push(TransitionUtils.verticalSlide(const PadsScreen())),
     );
   }
 }
