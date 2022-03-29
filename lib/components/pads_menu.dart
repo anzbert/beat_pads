@@ -2,7 +2,7 @@ import 'package:beat_pads/components/button_reset.dart';
 import 'package:beat_pads/components/counter_octave.dart';
 import 'package:beat_pads/components/label_info_box.dart';
 import 'package:beat_pads/components/slider_non_linear.dart';
-import 'package:beat_pads/services/color_const.dart';
+
 import 'package:beat_pads/services/pads_layouts.dart';
 import 'package:flutter/material.dart';
 
@@ -31,7 +31,7 @@ class PadsMenu extends StatelessWidget {
           RotateLabel(),
           ListTile(
             title: Text("Layout"),
-            subtitle: Text("Row Intervals and other Note Layouts"),
+            subtitle: Text("Row Intervals and other Layouts"),
             trailing: DropdownLayout(),
           ),
           ListTile(
@@ -41,7 +41,7 @@ class PadsMenu extends StatelessWidget {
                 value: settings.showNoteNames,
                 onChanged: (value) => settings.showNoteNames = value),
           ),
-          if (variableGrid) Divider(),
+          Divider(),
           if (variableGrid)
             ListTile(
               title: Text("Grid Width"),
@@ -56,6 +56,7 @@ class PadsMenu extends StatelessWidget {
           if (variableGrid)
             ListTile(
               title: Text("Scale Root Note"),
+              subtitle: Text("Higlight selected Scale with this Root Note"),
               trailing: DropdownRootNote(
                   setValue: (v) {
                     settings.baseNote = v + 36; // TEMP WHILE BASENOTE DISABLED
@@ -150,7 +151,7 @@ class PadsMenu extends StatelessWidget {
           Divider(),
           InfoBox(
             [
-              "Beat Pads v0.3.6\n",
+              "Beat Pads v0.3.7\n",
               "Made by A. Mueller\n      [anzgraph.com]\n",
               "Dog Icon by 'catalyststuff'\n      [freepik.com]\n",
               "Logo Animated with Rive\n      [rive.app]\n",
