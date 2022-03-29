@@ -32,13 +32,13 @@ class BaseOctaveCounter extends StatelessWidget {
           children: [
             ElevatedButton(
               onPressed: () {
-                setValue(readValue + 1);
+                setValue(readValue - 1);
               },
-              child: Icon(Icons.add),
+              child: Icon(Icons.remove),
               style: ElevatedButton.styleFrom(
                 shape: CircleBorder(),
                 // padding: EdgeInsets.all(10),
-                primary: Palette.cadetBlue.color,
+                primary: Palette.lightPink.color,
                 onPrimary: Colors.black,
               ),
             ),
@@ -48,13 +48,13 @@ class BaseOctaveCounter extends StatelessWidget {
                         Theme.of(context).textTheme.titleMedium!.fontSize)),
             ElevatedButton(
               onPressed: () {
-                setValue(readValue - 1);
+                setValue(readValue + 1);
               },
-              child: Icon(Icons.remove),
+              child: Icon(Icons.add),
               style: ElevatedButton.styleFrom(
                 shape: CircleBorder(),
                 // padding: EdgeInsets.all(10),
-                primary: Palette.lightPink.color,
+                primary: Palette.cadetBlue.color,
                 onPrimary: Colors.black,
               ),
             ),

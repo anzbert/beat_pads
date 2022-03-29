@@ -26,7 +26,6 @@ class App extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (context) => Settings()),
         ChangeNotifierProvider(create: (context) => MidiData()),
-        // ChangeNotifierProvider(create: (context) => PaintState()),
       ],
       child: MaterialApp(
         theme: appTheme,
