@@ -1,7 +1,8 @@
 import 'package:beat_pads/components/button_reset.dart';
-import 'package:beat_pads/components/drop_down_notes.dart';
+import 'package:beat_pads/components/counter_octave.dart';
 import 'package:beat_pads/components/label_info_box.dart';
 import 'package:beat_pads/components/slider_non_linear.dart';
+import 'package:beat_pads/services/color_const.dart';
 import 'package:beat_pads/services/pads_layouts.dart';
 import 'package:flutter/material.dart';
 
@@ -40,6 +41,7 @@ class PadsMenu extends StatelessWidget {
                 value: settings.showNoteNames,
                 onChanged: (value) => settings.showNoteNames = value),
           ),
+          if (variableGrid) Divider(),
           if (variableGrid)
             ListTile(
               title: Text("Grid Width"),
@@ -50,9 +52,10 @@ class PadsMenu extends StatelessWidget {
               title: Text("Grid Height"),
               trailing: DropdownNumbers(Dimension.height),
             ),
+          if (variableGrid) Divider(),
           if (variableGrid)
             ListTile(
-              title: Text("Root Note"),
+              title: Text("Scale Root Note"),
               trailing: DropdownRootNote(
                   setValue: (v) {
                     settings.baseNote = v + 36; // TEMP WHILE BASENOTE DISABLED
@@ -65,18 +68,24 @@ class PadsMenu extends StatelessWidget {
               title: Text("Scale"),
               trailing: DropdownScales(),
             ),
+          if (variableGrid) Divider(),
           if (variableGrid)
             ListTile(
-              title: Text("Lowest Note"),
-              subtitle: Text("The bottom left Note in the Grid"),
-              trailing: DropdownScaleNotes(
-                setValue: (v) => settings.baseNote = v,
-                readValue: settings.baseNote,
-                rootNote: settings.rootNote,
-                layout: settings.layout,
-                scale: settings.scale,
-              ),
+              title: Text("Base Note"),
+              subtitle: Text("The lowest Note in the Grid on the bottom left"),
+              trailing: DropdownRootNote(
+                  setValue: (v) {
+                    settings.base = v;
+                  },
+                  readValue: settings.base),
             ),
+          if (variableGrid)
+            BaseOctaveCounter(
+              readValue: settings.baseOctave,
+              setValue: (v) => settings.baseOctave = v,
+              resetFunction: settings.resetBaseOctave,
+            ),
+          if (variableGrid) Divider(),
           ListTile(
             title: Text("Random Velocity"),
             subtitle: Text("Random Velocity Within a given Range"),
@@ -100,6 +109,7 @@ class PadsMenu extends StatelessWidget {
               setMax: (v) => settings.velocityMax = v,
               resetFunction: settings.resetVelocity,
             ),
+          Divider(),
           NonLinearSlider(
             label: "Sustain",
             subtitle: "Delay before sending NoteOff Message in Milliseconds",
@@ -111,6 +121,13 @@ class PadsMenu extends StatelessWidget {
             steps: 11,
           ),
           ListTile(
+            title: Text("Pitch Bend"),
+            subtitle: Text("Adds Pitch Bend Slider to Pad Screen"),
+            trailing: Switch(
+                value: settings.pitchBend,
+                onChanged: (value) => settings.pitchBend = !settings.pitchBend),
+          ),
+          ListTile(
             title: Text("Send Control Change"),
             subtitle: Text("Send CC-ON (127) with Pad Note"),
             trailing: Switch(
@@ -118,13 +135,7 @@ class PadsMenu extends StatelessWidget {
                 onChanged: (value) => settings.sendCC = value),
           ),
           ChannelSelector(),
-          ListTile(
-            title: Text("Pitch Bend"),
-            subtitle: Text("Adds Pitch Bend Slider to Pad Screen"),
-            trailing: Switch(
-                value: settings.pitchBend,
-                onChanged: (value) => settings.pitchBend = !settings.pitchBend),
-          ),
+          Divider(),
           ListTile(
             title: Text("Lock Screen Button"),
             subtitle: Text("Adds Rotation Lock Button. Long Press to Use"),
@@ -134,10 +145,12 @@ class PadsMenu extends StatelessWidget {
                     settings.lockScreenButton = !settings.lockScreenButton),
           ),
           SwitchWakeLock(),
+          Divider(),
           ResetButton(),
+          Divider(),
           InfoBox(
             [
-              "Beat Pads v0.3.5\n",
+              "Beat Pads v0.3.6\n",
               "Made by A. Mueller\n      [anzgraph.com]\n",
               "Dog Icon by 'catalyststuff'\n      [freepik.com]\n",
               "Logo Animated with Rive\n      [rive.app]\n",

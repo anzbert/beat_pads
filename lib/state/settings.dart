@@ -45,17 +45,36 @@ class Settings extends ChangeNotifier {
   int get rootNote => _rootNote;
   resetRootNote() => rootNote = 0;
 
-  // lowest note:
-  int _baseNote = 36;
+  // base note:
+  int _base = 0;
+  int get base => _base;
 
-  set baseNote(int note) {
-    if (note < 0 || note > 127) return;
-    _baseNote = note;
+  set base(int note) {
+    if (note < 0 || note > 11) return;
+    _base = note;
     notifyListeners();
   }
 
-  int get baseNote => _baseNote;
-  resetBaseNote() => baseNote = 36;
+  int _baseOctave = 1;
+  int get baseOctave => _baseOctave;
+
+  set baseOctave(int octave) {
+    if (octave < -2 || octave > 7) return;
+    _baseOctave = octave;
+    notifyListeners();
+  }
+
+  int get baseNote => (_baseOctave + 2) * 12 + _base;
+  set baseNote(int note) {
+    _base = note % 12;
+    _baseOctave = (note ~/ 12) - 2;
+    notifyListeners();
+  }
+
+  resetBaseOctave() {
+    _baseOctave = 1;
+    notifyListeners();
+  }
 
   // pad dimensions
   final List<int> _padDimensions = [4, 4]; // [ W, H ]
