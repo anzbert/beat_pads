@@ -1,4 +1,4 @@
-import 'package:beat_pads/services/transitions.dart';
+import 'package:beat_pads/services/transition_utils.dart';
 import 'package:flutter/material.dart';
 
 import 'package:beat_pads/services/color_const.dart';

@@ -1,5 +1,6 @@
 import 'package:beat_pads/screens/screen_config.dart';
 import 'package:beat_pads/services/color_const.dart';
+import 'package:beat_pads/services/transition_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:rive/rive.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
@@ -24,13 +25,7 @@ class _SplashScreenState extends State<SplashScreen> {
         onPointerDown: (_) {
           Navigator.pushReplacement(
             context,
-            // MaterialPageRoute(builder: (context) => HomeScreen()),
-            PageRouteBuilder(
-              pageBuilder: (c, a1, a2) => ConfigScreen(),
-              transitionsBuilder: (c, anim, a2, child) =>
-                  FadeTransition(opacity: anim, child: child),
-              transitionDuration: Duration(milliseconds: 250),
-            ),
+            TransitionUtils.fade(ConfigScreen()),
           );
         },
         child: Center(
