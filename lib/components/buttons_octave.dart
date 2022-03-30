@@ -14,6 +14,7 @@ class OctaveButtons extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              // SizedBox(height: 30),
               ElevatedButton(
                 onPressed: () {
                   settings.baseOctave++;
@@ -21,13 +22,13 @@ class OctaveButtons extends StatelessWidget {
                 child: Icon(Icons.add),
                 style: ElevatedButton.styleFrom(
                   shape: CircleBorder(),
-                  padding: EdgeInsets.all(10),
+                  padding: EdgeInsets.all(16),
                   primary: Palette.cadetBlue.color,
                   onPrimary: Colors.black,
                 ),
               ),
               SizedBox(
-                height: 20,
+                height: 32,
               ),
               ElevatedButton(
                 onPressed: () {
@@ -36,7 +37,7 @@ class OctaveButtons extends StatelessWidget {
                 child: Icon(Icons.remove),
                 style: ElevatedButton.styleFrom(
                   shape: CircleBorder(),
-                  padding: EdgeInsets.all(10),
+                  padding: EdgeInsets.all(16),
                   primary: Palette.lightPink.color,
                   onPrimary: Colors.black,
                 ),

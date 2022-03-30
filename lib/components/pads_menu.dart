@@ -89,7 +89,7 @@ class PadsMenu extends StatelessWidget {
           if (variableGrid)
             ListTile(
               title: Text("Show Octave Buttons"),
-              subtitle: Text("Show Base Octave Controls next to Pads"),
+              subtitle: Text("Adds Base Octave Controls next to Pads"),
               trailing: Switch(
                   value: settings.octaveButtons,
                   onChanged: (value) => settings.octaveButtons = value),
@@ -131,7 +131,7 @@ class PadsMenu extends StatelessWidget {
           ),
           ListTile(
             title: Text("Pitch Bend"),
-            subtitle: Text("Adds Pitch Bend Slider to Pad Screen"),
+            subtitle: Text("Adds Pitch Bend Slider next to Pads"),
             trailing: Switch(
                 value: settings.pitchBend,
                 onChanged: (value) => settings.pitchBend = !settings.pitchBend),
