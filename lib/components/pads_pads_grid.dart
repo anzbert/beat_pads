@@ -13,7 +13,7 @@ class VariablePads extends StatelessWidget {
 
     return Center(
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 50.0),
+        padding: EdgeInsets.symmetric(horizontal: 30.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,

@@ -119,6 +119,15 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
+// octave buttons:
+  bool _octaveButtons = false;
+  bool get octaveButtons => _octaveButtons;
+
+  set octaveButtons(bool newValue) {
+    _octaveButtons = newValue;
+    notifyListeners();
+  }
+
 // lock screen button:
   bool _lockScreenButton = false;
   bool get lockScreenButton => _lockScreenButton;

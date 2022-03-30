@@ -1,3 +1,4 @@
+import 'package:beat_pads/components/buttons_octave.dart';
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
@@ -44,19 +45,22 @@ class PadsScreen extends StatelessWidget {
               child: SafeArea(
                 child: Row(
                   children: [
+                    // OCTAVE BUTTONS
+                    if (Provider.of<Settings>(context, listen: true)
+                        .octaveButtons)
+                      SizedBox(width: 10),
+                    if (Provider.of<Settings>(context, listen: true)
+                        .octaveButtons)
+                      OctaveButtons(),
+
+                    // PITCH BEND
                     if (Provider.of<Settings>(context, listen: true).pitchBend)
-                      SizedBox(
-                        width: 50,
-                      ),
+                      SizedBox(width: 20),
                     if (Provider.of<Settings>(context, listen: true).pitchBend)
-                      RotatedBox(
-                        quarterTurns: 1,
-                        child: PitchBender(),
-                      ),
-                    Expanded(
-                      flex: 1,
-                      child: VariablePads(),
-                    )
+                      PitchBender(),
+
+                    // PADS
+                    Expanded(flex: 1, child: VariablePads())
                   ],
                 ),
               ),

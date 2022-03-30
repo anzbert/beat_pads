@@ -86,6 +86,14 @@ class PadsMenu extends StatelessWidget {
               setValue: (v) => settings.baseOctave = v,
               resetFunction: settings.resetBaseOctave,
             ),
+          if (variableGrid)
+            ListTile(
+              title: Text("Show Octave Buttons"),
+              subtitle: Text("Show Base Octave Controls next to Pads"),
+              trailing: Switch(
+                  value: settings.octaveButtons,
+                  onChanged: (value) => settings.octaveButtons = value),
+            ),
           if (variableGrid) Divider(),
           ListTile(
             title: Text("Random Velocity"),
@@ -146,12 +154,10 @@ class PadsMenu extends StatelessWidget {
                     settings.lockScreenButton = !settings.lockScreenButton),
           ),
           SwitchWakeLock(),
-          Divider(),
           ResetButton(),
-          Divider(),
           InfoBox(
             [
-              "Beat Pads v0.3.7\n",
+              "Beat Pads v0.3.8\n",
               "Made by A. Mueller\n      [anzgraph.com]\n",
               "Dog Icon by 'catalyststuff'\n      [freepik.com]\n",
               "Logo Animated with Rive\n      [rive.app]\n",
