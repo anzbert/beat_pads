@@ -5,7 +5,7 @@ var appTheme = ThemeData.dark().copyWith(
   primaryColor: Palette.cadetBlue.color,
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
-      primary: Palette.cadetBlue.color,
+      primary: Palette.cadetBlue.color.withAlpha(150),
     ),
   ),
   textButtonTheme: TextButtonThemeData(
@@ -16,5 +16,25 @@ var appTheme = ThemeData.dark().copyWith(
   sliderTheme: SliderThemeData(
     activeTrackColor: Palette.cadetBlue.color,
     thumbColor: Palette.cadetBlue.color,
+  ),
+  switchTheme: SwitchThemeData(
+    thumbColor: MaterialStateProperty.resolveWith((Set<MaterialState> states) {
+      if (states.contains(MaterialState.selected)) {
+        return Palette.yellowGreen.color;
+      }
+      if (states.contains(MaterialState.disabled)) {
+        return Palette.darkGrey.color;
+      }
+      return Palette.cadetBlue.color;
+    }),
+    trackColor: MaterialStateProperty.resolveWith((Set<MaterialState> states) {
+      if (states.contains(MaterialState.selected)) {
+        return Palette.yellowGreen.color.withAlpha(150);
+      }
+      if (states.contains(MaterialState.disabled)) {
+        return Palette.darkGrey.color;
+      }
+      return Palette.lightGrey.color;
+    }),
   ),
 );

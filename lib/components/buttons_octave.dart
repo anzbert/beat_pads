@@ -38,7 +38,7 @@ class OctaveButtons extends StatelessWidget {
                 style: ElevatedButton.styleFrom(
                   shape: CircleBorder(),
                   padding: EdgeInsets.all(16),
-                  primary: Palette.lightPink.color,
+                  primary: Palette.laserLemon.color,
                   onPrimary: Colors.black,
                 ),
               ),

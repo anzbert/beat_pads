@@ -38,7 +38,7 @@ class BaseOctaveCounter extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 shape: CircleBorder(),
                 // padding: EdgeInsets.all(10),
-                primary: Palette.lightPink.color,
+                primary: Palette.laserLemon.color,
                 onPrimary: Colors.black,
               ),
             ),
