@@ -1,5 +1,5 @@
 import 'package:beat_pads/services/gen_utils.dart';
-import 'package:beat_pads/state/_paint_state.dart';
+import 'package:beat_pads/unused/_paint_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
