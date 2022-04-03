@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'theme.dart';
 
-import 'services/_services.dart';
+import 'package:beat_pads/services/_services.dart';
 
-import 'splash/_screen_splash.dart';
+import 'package:beat_pads/screen_splash/_screen_splash.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
