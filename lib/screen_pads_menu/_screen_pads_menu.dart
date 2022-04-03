@@ -1,5 +1,7 @@
-import 'package:beat_pads/screen_pads_menu/menu.dart';
 import 'package:flutter/material.dart';
+
+import 'package:beat_pads/shared/_shared.dart';
+import 'package:beat_pads/screen_pads_menu/menu.dart';
 
 class PadMenuScreen extends StatelessWidget {
   const PadMenuScreen({Key? key}) : super(key: key);
@@ -8,12 +10,10 @@ class PadMenuScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Pad Settings"),
-        leading: BackButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
+        title: Text("Beat Pads"),
+      ),
+      drawer: Drawer(
+        child: MidiConfig(),
       ),
       body: SafeArea(child: PadsMenu()),
     );

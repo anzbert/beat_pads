@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'theme.dart';
+import './theme.dart';
 
 import 'package:beat_pads/services/_services.dart';
 

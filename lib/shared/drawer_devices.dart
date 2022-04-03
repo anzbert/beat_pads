@@ -1,16 +1,14 @@
-import 'package:beat_pads/screen_devices/button_floating_pads.dart';
-import 'package:beat_pads/shared/_shared.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_midi_command/flutter_midi_command.dart';
 
-class _ConfigScreenState extends State<ConfigScreen> {
+import 'package:beat_pads/shared/_shared.dart';
+
+class _MidiConfigState extends State<MidiConfig> {
   final MidiCommand _midiCommand = MidiCommand();
 
   bool connecting = false;
 
   void setDevice(MidiDevice device) {
-    // print("BP: Connecting to : ${device.name}");
-
     if (device.connected) {
       _midiCommand.disconnectDevice(device);
       setState(() {});
@@ -28,7 +26,7 @@ class _ConfigScreenState extends State<ConfigScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Select Midi Devices"),
+        title: Text("Select Devices"),
         actions: [
           IconButton(
               onPressed: () {
@@ -37,10 +35,6 @@ class _ConfigScreenState extends State<ConfigScreen> {
               icon: Icon(Icons.refresh)),
         ],
       ),
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: FloatingButtonPads(),
-      ),
       body: FutureBuilder(
         future: _midiCommand.devices,
         builder:
@@ -48,7 +42,7 @@ class _ConfigScreenState extends State<ConfigScreen> {
           if (snapshot.hasData && snapshot.data!.isNotEmpty) {
             List<MidiDevice>? _devices = snapshot.data;
             return connecting
-                // WHILE CONNECTING:
+                // WHILE CONNECTING SHOW CIRCULAR PROGRESS INDICATOR:
                 ? Center(
                     child: SizedBox(
                     width: 100,
@@ -58,7 +52,7 @@ class _ConfigScreenState extends State<ConfigScreen> {
                     ),
                   ))
                 :
-                // WHEN NOT CONNECTING, SHOW LIST:
+                // OTHERWISE, SHOW LIST:
                 ListView(
                     children: [
                       ..._devices!.map((device) {
@@ -71,11 +65,24 @@ class _ConfigScreenState extends State<ConfigScreen> {
                             onPressed: () {
                               setDevice(device);
                             },
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 12),
-                              child: Text(
-                                device.name,
-                                style: Theme.of(context).textTheme.bodyText1,
+                            child: SizedBox(
+                              height: 40,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    device.name,
+                                    style:
+                                        Theme.of(context).textTheme.titleMedium,
+                                  ),
+                                  if (device.connected)
+                                    Icon(
+                                      Icons.check,
+                                      size: 24,
+                                      color: Colors.white,
+                                    )
+                                ],
                               ),
                             ),
                           ),
@@ -83,12 +90,11 @@ class _ConfigScreenState extends State<ConfigScreen> {
                       }).toList(),
                       InfoBox(
                         [
-                          "1. Connect USB device (PC, Mac, IPad...)",
-                          "2. Set USB mode to 'Midi' in Notification Menu",
+                          "1. Connect USB Host Device",
+                          "2. Set USB connection mode to 'Midi' in Notification Menu",
                           "3. Refresh this Device List",
                           "4. Tap Device to Connect",
                         ],
-                        header: "Midi Connection",
                       ),
                     ],
                   );
@@ -102,7 +108,8 @@ class _ConfigScreenState extends State<ConfigScreen> {
     );
   }
 
-  // ? As in example. MidiCommand.dispose() only seems to dispose of bluetooth ressources?!
+  // As in example. MidiCommand.dispose() only seems to dispose of bluetooth ressources?!
+  // Disposing anyway, just to be sure.
   @override
   void dispose() {
     _midiCommand.dispose();
@@ -110,8 +117,8 @@ class _ConfigScreenState extends State<ConfigScreen> {
   }
 }
 
-class ConfigScreen extends StatefulWidget {
-  const ConfigScreen({Key? key}) : super(key: key);
+class MidiConfig extends StatefulWidget {
+  const MidiConfig({Key? key}) : super(key: key);
   @override
-  _ConfigScreenState createState() => _ConfigScreenState();
+  _MidiConfigState createState() => _MidiConfigState();
 }

@@ -8,8 +8,8 @@ import 'package:beat_pads/screen_home/model_settings.dart';
 export './model_midi.dart';
 export './model_settings.dart';
 
-class PadsScreen extends StatelessWidget {
-  const PadsScreen({Key? key}) : super(key: key);
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,7 @@ class PadsScreen extends StatelessWidget {
       ],
       child: inPortrait
           ? PadMenuScreen() // PORTRAIT: SHOW PADS SETTINGS MENU
-          : BeatPads(), // LANDSCAPE: PLAY PADS
+          : BeatPadsScreen(), // LANDSCAPE: PLAY PADS
     );
   }
 }

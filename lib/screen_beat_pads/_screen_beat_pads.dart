@@ -8,8 +8,8 @@ import 'package:beat_pads/screen_beat_pads/buttons_octave.dart';
 import 'package:beat_pads/screen_beat_pads/pads.dart';
 import 'package:beat_pads/screen_beat_pads/slider_pitch_bend.dart';
 
-class BeatPads extends StatelessWidget {
-  const BeatPads({Key? key}) : super(key: key);
+class BeatPadsScreen extends StatelessWidget {
+  const BeatPadsScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

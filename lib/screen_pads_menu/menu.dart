@@ -1,3 +1,4 @@
+import 'package:beat_pads/screen_pads_menu/slider_int.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -7,16 +8,14 @@ import 'package:beat_pads/services/_services.dart';
 import 'package:beat_pads/screen_home/_screen_home.dart';
 
 import 'package:beat_pads/screen_pads_menu/counter_octave.dart';
-import 'package:beat_pads/screen_pads_menu/button_reset.dart';
 import 'package:beat_pads/screen_pads_menu/slider_non_linear.dart';
 import 'package:beat_pads/screen_pads_menu/drop_down_layout.dart';
-import 'package:beat_pads/screen_pads_menu/drop_down_grid_size.dart';
-import 'package:beat_pads/screen_pads_menu/drop_down_root_note.dart';
+import 'package:beat_pads/screen_pads_menu/drop_down_int.dart';
+import 'package:beat_pads/screen_pads_menu/drop_down_notes.dart';
 import 'package:beat_pads/screen_pads_menu/drop_down_scales.dart';
 import 'package:beat_pads/screen_pads_menu/label_rotate.dart';
-import 'package:beat_pads/screen_pads_menu/slider_channel_selector.dart';
-import 'package:beat_pads/screen_pads_menu/slider_midi_range.dart';
-import 'package:beat_pads/screen_pads_menu/slider_midival_selector.dart';
+import 'package:beat_pads/screen_pads_menu/slider_int_range.dart';
+
 import 'package:beat_pads/screen_pads_menu/switch_wake_lock.dart';
 
 class PadsMenu extends StatelessWidget {
@@ -45,12 +44,18 @@ class PadsMenu extends StatelessWidget {
           if (variableGrid)
             ListTile(
               title: Text("Grid Width"),
-              trailing: DropdownNumbers(Dimension.width),
+              trailing: DropdownNumbers(
+                setValue: (v) => settings.width = v,
+                readValue: settings.width,
+              ),
             ),
           if (variableGrid)
             ListTile(
               title: Text("Grid Height"),
-              trailing: DropdownNumbers(Dimension.height),
+              trailing: DropdownNumbers(
+                setValue: (v) => settings.height = v,
+                readValue: settings.height,
+              ),
             ),
           if (variableGrid) Divider(),
           if (variableGrid)
@@ -103,11 +108,11 @@ class PadsMenu extends StatelessWidget {
                 onChanged: (value) => settings.randomizeVelocity = value),
           ),
           if (!settings.randomVelocity)
-            MidiValueSelector(
+            IntSlider(
               label: "Fixed Velocity",
               readValue: settings.velocity,
               setValue: (v) => settings.velocity = v,
-              resetFunction: settings.resetVelocity,
+              resetValue: settings.resetVelocity,
             ),
           if (settings.randomVelocity)
             MidiRangeSelector(
@@ -143,7 +148,15 @@ class PadsMenu extends StatelessWidget {
                 value: settings.sendCC,
                 onChanged: (value) => settings.sendCC = value),
           ),
-          ChannelSelector(),
+          IntSlider(
+              min: 1,
+              max: 16,
+              label: "Midi Channel",
+              setValue: (v) {
+                Provider.of<MidiData>(context, listen: false).channel = v - 1;
+              },
+              readValue:
+                  Provider.of<MidiData>(context, listen: true).channel + 1),
           Divider(),
           ListTile(
             title: Text("Lock Screen Button"),
@@ -154,7 +167,12 @@ class PadsMenu extends StatelessWidget {
                     settings.lockScreenButton = !settings.lockScreenButton),
           ),
           SwitchWakeLock(),
-          ResetButton(),
+          SnackMessageButton(
+            label: "Clear Received Midi Buffer",
+            message: "Received Midi Buffer cleared",
+            onPressed:
+                Provider.of<MidiData>(context, listen: false).rxNotesReset,
+          ),
           InfoBox(
             [
               "Beat Pads v0.3.8\n",

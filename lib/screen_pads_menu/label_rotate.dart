@@ -1,3 +1,4 @@
+import 'package:beat_pads/shared/_shared.dart';
 import 'package:flutter/material.dart';
 
 class RotateLabel extends StatelessWidget {
@@ -11,6 +12,7 @@ class RotateLabel extends StatelessWidget {
             SnackBar(content: Text("Rotate Device to use the Pads")));
       },
       child: Card(
+        color: Palette.cadetBlue.color,
         margin: EdgeInsets.fromLTRB(8, 30, 8, 8),
         elevation: 5,
         child: Padding(
@@ -20,7 +22,7 @@ class RotateLabel extends StatelessWidget {
             children: [
               Icon(Icons.rotate_right),
               Text(
-                " : Beat Pads",
+                " : Rotate To Play",
                 style: TextStyle(
                   fontSize: 20,
                 ),

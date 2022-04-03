@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:rive/rive.dart';
+import 'package:animated_text_kit/animated_text_kit.dart';
+
+import 'package:beat_pads/screen_home/_screen_home.dart';
 
 import 'package:beat_pads/shared/_shared.dart';
 import 'package:beat_pads/services/_services.dart';
-
-import 'package:beat_pads/screen_home/_screen_home.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -35,7 +35,7 @@ class _SplashScreenState extends State<SplashScreen> {
               Expanded(
                 flex: 7,
                 child: RiveAnimation.asset(
-                  'assets/anim/doggo.riv',
+                  'assets/anim/doggo3.riv',
                   alignment: Alignment.bottomCenter,
                 ),
               ),
