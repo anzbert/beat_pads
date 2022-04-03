@@ -1,3 +1,4 @@
+import 'package:beat_pads/services/device_utils.dart';
 import 'package:flutter/material.dart';
 
 import 'package:beat_pads/shared/_shared.dart';
@@ -20,10 +21,6 @@ class PadMenuScreen extends StatelessWidget {
             Palette.yellowGreen.color,
           ],
         ),
-        // title: Text("Beat Pads",
-        //     style: TextStyle(
-        //       color: Palette.laserLemon.color,
-        //     )),
         leading: Builder(builder: (BuildContext context) {
           return IconButton(
             onPressed: () {
@@ -32,6 +29,7 @@ class PadMenuScreen extends StatelessWidget {
             icon: Icon(
               Icons.menu_rounded,
               color: Palette.lightGrey.color,
+              size: 36,
             ),
           );
         }),

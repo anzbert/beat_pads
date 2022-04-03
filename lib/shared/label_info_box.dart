@@ -26,7 +26,16 @@ class InfoBox extends StatelessWidget {
                     style: Theme.of(context).textTheme.headline5,
                   ),
                 ),
-              ...content.map((text) => Text(text)).toList()
+              ...content
+                  .map(
+                    (text) => Column(children: [
+                      Text(text),
+                      SizedBox(
+                        height: 5,
+                      )
+                    ]),
+                  )
+                  .toList()
             ],
           ),
         ),

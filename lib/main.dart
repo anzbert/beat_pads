@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import './theme.dart';
 
 import 'package:beat_pads/services/_services.dart';
@@ -8,9 +9,7 @@ import 'package:beat_pads/screen_splash/_screen_splash.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  DeviceUtils.hideSystemUi();
-
-  runApp(App());
+  DeviceUtils.hideSystemUi().then((_) => runApp(App()));
 }
 
 class App extends StatelessWidget {

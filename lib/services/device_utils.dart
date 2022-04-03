@@ -28,24 +28,24 @@ abstract class DeviceUtils {
   }
 
   /// Hide Top and Bottom Menu Bars
-  static void hideSystemUi() {
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+  static Future<void> hideSystemUi() {
+    return SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
   }
 
   /// Show Top and Bottom Menu Bars
-  static void showSystemUi() {
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+  static Future<void> showSystemUi() {
+    return SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   }
 
   /// Show Top Menu Bar only
-  static void showSystemUiTop() {
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+  static Future<void> showSystemUiTop() {
+    return SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
         overlays: [SystemUiOverlay.top]);
   }
 
   /// Show Bottom Menu Bar only
-  static void showSystemUiBottom() {
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+  static Future<void> showSystemUiBottom() {
+    return SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
         overlays: [SystemUiOverlay.bottom]);
   }
 }

@@ -175,13 +175,12 @@ class PadsMenu extends StatelessWidget {
           ),
           InfoBox(
             [
-              "Beat Pads v0.4.0\n",
-              "Made by A. Mueller\n      [anzgraph.com]\n",
-              "Dog Icon by 'catalyststuff'\n      [freepik.com]\n",
-              "Logo Animated with Rive\n      [rive.app]\n",
-              "Magic Tone Network / XpressPads by A. Samek\n      [xpresspads.com]\n"
+              "Made by A. Mueller\n      [anzgraph.com]",
+              "Dog Icon by 'catalyststuff'\n      [freepik.com]",
+              "Logo Animated with Rive\n      [rive.app]",
+              "Magic Tone Network / XpressPads by A. Samek\n      [xpresspads.com]"
             ],
-            header: "Credits",
+            header: "Beat Pads - 0.4.0",
           )
         ],
       );

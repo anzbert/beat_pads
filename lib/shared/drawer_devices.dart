@@ -90,11 +90,12 @@ class _MidiConfigState extends State<MidiConfig> {
                       }).toList(),
                       InfoBox(
                         [
-                          "1. Connect USB Host Device",
-                          "2. Set USB connection mode to 'Midi' in Notification Menu",
-                          "3. Refresh this Device List",
-                          "4. Tap Device to Connect",
+                          "Connect to USB Host Device",
+                          "Set USB connection mode to 'Midi' in Notification Menu",
+                          "Refresh this Device List",
+                          "Tap Device to Connect",
                         ],
+                        header: "Setup",
                       ),
                     ],
                   );
