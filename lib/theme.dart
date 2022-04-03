@@ -6,7 +6,8 @@ var appTheme = ThemeData.dark().copyWith(
   primaryColor: Palette.cadetBlue.color,
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
-      primary: Palette.cadetBlue.color.withAlpha(150),
+      primary: Palette.cadetBlue.color,
+      onSurface: Palette.cadetBlue.color,
     ),
   ),
   textButtonTheme: TextButtonThemeData(

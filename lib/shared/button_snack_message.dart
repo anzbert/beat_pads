@@ -1,3 +1,5 @@
+import '_shared.dart';
+
 import 'package:flutter/material.dart';
 
 class SnackMessageButton extends StatelessWidget {
@@ -21,7 +23,12 @@ class SnackMessageButton extends StatelessWidget {
           ScaffoldMessenger.of(context)
               .showSnackBar(SnackBar(content: Text(message)));
         },
-        child: Text(label),
+        child: Text(
+          label,
+          style: TextStyle(
+            color: Palette.darkGrey.color,
+          ),
+        ),
       ),
     );
   }

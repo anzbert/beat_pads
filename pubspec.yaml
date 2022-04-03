@@ -49,6 +49,8 @@ dependencies:
 
   animated_text_kit: ^4.2.1
 
+  simple_gradient_text: ^1.2.2
+
   # rive: ^0.8.1
   rive:
     git:

@@ -7,7 +7,7 @@ import 'package:beat_pads/services/_services.dart';
 
 import 'package:beat_pads/screen_home/_screen_home.dart';
 
-import 'package:beat_pads/screen_pads_menu/counter_octave.dart';
+import 'package:beat_pads/screen_pads_menu/counter_int.dart';
 import 'package:beat_pads/screen_pads_menu/slider_non_linear.dart';
 import 'package:beat_pads/screen_pads_menu/drop_down_layout.dart';
 import 'package:beat_pads/screen_pads_menu/drop_down_int.dart';
@@ -85,7 +85,8 @@ class PadsMenu extends StatelessWidget {
                   readValue: settings.base),
             ),
           if (variableGrid)
-            BaseOctaveCounter(
+            IntCounter(
+              label: "Base Octave",
               readValue: settings.baseOctave,
               setValue: (v) => settings.baseOctave = v,
               resetFunction: settings.resetBaseOctave,
@@ -174,7 +175,7 @@ class PadsMenu extends StatelessWidget {
           ),
           InfoBox(
             [
-              "Beat Pads v0.3.8\n",
+              "Beat Pads v0.4.0\n",
               "Made by A. Mueller\n      [anzgraph.com]\n",
               "Dog Icon by 'catalyststuff'\n      [freepik.com]\n",
               "Logo Animated with Rive\n      [rive.app]\n",

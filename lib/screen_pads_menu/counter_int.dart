@@ -1,14 +1,16 @@
 import 'package:beat_pads/shared/_shared.dart';
 import 'package:flutter/material.dart';
 
-class BaseOctaveCounter extends StatelessWidget {
-  const BaseOctaveCounter(
-      {required this.readValue,
+class IntCounter extends StatelessWidget {
+  const IntCounter(
+      {this.label = "#label",
+      required this.readValue,
       required this.setValue,
       this.resetFunction,
       Key? key})
       : super(key: key);
 
+  final String label;
   final int readValue;
   final Function setValue;
   final Function? resetFunction;
@@ -18,7 +20,7 @@ class BaseOctaveCounter extends StatelessWidget {
     return ListTile(
       title: Row(
         children: [
-          Text("Base Octave"),
+          Text(label),
           if (resetFunction != null)
             TextButton(
               onPressed: () => resetFunction!(),
@@ -37,9 +39,8 @@ class BaseOctaveCounter extends StatelessWidget {
               child: Icon(Icons.remove),
               style: ElevatedButton.styleFrom(
                 shape: CircleBorder(),
-                // padding: EdgeInsets.all(10),
                 primary: Palette.laserLemon.color,
-                onPrimary: Colors.black,
+                onPrimary: Palette.darkGrey.color,
               ),
             ),
             Text(readValue.toString(),
@@ -53,9 +54,8 @@ class BaseOctaveCounter extends StatelessWidget {
               child: Icon(Icons.add),
               style: ElevatedButton.styleFrom(
                 shape: CircleBorder(),
-                // padding: EdgeInsets.all(10),
                 primary: Palette.cadetBlue.color,
-                onPrimary: Colors.black,
+                onPrimary: Palette.darkGrey.color,
               ),
             ),
           ]),

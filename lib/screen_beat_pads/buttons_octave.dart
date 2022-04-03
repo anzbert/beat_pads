@@ -24,7 +24,7 @@ class OctaveButtons extends StatelessWidget {
                   shape: CircleBorder(),
                   padding: EdgeInsets.all(16),
                   primary: Palette.cadetBlue.color,
-                  onPrimary: Colors.black,
+                  onPrimary: Palette.darkGrey.color,
                 ),
               ),
               SizedBox(
@@ -39,7 +39,7 @@ class OctaveButtons extends StatelessWidget {
                   shape: CircleBorder(),
                   padding: EdgeInsets.all(16),
                   primary: Palette.laserLemon.color,
-                  onPrimary: Colors.black,
+                  onPrimary: Palette.darkGrey.color,
                 ),
               ),
             ]);

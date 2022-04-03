@@ -251,6 +251,13 @@ packages:
       url: "https://github.com/rive-app/rive-flutter.git"
     source: git
     version: "0.8.3"
+  simple_gradient_text:
+    dependency: "direct main"
+    description:
+      name: simple_gradient_text
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.2.2"
   sky_engine:
     dependency: transitive
     description: flutter

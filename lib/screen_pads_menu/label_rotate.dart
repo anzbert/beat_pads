@@ -8,8 +8,8 @@ class RotateLabel extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text("Rotate Device to use the Pads")));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text("Rotate 90 degrees to Landscape to play the Pads")));
       },
       child: Card(
         color: Palette.cadetBlue.color,
@@ -20,10 +20,14 @@ class RotateLabel extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.rotate_right),
+              Icon(
+                Icons.rotate_right,
+                color: Palette.darkGrey.color,
+              ),
               Text(
-                " : Rotate To Play",
+                " Rotate Device To Play",
                 style: TextStyle(
+                  color: Palette.darkGrey.color,
                   fontSize: 20,
                 ),
               ),
