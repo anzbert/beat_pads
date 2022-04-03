@@ -19,7 +19,6 @@ class DropdownScales extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: DropdownButton<String>(
-        // isExpanded: true,
         value: Provider.of<Settings>(context, listen: true).scale,
         items: items,
         onChanged: (value) {

@@ -15,15 +15,14 @@ import 'package:beat_pads/screen_pads_menu/drop_down_notes.dart';
 import 'package:beat_pads/screen_pads_menu/drop_down_scales.dart';
 import 'package:beat_pads/screen_pads_menu/label_rotate.dart';
 import 'package:beat_pads/screen_pads_menu/slider_int_range.dart';
-
 import 'package:beat_pads/screen_pads_menu/switch_wake_lock.dart';
 
 class PadsMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<Settings>(builder: (context, settings, child) {
-      // Is the layout fixed or variable? (in size, base note, etc...):
-      final bool variableGrid = settings.layout.variable;
+      final bool variableGrid =
+          settings.layout.variable; // Is the layout fixed or variable?
 
       return ListView(
         children: <Widget>[

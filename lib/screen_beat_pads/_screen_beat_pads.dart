@@ -13,35 +13,33 @@ class BeatPadsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
-      floatingActionButton:
-          Provider.of<Settings>(context, listen: true).lockScreenButton
-              ? LockScreenButton()
-              : null,
-      body: Hero(
-        tag: "toPads",
-        child: SafeArea(
-          child: Row(
-            children: [
-              // OCTAVE BUTTONS
-              if (Provider.of<Settings>(context, listen: true).octaveButtons)
-                SizedBox(width: 10),
-              if (Provider.of<Settings>(context, listen: true).octaveButtons)
-                OctaveButtons(),
+    return Consumer<Settings>(
+      builder: (context, settings, child) {
+        return Scaffold(
+          floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
+          floatingActionButton:
+              settings.lockScreenButton ? LockScreenButton() : null,
+          body: Hero(
+            tag: "toPads",
+            child: SafeArea(
+              child: Row(
+                children: [
+                  // OCTAVE BUTTONS
+                  if (settings.octaveButtons) SizedBox(width: 10),
+                  if (settings.octaveButtons) OctaveButtons(),
 
-              // PITCH BEND
-              if (Provider.of<Settings>(context, listen: true).pitchBend)
-                SizedBox(width: 20),
-              if (Provider.of<Settings>(context, listen: true).pitchBend)
-                PitchBender(),
+                  // PITCH BEND
+                  if (settings.pitchBend) SizedBox(width: 20),
+                  if (settings.pitchBend) PitchBender(),
 
-              // PADS
-              Expanded(flex: 1, child: VariablePads())
-            ],
+                  // PADS
+                  Expanded(flex: 1, child: VariablePads())
+                ],
+              ),
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

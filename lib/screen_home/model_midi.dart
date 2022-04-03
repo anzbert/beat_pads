@@ -5,25 +5,24 @@ import 'dart:async';
 import '../services/_services.dart';
 
 class MidiData extends ChangeNotifier {
-// public:
-  final List<int> rxNotes = List.filled(128, 0);
+  final List<int> rxNoteBuffer = List.filled(128, 0);
 
   rxNotesReset() {
-    rxNotes.fillRange(0, 128, 0);
+    rxNoteBuffer.fillRange(0, 128, 0);
     notifyListeners();
   }
 
   int _channel = 0;
+  int get channel => _channel;
+
   set channel(int channel) {
     if (channel < 0 || channel > 15) return;
     _channel = channel;
     notifyListeners();
   }
 
-  int get channel => _channel;
   resetChannel() => channel = 0;
 
-// private:
   StreamSubscription<MidiPacket>? _rxSubscription;
   final MidiCommand _midiCommand = MidiCommand();
 
@@ -47,11 +46,11 @@ class MidiData extends ChangeNotifier {
 
         switch (type) {
           case MidiMessageType.noteOn:
-            rxNotes[note] = velocity;
+            rxNoteBuffer[note] = velocity;
             notifyListeners();
             break;
           case MidiMessageType.noteOff:
-            rxNotes[note] = 0;
+            rxNoteBuffer[note] = 0;
             notifyListeners();
             break;
           default:

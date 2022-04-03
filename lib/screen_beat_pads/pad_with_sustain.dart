@@ -75,7 +75,7 @@ class _BeatPadSustainState extends State<BeatPadSustain> {
     // variables from midi receiver:
     final int channel = Provider.of<MidiData>(context, listen: true).channel;
     final int _rxNote = widget.note < 127
-        ? Provider.of<MidiData>(context, listen: true).rxNotes[widget.note]
+        ? Provider.of<MidiData>(context, listen: true).rxNoteBuffer[widget.note]
         : 0;
 
     // PAD COLOR:

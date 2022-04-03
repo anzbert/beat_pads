@@ -3,8 +3,10 @@ import 'package:beat_pads/screen_pads_menu/_screen_pads_menu.dart';
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
+
 import 'package:beat_pads/screen_home/model_midi.dart';
 import 'package:beat_pads/screen_home/model_settings.dart';
+
 export './model_midi.dart';
 export './model_settings.dart';
 
