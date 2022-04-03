@@ -1,5 +1,5 @@
-import 'package:beat_pads/services/color_const.dart';
-import 'package:beat_pads/state/settings.dart';
+import 'package:beat_pads/shared/shared.dart';
+import 'package:beat_pads/home/home.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

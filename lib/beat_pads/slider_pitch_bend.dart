@@ -1,4 +1,4 @@
-import 'package:beat_pads/services/color_const.dart';
+import 'package:beat_pads/shared/shared.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_midi_command/flutter_midi_command_messages.dart';
 

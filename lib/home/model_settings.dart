@@ -1,9 +1,7 @@
-import 'package:beat_pads/services/pads_utils.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 
-import 'package:beat_pads/services/pads_layouts.dart';
-import 'package:beat_pads/services/midi_utils.dart';
+import 'package:beat_pads/services/services.dart';
 
 class Settings extends ChangeNotifier {
 // layout:

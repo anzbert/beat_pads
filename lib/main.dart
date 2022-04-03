@@ -1,13 +1,9 @@
-import 'package:beat_pads/services/device_utils.dart';
-
 import 'package:flutter/material.dart';
+import 'theme.dart';
 
-import 'package:provider/provider.dart';
-import '../state/settings.dart';
-import 'state/midi.dart';
+import './services/services.dart';
 
-import 'app_theme.dart';
-import 'screens/screen_splash.dart';
+import './splash/splash.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,15 +18,9 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (context) => Settings()),
-        ChangeNotifierProvider(create: (context) => MidiData()),
-      ],
-      child: MaterialApp(
-        theme: appTheme,
-        home: SplashScreen(),
-      ),
+    return MaterialApp(
+      theme: appTheme,
+      home: SplashScreen(),
     );
   }
 }

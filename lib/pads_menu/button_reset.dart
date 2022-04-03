@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:beat_pads/state/midi.dart';
+import 'package:beat_pads/home/home.dart';
 
 class ResetButton extends StatelessWidget {
   const ResetButton({Key? key}) : super(key: key);

@@ -1,23 +1,22 @@
-import 'package:beat_pads/components/button_reset.dart';
-import 'package:beat_pads/components/counter_octave.dart';
-import 'package:beat_pads/components/label_info_box.dart';
-import 'package:beat_pads/components/slider_non_linear.dart';
-
-import 'package:beat_pads/services/pads_layouts.dart';
 import 'package:flutter/material.dart';
-
 import 'package:provider/provider.dart';
-import 'package:beat_pads/state/settings.dart';
 
-import 'package:beat_pads/components/drop_down_layout.dart';
-import 'package:beat_pads/components/drop_down_numbers.dart';
-import 'package:beat_pads/components/drop_down_root_note.dart';
-import 'package:beat_pads/components/drop_down_scales.dart';
-import 'package:beat_pads/components/label_rotate.dart';
-import 'package:beat_pads/components/slider_channel_selector.dart';
-import 'package:beat_pads/components/slider_midi_range.dart';
-import 'package:beat_pads/components/slider_midival_selector.dart';
-import 'package:beat_pads/components/switch_wake_lock.dart';
+import 'package:beat_pads/shared/shared.dart';
+import 'package:beat_pads/services/services.dart';
+import 'package:beat_pads/home/home.dart';
+
+import 'package:beat_pads/pads_menu/counter_octave.dart';
+import 'package:beat_pads/pads_menu/button_reset.dart';
+import 'package:beat_pads/pads_menu/slider_non_linear.dart';
+import 'package:beat_pads/pads_menu/drop_down_layout.dart';
+import 'package:beat_pads/pads_menu/drop_down_numbers.dart';
+import 'package:beat_pads/pads_menu/drop_down_root_note.dart';
+import 'package:beat_pads/pads_menu/drop_down_scales.dart';
+import 'package:beat_pads/pads_menu/label_rotate.dart';
+import 'package:beat_pads/pads_menu/slider_channel_selector.dart';
+import 'package:beat_pads/pads_menu/slider_midi_range.dart';
+import 'package:beat_pads/pads_menu/slider_midival_selector.dart';
+import 'package:beat_pads/pads_menu/switch_wake_lock.dart';
 
 class PadsMenu extends StatelessWidget {
   @override

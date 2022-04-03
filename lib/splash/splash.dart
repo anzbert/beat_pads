@@ -1,11 +1,9 @@
-import 'package:beat_pads/screens/screen_config.dart';
-import 'package:beat_pads/services/color_const.dart';
+import 'package:beat_pads/devices/devices.dart';
+import 'package:beat_pads/shared/shared.dart';
 import 'package:beat_pads/services/transition_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:rive/rive.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
-
-// import './config_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);

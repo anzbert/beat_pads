@@ -1,9 +1,13 @@
-import 'package:beat_pads/components/pads_beat_pad_sustain.dart';
+import 'package:beat_pads/beat_pads/pad_with_sustain.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:beat_pads/state/settings.dart';
+import 'package:beat_pads/home/home.dart';
+
+export 'package:beat_pads/beat_pads/buttons_octave.dart';
+export 'package:beat_pads/beat_pads/button_lock_screen.dart';
+export 'package:beat_pads/beat_pads/slider_pitch_bend.dart';
 
 class VariablePads extends StatelessWidget {
   @override

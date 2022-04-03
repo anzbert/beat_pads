@@ -1,4 +1,4 @@
-import 'package:beat_pads/services/color_const.dart';
+import './shared/shared.dart';
 import 'package:flutter/material.dart';
 
 var appTheme = ThemeData.dark().copyWith(

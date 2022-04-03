@@ -1,6 +1,5 @@
-import 'package:beat_pads/components/label_info_box.dart';
-import 'package:beat_pads/components/button_floating_pads.dart';
-import 'package:beat_pads/services/color_const.dart';
+import 'package:beat_pads/devices/button_floating_pads.dart';
+import 'package:beat_pads/shared/shared.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_midi_command/flutter_midi_command.dart';
 

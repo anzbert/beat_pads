@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:beat_pads/state/midi.dart';
+import 'package:beat_pads/home/home.dart';
 import 'package:provider/provider.dart';
 
 class ChannelSelector extends StatelessWidget {

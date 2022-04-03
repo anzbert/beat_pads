@@ -1,7 +1,6 @@
-import 'package:beat_pads/services/pads_layouts.dart';
 import 'package:flutter/material.dart';
 
-import 'package:beat_pads/services/midi_utils.dart';
+import 'package:beat_pads/services/services.dart';
 
 class DropdownScaleNotes extends StatelessWidget {
   const DropdownScaleNotes(
