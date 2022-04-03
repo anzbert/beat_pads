@@ -10,6 +10,7 @@ class SwitchWakeLock extends StatefulWidget {
 
 class _SwitchWakeLockState extends State<SwitchWakeLock> {
   bool wakeLock = false;
+
   @override
   Widget build(BuildContext context) {
     return ListTile(

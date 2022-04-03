@@ -1,3 +1,4 @@
+/// Selectable Pad Grid Layouts
 enum Layout {
   continuous,
   scaleNotesOnly,
@@ -8,6 +9,7 @@ enum Layout {
   xPressPadsStandard
 }
 
+/// Returns true if a Layout is variable or false if it is a fixed Layout
 extension Variable on Layout {
   bool get variable {
     switch (this) {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// Custom Palette for this App
 enum Palette {
   cadetBlue,
   yellowGreen,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../services/midi_utils.dart';
+
+import '../services/_services.dart';
 
 class MidiValueSelector extends StatelessWidget {
   const MidiValueSelector({

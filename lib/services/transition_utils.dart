@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 abstract class TransitionUtils {
+  /// A Vertical slide transition Route builder
   static Route verticalSlide(Widget destinationPage) {
     return PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) => destinationPage,
@@ -21,6 +22,7 @@ abstract class TransitionUtils {
     );
   }
 
+  /// A Fade transition Route builder
   static Route fade(Widget destinationPage) {
     return PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) => destinationPage,

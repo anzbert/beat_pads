@@ -1,6 +1,7 @@
 import 'package:beat_pads/services/_services.dart';
 
 abstract class PadUtils {
+  // Return a List of Notes, depending on the selected Layout
   static createGridList(Layout layout, int base, int width, int height,
       int root, List<int> scale) {
     List<int> grid = [];
@@ -35,6 +36,8 @@ abstract class PadUtils {
     return grid;
   }
 
+  /// Re-arrange a List to to a reversed list of rows (from the bottom up)
+  /// This way it can be easily displayed using a Column of Rows.
   static List<List<int>> reversedRowLists(
     int root,
     int base,
@@ -53,20 +56,19 @@ abstract class PadUtils {
     ).reversed.toList();
   }
 
+  // Create a Grid, which onlyt contains Notes within a specific Scale
   static List<int> scaleOnlyGridList(
       int root, List<int> scale, int base, int gridLength) {
     List<int> actualNotes = MidiUtils.absoluteScaleNotes(root, scale);
 
-    // ignore base values not in scale, add first higher one:
     int validatedBase = base;
     while (!actualNotes.contains(validatedBase % 12)) {
       validatedBase = (validatedBase + 1) % 127;
     }
 
-    // check where grid will start in scale:
-    int baseOffset = actualNotes.indexOf(validatedBase % 12);
+    int baseOffset = actualNotes.indexOf(
+        validatedBase % 12); // check where grid will start within scale
 
-    // generate grid:
     int octave = 0;
     int lastResult = 0;
 
@@ -83,6 +85,7 @@ abstract class PadUtils {
     return grid;
   }
 
+  /// Create a grid layout based on the Magic Tone Network (TM)
   static List<int> createToneNetworkList(int base, int width, int height) {
     List<int> grid = [];
 

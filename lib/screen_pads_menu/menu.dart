@@ -10,7 +10,7 @@ import 'package:beat_pads/screen_pads_menu/counter_octave.dart';
 import 'package:beat_pads/screen_pads_menu/button_reset.dart';
 import 'package:beat_pads/screen_pads_menu/slider_non_linear.dart';
 import 'package:beat_pads/screen_pads_menu/drop_down_layout.dart';
-import 'package:beat_pads/screen_pads_menu/drop_down_numbers.dart';
+import 'package:beat_pads/screen_pads_menu/drop_down_grid_size.dart';
 import 'package:beat_pads/screen_pads_menu/drop_down_root_note.dart';
 import 'package:beat_pads/screen_pads_menu/drop_down_scales.dart';
 import 'package:beat_pads/screen_pads_menu/label_rotate.dart';

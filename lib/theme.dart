@@ -1,5 +1,6 @@
-import 'shared/_shared.dart';
 import 'package:flutter/material.dart';
+
+import 'shared/_shared.dart';
 
 var appTheme = ThemeData.dark().copyWith(
   primaryColor: Palette.cadetBlue.color,

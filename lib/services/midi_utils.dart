@@ -75,6 +75,7 @@ abstract class MidiUtils {
     return list;
   }
 
+  /// Pass in a status Byte and return the expected message length
   static int lengthOfMessageType(int type) {
     // sysex not included, as it is of variable length
     List<int> commands1Bytes = [0xF6, 0xF8, 0xFA, 0xFB, 0xFC, 0xFF, 0xFE];
@@ -93,6 +94,7 @@ abstract class MidiUtils {
     return 0;
   }
 
+  /// Pass in a status Byte and return the Midi Message Type
   static MidiMessageType getMidiMessageType(int type) {
     if (type == 0xF0) return MidiMessageType.sysExStart;
     if (type == 0xF1) return MidiMessageType.midiTimeCode;

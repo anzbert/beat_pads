@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// A Card-based Info-Text Box Widget that takes an array of Strings and an optional header
 class InfoBox extends StatelessWidget {
   const InfoBox(this.content, {this.header, Key? key}) : super(key: key);
 

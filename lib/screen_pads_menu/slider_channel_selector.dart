@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:beat_pads/screen_home/_screen_home.dart';
 import 'package:provider/provider.dart';
+
+import 'package:beat_pads/screen_home/_screen_home.dart';
 
 class ChannelSelector extends StatelessWidget {
   const ChannelSelector({Key? key}) : super(key: key);
@@ -13,7 +14,6 @@ class ChannelSelector extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             ListTile(
-              // subtitle: Text("Select Channel to Receive and Send Midi Data"),
               title: Row(
                 children: [
                   Text("Midi Channel"),
