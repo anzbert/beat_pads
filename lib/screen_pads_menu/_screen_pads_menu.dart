@@ -1,4 +1,3 @@
-import 'package:beat_pads/services/device_utils.dart';
 import 'package:flutter/material.dart';
 
 import 'package:beat_pads/shared/_shared.dart';

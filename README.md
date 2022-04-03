@@ -2,7 +2,7 @@
 
 ## ! Important !
 
-This App is **ONLY** usable as a USB Midi Controller. It does **NOT** produce any sound on its own, but requires a device with Ableton, Fruity Loops, Garage Band, Logic, Software Synthesizers and many others. If you don't know what any of that that means, then this app is probably not useful for you. Otherwise, I hope you enjoy this app!
+This App is **ONLY** usable as a USB Midi Controller. It does **NOT** produce any sound on its own, but requires a device with Ableton, Fruity Loops, Garage Band, Logic, Software Synthesizers or any other Music Production Software. It also requires your phone to support the Midi Protocol over USB. This should apply to most Android phones running Marshmellow or newer (Android v6) and all iPhones. If you don't know what any of that that means, then this app is probably not useful for you. Otherwise, I hope you enjoy it a lot!
 
 ## Description
 
@@ -19,15 +19,17 @@ Unlike other generic Midi Controllers and apps out there, this app focuses on pa
 
 ## Features
 
-- A size-adjustable grid of pads for melodies and finger drumming
+- A size-adjustable grid of pads for melody input and finger drumming
 - Easy zero-latency connection via USB (OTG)
-- Usable as standard MIDI device on any PC, Mac or other USB Midi host
+- Usable as standard MIDI device on any PC, Mac or other USB host
 - Various row interval and layout settings, inspired by the Ableton Push
-- Random and fixed Velocity input
-- Optional pitch bend slider
-- Select from a large number of scales
+- Random and fixed Velocity settings
+- Optional Pitch Bend slider and Octave Increment / Decrement Buttons
+- Select from a large number of pre-defined scales
 - Highlight scales or exclude notes outside of a selected scale
+- Optional Sustain Setting
+- Highlights received Midi Notes so you can use the pads like a Novation Launchpad
 
-## Feature Requests
+## Suggestions
 
 If you have any ideas or suggestions for future releases, please email me at anzbert@gmail.com

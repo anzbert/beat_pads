@@ -178,7 +178,8 @@ class PadsMenu extends StatelessWidget {
               "Made by A. Mueller\n      [anzgraph.com]",
               "Dog Icon by 'catalyststuff'\n      [freepik.com]",
               "Logo Animated with Rive\n      [rive.app]",
-              "Magic Tone Network / XpressPads by A. Samek\n      [xpresspads.com]"
+              "Magic Tone Network / XpressPads by A. Samek\n      [xpresspads.com]",
+              "Please send improvement suggestions to anzbert@gmail.com !"
             ],
             header: "Beat Pads - 0.4.0",
           )

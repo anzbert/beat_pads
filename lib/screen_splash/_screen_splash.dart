@@ -30,45 +30,47 @@ class _SplashScreenState extends State<SplashScreen> {
         },
         child: Center(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Expanded(
-                flex: 7,
+                flex: 10,
                 child: RiveAnimation.asset(
                   'assets/anim/doggo.riv',
-                  alignment: Alignment.bottomCenter,
+                  alignment: Alignment.center,
                 ),
               ),
               Expanded(
-                flex: 1,
-                child: SizedBox(),
-              ),
-              Expanded(
-                flex: 2,
-                child: AnimatedTextKit(
-                  animatedTexts: [
-                    ColorizeAnimatedText(
-                      'BeatPads',
-                      speed: const Duration(milliseconds: 250),
-                      textAlign: TextAlign.center,
-                      textStyle: const TextStyle(
-                        fontSize: 52.0,
-                        fontFamily: 'Righteous',
-                        letterSpacing: 4.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      colors: [
-                        Palette.cadetBlue.color,
-                        Palette.lightPink.color,
-                        Palette.darkGrey.color,
-                        Palette.yellowGreen.color,
+                flex: 3,
+                child: FittedBox(
+                  fit: BoxFit.contain,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 50.0),
+                    child: AnimatedTextKit(
+                      animatedTexts: [
+                        ColorizeAnimatedText(
+                          'BeatPads',
+                          speed: const Duration(milliseconds: 250),
+                          textAlign: TextAlign.center,
+                          textStyle: const TextStyle(
+                            fontSize: 52.0,
+                            fontFamily: 'Righteous',
+                            letterSpacing: 4.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          colors: [
+                            Palette.cadetBlue.color,
+                            Palette.lightPink.color,
+                            Palette.darkGrey.color,
+                            Palette.yellowGreen.color,
+                          ],
+                        ),
                       ],
+                      isRepeatingAnimation: false,
+                      onFinished: () => setState(() {
+                        showClickToContinue = true;
+                      }),
                     ),
-                  ],
-                  isRepeatingAnimation: false,
-                  onFinished: () => setState(() {
-                    showClickToContinue = true;
-                  }),
+                  ),
                 ),
               ),
               Expanded(
