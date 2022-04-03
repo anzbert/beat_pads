@@ -1,8 +1,8 @@
 import 'package:beat_pads/services/transition_utils.dart';
 import 'package:flutter/material.dart';
 
-import 'package:beat_pads/shared/shared.dart';
-import 'package:beat_pads/home/home.dart';
+import 'package:beat_pads/shared/_shared.dart';
+import 'package:beat_pads/screen_home/_screen_home.dart';
 
 class FloatingButtonPads extends StatelessWidget {
   const FloatingButtonPads({

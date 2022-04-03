@@ -1,9 +1,7 @@
-import 'package:beat_pads/devices/button_floating_pads.dart';
-import 'package:beat_pads/shared/shared.dart';
+import 'package:beat_pads/screen_devices/button_floating_pads.dart';
+import 'package:beat_pads/shared/_shared.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_midi_command/flutter_midi_command.dart';
-
-// TODO: Bluetooth Midi?!
 
 class _ConfigScreenState extends State<ConfigScreen> {
   final MidiCommand _midiCommand = MidiCommand();

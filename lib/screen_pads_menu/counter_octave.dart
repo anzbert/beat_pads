@@ -1,4 +1,4 @@
-import 'package:beat_pads/shared/shared.dart';
+import 'package:beat_pads/shared/_shared.dart';
 import 'package:flutter/material.dart';
 
 class BaseOctaveCounter extends StatelessWidget {

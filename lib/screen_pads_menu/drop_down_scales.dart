@@ -1,6 +1,6 @@
-import 'package:beat_pads/home/home.dart';
+import 'package:beat_pads/screen_home/_screen_home.dart';
 import 'package:flutter/material.dart';
-import 'package:beat_pads/services/services.dart';
+import 'package:beat_pads/services/_services.dart';
 import 'package:provider/provider.dart';
 
 class DropdownScales extends StatelessWidget {

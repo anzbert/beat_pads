@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:flutter_midi_command/flutter_midi_command_messages.dart';
-import 'package:beat_pads/shared/shared.dart';
-import 'package:beat_pads/home/home.dart';
+import 'package:beat_pads/shared/_shared.dart';
+import 'package:beat_pads/screen_home/_screen_home.dart';
 
 import 'package:beat_pads/services/midi_utils.dart';
 

@@ -1,4 +1,4 @@
-import './shared/shared.dart';
+import 'shared/_shared.dart';
 import 'package:flutter/material.dart';
 
 var appTheme = ThemeData.dark().copyWith(
