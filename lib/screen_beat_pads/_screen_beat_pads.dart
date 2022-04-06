@@ -19,23 +19,20 @@ class BeatPadsScreen extends StatelessWidget {
           floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
           floatingActionButton:
               settings.lockScreenButton ? LockScreenButton() : null,
-          body: Hero(
-            tag: "toPads",
-            child: SafeArea(
-              child: Row(
-                children: [
-                  // OCTAVE BUTTONS
-                  if (settings.octaveButtons) SizedBox(width: 10),
-                  if (settings.octaveButtons) OctaveButtons(),
+          body: SafeArea(
+            child: Row(
+              children: [
+                // OCTAVE BUTTONS
+                if (settings.octaveButtons) SizedBox(width: 10),
+                if (settings.octaveButtons) OctaveButtons(),
 
-                  // PITCH BEND
-                  if (settings.pitchBend) SizedBox(width: 20),
-                  if (settings.pitchBend) PitchBender(),
+                // PITCH BEND
+                if (settings.pitchBend) SizedBox(width: 20),
+                if (settings.pitchBend) PitchBender(),
 
-                  // PADS
-                  Expanded(flex: 1, child: VariablePads())
-                ],
-              ),
+                // PADS
+                Expanded(flex: 1, child: VariablePads())
+              ],
             ),
           ),
         );

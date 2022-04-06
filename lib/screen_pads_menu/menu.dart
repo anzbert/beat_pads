@@ -1,3 +1,5 @@
+import 'package:beat_pads/screen_beat_pads/_screen_beat_pads.dart';
+import 'package:beat_pads/screen_beat_pads/pads.dart';
 import 'package:beat_pads/screen_pads_menu/slider_int.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -26,7 +28,43 @@ class PadsMenu extends StatelessWidget {
 
       return ListView(
         children: <Widget>[
-          RotateLabel(),
+          Card(
+            margin: EdgeInsets.all(12),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  RotateLabel(),
+                  Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      AspectRatio(
+                        aspectRatio: 16 / 10,
+                        child: Padding(
+                          padding: const EdgeInsets.all(4.0),
+                          child: BeatPadsScreen(),
+                        ),
+                      ),
+                      IgnorePointer(
+                        child: Container(
+                          padding: EdgeInsets.symmetric(horizontal: 50),
+                          width: double.infinity,
+                          child: FittedBox(
+                            child: Text(
+                              "Preview",
+                              style: TextStyle(
+                                color: Palette.lightGrey.color.withAlpha(175),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
           ListTile(
             title: Text("Layout"),
             subtitle: Text("Row Intervals and other Layouts"),

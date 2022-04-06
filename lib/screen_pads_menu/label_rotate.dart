@@ -12,11 +12,11 @@ class RotateLabel extends StatelessWidget {
             content: Text("Rotate 90 degrees to Landscape to play the Pads")));
       },
       child: Card(
-        color: Palette.cadetBlue.color,
-        margin: EdgeInsets.fromLTRB(8, 30, 8, 8),
+        color: Palette.laserLemon.color,
+        // margin: EdgeInsets.fromLTRB(8, 30, 8, 8),
         elevation: 5,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 12),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -29,6 +29,7 @@ class RotateLabel extends StatelessWidget {
                 style: TextStyle(
                   color: Palette.darkGrey.color,
                   fontSize: 20,
+                  // decoration: TextDecoration.underline,
                 ),
               ),
             ],
