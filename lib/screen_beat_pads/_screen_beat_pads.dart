@@ -13,6 +13,8 @@ class BeatPadsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+
     return Consumer<Settings>(
       builder: (context, settings, child) {
         return Scaffold(
@@ -23,11 +25,17 @@ class BeatPadsScreen extends StatelessWidget {
             child: Row(
               children: [
                 // OCTAVE BUTTONS
-                if (settings.octaveButtons) SizedBox(width: 10),
-                if (settings.octaveButtons) OctaveButtons(),
+                if (settings.octaveButtons)
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: width * 0.01),
+                    width: width * 0.08,
+                    child: FittedBox(
+                      child: OctaveButtons(),
+                      fit: BoxFit.scaleDown,
+                    ),
+                  ),
 
                 // PITCH BEND
-                if (settings.pitchBend) SizedBox(width: 20),
                 if (settings.pitchBend) PitchBender(),
 
                 // PADS

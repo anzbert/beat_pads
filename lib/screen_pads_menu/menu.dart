@@ -39,7 +39,7 @@ class PadsMenu extends StatelessWidget {
                     alignment: Alignment.center,
                     children: [
                       AspectRatio(
-                        aspectRatio: 16 / 10,
+                        aspectRatio: 16 / 9,
                         child: Padding(
                           padding: const EdgeInsets.all(4.0),
                           child: BeatPadsScreen(),

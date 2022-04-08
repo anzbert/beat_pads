@@ -101,17 +101,21 @@ class _BeatPadSustainState extends State<BeatPadSustain> {
 
     Color _padTextColor = Palette.darkGrey.color;
 
-    BorderRadius _padRadius = BorderRadius.all(Radius.circular(5.0));
     EdgeInsets _padPadding = const EdgeInsets.all(2.5);
 
+    Size size = MediaQuery.of(context).size;
+    double _fontSize = size.width * 0.022;
+    BorderRadius _padRadius =
+        BorderRadius.all(Radius.circular(size.width * 0.008));
+
     return Container(
-      padding: const EdgeInsets.all(5.0),
+      padding: EdgeInsets.all(size.width * 0.005),
       height: double.infinity,
       width: double.infinity,
       child: Material(
         color: _color,
-        borderRadius: BorderRadius.all(Radius.circular(5.0)),
-        elevation: 5.0,
+        borderRadius: _padRadius,
+        elevation: 5,
         shadowColor: Colors.black,
         child: widget.note > 127 || widget.note < 0
             ?
@@ -120,8 +124,13 @@ class _BeatPadSustainState extends State<BeatPadSustain> {
                 borderRadius: _padRadius,
                 child: Padding(
                   padding: _padPadding,
-                  child: Text("#${widget.note}",
-                      style: TextStyle(color: Colors.grey)),
+                  child: Text(
+                    "#${widget.note}",
+                    style: TextStyle(
+                      color: Colors.grey,
+                      fontSize: _fontSize,
+                    ),
+                  ),
                 ),
               )
             :
@@ -140,7 +149,10 @@ class _BeatPadSustainState extends State<BeatPadSustain> {
                           ? MidiUtils.getNoteName(widget.note,
                               showNoteValue: false)
                           : widget.note.toString(),
-                      style: TextStyle(color: _padTextColor)),
+                      style: TextStyle(
+                        color: _padTextColor,
+                        fontSize: _fontSize,
+                      )),
                 ),
               ),
       ),

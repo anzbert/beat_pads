@@ -10,39 +10,46 @@ class _PitchBenderState extends State<PitchBender> {
 
   @override
   Widget build(BuildContext context) {
-    return RotatedBox(
-      quarterTurns: 1,
-      child: SliderTheme(
-        data: SliderTheme.of(context).copyWith(
-          trackHeight: 40,
-          activeTrackColor: _trackColor,
-          inactiveTrackColor: _trackColor,
-          thumbColor: _thumbColor,
-          thumbShape: RoundSliderThumbShape(enabledThumbRadius: 40.0),
-          trackShape: CustomTrackShape(),
-        ),
-        child: Slider(
-          value: pitch,
-          min: -1,
-          max: 1,
-          onChanged: (value) {
-            setState(() {
-              pitch = value;
-            });
-            PitchBendMessage(
-              channel: widget.channel,
-              bend: -pitch,
-            ).send();
-          },
-          onChangeEnd: (details) {
-            setState(() {
-              pitch = 0;
-            });
-            PitchBendMessage(
-              channel: widget.channel,
-              bend: pitch,
-            ).send();
-          },
+    Size size = MediaQuery.of(context).size;
+
+    return SizedBox(
+      width: size.width * 0.09,
+      height: double.infinity,
+      child: RotatedBox(
+        quarterTurns: 1,
+        child: SliderTheme(
+          data: SliderTheme.of(context).copyWith(
+            trackHeight: size.width * 0.03,
+            activeTrackColor: _trackColor,
+            inactiveTrackColor: _trackColor,
+            thumbColor: _thumbColor,
+            thumbShape:
+                RoundSliderThumbShape(enabledThumbRadius: size.width * 0.04),
+            trackShape: CustomTrackShape(),
+          ),
+          child: Slider(
+            value: pitch,
+            min: -1,
+            max: 1,
+            onChanged: (value) {
+              setState(() {
+                pitch = value;
+              });
+              PitchBendMessage(
+                channel: widget.channel,
+                bend: -pitch,
+              ).send();
+            },
+            onChangeEnd: (details) {
+              setState(() {
+                pitch = 0;
+              });
+              PitchBendMessage(
+                channel: widget.channel,
+                bend: pitch,
+              ).send();
+            },
+          ),
         ),
       ),
     );

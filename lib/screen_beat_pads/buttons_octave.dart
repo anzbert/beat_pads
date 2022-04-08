@@ -8,36 +8,43 @@ class OctaveButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+
     return Consumer<Settings>(
       builder: (context, settings, child) {
         return Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // SizedBox(height: 30),
               ElevatedButton(
                 onPressed: () {
                   settings.baseOctave++;
                 },
-                child: Icon(Icons.add),
+                child: Icon(
+                  Icons.add,
+                  size: size.width * 0.05,
+                ),
                 style: ElevatedButton.styleFrom(
                   shape: CircleBorder(),
-                  padding: EdgeInsets.all(16),
+                  padding: EdgeInsets.all(size.width * 0.02),
                   primary: Palette.cadetBlue.color,
                   onPrimary: Palette.darkGrey.color,
                 ),
               ),
               SizedBox(
-                height: 32,
+                height: size.height * 0.05,
               ),
               ElevatedButton(
                 onPressed: () {
                   settings.baseOctave--;
                 },
-                child: Icon(Icons.remove),
+                child: Icon(
+                  Icons.remove,
+                  size: size.width * 0.05,
+                ),
                 style: ElevatedButton.styleFrom(
                   shape: CircleBorder(),
-                  padding: EdgeInsets.all(16),
+                  padding: EdgeInsets.all(size.width * 0.02),
                   primary: Palette.laserLemon.color,
                   onPrimary: Palette.darkGrey.color,
                 ),
