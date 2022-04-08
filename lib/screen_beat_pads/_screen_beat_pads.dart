@@ -25,15 +25,7 @@ class BeatPadsScreen extends StatelessWidget {
             child: Row(
               children: [
                 // OCTAVE BUTTONS
-                if (settings.octaveButtons)
-                  Container(
-                    margin: EdgeInsets.symmetric(horizontal: width * 0.01),
-                    width: width * 0.08,
-                    child: FittedBox(
-                      child: OctaveButtons(),
-                      fit: BoxFit.scaleDown,
-                    ),
-                  ),
+                if (settings.octaveButtons) OctaveButtons(),
 
                 // PITCH BEND
                 if (settings.pitchBend) PitchBender(),
