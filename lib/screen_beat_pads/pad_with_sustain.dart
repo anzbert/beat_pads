@@ -121,38 +121,47 @@ class _BeatPadSustainState extends State<BeatPadSustain> {
             ?
             // OUT OF MIDI RANGE
             InkWell(
+                onTapDown: (_) {},
                 borderRadius: _padRadius,
                 child: Padding(
                   padding: _padPadding,
                   child: Text(
                     "#${widget.note}",
                     style: TextStyle(
+                      fontStyle: FontStyle.italic,
                       color: Colors.grey,
-                      fontSize: _fontSize,
+                      fontSize: _fontSize * 0.8,
                     ),
                   ),
                 ),
               )
             :
             // WITHIN MIDI RANGE
-            InkWell(
-                borderRadius: _padRadius,
-                splashColor: _splashColor,
-                onTapDown: (_) =>
-                    handlePush(channel, sendCC, velocity, sustainTime),
-                onTapUp: (_) => handleRelease(channel, sendCC, sustainTime),
-                onTapCancel: () => handleRelease(channel, sendCC, sustainTime),
-                child: Padding(
-                  padding: _padPadding,
-                  child: Text(
-                      showNoteNames
-                          ? MidiUtils.getNoteName(widget.note,
-                              showNoteValue: false)
-                          : widget.note.toString(),
-                      style: TextStyle(
-                        color: _padTextColor,
-                        fontSize: _fontSize,
-                      )),
+            Listener(
+                onPointerDown: (_details) {
+                  // print("pointer down $_details");
+                  handlePush(channel, sendCC, velocity, sustainTime);
+                },
+                onPointerUp: (_details) {
+                  // print("pointer up $_details");
+                  handleRelease(channel, sendCC, sustainTime);
+                },
+                child: InkWell(
+                  onTapDown: (_) {},
+                  borderRadius: _padRadius,
+                  splashColor: _splashColor,
+                  child: Padding(
+                    padding: _padPadding,
+                    child: Text(
+                        showNoteNames
+                            ? MidiUtils.getNoteName(widget.note,
+                                showNoteValue: false)
+                            : widget.note.toString(),
+                        style: TextStyle(
+                          color: _padTextColor,
+                          fontSize: _fontSize,
+                        )),
+                  ),
                 ),
               ),
       ),

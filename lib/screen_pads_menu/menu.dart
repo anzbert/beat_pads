@@ -1,5 +1,5 @@
 import 'package:beat_pads/screen_beat_pads/_screen_beat_pads.dart';
-import 'package:beat_pads/screen_beat_pads/pads.dart';
+// import 'package:beat_pads/screen_beat_pads/pads.dart';
 import 'package:beat_pads/screen_pads_menu/slider_int.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
