@@ -3,6 +3,8 @@ import 'package:flutter_midi_command/flutter_midi_command.dart';
 
 import 'package:beat_pads/shared/_shared.dart';
 
+import 'dart:io' show Platform;
+
 class _MidiConfigState extends State<MidiConfig> {
   final MidiCommand _midiCommand = MidiCommand();
 
@@ -88,15 +90,40 @@ class _MidiConfigState extends State<MidiConfig> {
                           ),
                         );
                       }).toList(),
-                      InfoBox(
-                        [
-                          "Connect to USB Host Device",
-                          "Set USB connection mode to 'Midi' in Notification Menu",
-                          "Refresh this Device List",
-                          "Tap Device to Connect",
-                        ],
-                        header: "Setup",
-                      ),
+                      if (Platform.isAndroid)
+                        InfoBox(
+                          [
+                            "Connect USB cable to Host Device",
+                            "Slide down the Notification Menu and set the USB connection mode to 'Midi'",
+                            "Refresh this Device List",
+                            "Tap USB Device to Connect",
+                          ],
+                          header: "USB Setup",
+                        ),
+                      if (Platform.isIOS)
+                        InfoBox(
+                          [
+                            "Connect USB cable to Host Device",
+                            "Open 'Audio MIDI Setup' on Mac and click 'Enable' under iPad/iPhone in the 'Audio Devices' Window",
+                            "Refresh this Device List",
+                            "Tap 'IDAM MIDI Host' to Connect",
+                            "",
+                            "Note: USB connection ONLY works with MacOS devices due to Apple's MIDI implementation!",
+                          ],
+                          header: "USB Setup",
+                        ),
+                      if (Platform.isIOS)
+                        InfoBox(
+                          [
+                            "Connect to same WiFi as Host Device",
+                            "Connect to 'Network Session 1' in this Device List",
+                            "Open 'Audio MIDI Setup' on Mac and open the 'MIDI Studio' window",
+                            "Create a Session in the 'MIDI Network Setup' and connect to your iPad/iPhone in the 'Device Directory'",
+                            "",
+                            "Note: Wireless Midi Protocols add Latency. Connection to Windows Hosts via WiFi requires third-party Software"
+                          ],
+                          header: "WiFi Setup",
+                        ),
                     ],
                   );
           } else if (snapshot.hasError) {

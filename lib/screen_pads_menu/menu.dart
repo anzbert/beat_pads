@@ -219,7 +219,7 @@ class PadsMenu extends StatelessWidget {
               "Magic Tone Network / XpressPads by A. Samek\n      [xpresspads.com]",
               "Please send improvement suggestions to anzbert@gmail.com !"
             ],
-            header: "Beat Pads - 0.4.0",
+            header: "Beat Pads - 0.4.1",
           )
         ],
       );
