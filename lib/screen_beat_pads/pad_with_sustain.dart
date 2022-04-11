@@ -22,10 +22,16 @@ class _BeatPadSustainState extends State<BeatPadSustain> {
   int _triggerTime = DateTime.now().millisecondsSinceEpoch;
   bool _checkingSustain = false;
 
+  bool _pressed = false;
+
   handlePush(int channel, bool sendCC, int velocity, int sustainTime) {
     if (sustainTime != 0) {
       _triggerTime = DateTime.now().millisecondsSinceEpoch;
     }
+
+    setState(() {
+      _pressed = true;
+    });
 
     NoteOnMessage(channel: channel, note: widget.note, velocity: velocity)
         .send();
@@ -42,6 +48,9 @@ class _BeatPadSustainState extends State<BeatPadSustain> {
       while (await _checkSustainTime(sustainTime, _triggerTime) == false) {}
       _checkingSustain = false;
     }
+    setState(() {
+      _pressed = false;
+    });
 
     NoteOffMessage(
       channel: channel,
@@ -80,9 +89,14 @@ class _BeatPadSustainState extends State<BeatPadSustain> {
 
     // PAD COLOR:
     final Color _color;
+    Color _splashColor = Palette.lightPink.color;
 
-    if (_rxNote > 0) {
-      _color = Palette.cadetBlue.color; // receiving midi signal
+    if (_pressed == true) {
+      _color = _splashColor.withAlpha(220); // maintain color when pushed
+
+    } else if (_rxNote > 0) {
+      _color = Palette.cadetBlue.color.withAlpha(
+          _rxNote * 2); // receiving midi signal adjusted by received velocity
 
     } else if (widget.note > 127 || widget.note < 0) {
       _color = Palette.darkGrey.color; // out of midi range
@@ -96,8 +110,6 @@ class _BeatPadSustainState extends State<BeatPadSustain> {
     } else {
       _color = Palette.yellowGreen.color; // default pad color
     }
-
-    Color _splashColor = Palette.lightPink.color;
 
     Color _padTextColor = Palette.darkGrey.color;
 

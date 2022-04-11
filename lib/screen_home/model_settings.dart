@@ -4,6 +4,8 @@ import 'dart:math';
 import 'package:beat_pads/services/_services.dart';
 
 class Settings extends ChangeNotifier {
+  Settings();
+
 // layout:
   Layout _layout = Layout.continuous;
   Layout get layout => _layout;

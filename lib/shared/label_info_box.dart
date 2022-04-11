@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 /// A Card-based Info-Text Box Widget that takes an array of Strings and an optional header
 class InfoBox extends StatelessWidget {
-  const InfoBox(this.content, {this.header, Key? key}) : super(key: key);
+  const InfoBox({required this.body, this.header, Key? key}) : super(key: key);
 
   final String? header;
-  final List<String> content;
+  final List<String> body;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class InfoBox extends StatelessWidget {
                     style: Theme.of(context).textTheme.headline5,
                   ),
                 ),
-              ...content
+              ...body
                   .map(
                     (text) => Column(children: [
                       Text(text),

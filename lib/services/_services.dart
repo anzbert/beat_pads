@@ -5,3 +5,4 @@ export './midi_utils.dart';
 export './pads_layouts.dart';
 export './pads_utils.dart';
 export './transition_utils.dart';
+export './shared_prefs.dart';

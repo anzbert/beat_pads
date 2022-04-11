@@ -26,7 +26,7 @@ class PadMenuScreen extends StatelessWidget {
               Scaffold.of(context).openDrawer();
             },
             icon: Icon(
-              Icons.menu_rounded,
+              Icons.settings,
               color: Palette.lightGrey.color,
               size: 36,
             ),

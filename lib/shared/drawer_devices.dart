@@ -92,17 +92,18 @@ class _MidiConfigState extends State<MidiConfig> {
                       }).toList(),
                       if (Platform.isAndroid)
                         InfoBox(
-                          [
+                          header: "USB Setup",
+                          body: [
                             "Connect USB cable to Host Device",
                             "Slide down the Notification Menu and set the USB connection mode to 'Midi'",
                             "Refresh this Device List",
                             "Tap USB Device to Connect",
                           ],
-                          header: "USB Setup",
                         ),
                       if (Platform.isIOS)
                         InfoBox(
-                          [
+                          header: "USB Setup",
+                          body: [
                             "Connect USB cable to Host Device",
                             "Open 'Audio MIDI Setup' on Mac and click 'Enable' under iPad/iPhone in the 'Audio Devices' Window",
                             "Refresh this Device List",
@@ -110,19 +111,18 @@ class _MidiConfigState extends State<MidiConfig> {
                             "",
                             "Note: USB connection ONLY works with MacOS devices due to Apple's MIDI implementation!",
                           ],
-                          header: "USB Setup",
                         ),
                       if (Platform.isIOS)
                         InfoBox(
-                          [
+                          header: "WiFi Setup",
+                          body: [
                             "Connect to same WiFi as Host Device",
                             "Connect to 'Network Session 1' in this Device List",
                             "Open 'Audio MIDI Setup' on Mac and open the 'MIDI Studio' window",
-                            "Create a Session in the 'MIDI Network Setup' and connect to your iPad/iPhone in the 'Device Directory'",
+                            "Create a Session in the 'MIDI Network Setup' window and connect to your iPad/iPhone",
                             "",
                             "Note: Wireless Midi Protocols add Latency. Connection to Windows Hosts via WiFi requires third-party Software"
                           ],
-                          header: "WiFi Setup",
                         ),
                     ],
                   );

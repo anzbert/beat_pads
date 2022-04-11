@@ -1,5 +1,4 @@
 import 'package:beat_pads/screen_beat_pads/_screen_beat_pads.dart';
-// import 'package:beat_pads/screen_beat_pads/pads.dart';
 import 'package:beat_pads/screen_pads_menu/slider_int.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -35,18 +34,21 @@ class PadsMenu extends StatelessWidget {
               child: Column(
                 children: [
                   RotateLabel(),
-                  Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      AspectRatio(
-                        aspectRatio: 16 / 9,
-                        child: Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: BeatPadsScreen(),
+                  IgnorePointer(
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        AspectRatio(
+                          aspectRatio: 16 / 9,
+                          child: Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(6.0),
+                              child: BeatPadsScreen(),
+                            ),
+                          ),
                         ),
-                      ),
-                      IgnorePointer(
-                        child: Container(
+                        Container(
                           padding: EdgeInsets.symmetric(horizontal: 50),
                           width: double.infinity,
                           child: FittedBox(
@@ -58,8 +60,8 @@ class PadsMenu extends StatelessWidget {
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -212,14 +214,14 @@ class PadsMenu extends StatelessWidget {
                 Provider.of<MidiData>(context, listen: false).rxNotesReset,
           ),
           InfoBox(
-            [
+            header: "Beat Pads",
+            body: [
               "Made by A. Mueller\n      [anzgraph.com]",
               "Dog Icon by 'catalyststuff'\n      [freepik.com]",
               "Logo Animated with Rive\n      [rive.app]",
               "Magic Tone Network / XpressPads by A. Samek\n      [xpresspads.com]",
               "Please send improvement suggestions to anzbert@gmail.com !"
             ],
-            header: "Beat Pads - 0.4.1",
           )
         ],
       );
