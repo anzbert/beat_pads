@@ -4,10 +4,34 @@ import 'dart:math';
 import 'package:beat_pads/services/_services.dart';
 
 class Settings extends ChangeNotifier {
-  Settings();
+  Settings(this.prefs)
+      : _layout = prefs.loadSettings.layout,
+        _rootNote = prefs.loadSettings.rootNote,
+        _baseOctave = prefs.loadSettings.baseOctave,
+        _base = prefs.loadSettings.base,
+        _velocity = prefs.loadSettings.velocity,
+        _velocityMin = prefs.loadSettings.velocityMin,
+        _velocityMax = prefs.loadSettings.velocityMax,
+        _sustainTimeStep = prefs.loadSettings.sustainTimeStep,
+        _sendCC = prefs.loadSettings.sendCC,
+        _showNoteNames = prefs.loadSettings.showNoteNames,
+        _pitchBend = prefs.loadSettings.pitchBend,
+        _octaveButtons = prefs.loadSettings.octaveButtons,
+        _lockScreenButton = prefs.loadSettings.lockScreenButton,
+        _randomVelocity = prefs.loadSettings.randomVelocity,
+        _scale = prefs.loadSettings.scale,
+        _padDimensions = [
+          prefs.loadSettings.width,
+          prefs.loadSettings.height,
+        ];
+
+  Prefs prefs;
+
+// TODO: check all reset and set functions!
+// TODO: reset all / save all function
 
 // layout:
-  Layout _layout = Layout.continuous;
+  Layout _layout;
   Layout get layout => _layout;
 
   set layout(Layout newLayout) {
@@ -18,6 +42,7 @@ class Settings extends ChangeNotifier {
     }
 
     _layout = newLayout;
+    prefs.saveSetting("layout", newLayout.name);
     notifyListeners();
   }
 
@@ -34,7 +59,7 @@ class Settings extends ChangeNotifier {
   }
 
   // lowest note:
-  int _rootNote = 0;
+  int _rootNote;
 
   set rootNote(int note) {
     if (note < 0 || note > 11) return;
@@ -46,7 +71,7 @@ class Settings extends ChangeNotifier {
   resetRootNote() => rootNote = 0;
 
   // base note:
-  int _base = 0;
+  int _base;
   int get base => _base;
 
   set base(int note) {
@@ -55,7 +80,7 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
-  int _baseOctave = 1;
+  int _baseOctave;
   int get baseOctave => _baseOctave;
 
   set baseOctave(int octave) {
@@ -72,12 +97,14 @@ class Settings extends ChangeNotifier {
   }
 
   resetBaseOctave() {
-    _baseOctave = 1;
+    _baseOctave = LoadSettings.defaults().baseOctave;
+    prefs.saveSetting("baseOctave", _baseOctave);
     notifyListeners();
   }
 
   // pad dimensions
-  final List<int> _padDimensions = [4, 4]; // [ W, H ]
+  final List<int> _padDimensions; // [ W, H ]
+
   int get width => _padDimensions[0];
   int get height => _padDimensions[1];
 
@@ -96,7 +123,7 @@ class Settings extends ChangeNotifier {
   set height(int newValue) => padDimensions = [width, newValue];
 
 // scale:
-  String _scale = midiScales.keys.toList()[0];
+  String _scale;
   String get scale => _scale;
   List<int> get scaleList => midiScales[_scale]!;
 
@@ -111,7 +138,7 @@ class Settings extends ChangeNotifier {
   }
 
 // pitchbend:
-  bool _pitchBend = false;
+  bool _pitchBend;
   bool get pitchBend => _pitchBend;
 
   set pitchBend(bool newValue) {
@@ -120,7 +147,7 @@ class Settings extends ChangeNotifier {
   }
 
 // octave buttons:
-  bool _octaveButtons = false;
+  bool _octaveButtons;
   bool get octaveButtons => _octaveButtons;
 
   set octaveButtons(bool newValue) {
@@ -129,7 +156,7 @@ class Settings extends ChangeNotifier {
   }
 
 // lock screen button:
-  bool _lockScreenButton = false;
+  bool _lockScreenButton;
   bool get lockScreenButton => _lockScreenButton;
 
   set lockScreenButton(bool newValue) {
@@ -138,24 +165,23 @@ class Settings extends ChangeNotifier {
   }
 
 // velocity:
-  bool randomVelocity = false;
-  final _random = Random();
+  bool _randomVelocity;
+  int _velocity;
+  int _velocityMin;
+  int _velocityMax;
 
+  bool get randomVelocity => _randomVelocity;
   set randomizeVelocity(bool setTo) {
-    randomVelocity = setTo;
+    _randomVelocity = setTo;
     notifyListeners();
   }
 
-  int _velocity = 110;
-
-  int _velocityMin = 110;
-  int _velocityMax = 120;
   int get velocityMin => _velocityMin;
   int get velocityMax => _velocityMax;
 
+  final _random = Random();
   int get velocity {
     if (!randomVelocity) return _velocity;
-
     int randVelocity =
         _random.nextInt(_velocityMax - _velocityMin) + _velocityMin;
     return randVelocity > 127 ? 127 : randVelocity;
@@ -190,7 +216,7 @@ class Settings extends ChangeNotifier {
   }
 
 // notenames:
-  bool _showNoteNames = true;
+  bool _showNoteNames;
   bool get showNoteNames => _showNoteNames;
 
   set showNoteNames(bool setting) {
@@ -199,7 +225,7 @@ class Settings extends ChangeNotifier {
   }
 
   // send CC:
-  bool _sendCC = false;
+  bool _sendCC;
   bool get sendCC => _sendCC;
 
   set sendCC(bool setting) {
@@ -208,10 +234,8 @@ class Settings extends ChangeNotifier {
   }
 
   // sustain:
-  final int _minSustainTimeStep = 2;
-  int get minSustainTimeStep => _minSustainTimeStep;
-
   int _sustainTimeStep = 2;
+  int get minSustainTimeStep => _minSustainTimeStep;
   int get sustainTimeStep => _sustainTimeStep;
 
   set sustainTimeStep(int timeInMs) {
@@ -219,6 +243,7 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
+  final int _minSustainTimeStep = 2;
   int get sustainTimeExp {
     if (_sustainTimeStep <= _minSustainTimeStep) return 0;
     return pow(2, _sustainTimeStep).toInt();

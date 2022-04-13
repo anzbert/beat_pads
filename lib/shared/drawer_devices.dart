@@ -47,8 +47,8 @@ class _MidiConfigState extends State<MidiConfig> {
                 // WHILE CONNECTING SHOW CIRCULAR PROGRESS INDICATOR:
                 ? Center(
                     child: SizedBox(
-                    width: 100,
-                    height: 100,
+                    width: 50,
+                    height: 50,
                     child: CircularProgressIndicator(
                       color: Palette.cadetBlue.color,
                     ),
