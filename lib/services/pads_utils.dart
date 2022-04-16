@@ -20,10 +20,12 @@ abstract class PadUtils {
       case Layout.quart:
         semiTones = 5;
         break;
-      case Layout.toneNetwork:
+      case Layout.magicToneNetwork:
         return createToneNetworkList(base, width, height);
       case Layout.xPressPadsStandard:
         return xPressPadsStandard;
+      case Layout.xPressPadsLatinJazz:
+        return xPressPadsLatinJazz;
       case Layout.scaleNotesOnly:
         return scaleOnlyGridList(root, scale, base, width * height);
     }

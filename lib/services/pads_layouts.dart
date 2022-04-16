@@ -5,8 +5,9 @@ enum Layout {
   minorThird,
   majorThird,
   quart,
-  toneNetwork,
-  xPressPadsStandard
+  magicToneNetwork,
+  xPressPadsStandard,
+  xPressPadsLatinJazz,
 }
 
 abstract class LayoutUtils {
@@ -18,14 +19,28 @@ abstract class LayoutUtils {
   }
 }
 
-/// Returns true if a Layout is variable or false if it is a fixed Layout
 extension Variable on Layout {
+  /// Returns true if a Layout is variable or false if it is a fixed Layout
   bool get variable {
     switch (this) {
       case Layout.xPressPadsStandard:
         return false;
+      case Layout.xPressPadsLatinJazz:
+        return false;
       default:
         return true;
+    }
+  }
+
+  // TODO: primitive obsession??? maybe create class object for layout parameters
+  List<int>? get size {
+    switch (this) {
+      case Layout.xPressPadsStandard:
+        return [4, 4];
+      case Layout.xPressPadsLatinJazz:
+        return [4, 4];
+      default:
+        return null;
     }
   }
 }

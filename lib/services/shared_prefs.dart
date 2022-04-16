@@ -2,6 +2,9 @@ import 'package:beat_pads/services/_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Prefs {
+  Prefs._();
+  late SharedPreferences _sharedPrefs;
+  late Map<String, dynamic> _startUpSettings;
   late LoadSettings loadSettings;
 
   static Future<Prefs> initAsync() async {
@@ -9,19 +12,18 @@ class Prefs {
 
     // late inits:
     instance._sharedPrefs = await SharedPreferences.getInstance();
+
     instance._startUpSettings = Prefs._defaults.map((key, value) {
       var loadedVal = instance._sharedPrefs.get(key) ?? value;
+      // var loadedVal = value; // debug: set to default
       return MapEntry(key, loadedVal);
     });
 
+    // print(instance._startUpSettings.toString());
     instance.loadSettings = LoadSettings(instance._startUpSettings);
 
     return instance;
   }
-
-  Prefs._();
-  late SharedPreferences _sharedPrefs;
-  late Map<String, dynamic> _startUpSettings;
 
   void refreshStore() async {
     try {
@@ -60,12 +62,12 @@ class Prefs {
     } else if (_defaults[key] is bool && value is bool) {
       return _sharedPrefs.setBool(key, value);
     }
-
     return false;
   }
 }
 
 // TODO: save with setter?
+
 class LoadSettings {
   final Layout layout;
   final String scale;
@@ -89,7 +91,7 @@ class LoadSettings {
       : scale = loadedMap['scale'],
         rootNote = loadedMap['rootNote'],
         width = loadedMap['width'],
-        height = loadedMap[''],
+        height = loadedMap['height'],
         baseOctave = loadedMap['baseOctave'],
         base = loadedMap['base'],
         velocity = loadedMap['velocity'],

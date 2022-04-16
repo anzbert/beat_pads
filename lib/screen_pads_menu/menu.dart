@@ -17,6 +17,7 @@ import 'package:beat_pads/screen_pads_menu/drop_down_scales.dart';
 import 'package:beat_pads/screen_pads_menu/label_rotate.dart';
 import 'package:beat_pads/screen_pads_menu/slider_int_range.dart';
 import 'package:beat_pads/screen_pads_menu/switch_wake_lock.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PadsMenu extends StatelessWidget {
   @override
@@ -222,7 +223,15 @@ class PadsMenu extends StatelessWidget {
               "Magic Tone Network / XpressPads by A. Samek\n      [xpresspads.com]",
               "Please send improvement suggestions to anzbert@gmail.com !"
             ],
-          )
+          ),
+          // TEST URL_LAUNCHER:
+          ElevatedButton(
+              onPressed: () async {
+                if (!await launch("https://anzgraph.com")) {
+                  throw 'Could not launch url';
+                }
+              },
+              child: Text("https://anzgraph.com"))
         ],
       );
     });

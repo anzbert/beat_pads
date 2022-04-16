@@ -132,3 +132,21 @@ const List<int> xPressPadsStandard = [
   51,
   49
 ];
+const List<int> xPressPadsLatinJazz = [
+  36,
+  44,
+  44,
+  36,
+  43,
+  49,
+  49,
+  43,
+  50,
+  38,
+  38,
+  50,
+  51,
+  37,
+  37,
+  51
+];

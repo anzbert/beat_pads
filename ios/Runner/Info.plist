@@ -43,7 +43,19 @@
 		</array>
 		<key>UIViewControllerBasedStatusBarAppearance</key>
 		<false/>
+
+		<!-- Bluetooth permission query: -->
 		<key>NSBluetoothAlwaysUsageDescription</key>
 		<string>This app does not utilize this functionality but it is included in our info.plist since one of the Apps dependencies adds Midi over Bluetooth functionality, which may one day be implemented.</string>
+		<key>CADisableMinimumFrameDurationOnPhone</key>
+		<true/>
+
+		<!-- To launch urls in browser: -->
+		<key>LSApplicationQueriesSchemes</key>
+		<array>
+			<string>https</string>
+			<string>http</string>
+		</array>
+
 	</dict>
 </plist>
