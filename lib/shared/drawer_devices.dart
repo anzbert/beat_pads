@@ -91,7 +91,7 @@ class _MidiConfigState extends State<MidiConfig> {
                         );
                       }).toList(),
                       if (Platform.isAndroid)
-                        InfoBox(
+                        TextInfoBox(
                           header: "USB Setup",
                           body: [
                             "Connect USB cable to Host Device",
@@ -101,7 +101,7 @@ class _MidiConfigState extends State<MidiConfig> {
                           ],
                         ),
                       if (Platform.isIOS)
-                        InfoBox(
+                        TextInfoBox(
                           header: "USB Setup",
                           body: [
                             "Connect USB cable to Host Device",
@@ -113,7 +113,7 @@ class _MidiConfigState extends State<MidiConfig> {
                           ],
                         ),
                       if (Platform.isIOS)
-                        InfoBox(
+                        TextInfoBox(
                           header: "WiFi Setup",
                           body: [
                             "Connect to same WiFi as Host Device",

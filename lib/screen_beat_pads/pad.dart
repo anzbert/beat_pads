@@ -35,12 +35,14 @@ class _BeatPadSustainState extends State<BeatPadSustain> {
 
     NoteOnMessage(channel: channel, note: widget.note, velocity: velocity)
         .send();
+    lastNote = widget.note;
+
     if (sendCC) {
       CCMessage(channel: channel, controller: widget.note, value: 127).send();
     }
   }
 
-  handleRelease(int channel, bool sendCC, int sustainTime) async {
+  handleRelease(int channel, bool? sendCC, int sustainTime) async {
     if (sustainTime != 0) {
       if (_checkingSustain) return;
 
@@ -57,7 +59,7 @@ class _BeatPadSustainState extends State<BeatPadSustain> {
       note: widget.note,
     ).send();
 
-    if (sendCC) {
+    if (sendCC == true) {
       CCMessage(channel: channel, controller: widget.note, value: 0).send();
     }
   }
@@ -67,6 +69,8 @@ class _BeatPadSustainState extends State<BeatPadSustain> {
         const Duration(milliseconds: 5),
         () => DateTime.now().millisecondsSinceEpoch - triggerTime > sustainTime,
       );
+
+  int? lastNote;
 
   @override
   Widget build(BuildContext context) {
@@ -83,9 +87,23 @@ class _BeatPadSustainState extends State<BeatPadSustain> {
 
     // variables from midi receiver:
     final int channel = Provider.of<MidiData>(context, listen: true).channel;
-    final int _rxNote = widget.note < 127
+    final int _rxNote = widget.note < 127 && widget.note >= 0
         ? Provider.of<MidiData>(context, listen: true).rxNoteBuffer[widget.note]
         : 0;
+
+    // if octave has been changed and there is still another note playing on rebuild
+    if (lastNote != widget.note && lastNote != null) {
+      NoteOffMessage(
+        channel: channel,
+        note: lastNote!,
+      ).send();
+
+      if (sendCC == true) {
+        CCMessage(channel: channel, controller: lastNote!, value: 0).send();
+      }
+
+      lastNote = widget.note;
+    }
 
     // PAD COLOR:
     final Color _color;

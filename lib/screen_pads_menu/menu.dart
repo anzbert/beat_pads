@@ -1,4 +1,5 @@
 import 'package:beat_pads/screen_beat_pads/_screen_beat_pads.dart';
+import 'package:beat_pads/screen_pads_menu/box_credits.dart';
 import 'package:beat_pads/screen_pads_menu/slider_int.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -17,7 +18,6 @@ import 'package:beat_pads/screen_pads_menu/drop_down_scales.dart';
 import 'package:beat_pads/screen_pads_menu/label_rotate.dart';
 import 'package:beat_pads/screen_pads_menu/slider_int_range.dart';
 import 'package:beat_pads/screen_pads_menu/switch_wake_lock.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class PadsMenu extends StatelessWidget {
   @override
@@ -214,24 +214,7 @@ class PadsMenu extends StatelessWidget {
             onPressed:
                 Provider.of<MidiData>(context, listen: false).rxNotesReset,
           ),
-          InfoBox(
-            header: "Beat Pads",
-            body: [
-              "Made by A. Mueller\n      [anzgraph.com]",
-              "Dog Icon by 'catalyststuff'\n      [freepik.com]",
-              "Logo Animated with Rive\n      [rive.app]",
-              "Magic Tone Network / XpressPads by A. Samek\n      [xpresspads.com]",
-              "Please send improvement suggestions to anzbert@gmail.com !"
-            ],
-          ),
-          // TEST URL_LAUNCHER:
-          ElevatedButton(
-              onPressed: () async {
-                if (!await launch("https://anzgraph.com")) {
-                  throw 'Could not launch url';
-                }
-              },
-              child: Text("https://anzgraph.com"))
+          CreditsBox(),
         ],
       );
     });

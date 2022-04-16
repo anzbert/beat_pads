@@ -1,3 +1,5 @@
+// import 'dart:html';
+
 import 'package:beat_pads/services/_services.dart';
 
 abstract class PadUtils {
@@ -21,7 +23,7 @@ abstract class PadUtils {
         semiTones = 5;
         break;
       case Layout.magicToneNetwork:
-        return createToneNetworkList(base, width, height);
+        return createToneNetworkList(root, base, width, height);
       case Layout.xPressPadsStandard:
         return xPressPadsStandard;
       case Layout.xPressPadsLatinJazz:
@@ -87,15 +89,31 @@ abstract class PadUtils {
     return grid;
   }
 
+  // TODO: fix MTN
+
   /// Create a grid layout based on the Magic Tone Network (TM)
-  static List<int> createToneNetworkList(int base, int width, int height) {
+  static List<int> createToneNetworkList(
+    int root,
+    int base,
+    int width,
+    int height,
+  ) {
     List<int> grid = [];
 
+    bool sameColumn = root % 2 == base % 2;
+
     for (int row = 0; row < height; row++) {
+      int next = base;
       for (int note = 0; note < width; note++) {
-        grid.add(note * 7 + row * 4 + base);
+        grid.add(next + row * 4);
+        if (note.isEven) {
+          next = sameColumn ? next + 7 : next - 5;
+        } else {
+          next = sameColumn ? next - 5 : next + 7;
+        }
       }
     }
+
     return grid;
   }
 }

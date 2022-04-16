@@ -19,6 +19,12 @@ class Prefs {
       return MapEntry(key, loadedVal);
     });
 
+    // instance._startUpSettings = Prefs._defaults.map((key, value) {
+    //   var loadedVal = instance._sharedPrefs.get(key) ?? value;
+    //   // var loadedVal = value; // debug: set to default
+    //   return MapEntry(key, loadedVal);
+    // });
+
     // print(instance._startUpSettings.toString());
     instance.loadSettings = LoadSettings(instance._startUpSettings);
 
@@ -65,8 +71,6 @@ class Prefs {
     return false;
   }
 }
-
-// TODO: save with setter?
 
 class LoadSettings {
   final Layout layout;

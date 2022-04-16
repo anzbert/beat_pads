@@ -1,4 +1,4 @@
-import 'package:beat_pads/screen_beat_pads/pad_with_sustain.dart';
+import 'package:beat_pads/screen_beat_pads/pad.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
