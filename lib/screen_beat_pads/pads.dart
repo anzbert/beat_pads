@@ -9,7 +9,7 @@ class VariablePads extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<List<int>> rowsList =
-        Provider.of<Settings>(context, listen: true).rowsLists;
+        Provider.of<Settings>(context, listen: true).rows;
 
     return Center(
       child: Container(

@@ -21,10 +21,12 @@ class BeatPadSustain extends StatefulWidget {
 class _BeatPadSustainState extends State<BeatPadSustain> {
   int _triggerTime = DateTime.now().millisecondsSinceEpoch;
   bool _checkingSustain = false;
-
   bool _pressed = false;
 
-  handlePush(int channel, bool sendCC, int velocity, int sustainTime) {
+  int? lastNote;
+
+  handlePush(
+      int channel, int note, bool sendCC, int velocity, int sustainTime) {
     if (sustainTime != 0) {
       _triggerTime = DateTime.now().millisecondsSinceEpoch;
     }
@@ -33,16 +35,15 @@ class _BeatPadSustainState extends State<BeatPadSustain> {
       _pressed = true;
     });
 
-    NoteOnMessage(channel: channel, note: widget.note, velocity: velocity)
-        .send();
+    NoteOnMessage(channel: channel, note: note, velocity: velocity).send();
     lastNote = widget.note;
 
     if (sendCC) {
-      CCMessage(channel: channel, controller: widget.note, value: 127).send();
+      CCMessage(channel: channel, controller: note, value: 127).send();
     }
   }
 
-  handleRelease(int channel, bool? sendCC, int sustainTime) async {
+  handleRelease(int channel, int note, bool? sendCC, int sustainTime) async {
     if (sustainTime != 0) {
       if (_checkingSustain) return;
 
@@ -56,11 +57,11 @@ class _BeatPadSustainState extends State<BeatPadSustain> {
 
     NoteOffMessage(
       channel: channel,
-      note: widget.note,
+      note: note,
     ).send();
 
     if (sendCC == true) {
-      CCMessage(channel: channel, controller: widget.note, value: 0).send();
+      CCMessage(channel: channel, controller: note, value: 0).send();
     }
   }
 
@@ -69,8 +70,6 @@ class _BeatPadSustainState extends State<BeatPadSustain> {
         const Duration(milliseconds: 5),
         () => DateTime.now().millisecondsSinceEpoch - triggerTime > sustainTime,
       );
-
-  int? lastNote;
 
   @override
   Widget build(BuildContext context) {
@@ -90,20 +89,6 @@ class _BeatPadSustainState extends State<BeatPadSustain> {
     final int _rxNote = widget.note < 127 && widget.note >= 0
         ? Provider.of<MidiData>(context, listen: true).rxNoteBuffer[widget.note]
         : 0;
-
-    // if octave has been changed and there is still another note playing on rebuild
-    if (lastNote != widget.note && lastNote != null) {
-      NoteOffMessage(
-        channel: channel,
-        note: lastNote!,
-      ).send();
-
-      if (sendCC == true) {
-        CCMessage(channel: channel, controller: lastNote!, value: 0).send();
-      }
-
-      lastNote = widget.note;
-    }
 
     // PAD COLOR:
     final Color _color;
@@ -169,12 +154,16 @@ class _BeatPadSustainState extends State<BeatPadSustain> {
             // WITHIN MIDI RANGE
             Listener(
                 onPointerDown: (_details) {
-                  // print("pointer down $_details");
-                  handlePush(channel, sendCC, velocity, sustainTime);
+                  handlePush(
+                      channel, widget.note, sendCC, velocity, sustainTime);
                 },
                 onPointerUp: (_details) {
-                  // print("pointer up $_details");
-                  handleRelease(channel, sendCC, sustainTime);
+                  if (lastNote != widget.note && lastNote != null) {
+                    handleRelease(channel, lastNote!, sendCC, sustainTime);
+                    lastNote = widget.note;
+                  } else {
+                    handleRelease(channel, widget.note, sendCC, sustainTime);
+                  }
                 },
                 child: InkWell(
                   onTapDown: (_) {},

@@ -23,8 +23,8 @@ class PadsMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<Settings>(builder: (context, settings, child) {
-      final bool variableGrid =
-          settings.layout.variable; // Is the layout fixed or variable?
+      final bool resizableGrid =
+          settings.layout.props.resizable; // Is the layout fixed or variable?
 
       return ListView(
         children: <Widget>[
@@ -81,7 +81,7 @@ class PadsMenu extends StatelessWidget {
                 onChanged: (value) => settings.showNoteNames = value),
           ),
           Divider(),
-          if (variableGrid)
+          if (resizableGrid)
             ListTile(
               title: Text("Grid Width"),
               trailing: DropdownNumbers(
@@ -89,7 +89,7 @@ class PadsMenu extends StatelessWidget {
                 readValue: settings.width,
               ),
             ),
-          if (variableGrid)
+          if (resizableGrid)
             ListTile(
               title: Text("Grid Height"),
               trailing: DropdownNumbers(
@@ -97,25 +97,22 @@ class PadsMenu extends StatelessWidget {
                 readValue: settings.height,
               ),
             ),
-          if (variableGrid) Divider(),
-          if (variableGrid)
+          if (resizableGrid) Divider(),
+          if (resizableGrid)
             ListTile(
               title: Text("Scale Root Note"),
               subtitle: Text("Higlight selected Scale with this Root Note"),
               trailing: DropdownRootNote(
-                  setValue: (v) {
-                    settings.baseNote = v + 36; // TEMP WHILE BASENOTE DISABLED
-                    settings.rootNote = v;
-                  },
+                  setValue: (v) => settings.rootNote = v,
                   readValue: settings.rootNote),
             ),
-          if (variableGrid)
+          if (resizableGrid)
             ListTile(
               title: Text("Scale"),
               trailing: DropdownScales(),
             ),
-          if (variableGrid) Divider(),
-          if (variableGrid)
+          if (resizableGrid) Divider(),
+          if (resizableGrid)
             ListTile(
               title: Text("Base Note"),
               subtitle: Text("The lowest Note in the Grid on the bottom left"),
@@ -125,14 +122,14 @@ class PadsMenu extends StatelessWidget {
                   },
                   readValue: settings.base),
             ),
-          if (variableGrid)
+          if (resizableGrid)
             IntCounter(
               label: "Base Octave",
               readValue: settings.baseOctave,
               setValue: (v) => settings.baseOctave = v,
               resetFunction: settings.resetBaseOctave,
             ),
-          if (variableGrid)
+          if (resizableGrid)
             ListTile(
               title: Text("Show Octave Buttons"),
               subtitle: Text("Adds Base Octave Controls next to Pads"),
@@ -140,7 +137,7 @@ class PadsMenu extends StatelessWidget {
                   value: settings.octaveButtons,
                   onChanged: (value) => settings.octaveButtons = value),
             ),
-          if (variableGrid) Divider(),
+          if (resizableGrid) Divider(),
           ListTile(
             title: Text("Random Velocity"),
             subtitle: Text("Random Velocity Within a given Range"),

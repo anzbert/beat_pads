@@ -19,25 +19,18 @@ class Prefs {
       return MapEntry(key, loadedVal);
     });
 
-    // instance._startUpSettings = Prefs._defaults.map((key, value) {
-    //   var loadedVal = instance._sharedPrefs.get(key) ?? value;
-    //   // var loadedVal = value; // debug: set to default
-    //   return MapEntry(key, loadedVal);
-    // });
-
-    // print(instance._startUpSettings.toString());
     instance.loadSettings = LoadSettings(instance._startUpSettings);
 
     return instance;
   }
 
-  void refreshStore() async {
-    try {
-      _sharedPrefs = await SharedPreferences.getInstance();
-    } catch (e) {
-      throw Exception(e);
-    }
-  }
+  // void refreshStore() async {
+  //   try {
+  //     _sharedPrefs = await SharedPreferences.getInstance();
+  //   } catch (e) {
+  //     throw Exception(e);
+  //   }
+  // }
 
 // DEFAULT VALUES:
   static const Map<String, dynamic> _defaults = {
@@ -57,59 +50,57 @@ class Prefs {
     "octaveButtons": false,
     "lockScreenButton": false,
     "randomVelocity": false,
-    "scale": "chromatic",
+    "scaleString": "chromatic",
   };
-
-  Future<bool> saveSetting(String key, dynamic value) async {
-    if (_defaults[key] is int && value is int) {
-      return _sharedPrefs.setInt(key, value);
-    } else if (_defaults[key] is String && value is String) {
-      return _sharedPrefs.setString(key, value);
-    } else if (_defaults[key] is bool && value is bool) {
-      return _sharedPrefs.setBool(key, value);
-    }
-    return false;
-  }
 }
 
 class LoadSettings {
-  final Layout layout;
-  final String scale;
-  final int rootNote;
-  final int width;
-  final int height;
-  final int baseOctave;
-  final int base;
-  final int velocity;
-  final int velocityMin;
-  final int velocityMax;
-  final int sustainTimeStep;
-  final bool sendCC;
-  final bool showNoteNames;
-  final bool pitchBend;
-  final bool octaveButtons;
-  final bool lockScreenButton;
-  final bool randomVelocity;
+  final Setting<Layout> layout;
+  final Setting<String> scaleString;
+  final Setting<int> rootNote;
+  final Setting<int> width;
+  final Setting<int> height;
+  final Setting<int> baseOctave;
+  final Setting<int> base;
+  final Setting<int> velocity;
+  final Setting<int> velocityMin;
+  final Setting<int> velocityMax;
+  final Setting<int> sustainTimeStep;
+  final Setting<bool> sendCC;
+  final Setting<bool> showNoteNames;
+  final Setting<bool> pitchBend;
+  final Setting<bool> octaveButtons;
+  final Setting<bool> lockScreenButton;
+  final Setting<bool> randomVelocity;
 
   LoadSettings(Map<String, dynamic> loadedMap)
-      : scale = loadedMap['scale'],
-        rootNote = loadedMap['rootNote'],
-        width = loadedMap['width'],
-        height = loadedMap['height'],
-        baseOctave = loadedMap['baseOctave'],
-        base = loadedMap['base'],
-        velocity = loadedMap['velocity'],
-        velocityMin = loadedMap['velocityMin'],
-        velocityMax = loadedMap['velocityMax'],
-        sustainTimeStep = loadedMap['sustainTimeStep'],
-        sendCC = loadedMap['sendCC'],
-        showNoteNames = loadedMap['showNoteNames'],
-        pitchBend = loadedMap['pitchBend'],
-        octaveButtons = loadedMap['octaveButtons'],
-        lockScreenButton = loadedMap['lockScreenButton'],
-        randomVelocity = loadedMap['randomVelocity'],
-        layout =
-            LayoutUtils.fromString(loadedMap['layout']) ?? Layout.values[0];
+      : rootNote = Setting<int>("rootnote", loadedMap['rootNote']),
+        width = Setting<int>('width', loadedMap['width']),
+        height = Setting<int>('height', loadedMap['height']),
+        baseOctave = Setting<int>('baseOctave', loadedMap['baseOctave']),
+        base = Setting<int>('base', loadedMap['base']),
+        velocity = Setting<int>('velocity', loadedMap['velocity']),
+        velocityMin = Setting<int>('velocityMin', loadedMap['velocityMin']),
+        velocityMax = Setting<int>('velocityMax', loadedMap['velocityMax']),
+        sustainTimeStep =
+            Setting<int>('sustainTimeStep', loadedMap['sustainTimeStep']),
+        sendCC = Setting<bool>('sendCC', loadedMap['sendCC']),
+        showNoteNames =
+            Setting<bool>('showNoteNames', loadedMap['showNoteNames']),
+        pitchBend = Setting<bool>('pichBend', loadedMap['pitchBend']),
+        octaveButtons =
+            Setting<bool>('octaveButtons', loadedMap['octaveButtons']),
+        lockScreenButton =
+            Setting<bool>('lockScreenButton', loadedMap['lockScreenButton']),
+        randomVelocity =
+            Setting<bool>('randomVelocity', loadedMap['randomVelocity']),
+        scaleString = Setting<String>(
+            'scaleString',
+            midiScales.containsKey(loadedMap['scaleString'])
+                ? loadedMap['scaleString']
+                : midiScales.keys.toList()[0]),
+        layout = Setting<Layout>('layout',
+            LayoutUtils.fromString(loadedMap['layout']) ?? Layout.values[0]);
 
   factory LoadSettings.defaults() {
     return LoadSettings(Prefs._defaults);
@@ -117,33 +108,25 @@ class LoadSettings {
 }
 
 class Setting<T> {
-  Setting(
-    this.sharedPrefs,
-    this.key,
-  );
-  SharedPreferences sharedPrefs;
-  final String key;
+  Setting(this.sharedPrefsKey, this.value);
 
-  Future<bool> save(T value) async {
-    if (value is int) {
-      return sharedPrefs.setInt(key, value);
-    } else if (value is String) {
-      return sharedPrefs.setString(key, value);
-    } else if (value is bool) {
-      return sharedPrefs.setBool(key, value);
-    } else if (value is Layout) {
-      return sharedPrefs.setString(key, value.name);
+  final String sharedPrefsKey;
+  T value;
+
+  Future<bool> save() async {
+    SharedPreferences _sharedPrefs = await SharedPreferences.getInstance();
+
+    if (T is Layout) {
+      Layout cast = value as Layout;
+      return _sharedPrefs.setString("layout", cast.name);
+    } else if (T is int) {
+      return _sharedPrefs.setInt(sharedPrefsKey, value as int);
+    } else if (T is String) {
+      return _sharedPrefs.setString(sharedPrefsKey, value as String);
+    } else if (T is bool) {
+      return _sharedPrefs.setBool(sharedPrefsKey, value as bool);
     }
 
     return false;
-  }
-
-  T? load() {
-    if (T is int || T is String || T is bool) {
-      return sharedPrefs.get(key) as T;
-    } else if (T is Layout) {
-      return LayoutUtils.fromString(key) as T ?? Layout.values[0] as T;
-    }
-    return null;
   }
 }

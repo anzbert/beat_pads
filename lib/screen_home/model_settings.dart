@@ -19,238 +19,237 @@ class Settings extends ChangeNotifier {
         _octaveButtons = prefs.loadSettings.octaveButtons,
         _lockScreenButton = prefs.loadSettings.lockScreenButton,
         _randomVelocity = prefs.loadSettings.randomVelocity,
-        _scale = prefs.loadSettings.scale,
-        _padDimensions = [
-          prefs.loadSettings.width,
-          prefs.loadSettings.height,
-        ];
+        _scaleString = prefs.loadSettings.scaleString,
+        _width = prefs.loadSettings.width,
+        _height = prefs.loadSettings.height;
 
   Prefs prefs;
 
-// TODO: check all reset and set functions!
-// TODO: reset all / save all function
+  final Setting<Layout> _layout;
+  final Setting<int> _rootNote;
+  final Setting<int> _height;
+  final Setting<int> _width;
+  final Setting<int> _base;
+  final Setting<int> _baseOctave;
+  final Setting<String> _scaleString;
+  final Setting<bool> _pitchBend;
+  final Setting<bool> _showNoteNames;
+  final Setting<int> _sustainTimeStep;
+  final Setting<bool> _sendCC;
+  final Setting<bool> _lockScreenButton;
+  final Setting<bool> _randomVelocity;
+  final Setting<bool> _octaveButtons;
+  final Setting<int> _velocity;
+  final Setting<int> _velocityMin;
+  final Setting<int> _velocityMax;
 
-// layout:
-  Layout _layout;
-  Layout get layout => _layout;
+// TODO : RESET ALL BUTTON
+
+  // layout:
+  Layout get layout => _layout.value;
 
   set layout(Layout newLayout) {
-    if (newLayout.variable == false) {
-      _padDimensions.setAll(0, [4, 4]);
-      _showNoteNames = false;
-      _scale = "chromatic";
+    if (newLayout.props.resizable == false) {
+      _width.value = newLayout.props.defaultDimensions.x;
+      _width.save();
+      _height.value = newLayout.props.defaultDimensions.y;
+      _height.save();
+      _rootNote.value = 0;
+      _rootNote.save();
+      _scaleString.value = LoadSettings.defaults().scaleString.value;
+      _scaleString.save();
     }
 
-    _layout = newLayout;
-    prefs.saveSetting("layout", newLayout.name);
+    _layout.value = newLayout;
+    _layout.save();
+
     notifyListeners();
   }
 
-// pads:
-  List<List<int>> get rowsLists {
-    return PadUtils.reversedRowLists(
-      rootNote,
-      baseNote,
-      width,
-      height,
-      scaleList,
-      layout,
-    );
+  // pads:
+  List<List<int>> get rows {
+    return _layout.value.getGrid(this).rows;
   }
 
-  // lowest note:
-  int _rootNote;
-
+  // root note:
   set rootNote(int note) {
     if (note < 0 || note > 11) return;
-    _rootNote = note;
+    _rootNote.value = note;
+    _rootNote.save();
+    _base.value = note; // TODO: is this always a good idea?
+    _base.save();
     notifyListeners();
   }
 
-  int get rootNote => _rootNote;
-  resetRootNote() => rootNote = 0;
+  int get rootNote => _rootNote.value;
+  resetRootNote() => rootNote = LoadSettings.defaults().rootNote.value;
 
   // base note:
-  int _base;
-  int get base => _base;
+  int get base => _base.value;
 
   set base(int note) {
     if (note < 0 || note > 11) return;
-    _base = note;
+    _base.value = note;
+    _base.save();
     notifyListeners();
   }
 
-  int _baseOctave;
-  int get baseOctave => _baseOctave;
+  int get baseOctave => _baseOctave.value;
 
   set baseOctave(int octave) {
     if (octave < -2 || octave > 7) return;
-    _baseOctave = octave;
+    _baseOctave.value = octave;
+    _baseOctave.save();
     notifyListeners();
   }
 
-  int get baseNote => (_baseOctave + 2) * 12 + _base;
+  resetBaseOctave() => baseOctave = LoadSettings.defaults().baseOctave.value;
+
+  int get baseNote => (_baseOctave.value + 2) * 12 + _base.value;
   set baseNote(int note) {
-    _base = note % 12;
-    _baseOctave = (note ~/ 12) - 2;
-    notifyListeners();
-  }
-
-  resetBaseOctave() {
-    _baseOctave = LoadSettings.defaults().baseOctave;
-    prefs.saveSetting("baseOctave", _baseOctave);
+    _base.value = note % 12;
+    _baseOctave.value = (note ~/ 12) - 2;
+    _base.save();
+    _baseOctave.save();
     notifyListeners();
   }
 
   // pad dimensions
-  final List<int> _padDimensions; // [ W, H ]
+  int get width => _width.value;
+  int get height => _height.value;
 
-  int get width => _padDimensions[0];
-  int get height => _padDimensions[1];
-
-  set padDimensions(List<int> newDims) {
-    if (newDims.length != 2) return;
-    if (baseNote + newDims[0] * newDims[1] > 127) {
-      int maxValue = 128 - newDims[0] * newDims[1];
-      baseNote = maxValue;
-    }
-    _padDimensions[0] = newDims[0];
-    _padDimensions[1] = newDims[1];
+  set width(int newValue) {
+    _width.value = newValue;
+    _width.save();
     notifyListeners();
   }
 
-  set width(int newValue) => padDimensions = [newValue, height];
-  set height(int newValue) => padDimensions = [width, newValue];
-
-// scale:
-  String _scale;
-  String get scale => _scale;
-  List<int> get scaleList => midiScales[_scale]!;
-
-  set scale(String newValue) {
-    String validatedScale = newValue;
-    if (!midiScales.containsKey(newValue)) {
-      validatedScale = midiScales.keys.toList()[0]; // set to default
-    }
-    _scale = validatedScale;
-
+  set height(int newValue) {
+    _height.value = newValue;
+    _height.save();
     notifyListeners();
   }
 
-// pitchbend:
-  bool _pitchBend;
-  bool get pitchBend => _pitchBend;
+  // scale:
+  String get scaleString => _scaleString.value;
+  List<int> get scaleList => midiScales[_scaleString]!;
+
+  set scaleString(String newValue) {
+    _scaleString.value = newValue;
+    _scaleString.save();
+    notifyListeners();
+  }
+
+  // pitchbend:
+  bool get pitchBend => _pitchBend.value;
 
   set pitchBend(bool newValue) {
-    _pitchBend = newValue;
+    _pitchBend.value = newValue;
+    _pitchBend.save();
     notifyListeners();
   }
 
-// octave buttons:
-  bool _octaveButtons;
-  bool get octaveButtons => _octaveButtons;
+  // octave buttons:
+  bool get octaveButtons => _octaveButtons.value;
 
   set octaveButtons(bool newValue) {
-    _octaveButtons = newValue;
+    _octaveButtons.value = newValue;
+    _octaveButtons.save();
     notifyListeners();
   }
 
-// lock screen button:
-  bool _lockScreenButton;
-  bool get lockScreenButton => _lockScreenButton;
+  // lock screen button:
+  bool get lockScreenButton => _lockScreenButton.value;
 
   set lockScreenButton(bool newValue) {
-    _lockScreenButton = newValue;
+    _lockScreenButton.value = newValue;
+    _lockScreenButton.save();
     notifyListeners();
   }
 
-// velocity:
-  bool _randomVelocity;
-  int _velocity;
-  int _velocityMin;
-  int _velocityMax;
-
-  bool get randomVelocity => _randomVelocity;
-  set randomizeVelocity(bool setTo) {
-    _randomVelocity = setTo;
+  // velocity:
+  bool get randomVelocity => _randomVelocity.value;
+  set randomizeVelocity(bool newValue) {
+    _randomVelocity.value = newValue;
+    _randomVelocity.save();
     notifyListeners();
   }
 
-  int get velocityMin => _velocityMin;
-  int get velocityMax => _velocityMax;
+  int get velocityMin => _velocityMin.value;
+  int get velocityMax => _velocityMax.value;
 
   final _random = Random();
   int get velocity {
-    if (!randomVelocity) return _velocity;
+    if (!randomVelocity) return _velocity.value;
     int randVelocity =
-        _random.nextInt(_velocityMax - _velocityMin) + _velocityMin;
+        _random.nextInt(_velocityMax.value - _velocityMin.value) +
+            _velocityMin.value;
     return randVelocity > 127 ? 127 : randVelocity;
   }
 
   set velocityMin(int min) {
-    if (min < 0 || min > _velocityMax) return;
-    _velocityMin = min;
+    if (min < 0 || min > _velocityMax.value) return;
+    _velocityMin.value = min;
+    _velocityMin.save();
     notifyListeners();
   }
 
   set velocityMax(int max) {
-    if (max < _velocityMin || max > 127) return;
-    _velocityMax = max;
+    if (max < _velocityMin.value || max > 127) return;
+    _velocityMax.value = max;
+    _velocityMax.save();
     notifyListeners();
   }
 
   set velocity(int vel) {
     if (vel < 0 || vel > 127) return;
-    _velocity = vel;
+    _velocity.value = vel;
+    _velocity.save();
     notifyListeners();
   }
 
   resetVelocity() {
     if (!randomVelocity) {
-      _velocity = 110;
+      velocity = LoadSettings.defaults().velocity.value;
     } else {
-      _velocityMax = 120;
-      _velocityMin = 110;
+      velocityMax = LoadSettings.defaults().velocityMin.value;
+      velocityMin = LoadSettings.defaults().velocityMax.value;
     }
-    notifyListeners();
   }
 
-// notenames:
-  bool _showNoteNames;
-  bool get showNoteNames => _showNoteNames;
+  // notenames:
+  bool get showNoteNames => _showNoteNames.value;
 
-  set showNoteNames(bool setting) {
-    _showNoteNames = setting;
+  set showNoteNames(bool newValue) {
+    _showNoteNames.value = newValue;
+    _showNoteNames.save();
     notifyListeners();
   }
 
   // send CC:
-  bool _sendCC;
-  bool get sendCC => _sendCC;
+  bool get sendCC => _sendCC.value;
 
-  set sendCC(bool setting) {
-    _sendCC = setting;
+  set sendCC(bool newValue) {
+    _sendCC.value = newValue;
+    _sendCC.save();
     notifyListeners();
   }
 
   // sustain:
-  int _sustainTimeStep = 2;
-  int get minSustainTimeStep => _minSustainTimeStep;
-  int get sustainTimeStep => _sustainTimeStep;
+  int get sustainTimeStep => _sustainTimeStep.value;
 
   set sustainTimeStep(int timeInMs) {
-    _sustainTimeStep = timeInMs.clamp(0, 5000);
+    _sustainTimeStep.value = timeInMs.clamp(0, 5000);
+    _sustainTimeStep.save();
     notifyListeners();
   }
 
-  final int _minSustainTimeStep = 2;
+  int get minSustainTimeStep => 2;
   int get sustainTimeExp {
-    if (_sustainTimeStep <= _minSustainTimeStep) return 0;
-    return pow(2, _sustainTimeStep).toInt();
+    if (_sustainTimeStep.value <= minSustainTimeStep) return 0;
+    return pow(2, _sustainTimeStep.value).toInt();
   }
 
-  resetSustainTimeStep() {
-    _sustainTimeStep = _minSustainTimeStep;
-    notifyListeners();
-  }
+  resetSustainTimeStep() =>
+      sustainTimeStep = LoadSettings.defaults().sustainTimeStep.value;
 }
