@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:beat_pads/screen_home/_screen_home.dart';
 
 import 'package:beat_pads/screen_beat_pads/button_lock_screen.dart';
-import 'package:beat_pads/screen_beat_pads/buttons_octave.dart';
+import 'package:beat_pads/screen_beat_pads/buttons_control.dart';
 import 'package:beat_pads/screen_beat_pads/pads.dart';
 import 'package:beat_pads/screen_beat_pads/slider_pitch_bend.dart';
 
@@ -25,7 +25,8 @@ class BeatPadsScreen extends StatelessWidget {
             child: Row(
               children: [
                 // OCTAVE BUTTONS
-                if (settings.octaveButtons) OctaveButtons(),
+                if (settings.octaveButtons || settings.sustainButton)
+                  ControlButtons(),
 
                 // PITCH BEND
                 if (settings.pitchBend) PitchBender(),

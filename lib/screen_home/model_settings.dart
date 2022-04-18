@@ -133,6 +133,15 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
+  // sustain button:
+  bool get sustainButton => prefs.settings.sustainButton.value;
+
+  set sustainButton(bool newValue) {
+    prefs.settings.sustainButton.value = newValue;
+    prefs.settings.sustainButton.save();
+    notifyListeners();
+  }
+
   // lock screen button:
   bool get lockScreenButton => prefs.settings.lockScreenButton.value;
 

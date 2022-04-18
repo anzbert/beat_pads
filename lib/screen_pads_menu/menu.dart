@@ -162,6 +162,21 @@ class PadsMenu extends StatelessWidget {
               resetFunction: settings.resetVelocity,
             ),
           Divider(),
+          ListTile(
+            title: Text("Sustain Button"),
+            subtitle: Text("Adds Sustain-Pedal Button next to Pads"),
+            trailing: Switch(
+                value: settings.sustainButton,
+                onChanged: (value) =>
+                    settings.sustainButton = !settings.sustainButton),
+          ),
+          ListTile(
+            title: Text("Pitch Bender"),
+            subtitle: Text("Adds Pitch Bend Slider next to Pads"),
+            trailing: Switch(
+                value: settings.pitchBend,
+                onChanged: (value) => settings.pitchBend = !settings.pitchBend),
+          ),
           NonLinearSlider(
             label: "Sustain",
             subtitle: "Delay before sending NoteOff Message in Milliseconds",
@@ -171,13 +186,6 @@ class PadsMenu extends StatelessWidget {
             actualValue: settings.sustainTimeExp.toString(),
             start: settings.minSustainTimeStep,
             steps: 11,
-          ),
-          ListTile(
-            title: Text("Pitch Bend"),
-            subtitle: Text("Adds Pitch Bend Slider next to Pads"),
-            trailing: Switch(
-                value: settings.pitchBend,
-                onChanged: (value) => settings.pitchBend = !settings.pitchBend),
           ),
           ListTile(
             title: Text("Send Control Change"),

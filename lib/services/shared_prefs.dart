@@ -58,6 +58,7 @@ class Prefs {
     "showNoteNames": true,
     "pitchBend": false,
     "octaveButtons": false,
+    "sustainButton": false,
     "lockScreenButton": false,
     "randomVelocity": false,
     "scaleString": "chromatic",
@@ -82,31 +83,34 @@ class LoadSettings {
   final Setting<bool> showNoteNames;
   final Setting<bool> pitchBend;
   final Setting<bool> octaveButtons;
+  final Setting<bool> sustainButton;
   final Setting<bool> lockScreenButton;
   final Setting<bool> randomVelocity;
 
   LoadSettings(Map<String, dynamic> loadedMap)
-      : rootNote = Setting<int>("rootnote", loadedMap['rootNote']),
-        channel = Setting<int>('channel', loadedMap['channel']),
-        width = Setting<int>('width', loadedMap['width']),
-        height = Setting<int>('height', loadedMap['height']),
-        baseOctave = Setting<int>('baseOctave', loadedMap['baseOctave']),
-        base = Setting<int>('base', loadedMap['base']),
-        velocity = Setting<int>('velocity', loadedMap['velocity']),
-        velocityMin = Setting<int>('velocityMin', loadedMap['velocityMin']),
-        velocityMax = Setting<int>('velocityMax', loadedMap['velocityMax']),
+      : rootNote = Setting<int>("rootnote", loadedMap['rootNote']!),
+        channel = Setting<int>('channel', loadedMap['channel']!),
+        width = Setting<int>('width', loadedMap['width']!),
+        height = Setting<int>('height', loadedMap['height']!),
+        baseOctave = Setting<int>('baseOctave', loadedMap['baseOctave']!),
+        base = Setting<int>('base', loadedMap['base']!),
+        velocity = Setting<int>('velocity', loadedMap['velocity']!),
+        velocityMin = Setting<int>('velocityMin', loadedMap['velocityMin']!),
+        velocityMax = Setting<int>('velocityMax', loadedMap['velocityMax']!),
         sustainTimeStep =
-            Setting<int>('sustainTimeStep', loadedMap['sustainTimeStep']),
-        sendCC = Setting<bool>('sendCC', loadedMap['sendCC']),
+            Setting<int>('sustainTimeStep', loadedMap['sustainTimeStep']!),
+        sendCC = Setting<bool>('sendCC', loadedMap['sendCC']!),
         showNoteNames =
-            Setting<bool>('showNoteNames', loadedMap['showNoteNames']),
-        pitchBend = Setting<bool>('pichBend', loadedMap['pitchBend']),
+            Setting<bool>('showNoteNames', loadedMap['showNoteNames']!),
+        pitchBend = Setting<bool>('pichBend', loadedMap['pitchBend']!),
         octaveButtons =
-            Setting<bool>('octaveButtons', loadedMap['octaveButtons']),
+            Setting<bool>('octaveButtons', loadedMap['octaveButtons']!!),
+        sustainButton =
+            Setting<bool>('sustainButton', loadedMap['sustainButton']!),
         lockScreenButton =
-            Setting<bool>('lockScreenButton', loadedMap['lockScreenButton']),
+            Setting<bool>('lockScreenButton', loadedMap['lockScreenButton']!),
         randomVelocity =
-            Setting<bool>('randomVelocity', loadedMap['randomVelocity']),
+            Setting<bool>('randomVelocity', loadedMap['randomVelocity']!),
         scaleString = Setting<String>(
             'scaleString',
             midiScales.containsKey(loadedMap['scaleString'])
