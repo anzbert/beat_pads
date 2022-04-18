@@ -1,3 +1,5 @@
+import 'package:beat_pads/screen_beat_pads/_screen_beat_pads.dart';
+import 'package:beat_pads/screen_pads_menu/box_credits.dart';
 import 'package:beat_pads/screen_pads_menu/slider_int.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -21,12 +23,53 @@ class PadsMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<Settings>(builder: (context, settings, child) {
-      final bool variableGrid =
-          settings.layout.variable; // Is the layout fixed or variable?
+      Provider.of<MidiData>(context, listen: false).channel =
+          settings.channel - 1; // update MidiData Provider with latest settings
+      final bool resizableGrid =
+          settings.layout.props.resizable; // Is the layout fixed or resizable?
 
       return ListView(
         children: <Widget>[
-          RotateLabel(),
+          Card(
+            margin: EdgeInsets.all(12),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  RotateLabel(),
+                  IgnorePointer(
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        AspectRatio(
+                          aspectRatio: 16 / 9,
+                          child: Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(6.0),
+                              child: BeatPadsScreen(),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 50),
+                          width: double.infinity,
+                          child: FittedBox(
+                            child: Text(
+                              "Preview",
+                              style: TextStyle(
+                                color: Palette.lightGrey.color.withAlpha(175),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
           ListTile(
             title: Text("Layout"),
             subtitle: Text("Row Intervals and other Layouts"),
@@ -40,7 +83,7 @@ class PadsMenu extends StatelessWidget {
                 onChanged: (value) => settings.showNoteNames = value),
           ),
           Divider(),
-          if (variableGrid)
+          if (resizableGrid)
             ListTile(
               title: Text("Grid Width"),
               trailing: DropdownNumbers(
@@ -48,7 +91,7 @@ class PadsMenu extends StatelessWidget {
                 readValue: settings.width,
               ),
             ),
-          if (variableGrid)
+          if (resizableGrid)
             ListTile(
               title: Text("Grid Height"),
               trailing: DropdownNumbers(
@@ -56,25 +99,22 @@ class PadsMenu extends StatelessWidget {
                 readValue: settings.height,
               ),
             ),
-          if (variableGrid) Divider(),
-          if (variableGrid)
+          if (resizableGrid) Divider(),
+          if (resizableGrid)
             ListTile(
               title: Text("Scale Root Note"),
               subtitle: Text("Higlight selected Scale with this Root Note"),
               trailing: DropdownRootNote(
-                  setValue: (v) {
-                    settings.baseNote = v + 36; // TEMP WHILE BASENOTE DISABLED
-                    settings.rootNote = v;
-                  },
+                  setValue: (v) => settings.rootNote = v,
                   readValue: settings.rootNote),
             ),
-          if (variableGrid)
+          if (resizableGrid)
             ListTile(
               title: Text("Scale"),
               trailing: DropdownScales(),
             ),
-          if (variableGrid) Divider(),
-          if (variableGrid)
+          if (resizableGrid) Divider(),
+          if (resizableGrid)
             ListTile(
               title: Text("Base Note"),
               subtitle: Text("The lowest Note in the Grid on the bottom left"),
@@ -84,14 +124,14 @@ class PadsMenu extends StatelessWidget {
                   },
                   readValue: settings.base),
             ),
-          if (variableGrid)
+          if (resizableGrid)
             IntCounter(
               label: "Base Octave",
               readValue: settings.baseOctave,
               setValue: (v) => settings.baseOctave = v,
               resetFunction: settings.resetBaseOctave,
             ),
-          if (variableGrid)
+          if (resizableGrid)
             ListTile(
               title: Text("Show Octave Buttons"),
               subtitle: Text("Adds Base Octave Controls next to Pads"),
@@ -99,7 +139,7 @@ class PadsMenu extends StatelessWidget {
                   value: settings.octaveButtons,
                   onChanged: (value) => settings.octaveButtons = value),
             ),
-          if (variableGrid) Divider(),
+          if (resizableGrid) Divider(),
           ListTile(
             title: Text("Random Velocity"),
             subtitle: Text("Random Velocity Within a given Range"),
@@ -153,10 +193,10 @@ class PadsMenu extends StatelessWidget {
               max: 16,
               label: "Midi Channel",
               setValue: (v) {
+                settings.channel = v - 1;
                 Provider.of<MidiData>(context, listen: false).channel = v - 1;
               },
-              readValue:
-                  Provider.of<MidiData>(context, listen: true).channel + 1),
+              readValue: settings.channel + 1),
           Divider(),
           ListTile(
             title: Text("Lock Screen Button"),
@@ -173,16 +213,7 @@ class PadsMenu extends StatelessWidget {
             onPressed:
                 Provider.of<MidiData>(context, listen: false).rxNotesReset,
           ),
-          InfoBox(
-            [
-              "Made by A. Mueller\n      [anzgraph.com]",
-              "Dog Icon by 'catalyststuff'\n      [freepik.com]",
-              "Logo Animated with Rive\n      [rive.app]",
-              "Magic Tone Network / XpressPads by A. Samek\n      [xpresspads.com]",
-              "Please send improvement suggestions to anzbert@gmail.com !"
-            ],
-            header: "Beat Pads - 0.4.0",
-          )
+          CreditsBox(),
         ],
       );
     });

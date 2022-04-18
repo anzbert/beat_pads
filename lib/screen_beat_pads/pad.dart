@@ -21,20 +21,29 @@ class BeatPadSustain extends StatefulWidget {
 class _BeatPadSustainState extends State<BeatPadSustain> {
   int _triggerTime = DateTime.now().millisecondsSinceEpoch;
   bool _checkingSustain = false;
+  bool _pressed = false;
 
-  handlePush(int channel, bool sendCC, int velocity, int sustainTime) {
+  int? lastNote;
+
+  handlePush(
+      int channel, int note, bool sendCC, int velocity, int sustainTime) {
     if (sustainTime != 0) {
       _triggerTime = DateTime.now().millisecondsSinceEpoch;
     }
 
-    NoteOnMessage(channel: channel, note: widget.note, velocity: velocity)
-        .send();
+    setState(() {
+      _pressed = true;
+    });
+
+    NoteOnMessage(channel: channel, note: note, velocity: velocity).send();
+    lastNote = widget.note;
+
     if (sendCC) {
-      CCMessage(channel: channel, controller: widget.note, value: 127).send();
+      CCMessage(channel: channel, controller: note, value: 127).send();
     }
   }
 
-  handleRelease(int channel, bool sendCC, int sustainTime) async {
+  handleRelease(int channel, int note, bool? sendCC, int sustainTime) async {
     if (sustainTime != 0) {
       if (_checkingSustain) return;
 
@@ -42,14 +51,17 @@ class _BeatPadSustainState extends State<BeatPadSustain> {
       while (await _checkSustainTime(sustainTime, _triggerTime) == false) {}
       _checkingSustain = false;
     }
+    setState(() {
+      _pressed = false;
+    });
 
     NoteOffMessage(
       channel: channel,
-      note: widget.note,
+      note: note,
     ).send();
 
-    if (sendCC) {
-      CCMessage(channel: channel, controller: widget.note, value: 0).send();
+    if (sendCC == true) {
+      CCMessage(channel: channel, controller: note, value: 0).send();
     }
   }
 
@@ -74,15 +86,20 @@ class _BeatPadSustainState extends State<BeatPadSustain> {
 
     // variables from midi receiver:
     final int channel = Provider.of<MidiData>(context, listen: true).channel;
-    final int _rxNote = widget.note < 127
+    final int _rxNote = widget.note < 127 && widget.note >= 0
         ? Provider.of<MidiData>(context, listen: true).rxNoteBuffer[widget.note]
         : 0;
 
     // PAD COLOR:
     final Color _color;
+    Color _splashColor = Palette.lightPink.color;
 
-    if (_rxNote > 0) {
-      _color = Palette.cadetBlue.color; // receiving midi signal
+    if (_pressed == true) {
+      _color = _splashColor.withAlpha(220); // maintain color when pushed
+
+    } else if (_rxNote > 0) {
+      _color = Palette.cadetBlue.color.withAlpha(
+          _rxNote * 2); // receiving midi signal adjusted by received velocity
 
     } else if (widget.note > 127 || widget.note < 0) {
       _color = Palette.darkGrey.color; // out of midi range
@@ -97,50 +114,73 @@ class _BeatPadSustainState extends State<BeatPadSustain> {
       _color = Palette.yellowGreen.color; // default pad color
     }
 
-    Color _splashColor = Palette.lightPink.color;
-
     Color _padTextColor = Palette.darkGrey.color;
 
-    BorderRadius _padRadius = BorderRadius.all(Radius.circular(5.0));
     EdgeInsets _padPadding = const EdgeInsets.all(2.5);
 
+    Size size = MediaQuery.of(context).size;
+    double _fontSize = size.width * 0.022;
+    BorderRadius _padRadius =
+        BorderRadius.all(Radius.circular(size.width * 0.008));
+
     return Container(
-      padding: const EdgeInsets.all(5.0),
+      padding: EdgeInsets.all(size.width * 0.005),
       height: double.infinity,
       width: double.infinity,
       child: Material(
         color: _color,
-        borderRadius: BorderRadius.all(Radius.circular(5.0)),
-        elevation: 5.0,
+        borderRadius: _padRadius,
+        elevation: 5,
         shadowColor: Colors.black,
         child: widget.note > 127 || widget.note < 0
             ?
             // OUT OF MIDI RANGE
             InkWell(
+                onTapDown: (_) {},
                 borderRadius: _padRadius,
                 child: Padding(
                   padding: _padPadding,
-                  child: Text("#${widget.note}",
-                      style: TextStyle(color: Colors.grey)),
+                  child: Text(
+                    "#${widget.note}",
+                    style: TextStyle(
+                      fontStyle: FontStyle.italic,
+                      color: Colors.grey,
+                      fontSize: _fontSize * 0.8,
+                    ),
+                  ),
                 ),
               )
             :
             // WITHIN MIDI RANGE
-            InkWell(
-                borderRadius: _padRadius,
-                splashColor: _splashColor,
-                onTapDown: (_) =>
-                    handlePush(channel, sendCC, velocity, sustainTime),
-                onTapUp: (_) => handleRelease(channel, sendCC, sustainTime),
-                onTapCancel: () => handleRelease(channel, sendCC, sustainTime),
-                child: Padding(
-                  padding: _padPadding,
-                  child: Text(
-                      showNoteNames
-                          ? MidiUtils.getNoteName(widget.note,
-                              showNoteValue: false)
-                          : widget.note.toString(),
-                      style: TextStyle(color: _padTextColor)),
+            Listener(
+                onPointerDown: (_details) {
+                  handlePush(
+                      channel, widget.note, sendCC, velocity, sustainTime);
+                },
+                onPointerUp: (_details) {
+                  if (lastNote != widget.note && lastNote != null) {
+                    handleRelease(channel, lastNote!, sendCC, sustainTime);
+                    lastNote = widget.note;
+                  } else {
+                    handleRelease(channel, widget.note, sendCC, sustainTime);
+                  }
+                },
+                child: InkWell(
+                  onTapDown: (_) {},
+                  borderRadius: _padRadius,
+                  splashColor: _splashColor,
+                  child: Padding(
+                    padding: _padPadding,
+                    child: Text(
+                        showNoteNames
+                            ? MidiUtils.getNoteName(widget.note,
+                                showNoteValue: false)
+                            : widget.note.toString(),
+                        style: TextStyle(
+                          color: _padTextColor,
+                          fontSize: _fontSize,
+                        )),
+                  ),
                 ),
               ),
       ),

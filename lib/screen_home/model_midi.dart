@@ -12,16 +12,7 @@ class MidiData extends ChangeNotifier {
     notifyListeners();
   }
 
-  int _channel = 0;
-  int get channel => _channel;
-
-  set channel(int channel) {
-    if (channel < 0 || channel > 15) return;
-    _channel = channel;
-    notifyListeners();
-  }
-
-  resetChannel() => channel = 0;
+  int channel = 0;
 
   StreamSubscription<MidiPacket>? _rxSubscription;
   final MidiCommand _midiCommand = MidiCommand();
@@ -29,18 +20,18 @@ class MidiData extends ChangeNotifier {
 // constructor:
   MidiData() {
     _rxSubscription = _midiCommand.onMidiDataReceived?.listen((packet) {
-      int header = packet.data[0];
+      int statusByte = packet.data[0];
 
       // print(
       //     "${packet.data} @ ${packet.timestamp} from ${packet.device.name} / ID:${packet.device.id}");
 
       // If the message is NOT a command (0xFn), and NOT using the correct channel -> return:
-      if (header & 0xF0 != 0xF0 && header & 0x0F != _channel) return;
+      if (statusByte & 0xF0 != 0xF0 && statusByte & 0x0F != channel) return;
 
-      MidiMessageType type = MidiUtils.getMidiMessageType(header);
+      MidiMessageType type = MidiUtils.getMidiMessageType(statusByte);
 
+      // Data only handling noteON(9) and noteOFF(8) at the moment:
       if (type == MidiMessageType.noteOn || type == MidiMessageType.noteOff) {
-        // Data only handling noteON(9) and noteOFF(8) at the moment:
         int note = packet.data[1];
         int velocity = packet.data[2];
 

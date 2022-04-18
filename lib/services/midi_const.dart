@@ -113,22 +113,3 @@ const Map<String, List<int>> midiScales = {
   'bebop minor': [0, 2, 3, 5, 7, 8, 9, 10],
   'bebop tonic minor': [0, 2, 3, 5, 7, 8, 9, 11]
 };
-
-const List<int> xPressPadsStandard = [
-  36,
-  42,
-  42,
-  36,
-  38,
-  46,
-  46,
-  38,
-  43,
-  50,
-  50,
-  43,
-  49,
-  51,
-  51,
-  49
-];

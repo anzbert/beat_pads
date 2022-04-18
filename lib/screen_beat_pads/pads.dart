@@ -1,4 +1,4 @@
-import 'package:beat_pads/screen_beat_pads/pad_with_sustain.dart';
+import 'package:beat_pads/screen_beat_pads/pad.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -9,11 +9,12 @@ class VariablePads extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<List<int>> rowsList =
-        Provider.of<Settings>(context, listen: true).rowsLists;
+        Provider.of<Settings>(context, listen: true).rows;
 
     return Center(
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 30.0),
+        padding: EdgeInsets.symmetric(
+            horizontal: MediaQuery.of(context).size.width * 0.04),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,

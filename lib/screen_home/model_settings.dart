@@ -4,226 +4,239 @@ import 'dart:math';
 import 'package:beat_pads/services/_services.dart';
 
 class Settings extends ChangeNotifier {
-// layout:
-  Layout _layout = Layout.continuous;
-  Layout get layout => _layout;
+  Settings(this.prefs);
+  Prefs prefs;
+
+  resetAll() async {
+    await prefs.resetStoredValues();
+    prefs = await Prefs.initAsync();
+    notifyListeners();
+  }
+
+  // layout:
+  Layout get layout => prefs.settings.layout.value;
 
   set layout(Layout newLayout) {
-    if (newLayout.variable == false) {
-      _padDimensions.setAll(0, [4, 4]);
-      _showNoteNames = false;
-      _scale = "chromatic";
+    if (newLayout.props.resizable == false) {
+      prefs.settings.rootNote.value = 0;
+      prefs.settings.rootNote.save();
+      prefs.settings.scaleString.value =
+          LoadSettings.defaults().scaleString.value;
+      prefs.settings.scaleString.save();
     }
 
-    _layout = newLayout;
+    if (prefs.settings.width.value != newLayout.props.defaultDimensions.x) {
+      prefs.settings.width.value = newLayout.props.defaultDimensions.x;
+      prefs.settings.width.save();
+    }
+    if (prefs.settings.height.value != newLayout.props.defaultDimensions.y) {
+      prefs.settings.height.value = newLayout.props.defaultDimensions.y;
+      prefs.settings.height.save();
+    }
+
+    prefs.settings.layout.value = newLayout;
+    prefs.settings.layout.save();
+
     notifyListeners();
   }
 
-// pads:
-  List<List<int>> get rowsLists {
-    return PadUtils.reversedRowLists(
-      rootNote,
-      baseNote,
-      width,
-      height,
-      scaleList,
-      layout,
-    );
+  // pads:
+  List<List<int>> get rows {
+    return prefs.settings.layout.value.getGrid(this).rows;
   }
 
-  // lowest note:
-  int _rootNote = 0;
-
+  // root note:
   set rootNote(int note) {
     if (note < 0 || note > 11) return;
-    _rootNote = note;
+    prefs.settings.rootNote.value = note;
+    prefs.settings.rootNote.save();
+    prefs.settings.base.value = note; // TODO: is this always a good idea?
+    prefs.settings.base.save();
     notifyListeners();
   }
 
-  int get rootNote => _rootNote;
-  resetRootNote() => rootNote = 0;
+  int get rootNote => prefs.settings.rootNote.value;
+  resetRootNote() => rootNote = LoadSettings.defaults().rootNote.value;
 
   // base note:
-  int _base = 0;
-  int get base => _base;
+  int get base => prefs.settings.base.value;
 
   set base(int note) {
     if (note < 0 || note > 11) return;
-    _base = note;
+    prefs.settings.base.value = note;
+    prefs.settings.base.save();
     notifyListeners();
   }
 
-  int _baseOctave = 1;
-  int get baseOctave => _baseOctave;
+  int get baseOctave => prefs.settings.baseOctave.value;
 
   set baseOctave(int octave) {
     if (octave < -2 || octave > 7) return;
-    _baseOctave = octave;
+    prefs.settings.baseOctave.value = octave;
+    prefs.settings.baseOctave.save();
     notifyListeners();
   }
 
-  int get baseNote => (_baseOctave + 2) * 12 + _base;
+  resetBaseOctave() => baseOctave = LoadSettings.defaults().baseOctave.value;
+
+  int get baseNote =>
+      (prefs.settings.baseOctave.value + 2) * 12 + prefs.settings.base.value;
   set baseNote(int note) {
-    _base = note % 12;
-    _baseOctave = (note ~/ 12) - 2;
-    notifyListeners();
-  }
-
-  resetBaseOctave() {
-    _baseOctave = 1;
+    prefs.settings.base.value = note % 12;
+    prefs.settings.baseOctave.value = (note ~/ 12) - 2;
+    prefs.settings.base.save();
+    prefs.settings.baseOctave.save();
     notifyListeners();
   }
 
   // pad dimensions
-  final List<int> _padDimensions = [4, 4]; // [ W, H ]
-  int get width => _padDimensions[0];
-  int get height => _padDimensions[1];
+  int get width => prefs.settings.width.value;
+  int get height => prefs.settings.height.value;
 
-  set padDimensions(List<int> newDims) {
-    if (newDims.length != 2) return;
-    if (baseNote + newDims[0] * newDims[1] > 127) {
-      int maxValue = 128 - newDims[0] * newDims[1];
-      baseNote = maxValue;
-    }
-    _padDimensions[0] = newDims[0];
-    _padDimensions[1] = newDims[1];
+  set width(int newValue) {
+    prefs.settings.width.value = newValue;
+    prefs.settings.width.save();
     notifyListeners();
   }
 
-  set width(int newValue) => padDimensions = [newValue, height];
-  set height(int newValue) => padDimensions = [width, newValue];
-
-// scale:
-  String _scale = midiScales.keys.toList()[0];
-  String get scale => _scale;
-  List<int> get scaleList => midiScales[_scale]!;
-
-  set scale(String newValue) {
-    String validatedScale = newValue;
-    if (!midiScales.containsKey(newValue)) {
-      validatedScale = midiScales.keys.toList()[0]; // set to default
-    }
-    _scale = validatedScale;
-
+  set height(int newValue) {
+    prefs.settings.height.value = newValue;
+    prefs.settings.height.save();
     notifyListeners();
   }
 
-// pitchbend:
-  bool _pitchBend = false;
-  bool get pitchBend => _pitchBend;
+  // scale:
+  String get scaleString => prefs.settings.scaleString.value;
+  List<int> get scaleList => midiScales[prefs.settings.scaleString.value]!;
+
+  set scaleString(String newValue) {
+    prefs.settings.scaleString.value = newValue;
+    prefs.settings.scaleString.save();
+    notifyListeners();
+  }
+
+  // pitchbend:
+  bool get pitchBend => prefs.settings.pitchBend.value;
 
   set pitchBend(bool newValue) {
-    _pitchBend = newValue;
+    prefs.settings.pitchBend.value = newValue;
+    prefs.settings.pitchBend.save();
     notifyListeners();
   }
 
-// octave buttons:
-  bool _octaveButtons = false;
-  bool get octaveButtons => _octaveButtons;
+  // octave buttons:
+  bool get octaveButtons => prefs.settings.octaveButtons.value;
 
   set octaveButtons(bool newValue) {
-    _octaveButtons = newValue;
+    prefs.settings.octaveButtons.value = newValue;
+    prefs.settings.octaveButtons.save();
     notifyListeners();
   }
 
-// lock screen button:
-  bool _lockScreenButton = false;
-  bool get lockScreenButton => _lockScreenButton;
+  // lock screen button:
+  bool get lockScreenButton => prefs.settings.lockScreenButton.value;
 
   set lockScreenButton(bool newValue) {
-    _lockScreenButton = newValue;
+    prefs.settings.lockScreenButton.value = newValue;
+    prefs.settings.lockScreenButton.save();
     notifyListeners();
   }
 
-// velocity:
-  bool randomVelocity = false;
+  // velocity:
+  bool get randomVelocity => prefs.settings.randomVelocity.value;
+  set randomizeVelocity(bool newValue) {
+    prefs.settings.randomVelocity.value = newValue;
+    prefs.settings.randomVelocity.save();
+    notifyListeners();
+  }
+
+  int get velocityMin => prefs.settings.velocityMin.value;
+  int get velocityMax => prefs.settings.velocityMax.value;
+
   final _random = Random();
-
-  set randomizeVelocity(bool setTo) {
-    randomVelocity = setTo;
-    notifyListeners();
-  }
-
-  int _velocity = 110;
-
-  int _velocityMin = 110;
-  int _velocityMax = 120;
-  int get velocityMin => _velocityMin;
-  int get velocityMax => _velocityMax;
-
   int get velocity {
-    if (!randomVelocity) return _velocity;
-
-    int randVelocity =
-        _random.nextInt(_velocityMax - _velocityMin) + _velocityMin;
+    if (!randomVelocity) return prefs.settings.velocity.value;
+    int randVelocity = _random.nextInt(prefs.settings.velocityMax.value -
+            prefs.settings.velocityMin.value) +
+        prefs.settings.velocityMin.value;
     return randVelocity > 127 ? 127 : randVelocity;
   }
 
   set velocityMin(int min) {
-    if (min < 0 || min > _velocityMax) return;
-    _velocityMin = min;
+    if (min < 0 || min > prefs.settings.velocityMax.value) return;
+    prefs.settings.velocityMin.value = min;
+    prefs.settings.velocityMin.save();
     notifyListeners();
   }
 
   set velocityMax(int max) {
-    if (max < _velocityMin || max > 127) return;
-    _velocityMax = max;
+    if (max < prefs.settings.velocityMin.value || max > 127) return;
+    prefs.settings.velocityMax.value = max;
+    prefs.settings.velocityMax.save();
     notifyListeners();
   }
 
   set velocity(int vel) {
     if (vel < 0 || vel > 127) return;
-    _velocity = vel;
+    prefs.settings.velocity.value = vel;
+    prefs.settings.velocity.save();
     notifyListeners();
   }
 
   resetVelocity() {
     if (!randomVelocity) {
-      _velocity = 110;
+      velocity = LoadSettings.defaults().velocity.value;
     } else {
-      _velocityMax = 120;
-      _velocityMin = 110;
+      velocityMax = LoadSettings.defaults().velocityMin.value;
+      velocityMin = LoadSettings.defaults().velocityMax.value;
     }
-    notifyListeners();
   }
 
-// notenames:
-  bool _showNoteNames = true;
-  bool get showNoteNames => _showNoteNames;
+  // notenames:
+  bool get showNoteNames => prefs.settings.showNoteNames.value;
 
-  set showNoteNames(bool setting) {
-    _showNoteNames = setting;
+  set showNoteNames(bool newValue) {
+    prefs.settings.showNoteNames.value = newValue;
+    prefs.settings.showNoteNames.save();
     notifyListeners();
   }
 
   // send CC:
-  bool _sendCC = false;
-  bool get sendCC => _sendCC;
+  bool get sendCC => prefs.settings.sendCC.value;
 
-  set sendCC(bool setting) {
-    _sendCC = setting;
+  set sendCC(bool newValue) {
+    prefs.settings.sendCC.value = newValue;
+    prefs.settings.sendCC.save();
     notifyListeners();
   }
 
   // sustain:
-  final int _minSustainTimeStep = 2;
-  int get minSustainTimeStep => _minSustainTimeStep;
-
-  int _sustainTimeStep = 2;
-  int get sustainTimeStep => _sustainTimeStep;
+  int get sustainTimeStep => prefs.settings.sustainTimeStep.value;
 
   set sustainTimeStep(int timeInMs) {
-    _sustainTimeStep = timeInMs.clamp(0, 5000);
+    prefs.settings.sustainTimeStep.value = timeInMs.clamp(0, 5000);
+    prefs.settings.sustainTimeStep.save();
     notifyListeners();
   }
 
+  int get minSustainTimeStep => 2;
   int get sustainTimeExp {
-    if (_sustainTimeStep <= _minSustainTimeStep) return 0;
-    return pow(2, _sustainTimeStep).toInt();
+    if (prefs.settings.sustainTimeStep.value <= minSustainTimeStep) return 0;
+    return pow(2, prefs.settings.sustainTimeStep.value).toInt();
   }
 
-  resetSustainTimeStep() {
-    _sustainTimeStep = _minSustainTimeStep;
+  resetSustainTimeStep() =>
+      sustainTimeStep = LoadSettings.defaults().sustainTimeStep.value;
+
+  // channel:
+  int get channel => prefs.settings.channel.value;
+
+  set channel(int newChannel) {
+    if (newChannel < 0 || newChannel > 15) return;
+    prefs.settings.channel.value = newChannel;
+    prefs.settings.channel.save();
     notifyListeners();
   }
+
+  resetChannel() => channel = LoadSettings.defaults().channel.value;
 }
