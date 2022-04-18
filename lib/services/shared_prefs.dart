@@ -5,7 +5,7 @@ class Prefs {
   Prefs._();
   late SharedPreferences _sharedPrefs;
   late Map<String, dynamic> _startUpSettings;
-  late LoadSettings loadSettings;
+  late LoadSettings settings;
 
   static Future<Prefs> initAsync() async {
     Prefs instance = Prefs._();
@@ -19,7 +19,7 @@ class Prefs {
       return MapEntry(key, loadedVal);
     });
 
-    instance.loadSettings = LoadSettings(instance._startUpSettings);
+    instance.settings = LoadSettings(instance._startUpSettings);
 
     return instance;
   }
@@ -61,7 +61,7 @@ class Prefs {
     "lockScreenButton": false,
     "randomVelocity": false,
     "scaleString": "chromatic",
-    "channel": 0, // not in Settings Model?!
+    "channel": 0,
   };
 }
 
