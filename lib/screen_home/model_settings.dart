@@ -238,5 +238,5 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
-  resetChannel() => channel = LoadSettings.defaults().channel.value;
+  // resetChannel() => channel = LoadSettings.defaults().channel.value;
 }

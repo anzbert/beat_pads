@@ -31,15 +31,15 @@ class _BeatPadSustainState extends State<BeatPadSustain> {
       _triggerTime = DateTime.now().millisecondsSinceEpoch;
     }
 
-    setState(() {
-      _pressed = true;
-    });
-
     NoteOnMessage(channel: channel, note: note, velocity: velocity).send();
     lastNote = widget.note;
+    disposeChannel = channel;
 
     if (sendCC) {
       CCMessage(channel: channel, controller: note, value: 127).send();
+      disposeSendCC = true;
+    } else {
+      disposeSendCC = false;
     }
   }
 
@@ -51,10 +51,6 @@ class _BeatPadSustainState extends State<BeatPadSustain> {
       while (await _checkSustainTime(sustainTime, _triggerTime) == false) {}
       _checkingSustain = false;
     }
-    setState(() {
-      _pressed = false;
-    });
-
     NoteOffMessage(
       channel: channel,
       note: note,
@@ -71,6 +67,21 @@ class _BeatPadSustainState extends State<BeatPadSustain> {
         () => DateTime.now().millisecondsSinceEpoch - triggerTime > sustainTime,
       );
 
+  int? disposeChannel;
+  bool? disposeSendCC;
+
+  @override
+  void dispose() {
+    if (disposeChannel != null) {
+      if (lastNote != widget.note && lastNote != null) {
+        handleRelease(disposeChannel!, lastNote!, disposeSendCC ?? false, 0);
+      } else {
+        handleRelease(disposeChannel!, widget.note, disposeSendCC ?? false, 0);
+      }
+    }
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     // variables from settings:
@@ -84,8 +95,12 @@ class _BeatPadSustainState extends State<BeatPadSustain> {
         Provider.of<Settings>(context, listen: true).showNoteNames;
     final bool sendCC = Provider.of<Settings>(context, listen: true).sendCC;
 
-    // variables from midi receiver:
-    final int channel = Provider.of<MidiData>(context, listen: true).channel;
+    final int channel = Provider.of<Settings>(context, listen: true).channel;
+
+    // variables from and to  midi receiver:
+    Provider.of<MidiData>(context, listen: false).channel =
+        channel - 1; // update MidiData Provider with latest settings
+
     final int _rxNote = widget.note < 127 && widget.note >= 0
         ? Provider.of<MidiData>(context, listen: true).rxNoteBuffer[widget.note]
         : 0;
@@ -156,13 +171,24 @@ class _BeatPadSustainState extends State<BeatPadSustain> {
                 onPointerDown: (_details) {
                   handlePush(
                       channel, widget.note, sendCC, velocity, sustainTime);
+                  if (mounted) {
+                    setState(() {
+                      _pressed = true;
+                    });
+                  }
                 },
                 onPointerUp: (_details) {
                   if (lastNote != widget.note && lastNote != null) {
                     handleRelease(channel, lastNote!, sendCC, sustainTime);
+
                     lastNote = widget.note;
                   } else {
                     handleRelease(channel, widget.note, sendCC, sustainTime);
+                  }
+                  if (mounted) {
+                    setState(() {
+                      _pressed = false;
+                    });
                   }
                 },
                 child: InkWell(
