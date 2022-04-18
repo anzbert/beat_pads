@@ -9,6 +9,17 @@ class _PitchBenderState extends State<PitchBender> {
   final Color _thumbColor = Palette.cadetBlue.color;
 
   @override
+  void dispose() {
+    if (pitch != 0) {
+      PitchBendMessage(
+        channel: widget.channel,
+        bend: 0,
+      ).send();
+    }
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 

@@ -13,11 +13,11 @@ abstract class LayoutUtils {
 
 /// Selectable Pad Grid Layouts
 enum Layout {
+  majorThird,
+  minorThird,
+  quart,
   continuous,
   scaleNotesOnly,
-  minorThird,
-  majorThird,
-  quart,
   magicToneNetwork,
   xPressPadsStandard,
   xPressPadsLatinJazz,

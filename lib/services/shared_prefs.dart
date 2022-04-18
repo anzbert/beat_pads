@@ -44,7 +44,7 @@ class Prefs {
 
 // DEFAULT VALUES:
   static const Map<String, dynamic> _defaults = {
-    "layout": "continuous",
+    "layout": "majorThird",
     "rootNote": 0,
     "width": 4,
     "height": 4,
