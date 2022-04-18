@@ -31,7 +31,7 @@ class OctaveButtons extends StatelessWidget {
         ),
         ElevatedButton(
           onPressed: () {
-            Provider.of<Settings>(context, listen: false).baseOctave++;
+            Provider.of<Settings>(context, listen: false).baseOctave--;
           },
           child: Icon(
             Icons.remove,
