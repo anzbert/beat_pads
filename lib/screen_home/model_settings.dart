@@ -246,6 +246,4 @@ class Settings extends ChangeNotifier {
     prefs.settings.channel.save();
     notifyListeners();
   }
-
-  // resetChannel() => channel = LoadSettings.defaults().channel.value;
 }
