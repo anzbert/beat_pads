@@ -24,13 +24,23 @@ class Prefs {
     return instance;
   }
 
-  // void refreshStore() async {
-  //   try {
-  //     _sharedPrefs = await SharedPreferences.getInstance();
-  //   } catch (e) {
-  //     throw Exception(e);
-  //   }
-  // }
+  Future<void> resetStoredValues() async {
+    for (MapEntry<String, dynamic> entry in Prefs._defaults.entries) {
+      switch (entry.value.runtimeType) {
+        case int:
+          await _sharedPrefs.setInt(entry.key, entry.value);
+          break;
+        case bool:
+          await _sharedPrefs.setBool(entry.key, entry.value);
+          break;
+        case String:
+          await _sharedPrefs.setString(entry.key, entry.value);
+          break;
+        default:
+          throw "type not recognised";
+      }
+    }
+  }
 
 // DEFAULT VALUES:
   static const Map<String, dynamic> _defaults = {
@@ -51,12 +61,14 @@ class Prefs {
     "lockScreenButton": false,
     "randomVelocity": false,
     "scaleString": "chromatic",
+    "channel": 0, // not in Settings Model?!
   };
 }
 
 class LoadSettings {
   final Setting<Layout> layout;
   final Setting<String> scaleString;
+  final Setting<int> channel;
   final Setting<int> rootNote;
   final Setting<int> width;
   final Setting<int> height;
@@ -75,6 +87,7 @@ class LoadSettings {
 
   LoadSettings(Map<String, dynamic> loadedMap)
       : rootNote = Setting<int>("rootnote", loadedMap['rootNote']),
+        channel = Setting<int>('channel', loadedMap['channel']),
         width = Setting<int>('width', loadedMap['width']),
         height = Setting<int>('height', loadedMap['height']),
         baseOctave = Setting<int>('baseOctave', loadedMap['baseOctave']),
@@ -116,14 +129,14 @@ class Setting<T> {
   Future<bool> save() async {
     SharedPreferences _sharedPrefs = await SharedPreferences.getInstance();
 
-    if (T is Layout) {
+    if (value is Layout) {
       Layout cast = value as Layout;
       return _sharedPrefs.setString("layout", cast.name);
-    } else if (T is int) {
+    } else if (value is int) {
       return _sharedPrefs.setInt(sharedPrefsKey, value as int);
-    } else if (T is String) {
+    } else if (value is String) {
       return _sharedPrefs.setString(sharedPrefsKey, value as String);
-    } else if (T is bool) {
+    } else if (value is bool) {
       return _sharedPrefs.setBool(sharedPrefsKey, value as bool);
     }
 

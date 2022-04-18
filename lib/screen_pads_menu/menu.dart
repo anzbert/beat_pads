@@ -23,8 +23,10 @@ class PadsMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<Settings>(builder: (context, settings, child) {
+      Provider.of<MidiData>(context, listen: false).channel =
+          settings.channel - 1; // update MidiData Provider with latest settings
       final bool resizableGrid =
-          settings.layout.props.resizable; // Is the layout fixed or variable?
+          settings.layout.props.resizable; // Is the layout fixed or resizable?
 
       return ListView(
         children: <Widget>[
@@ -191,10 +193,10 @@ class PadsMenu extends StatelessWidget {
               max: 16,
               label: "Midi Channel",
               setValue: (v) {
+                settings.channel = v - 1;
                 Provider.of<MidiData>(context, listen: false).channel = v - 1;
               },
-              readValue:
-                  Provider.of<MidiData>(context, listen: true).channel + 1),
+              readValue: settings.channel + 1),
           Divider(),
           ListTile(
             title: Text("Lock Screen Button"),

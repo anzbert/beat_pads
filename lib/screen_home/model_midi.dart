@@ -4,6 +4,8 @@ import 'dart:async';
 
 import '../services/_services.dart';
 
+// TODO: move all logic to one provider model!
+
 class MidiData extends ChangeNotifier {
   final List<int> rxNoteBuffer = List.filled(128, 0);
 
@@ -12,16 +14,7 @@ class MidiData extends ChangeNotifier {
     notifyListeners();
   }
 
-  int _channel = 0;
-  int get channel => _channel;
-
-  set channel(int channel) {
-    if (channel < 0 || channel > 15) return;
-    _channel = channel;
-    notifyListeners();
-  }
-
-  resetChannel() => channel = 0;
+  int channel = 0;
 
   StreamSubscription<MidiPacket>? _rxSubscription;
   final MidiCommand _midiCommand = MidiCommand();
@@ -35,7 +28,7 @@ class MidiData extends ChangeNotifier {
       //     "${packet.data} @ ${packet.timestamp} from ${packet.device.name} / ID:${packet.device.id}");
 
       // If the message is NOT a command (0xFn), and NOT using the correct channel -> return:
-      if (header & 0xF0 != 0xF0 && header & 0x0F != _channel) return;
+      if (header & 0xF0 != 0xF0 && header & 0x0F != channel) return;
 
       MidiMessageType type = MidiUtils.getMidiMessageType(header);
 

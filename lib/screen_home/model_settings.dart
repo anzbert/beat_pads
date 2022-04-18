@@ -7,6 +7,7 @@ class Settings extends ChangeNotifier {
   Settings(this.prefs)
       : _layout = prefs.loadSettings.layout,
         _rootNote = prefs.loadSettings.rootNote,
+        _channel = prefs.loadSettings.channel,
         _baseOctave = prefs.loadSettings.baseOctave,
         _base = prefs.loadSettings.base,
         _velocity = prefs.loadSettings.velocity,
@@ -25,39 +26,69 @@ class Settings extends ChangeNotifier {
 
   Prefs prefs;
 
-  final Setting<Layout> _layout;
-  final Setting<int> _rootNote;
-  final Setting<int> _height;
-  final Setting<int> _width;
-  final Setting<int> _base;
-  final Setting<int> _baseOctave;
-  final Setting<String> _scaleString;
-  final Setting<bool> _pitchBend;
-  final Setting<bool> _showNoteNames;
-  final Setting<int> _sustainTimeStep;
-  final Setting<bool> _sendCC;
-  final Setting<bool> _lockScreenButton;
-  final Setting<bool> _randomVelocity;
-  final Setting<bool> _octaveButtons;
-  final Setting<int> _velocity;
-  final Setting<int> _velocityMin;
-  final Setting<int> _velocityMax;
+  Setting<Layout> _layout;
+  Setting<int> _rootNote;
+  Setting<int> _height;
+  Setting<int> _width;
+  Setting<int> _base;
+  Setting<int> _baseOctave;
+  Setting<String> _scaleString;
+  Setting<bool> _pitchBend;
+  Setting<bool> _showNoteNames;
+  Setting<int> _sustainTimeStep;
+  Setting<bool> _sendCC;
+  Setting<bool> _lockScreenButton;
+  Setting<bool> _randomVelocity;
+  Setting<bool> _octaveButtons;
+  Setting<int> _velocity;
+  Setting<int> _velocityMin;
+  Setting<int> _velocityMax;
+  Setting<int> _channel;
 
-// TODO : RESET ALL BUTTON
+  resetAll() async {
+    await prefs.resetStoredValues();
+    prefs = await Prefs.initAsync();
+
+    _layout = prefs.loadSettings.layout;
+    _rootNote = prefs.loadSettings.rootNote;
+    _baseOctave = prefs.loadSettings.baseOctave;
+    _channel = prefs.loadSettings.channel;
+    _base = prefs.loadSettings.base;
+    _velocity = prefs.loadSettings.velocity;
+    _velocityMin = prefs.loadSettings.velocityMin;
+    _velocityMax = prefs.loadSettings.velocityMax;
+    _sustainTimeStep = prefs.loadSettings.sustainTimeStep;
+    _sendCC = prefs.loadSettings.sendCC;
+    _showNoteNames = prefs.loadSettings.showNoteNames;
+    _pitchBend = prefs.loadSettings.pitchBend;
+    _octaveButtons = prefs.loadSettings.octaveButtons;
+    _lockScreenButton = prefs.loadSettings.lockScreenButton;
+    _randomVelocity = prefs.loadSettings.randomVelocity;
+    _scaleString = prefs.loadSettings.scaleString;
+    _width = prefs.loadSettings.width;
+    _height = prefs.loadSettings.height;
+
+    notifyListeners();
+  }
 
   // layout:
   Layout get layout => _layout.value;
 
   set layout(Layout newLayout) {
     if (newLayout.props.resizable == false) {
-      _width.value = newLayout.props.defaultDimensions.x;
-      _width.save();
-      _height.value = newLayout.props.defaultDimensions.y;
-      _height.save();
       _rootNote.value = 0;
       _rootNote.save();
       _scaleString.value = LoadSettings.defaults().scaleString.value;
       _scaleString.save();
+    }
+
+    if (_width.value != newLayout.props.defaultDimensions.x) {
+      _width.value = newLayout.props.defaultDimensions.x;
+      _width.save();
+    }
+    if (_height.value != newLayout.props.defaultDimensions.y) {
+      _height.value = newLayout.props.defaultDimensions.y;
+      _height.save();
     }
 
     _layout.value = newLayout;
@@ -132,7 +163,7 @@ class Settings extends ChangeNotifier {
 
   // scale:
   String get scaleString => _scaleString.value;
-  List<int> get scaleList => midiScales[_scaleString]!;
+  List<int> get scaleList => midiScales[_scaleString.value]!;
 
   set scaleString(String newValue) {
     _scaleString.value = newValue;
@@ -252,4 +283,16 @@ class Settings extends ChangeNotifier {
 
   resetSustainTimeStep() =>
       sustainTimeStep = LoadSettings.defaults().sustainTimeStep.value;
+
+  // channel:
+  int get channel => _channel.value;
+
+  set channel(int newChannel) {
+    if (newChannel < 0 || newChannel > 15) return;
+    _channel.value = newChannel;
+    _channel.save();
+    notifyListeners();
+  }
+
+  resetChannel() => channel = LoadSettings.defaults().channel.value;
 }

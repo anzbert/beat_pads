@@ -21,6 +21,7 @@ enum Layout {
   magicToneNetwork,
   xPressPadsStandard,
   xPressPadsLatinJazz,
+  xPressPadsXtreme,
 }
 
 extension LayoutExt on Layout {
@@ -30,6 +31,8 @@ extension LayoutExt on Layout {
         return LayoutProps(resizable: false);
       case Layout.xPressPadsLatinJazz:
         return LayoutProps(resizable: false);
+      case Layout.xPressPadsXtreme:
+        return LayoutProps(resizable: false, defaultDimensions: Vector2D(8, 4));
       default:
         return LayoutProps(resizable: true);
     }
@@ -47,12 +50,14 @@ extension LayoutExt on Layout {
         return GridRowInterval(settings, rowInterval: 5);
       case Layout.scaleNotesOnly:
         return GridScaleOnly(settings);
+      case Layout.magicToneNetwork:
+        return GridMTN(settings);
       case Layout.xPressPadsStandard:
         return GridXpressPads(settings, XPP.standard);
       case Layout.xPressPadsLatinJazz:
         return GridXpressPads(settings, XPP.latinJazz);
-      case Layout.magicToneNetwork:
-        return GridMTN(settings);
+      case Layout.xPressPadsXtreme:
+        return GridXpressPads(settings, XPP.xtreme);
     }
   }
 }
@@ -178,7 +183,7 @@ class GridXpressPads extends Grid {
 }
 
 // constant data about XPP layouts
-enum XPP { standard, latinJazz }
+enum XPP { standard, latinJazz, xtreme }
 
 extension XPPConstants on XPP {
   List<int> get list {
@@ -187,6 +192,8 @@ extension XPPConstants on XPP {
         return standard;
       case XPP.latinJazz:
         return latinJazz;
+      case XPP.xtreme:
+        return xtreme;
     }
   }
 
@@ -206,7 +213,7 @@ extension XPPConstants on XPP {
     49,
     51,
     51,
-    49
+    49,
   ];
   static const List<int> latinJazz = [
     36,
@@ -224,6 +231,40 @@ extension XPPConstants on XPP {
     51,
     37,
     37,
-    51
+    51,
+  ];
+  static const List<int> xtreme = [
+    37,
+    36,
+    42,
+    51,
+    51,
+    42,
+    36,
+    37,
+    40,
+    38,
+    46,
+    53,
+    53,
+    46,
+    38,
+    40,
+    41,
+    43,
+    47,
+    50,
+    50,
+    47,
+    43,
+    41,
+    55,
+    49,
+    56,
+    57,
+    57,
+    56,
+    49,
+    55,
   ];
 }
