@@ -29,7 +29,7 @@ class VariablePads extends StatelessWidget {
                       ...row.map((padNote) {
                         return Expanded(
                           flex: 1,
-                          child: BeatPadSustain(
+                          child: BeatPad(
                             note: padNote,
                           ),
                         );

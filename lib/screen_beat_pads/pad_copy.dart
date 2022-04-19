@@ -7,18 +7,18 @@ import 'package:beat_pads/screen_home/_screen_home.dart';
 
 import 'package:beat_pads/services/midi_utils.dart';
 
-class BeatPad extends StatefulWidget {
-  const BeatPad({
+class BeatPadOld extends StatefulWidget {
+  const BeatPadOld({
     Key? key,
     this.note = 36,
   }) : super(key: key);
 
   final int note;
   @override
-  State<BeatPad> createState() => _BeatPadState();
+  State<BeatPadOld> createState() => _BeatPadOldState();
 }
 
-class _BeatPadState extends State<BeatPad> {
+class _BeatPadOldState extends State<BeatPadOld> {
   int _triggerTime = DateTime.now().millisecondsSinceEpoch;
   bool _checkingSustain = false;
   bool _pressed = false;
@@ -33,13 +33,13 @@ class _BeatPadState extends State<BeatPad> {
 
     NoteOnMessage(channel: channel, note: note, velocity: velocity).send();
     lastNote = widget.note;
-    // disposeChannel = channel;
+    disposeChannel = channel;
 
     if (sendCC) {
       CCMessage(channel: channel, controller: note, value: 127).send();
-      // disposeSendCC = true;
+      disposeSendCC = true;
     } else {
-      // disposeSendCC = false;
+      disposeSendCC = false;
     }
   }
 
@@ -67,20 +67,20 @@ class _BeatPadState extends State<BeatPad> {
         () => DateTime.now().millisecondsSinceEpoch - triggerTime > sustainTime,
       );
 
-  // int? disposeChannel;
-  // bool? disposeSendCC;
+  int? disposeChannel;
+  bool? disposeSendCC;
 
-  // @override
-  // void dispose() {
-  //   if (disposeChannel != null && _pressed) {
-  //     if (lastNote != widget.note && lastNote != null) {
-  //       handleRelease(disposeChannel!, lastNote!, disposeSendCC ?? false, 0);
-  //     } else {
-  //       handleRelease(disposeChannel!, widget.note, disposeSendCC ?? false, 0);
-  //     }
-  //   }
-  //   super.dispose();
-  // }
+  @override
+  void dispose() {
+    if (disposeChannel != null && _pressed) {
+      if (lastNote != widget.note && lastNote != null) {
+        handleRelease(disposeChannel!, lastNote!, disposeSendCC ?? false, 0);
+      } else {
+        handleRelease(disposeChannel!, widget.note, disposeSendCC ?? false, 0);
+      }
+    }
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -171,7 +171,11 @@ class _BeatPadState extends State<BeatPad> {
                 onPointerDown: (_details) {
                   handlePush(
                       channel, widget.note, sendCC, velocity, sustainTime);
-                  if (mounted) setState(() => _pressed = true);
+                  if (mounted) {
+                    setState(() {
+                      _pressed = true;
+                    });
+                  }
                 },
                 onPointerUp: (_details) {
                   if (lastNote != widget.note && lastNote != null) {
@@ -181,7 +185,11 @@ class _BeatPadState extends State<BeatPad> {
                   } else {
                     handleRelease(channel, widget.note, sendCC, sustainTime);
                   }
-                  if (mounted) setState(() => _pressed = false);
+                  if (mounted) {
+                    setState(() {
+                      _pressed = false;
+                    });
+                  }
                 },
                 child: InkWell(
                   onTapDown: (_) {},
