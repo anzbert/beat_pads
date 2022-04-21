@@ -39,7 +39,7 @@ class CreditsBox extends StatelessWidget {
             Wrap(children: [Text("Dog Icon by 'catalyststuff'")]),
             TextButton(
               child: Text(
-                "freepik.com",
+                "FreePik.com",
                 style: TextStyle(decoration: TextDecoration.underline),
               ),
               onPressed: () async => await webView("https://www.freepik.com"),
@@ -51,7 +51,7 @@ class CreditsBox extends StatelessWidget {
           children: [
             Wrap(children: [Text("Logo Animated with Rive")]),
             TextButton(
-              child: Text("rive.app",
+              child: Text("Rive.app",
                   style: TextStyle(decoration: TextDecoration.underline)),
               onPressed: () async => await webView("https://www.rive.app"),
             )
@@ -61,11 +61,11 @@ class CreditsBox extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Wrap(children: [
-              Text("Magic Tone Network / XPressPads by A. Samek")
+              Text("Magic Tone Network / XpressPads by A. Samek")
             ]),
             TextButton(
               child: Text(
-                "xpresspads.com",
+                "XpressPads.com",
                 style: TextStyle(decoration: TextDecoration.underline),
               ),
               onPressed: () async =>
@@ -91,7 +91,6 @@ class CreditsBox extends StatelessWidget {
                   query:
                       'subject=App Feedback&body=Feedback for Beat pads', //add subject and body here
                 );
-
                 await webView(encoded.toString());
               },
             )

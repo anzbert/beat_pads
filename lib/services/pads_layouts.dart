@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 import 'package:beat_pads/screen_home/model_settings.dart';
 import 'package:beat_pads/services/_services.dart';
 
@@ -13,25 +15,25 @@ abstract class LayoutUtils {
 
 /// Selectable Pad Grid Layouts
 enum Layout {
-  majorThird,
-  minorThird,
-  quart,
-  continuous,
-  scaleNotesOnly,
-  magicToneNetwork,
-  xPressPadsStandard,
-  xPressPadsLatinJazz,
-  xPressPadsXtreme,
+  Major_Third,
+  Minor_Third,
+  Quart,
+  Continuous,
+  Scale_Notes_Only,
+  Magic_Tone_Network,
+  XpressPads_Standard,
+  XpressPads_LatinJazz,
+  XpressPads_Xtreme,
 }
 
 extension LayoutExt on Layout {
   LayoutProps get props {
     switch (this) {
-      case Layout.xPressPadsStandard:
+      case Layout.XpressPads_Standard:
         return LayoutProps(resizable: false);
-      case Layout.xPressPadsLatinJazz:
+      case Layout.XpressPads_LatinJazz:
         return LayoutProps(resizable: false);
-      case Layout.xPressPadsXtreme:
+      case Layout.XpressPads_Xtreme:
         return LayoutProps(resizable: false, defaultDimensions: Vector2D(8, 4));
       default:
         return LayoutProps(resizable: true);
@@ -40,23 +42,23 @@ extension LayoutExt on Layout {
 
   Grid getGrid(Settings settings) {
     switch (this) {
-      case Layout.continuous:
+      case Layout.Continuous:
         return GridRowInterval(settings, rowInterval: settings.width);
-      case Layout.minorThird:
+      case Layout.Minor_Third:
         return GridRowInterval(settings, rowInterval: 3);
-      case Layout.majorThird:
+      case Layout.Major_Third:
         return GridRowInterval(settings, rowInterval: 4);
-      case Layout.quart:
+      case Layout.Quart:
         return GridRowInterval(settings, rowInterval: 5);
-      case Layout.scaleNotesOnly:
+      case Layout.Scale_Notes_Only:
         return GridScaleOnly(settings);
-      case Layout.magicToneNetwork:
+      case Layout.Magic_Tone_Network:
         return GridMTN(settings);
-      case Layout.xPressPadsStandard:
+      case Layout.XpressPads_Standard:
         return GridXpressPads(settings, XPP.standard);
-      case Layout.xPressPadsLatinJazz:
+      case Layout.XpressPads_LatinJazz:
         return GridXpressPads(settings, XPP.latinJazz);
-      case Layout.xPressPadsXtreme:
+      case Layout.XpressPads_Xtreme:
         return GridXpressPads(settings, XPP.xtreme);
     }
   }
