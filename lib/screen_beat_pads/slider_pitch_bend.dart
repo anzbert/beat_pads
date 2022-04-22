@@ -38,29 +38,37 @@ class _PitchBenderState extends State<PitchBender> {
                 RoundSliderThumbShape(enabledThumbRadius: size.width * 0.04),
             trackShape: CustomTrackShape(),
           ),
-          child: Slider(
-            value: pitch,
-            min: -1,
-            max: 1,
-            onChanged: (value) {
-              setState(() {
-                pitch = value;
-              });
-              PitchBendMessage(
-                channel: widget.channel,
-                bend: -pitch,
-              ).send();
-            },
-            onChangeEnd: (details) {
-              setState(() {
-                pitch = 0;
-              });
-              PitchBendMessage(
-                channel: widget.channel,
-                bend: pitch,
-              ).send();
-            },
-          ),
+          child: Stack(
+            children:[
+              Container(
+                color: Palette.cadetBlue.color,
+                height: size.width * 0.05,
+                width: size.width * 0.01,
+            ),
+              Slider(
+              value: pitch,
+              min: -1,
+              max: 1,
+              onChanged: (value) {
+                setState(() {
+                  pitch = value;
+                });
+                PitchBendMessage(
+                  channel: widget.channel,
+                  bend: -pitch,
+                ).send();
+              },
+              onChangeEnd: (details) {
+                setState(() {
+                  pitch = 0;
+                });
+                PitchBendMessage(
+                  channel: widget.channel,
+                  bend: pitch,
+                ).send();
+              },
+              ),
+           ]),
         ),
       ),
     );
