@@ -26,10 +26,10 @@ class CreditsBox extends StatelessWidget {
             Wrap(children: [Text("Made by A. Mueller")]),
             TextButton(
               child: Text(
-                "anzgraph.com",
+                "anzio.dev",
                 style: TextStyle(decoration: TextDecoration.underline),
               ),
-              onPressed: () async => await webView("https://www.anzgraph.com"),
+              onPressed: () async => await webView("https://www.anzio.dev"),
             )
           ],
         ),
