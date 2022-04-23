@@ -31,9 +31,14 @@ abstract class MidiUtils {
     NoteSign sign = NoteSign.sharp,
     showOctaveIndex = true,
     showNoteValue = false,
+    gmPercussionLabels = false,
   }) {
     if (value < 0 || value > 127) {
-      return "Out of range";
+      return "#Range";
+    }
+
+    if (gmPercussionLabels) {
+      return gm2PercStandard[value] ?? value.toString();
     }
 
     int octave = value ~/ 12;
