@@ -7,21 +7,23 @@ import 'package:beat_pads/screen_home/_screen_home.dart';
 
 import 'package:beat_pads/services/midi_utils.dart';
 
-class BeatPadOld extends StatefulWidget {
-  const BeatPadOld({
+class SlideBeatPad extends StatefulWidget {
+  const SlideBeatPad({
+    required this.selected,
+    required this.note,
     Key? key,
-    this.note = 36,
   }) : super(key: key);
 
+  final bool selected;
   final int note;
   @override
-  State<BeatPadOld> createState() => _BeatPadOldState();
+  State<SlideBeatPad> createState() => _SlideBeatPadState();
 }
 
-class _BeatPadOldState extends State<BeatPadOld> {
+class _SlideBeatPadState extends State<SlideBeatPad> {
   int _triggerTime = DateTime.now().millisecondsSinceEpoch;
   bool _checkingSustain = false;
-  bool _pressed = false;
+  // bool _pressed = false;
 
   int? lastNote;
 
@@ -33,14 +35,10 @@ class _BeatPadOldState extends State<BeatPadOld> {
 
     NoteOnMessage(channel: channel, note: note, velocity: velocity).send();
     lastNote = widget.note;
-    disposeChannel = channel;
 
     if (sendCC) {
       CCMessage(channel: channel, controller: note, value: 127).send();
-      disposeSendCC = true;
-    } else {
-      disposeSendCC = false;
-    }
+    } else {}
   }
 
   handleRelease(int channel, int note, bool? sendCC, int sustainTime) async {
@@ -66,21 +64,6 @@ class _BeatPadOldState extends State<BeatPadOld> {
         const Duration(milliseconds: 5),
         () => DateTime.now().millisecondsSinceEpoch - triggerTime > sustainTime,
       );
-
-  int? disposeChannel;
-  bool? disposeSendCC;
-
-  @override
-  void dispose() {
-    if (disposeChannel != null && _pressed) {
-      if (lastNote != widget.note && lastNote != null) {
-        handleRelease(disposeChannel!, lastNote!, disposeSendCC ?? false, 0);
-      } else {
-        handleRelease(disposeChannel!, widget.note, disposeSendCC ?? false, 0);
-      }
-    }
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -109,7 +92,7 @@ class _BeatPadOldState extends State<BeatPadOld> {
     final Color _color;
     Color _splashColor = Palette.lightPink.color;
 
-    if (_pressed == true) {
+    if (widget.selected == true) {
       _color = _splashColor.withAlpha(220); // maintain color when pushed
 
     } else if (_rxNote > 0) {
@@ -167,49 +150,42 @@ class _BeatPadOldState extends State<BeatPadOld> {
               )
             :
             // WITHIN MIDI RANGE
-            Listener(
-                onPointerDown: (_details) {
-                  handlePush(
-                      channel, widget.note, sendCC, velocity, sustainTime);
-                  if (mounted) {
-                    setState(() {
-                      _pressed = true;
-                    });
-                  }
-                },
-                onPointerUp: (_details) {
-                  if (lastNote != widget.note && lastNote != null) {
-                    handleRelease(channel, lastNote!, sendCC, sustainTime);
-
-                    lastNote = widget.note;
-                  } else {
-                    handleRelease(channel, widget.note, sendCC, sustainTime);
-                  }
-                  if (mounted) {
-                    setState(() {
-                      _pressed = false;
-                    });
-                  }
-                },
-                child: InkWell(
-                  onTapDown: (_) {},
-                  borderRadius: _padRadius,
-                  splashColor: _splashColor,
-                  child: Padding(
-                    padding: _padPadding,
-                    child: Text(
-                        showNoteNames
-                            ? MidiUtils.getNoteName(widget.note,
-                                showNoteValue: false)
-                            : widget.note.toString(),
-                        style: TextStyle(
-                          color: _padTextColor,
-                          fontSize: _fontSize,
-                        )),
-                  ),
+            InkWell(
+                onTapDown: (_) {},
+                borderRadius: _padRadius,
+                splashColor: _splashColor,
+                child: Padding(
+                  padding: _padPadding,
+                  child: Text(
+                      showNoteNames
+                          ? MidiUtils.getNoteName(widget.note,
+                              showNoteValue: false)
+                          : widget.note.toString(),
+                      style: TextStyle(
+                        color: _padTextColor,
+                        fontSize: _fontSize,
+                      )),
                 ),
               ),
       ),
     );
   }
 }
+
+// TODO: implement midi sending
+
+ // onPointerDown: (_details) {
+                //   handlePush(
+                //       channel, widget.note, sendCC, velocity, sustainTime);
+                //   if (mounted) setState(() => _pressed = true);
+                // },
+                // onPointerUp: (_details) {
+                //   if (lastNote != widget.note && lastNote != null) {
+                //     handleRelease(channel, lastNote!, sendCC, sustainTime);
+
+                //     lastNote = widget.note;
+                //   } else {
+                //     handleRelease(channel, widget.note, sendCC, sustainTime);
+                //   }
+                //   if (mounted) setState(() => _pressed = false);
+                // },
