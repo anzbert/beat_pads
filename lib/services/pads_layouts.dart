@@ -28,6 +28,8 @@ enum Layout {
 extension LayoutExt on Layout {
   LayoutProps get props {
     switch (this) {
+      case Layout.Magic_Tone_Network:
+        return LayoutProps(resizable: true, defaultDimensions: Vector2D(8, 8));
       case Layout.XpressPads_Standard:
         return LayoutProps(resizable: false);
       case Layout.XpressPads_LatinJazz:

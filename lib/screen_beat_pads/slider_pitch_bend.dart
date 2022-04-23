@@ -5,8 +5,8 @@ import 'package:flutter_midi_command/flutter_midi_command_messages.dart';
 class _PitchBenderState extends State<PitchBender> {
   double pitch = 0;
 
-  final Color _trackColor = Palette.darkGrey.color.withOpacity(0.25);
-  final Color _thumbColor = Palette.cadetBlue.color;
+  final Color _trackColor = Palette.lightGrey.color;
+  final Color _thumbColor = Palette.yellowGreen.color;
 
   @override
   void dispose() {
@@ -30,12 +30,13 @@ class _PitchBenderState extends State<PitchBender> {
         quarterTurns: 1,
         child: SliderTheme(
           data: SliderTheme.of(context).copyWith(
-            trackHeight: size.width * 0.03,
+            trackHeight: size.width * 0.025,
             activeTrackColor: _trackColor,
             inactiveTrackColor: _trackColor,
             thumbColor: _thumbColor,
-            thumbShape:
-                RoundSliderThumbShape(enabledThumbRadius: size.width * 0.04),
+            thumbShape: RoundSliderThumbShape(
+              enabledThumbRadius: size.width * 0.04,
+            ),
             trackShape: CustomTrackShape(),
           ),
           child: Stack(
@@ -43,13 +44,13 @@ class _PitchBenderState extends State<PitchBender> {
             children: [
               Container(
                 decoration: BoxDecoration(
-                  color: Palette.darkGrey.color,
+                  color: _trackColor,
                   borderRadius: BorderRadius.all(
-                    Radius.circular(size.width * 0.01),
+                    Radius.circular(size.width * 0.010),
                   ),
                 ),
                 height: size.width * 0.085,
-                width: size.width * 0.02,
+                width: size.width * 0.015,
               ),
               Slider(
                 value: pitch,

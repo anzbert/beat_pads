@@ -28,7 +28,7 @@ extension RGB on Palette {
       case Palette.darkGrey:
         return Colors.grey[800]!;
       case Palette.lightGrey:
-        return Colors.grey;
+        return HSLColor.fromAHSL(1, 0, .0, .33).toColor();
       case Palette.whiteLike:
         return Colors.white70;
     }

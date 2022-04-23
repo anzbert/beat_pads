@@ -1,11 +1,10 @@
-import 'package:beat_pads/screen_beat_pads/buttons_controls_rect.dart';
+import 'package:beat_pads/screen_beat_pads/buttons_controls.dart';
 import 'package:beat_pads/screen_beat_pads/slide_pads.dart';
 import 'package:flutter/material.dart';
 import 'package:beat_pads/services/_services.dart';
 import 'package:provider/provider.dart';
 
 import 'package:beat_pads/screen_beat_pads/button_lock_screen.dart';
-import 'package:beat_pads/screen_beat_pads/buttons_control.dart';
 
 import 'package:beat_pads/screen_beat_pads/slider_pitch_bend.dart';
 
@@ -25,8 +24,12 @@ class BeatPadsScreen extends StatelessWidget {
               children: [
                 // CONTROL BUTTONS
                 if (settings.octaveButtons || settings.sustainButton)
+                  SizedBox(
+                    width: 25, // SKIP laggy edge area
+                  ),
+                if (settings.octaveButtons || settings.sustainButton)
                   Expanded(
-                    flex: 1,
+                    flex: 2,
                     child: ControlButtonsRect(), // TODO: replaced for testing
                   ),
 
@@ -35,7 +38,7 @@ class BeatPadsScreen extends StatelessWidget {
 
                 // PADS
                 Expanded(
-                  flex: 20,
+                  flex: 30,
                   child: SlidePads(), // TODO: replaced for testing
                 )
               ],

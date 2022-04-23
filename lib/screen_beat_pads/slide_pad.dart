@@ -24,17 +24,21 @@ class _SlideBeatPadState extends State<SlideBeatPad> {
   bool _noteOn = false;
 
   int? lastNote;
+  int? disposeChannel;
+  bool disposeCC = false;
 
   handlePush(
       int channel, int note, bool sendCC, int velocity, int sustainTime) {
     if (sustainTime != 0) {
       _triggerTime = DateTime.now().millisecondsSinceEpoch;
     }
+    disposeChannel = channel;
 
     NoteOnMessage(channel: channel, note: note, velocity: velocity).send();
     lastNote = widget.note;
 
     if (sendCC) {
+      disposeCC = true;
       CCMessage(channel: (channel + 1) % 16, controller: note, value: 127)
           .send();
     } else {}
@@ -66,6 +70,25 @@ class _SlideBeatPadState extends State<SlideBeatPad> {
 
   final Color _padTextColor = Palette.darkGrey.color;
   final EdgeInsets _padPadding = const EdgeInsets.all(2.5);
+
+  @override
+  void dispose() {
+    if (_noteOn && disposeChannel != null) {
+      NoteOffMessage(
+        channel: disposeChannel!,
+        note: widget.note,
+      ).send();
+
+      if (disposeCC == true) {
+        CCMessage(
+                channel: (disposeChannel! + 1) % 16,
+                controller: widget.note,
+                value: 0)
+            .send();
+      }
+    }
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

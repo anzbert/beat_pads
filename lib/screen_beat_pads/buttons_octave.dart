@@ -3,45 +3,60 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:beat_pads/services/_services.dart';
 
-class OctaveButtons extends StatelessWidget {
-  const OctaveButtons({Key? key}) : super(key: key);
+class OctaveButtonsRect extends StatelessWidget {
+  const OctaveButtonsRect({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    double padSize = MediaQuery.of(context).size.width * 0.005;
     return Column(
-      mainAxisSize: MainAxisSize.min,
       children: [
-        ElevatedButton(
-          onPressed: () {
-            Provider.of<Settings>(context, listen: false).baseOctave++;
-          },
-          child: Icon(
-            Icons.add,
-            size: 30,
-          ),
-          style: ElevatedButton.styleFrom(
-            shape: CircleBorder(),
-            padding: EdgeInsets.all(15),
-            primary: Palette.cadetBlue.color,
-            onPrimary: Palette.darkGrey.color,
+        Expanded(
+          flex: 1,
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(0, padSize, padSize, padSize),
+            child: ElevatedButton(
+              onPressed: () {
+                Provider.of<Settings>(context, listen: false).baseOctave++;
+              },
+              child: FittedBox(
+                fit: BoxFit.contain,
+                child: Icon(
+                  Icons.add,
+                  size: 100,
+                ),
+              ),
+              style: ElevatedButton.styleFrom(
+                padding: EdgeInsets.all(0),
+                alignment: Alignment.center,
+                primary: Palette.cadetBlue.color,
+                onPrimary: Palette.darkGrey.color,
+              ),
+            ),
           ),
         ),
-        SizedBox(
-          height: 30,
-        ),
-        ElevatedButton(
-          onPressed: () {
-            Provider.of<Settings>(context, listen: false).baseOctave--;
-          },
-          child: Icon(
-            Icons.remove,
-            size: 30,
-          ),
-          style: ElevatedButton.styleFrom(
-            shape: CircleBorder(),
-            padding: EdgeInsets.all(15),
-            primary: Palette.laserLemon.color,
-            onPrimary: Palette.darkGrey.color,
+        Expanded(
+          flex: 1,
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(0, padSize, padSize, padSize),
+            child: ElevatedButton(
+              onPressed: () {
+                Provider.of<Settings>(context, listen: false).baseOctave--;
+              },
+              child: FittedBox(
+                fit: BoxFit.contain,
+                child: Icon(
+                  Icons.remove,
+                  size: 100,
+                ),
+              ),
+              style: ElevatedButton.styleFrom(
+                padding: EdgeInsets.all(0),
+                alignment: Alignment.center,
+                primary: Palette.laserLemon.color,
+                onPrimary: Palette.darkGrey.color,
+              ),
+            ),
           ),
         ),
       ],

@@ -3,14 +3,14 @@ import 'package:beat_pads/shared/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class SustainButton extends StatefulWidget {
-  const SustainButton({Key? key}) : super(key: key);
+class SustainButtonRect extends StatefulWidget {
+  const SustainButtonRect({Key? key}) : super(key: key);
 
   @override
-  State<SustainButton> createState() => _SustainButtonState();
+  State<SustainButtonRect> createState() => _SustainButtonRectState();
 }
 
-class _SustainButtonState extends State<SustainButton> {
+class _SustainButtonRectState extends State<SustainButtonRect> {
   final key = GlobalKey();
   bool sustainState = false;
   int? disposeChannel;
@@ -29,7 +29,7 @@ class _SustainButtonState extends State<SustainButton> {
 
   @override
   void dispose() {
-    if (disposeChannel != null) {
+    if (disposeChannel != null && sustainState == true) {
       MidiUtils.sustainMessage(disposeChannel!, false);
     }
     super.dispose();
@@ -39,38 +39,49 @@ class _SustainButtonState extends State<SustainButton> {
   Widget build(BuildContext context) {
     int channel = Provider.of<Settings>(context, listen: true).channel;
     disposeChannel = channel;
-
-    return Listener(
-      onPointerDown: (_) {
-        MidiUtils.sustainMessage(channel, true);
-        setState(() {
-          sustainState = true;
-        });
-      },
-      onPointerUp: (touch) {
-        if (!notOnButtonRect(touch.position)) {
-          MidiUtils.sustainMessage(channel, false);
-          if (mounted) {
-            setState(() {
-              sustainState = false;
-            });
+    double padSize = MediaQuery.of(context).size.width * 0.005;
+    return Padding(
+      padding: EdgeInsets.fromLTRB(0, padSize, padSize, padSize),
+      child: Listener(
+        onPointerDown: (_) {
+          MidiUtils.sustainMessage(channel, true);
+          setState(() {
+            sustainState = true;
+          });
+        },
+        onPointerUp: (touch) {
+          if (!notOnButtonRect(touch.position)) {
+            MidiUtils.sustainMessage(channel, false);
+            if (mounted) {
+              setState(() {
+                sustainState = false;
+              });
+            }
           }
-        }
-      },
-      child: ElevatedButton(
-        key: key,
-        onPressed: () {},
-        child: Text(
-          'S',
-          style: TextStyle(fontSize: 30),
-        ),
-        style: ElevatedButton.styleFrom(
-          shape: CircleBorder(),
-          padding: EdgeInsets.all(20),
-          primary: sustainState
-              ? Palette.lightPink.color
-              : Palette.yellowGreen.color,
-          onPrimary: Palette.darkGrey.color,
+        },
+        child: ElevatedButton(
+          key: key,
+          onPressed: () {},
+          child: RotatedBox(
+            quarterTurns: 1,
+            child: FittedBox(
+              fit: BoxFit.contain,
+              child: Text(
+                'Sustain',
+                style: TextStyle(
+                  fontSize: 100,
+                ),
+              ),
+            ),
+          ),
+          style: ElevatedButton.styleFrom(
+            alignment: Alignment.center,
+            padding: EdgeInsets.all(0),
+            primary: sustainState
+                ? Palette.lightPink.color
+                : Palette.yellowGreen.color,
+            onPrimary: Palette.darkGrey.color,
+          ),
         ),
       ),
     );
