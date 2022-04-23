@@ -1,6 +1,5 @@
 // ignore_for_file: constant_identifier_names
 
-import 'package:beat_pads/screen_home/model_settings.dart';
 import 'package:beat_pads/services/_services.dart';
 
 abstract class LayoutUtils {

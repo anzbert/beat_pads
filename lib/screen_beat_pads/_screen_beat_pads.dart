@@ -1,9 +1,7 @@
-import 'package:beat_pads/screen_beat_pads/pads.dart';
 import 'package:beat_pads/screen_beat_pads/slide_pads.dart';
 import 'package:flutter/material.dart';
-
+import 'package:beat_pads/services/_services.dart';
 import 'package:provider/provider.dart';
-import 'package:beat_pads/screen_home/_screen_home.dart';
 
 import 'package:beat_pads/screen_beat_pads/button_lock_screen.dart';
 import 'package:beat_pads/screen_beat_pads/buttons_control.dart';
@@ -33,8 +31,7 @@ class BeatPadsScreen extends StatelessWidget {
 
                 // PADS
                 Expanded(
-                    flex: 1,
-                    child: VariablePads()) // TODO: replaced for testing
+                    flex: 1, child: SlidePads()) // TODO: replaced for testing
               ],
             ),
           ),

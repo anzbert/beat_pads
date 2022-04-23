@@ -6,12 +6,6 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 
-import 'package:beat_pads/screen_home/model_midi.dart';
-import 'package:beat_pads/screen_home/model_settings.dart';
-
-export './model_midi.dart';
-export './model_settings.dart';
-
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
 

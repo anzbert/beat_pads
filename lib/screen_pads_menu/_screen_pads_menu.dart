@@ -1,10 +1,10 @@
-import 'package:beat_pads/screen_home/model_settings.dart';
 import 'package:flutter/material.dart';
 
 import 'package:beat_pads/shared/_shared.dart';
 import 'package:beat_pads/screen_pads_menu/menu.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
+import 'package:beat_pads/services/_services.dart';
 
 class PadMenuScreen extends StatelessWidget {
   const PadMenuScreen({Key? key}) : super(key: key);

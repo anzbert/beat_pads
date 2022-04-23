@@ -1,7 +1,6 @@
-import 'package:beat_pads/screen_home/model_settings.dart';
+import 'package:beat_pads/services/_services.dart';
 import 'package:beat_pads/shared/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_midi_command/flutter_midi_command_messages.dart';
 import 'package:provider/provider.dart';
 
 class SustainButton extends StatefulWidget {
@@ -17,11 +16,7 @@ class _SustainButtonState extends State<SustainButton> {
   @override
   void dispose() {
     if (disposeChannel != null) {
-      CCMessage(
-        channel: disposeChannel!,
-        controller: 64,
-        value: 0,
-      ).send();
+      MidiUtils.sustainMessage(disposeChannel!, false);
     }
     super.dispose();
   }
@@ -33,18 +28,10 @@ class _SustainButtonState extends State<SustainButton> {
 
     return Listener(
       onPointerDown: (_) {
-        CCMessage(
-          channel: channel,
-          controller: 64,
-          value: 127,
-        ).send();
+        MidiUtils.sustainMessage(channel, true);
       },
       onPointerUp: (_) {
-        CCMessage(
-          channel: channel,
-          controller: 64,
-          value: 0,
-        ).send();
+        MidiUtils.sustainMessage(channel, false);
       },
       child: ElevatedButton(
         onPressed: () {},

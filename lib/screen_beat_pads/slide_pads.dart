@@ -1,9 +1,11 @@
 import 'package:beat_pads/screen_beat_pads/slide_pad.dart';
-import 'package:beat_pads/screen_home/model_settings.dart';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
+import 'package:beat_pads/shared/_shared.dart';
+import 'package:beat_pads/services/_services.dart';
 
 // TODO: prototype of slidable pads
 
@@ -48,9 +50,9 @@ class _SlidePadsState extends State<SlidePads> {
         padding: EdgeInsets.symmetric(
             horizontal: MediaQuery.of(context).size.width * 0.04),
         child: Listener(
-          onPointerDown:
-              _detectTappedItem, // TODO: cancel moving behaviour if 1st push down is not on a pad?
-          onPointerMove: mounted ? _detectTappedItem : null,
+          onPointerDown: _detectTappedItem,
+          onPointerMove:
+              mounted || _selectedPad != null ? _detectTappedItem : null,
           onPointerUp: mounted ? _clearSelection : null,
           child: Column(
             // Hit testing happens on this keyed Widget, which contains all the pads!
@@ -85,26 +87,4 @@ class _SlidePadsState extends State<SlidePads> {
       ),
     );
   }
-}
-
-class TestObject extends SingleChildRenderObjectWidget {
-  final int index;
-
-  const TestObject({required Widget child, required this.index, Key? key})
-      : super(child: child, key: key);
-
-  @override
-  TestProxyBox createRenderObject(BuildContext context) {
-    return TestProxyBox(index);
-  }
-
-  @override
-  void updateRenderObject(BuildContext context, TestProxyBox renderObject) {
-    renderObject.index = index;
-  }
-}
-
-class TestProxyBox extends RenderProxyBox {
-  int index;
-  TestProxyBox(this.index);
 }

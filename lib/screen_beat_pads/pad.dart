@@ -3,9 +3,8 @@ import 'package:provider/provider.dart';
 
 import 'package:flutter_midi_command/flutter_midi_command_messages.dart';
 import 'package:beat_pads/shared/_shared.dart';
-import 'package:beat_pads/screen_home/_screen_home.dart';
 
-import 'package:beat_pads/services/midi_utils.dart';
+import 'package:beat_pads/services/_services.dart';
 
 class BeatPad extends StatefulWidget {
   const BeatPad({
@@ -33,14 +32,10 @@ class _BeatPadState extends State<BeatPad> {
 
     NoteOnMessage(channel: channel, note: note, velocity: velocity).send();
     lastNote = widget.note;
-    // disposeChannel = channel;
 
     if (sendCC) {
       CCMessage(channel: (channel + 1) % 16, controller: note, value: 127)
           .send();
-      // disposeSendCC = true;
-    } else {
-      // disposeSendCC = false;
     }
   }
 
@@ -68,24 +63,9 @@ class _BeatPadState extends State<BeatPad> {
         () => DateTime.now().millisecondsSinceEpoch - triggerTime > sustainTime,
       );
 
-  // int? disposeChannel;
-  // bool? disposeSendCC;
-
-  // @override
-  // void dispose() {
-  //   if (disposeChannel != null && _pressed) {
-  //     if (lastNote != widget.note && lastNote != null) {
-  //       handleRelease(disposeChannel!, lastNote!, disposeSendCC ?? false, 0);
-  //     } else {
-  //       handleRelease(disposeChannel!, widget.note, disposeSendCC ?? false, 0);
-  //     }
-  //   }
-  //   super.dispose();
-  // }
-
   @override
   Widget build(BuildContext context) {
-    // variables from settings:
+    // variables from settings model:
     final int rootNote = Provider.of<Settings>(context, listen: true).rootNote;
     final int sustainTime =
         Provider.of<Settings>(context, listen: true).sustainTimeExp;
@@ -98,7 +78,7 @@ class _BeatPadState extends State<BeatPad> {
 
     final int channel = Provider.of<Settings>(context, listen: true).channel;
 
-    // variables from and to  midi receiver:
+    // variables from and to midi rx:
     Provider.of<MidiData>(context, listen: false).channel =
         channel - 1; // update MidiData Provider with latest settings
 

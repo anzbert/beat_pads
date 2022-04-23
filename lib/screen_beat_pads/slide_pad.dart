@@ -3,9 +3,7 @@ import 'package:provider/provider.dart';
 
 import 'package:flutter_midi_command/flutter_midi_command_messages.dart';
 import 'package:beat_pads/shared/_shared.dart';
-import 'package:beat_pads/screen_home/_screen_home.dart';
-
-import 'package:beat_pads/services/midi_utils.dart';
+import 'package:beat_pads/services/_services.dart';
 
 class SlideBeatPad extends StatefulWidget {
   const SlideBeatPad({
@@ -23,7 +21,7 @@ class SlideBeatPad extends StatefulWidget {
 class _SlideBeatPadState extends State<SlideBeatPad> {
   int _triggerTime = DateTime.now().millisecondsSinceEpoch;
   bool _checkingSustain = false;
-  // bool _pressed = false;
+  bool _noteOn = false;
 
   int? lastNote;
 
@@ -122,6 +120,20 @@ class _SlideBeatPadState extends State<SlideBeatPad> {
     BorderRadius _padRadius =
         BorderRadius.all(Radius.circular(size.width * 0.008));
 
+// TODO: test midi sending
+    if (widget.selected && !_noteOn) {
+      handlePush(channel, widget.note, sendCC, velocity, sustainTime);
+      _noteOn = true;
+    } else if (!widget.selected && _noteOn) {
+      if (lastNote != widget.note && lastNote != null) {
+        handleRelease(channel, lastNote!, sendCC, sustainTime);
+        lastNote = widget.note;
+      } else {
+        handleRelease(channel, widget.note, sendCC, sustainTime);
+      }
+      _noteOn = false;
+    }
+
     return Container(
       padding: EdgeInsets.all(size.width * 0.005),
       height: double.infinity,
@@ -172,21 +184,3 @@ class _SlideBeatPadState extends State<SlideBeatPad> {
     );
   }
 }
-
-// TODO: implement midi sending
-
- // onPointerDown: (_details) {
-                //   handlePush(
-                //       channel, widget.note, sendCC, velocity, sustainTime);
-                //   if (mounted) setState(() => _pressed = true);
-                // },
-                // onPointerUp: (_details) {
-                //   if (lastNote != widget.note && lastNote != null) {
-                //     handleRelease(channel, lastNote!, sendCC, sustainTime);
-
-                //     lastNote = widget.note;
-                //   } else {
-                //     handleRelease(channel, widget.note, sendCC, sustainTime);
-                //   }
-                //   if (mounted) setState(() => _pressed = false);
-                // },
