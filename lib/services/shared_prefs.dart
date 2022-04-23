@@ -102,7 +102,7 @@ class LoadSettings {
         sendCC = Setting<bool>('sendCC', loadedMap['sendCC']!),
         showNoteNames =
             Setting<bool>('showNoteNames', loadedMap['showNoteNames']!),
-        pitchBend = Setting<bool>('pichBend', loadedMap['pitchBend']!),
+        pitchBend = Setting<bool>('pitchBend', loadedMap['pitchBend']!),
         octaveButtons =
             Setting<bool>('octaveButtons', loadedMap['octaveButtons']!!),
         sustainButton =
@@ -132,18 +132,20 @@ class Setting<T> {
 
   Future<bool> save() async {
     SharedPreferences _sharedPrefs = await SharedPreferences.getInstance();
+    bool result = true;
 
     if (value is Layout) {
       Layout cast = value as Layout;
-      return _sharedPrefs.setString("layout", cast.name);
+      result = await _sharedPrefs.setString("layout", cast.name);
     } else if (value is int) {
-      return _sharedPrefs.setInt(sharedPrefsKey, value as int);
+      result = await _sharedPrefs.setInt(sharedPrefsKey, value as int);
     } else if (value is String) {
-      return _sharedPrefs.setString(sharedPrefsKey, value as String);
+      result = await _sharedPrefs.setString(sharedPrefsKey, value as String);
     } else if (value is bool) {
-      return _sharedPrefs.setBool(sharedPrefsKey, value as bool);
+      result = await _sharedPrefs.setBool(sharedPrefsKey, value as bool);
     }
 
-    return false;
+    if (!result) Utils.logd("Setting<${value.runtimeType}>.save() error");
+    return result;
   }
 }
