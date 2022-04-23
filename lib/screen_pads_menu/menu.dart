@@ -189,8 +189,9 @@ class PadsMenu extends StatelessWidget {
             steps: 11,
           ),
           ListTile(
-            title: Text("Send Control Change"),
-            subtitle: Text("Send CC-ON (127) with Pad Note"),
+            title: Text("Send CC"),
+            subtitle: Text(
+                "Send Control Change Message along with Note, one Midi Channel higher than the Note"),
             trailing: Switch(
                 value: settings.sendCC,
                 onChanged: (value) => settings.sendCC = value),

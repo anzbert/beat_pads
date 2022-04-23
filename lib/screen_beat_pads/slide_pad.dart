@@ -37,7 +37,8 @@ class _SlideBeatPadState extends State<SlideBeatPad> {
     lastNote = widget.note;
 
     if (sendCC) {
-      CCMessage(channel: channel, controller: note, value: 127).send();
+      CCMessage(channel: (channel + 1) % 16, controller: note, value: 127)
+          .send();
     } else {}
   }
 
@@ -55,7 +56,7 @@ class _SlideBeatPadState extends State<SlideBeatPad> {
     ).send();
 
     if (sendCC == true) {
-      CCMessage(channel: channel, controller: note, value: 0).send();
+      CCMessage(channel: (channel + 1) % 16, controller: note, value: 0).send();
     }
   }
 
