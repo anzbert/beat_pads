@@ -16,6 +16,8 @@ class _SustainButtonRectState extends State<SustainButtonRect> {
   int? disposeChannel;
 
   bool notOnButtonRect(Offset touchPosition) {
+    if (key.currentContext == null) return true;
+
     final RenderBox childRenderBox =
         key.currentContext!.findRenderObject() as RenderBox;
     final Size childSize = childRenderBox.size;

@@ -55,6 +55,9 @@ class _SlidePadsState extends State<SlidePads> {
         if (mounted) _detectTappedItem(touch);
       },
       // TODO: weirdness when moving post octave change
+      // TODO : move midi logic to midiData provider model!!!!!!
+      // make sure many pads are playable
+
       onPointerMove: (touch) {
         if (mounted || _selectedPad != null) _detectTappedItem(touch);
       },
@@ -62,7 +65,7 @@ class _SlidePadsState extends State<SlidePads> {
         if (mounted) _clearSelection();
       },
       child: Column(
-        // Hit testing happens on this keyed Widget, which contains all the pads!
+        // Hit testing happens on this keyed Widget, which contains all the pads:
         key: _padsWidgetKey,
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
