@@ -9,36 +9,33 @@ class VariablePads extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<List<int>> rowsList =
         Provider.of<Settings>(context, listen: true).rows;
+    Provider.of<MidiData>(context, listen: false).channel =
+        Provider.of<Settings>(context, listen: true).channel -
+            1; // TODO needs listen true? rebuilding?
 
-    return Center(
-      child: Container(
-        padding: EdgeInsets.symmetric(
-            horizontal: MediaQuery.of(context).size.width * 0.04),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ...rowsList.map((row) {
-              return Expanded(
-                flex: 1,
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      ...row.map((padNote) {
-                        return Expanded(
-                          flex: 1,
-                          child: BeatPad(
-                            note: padNote,
-                          ),
-                        );
-                      }).toList()
-                    ]),
-              );
-            }).toList()
-          ],
-        ),
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        ...rowsList.map((row) {
+          return Expanded(
+            flex: 1,
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  ...row.map((padNote) {
+                    return Expanded(
+                      flex: 1,
+                      child: BeatPad(
+                        note: padNote,
+                      ),
+                    );
+                  }).toList()
+                ]),
+          );
+        }).toList()
+      ],
     );
   }
 }

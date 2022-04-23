@@ -2,13 +2,10 @@ import 'package:beat_pads/screen_beat_pads/_screen_beat_pads.dart';
 import 'package:beat_pads/screen_pads_menu/box_credits.dart';
 import 'package:beat_pads/screen_pads_menu/slider_int.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_midi_command/flutter_midi_command_messages.dart';
 import 'package:provider/provider.dart';
 
 import 'package:beat_pads/shared/_shared.dart';
 import 'package:beat_pads/services/_services.dart';
-
-import 'package:beat_pads/screen_home/_screen_home.dart';
 
 import 'package:beat_pads/screen_pads_menu/counter_int.dart';
 import 'package:beat_pads/screen_pads_menu/slider_non_linear.dart';
@@ -165,7 +162,8 @@ class PadsMenu extends StatelessWidget {
           Divider(),
           ListTile(
             title: Text("Sustain Button"),
-            subtitle: Text("Adds Sustain-Pedal Button next to Pads"),
+            subtitle: Text(
+                "Adds Sustain-Pedal Button next to Pads. Keep Sustain ON by pushing and sliding away from Button"),
             trailing: Switch(
                 value: settings.sustainButton,
                 onChanged: (value) =>

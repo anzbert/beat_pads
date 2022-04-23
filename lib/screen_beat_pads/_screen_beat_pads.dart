@@ -1,3 +1,4 @@
+import 'package:beat_pads/screen_beat_pads/buttons_controls_rect.dart';
 import 'package:beat_pads/screen_beat_pads/slide_pads.dart';
 import 'package:flutter/material.dart';
 import 'package:beat_pads/services/_services.dart';
@@ -24,14 +25,19 @@ class BeatPadsScreen extends StatelessWidget {
               children: [
                 // CONTROL BUTTONS
                 if (settings.octaveButtons || settings.sustainButton)
-                  ControlButtons(),
+                  Expanded(
+                    flex: 1,
+                    child: ControlButtonsRect(), // TODO: replaced for testing
+                  ),
 
                 // PITCH BEND
-                if (settings.pitchBend) PitchBender(),
+                if (settings.pitchBend) PitchBender(), // TODO: restyle this
 
                 // PADS
                 Expanded(
-                    flex: 1, child: SlidePads()) // TODO: replaced for testing
+                  flex: 20,
+                  child: SlidePads(), // TODO: replaced for testing
+                )
               ],
             ),
           ),

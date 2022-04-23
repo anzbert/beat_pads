@@ -64,6 +64,9 @@ class _SlideBeatPadState extends State<SlideBeatPad> {
         () => DateTime.now().millisecondsSinceEpoch - triggerTime > sustainTime,
       );
 
+  final Color _padTextColor = Palette.darkGrey.color;
+  final EdgeInsets _padPadding = const EdgeInsets.all(2.5);
+
   @override
   Widget build(BuildContext context) {
     // variables from settings:
@@ -79,10 +82,7 @@ class _SlideBeatPadState extends State<SlideBeatPad> {
 
     final int channel = Provider.of<Settings>(context, listen: true).channel;
 
-    // variables from and to  midi receiver:
-    Provider.of<MidiData>(context, listen: false).channel =
-        channel - 1; // update MidiData Provider with latest settings
-
+    // variables from midi receiver:
     final int _rxNote = widget.note < 127 && widget.note >= 0
         ? Provider.of<MidiData>(context, listen: true).rxNoteBuffer[widget.note]
         : 0;
@@ -111,20 +111,16 @@ class _SlideBeatPadState extends State<SlideBeatPad> {
       _color = Palette.yellowGreen.color; // default pad color
     }
 
-    Color _padTextColor = Palette.darkGrey.color;
-
-    EdgeInsets _padPadding = const EdgeInsets.all(2.5);
-
     Size size = MediaQuery.of(context).size;
     double _fontSize = size.width * 0.022;
     BorderRadius _padRadius =
         BorderRadius.all(Radius.circular(size.width * 0.008));
 
-// TODO: test midi sending
-    if (widget.selected && !_noteOn) {
+// TODO: test midi sending in all situations
+    if (widget.selected && _noteOn == false) {
       handlePush(channel, widget.note, sendCC, velocity, sustainTime);
       _noteOn = true;
-    } else if (!widget.selected && _noteOn) {
+    } else if (widget.selected == false && _noteOn) {
       if (lastNote != widget.note && lastNote != null) {
         handleRelease(channel, lastNote!, sendCC, sustainTime);
         lastNote = widget.note;

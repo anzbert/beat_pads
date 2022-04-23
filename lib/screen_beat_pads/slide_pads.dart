@@ -45,45 +45,41 @@ class _SlidePadsState extends State<SlidePads> {
     final List<List<int>> rowsList =
         Provider.of<Settings>(context, listen: true).rows;
 
-    return Center(
-      child: Container(
-        padding: EdgeInsets.symmetric(
-            horizontal: MediaQuery.of(context).size.width * 0.04),
-        child: Listener(
-          onPointerDown: _detectTappedItem,
-          onPointerMove:
-              mounted || _selectedPad != null ? _detectTappedItem : null,
-          onPointerUp: mounted ? _clearSelection : null,
-          child: Column(
-            // Hit testing happens on this keyed Widget, which contains all the pads!
-            key: _padsWidgetKey,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ...rowsList.map((row) {
-                return Expanded(
-                  flex: 1,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      ...row.map((note) {
-                        return Expanded(
-                          flex: 1,
-                          child: TestObject(
-                            index: note,
-                            child: SlideBeatPad(
-                                note: note, selected: note == _selectedPad),
-                          ),
-                        );
-                      }).toList()
-                    ],
-                  ),
-                );
-              }).toList()
-            ],
-          ),
-        ),
+    Provider.of<MidiData>(context, listen: false).channel =
+        Provider.of<Settings>(context, listen: true).channel - 1;
+
+    return Listener(
+      onPointerDown: _detectTappedItem,
+      onPointerMove: mounted || _selectedPad != null ? _detectTappedItem : null,
+      onPointerUp: mounted ? _clearSelection : null,
+      child: Column(
+        // Hit testing happens on this keyed Widget, which contains all the pads!
+        key: _padsWidgetKey,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          ...rowsList.map((row) {
+            return Expanded(
+              flex: 1,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  ...row.map((note) {
+                    return Expanded(
+                      flex: 1,
+                      child: TestObject(
+                        index: note,
+                        child: SlideBeatPad(
+                            note: note, selected: note == _selectedPad),
+                      ),
+                    );
+                  }).toList()
+                ],
+              ),
+            );
+          }).toList()
+        ],
       ),
     );
   }

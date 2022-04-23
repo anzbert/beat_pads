@@ -78,10 +78,7 @@ class _BeatPadState extends State<BeatPad> {
 
     final int channel = Provider.of<Settings>(context, listen: true).channel;
 
-    // variables from and to midi rx:
-    Provider.of<MidiData>(context, listen: false).channel =
-        channel - 1; // update MidiData Provider with latest settings
-
+    // variables from midi rx:
     final int _rxNote = widget.note < 127 && widget.note >= 0
         ? Provider.of<MidiData>(context, listen: true).rxNoteBuffer[widget.note]
         : 0;
