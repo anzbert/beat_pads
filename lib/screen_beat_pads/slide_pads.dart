@@ -3,12 +3,9 @@ import 'package:beat_pads/screen_beat_pads/slide_pad.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_midi_command/flutter_midi_command_messages.dart';
 import 'package:provider/provider.dart';
 import 'package:beat_pads/shared/_shared.dart';
 import 'package:beat_pads/services/_services.dart';
-
-// TODO: prototype of slidable pads
 
 class SlidePads extends StatefulWidget {
   const SlidePads({Key? key}) : super(key: key);

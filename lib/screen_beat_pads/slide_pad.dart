@@ -139,7 +139,8 @@ class _SlideBeatPadState extends State<SlideBeatPad> {
     BorderRadius _padRadius =
         BorderRadius.all(Radius.circular(size.width * 0.008));
 
-// TODO: test midi sending in all situations
+    // TODO: test midi sending in all situations!!!
+
     if (widget.selected && _noteOn == false) {
       handlePush(channel, widget.note, sendCC, velocity, sustainTime);
       _noteOn = true;

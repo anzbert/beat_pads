@@ -10,8 +10,7 @@ class VariablePads extends StatelessWidget {
     final List<List<int>> rowsList =
         Provider.of<Settings>(context, listen: true).rows;
     Provider.of<MidiData>(context, listen: false).channel =
-        Provider.of<Settings>(context, listen: true).channel -
-            1; // TODO needs listen true? rebuilding?
+        Provider.of<Settings>(context, listen: true).channel - 1;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,

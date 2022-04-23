@@ -22,24 +22,35 @@ class BeatPadsScreen extends StatelessWidget {
           body: SafeArea(
             child: Row(
               children: [
-                // CONTROL BUTTONS
-                if (settings.octaveButtons || settings.sustainButton)
+                // SKIP laggy edge area. OS uses edges to detect system gestures
+                // and messes with touch detection
+                if (settings.octaveButtons ||
+                    settings.sustainButton ||
+                    settings.pitchBend)
                   SizedBox(
-                    width: 25, // SKIP laggy edge area
+                    width: 25,
                   ),
+
+                // CONTROL BUTTONS
                 if (settings.octaveButtons || settings.sustainButton)
                   Expanded(
                     flex: 2,
-                    child: ControlButtonsRect(), // TODO: replaced for testing
+                    child: ControlButtonsRect(),
                   ),
 
                 // PITCH BEND
-                if (settings.pitchBend) PitchBender(), // TODO: restyle this
+                if (settings.pitchBend)
+                  Expanded(
+                    flex: 2,
+                    child:
+                        PitchBender(), // TODO: restyle sizing, then copy for mod wheel
+                  ),
 
                 // PADS
                 Expanded(
                   flex: 30,
-                  child: SlidePads(), // TODO: replaced for testing
+                  child:
+                      SlidePads(), // TODO: replaced for testing with slideable
                 )
               ],
             ),
