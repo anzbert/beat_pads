@@ -20,34 +20,38 @@ class BeatPadsScreen extends StatelessWidget {
           floatingActionButton:
               settings.lockScreenButton ? LockScreenButton() : null,
           body: SafeArea(
-            child: Padding(
-              // SKIP laggy edge area. OS uses edges to detect system gestures, messes with touch
-              padding: const EdgeInsets.only(left: 25, right: 5),
-              child: Row(
-                children: [
-                  // CONTROL BUTTONS
-                  if (settings.octaveButtons || settings.sustainButton)
-                    Expanded(
-                      flex: 2,
-                      child: ControlButtonsRect(),
-                    ),
-
-                  // PITCH BEND
-                  if (settings.pitchBend)
-                    Expanded(
-                      flex: 2,
-                      child:
-                          PitchBender(), // TODO: restyle sizing, then copy for mod wheel
-                    ),
-
-                  // PADS
+            child: Row(
+              children: [
+                // SKIP laggy edge area. OS uses edges to detect system gestures
+                // and messes with touch detection
+                Expanded(
+                  flex: 3,
+                  child: SizedBox(),
+                ),
+                // CONTROL BUTTONS
+                if (settings.octaveButtons || settings.sustainButton)
                   Expanded(
-                    flex: 30,
-                    child:
-                        SlidePads(), // TODO: replaced for testing with slideable
+                    flex: 4,
+                    child: ControlButtonsRect(),
                   ),
-                ],
-              ),
+                // PITCH BEND
+                if (settings.pitchBend)
+                  Expanded(
+                    flex: 4,
+                    child:
+                        PitchBender(), // TODO: restyle sizing, then copy for mod wheel
+                  ),
+                // PADS
+                Expanded(
+                  flex: 60,
+                  child:
+                      SlidePads(), // TODO: replaced for testing with slideable
+                ),
+                Expanded(
+                  flex: 1,
+                  child: SizedBox(),
+                ),
+              ],
             ),
           ),
         );
