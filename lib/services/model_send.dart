@@ -27,8 +27,9 @@ class MidiSender extends ChangeNotifier {
 
   bool isNoteOn(int note) => _sendBuffer[note] != 0;
 
-  void noteToBufferAndSend(int note, bool noteOn) {
+  void updateNoteInBufferAndSend(int note, bool noteOn) {
     _sendBuffer[note] = noteOn ? _settings.velocity : 0;
+
     if (noteOn) {
       NoteOnMessage(
         channel: _settings.channel,
@@ -54,44 +55,56 @@ class MidiSender extends ChangeNotifier {
 
     for (int n = 0; n < 128; n++) {
       if (allCurrentlyTouched.contains(n) && _sendBuffer[n] == 0) {
-        noteToBufferAndSend(n, true);
+        updateNoteInBufferAndSend(n, true);
         refresh = true;
       } else if (!allCurrentlyTouched.contains(n) && _sendBuffer[n] != 0) {
-        noteToBufferAndSend(n, false);
+        updateNoteInBufferAndSend(n, false);
         refresh = true;
       }
     }
 
-    if (refresh) notifyListeners();
+    if (refresh) notifyListeners(); // notify pads for color change
   }
 
   // TOUCH HANDLING:
   final _touchBuffer = TouchBuffer();
 
   push(PointerEvent touch, int note) {
+    // add event to touchbuffer and send noteOn
     _touchBuffer.buffer.add(TouchEvent(touch, note));
-    noteToBufferAndSend(note, true);
-    notifyListeners();
+    updateNoteInBufferAndSend(note, true);
+
+    notifyListeners(); // notify pads for color change
   }
 
   slide(PointerEvent touch, int? note) {
+    // check if it is a legeit event that has previously been registered by a push()
     TouchEvent? eventInBuffer = _touchBuffer.findByPointer(touch.pointer);
     if (eventInBuffer == null) return;
 
+    // check if previous events are dirty (by octave change):
     if (eventInBuffer.blockSlide) return;
 
+    // update touchbuffer with this new event:
     _touchBuffer.updateWith(TouchEvent(touch, note));
 
+    // update send buffer with updated touchbuffer and send noteOn and noteOff's
+    // notify pads for color change
     updateSendBufferWithTouchBufferAndNotify();
   }
 
   lift(PointerEvent touch, int note) {
+    // only send noteoff if there is a previous touch event,
+    // which still has a note attached to it
+
     TouchEvent? eventInBuffer = _touchBuffer.findByPointer(touch.pointer);
     if (eventInBuffer?.note == null) return;
 
-    noteToBufferAndSend(eventInBuffer!.note!, false);
-    notifyListeners();
+    // send noteOff and remove from touchbuffer
+    updateNoteInBufferAndSend(eventInBuffer!.note!, false);
     _touchBuffer.removeEvent(touch.pointer);
+
+    notifyListeners(); // notify pads for color change
   }
 
   // DISPOSE:
@@ -148,7 +161,6 @@ class TouchEvent {
   int? note;
   bool blockSlide = false;
 }
-
 
 // ////////////////////////////// OLD CODE:
 //
