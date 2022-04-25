@@ -198,10 +198,7 @@ class PadsMenu extends StatelessWidget {
               min: 1,
               max: 16,
               label: "Midi Channel",
-              setValue: (v) {
-                settings.channel = v - 1;
-                Provider.of<MidiData>(context, listen: false).channel = v - 1;
-              },
+              setValue: (v) => settings.channel = v - 1,
               readValue: settings.channel + 1),
           Divider(),
           ListTile(
@@ -217,7 +214,7 @@ class PadsMenu extends StatelessWidget {
             label: "Clear Received Midi Buffer",
             message: "Received Midi Buffer cleared",
             onPressed: () {
-              Provider.of<MidiData>(context, listen: false).rxNotesReset();
+              Provider.of<MidiReceiver>(context, listen: false).resetRxBuffer();
               MidiUtils.killAllMessage(settings.channel);
             },
           ),

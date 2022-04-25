@@ -9,32 +9,38 @@ class VariablePads extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<List<int>> rowsList =
         Provider.of<Settings>(context, listen: true).rows;
-    Provider.of<MidiData>(context, listen: false).channel =
-        Provider.of<Settings>(context, listen: true).channel - 1;
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        ...rowsList.map((row) {
-          return Expanded(
-            flex: 1,
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  ...row.map((padNote) {
-                    return Expanded(
-                      flex: 1,
-                      child: BeatPad(
-                        note: padNote,
-                      ),
-                    );
-                  }).toList()
-                ]),
-          );
-        }).toList()
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) =>
+              MidiReceiver(Provider.of<Settings>(context, listen: true)),
+        )
       ],
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          ...rowsList.map((row) {
+            return Expanded(
+              flex: 1,
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    ...row.map((padNote) {
+                      return Expanded(
+                        flex: 1,
+                        child: BeatPad(
+                          note: padNote,
+                        ),
+                      );
+                    }).toList()
+                  ]),
+            );
+          }).toList()
+        ],
+      ),
     );
   }
 }

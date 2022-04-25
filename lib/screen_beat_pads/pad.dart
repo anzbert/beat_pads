@@ -80,7 +80,7 @@ class _BeatPadState extends State<BeatPad> {
 
     // variables from midi rx:
     final int _rxNote = widget.note < 127 && widget.note >= 0
-        ? Provider.of<MidiData>(context, listen: true).rxNoteBuffer[widget.note]
+        ? Provider.of<MidiReceiver>(context, listen: true).rxBuffer[widget.note]
         : 0;
 
     // PAD COLOR:

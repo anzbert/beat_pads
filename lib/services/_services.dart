@@ -7,5 +7,6 @@ export './pads_layouts.dart';
 export './transition_utils.dart';
 export './shared_prefs.dart';
 export './data_classes.dart';
-export './model_midi.dart';
+export './model_receive.dart';
+export './model_send.dart';
 export './model_settings.dart';

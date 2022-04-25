@@ -9,21 +9,20 @@ import 'package:beat_pads/services/_services.dart';
 
 class SlidePads extends StatefulWidget {
   const SlidePads({Key? key}) : super(key: key);
-
   @override
   State<SlidePads> createState() => _SlidePadsState();
 }
 
 class _SlidePadsState extends State<SlidePads> {
   final GlobalKey _padsWidgetKey = GlobalKey();
-  int? _selectedPad;
+  // MidiSender? _sender;
 
-  void _detectTappedItem(PointerEvent event) {
+  int? _detectTappedItem(PointerEvent event) {
     final BuildContext? context = _padsWidgetKey.currentContext;
-    if (context == null) return;
+    if (context == null) return null;
 
     final RenderBox? box = context.findAncestorRenderObjectOfType<RenderBox>();
-    if (box == null) return;
+    if (box == null) return null;
 
     final Offset localOffset = box.globalToLocal(event.position);
     final BoxHitTestResult results = BoxHitTestResult();
@@ -32,67 +31,92 @@ class _SlidePadsState extends State<SlidePads> {
       for (final HitTestEntry<HitTestTarget> hit in results.path) {
         final HitTestTarget target = hit.target;
         if (target is TestProxyBox) {
-          setState(() => _selectedPad = target.index);
+          return target.index;
         }
       }
     }
-  }
 
-  void _clearSelection() {
-    setState(() => _selectedPad = null);
+    return null;
   }
 
   @override
   Widget build(BuildContext context) {
+    // _sender = MidiSender(Provider.of<Settings>(context, listen: true));
+
     final List<List<int>> rowsList =
         Provider.of<Settings>(context, listen: true).rows;
 
-    Provider.of<MidiData>(context, listen: false).channel =
-        Provider.of<Settings>(context, listen: true).channel - 1;
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+            create: (context) =>
+                MidiReceiver(Provider.of<Settings>(context, listen: false))),
+        ChangeNotifierProvider(
+            create: (context) =>
+                MidiSender(Provider.of<Settings>(context, listen: false))),
+      ],
+      builder: (context, child) {
+        return Listener(
+          // TODO: weirdness when moving post octave change
+          // TODO : move midi logic to midiData provider model!!!!!!
 
-    return Listener(
-      onPointerDown: (touch) {
-        if (mounted) _detectTappedItem(touch);
-      },
-      // TODO: weirdness when moving post octave change
-      // TODO : move midi logic to midiData provider model!!!!!!
-      // make sure many pads are playable
+          onPointerDown: (touch) {
+            int? result = _detectTappedItem(touch);
+            if (mounted && result != null) {
+              Provider.of<MidiSender>(context, listen: false)
+                  .push(touch, result);
+            }
+          },
+          onPointerMove: (touch) {
+            int? result = _detectTappedItem(touch);
+            if (mounted && result != null) {
+              Provider.of<MidiSender>(context, listen: false)
+                  .slide(touch, result);
+            }
+          },
+          onPointerUp: (touch) {
+            int? result = _detectTappedItem(touch);
+            if (mounted && result != null) {
+              Provider.of<MidiSender>(context, listen: false)
+                  .lift(touch, result);
+            }
+          },
 
-      onPointerMove: (touch) {
-        if (mounted || _selectedPad != null) _detectTappedItem(touch);
+          child: Column(
+            // Hit testing happens on this keyed Widget, which contains all the pads:
+            key: _padsWidgetKey,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ...rowsList.map((row) {
+                return Expanded(
+                  flex: 1,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      ...row.map((note) {
+                        return Expanded(
+                          flex: 1,
+                          child: HitTestObject(
+                            index: note,
+                            child: SlideBeatPad(
+                              note: note,
+                              selected:
+                                  Provider.of<MidiSender>(context, listen: true)
+                                      .isNoteOn(note),
+                            ),
+                          ),
+                        );
+                      }).toList()
+                    ],
+                  ),
+                );
+              }).toList()
+            ],
+          ),
+        );
       },
-      onPointerUp: (_) {
-        if (mounted) _clearSelection();
-      },
-      child: Column(
-        // Hit testing happens on this keyed Widget, which contains all the pads:
-        key: _padsWidgetKey,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          ...rowsList.map((row) {
-            return Expanded(
-              flex: 1,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  ...row.map((note) {
-                    return Expanded(
-                      flex: 1,
-                      child: TestObject(
-                        index: note,
-                        child: SlideBeatPad(
-                            note: note, selected: note == _selectedPad),
-                      ),
-                    );
-                  }).toList()
-                ],
-              ),
-            );
-          }).toList()
-        ],
-      ),
     );
   }
 }

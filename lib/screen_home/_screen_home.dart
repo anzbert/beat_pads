@@ -22,7 +22,6 @@ class HomeScreen extends StatelessWidget {
             providers: [
               ChangeNotifierProvider(
                   create: (context) => Settings(snapshot.data!)),
-              ChangeNotifierProvider(create: (context) => MidiData()),
             ],
             child: inPortrait
                 ? PadMenuScreen() // PORTRAIT: SHOW PADS MENU

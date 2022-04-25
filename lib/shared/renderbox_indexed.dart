@@ -1,10 +1,10 @@
 import 'package:flutter/rendering.dart';
 import 'package:flutter/material.dart';
 
-class TestObject extends SingleChildRenderObjectWidget {
+class HitTestObject extends SingleChildRenderObjectWidget {
   final int index;
 
-  const TestObject({required Widget child, required this.index, Key? key})
+  const HitTestObject({required Widget child, required this.index, Key? key})
       : super(child: child, key: key);
 
   @override

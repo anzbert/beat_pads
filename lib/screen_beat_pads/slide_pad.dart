@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:flutter_midi_command/flutter_midi_command_messages.dart';
 import 'package:beat_pads/shared/_shared.dart';
 import 'package:beat_pads/services/_services.dart';
 
@@ -19,109 +18,108 @@ class SlideBeatPad extends StatefulWidget {
 }
 
 class _SlideBeatPadState extends State<SlideBeatPad> {
-  int _triggerTime = DateTime.now().millisecondsSinceEpoch;
-  bool _checkingSustain = false;
-  bool _noteOn = false;
+  // int _triggerTime = DateTime.now().millisecondsSinceEpoch;
+  // bool _checkingSustain = false;
+  // bool _noteOn = false;
 
-  int? lastNote;
-  int? disposeChannel;
-  bool disposeCC = false;
+  // int? lastNote;
+  // int? disposeChannel;
+  // bool disposeCC = false;
 
-  handlePush(
-      int channel, int note, bool sendCC, int velocity, int sustainTime) {
-    if (sustainTime != 0) {
-      _triggerTime = DateTime.now().millisecondsSinceEpoch;
-    }
-    disposeChannel = channel;
+  // handlePush(
+  //     int channel, int note, bool sendCC, int velocity, int sustainTime) {
+  //   if (sustainTime != 0) {
+  //     _triggerTime = DateTime.now().millisecondsSinceEpoch;
+  //   }
+  //   disposeChannel = channel;
 
-    NoteOnMessage(channel: channel, note: note, velocity: velocity).send();
-    lastNote = widget.note;
+  //   NoteOnMessage(channel: channel, note: note, velocity: velocity).send();
+  //   lastNote = widget.note;
 
-    if (sendCC) {
-      disposeCC = true;
-      CCMessage(channel: (channel + 1) % 16, controller: note, value: 127)
-          .send();
-    } else {}
-  }
+  //   if (sendCC) {
+  //     disposeCC = true;
+  //     CCMessage(channel: (channel + 1) % 16, controller: note, value: 127)
+  //         .send();
+  //   } else {}
+  // }
 
-  handleRelease(int channel, int note, bool? sendCC, int sustainTime) async {
-    if (sustainTime != 0) {
-      if (_checkingSustain) return;
+  // handleRelease(int channel, int note, bool? sendCC, int sustainTime) async {
+  //   if (sustainTime != 0) {
+  //     if (_checkingSustain) return;
 
-      _checkingSustain = true;
-      while (await _checkSustainTime(sustainTime, _triggerTime) == false) {}
-      _checkingSustain = false;
-    }
-    NoteOffMessage(
-      channel: channel,
-      note: note,
-    ).send();
+  //     _checkingSustain = true;
+  //     while (await _checkSustainTime(sustainTime, _triggerTime) == false) {}
+  //     _checkingSustain = false;
+  //   }
+  //   NoteOffMessage(
+  //     channel: channel,
+  //     note: note,
+  //   ).send();
 
-    if (sendCC == true) {
-      CCMessage(channel: (channel + 1) % 16, controller: note, value: 0).send();
-    }
-  }
+  //   if (sendCC == true) {
+  //     CCMessage(channel: (channel + 1) % 16, controller: note, value: 0).send();
+  //   }
+  // }
 
-  Future<bool> _checkSustainTime(int sustainTime, int triggerTime) =>
-      Future.delayed(
-        const Duration(milliseconds: 5),
-        () => DateTime.now().millisecondsSinceEpoch - triggerTime > sustainTime,
-      );
+  // Future<bool> _checkSustainTime(int sustainTime, int triggerTime) =>
+  //     Future.delayed(
+  //       const Duration(milliseconds: 5),
+  //       () => DateTime.now().millisecondsSinceEpoch - triggerTime > sustainTime,
+  //     );
+
+  // @override
+  // void dispose() {
+  //   if (_noteOn && disposeChannel != null) {
+  //     NoteOffMessage(
+  //       channel: disposeChannel!,
+  //       note: widget.note,
+  //     ).send();
+
+  //     if (disposeCC == true) {
+  //       CCMessage(
+  //               channel: (disposeChannel! + 1) % 16,
+  //               controller: widget.note,
+  //               value: 0)
+  //           .send();
+  //     }
+  //   }
+  //   super.dispose();
+  // }
 
   final Color _padTextColor = Palette.darkGrey.color;
   final EdgeInsets _padPadding = const EdgeInsets.all(2.5);
 
   @override
-  void dispose() {
-    if (_noteOn && disposeChannel != null) {
-      NoteOffMessage(
-        channel: disposeChannel!,
-        note: widget.note,
-      ).send();
-
-      if (disposeCC == true) {
-        CCMessage(
-                channel: (disposeChannel! + 1) % 16,
-                controller: widget.note,
-                value: 0)
-            .send();
-      }
-    }
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     // variables from settings:
+    // final int sustainTime =
+    //     Provider.of<Settings>(context, listen: true).sustainTimeExp;
+    // final int velocity = Provider.of<Settings>(context, listen: true).velocity;
+    // final bool sendCC = Provider.of<Settings>(context, listen: true).sendCC;
+    // final int channel = Provider.of<Settings>(context, listen: true).channel;
+
     final int rootNote = Provider.of<Settings>(context, listen: true).rootNote;
-    final int sustainTime =
-        Provider.of<Settings>(context, listen: true).sustainTimeExp;
     final List<int> scale =
         Provider.of<Settings>(context, listen: true).scaleList;
-    final int velocity = Provider.of<Settings>(context, listen: true).velocity;
     final bool showNoteNames =
         Provider.of<Settings>(context, listen: true).showNoteNames;
-    final bool sendCC = Provider.of<Settings>(context, listen: true).sendCC;
-
-    final int channel = Provider.of<Settings>(context, listen: true).channel;
-
-    // variables from midi receiver:
     final int _rxNote = widget.note < 127 && widget.note >= 0
-        ? Provider.of<MidiData>(context, listen: true).rxNoteBuffer[widget.note]
+        ? Provider.of<MidiReceiver>(context, listen: true).rxBuffer[widget.note]
         : 0;
 
     // PAD COLOR:
     final Color _color;
     Color _splashColor = Palette.lightPink.color;
 
-    if (widget.selected == true) {
+    if (widget.selected) {
       _color = _splashColor.withAlpha(220); // maintain color when pushed
 
-    } else if (_rxNote > 0) {
-      _color = Palette.cadetBlue.color.withAlpha(
-          _rxNote * 2); // receiving midi signal adjusted by received velocity
-
-    } else if (widget.note > 127 || widget.note < 0) {
+    }
+    // else if (_rxNote > 0) {
+    //   _color = Palette.cadetBlue.color.withAlpha(
+    //       _rxNote * 2); // receiving midi signal adjusted by received velocity
+    // }
+    else if (widget.note > 127 || widget.note < 0) {
       _color = Palette.darkGrey.color; // out of midi range
 
     } else if (!MidiUtils.isNoteInScale(widget.note, scale, rootNote)) {
@@ -141,18 +139,18 @@ class _SlideBeatPadState extends State<SlideBeatPad> {
 
     // TODO: test midi sending in all situations!!!
 
-    if (widget.selected && _noteOn == false) {
-      handlePush(channel, widget.note, sendCC, velocity, sustainTime);
-      _noteOn = true;
-    } else if (widget.selected == false && _noteOn) {
-      if (lastNote != widget.note && lastNote != null) {
-        handleRelease(channel, lastNote!, sendCC, sustainTime);
-        lastNote = widget.note;
-      } else {
-        handleRelease(channel, widget.note, sendCC, sustainTime);
-      }
-      _noteOn = false;
-    }
+    // if (widget.selected && _noteOn == false) {
+    //   handlePush(channel, widget.note, sendCC, velocity, sustainTime);
+    //   _noteOn = true;
+    // } else if (widget.selected == false && _noteOn) {
+    //   if (lastNote != widget.note && lastNote != null) {
+    //     handleRelease(channel, lastNote!, sendCC, sustainTime);
+    //     lastNote = widget.note;
+    //   } else {
+    //     handleRelease(channel, widget.note, sendCC, sustainTime);
+    //   }
+    //   _noteOn = false;
+    // }
 
     return Container(
       padding: EdgeInsets.all(size.width * 0.005),
