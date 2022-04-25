@@ -62,6 +62,7 @@ class _SlidePadsState extends State<SlidePads> {
             }
           },
           onPointerMove: (touch) {
+            // TODO: make this whole callback conditional for sliding behaviour on or off:
             int? result = _detectTappedItem(touch);
             if (mounted) {
               sender.slide(touch, result);

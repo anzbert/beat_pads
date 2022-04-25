@@ -36,12 +36,25 @@ class MidiSender extends ChangeNotifier {
         note: note,
         velocity: _settings.velocity,
       ).send();
+      if (_settings.sendCC) {
+        CCMessage(
+          channel: (_settings.channel + 1) % 16,
+          controller: note,
+          value: 127,
+        ).send();
+      }
     } else {
       NoteOffMessage(
         channel: _settings.channel,
         note: note,
         velocity: 0,
       ).send();
+      if (_settings.sendCC) {
+        CCMessage(
+          channel: (_settings.channel + 1) % 16,
+          controller: note,
+        ).send();
+      }
     }
   }
 
@@ -116,6 +129,12 @@ class MidiSender extends ChangeNotifier {
           channel: _settings.channel,
           note: note,
         ).send();
+        if (_settings.sendCC) {
+          CCMessage(
+            channel: (_settings.channel + 1) % 16,
+            controller: note,
+          ).send();
+        }
       }
     }
     super.dispose();
