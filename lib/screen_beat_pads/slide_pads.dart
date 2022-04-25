@@ -15,7 +15,6 @@ class SlidePads extends StatefulWidget {
 
 class _SlidePadsState extends State<SlidePads> {
   final GlobalKey _padsWidgetKey = GlobalKey();
-  // MidiSender? _sender;
 
   int? _detectTappedItem(PointerEvent event) {
     final BuildContext? context = _padsWidgetKey.currentContext;
@@ -41,11 +40,6 @@ class _SlidePadsState extends State<SlidePads> {
 
   @override
   Widget build(BuildContext context) {
-    // _sender = MidiSender(Provider.of<Settings>(context, listen: true));
-
-    final List<List<int>> rowsList =
-        Provider.of<Settings>(context, listen: true).rows;
-
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
@@ -56,39 +50,33 @@ class _SlidePadsState extends State<SlidePads> {
                 MidiSender(Provider.of<Settings>(context, listen: false))),
       ],
       builder: (context, child) {
+        MidiSender sender = Provider.of<MidiSender>(context, listen: false);
         return Listener(
-          // TODO: weirdness when moving post octave change
-          // TODO : move midi logic to midiData provider model!!!!!!
-
           onPointerDown: (touch) {
             int? result = _detectTappedItem(touch);
             if (mounted && result != null) {
-              Provider.of<MidiSender>(context, listen: false)
-                  .push(touch, result);
+              sender.push(touch, result);
             }
           },
           onPointerMove: (touch) {
             int? result = _detectTappedItem(touch);
-            if (mounted && result != null) {
-              Provider.of<MidiSender>(context, listen: false)
-                  .slide(touch, result);
+            if (mounted) {
+              sender.slide(touch, result);
             }
           },
           onPointerUp: (touch) {
             int? result = _detectTappedItem(touch);
             if (mounted && result != null) {
-              Provider.of<MidiSender>(context, listen: false)
-                  .lift(touch, result);
+              sender.lift(touch, result);
             }
           },
-
           child: Column(
             // Hit testing happens on this keyed Widget, which contains all the pads:
             key: _padsWidgetKey,
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              ...rowsList.map((row) {
+              ...Provider.of<Settings>(context, listen: true).rows.map((row) {
                 return Expanded(
                   flex: 1,
                   child: Row(
@@ -102,9 +90,6 @@ class _SlidePadsState extends State<SlidePads> {
                             index: note,
                             child: SlideBeatPad(
                               note: note,
-                              selected:
-                                  Provider.of<MidiSender>(context, listen: true)
-                                      .isNoteOn(note),
                             ),
                           ),
                         );
