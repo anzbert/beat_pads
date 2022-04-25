@@ -71,11 +71,10 @@ abstract class MidiUtils {
     String octaveString = showOctaveIndex ? "${octave - 2}" : "";
     String noteString = showNoteValue ? " ($value)" : "";
 
-    if (sign == NoteSign.sharp) {
-      return "${midiNotesSharps[note]}$octaveString$noteString";
-    } else {
-      return "${midiNotesFlats[note]}$octaveString$noteString";
-    }
+    String output =
+        "${sign == NoteSign.sharp ? midiNotesSharps[note] : midiNotesFlats[note]}$octaveString$noteString";
+
+    return output;
   }
 
   /// Transpose generic scale interval pattern to absolute scale notes of the given root
