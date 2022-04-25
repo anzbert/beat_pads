@@ -3,8 +3,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_midi_command/flutter_midi_command_messages.dart';
 
 class MidiSender extends ChangeNotifier {
-  MidiSender(this._settings);
-  final Settings _settings;
+  MidiSender(this._settings) : _baseOctave = _settings.baseOctave;
+  Settings _settings;
+  int _baseOctave;
+
+  updateSettings(Settings settings) {
+    _settings = settings;
+    _updateBaseOctave();
+  }
+
+  _updateBaseOctave() {
+    if (_settings.baseOctave != _baseOctave) {
+      // declare all events dirty
+      for (TouchEvent event in _touchBuffer.buffer) {
+        event.blockSlide = true;
+      }
+      _baseOctave = _settings.baseOctave;
+    }
+  }
 
   // SEND BUFFER:
   final List<int> _sendBuffer = List.filled(128, 0);
@@ -62,13 +78,18 @@ class MidiSender extends ChangeNotifier {
     TouchEvent? eventInBuffer = _touchBuffer.findByPointer(touch.pointer);
     if (eventInBuffer == null) return;
 
+    if (eventInBuffer.blockSlide) return;
+
     _touchBuffer.updateWith(TouchEvent(touch, note));
 
     updateSendBufferWithTouchBufferAndNotify();
   }
 
   lift(PointerEvent touch, int note) {
-    noteToBufferAndSend(note, false);
+    TouchEvent? eventInBuffer = _touchBuffer.findByPointer(touch.pointer);
+    if (eventInBuffer?.note == null) return;
+
+    noteToBufferAndSend(eventInBuffer!.note!, false);
     notifyListeners();
     _touchBuffer.removeEvent(touch.pointer);
   }
@@ -125,6 +146,7 @@ class TouchEvent {
   final int pointer; // unique id of pointer down event
   Duration timeStamp;
   int? note;
+  bool blockSlide = false;
 }
 
 

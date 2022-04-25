@@ -51,6 +51,9 @@ class _SlidePadsState extends State<SlidePads> {
       ],
       builder: (context, child) {
         MidiSender sender = Provider.of<MidiSender>(context, listen: false);
+
+        sender.updateSettings(Provider.of<Settings>(context, listen: true));
+
         return Listener(
           onPointerDown: (touch) {
             int? result = _detectTappedItem(touch);

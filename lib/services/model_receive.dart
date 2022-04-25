@@ -7,8 +7,12 @@ import '../services/_services.dart';
 class MidiReceiver extends ChangeNotifier {
   StreamSubscription<MidiPacket>? _rxSubscription;
   final MidiCommand _midiCommand = MidiCommand();
-  // ignore: unused_field
-  final Settings _settings;
+
+  Settings _settings;
+
+  updateSettings(Settings settings) {
+    _settings = settings;
+  }
 
   MidiReceiver(this._settings) {
     _rxSubscription = registerRxCallback();
