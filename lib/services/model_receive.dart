@@ -10,8 +10,9 @@ class MidiReceiver extends ChangeNotifier {
 
   Settings _settings;
 
-  updateSettings(Settings settings) {
+  MidiReceiver update(Settings settings) {
     _settings = settings;
+    return this;
   }
 
   MidiReceiver(this._settings) {
@@ -26,10 +27,6 @@ class MidiReceiver extends ChangeNotifier {
     rxBuffer.fillRange(0, 128, 0);
     notifyListeners();
   }
-
-  // Midi Channel:
-  // int _channel = 0;
-  // set channel(int newValue) => _channel = newValue;
 
   // Receiver Callback:
   StreamSubscription<MidiPacket>? registerRxCallback() {

@@ -37,7 +37,7 @@ class BeatPadsScreen extends StatelessWidget {
                 // PITCH BEND
                 if (settings.pitchBend)
                   Expanded(
-                    flex: 4,
+                    flex: 7,
                     child:
                         PitchBender(), // TODO: restyle sizing of PB, then copy for mod wheel
                   ),

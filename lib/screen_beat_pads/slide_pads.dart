@@ -42,36 +42,34 @@ class _SlidePadsState extends State<SlidePads> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-            create: (context) =>
-                MidiReceiver(Provider.of<Settings>(context, listen: false))),
-        ChangeNotifierProvider(
-            create: (context) =>
-                MidiSender(Provider.of<Settings>(context, listen: false))),
+        ChangeNotifierProxyProvider<Settings, MidiReceiver>(
+          create: (context) => MidiReceiver(context.read<Settings>()),
+          update: (_, settings, midiReceiver) => midiReceiver!.update(settings),
+        ),
+        ChangeNotifierProxyProvider<Settings, MidiSender>(
+          create: (context) => MidiSender(context.read<Settings>()),
+          update: (_, settings, midiSender) => midiSender!.update(settings),
+        ),
       ],
       builder: (context, child) {
-        MidiSender sender = Provider.of<MidiSender>(context, listen: false);
-
-        sender.updateSettings(Provider.of<Settings>(context, listen: true));
-
         return Listener(
           onPointerDown: (touch) {
             int? result = _detectTappedItem(touch);
             if (mounted && result != null) {
-              sender.push(touch, result);
+              context.read<MidiSender>().push(touch, result);
             }
           },
           onPointerMove: (touch) {
             // TODO: make this whole callback conditional for sliding behaviour on or off:
             int? result = _detectTappedItem(touch);
             if (mounted) {
-              sender.slide(touch, result);
+              context.read<MidiSender>().slide(touch, result);
             }
           },
           onPointerUp: (touch) {
             int? result = _detectTappedItem(touch);
             if (mounted && result != null) {
-              sender.lift(touch, result);
+              context.read<MidiSender>().lift(touch, result);
             }
           },
           child: Column(
@@ -80,28 +78,30 @@ class _SlidePadsState extends State<SlidePads> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              ...Provider.of<Settings>(context, listen: true).rows.map((row) {
-                return Expanded(
-                  flex: 1,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      ...row.map((note) {
-                        return Expanded(
-                          flex: 1,
-                          child: HitTestObject(
-                            index: note,
-                            child: SlideBeatPad(
-                              note: note,
-                            ),
-                          ),
-                        );
-                      }).toList()
-                    ],
-                  ),
-                );
-              }).toList()
+              ...context.watch<Settings>().rows.map(
+                (row) {
+                  return Expanded(
+                    flex: 1,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        ...row.map(
+                          (note) {
+                            return Expanded(
+                              flex: 1,
+                              child: HitTestObject(
+                                index: note,
+                                child: SlideBeatPad(note: note),
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
             ],
           ),
         );

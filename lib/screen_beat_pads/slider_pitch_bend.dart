@@ -23,60 +23,56 @@ class _PitchBenderState extends State<PitchBender> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    return SizedBox(
-      width: size.width * 0.09,
-      height: double.infinity,
-      child: RotatedBox(
-        quarterTurns: 1,
-        child: SliderTheme(
-          data: SliderTheme.of(context).copyWith(
-            trackHeight: size.width * 0.025,
-            activeTrackColor: _trackColor,
-            inactiveTrackColor: _trackColor,
-            thumbColor: _thumbColor,
-            thumbShape: RoundSliderThumbShape(
-              enabledThumbRadius: size.width * 0.04,
-            ),
-            trackShape: CustomTrackShape(),
+    return RotatedBox(
+      quarterTurns: 1,
+      child: SliderTheme(
+        data: SliderTheme.of(context).copyWith(
+          trackHeight: size.width * 0.015,
+          activeTrackColor: _trackColor,
+          inactiveTrackColor: _trackColor,
+          thumbColor: _thumbColor,
+          thumbShape: RoundSliderThumbShape(
+            enabledThumbRadius: size.width * 0.038,
           ),
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  color: _trackColor,
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(size.width * 0.010),
-                  ),
+          trackShape: CustomTrackShape(),
+        ),
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                color: _trackColor,
+                borderRadius: BorderRadius.all(
+                  Radius.circular(size.width * 0.010),
                 ),
-                height: size.width * 0.085,
-                width: size.width * 0.015,
               ),
-              Slider(
-                value: pitch,
-                min: -1,
-                max: 1,
-                onChanged: (value) {
-                  setState(() {
-                    pitch = value;
-                  });
-                  PitchBendMessage(
-                    channel: widget.channel,
-                    bend: -pitch,
-                  ).send();
-                },
-                onChangeEnd: (details) {
-                  setState(() {
-                    pitch = 0;
-                  });
-                  PitchBendMessage(
-                    channel: widget.channel,
-                    bend: pitch,
-                  ).send();
-                },
-              ),
-            ],
-          ),
+              height: double.infinity,
+              width: size.width * 0.010,
+            ),
+            Slider(
+              value: pitch,
+              min: -1,
+              max: 1,
+              onChanged: (value) {
+                setState(() {
+                  pitch = value;
+                });
+                PitchBendMessage(
+                  channel: widget.channel,
+                  bend: -pitch,
+                ).send();
+              },
+              onChangeEnd: (details) {
+                setState(() {
+                  pitch = 0;
+                });
+                PitchBendMessage(
+                  channel: widget.channel,
+                  bend: pitch,
+                ).send();
+              },
+            ),
+          ],
         ),
       ),
     );

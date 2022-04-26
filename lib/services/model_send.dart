@@ -7,9 +7,10 @@ class MidiSender extends ChangeNotifier {
   Settings _settings;
   int _baseOctave;
 
-  updateSettings(Settings settings) {
+  MidiSender update(Settings settings) {
     _settings = settings;
     _updateBaseOctave();
+    return this;
   }
 
   _updateBaseOctave() {
