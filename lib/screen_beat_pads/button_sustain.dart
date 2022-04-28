@@ -46,10 +46,12 @@ class _SustainButtonRectState extends State<SustainButtonRect> {
       padding: EdgeInsets.fromLTRB(0, padSize, padSize, padSize),
       child: Listener(
         onPointerDown: (_) {
-          MidiUtils.sustainMessage(channel, true);
-          setState(() {
-            sustainState = true;
-          });
+          if (!sustainState) {
+            MidiUtils.sustainMessage(channel, true);
+            setState(() {
+              sustainState = true;
+            });
+          }
         },
         onPointerUp: (touch) {
           if (!notOnButtonRect(touch.position)) {
@@ -81,7 +83,7 @@ class _SustainButtonRectState extends State<SustainButtonRect> {
             padding: EdgeInsets.all(0),
             primary: sustainState
                 ? Palette.lightPink.color
-                : Palette.yellowGreen.color,
+                : Palette.lightPink.color.withAlpha(120),
             onPrimary: Palette.darkGrey.color,
           ),
         ),

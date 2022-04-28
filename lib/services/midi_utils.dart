@@ -50,6 +50,11 @@ abstract class MidiUtils {
     CCMessage(channel: channel, controller: 64, value: state ? 127 : 0).send();
   }
 
+  static void modWheelMessage(int channel, int value) {
+    CCMessage(channel: channel, controller: 1, value: value.clamp(0, 127))
+        .send();
+  }
+
   /// Get note name based on midi value
   static String getNoteName(
     int value, {

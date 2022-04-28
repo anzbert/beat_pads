@@ -19,7 +19,6 @@ class SnackMessageButton extends StatelessWidget {
     return Center(
       child: ElevatedButton(
         onPressed: () {
-          onPressed();
           ScaffoldMessenger.of(context)
               .showSnackBar(SnackBar(content: Text(message)));
         },

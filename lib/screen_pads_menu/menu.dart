@@ -163,11 +163,21 @@ class PadsMenu extends StatelessWidget {
           ListTile(
             title: Text("Sustain Button"),
             subtitle: Text(
-                "Adds Sustain-Pedal Button next to Pads. Keep Sustain ON by pushing and sliding away from Button"),
+                "Adds Sustain Button next to Pads. LOCK Sustain ON by pushing and sliding away from Button"),
             trailing: Switch(
                 value: settings.sustainButton,
                 onChanged: (value) =>
                     settings.sustainButton = !settings.sustainButton),
+          ),
+          NonLinearSlider(
+            label: "Auto Sustain",
+            subtitle: "Delay in Milliseconds before sending NoteOff Message",
+            readValue: settings.sustainTimeStep,
+            setValue: (v) => settings.sustainTimeStep = v,
+            resetFunction: () => settings.resetSustainTimeStep(),
+            actualValue: "${settings.sustainTimeUsable} ms",
+            start: 0,
+            steps: 25,
           ),
           ListTile(
             title: Text("Pitch Bender"),
@@ -176,16 +186,31 @@ class PadsMenu extends StatelessWidget {
                 value: settings.pitchBend,
                 onChanged: (value) => settings.pitchBend = !settings.pitchBend),
           ),
-          NonLinearSlider(
-            label: "Sustain",
-            subtitle: "Delay before sending NoteOff Message in Milliseconds",
-            readValue: settings.sustainTimeStep,
-            setValue: (v) => settings.sustainTimeStep = v,
-            resetFunction: () => settings.resetSustainTimeStep(),
-            actualValue: settings.sustainTimeExp.toString(),
-            start: settings.minSustainTimeStep,
-            steps: 11,
+          if (settings.pitchBend)
+            NonLinearSlider(
+              label: "Pitch Bend Easing",
+              subtitle:
+                  "Set time in Milliseconds for Pitch Bend to ease back to Zero",
+              readValue: settings.pitchBendEase,
+              setValue: (v) => settings.pitchBendEase = v,
+              resetFunction: () => settings.resetPitchBendEase(),
+              actualValue: "${settings.pitchBendEaseCalculated} ms",
+              start: 0,
+              steps: 25,
+            ),
+          ListTile(
+            title: Text("Mod Wheel"),
+            subtitle: Text("Adds Mod Wheel Slider next to Pads"),
+            trailing: Switch(
+                value: settings.modWheel,
+                onChanged: (value) => settings.modWheel = !settings.modWheel),
           ),
+          IntSlider(
+              min: 1,
+              max: 16,
+              label: "Midi Channel",
+              setValue: (v) => settings.channel = v - 1,
+              readValue: settings.channel + 1),
           ListTile(
             title: Text("Send CC"),
             subtitle: Text(
@@ -194,15 +219,6 @@ class PadsMenu extends StatelessWidget {
                 value: settings.sendCC,
                 onChanged: (value) => settings.sendCC = value),
           ),
-          IntSlider(
-              min: 1,
-              max: 16,
-              label: "Midi Channel",
-              setValue: (v) {
-                settings.channel = v - 1;
-                Provider.of<MidiData>(context, listen: false).channel = v - 1;
-              },
-              readValue: settings.channel + 1),
           Divider(),
           ListTile(
             title: Text("Lock Screen Button"),
@@ -217,7 +233,7 @@ class PadsMenu extends StatelessWidget {
             label: "Clear Received Midi Buffer",
             message: "Received Midi Buffer cleared",
             onPressed: () {
-              Provider.of<MidiData>(context, listen: false).rxNotesReset();
+              Provider.of<MidiReceiver>(context, listen: false).resetRxBuffer();
               MidiUtils.killAllMessage(settings.channel);
             },
           ),

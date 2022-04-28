@@ -45,6 +45,10 @@ class Settings extends ChangeNotifier {
     return prefs.settings.layout.value.getGrid(this).rows;
   }
 
+  List<int> get grid {
+    return prefs.settings.layout.value.getGrid(this).list;
+  }
+
   // root note:
   set rootNote(int note) {
     if (note < 0 || note > 11) return;
@@ -112,15 +116,6 @@ class Settings extends ChangeNotifier {
   set scaleString(String newValue) {
     prefs.settings.scaleString.value = newValue;
     prefs.settings.scaleString.save();
-    notifyListeners();
-  }
-
-  // pitchbend:
-  bool get pitchBend => prefs.settings.pitchBend.value;
-
-  set pitchBend(bool newValue) {
-    prefs.settings.pitchBend.value = newValue;
-    prefs.settings.pitchBend.save();
     notifyListeners();
   }
 
@@ -223,16 +218,12 @@ class Settings extends ChangeNotifier {
   int get sustainTimeStep => prefs.settings.sustainTimeStep.value;
 
   set sustainTimeStep(int timeInMs) {
-    prefs.settings.sustainTimeStep.value = timeInMs.clamp(0, 5000);
+    prefs.settings.sustainTimeStep.value = timeInMs;
     prefs.settings.sustainTimeStep.save();
     notifyListeners();
   }
 
-  int get minSustainTimeStep => 2;
-  int get sustainTimeExp {
-    if (prefs.settings.sustainTimeStep.value <= minSustainTimeStep) return 0;
-    return pow(2, prefs.settings.sustainTimeStep.value).toInt();
-  }
+  int get sustainTimeUsable => (100 * sustainTimeStep).toInt();
 
   resetSustainTimeStep() =>
       sustainTimeStep = LoadSettings.defaults().sustainTimeStep.value;
@@ -244,6 +235,45 @@ class Settings extends ChangeNotifier {
     if (newChannel < 0 || newChannel > 15) return;
     prefs.settings.channel.value = newChannel;
     prefs.settings.channel.save();
+    notifyListeners();
+  }
+
+// pitchbend:
+  bool get pitchBend => prefs.settings.pitchBend.value;
+
+  set pitchBend(bool newValue) {
+    prefs.settings.pitchBend.value = newValue;
+    prefs.settings.pitchBend.save();
+
+    if (!newValue) {
+      prefs.settings.pitchBendEase.value =
+          LoadSettings.defaults().pitchBendEase.value;
+      prefs.settings.pitchBendEase.save();
+    }
+
+    notifyListeners();
+  }
+
+// pitchBendEase
+  int get pitchBendEase => prefs.settings.pitchBendEase.value;
+
+  set pitchBendEase(int timeInMs) {
+    prefs.settings.pitchBendEase.value = timeInMs;
+    prefs.settings.pitchBendEase.save();
+    notifyListeners();
+  }
+
+  int get pitchBendEaseCalculated => (100 * pitchBendEase).toInt();
+
+  resetPitchBendEase() =>
+      pitchBendEase = LoadSettings.defaults().pitchBendEase.value;
+
+// modWheel
+  bool get modWheel => prefs.settings.modWheel.value;
+
+  set modWheel(bool newValue) {
+    prefs.settings.modWheel.value = newValue;
+    prefs.settings.modWheel.save();
     notifyListeners();
   }
 }
