@@ -223,7 +223,7 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
-  int get sustainTimeUsable => (50 * sustainTimeStep).toInt();
+  int get sustainTimeUsable => (100 * sustainTimeStep).toInt();
 
   resetSustainTimeStep() =>
       sustainTimeStep = LoadSettings.defaults().sustainTimeStep.value;

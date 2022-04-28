@@ -52,7 +52,7 @@ class _PitchSliderEased extends State<PitchSliderEased>
 
             PitchBendMessage(
               channel: widget.channel,
-              bend: _pitch,
+              bend: -_pitch,
             ).send();
           },
           onChangeEnd: (val) {
@@ -67,9 +67,10 @@ class _PitchSliderEased extends State<PitchSliderEased>
             } else {
               setState(() => _pitch = 0);
             }
+
             PitchBendMessage(
               channel: widget.channel,
-              bend: _pitch,
+              bend: -_pitch,
             ).send();
           },
           onChangeStart: (_) {

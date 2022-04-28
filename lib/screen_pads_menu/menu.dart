@@ -171,8 +171,7 @@ class PadsMenu extends StatelessWidget {
           ),
           NonLinearSlider(
             label: "Auto Sustain",
-            subtitle:
-                "Delay in Milliseconds before sending NoteOff Message in Milliseconds",
+            subtitle: "Delay in Milliseconds before sending NoteOff Message",
             readValue: settings.sustainTimeStep,
             setValue: (v) => settings.sustainTimeStep = v,
             resetFunction: () => settings.resetSustainTimeStep(),
@@ -191,7 +190,7 @@ class PadsMenu extends StatelessWidget {
             NonLinearSlider(
               label: "Pitch Bend Easing",
               subtitle:
-                  "Set time in Milliseconds for Pitch Bend to return to Zero",
+                  "Set time in Milliseconds for Pitch Bend to ease back to Zero",
               readValue: settings.pitchBendEase,
               setValue: (v) => settings.pitchBendEase = v,
               resetFunction: () => settings.resetPitchBendEase(),
