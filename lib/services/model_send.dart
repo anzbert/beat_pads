@@ -160,6 +160,8 @@ class MidiSender extends ChangeNotifier {
         }
       }
     }
+    // _touchBuffer.clear();
+
     _disposed = true;
     super.dispose();
   }
@@ -189,9 +191,11 @@ class TouchBuffer {
 
   debug() {
     for (var event in _buffer) {
-      print(event.touch);
+      Utils.logd(event.touch);
     }
   }
+
+  clear() => _buffer = [];
 
   bool updateWith(TouchEvent updatedEvent) {
     int index = _buffer.indexWhere(
