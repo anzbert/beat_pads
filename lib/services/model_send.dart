@@ -160,8 +160,6 @@ class MidiSender extends ChangeNotifier {
         }
       }
     }
-    // _touchBuffer.clear();
-
     _disposed = true;
     super.dispose();
   }

@@ -62,7 +62,7 @@ class Prefs {
     "lockScreenButton": false,
     "randomVelocity": false,
     "scaleString": "chromatic",
-    "channel": 0,
+    "channel": 2,
     "pitchBendEase": 0,
     "modWheel": false,
   };
