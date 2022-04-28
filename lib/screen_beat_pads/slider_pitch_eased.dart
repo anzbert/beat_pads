@@ -40,6 +40,7 @@ class _PitchSliderEased extends State<PitchSliderEased>
     return RotatedBox(
       quarterTurns: 1,
       child: ThemedSlider(
+        label: "",
         thumbColor: Palette.yellowGreen.color,
         centerLine: true,
         child: Slider(

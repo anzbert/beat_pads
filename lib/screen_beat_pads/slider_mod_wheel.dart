@@ -20,6 +20,7 @@ class _ModWheelState extends State<ModWheel> {
     return RotatedBox(
       quarterTurns: 1,
       child: ThemedSlider(
+        midiVal: true,
         thumbColor: Palette.cadetBlue.color,
         child: Slider(
           min: 0,
