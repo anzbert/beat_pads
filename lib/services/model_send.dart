@@ -6,6 +6,7 @@ class MidiSender extends ChangeNotifier {
   MidiSender(this._settings) : _baseOctave = _settings.baseOctave;
   Settings _settings;
   int _baseOctave;
+  bool _disposed = false;
 
   MidiSender update(Settings settings) {
     _settings = settings;
@@ -24,19 +25,13 @@ class MidiSender extends ChangeNotifier {
   }
 
   // SEND BUFFER:
-  final List<int> _sendBuffer = List.filled(128, 0);
+  final List<NoteEvent> _sendBuffer =
+      List.generate(128, (_) => NoteEvent(), growable: false);
 
-  bool isNoteOn(int note) => _sendBuffer[note] != 0;
+  bool noteIsOn(int note) => _sendBuffer[note].noteIsOn;
 
-  void updateNoteInBufferAndSend(int note, bool noteOn) {
-    _sendBuffer[note] = noteOn ? _settings.velocity : 0;
-
+  void updateSendBufferAndSend(int note, bool noteOn) async {
     if (noteOn) {
-      NoteOnMessage(
-        channel: _settings.channel,
-        note: note,
-        velocity: _settings.velocity,
-      ).send();
       if (_settings.sendCC) {
         CCMessage(
           channel: (_settings.channel + 1) % 16,
@@ -44,40 +39,66 @@ class MidiSender extends ChangeNotifier {
           value: 127,
         ).send();
       }
-    } else {
-      NoteOffMessage(
+      NoteOnMessage(
         channel: _settings.channel,
         note: note,
-        velocity: 0,
+        velocity: _settings.velocity,
       ).send();
+
+      _sendBuffer[note] = NoteEvent(_settings.velocity);
+    } else {
       if (_settings.sendCC) {
         CCMessage(
           channel: (_settings.channel + 1) % 16,
           controller: note,
         ).send();
       }
+
+      // SUSTAIN:
+      if (_settings.sustainTimeExp > 0) {
+        if (_sendBuffer[note].checkingSustain) return;
+        _sendBuffer[note].checkingSustain = true;
+
+        while (!await Future.delayed(
+          const Duration(milliseconds: 5),
+          () =>
+              DateTime.now().millisecondsSinceEpoch -
+                  _sendBuffer[note].triggerTime >
+              _settings.sustainTimeExp,
+        )) {
+          // Waiting for next check in 5 milliseconds...
+        }
+        _sendBuffer[note].checkingSustain = false;
+      }
+      ////////////////
+
+      NoteOffMessage(
+        channel: _settings.channel,
+        note: note,
+        velocity: 0,
+      ).send();
+
+      _sendBuffer[note] = NoteEvent();
     }
+
+    notifyListeners();
   }
 
-  void updateSendBufferWithTouchBufferAndNotify() {
+  void updateSendBufferWithTouchBuffer() {
     List<int> allCurrentlyTouched = _touchBuffer.buffer
         .where((element) => element.note != null)
         .map((element) => element.note!)
         .toList();
 
-    bool refresh = false;
-
     for (int n = 0; n < 128; n++) {
-      if (allCurrentlyTouched.contains(n) && _sendBuffer[n] == 0) {
-        updateNoteInBufferAndSend(n, true);
-        refresh = true;
-      } else if (!allCurrentlyTouched.contains(n) && _sendBuffer[n] != 0) {
-        updateNoteInBufferAndSend(n, false);
-        refresh = true;
+      if (allCurrentlyTouched.contains(n) && _sendBuffer[n].noteIsOff) {
+        updateSendBufferAndSend(n, true);
+      } else if (!allCurrentlyTouched.contains(n) && _sendBuffer[n].noteIsOn) {
+        updateSendBufferAndSend(n, false);
+      } else if (allCurrentlyTouched.contains(n) && _sendBuffer[n].noteIsOn) {
+        _sendBuffer[n].updateTriggerTime();
       }
     }
-
-    if (refresh) notifyListeners(); // notify pads for color change
   }
 
   // TOUCH HANDLING:
@@ -86,9 +107,7 @@ class MidiSender extends ChangeNotifier {
   push(PointerEvent touch, int note) {
     // add event to touchbuffer and send noteOn
     _touchBuffer.buffer.add(TouchEvent(touch, note));
-    updateNoteInBufferAndSend(note, true);
-
-    notifyListeners(); // notify pads for color change
+    updateSendBufferAndSend(note, true);
   }
 
   slide(PointerEvent touch, int? note) {
@@ -103,29 +122,25 @@ class MidiSender extends ChangeNotifier {
     _touchBuffer.updateWith(TouchEvent(touch, note));
 
     // update send buffer with updated touchbuffer and send noteOn and noteOff's
-    // notify pads for color change
-    updateSendBufferWithTouchBufferAndNotify();
+    updateSendBufferWithTouchBuffer();
   }
 
   lift(PointerEvent touch, int note) {
     // only send noteoff if there is a previous touch event,
     // which still has a note attached to it
-
     TouchEvent? eventInBuffer = _touchBuffer.findByPointer(touch.pointer);
     if (eventInBuffer?.note == null) return;
 
     // send noteOff and remove from touchbuffer
-    updateNoteInBufferAndSend(eventInBuffer!.note!, false);
+    updateSendBufferAndSend(eventInBuffer!.note!, false);
     _touchBuffer.removeEvent(touch.pointer);
-
-    notifyListeners(); // notify pads for color change
   }
 
   // DISPOSE:
   @override
   dispose() {
     for (int note = 0; note < 128; note++) {
-      if (_sendBuffer[note] != 0) {
+      if (_sendBuffer[note].noteIsOn) {
         NoteOffMessage(
           channel: _settings.channel,
           note: note,
@@ -138,7 +153,15 @@ class MidiSender extends ChangeNotifier {
         }
       }
     }
+    _disposed = true;
     super.dispose();
+  }
+
+  @override
+  void notifyListeners() {
+    if (!_disposed) {
+      super.notifyListeners();
+    }
   }
 }
 
@@ -173,54 +196,27 @@ class TouchBuffer {
 
 class TouchEvent {
   TouchEvent(PointerEvent touch, this.note)
-      : timeStamp = touch.timeStamp,
+      :
+        //  timeStamp = touch.timeStamp,
         pointer = touch.pointer;
 
   final int pointer; // unique id of pointer down event
-  Duration timeStamp;
+  // Duration timeStamp;
   int? note;
   bool blockSlide = false;
 }
 
-// ////////////////////////////// OLD CODE:
-//
-//
-//
-// handlePush(int channel, int note, bool sendCC, int velocity, int sustainTime) {
-//   if (sustainTime != 0) {
-//     _triggerTime = DateTime.now().millisecondsSinceEpoch;
-//   }
-//   disposeChannel = channel;
+class NoteEvent {
+  NoteEvent([this.velocity = 0])
+      : triggerTime = velocity > 0 ? DateTime.now().millisecondsSinceEpoch : 0;
 
-//   NoteOnMessage(channel: channel, note: note, velocity: velocity).send();
-//   lastNote = widget.note;
+  final int velocity;
+  int triggerTime;
+  bool checkingSustain = false;
 
-//   if (sendCC) {
-//     disposeCC = true;
-//     CCMessage(channel: (channel + 1) % 16, controller: note, value: 127).send();
-//   } else {}
-// }
+  void updateTriggerTime() =>
+      triggerTime = DateTime.now().millisecondsSinceEpoch;
 
-// handleRelease(int channel, int note, bool? sendCC, int sustainTime) async {
-//   if (sustainTime != 0) {
-//     if (_checkingSustain) return;
-
-//     _checkingSustain = true;
-//     while (await _checkSustainTime(sustainTime, _triggerTime) == false) {}
-//     _checkingSustain = false;
-//   }
-//   NoteOffMessage(
-//     channel: channel,
-//     note: note,
-//   ).send();
-
-//   if (sendCC == true) {
-//     CCMessage(channel: (channel + 1) % 16, controller: note, value: 0).send();
-//   }
-// }
-
-// Future<bool> _checkSustainTime(int sustainTime, int triggerTime) =>
-//     Future.delayed(
-//       const Duration(milliseconds: 5),
-//       () => DateTime.now().millisecondsSinceEpoch - triggerTime > sustainTime,
-//     );
+  bool get noteIsOn => velocity > 0 ? true : false;
+  bool get noteIsOff => velocity == 0 ? true : false;
+}

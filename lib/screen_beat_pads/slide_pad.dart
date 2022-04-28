@@ -27,7 +27,7 @@ class SlideBeatPad extends StatelessWidget {
         : 0;
 
     final bool noteOn =
-        Provider.of<MidiSender>(context, listen: true).isNoteOn(note);
+        Provider.of<MidiSender>(context, listen: true).noteIsOn(note);
 
     // PAD COLOR:
     final Color _color;
