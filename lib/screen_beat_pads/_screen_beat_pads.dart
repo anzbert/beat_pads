@@ -1,5 +1,6 @@
 import 'package:beat_pads/screen_beat_pads/buttons_controls.dart';
 import 'package:beat_pads/screen_beat_pads/slide_pads.dart';
+import 'package:beat_pads/screen_beat_pads/slider_mod_wheel.dart';
 import 'package:beat_pads/screen_beat_pads/slider_pitch_eased.dart';
 import 'package:flutter/material.dart';
 import 'package:beat_pads/services/_services.dart';
@@ -42,6 +43,13 @@ class BeatPadsScreen extends StatelessWidget {
                       resetTime: 500,
                     ),
                   ),
+                // MOD WHEEL
+                Expanded(
+                  flex: 7,
+                  child: ModWheel(
+                    channel: settings.channel,
+                  ),
+                ),
                 // PADS
                 Expanded(
                   flex: 60,

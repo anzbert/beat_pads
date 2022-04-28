@@ -2,46 +2,53 @@ import 'package:beat_pads/shared/colors.dart';
 import 'package:flutter/material.dart';
 
 class ThemedSlider extends StatelessWidget {
-  ThemedSlider({Key? key, required this.child, this.centerLine = false})
+  ThemedSlider(
+      {Key? key,
+      required this.child,
+      this.centerLine = false,
+      required this.thumbColor})
       : super(key: key);
 
   final Widget child;
   final bool centerLine;
 
   final Color _trackColor = Palette.lightGrey.color;
-  final Color _thumbColor = Palette.yellowGreen.color;
+  final Color thumbColor;
 
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
 
-    return Stack(
-      alignment: Alignment.center,
-      children: [
-        if (centerLine)
-          Container(
-            decoration: BoxDecoration(
-              color: _trackColor,
-              borderRadius: BorderRadius.all(
-                Radius.circular(width * 0.010),
+    return FractionallySizedBox(
+      widthFactor: 0.9,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          if (centerLine)
+            Container(
+              decoration: BoxDecoration(
+                color: _trackColor,
+                borderRadius: BorderRadius.all(
+                  Radius.circular(width * 0.010),
+                ),
               ),
+              height: double.infinity,
+              width: width * 0.010,
             ),
-            height: double.infinity,
-            width: width * 0.010,
-          ),
-        SliderTheme(
-            data: SliderTheme.of(context).copyWith(
-              trackHeight: width * 0.015,
-              activeTrackColor: _trackColor,
-              inactiveTrackColor: _trackColor,
-              thumbColor: _thumbColor,
-              thumbShape: RoundSliderThumbShape(
-                enabledThumbRadius: width * 0.038,
+          SliderTheme(
+              data: SliderTheme.of(context).copyWith(
+                trackHeight: width * 0.015,
+                activeTrackColor: _trackColor,
+                inactiveTrackColor: _trackColor,
+                thumbColor: thumbColor,
+                thumbShape: RoundSliderThumbShape(
+                  enabledThumbRadius: width * 0.038,
+                ),
+                trackShape: CustomTrackShape(),
               ),
-              trackShape: CustomTrackShape(),
-            ),
-            child: child),
-      ],
+              child: child),
+        ],
+      ),
     );
   }
 }

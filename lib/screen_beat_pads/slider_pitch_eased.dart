@@ -1,4 +1,5 @@
 import 'package:beat_pads/screen_beat_pads/slider_themed.dart';
+import 'package:beat_pads/shared/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_midi_command/flutter_midi_command_messages.dart';
 
@@ -39,6 +40,7 @@ class _PitchSliderEased extends State<PitchSliderEased>
     return RotatedBox(
       quarterTurns: 1,
       child: ThemedSlider(
+        thumbColor: Palette.yellowGreen.color,
         centerLine: true,
         child: Slider(
           min: -1,
