@@ -1,12 +1,11 @@
 import 'package:beat_pads/screen_beat_pads/buttons_controls.dart';
 import 'package:beat_pads/screen_beat_pads/slide_pads.dart';
+import 'package:beat_pads/screen_beat_pads/slider_pitch_eased.dart';
 import 'package:flutter/material.dart';
 import 'package:beat_pads/services/_services.dart';
 import 'package:provider/provider.dart';
 
 import 'package:beat_pads/screen_beat_pads/button_lock_screen.dart';
-
-import 'package:beat_pads/screen_beat_pads/slider_pitch_bend.dart';
 
 class BeatPadsScreen extends StatelessWidget {
   const BeatPadsScreen({Key? key}) : super(key: key);
@@ -38,8 +37,10 @@ class BeatPadsScreen extends StatelessWidget {
                 if (settings.pitchBend)
                   Expanded(
                     flex: 7,
-                    child:
-                        PitchBender(), // TODO: restyle sizing of PB, then copy for mod wheel
+                    child: PitchSliderEased(
+                      channel: settings.channel,
+                      resetTime: 500,
+                    ),
                   ),
                 // PADS
                 Expanded(
