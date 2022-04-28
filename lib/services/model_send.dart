@@ -28,7 +28,8 @@ class MidiSender extends ChangeNotifier {
   final List<NoteEvent> _sendBuffer =
       List.generate(128, (_) => NoteEvent(), growable: false);
 
-  bool noteIsOn(int note) => _sendBuffer[note].noteIsOn;
+  bool noteIsOn(int note) =>
+      note >= 0 && note < 128 ? _sendBuffer[note].noteIsOn : false;
 
   void updateSendBufferAndSend(int note, bool noteOn) async {
     if (noteOn) {

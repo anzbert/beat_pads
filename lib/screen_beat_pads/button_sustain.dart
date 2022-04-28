@@ -83,7 +83,7 @@ class _SustainButtonRectState extends State<SustainButtonRect> {
             padding: EdgeInsets.all(0),
             primary: sustainState
                 ? Palette.lightPink.color
-                : Palette.yellowGreen.color.withAlpha(160),
+                : Palette.lightPink.color.withAlpha(120),
             onPrimary: Palette.darkGrey.color,
           ),
         ),

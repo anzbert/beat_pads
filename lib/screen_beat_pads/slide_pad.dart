@@ -11,7 +11,7 @@ class SlideBeatPad extends StatelessWidget {
   }) : super(key: key);
 
   final int note;
-  final EdgeInsets _padPadding = const EdgeInsets.all(2.5);
+  final EdgeInsets padPadding = const EdgeInsets.all(2.5);
 
   @override
   Widget build(BuildContext context) {
@@ -68,15 +68,14 @@ class SlideBeatPad extends StatelessWidget {
             ?
             // OUT OF MIDI RANGE
             InkWell(
-                onTapDown: (_) {},
                 borderRadius: padRadius,
                 child: Padding(
-                  padding: _padPadding,
+                  padding: padPadding,
                   child: Text(
                     note.toString(),
                     style: TextStyle(
                       fontStyle: FontStyle.italic,
-                      color: Colors.grey,
+                      color: Palette.lightGrey.color,
                       fontSize: fontSize * 0.8,
                     ),
                   ),
@@ -89,7 +88,7 @@ class SlideBeatPad extends StatelessWidget {
                 borderRadius: padRadius,
                 splashColor: splashColor,
                 child: Padding(
-                  padding: _padPadding,
+                  padding: padPadding,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [

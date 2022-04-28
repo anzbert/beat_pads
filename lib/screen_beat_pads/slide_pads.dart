@@ -30,7 +30,7 @@ class _SlidePadsState extends State<SlidePads> {
       for (final HitTestEntry<HitTestTarget> hit in results.path) {
         final HitTestTarget target = hit.target;
         if (target is TestProxyBox) {
-          return target.index;
+          return target.index >= 0 && target.index < 128 ? target.index : null;
         }
       }
     }
