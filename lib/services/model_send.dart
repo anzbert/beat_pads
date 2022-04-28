@@ -123,17 +123,24 @@ class MidiSender extends ChangeNotifier {
 
     // update send buffer with updated touchbuffer and send noteOn and noteOff's
     updateSendBufferWithTouchBuffer();
+
+    // print("touchbuffer: ${_touchBuffer._buffer.length}");
+    // print("sendbuffer: ${_sendBuffer.length}");
   }
 
-  lift(PointerEvent touch, int note) {
+  lift(PointerEvent touch, int? note) {
     // only send noteoff if there is a previous touch event,
     // which still has a note attached to it
     TouchEvent? eventInBuffer = _touchBuffer.findByPointer(touch.pointer);
-    if (eventInBuffer?.note == null) return;
+    if (eventInBuffer == null) return;
 
     // send noteOff and remove from touchbuffer
-    updateSendBufferAndSend(eventInBuffer!.note!, false);
+    if (eventInBuffer.note != null) {
+      updateSendBufferAndSend(eventInBuffer.note!, false);
+    }
+
     _touchBuffer.removeEvent(touch.pointer);
+    // _touchBuffer.debug();
   }
 
   // DISPOSE:
@@ -173,16 +180,22 @@ class TouchBuffer {
 
   TouchEvent? findByPointer(int searchPointer) {
     for (TouchEvent event in _buffer) {
-      if (event.pointer == searchPointer) {
+      if (event.touch.pointer == searchPointer) {
         return event;
       }
     }
     return null;
   }
 
+  debug() {
+    for (var event in _buffer) {
+      print(event.touch);
+    }
+  }
+
   bool updateWith(TouchEvent updatedEvent) {
-    int index = _buffer
-        .indexWhere((element) => element.pointer == updatedEvent.pointer);
+    int index = _buffer.indexWhere(
+        (element) => element.touch.pointer == updatedEvent.touch.pointer);
     if (index == -1) return false;
 
     _buffer[index] = updatedEvent;
@@ -190,18 +203,16 @@ class TouchBuffer {
   }
 
   void removeEvent(int searchID) {
-    _buffer = _buffer.where((element) => element.pointer != searchID).toList();
+    _buffer =
+        _buffer.where((element) => element.touch.pointer != searchID).toList();
   }
 }
 
 class TouchEvent {
-  TouchEvent(PointerEvent touch, this.note)
-      :
-        //  timeStamp = touch.timeStamp,
-        pointer = touch.pointer;
+  TouchEvent(this.touch, this.note);
 
-  final int pointer; // unique id of pointer down event
-  // Duration timeStamp;
+  final PointerEvent touch; // unique pointer down event
+
   int? note;
   bool blockSlide = false;
 }

@@ -60,7 +60,6 @@ class _SlidePadsState extends State<SlidePads> {
             }
           },
           onPointerMove: (touch) {
-            // TODO: make this whole callback conditional for sliding behaviour on or off:
             int? result = _detectTappedItem(touch);
             if (mounted) {
               context.read<MidiSender>().slide(touch, result);
@@ -68,7 +67,13 @@ class _SlidePadsState extends State<SlidePads> {
           },
           onPointerUp: (touch) {
             int? result = _detectTappedItem(touch);
-            if (mounted && result != null) {
+            if (mounted) {
+              context.read<MidiSender>().lift(touch, result);
+            }
+          },
+          onPointerCancel: (touch) {
+            int? result = _detectTappedItem(touch);
+            if (mounted) {
               context.read<MidiSender>().lift(touch, result);
             }
           },
