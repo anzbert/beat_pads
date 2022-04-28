@@ -91,9 +91,13 @@ class SlideBeatPad extends StatelessWidget {
                 child: Padding(
                   padding: _padPadding,
                   child: Text(
-                      settings.showNoteNames
-                          ? MidiUtils.getNoteName(note, showNoteValue: false)
-                          : note.toString(),
+                      settings.layout == Layout.XpressPads_Standard ||
+                              settings.layout == Layout.XpressPads_LatinJazz ||
+                              settings.layout == Layout.XpressPads_Xtreme
+                          ? "${MidiUtils.getNoteName(note, gmPercussionLabels: true)} (${settings.showNoteNames ? MidiUtils.getNoteName(note) : note.toString()})"
+                          : settings.showNoteNames
+                              ? MidiUtils.getNoteName(note)
+                              : note.toString(),
                       style: TextStyle(
                         color: padTextColor,
                         fontSize: fontSize,
