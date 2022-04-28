@@ -25,8 +25,6 @@ class _PitchSliderEased extends State<PitchSliderEased>
 
   double _pitch = 0;
 
-  int? disposeChannel;
-
   @override
   void initState() {
     super.initState();
@@ -60,6 +58,11 @@ class _PitchSliderEased extends State<PitchSliderEased>
               _animation = Tween<double>(begin: val, end: 0).animate(_curve);
               _animation.addListener(() {
                 setState(() => _pitch = _animation.value);
+
+                PitchBendMessage(
+                  channel: widget.channel,
+                  bend: -_pitch,
+                ).send();
               });
 
               _controller.reset();
@@ -67,11 +70,6 @@ class _PitchSliderEased extends State<PitchSliderEased>
             } else {
               setState(() => _pitch = 0);
             }
-
-            PitchBendMessage(
-              channel: widget.channel,
-              bend: -_pitch,
-            ).send();
           },
           onChangeStart: (_) {
             _controller.stop();

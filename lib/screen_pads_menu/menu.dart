@@ -177,7 +177,7 @@ class PadsMenu extends StatelessWidget {
             resetFunction: () => settings.resetSustainTimeStep(),
             actualValue: "${settings.sustainTimeUsable} ms",
             start: 0,
-            steps: 20,
+            steps: 25,
           ),
           ListTile(
             title: Text("Pitch Bender"),
@@ -196,7 +196,7 @@ class PadsMenu extends StatelessWidget {
               resetFunction: () => settings.resetPitchBendEase(),
               actualValue: "${settings.pitchBendEaseCalculated} ms",
               start: 0,
-              steps: 20,
+              steps: 25,
             ),
           ListTile(
             title: Text("Mod Wheel"),
