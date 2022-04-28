@@ -246,7 +246,8 @@ class Settings extends ChangeNotifier {
     prefs.settings.pitchBend.save();
 
     if (!newValue) {
-      prefs.settings.pitchBendEase.value = 0;
+      prefs.settings.pitchBendEase.value =
+          LoadSettings.defaults().pitchBendEase.value;
       prefs.settings.pitchBendEase.save();
     }
 
