@@ -55,7 +55,7 @@ class MidiSender extends ChangeNotifier {
       }
 
       // SUSTAIN:
-      if (_settings.sustainTimeExp > 0) {
+      if (_settings.sustainTimeUsable > 0) {
         if (_sendBuffer[note].checkingSustain) return;
         _sendBuffer[note].checkingSustain = true;
 
@@ -64,7 +64,7 @@ class MidiSender extends ChangeNotifier {
           () =>
               DateTime.now().millisecondsSinceEpoch -
                   _sendBuffer[note].triggerTime >
-              _settings.sustainTimeExp,
+              _settings.sustainTimeUsable,
         )) {
           // Waiting for next check in 5 milliseconds...
         }

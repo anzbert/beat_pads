@@ -169,6 +169,16 @@ class PadsMenu extends StatelessWidget {
                 onChanged: (value) =>
                     settings.sustainButton = !settings.sustainButton),
           ),
+          NonLinearSlider(
+            label: "Sustain",
+            subtitle: "Delay before sending NoteOff Message in Milliseconds",
+            readValue: settings.sustainTimeStep,
+            setValue: (v) => settings.sustainTimeStep = v,
+            resetFunction: () => settings.resetSustainTimeStep(),
+            actualValue: settings.sustainTimeUsable.toString(),
+            start: settings.minSustainTimeStep,
+            steps: 11,
+          ),
           ListTile(
             title: Text("Pitch Bender"),
             subtitle: Text("Adds Pitch Bend Slider next to Pads"),
@@ -177,14 +187,21 @@ class PadsMenu extends StatelessWidget {
                 onChanged: (value) => settings.pitchBend = !settings.pitchBend),
           ),
           NonLinearSlider(
-            label: "Sustain",
-            subtitle: "Delay before sending NoteOff Message in Milliseconds",
-            readValue: settings.sustainTimeStep,
-            setValue: (v) => settings.sustainTimeStep = v,
-            resetFunction: () => settings.resetSustainTimeStep(),
-            actualValue: settings.sustainTimeExp.toString(),
-            start: settings.minSustainTimeStep,
+            label: "Pitch Bend Easing",
+            subtitle: "Set time for Pitch Bend to return to Zero",
+            readValue: settings.pitchBendEase,
+            setValue: (v) => settings.pitchBendEase = v,
+            resetFunction: () => settings.resetPitchBendEase(),
+            actualValue: settings.pitchBendEaseCalculated.toString(),
+            start: settings.minPitchBendEase,
             steps: 11,
+          ),
+          ListTile(
+            title: Text("Mod Wheel"),
+            subtitle: Text("Adds Mod Wheel Slider next to Pads"),
+            trailing: Switch(
+                value: settings.modWheel,
+                onChanged: (value) => settings.modWheel = !settings.modWheel),
           ),
           ListTile(
             title: Text("Send CC"),

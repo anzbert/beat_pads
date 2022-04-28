@@ -40,16 +40,17 @@ class BeatPadsScreen extends StatelessWidget {
                     flex: 7,
                     child: PitchSliderEased(
                       channel: settings.channel,
-                      resetTime: 500,
+                      resetTime: settings.pitchBendEaseCalculated,
                     ),
                   ),
                 // MOD WHEEL
-                Expanded(
-                  flex: 7,
-                  child: ModWheel(
-                    channel: settings.channel,
+                if (settings.modWheel)
+                  Expanded(
+                    flex: 7,
+                    child: ModWheel(
+                      channel: settings.channel,
+                    ),
                   ),
-                ),
                 // PADS
                 Expanded(
                   flex: 60,

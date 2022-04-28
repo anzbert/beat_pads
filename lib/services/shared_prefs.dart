@@ -63,6 +63,8 @@ class Prefs {
     "randomVelocity": false,
     "scaleString": "chromatic",
     "channel": 0,
+    "pitchBendEase": 2,
+    "modWheel": false,
   };
 }
 
@@ -79,6 +81,8 @@ class LoadSettings {
   final Setting<int> velocityMin;
   final Setting<int> velocityMax;
   final Setting<int> sustainTimeStep;
+  final Setting<int> pitchBendEase;
+  final Setting<bool> modWheel;
   final Setting<bool> sendCC;
   final Setting<bool> showNoteNames;
   final Setting<bool> pitchBend;
@@ -103,6 +107,9 @@ class LoadSettings {
         showNoteNames =
             Setting<bool>('showNoteNames', loadedMap['showNoteNames']!),
         pitchBend = Setting<bool>('pitchBend', loadedMap['pitchBend']!),
+        pitchBendEase =
+            Setting<int>('pitchBendEase', loadedMap['pitchBendEase']!),
+        modWheel = Setting<bool>('modWheel', loadedMap['modWheel']!),
         octaveButtons =
             Setting<bool>('octaveButtons', loadedMap['octaveButtons']!!),
         sustainButton =
