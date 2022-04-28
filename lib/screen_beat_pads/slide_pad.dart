@@ -51,7 +51,7 @@ class SlideBeatPad extends StatelessWidget {
     }
 
     double screenWidth = MediaQuery.of(context).size.width;
-    double fontSize = screenWidth * 0.022;
+    double fontSize = screenWidth * 0.021;
     BorderRadius padRadius =
         BorderRadius.all(Radius.circular(screenWidth * 0.008));
 
@@ -90,18 +90,25 @@ class SlideBeatPad extends StatelessWidget {
                 splashColor: splashColor,
                 child: Padding(
                   padding: _padPadding,
-                  child: Text(
-                      settings.layout == Layout.XpressPads_Standard ||
-                              settings.layout == Layout.XpressPads_LatinJazz ||
-                              settings.layout == Layout.XpressPads_Xtreme
-                          ? "${MidiUtils.getNoteName(note, gmPercussionLabels: true)} (${settings.showNoteNames ? MidiUtils.getNoteName(note) : note.toString()})"
-                          : settings.showNoteNames
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (settings.layout == Layout.XpressPads_Standard ||
+                          settings.layout == Layout.XpressPads_LatinJazz ||
+                          settings.layout == Layout.XpressPads_Xtreme)
+                        Text(
+                          MidiUtils.getNoteName(note, gmPercussionLabels: true),
+                          style: TextStyle(
+                              color: padTextColor, fontSize: fontSize * 0.6),
+                        ),
+                      Text(
+                          settings.showNoteNames
                               ? MidiUtils.getNoteName(note)
                               : note.toString(),
-                      style: TextStyle(
-                        color: padTextColor,
-                        fontSize: fontSize,
-                      )),
+                          style: TextStyle(
+                              color: padTextColor, fontSize: fontSize)),
+                    ],
+                  ),
                 ),
               ),
       ),
