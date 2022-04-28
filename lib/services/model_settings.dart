@@ -119,15 +119,6 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
-  // pitchbend:
-  bool get pitchBend => prefs.settings.pitchBend.value;
-
-  set pitchBend(bool newValue) {
-    prefs.settings.pitchBend.value = newValue;
-    prefs.settings.pitchBend.save();
-    notifyListeners();
-  }
-
   // octave buttons:
   bool get octaveButtons => prefs.settings.octaveButtons.value;
 
@@ -227,16 +218,12 @@ class Settings extends ChangeNotifier {
   int get sustainTimeStep => prefs.settings.sustainTimeStep.value;
 
   set sustainTimeStep(int timeInMs) {
-    prefs.settings.sustainTimeStep.value = timeInMs.clamp(0, 5000);
+    prefs.settings.sustainTimeStep.value = timeInMs;
     prefs.settings.sustainTimeStep.save();
     notifyListeners();
   }
 
-  int get minSustainTimeStep => 2;
-  int get sustainTimeUsable {
-    if (prefs.settings.sustainTimeStep.value <= minSustainTimeStep) return 0;
-    return pow(2, prefs.settings.sustainTimeStep.value).toInt();
-  }
+  int get sustainTimeUsable => (50 * sustainTimeStep).toInt();
 
   resetSustainTimeStep() =>
       sustainTimeStep = LoadSettings.defaults().sustainTimeStep.value;
@@ -251,20 +238,31 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
+// pitchbend:
+  bool get pitchBend => prefs.settings.pitchBend.value;
+
+  set pitchBend(bool newValue) {
+    prefs.settings.pitchBend.value = newValue;
+    prefs.settings.pitchBend.save();
+
+    if (!newValue) {
+      prefs.settings.pitchBendEase.value = 0;
+      prefs.settings.pitchBendEase.save();
+    }
+
+    notifyListeners();
+  }
+
 // pitchBendEase
   int get pitchBendEase => prefs.settings.pitchBendEase.value;
 
   set pitchBendEase(int timeInMs) {
-    prefs.settings.pitchBendEase.value = timeInMs.clamp(0, 5000);
+    prefs.settings.pitchBendEase.value = timeInMs;
     prefs.settings.pitchBendEase.save();
     notifyListeners();
   }
 
-  int get minPitchBendEase => 2;
-  int get pitchBendEaseCalculated {
-    if (prefs.settings.pitchBendEase.value <= minPitchBendEase) return 0;
-    return pow(2, prefs.settings.pitchBendEase.value).toInt();
-  }
+  int get pitchBendEaseCalculated => (100 * pitchBendEase).toInt();
 
   resetPitchBendEase() =>
       pitchBendEase = LoadSettings.defaults().pitchBendEase.value;

@@ -53,7 +53,7 @@ class Prefs {
     "velocity": 110,
     "velocityMin": 110,
     "velocityMax": 120,
-    "sustainTimeStep": 2,
+    "sustainTimeStep": 0,
     "sendCC": false,
     "showNoteNames": true,
     "pitchBend": false,
@@ -63,7 +63,7 @@ class Prefs {
     "randomVelocity": false,
     "scaleString": "chromatic",
     "channel": 0,
-    "pitchBendEase": 2,
+    "pitchBendEase": 0,
     "modWheel": false,
   };
 }
