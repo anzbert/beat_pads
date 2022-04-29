@@ -162,9 +162,8 @@ class PadsMenu extends StatelessWidget {
             ),
           Divider(),
           ListTile(
-            title: Text("Sliding and Aftertouch"),
-            subtitle: Text(
-                "Choose between Touch Sliding behaviours and Polyphonic Aftertouch"),
+            title: Text("Slide / Aftertouch"),
+            subtitle: Text("Touch Sliding and Polyphonic Aftertouch"),
             trailing: DropdownPlayMode(),
           ),
           ListTile(

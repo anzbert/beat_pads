@@ -6,8 +6,8 @@ class DropdownLayout extends StatelessWidget {
   DropdownLayout({Key? key}) : super(key: key);
 
   final items = Layout.values
-      .map(
-          (layout) => DropdownMenuItem(child: Text(layout.name), value: layout))
+      .map((layout) =>
+          DropdownMenuItem(child: Text(layout.title), value: layout))
       .toList();
 
 //
