@@ -58,17 +58,6 @@ class _SlidePadsState extends State<SlidePads> {
       builder: (context, child) {
         return Consumer(
           builder: (BuildContext context, Settings settings, _) {
-            upAndCancel(PointerEvent touch) {
-              if (mounted) {
-                int? result = _detectTappedItem(touch);
-                context.read<MidiSender>().lift(touch, result);
-
-                if (settings.playMode == PlayMode.polyAT) {
-                  context.read<AftertouchModel>().lift(touch);
-                }
-              }
-            }
-
             down(PointerEvent touch) {
               int? result = _detectTappedItem(touch);
               if (mounted && result != null) {
@@ -89,6 +78,17 @@ class _SlidePadsState extends State<SlidePads> {
                   context.read<AftertouchModel>().move(touch);
                 } else {
                   context.read<MidiSender>().move(touch, result);
+                }
+              }
+            }
+
+            upAndCancel(PointerEvent touch) {
+              if (mounted) {
+                int? result = _detectTappedItem(touch);
+                context.read<MidiSender>().lift(touch, result);
+
+                if (settings.playMode == PlayMode.polyAT) {
+                  context.read<AftertouchModel>().lift(touch);
                 }
               }
             }
