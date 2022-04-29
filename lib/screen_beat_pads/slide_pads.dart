@@ -40,6 +40,13 @@ class _SlidePadsState extends State<SlidePads> {
 
   @override
   Widget build(BuildContext context) {
+    // var test = PlayMode.noSlide;
+    // print(test.title);
+    // var test2 = PlayMode.fromName("noSlide");
+    // print(test2);
+    // var test3 = PlayMode.fromTitle("No_Slide");
+    // print(test3);
+
     return MultiProvider(
       providers: [
         ChangeNotifierProxyProvider<Settings, MidiReceiver>(

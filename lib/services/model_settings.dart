@@ -40,7 +40,9 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
-  // pads:
+  // play mode
+
+  // pad grid:
   List<List<int>> get rows {
     return prefs.settings.layout.value.getGrid(this).rows;
   }

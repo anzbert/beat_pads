@@ -12,57 +12,61 @@ class AftertouchModel extends ChangeNotifier {
     return this;
   }
 
-  final CircleBuffer circleBuffer = CircleBuffer(127);
+  final CircleBuffer atCircleBuffer = CircleBuffer(127);
   final CircleBuffer outlineBuffer = CircleBuffer(127);
 
+  final curve = Curves.easeIn;
+
   double getOpacity(double radius, {double scale = 1}) {
-    return ((radius * scale.clamp(0, 1)) / circleBuffer.maxRadius)
-        .clamp(0.1, 0.8);
+    double fraction =
+        radius.clamp(0, atCircleBuffer.maxRadius) / atCircleBuffer.maxRadius;
+    double transformed = curve.transform(fraction);
+    double scaled = transformed * scale.clamp(0, 1);
+    return scaled;
   }
 
-  int getPressure(double radius) {
-    int pressure =
-        (radius / circleBuffer.maxRadius * 127).clamp(0, 127).toInt();
-
-    return pressure;
-  }
+  int getPressure(double radius) =>
+      (curve.transform(radius.clamp(0, atCircleBuffer.maxRadius) /
+                  atCircleBuffer.maxRadius) *
+              127)
+          .toInt();
 
   // TOUCH HANDLIMG
   void push(PointerEvent touch, int note) {
-    circleBuffer.add(touch.pointer, ATCircle(touch.position, 0, note));
+    atCircleBuffer.add(touch.pointer, ATCircle(touch.position, 0, note));
     outlineBuffer.add(touch.pointer, ATCircle(touch.position, 0, note));
 
     notifyListeners();
   }
 
   void move(PointerEvent touch) {
-    if (circleBuffer.buffer[touch.pointer] == null) return;
+    if (atCircleBuffer.buffer[touch.pointer] == null) return;
 
     double distance = Utils.offsetDistance(
-        circleBuffer.buffer[touch.pointer]!.center, touch.position);
+        atCircleBuffer.buffer[touch.pointer]!.center, touch.position);
 
+    atCircleBuffer.updateRadiusWithinLimit(touch.pointer, distance);
     outlineBuffer.updateRadiusWithinLimit(touch.pointer, distance);
-    circleBuffer.updateRadiusWithinLimit(touch.pointer, distance);
 
     PolyATMessage(
       channel: _settings.channel,
-      note: circleBuffer.buffer[touch.pointer]!.note,
-      pressure: getPressure(circleBuffer.buffer[touch.pointer]!.radius),
+      note: atCircleBuffer.buffer[touch.pointer]!.note,
+      pressure: getPressure(atCircleBuffer.buffer[touch.pointer]!.radius),
     ).send();
 
     notifyListeners();
   }
 
   void lift(PointerEvent touch) {
-    if (circleBuffer.buffer[touch.pointer] == null) return;
+    if (atCircleBuffer.buffer[touch.pointer] == null) return;
 
     PolyATMessage(
       channel: _settings.channel,
-      note: circleBuffer.buffer[touch.pointer]!.note,
+      note: atCircleBuffer.buffer[touch.pointer]!.note,
       pressure: 0,
     ).send();
 
-    circleBuffer.remove(touch.pointer);
+    atCircleBuffer.remove(touch.pointer);
     outlineBuffer.remove(touch.pointer);
     notifyListeners();
   }
