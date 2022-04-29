@@ -9,3 +9,6 @@ export './data_classes.dart';
 export './model_receive.dart';
 export './model_send.dart';
 export './model_settings.dart';
+export './model_paint.dart';
+export './paint_aftertouch.dart';
+export './paint_line.dart';
