@@ -107,11 +107,11 @@ class MidiSender extends ChangeNotifier {
 
   push(PointerEvent touch, int note) {
     // add event to touchbuffer and send noteOn
-    _touchBuffer.buffer.add(TouchEvent(touch, note));
+    _touchBuffer.add(TouchEvent(touch, note));
     updateSendBufferAndSend(note, true);
   }
 
-  slide(PointerEvent touch, int? note) {
+  move(PointerEvent touch, int? note) {
     // check if it is a legeit event that has previously been registered by a push()
     TouchEvent? eventInBuffer = _touchBuffer.findByPointer(touch.pointer);
     if (eventInBuffer == null) return;
@@ -140,7 +140,7 @@ class MidiSender extends ChangeNotifier {
       updateSendBufferAndSend(eventInBuffer.note!, false);
     }
 
-    _touchBuffer.removeEvent(touch.pointer);
+    _touchBuffer.remove(touch.pointer);
     // _touchBuffer.debug();
   }
 
@@ -171,53 +171,6 @@ class MidiSender extends ChangeNotifier {
       super.notifyListeners();
     }
   }
-}
-
-class TouchBuffer {
-  TouchBuffer();
-
-  List<TouchEvent> _buffer = [];
-  List<TouchEvent> get buffer => _buffer;
-
-  TouchEvent? findByPointer(int searchPointer) {
-    for (TouchEvent event in _buffer) {
-      if (event.touch.pointer == searchPointer) {
-        return event;
-      }
-    }
-    return null;
-  }
-
-  debug() {
-    for (var event in _buffer) {
-      Utils.logd(event.touch);
-    }
-  }
-
-  clear() => _buffer = [];
-
-  bool updateWith(TouchEvent updatedEvent) {
-    int index = _buffer.indexWhere(
-        (element) => element.touch.pointer == updatedEvent.touch.pointer);
-    if (index == -1) return false;
-
-    _buffer[index] = updatedEvent;
-    return true;
-  }
-
-  void removeEvent(int searchID) {
-    _buffer =
-        _buffer.where((element) => element.touch.pointer != searchID).toList();
-  }
-}
-
-class TouchEvent {
-  TouchEvent(this.touch, this.note);
-
-  final PointerEvent touch; // unique pointer down event
-
-  int? note;
-  bool blockSlide = false;
 }
 
 class NoteEvent {

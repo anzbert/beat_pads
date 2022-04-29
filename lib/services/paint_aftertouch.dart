@@ -1,23 +1,23 @@
-// import '_paint_line.dart';
-// import 'package:beat_pads/unused/_paint_state.dart';
-// import 'package:flutter/material.dart';
-// import 'package:provider/provider.dart';
+import 'package:beat_pads/services/_services.dart';
 
-// class PaintAfterTouchLines extends StatelessWidget {
-//   const PaintAfterTouchLines({Key? key}) : super(key: key);
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Consumer<PaintState>(
-//       builder: (context, paintState, child) {
-//         return Stack(
-//           children: [
-//             ...paintState.linesIterable.map((line) {
-//               return PaintLine(line[0], line[1]);
-//             }).toList()
-//           ],
-//         );
-//       },
-//     );
-//   }
-// }
+class PaintAfterTouchLines extends StatelessWidget {
+  const PaintAfterTouchLines({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<AftertouchModel>(
+      builder: (context, paintModel, child) {
+        return Stack(
+          children: [
+            ...paintModel.linesIterable.map((line) {
+              return PaintLine(line[0], line[1]);
+            })
+          ],
+        );
+      },
+    );
+  }
+}

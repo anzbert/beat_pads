@@ -50,65 +50,77 @@ class _SlidePadsState extends State<SlidePads> {
           create: (context) => MidiSender(context.read<Settings>()),
           update: (_, settings, midiSender) => midiSender!.update(settings),
         ),
+        ChangeNotifierProvider(create: ((context) => AftertouchModel()))
       ],
       builder: (context, child) {
-        return Listener(
-          onPointerDown: (touch) {
-            int? result = _detectTappedItem(touch);
-            if (mounted && result != null) {
-              context.read<MidiSender>().push(touch, result);
-            }
-          },
-          onPointerMove: (touch) {
-            int? result = _detectTappedItem(touch);
-            if (mounted) {
-              context.read<MidiSender>().slide(touch, result);
-            }
-          },
-          onPointerUp: (touch) {
-            int? result = _detectTappedItem(touch);
-            if (mounted) {
-              context.read<MidiSender>().lift(touch, result);
-            }
-          },
-          onPointerCancel: (touch) {
-            int? result = _detectTappedItem(touch);
-            if (mounted) {
-              context.read<MidiSender>().lift(touch, result);
-            }
-          },
-          child: Column(
-            // Hit testing happens on this keyed Widget, which contains all the pads:
-            key: _padsWidgetKey,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ...context.watch<Settings>().rows.map(
-                (row) {
-                  return Expanded(
-                    flex: 1,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        ...row.map(
-                          (note) {
-                            return Expanded(
-                              flex: 1,
-                              child: HitTestObject(
-                                index: note,
-                                child: SlideBeatPad(note: note),
-                              ),
-                            );
-                          },
+        bool aT = true;
+        return Stack(
+          children: [
+            Listener(
+              onPointerDown: (touch) {
+                int? result = _detectTappedItem(touch);
+                if (mounted && result != null) {
+                  context.read<MidiSender>().push(touch, result);
+                  if (aT) context.read<AftertouchModel>().push(touch, result);
+                }
+              },
+              onPointerMove: (touch) {
+                if (mounted) {
+                  int? result = _detectTappedItem(touch);
+                  // ignore: dead_code
+                  if (!aT) context.read<MidiSender>().move(touch, result);
+                  if (aT) context.read<AftertouchModel>().move(touch);
+                }
+              },
+              onPointerUp: (touch) {
+                if (mounted) {
+                  int? result = _detectTappedItem(touch);
+                  context.read<MidiSender>().lift(touch, result);
+                  if (aT) context.read<AftertouchModel>().lift(touch);
+                }
+              },
+              onPointerCancel: (touch) {
+                if (mounted) {
+                  int? result = _detectTappedItem(touch);
+                  context.read<MidiSender>().lift(touch, result);
+                  if (aT) context.read<AftertouchModel>().lift(touch);
+                }
+              },
+              child: Column(
+                // Hit testing happens on this keyed Widget, which contains all the pads:
+                key: _padsWidgetKey,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ...context.watch<Settings>().rows.map(
+                    (row) {
+                      return Expanded(
+                        flex: 1,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            ...row.map(
+                              (note) {
+                                return Expanded(
+                                  flex: 1,
+                                  child: HitTestObject(
+                                    index: note,
+                                    child: SlideBeatPad(note: note),
+                                  ),
+                                );
+                              },
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  );
-                },
+                      );
+                    },
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+            if (aT) PaintAfterTouchLines(),
+          ],
         );
       },
     );
