@@ -8,9 +8,9 @@ class DropdownScaleNotes extends StatelessWidget {
       required this.rootNote,
       required this.setValue,
       required this.readValue,
-      this.layout = Layout.Major_Third,
+      this.layout = Layout.majorThird,
       Key? key})
-      : usedScale = layout == Layout.Scale_Notes_Only ? scale : "chromatic",
+      : usedScale = layout == Layout.scaleNotesOnly ? scale : "chromatic",
         super(key: key);
 
   final Layout layout;

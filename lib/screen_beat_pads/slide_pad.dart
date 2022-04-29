@@ -92,9 +92,7 @@ class SlideBeatPad extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if (settings.layout == Layout.XpressPads_Standard ||
-                          settings.layout == Layout.XpressPads_LatinJazz ||
-                          settings.layout == Layout.XpressPads_Xtreme)
+                      if (settings.layout.gmPercussion)
                         Text(
                           MidiUtils.getNoteName(note, gmPercussionLabels: true),
                           style: TextStyle(

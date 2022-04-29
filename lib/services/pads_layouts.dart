@@ -21,6 +21,19 @@ enum Layout {
     return null;
   }
 
+  bool get gmPercussion {
+    switch (this) {
+      case Layout.xPressPadsStandard:
+        return true;
+      case Layout.xPressPadsLatinJazz:
+        return true;
+      case Layout.xPressPadsXtreme:
+        return true;
+      default:
+        return false;
+    }
+  }
+
   LayoutProps get props {
     switch (this) {
       case Layout.magicToneNetwork:
