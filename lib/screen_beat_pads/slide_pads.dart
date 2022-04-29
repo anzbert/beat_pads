@@ -42,6 +42,7 @@ class _SlidePadsState extends State<SlidePads> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        // proxyproviders, to update all other models, when Settings change:
         ChangeNotifierProxyProvider<Settings, MidiReceiver>(
           create: (context) => MidiReceiver(context.read<Settings>()),
           update: (_, settings, midiReceiver) => midiReceiver!.update(settings),
