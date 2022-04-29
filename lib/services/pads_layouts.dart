@@ -202,15 +202,17 @@ enum XPP {
   List<int> get list {
     switch (this) {
       case XPP.standard:
-        return _standardGrid;
+        return XppConstants.standardGrid;
       case XPP.latinJazz:
-        return _latinJazzGrid;
+        return XppConstants.latinJazzGrid;
       case XPP.xtreme:
-        return _xtremeGrid;
+        return XppConstants.xtremeGrid;
     }
   }
+}
 
-  final List<int> _standardGrid = [
+abstract class XppConstants {
+  static const List<int> standardGrid = [
     36,
     42,
     42,
@@ -228,7 +230,7 @@ enum XPP {
     51,
     49,
   ];
-  final List<int> _latinJazzGrid = [
+  static const List<int> latinJazzGrid = [
     36,
     44,
     44,
@@ -246,7 +248,7 @@ enum XPP {
     37,
     51,
   ];
-  final List<int> _xtremeGrid = [
+  static const List<int> xtremeGrid = [
     37,
     36,
     42,
@@ -281,5 +283,3 @@ enum XPP {
     55,
   ];
 }
-
-extension XPPConstants on XPP {}

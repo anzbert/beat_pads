@@ -13,4 +13,15 @@ enum PlayMode {
     }
     return null;
   }
+
+  bool get afterTouch {
+    switch (this) {
+      case PlayMode.polyAT:
+        return true;
+      case PlayMode.cc:
+        return true;
+      default:
+        return false;
+    }
+  }
 }

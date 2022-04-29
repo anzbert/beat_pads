@@ -34,7 +34,7 @@ class PaintAfterTouchCircle extends StatelessWidget {
                   box.globalToLocal(atCircle.center),
                   atCircle.radius,
                   Palette.laserLemon.color.withOpacity(
-                      paintModel.getOpacity(atCircle.radius, scale: 0.7)),
+                      paintModel.getOpacity(atCircle.radius, scale: 0.6)),
                 );
               },
             ),

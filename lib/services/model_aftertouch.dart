@@ -5,15 +5,18 @@ import 'package:flutter_midi_command/flutter_midi_command_messages.dart';
 
 class AftertouchModel extends ChangeNotifier {
   Settings _settings;
-  AftertouchModel(this._settings);
+  Size screenSize;
+  AftertouchModel(this._settings, this.screenSize)
+      : atCircleBuffer = CircleBuffer(screenSize.width * 0.17),
+        outlineBuffer = CircleBuffer(screenSize.width * 0.17);
 
   AftertouchModel update(Settings settings) {
     _settings = settings;
     return this;
   }
 
-  final CircleBuffer atCircleBuffer = CircleBuffer(127);
-  final CircleBuffer outlineBuffer = CircleBuffer(127);
+  final CircleBuffer atCircleBuffer;
+  final CircleBuffer outlineBuffer;
 
   final curve = Curves.easeIn;
 
@@ -25,7 +28,7 @@ class AftertouchModel extends ChangeNotifier {
     return scaled;
   }
 
-  int getPressure(double radius) =>
+  int getValue(double radius) =>
       (curve.transform(radius.clamp(0, atCircleBuffer.maxRadius) /
                   atCircleBuffer.maxRadius) *
               127)
@@ -33,38 +36,52 @@ class AftertouchModel extends ChangeNotifier {
 
   // TOUCH HANDLIMG
   void push(PointerEvent touch, int note) {
-    atCircleBuffer.add(touch.pointer, ATCircle(touch.position, 0, note));
-    outlineBuffer.add(touch.pointer, ATCircle(touch.position, 0, note));
+    atCircleBuffer.add(touch.pointer, touch.position, note);
+    outlineBuffer.add(touch.pointer, touch.position, note);
 
+    if (_settings.playMode == PlayMode.polyAT) {
+      PolyATMessage(
+        channel: _settings.channel,
+        note: atCircleBuffer.buffer[touch.pointer]!.note,
+        pressure: 0,
+      ).send();
+    }
+    if (_settings.playMode == PlayMode.cc) {
+      CCMessage(
+        channel: (_settings.channel + 2) % 16,
+        controller: atCircleBuffer.buffer[touch.pointer]!.note,
+        value: 0,
+      ).send();
+    }
     notifyListeners();
   }
 
   void move(PointerEvent touch) {
     if (atCircleBuffer.buffer[touch.pointer] == null) return;
 
-    double distance = Utils.offsetDistance(
-        atCircleBuffer.buffer[touch.pointer]!.center, touch.position);
+    atCircleBuffer.updatePointer(touch.pointer, touch.position);
+    outlineBuffer.updatePointer(touch.pointer, touch.position);
 
-    atCircleBuffer.updateRadiusWithinLimit(touch.pointer, distance);
-    outlineBuffer.updateRadiusWithinLimit(touch.pointer, distance);
-
-    PolyATMessage(
-      channel: _settings.channel,
-      note: atCircleBuffer.buffer[touch.pointer]!.note,
-      pressure: getPressure(atCircleBuffer.buffer[touch.pointer]!.radius),
-    ).send();
+    if (_settings.playMode == PlayMode.polyAT) {
+      PolyATMessage(
+        channel: _settings.channel,
+        note: atCircleBuffer.buffer[touch.pointer]!.note,
+        pressure: getValue(atCircleBuffer.buffer[touch.pointer]!.radius),
+      ).send();
+    }
+    if (_settings.playMode == PlayMode.cc) {
+      CCMessage(
+        channel: (_settings.channel + 2) % 16,
+        controller: atCircleBuffer.buffer[touch.pointer]!.note,
+        value: getValue(atCircleBuffer.buffer[touch.pointer]!.radius),
+      ).send();
+    }
 
     notifyListeners();
   }
 
   void lift(PointerEvent touch) {
     if (atCircleBuffer.buffer[touch.pointer] == null) return;
-
-    PolyATMessage(
-      channel: _settings.channel,
-      note: atCircleBuffer.buffer[touch.pointer]!.note,
-      pressure: 0,
-    ).send();
 
     atCircleBuffer.remove(touch.pointer);
     outlineBuffer.remove(touch.pointer);
@@ -80,21 +97,18 @@ class CircleBuffer {
 
   Iterable<ATCircle> get values => buffer.values;
 
-  void add(int key, ATCircle circle) {
-    buffer[key] = circle;
+  void add(int key, Offset center, int note) {
+    buffer[key] = ATCircle(center, center, note, maxRadius);
   }
 
-  void updateRadiusWithinLimit(int key, double newRadius) {
+  void updatePointer(int key, Offset newPointer) {
     if (buffer[key] != null) {
-      if (newRadius > maxRadius) {
-        buffer[key]!.radius = maxRadius;
-      } else {
-        buffer[key]!.radius = newRadius;
-      }
+      buffer[key]!.pointer = newPointer;
     }
   }
 
   void remove(int key) {
+    // TODO: MAYBE ADD ANIMATION HERE
     if (buffer[key] != null) {
       buffer.remove(key);
     }
@@ -104,7 +118,16 @@ class CircleBuffer {
 class ATCircle {
   final int note;
   final Offset center;
-  double radius;
+  final double maxRadius;
+  Offset pointer;
 
-  ATCircle(this.center, this.radius, this.note);
+  ATCircle(this.center, this.pointer, this.note, this.maxRadius);
+
+  double get radius {
+    double newRadius = Utils.offsetDistance(center, pointer);
+    if (newRadius > maxRadius) return maxRadius;
+    return newRadius;
+  }
+
+  // TODO get x and y component within maxRadius
 }

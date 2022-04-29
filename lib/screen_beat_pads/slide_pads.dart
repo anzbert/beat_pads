@@ -40,6 +40,7 @@ class _SlidePadsState extends State<SlidePads> {
 
   @override
   Widget build(BuildContext context) {
+    var screenSize = MediaQuery.of(context).size;
     return MultiProvider(
       providers: [
         // proxyproviders, to update all other models, when Settings change:
@@ -52,7 +53,8 @@ class _SlidePadsState extends State<SlidePads> {
           update: (_, settings, midiSender) => midiSender!.update(settings),
         ),
         ChangeNotifierProxyProvider<Settings, AftertouchModel>(
-          create: ((context) => AftertouchModel(context.read<Settings>())),
+          create: ((context) =>
+              AftertouchModel(context.read<Settings>(), screenSize)),
           update: (_, settings, atModel) => atModel!.update(settings),
         )
       ],
@@ -64,7 +66,7 @@ class _SlidePadsState extends State<SlidePads> {
               if (mounted && result != null) {
                 context.read<MidiSender>().push(touch, result);
 
-                if (settings.playMode == PlayMode.polyAT) {
+                if (settings.playMode.afterTouch) {
                   context.read<AftertouchModel>().push(touch, result);
                 }
               }
@@ -75,7 +77,7 @@ class _SlidePadsState extends State<SlidePads> {
 
               if (mounted) {
                 int? result = _detectTappedItem(touch);
-                if (settings.playMode == PlayMode.polyAT) {
+                if (settings.playMode.afterTouch) {
                   context.read<AftertouchModel>().move(touch);
                 } else {
                   context.read<MidiSender>().move(touch, result);
@@ -88,7 +90,7 @@ class _SlidePadsState extends State<SlidePads> {
                 int? result = _detectTappedItem(touch);
                 context.read<MidiSender>().lift(touch, result);
 
-                if (settings.playMode == PlayMode.polyAT) {
+                if (settings.playMode.afterTouch) {
                   context.read<AftertouchModel>().lift(touch);
                 }
               }
@@ -134,8 +136,7 @@ class _SlidePadsState extends State<SlidePads> {
                     ],
                   ),
                 ),
-                if (settings.playMode == PlayMode.polyAT)
-                  PaintAfterTouchCircle(),
+                if (settings.playMode.afterTouch) PaintAfterTouchCircle(),
               ],
             );
           },
