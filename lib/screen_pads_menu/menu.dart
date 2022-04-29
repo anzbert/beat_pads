@@ -1,5 +1,6 @@
 import 'package:beat_pads/screen_beat_pads/_screen_beat_pads.dart';
 import 'package:beat_pads/screen_pads_menu/box_credits.dart';
+import 'package:beat_pads/screen_pads_menu/drop_down_playmode.dart';
 import 'package:beat_pads/screen_pads_menu/slider_int.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -160,6 +161,12 @@ class PadsMenu extends StatelessWidget {
               resetFunction: settings.resetVelocity,
             ),
           Divider(),
+          ListTile(
+            title: Text("Sliding and Aftertouch"),
+            subtitle: Text(
+                "Choose between Touch Sliding behaviours and Polyphonic Aftertouch"),
+            trailing: DropdownPlayMode(),
+          ),
           ListTile(
             title: Text("Sustain Button"),
             subtitle: Text(

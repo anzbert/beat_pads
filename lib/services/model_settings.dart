@@ -41,6 +41,13 @@ class Settings extends ChangeNotifier {
   }
 
   // play mode
+  PlayMode get playMode => prefs.settings.playMode.value;
+
+  set playMode(PlayMode newValue) {
+    prefs.settings.playMode.value = newValue;
+    prefs.settings.playMode.save();
+    notifyListeners();
+  }
 
   // pad grid:
   List<List<int>> get rows {

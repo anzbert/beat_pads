@@ -1,18 +1,6 @@
 // ignore_for_file: constant_identifier_names
-
 import 'package:beat_pads/services/_services.dart';
 
-abstract class LayoutUtils {
-  /// get Layout from its name as a String
-  static Layout? fromString(String key) {
-    for (Layout layout in Layout.values) {
-      if (layout.name == key) return layout;
-    }
-    return null;
-  }
-}
-
-/// Selectable Pad Grid Layouts
 enum Layout {
   Major_Third,
   Minor_Third,
@@ -22,7 +10,14 @@ enum Layout {
   Magic_Tone_Network,
   XpressPads_Standard,
   XpressPads_LatinJazz,
-  XpressPads_Xtreme,
+  XpressPads_Xtreme;
+
+  static Layout? fromName(String key) {
+    for (Layout mode in Layout.values) {
+      if (mode.name == key) return mode;
+    }
+    return null;
+  }
 }
 
 extension LayoutExt on Layout {

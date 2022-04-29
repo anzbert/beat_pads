@@ -40,13 +40,6 @@ class _SlidePadsState extends State<SlidePads> {
 
   @override
   Widget build(BuildContext context) {
-    // var test = PlayMode.noSlide;
-    // print(test.title);
-    // var test2 = PlayMode.fromName("noSlide");
-    // print(test2);
-    // var test3 = PlayMode.fromTitle("No_Slide");
-    // print(test3);
-
     return MultiProvider(
       providers: [
         ChangeNotifierProxyProvider<Settings, MidiReceiver>(
@@ -63,74 +56,91 @@ class _SlidePadsState extends State<SlidePads> {
         )
       ],
       builder: (context, child) {
-        bool aT = true;
-        return Stack(
-          children: [
-            Listener(
-              onPointerDown: (touch) {
-                int? result = _detectTappedItem(touch);
-                if (mounted && result != null) {
-                  context.read<MidiSender>().push(touch, result);
-                  if (aT) context.read<AftertouchModel>().push(touch, result);
-                }
-              },
-              onPointerMove: (touch) {
-                if (mounted) {
-                  int? result = _detectTappedItem(touch);
-                  // ignore: dead_code
-                  if (!aT) context.read<MidiSender>().move(touch, result);
-                  if (aT) context.read<AftertouchModel>().move(touch);
-                }
-              },
-              onPointerUp: (touch) {
-                if (mounted) {
-                  int? result = _detectTappedItem(touch);
-                  context.read<MidiSender>().lift(touch, result);
-                  if (aT) context.read<AftertouchModel>().lift(touch);
-                }
-              },
-              onPointerCancel: (touch) {
-                if (mounted) {
-                  int? result = _detectTappedItem(touch);
-                  context.read<MidiSender>().lift(touch, result);
-                  if (aT) context.read<AftertouchModel>().lift(touch);
-                }
-              },
-              child: Column(
-                // Hit testing happens on this keyed Widget, which contains all the pads:
-                key: _padsWidgetKey,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ...context.watch<Settings>().rows.map(
-                    (row) {
-                      return Expanded(
-                        flex: 1,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            ...row.map(
-                              (note) {
-                                return Expanded(
-                                  flex: 1,
-                                  child: HitTestObject(
-                                    index: note,
-                                    child: SlideBeatPad(note: note),
-                                  ),
-                                );
-                              },
+        return Consumer(
+          builder: (BuildContext context, Settings settings, _) {
+            return Stack(
+              children: [
+                Listener(
+                  onPointerDown: (touch) {
+                    int? result = _detectTappedItem(touch);
+                    if (mounted && result != null) {
+                      context.read<MidiSender>().push(touch, result);
+
+                      if (settings.playMode == PlayMode.polyAT) {
+                        context.read<AftertouchModel>().push(touch, result);
+                      }
+                    }
+                  },
+                  onPointerMove: (touch) {
+                    if (settings.playMode == PlayMode.noSlide) return;
+
+                    if (mounted) {
+                      int? result = _detectTappedItem(touch);
+                      if (settings.playMode == PlayMode.polyAT) {
+                        context.read<AftertouchModel>().move(touch);
+                      } else {
+                        context.read<MidiSender>().move(touch, result);
+                      }
+                    }
+                  },
+                  onPointerUp: (touch) {
+                    if (mounted) {
+                      int? result = _detectTappedItem(touch);
+                      context.read<MidiSender>().lift(touch, result);
+
+                      if (settings.playMode == PlayMode.polyAT) {
+                        context.read<AftertouchModel>().lift(touch);
+                      }
+                    }
+                  },
+                  onPointerCancel: (touch) {
+                    if (mounted) {
+                      int? result = _detectTappedItem(touch);
+                      context.read<MidiSender>().lift(touch, result);
+
+                      if (settings.playMode == PlayMode.polyAT) {
+                        context.read<AftertouchModel>().lift(touch);
+                      }
+                    }
+                  },
+                  child: Column(
+                    // Hit testing happens on this keyed Widget, which contains all the pads:
+                    key: _padsWidgetKey,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ...settings.rows.map(
+                        (row) {
+                          return Expanded(
+                            flex: 1,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                ...row.map(
+                                  (note) {
+                                    return Expanded(
+                                      flex: 1,
+                                      child: HitTestObject(
+                                        index: note,
+                                        child: SlideBeatPad(note: note),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                      );
-                    },
+                          );
+                        },
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            ),
-            if (aT) PaintAfterTouchCircle(),
-          ],
+                ),
+                if (settings.playMode == PlayMode.polyAT)
+                  PaintAfterTouchCircle(),
+              ],
+            );
+          },
         );
       },
     );
