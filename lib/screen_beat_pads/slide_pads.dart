@@ -50,7 +50,10 @@ class _SlidePadsState extends State<SlidePads> {
           create: (context) => MidiSender(context.read<Settings>()),
           update: (_, settings, midiSender) => midiSender!.update(settings),
         ),
-        ChangeNotifierProvider(create: ((context) => AftertouchModel()))
+        ChangeNotifierProxyProvider<Settings, AftertouchModel>(
+          create: ((context) => AftertouchModel(context.read<Settings>())),
+          update: (_, settings, atModel) => atModel!.update(settings),
+        )
       ],
       builder: (context, child) {
         bool aT = true;
@@ -119,7 +122,7 @@ class _SlidePadsState extends State<SlidePads> {
                 ],
               ),
             ),
-            if (aT) PaintAfterTouchLines(),
+            if (aT) PaintAfterTouchCircle(),
           ],
         );
       },

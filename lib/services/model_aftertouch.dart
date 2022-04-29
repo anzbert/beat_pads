@@ -1,41 +1,106 @@
+import 'package:beat_pads/services/_services.dart';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_midi_command/flutter_midi_command_messages.dart';
 
 class AftertouchModel extends ChangeNotifier {
-  final Map<int, List<Offset>> _lineBuffer = {};
+  Settings _settings;
+  AftertouchModel(this._settings);
 
-  get linesIterable {
-    return _lineBuffer.values;
+  AftertouchModel update(Settings settings) {
+    _settings = settings;
+    return this;
   }
 
-  addLine(int key, List<Offset> line) {
-    _lineBuffer[key] = line;
-    notifyListeners();
+  final CircleBuffer circleBuffer = CircleBuffer(127);
+  final CircleBuffer outlineBuffer = CircleBuffer(127);
+
+  double getOpacity(double radius, {double scale = 1}) {
+    return ((radius * scale.clamp(0, 1)) / circleBuffer.maxRadius)
+        .clamp(0.1, 0.8);
   }
 
-  updateEndPoint(int key, Offset endPoint) {
-    if (_lineBuffer[key] != null) {
-      _lineBuffer[key]![1] = endPoint;
-    }
-    notifyListeners();
-  }
+  int getPressure(double radius) {
+    int pressure =
+        (radius / circleBuffer.maxRadius * 127).clamp(0, 127).toInt();
 
-  removeLine(int key) {
-    if (_lineBuffer[key] != null) {
-      _lineBuffer.remove(key);
-    }
-    notifyListeners();
+    return pressure;
   }
 
   // TOUCH HANDLIMG
-  push(PointerEvent touch, int note) {
-    addLine(touch.pointer, [touch.position, touch.position]);
+  void push(PointerEvent touch, int note) {
+    circleBuffer.add(touch.pointer, ATCircle(touch.position, 0, note));
+    outlineBuffer.add(touch.pointer, ATCircle(touch.position, 0, note));
+
+    notifyListeners();
   }
 
-  move(PointerEvent touch) {
-    updateEndPoint(touch.pointer, touch.position);
+  void move(PointerEvent touch) {
+    if (circleBuffer.buffer[touch.pointer] == null) return;
+
+    double distance = Utils.offsetDistance(
+        circleBuffer.buffer[touch.pointer]!.center, touch.position);
+
+    outlineBuffer.updateRadiusWithinLimit(touch.pointer, distance);
+    circleBuffer.updateRadiusWithinLimit(touch.pointer, distance);
+
+    PolyATMessage(
+      channel: _settings.channel,
+      note: circleBuffer.buffer[touch.pointer]!.note,
+      pressure: getPressure(circleBuffer.buffer[touch.pointer]!.radius),
+    ).send();
+
+    notifyListeners();
   }
 
-  lift(PointerEvent touch) {
-    removeLine(touch.pointer);
+  void lift(PointerEvent touch) {
+    if (circleBuffer.buffer[touch.pointer] == null) return;
+
+    PolyATMessage(
+      channel: _settings.channel,
+      note: circleBuffer.buffer[touch.pointer]!.note,
+      pressure: 0,
+    ).send();
+
+    circleBuffer.remove(touch.pointer);
+    outlineBuffer.remove(touch.pointer);
+    notifyListeners();
   }
+}
+
+class CircleBuffer {
+  final double maxRadius;
+  CircleBuffer(this.maxRadius);
+
+  final Map<int, ATCircle> buffer = {};
+
+  Iterable<ATCircle> get values => buffer.values;
+
+  void add(int key, ATCircle circle) {
+    buffer[key] = circle;
+  }
+
+  void updateRadiusWithinLimit(int key, double newRadius) {
+    if (buffer[key] != null) {
+      if (newRadius > maxRadius) {
+        buffer[key]!.radius = maxRadius;
+      } else {
+        buffer[key]!.radius = newRadius;
+      }
+    }
+  }
+
+  void remove(int key) {
+    if (buffer[key] != null) {
+      buffer.remove(key);
+    }
+  }
+}
+
+class ATCircle {
+  final int note;
+  final Offset center;
+  double radius;
+
+  ATCircle(this.center, this.radius, this.note);
 }
