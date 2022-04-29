@@ -58,51 +58,48 @@ class _SlidePadsState extends State<SlidePads> {
       builder: (context, child) {
         return Consumer(
           builder: (BuildContext context, Settings settings, _) {
+            upAndCancel(PointerEvent touch) {
+              if (mounted) {
+                int? result = _detectTappedItem(touch);
+                context.read<MidiSender>().lift(touch, result);
+
+                if (settings.playMode == PlayMode.polyAT) {
+                  context.read<AftertouchModel>().lift(touch);
+                }
+              }
+            }
+
+            down(PointerEvent touch) {
+              int? result = _detectTappedItem(touch);
+              if (mounted && result != null) {
+                context.read<MidiSender>().push(touch, result);
+
+                if (settings.playMode == PlayMode.polyAT) {
+                  context.read<AftertouchModel>().push(touch, result);
+                }
+              }
+            }
+
+            move(PointerEvent touch) {
+              if (settings.playMode == PlayMode.noSlide) return;
+
+              if (mounted) {
+                int? result = _detectTappedItem(touch);
+                if (settings.playMode == PlayMode.polyAT) {
+                  context.read<AftertouchModel>().move(touch);
+                } else {
+                  context.read<MidiSender>().move(touch, result);
+                }
+              }
+            }
+
             return Stack(
               children: [
                 Listener(
-                  onPointerDown: (touch) {
-                    int? result = _detectTappedItem(touch);
-                    if (mounted && result != null) {
-                      context.read<MidiSender>().push(touch, result);
-
-                      if (settings.playMode == PlayMode.polyAT) {
-                        context.read<AftertouchModel>().push(touch, result);
-                      }
-                    }
-                  },
-                  onPointerMove: (touch) {
-                    if (settings.playMode == PlayMode.noSlide) return;
-
-                    if (mounted) {
-                      int? result = _detectTappedItem(touch);
-                      if (settings.playMode == PlayMode.polyAT) {
-                        context.read<AftertouchModel>().move(touch);
-                      } else {
-                        context.read<MidiSender>().move(touch, result);
-                      }
-                    }
-                  },
-                  onPointerUp: (touch) {
-                    if (mounted) {
-                      int? result = _detectTappedItem(touch);
-                      context.read<MidiSender>().lift(touch, result);
-
-                      if (settings.playMode == PlayMode.polyAT) {
-                        context.read<AftertouchModel>().lift(touch);
-                      }
-                    }
-                  },
-                  onPointerCancel: (touch) {
-                    if (mounted) {
-                      int? result = _detectTappedItem(touch);
-                      context.read<MidiSender>().lift(touch, result);
-
-                      if (settings.playMode == PlayMode.polyAT) {
-                        context.read<AftertouchModel>().lift(touch);
-                      }
-                    }
-                  },
+                  onPointerDown: down,
+                  onPointerMove: move,
+                  onPointerUp: upAndCancel,
+                  onPointerCancel: upAndCancel,
                   child: Column(
                     // Hit testing happens on this keyed Widget, which contains all the pads:
                     key: _padsWidgetKey,
