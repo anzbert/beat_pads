@@ -34,6 +34,16 @@ class AftertouchModel extends ChangeNotifier {
               127)
           .toInt();
 
+  double getAverageATRadiusOfAllPads() {
+    if (atCircleBuffer.buffer.isEmpty) return 0;
+
+    double total = atCircleBuffer.buffer.values
+        .map((e) => e.radius)
+        .reduce(((value, element) => value + element));
+
+    return total / atCircleBuffer.buffer.values.length;
+  }
+
   // TOUCH HANDLIMG
   void push(PointerEvent touch, int note) {
     atCircleBuffer.add(touch.pointer, touch.position, note);
@@ -46,13 +56,13 @@ class AftertouchModel extends ChangeNotifier {
         pressure: 0,
       ).send();
     }
-    if (_settings.playMode == PlayMode.cc) {
-      CCMessage(
-        channel: (_settings.channel + 2) % 16,
-        controller: atCircleBuffer.buffer[touch.pointer]!.note,
-        value: 0,
-      ).send();
-    }
+    // if (_settings.playMode == PlayMode.cc) {
+    //   CCMessage(
+    //     channel: (_settings.channel + 2) % 16,
+    //     controller: 0,
+    //     value: 0,
+    //   ).send();
+    // }
     notifyListeners();
   }
 
