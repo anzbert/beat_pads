@@ -41,7 +41,7 @@ class MidiSender extends ChangeNotifier {
         ).send();
       }
       NoteOnMessage(
-        channel: _settings.channel,
+        channel: note % 15 + 1,
         note: note,
         velocity: _settings.velocity,
       ).send();
@@ -74,7 +74,7 @@ class MidiSender extends ChangeNotifier {
       ////////////////
 
       NoteOffMessage(
-        channel: _settings.channel,
+        channel: note % 15 + 1,
         note: note,
         velocity: 0,
       ).send();
@@ -150,7 +150,7 @@ class MidiSender extends ChangeNotifier {
     for (int note = 0; note < 128; note++) {
       if (_sendBuffer[note].noteIsOn) {
         NoteOffMessage(
-          channel: _settings.channel,
+          channel: note % 15 + 1,
           note: note,
         ).send();
         if (_settings.sendCC) {

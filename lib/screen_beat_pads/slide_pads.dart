@@ -16,6 +16,8 @@ class SlidePads extends StatefulWidget {
 class _SlidePadsState extends State<SlidePads> {
   final GlobalKey _padsWidgetKey = GlobalKey();
 
+  PlayMode? disposeMode;
+
   int? _detectTappedItem(PointerEvent event) {
     final BuildContext? context = _padsWidgetKey.currentContext;
     if (context == null) return null;
@@ -96,6 +98,11 @@ class _SlidePadsState extends State<SlidePads> {
               }
             }
 
+            if (settings.playMode == PlayMode.mpe) {
+              disposeMode = PlayMode.mpe;
+              MPEinitMessage(memberChannels: 15).send();
+            }
+
             return Stack(
               children: [
                 Listener(
@@ -143,5 +150,13 @@ class _SlidePadsState extends State<SlidePads> {
         );
       },
     );
+  }
+
+  @override
+  void dispose() {
+    if (disposeMode == PlayMode.mpe) {
+      MPEinitMessage(memberChannels: 0).send();
+    }
+    super.dispose();
   }
 }

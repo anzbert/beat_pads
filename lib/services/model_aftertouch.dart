@@ -49,13 +49,13 @@ class AftertouchModel extends ChangeNotifier {
     atCircleBuffer.add(touch.pointer, touch.position, note);
     outlineBuffer.add(touch.pointer, touch.position, note);
 
-    if (_settings.playMode == PlayMode.polyAT) {
-      PolyATMessage(
-        channel: _settings.channel,
-        note: atCircleBuffer.buffer[touch.pointer]!.note,
-        pressure: 0,
-      ).send();
-    }
+    // if (_settings.playMode == PlayMode.polyAT) {
+    //   PolyATMessage(
+    //     channel: _settings.channel,
+    //     note: atCircleBuffer.buffer[touch.pointer]!.note,
+    //     pressure: 0,
+    //   ).send();
+    // }
     // if (_settings.playMode == PlayMode.cc) {
     //   CCMessage(
     //     channel: (_settings.channel + 2) % 16,
@@ -84,6 +84,31 @@ class AftertouchModel extends ChangeNotifier {
         channel: (_settings.channel + 2) % 16,
         controller: atCircleBuffer.buffer[touch.pointer]!.note,
         value: getValue(atCircleBuffer.buffer[touch.pointer]!.radius),
+      ).send();
+    }
+
+    if (_settings.playMode == PlayMode.mpe) {
+      // print("x:${atCircleBuffer.buffer[touch.pointer]!.dx}");
+      // print("y:${atCircleBuffer.buffer[touch.pointer]!.dy}");
+      // print(
+      //     "f :${atCircleBuffer.buffer[touch.pointer]!.dx / atCircleBuffer.maxRadius / 2}");
+      // print("max: ${atCircleBuffer.maxRadius}");
+
+      int channel = atCircleBuffer.buffer[touch.pointer]!.note % 15 + 1;
+      CCMessage(
+        channel: channel,
+        controller: 74, // SLIDE
+        value:
+            (atCircleBuffer.buffer[touch.pointer]!.distancefromCenterX.abs() /
+                    atCircleBuffer.maxRadius *
+                    127)
+                .toInt(),
+      ).send();
+      PitchBendMessage(
+        channel: channel,
+        bend: (atCircleBuffer.buffer[touch.pointer]!.positionOnWholeFieldAxisY -
+                atCircleBuffer.maxRadius) /
+            atCircleBuffer.maxRadius,
       ).send();
     }
 
@@ -140,14 +165,24 @@ class ATCircle {
   }
 
   // EXPERIMENTAL STUFF:
-  double get dx => pointer.dx - center.dx;
-  double get dy => pointer.dx - center.dy;
 
-  double get2DValue() {
-    if (dx.abs() > dy.abs()) {
-      return dx;
-    } else {
-      return dy;
-    }
+  double get distancefromCenterX {
+    double rx = pointer.dx - center.dx;
+    if (rx >= maxRadius) return maxRadius;
+    return rx;
+  }
+
+  double get positionOnWholeFieldAxisX {
+    double dx = pointer.dx - center.dx + maxRadius;
+    if (dx >= maxRadius * 2) return maxRadius * 2;
+    if (dx <= 0) return 0;
+    return dx;
+  }
+
+  double get positionOnWholeFieldAxisY {
+    double dy = pointer.dy - center.dy + maxRadius;
+    if (dy >= maxRadius * 2) return 0;
+    if (dy <= 0) return maxRadius * 2;
+    return maxRadius * 2 - dy;
   }
 }

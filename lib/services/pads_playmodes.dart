@@ -1,8 +1,9 @@
 enum PlayMode {
   slide("Slide"),
   noSlide("No Slide"),
-  polyAT("Aftertouch"),
-  cc("Send CC");
+  polyAT("Aftertouch (test)"),
+  cc("Send CC (test)"),
+  mpe("MPE (test)");
 
   const PlayMode(this.title);
   final String title;
@@ -19,6 +20,8 @@ enum PlayMode {
       case PlayMode.polyAT:
         return true;
       case PlayMode.cc:
+        return true;
+      case PlayMode.mpe:
         return true;
       default:
         return false;
