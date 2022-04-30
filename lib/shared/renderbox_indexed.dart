@@ -18,6 +18,8 @@ class HitTestObject extends SingleChildRenderObjectWidget {
   }
 }
 
+// TODO: get size
+// https://www.woolha.com/tutorials/flutter-get-widget-size-and-position
 class TestProxyBox extends RenderProxyBox {
   int index;
   TestProxyBox(this.index);

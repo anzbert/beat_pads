@@ -129,5 +129,15 @@ class ATCircle {
     return newRadius;
   }
 
-  // TODO get x and y component within maxRadius
+  // EXPERIMENTAL STUFF:
+  double get dx => pointer.dx - center.dx;
+  double get dy => pointer.dx - center.dy;
+
+  double get2DValue() {
+    if (dx.abs() > dy.abs()) {
+      return dx;
+    } else {
+      return dy;
+    }
+  }
 }
