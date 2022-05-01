@@ -61,21 +61,26 @@ class MidiSender extends ChangeNotifier {
 
     _touchBuffer.updatePosition(touch, noteHovered);
 
+    // SLIDE
     if (_settings.playMode == PlayMode.slide) {
-      print(noteHovered);
-      if (noteHovered != eventInBuffer.noteEvent.currentNoteOn) {
+      if (noteHovered != eventInBuffer.noteEvent.currentNoteOn &&
+          eventInBuffer.noteEvent.currentNoteOn != null) {
         eventInBuffer.noteEvent.kill();
-        eventInBuffer.hoveringNote = notifyListeners();
-
-        if (noteHovered != null) {
-          eventInBuffer.noteEvent
-              .revive(_settings.memberChan, noteHovered, _settings.velocity);
-          notifyListeners();
-        }
+        notifyListeners();
       }
-    } else if (_settings.playMode == PlayMode.polyAT) {
-    } else if (_settings.playMode == PlayMode.cc) {
-    } else if (_settings.playMode == PlayMode.mpe) {}
+      if (noteHovered != null &&
+          eventInBuffer.noteEvent.currentNoteOn == null &&
+          noteHovered != null) {
+        eventInBuffer.noteEvent
+            .revive(_settings.memberChan, noteHovered, _settings.velocity);
+        notifyListeners();
+      }
+    } // Poly AT
+    else if (_settings.playMode == PlayMode.polyAT) {
+    } // CC
+    else if (_settings.playMode == PlayMode.cc) {
+    } // MPE
+    else if (_settings.playMode == PlayMode.mpe) {}
   }
 
   lift(PointerEvent touch) {
@@ -94,7 +99,7 @@ class MidiSender extends ChangeNotifier {
       MPEinitMessage(memberChannels: 0, upperZone: _settings.upperZone);
     }
     for (TouchEvent touch in _touchBuffer.buffer) {
-      if (touch.noteEvent.dead == false) {
+      if (touch.noteEvent.currentNoteOn != null) {
         touch.noteEvent.kill();
       }
     }
@@ -110,4 +115,3 @@ class MidiSender extends ChangeNotifier {
   }
 }
 //////////////////////////////////////////////////////////////////////////////
-

@@ -33,16 +33,7 @@ class TouchBuffer {
     if (index == -1) return;
 
     _buffer[index].update(updatedEvent.position, note);
-    // _buffer[index].markMoved();
   }
-
-  // void markDying(PointerEvent killEvent) {
-  //   int index =
-  //       _buffer.indexWhere((element) => element.uniqueID == killEvent.pointer);
-  //   if (index == -1) return;
-
-  //   _buffer[index].markDying();
-  // }
 
   void remove(TouchEvent event) {
     _buffer =
@@ -89,9 +80,9 @@ class TouchEvent {
   final List<Event> mpeEvents = [];
   final Offset origin; // unique pointer down event
   Offset newPosition;
-  int? hoveringNote; // currently on this note (or not over any)
+  // int? hoveringNote; // currently on this note (or not over any)
 
-  TouchEvent(this.uniqueID, this.origin, this.hoveringNote, this.noteEvent)
+  TouchEvent(this.uniqueID, this.origin, int hoveringNote, this.noteEvent)
       : newPosition = origin;
 
   update(Offset newPosition, int? note) {
