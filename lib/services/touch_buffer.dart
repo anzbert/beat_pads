@@ -22,31 +22,31 @@ class TouchBuffer {
     return null;
   }
 
-  void add(PointerEvent touch, int note, int channel, int velocity) {
+  void addNoteOn(PointerEvent touch, int note, int channel, int velocity) {
     _buffer.add(TouchEvent(touch.pointer, touch.position, note,
         NoteEvent(channel, note, velocity)));
   }
 
-  void updatePositionAndNote(PointerEvent updatedEvent, int? note) {
+  void updatePosition(PointerEvent updatedEvent, int? note) {
     int index = _buffer
         .indexWhere((element) => element.uniqueID == updatedEvent.pointer);
     if (index == -1) return;
 
     _buffer[index].update(updatedEvent.position, note);
-    _buffer[index].markMoved();
+    // _buffer[index].markMoved();
   }
 
-  void markDying(PointerEvent killEvent) {
-    int index =
-        _buffer.indexWhere((element) => element.uniqueID == killEvent.pointer);
-    if (index == -1) return;
+  // void markDying(PointerEvent killEvent) {
+  //   int index =
+  //       _buffer.indexWhere((element) => element.uniqueID == killEvent.pointer);
+  //   if (index == -1) return;
 
-    _buffer[index].markDying();
-  }
+  //   _buffer[index].markDying();
+  // }
 
-  void remove(PointerEvent event) {
+  void remove(TouchEvent event) {
     _buffer =
-        _buffer.where((element) => element.uniqueID != event.pointer).toList();
+        _buffer.where((element) => element.uniqueID != event.uniqueID).toList();
   }
 
   // GEOMETRY functions:
@@ -86,6 +86,7 @@ class TouchBuffer {
 class TouchEvent {
   final int uniqueID;
   NoteEvent noteEvent;
+  final List<Event> mpeEvents = [];
   final Offset origin; // unique pointer down event
   Offset newPosition;
   int? hoveringNote; // currently on this note (or not over any)
@@ -98,26 +99,26 @@ class TouchEvent {
     note = note;
   }
 
-  bool _newInstance = true;
-  bool get isNew {
-    bool returnValue = _newInstance;
-    _newInstance = false;
-    return returnValue;
-  }
-
   bool _dirty = false;
   markDirty() => _dirty = true;
   bool get dirty => _dirty;
 
-  bool _dying = false;
-  markDying() => _dying = true;
-  bool get isDying => _dying;
+  // bool _newInstance = true;
+  // bool get isNew {
+  //   bool returnValue = _newInstance;
+  //   _newInstance = false;
+  //   return returnValue;
+  // }
 
-  bool _moved = false;
-  markMoved() => _moved = true;
-  bool get didMove {
-    bool returnValue = _moved;
-    _moved = false;
-    return returnValue;
-  }
+  // bool _dying = false;
+  // markDying() => _dying = true;
+  // bool get isDying => _dying;
+
+  // bool _moved = false;
+  // markMoved() => _moved = true;
+  // bool get didMove {
+  //   bool returnValue = _moved;
+  //   _moved = false;
+  //   return returnValue;
+  // }
 }

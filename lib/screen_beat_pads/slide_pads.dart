@@ -9,6 +9,7 @@ import 'package:beat_pads/services/_services.dart';
 
 class SlidePads extends StatefulWidget {
   const SlidePads({Key? key}) : super(key: key);
+
   @override
   State<SlidePads> createState() => _SlidePadsState();
 }

@@ -1,12 +1,12 @@
-import 'package:beat_pads/services/_services.dart';
 import 'package:flutter_midi_command/flutter_midi_command_messages.dart';
 
 abstract class Event {
-  final int channel;
+  int channel;
   int triggerTime;
-  int note;
+  int currentNoteOn;
+  bool dead = false;
 
-  Event(this.channel, this.note)
+  Event(this.channel, this.currentNoteOn)
       : triggerTime = DateTime.now().millisecondsSinceEpoch;
 
   void updateTriggerTime() =>
@@ -20,15 +20,23 @@ class NoteEvent extends Event {
     NoteOnMessage(channel: channel, note: note, velocity: velocity).send();
   }
 
+  revive(int newChan, int note, int velocity) {
+    channel = newChan;
+    NoteOnMessage(channel: newChan, note: note, velocity: velocity).send();
+    dead = false;
+  }
+
   @override
   kill() {
-    NoteOffMessage(channel: channel, note: note).send();
+    NoteOffMessage(channel: channel, note: currentNoteOn).send();
+    dead = true;
   }
 }
 
+// class ATEvent extends Event {}
 
-class ATEvent extends Event{
+// class SlideEvent extends Event {}
 
-}
+// class PitchBend extends Event {}
 
-class SlideEvent 
+// class CCEvent extends Event {}

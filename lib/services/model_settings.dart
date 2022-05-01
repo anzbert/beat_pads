@@ -17,13 +17,53 @@ class Settings extends ChangeNotifier {
   double maxMPEControlDrawRadius =
       150; // TODO : fixed/ changable or screen dependant?
 
-  int _memberChannels = 15;
-  int get memberChannels {
-    if (playMode != PlayMode.mpe) return 1;
-    return _memberChannels;
+  bool _upperZone = false; // temp fixed
+  bool get upperZone => _upperZone;
+  set upperZone(bool newVal) {
+    if (newVal) {
+      channel = 15;
+    } else {
+      channel = 0;
+    }
+    _upperZone = newVal;
   }
 
-  bool upperZone = false;
+  final int memberChannels = 8; // temp fixed
+  int _channelCounter = -1;
+  int get memberChan {
+    if (playMode != PlayMode.mpe) return channel;
+    int upperLimit = _upperZone ? 14 : memberChannels;
+    int lowerLimit = _upperZone ? 15 - memberChannels : 1;
+
+    _channelCounter = _channelCounter == -1 ? lowerLimit : _channelCounter;
+
+    _channelCounter++;
+
+    if (_channelCounter >= upperLimit || _channelCounter < lowerLimit) {
+      _channelCounter = lowerLimit;
+    }
+
+    return _channelCounter;
+  }
+
+// channel (master channel):
+  int get channel {
+    if (playMode == PlayMode.mpe) {
+      return upperZone ? 15 : 0;
+    }
+    return prefs.settings.channel.value;
+  }
+
+  set channel(int newChannel) {
+    if (newChannel < 0 || newChannel > 15) return;
+    if (playMode == PlayMode.mpe) {
+      if (newChannel != 0 || newChannel != 15) return;
+    }
+
+    prefs.settings.channel.value = newChannel;
+    prefs.settings.channel.save();
+    notifyListeners();
+  }
 
   // layout:
   Layout get layout => prefs.settings.layout.value;
@@ -248,21 +288,6 @@ class Settings extends ChangeNotifier {
 
   resetSustainTimeStep() =>
       sustainTimeStep = LoadSettings.defaults().sustainTimeStep.value;
-
-  // channel:
-  int get channel {
-    if (playMode == PlayMode.mpe) {
-      return upperZone ? 15 : 0;
-    }
-    return prefs.settings.channel.value;
-  }
-
-  set channel(int newChannel) {
-    if (newChannel < 0 || newChannel > 15) return;
-    prefs.settings.channel.value = newChannel;
-    prefs.settings.channel.save();
-    notifyListeners();
-  }
 
 // pitchbend:
   bool get pitchBend => prefs.settings.pitchBend.value;
