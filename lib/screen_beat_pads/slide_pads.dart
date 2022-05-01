@@ -98,6 +98,7 @@ class _SlidePadsState extends State<SlidePads> {
               }
             }
 
+            // TODO not great!
             if (settings.playMode == PlayMode.mpe) {
               disposeMode = PlayMode.mpe;
               MPEinitMessage(memberChannels: 15).send();
@@ -152,6 +153,7 @@ class _SlidePadsState extends State<SlidePads> {
     );
   }
 
+  // handle MPE init somewhere else
   @override
   void dispose() {
     if (disposeMode == PlayMode.mpe) {

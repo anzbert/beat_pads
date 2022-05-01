@@ -3,12 +3,13 @@ import 'package:beat_pads/services/_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_midi_command/flutter_midi_command_messages.dart';
 
+// TODO: move all midi sending to send model!!!
+
 class AftertouchModel extends ChangeNotifier {
   Settings _settings;
   Size screenSize;
   AftertouchModel(this._settings, this.screenSize)
-      : atCircleBuffer = CircleBuffer(screenSize.width * 0.17),
-        outlineBuffer = CircleBuffer(screenSize.width * 0.17);
+      : atCircleBuffer = CircleBuffer(screenSize.width * 0.17);
 
   AftertouchModel update(Settings settings) {
     _settings = settings;
@@ -16,7 +17,6 @@ class AftertouchModel extends ChangeNotifier {
   }
 
   final CircleBuffer atCircleBuffer;
-  final CircleBuffer outlineBuffer;
 
   final curve = Curves.easeIn;
 
@@ -47,7 +47,6 @@ class AftertouchModel extends ChangeNotifier {
   // TOUCH HANDLIMG
   void push(PointerEvent touch, int note) {
     atCircleBuffer.add(touch.pointer, touch.position, note);
-    outlineBuffer.add(touch.pointer, touch.position, note);
 
     // if (_settings.playMode == PlayMode.polyAT) {
     //   PolyATMessage(
@@ -70,7 +69,6 @@ class AftertouchModel extends ChangeNotifier {
     if (atCircleBuffer.buffer[touch.pointer] == null) return;
 
     atCircleBuffer.updatePointer(touch.pointer, touch.position);
-    outlineBuffer.updatePointer(touch.pointer, touch.position);
 
     if (_settings.playMode == PlayMode.polyAT) {
       PolyATMessage(
@@ -119,7 +117,7 @@ class AftertouchModel extends ChangeNotifier {
     if (atCircleBuffer.buffer[touch.pointer] == null) return;
 
     atCircleBuffer.remove(touch.pointer);
-    outlineBuffer.remove(touch.pointer);
+
     notifyListeners();
   }
 }

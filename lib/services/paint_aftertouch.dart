@@ -17,24 +17,24 @@ class PaintAfterTouchCircle extends StatelessWidget {
       builder: (context, paintModel, child) {
         return Stack(
           children: [
-            ...paintModel.outlineBuffer.values.map(
-              (outlineCircle) {
-                return PaintCircle(
-                  box.globalToLocal(outlineCircle.center),
-                  paintModel.outlineBuffer.maxRadius,
-                  Palette.lightPink.color.withOpacity(
-                      paintModel.getOpacity(outlineCircle.radius, scale: 0.5)),
-                  stroke: false,
-                );
-              },
-            ),
             ...paintModel.atCircleBuffer.values.map(
               (atCircle) {
-                return PaintCircle(
-                  box.globalToLocal(atCircle.center),
-                  atCircle.radius,
-                  Palette.laserLemon.color.withOpacity(
-                      paintModel.getOpacity(atCircle.radius, scale: 0.6)),
+                return Stack(
+                  children: [
+                    PaintCircle(
+                      box.globalToLocal(atCircle.center),
+                      paintModel.atCircleBuffer.maxRadius,
+                      Palette.lightPink.color.withOpacity(
+                          paintModel.getOpacity(atCircle.radius, scale: 0.5)),
+                      stroke: false,
+                    ),
+                    PaintCircle(
+                      box.globalToLocal(atCircle.center),
+                      atCircle.radius,
+                      Palette.laserLemon.color.withOpacity(
+                          paintModel.getOpacity(atCircle.radius, scale: 0.6)),
+                    ),
+                  ],
                 );
               },
             ),
