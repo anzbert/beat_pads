@@ -2,6 +2,7 @@ import 'package:beat_pads/services/gen_utils.dart';
 import 'package:flutter/material.dart';
 
 class TouchBuffer {
+  /// Data Structure that holds Touch Events
   TouchBuffer();
 
   List<TouchEvent> _buffer = [];
@@ -16,13 +17,13 @@ class TouchBuffer {
     return null;
   }
 
-  debug() {
+  void debug() {
     for (var event in _buffer) {
       Utils.logd(event.touch);
     }
   }
 
-  clear() => _buffer = [];
+  void clear() => _buffer = [];
 
   void add(TouchEvent event) => buffer.add(event);
 

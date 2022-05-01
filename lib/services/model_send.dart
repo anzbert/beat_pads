@@ -41,7 +41,7 @@ class MidiSender extends ChangeNotifier {
         ).send();
       }
       NoteOnMessage(
-        channel: note % 15 + 1,
+        channel: note % 15 + 1, // TODO TEMP
         note: note,
         velocity: _settings.velocity,
       ).send();
@@ -74,7 +74,7 @@ class MidiSender extends ChangeNotifier {
       ////////////////
 
       NoteOffMessage(
-        channel: note % 15 + 1,
+        channel: note % 15 + 1, // TODO TEMP
         note: note,
         velocity: 0,
       ).send();
@@ -124,9 +124,6 @@ class MidiSender extends ChangeNotifier {
 
     // update send buffer with updated touchbuffer and send noteOn and noteOff's
     updateSendBufferWithTouchBuffer();
-
-    // print("touchbuffer: ${_touchBuffer._buffer.length}");
-    // print("sendbuffer: ${_sendBuffer.length}");
   }
 
   lift(PointerEvent touch, int? note) {
@@ -150,7 +147,7 @@ class MidiSender extends ChangeNotifier {
     for (int note = 0; note < 128; note++) {
       if (_sendBuffer[note].noteIsOn) {
         NoteOffMessage(
-          channel: note % 15 + 1,
+          channel: note % 15 + 1, // TODO TEMP
           note: note,
         ).send();
         if (_settings.sendCC) {
@@ -174,6 +171,7 @@ class MidiSender extends ChangeNotifier {
 }
 
 class NoteEvent {
+  /// Data Structure that golds
   NoteEvent([this.velocity = 0])
       : triggerTime = velocity > 0 ? DateTime.now().millisecondsSinceEpoch : 0;
 
@@ -186,4 +184,9 @@ class NoteEvent {
 
   bool get noteIsOn => velocity > 0 ? true : false;
   bool get noteIsOff => velocity == 0 ? true : false;
+}
+
+class NoteBuffer {
+  /// Data Structure holding and managing all currently active note events
+  NoteBuffer();
 }

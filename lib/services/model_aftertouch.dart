@@ -48,20 +48,6 @@ class AftertouchModel extends ChangeNotifier {
   void push(PointerEvent touch, int note) {
     atCircleBuffer.add(touch.pointer, touch.position, note);
 
-    // if (_settings.playMode == PlayMode.polyAT) {
-    //   PolyATMessage(
-    //     channel: _settings.channel,
-    //     note: atCircleBuffer.buffer[touch.pointer]!.note,
-    //     pressure: 0,
-    //   ).send();
-    // }
-    // if (_settings.playMode == PlayMode.cc) {
-    //   CCMessage(
-    //     channel: (_settings.channel + 2) % 16,
-    //     controller: 0,
-    //     value: 0,
-    //   ).send();
-    // }
     notifyListeners();
   }
 
@@ -86,12 +72,6 @@ class AftertouchModel extends ChangeNotifier {
     }
 
     if (_settings.playMode == PlayMode.mpe) {
-      // print("x:${atCircleBuffer.buffer[touch.pointer]!.dx}");
-      // print("y:${atCircleBuffer.buffer[touch.pointer]!.dy}");
-      // print(
-      //     "f :${atCircleBuffer.buffer[touch.pointer]!.dx / atCircleBuffer.maxRadius / 2}");
-      // print("max: ${atCircleBuffer.maxRadius}");
-
       int channel = atCircleBuffer.buffer[touch.pointer]!.note % 15 + 1;
       CCMessage(
         channel: channel,
@@ -127,7 +107,6 @@ class CircleBuffer {
   CircleBuffer(this.maxRadius);
 
   final Map<int, ATCircle> buffer = {};
-
   Iterable<ATCircle> get values => buffer.values;
 
   void add(int key, Offset center, int note) {
