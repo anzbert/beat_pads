@@ -1,160 +1,165 @@
+import 'dart:math';
+
 import 'package:beat_pads/services/_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_midi_command/flutter_midi_command_messages.dart';
 
 class MidiSender extends ChangeNotifier {
-  MidiSender(this._settings) : _baseOctave = _settings.baseOctave;
+  MidiSender(this._settings)
+      : _baseOctave = _settings.baseOctave,
+        _touchBuffer = TouchBuffer(_settings.maxMPEControlDrawRadius) {
+    if (_settings.playMode == PlayMode.mpe) {
+      MPEinitMessage(
+          memberChannels: _settings.memberChannels,
+          upperZone: _settings.upperZone);
+    }
+  }
+
   Settings _settings;
   int _baseOctave;
   bool _disposed = false;
+  final TouchBuffer _touchBuffer;
 
   MidiSender update(Settings settings) {
     _settings = settings;
+    // Handle all setting changes happening in the lifetime of the pad grid here.
+    // At the moment only octave changes affect it.
     _updateBaseOctave();
     return this;
   }
 
   _updateBaseOctave() {
     if (_settings.baseOctave != _baseOctave) {
-      // declare all events dirty
       for (TouchEvent event in _touchBuffer.buffer) {
-        event.blockSlide = true;
+        event.markDirty();
       }
       _baseOctave = _settings.baseOctave;
     }
   }
 
-  // SEND BUFFER:
-  final List<NoteEvent> _sendBuffer =
-      List.generate(128, (_) => NoteEvent(), growable: false);
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  MIDI HANDLING:
+  final List<List<bool>> _noteOnMemory =
+      List.filled(16, List.filled(128, false));
 
-  bool noteIsOn(int note) =>
-      note >= 0 && note < 128 ? _sendBuffer[note].noteIsOn : false;
-
-  void updateSendBufferAndSend(int note, bool noteOn) async {
-    if (noteOn) {
-      if (_settings.sendCC) {
-        CCMessage(
-          channel: (_settings.channel + 1) % 16,
-          controller: note,
-          value: 127,
-        ).send();
+  bool isNoteOnInAnyChannel(int note) {
+    if (_settings.playMode != PlayMode.mpe) {
+      return _noteOnMemory[_settings.channel][note];
+    }
+    // TODO maybe refine check, depending on MPE range
+    for (List<bool> channel in _noteOnMemory) {
+      if (channel[note] == true) {
+        return true;
       }
-      NoteOnMessage(
-        channel: note % 15 + 1, // TODO TEMP
-        note: note,
-        velocity: _settings.velocity,
-      ).send();
+    }
+    return false;
+  }
 
-      _sendBuffer[note] = NoteEvent(_settings.velocity);
+  final Random random = Random(); // temporary
+  int getChannel() {
+    if (_settings.playMode != PlayMode.mpe) {
+      return _settings.channel;
     } else {
-      if (_settings.sendCC) {
-        CCMessage(
-          channel: (_settings.channel + 1) % 16,
-          controller: note,
-        ).send();
+      return _settings.upperZone
+          ? random.nextInt(_settings.memberChannels)
+          : random.nextInt(_settings.memberChannels) + 1;
+      // TODO: implement channel provider / temporary lower zone with 15 members
+    }
+  }
+
+  void updateMidi(TouchBuffer touches) {
+    for (TouchEvent touch in touches.buffer) {
+      if (touch.isNew) {
+        _noteOnMemory[touch.noteEvent.channel][touch.noteEvent.note] = true;
+        notifyListeners();
       }
+    }
 
-      // SUSTAIN:
-      if (_settings.sustainTimeUsable > 0) {
-        if (_sendBuffer[note].checkingSustain) return;
-        _sendBuffer[note].checkingSustain = true;
+    for (TouchEvent touch in touches.buffer) {
+      if (touch.didMove) {
+        if (touch.hoveringNote != touch.noteEvent.note) {
+          touch.noteEvent.kill();
+          _noteOnMemory[touch.noteEvent.channel][touch.noteEvent.note] = false;
+          notifyListeners();
 
-        while (!await Future.delayed(
-          const Duration(milliseconds: 5),
-          () =>
-              DateTime.now().millisecondsSinceEpoch -
-                  _sendBuffer[note].triggerTime >
-              _settings.sustainTimeUsable,
-        )) {
-          // Waiting for next check in 5 milliseconds...
+          if (touch.hoveringNote != null) {
+            touch.noteEvent = NoteEvent(
+                getChannel(), touch.hoveringNote!, _settings.velocity);
+            _noteOnMemory[touch.noteEvent.channel][touch.noteEvent.note] = true;
+            notifyListeners();
+          }
         }
-        _sendBuffer[note].checkingSustain = false;
+
+        // handle AT
+
+        // handle Slide
+
+        // handle PB
       }
-      ////////////////
-
-      NoteOffMessage(
-        channel: note % 15 + 1, // TODO TEMP
-        note: note,
-        velocity: 0,
-      ).send();
-
-      _sendBuffer[note] = NoteEvent();
     }
 
-    notifyListeners();
-  }
-
-  void updateSendBufferWithTouchBuffer() {
-    List<int> allCurrentlyTouched = _touchBuffer.buffer
-        .where((element) => element.note != null)
-        .map((element) => element.note!)
-        .toList();
-
-    for (int n = 0; n < 128; n++) {
-      if (allCurrentlyTouched.contains(n) && _sendBuffer[n].noteIsOff) {
-        updateSendBufferAndSend(n, true);
-      } else if (!allCurrentlyTouched.contains(n) && _sendBuffer[n].noteIsOn) {
-        updateSendBufferAndSend(n, false);
-      } else if (allCurrentlyTouched.contains(n) && _sendBuffer[n].noteIsOn) {
-        _sendBuffer[n].updateTriggerTime();
+    for (TouchEvent touch in touches.buffer) {
+      if (touch.isDying) {
+        touch.noteEvent.kill();
+        _noteOnMemory[touch.noteEvent.channel][touch.noteEvent.note] = false;
+        notifyListeners();
       }
     }
   }
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////
   // TOUCH HANDLING:
-  final _touchBuffer = TouchBuffer();
-
   push(PointerEvent touch, int note) {
-    // add event to touchbuffer and send noteOn
-    _touchBuffer.add(TouchEvent(touch, note));
-    updateSendBufferAndSend(note, true);
+    _touchBuffer.add(touch, note, getChannel(), _settings.velocity);
+    updateMidi(_touchBuffer);
   }
 
   move(PointerEvent touch, int? note) {
     // check if it is a legeit event that has previously been registered by a push()
-    TouchEvent? eventInBuffer = _touchBuffer.findByPointer(touch.pointer);
+    TouchEvent? eventInBuffer = _touchBuffer.getByID(touch.pointer);
     if (eventInBuffer == null) return;
 
     // check if previous events are dirty (by octave change):
-    if (eventInBuffer.blockSlide) return;
+    if (eventInBuffer.dirty) return;
 
     // update touchbuffer with this new event:
-    _touchBuffer.updateWith(TouchEvent(touch, note));
+    _touchBuffer.updatePositionAndNote(touch, note);
 
-    // update send buffer with updated touchbuffer and send noteOn and noteOff's
-    updateSendBufferWithTouchBuffer();
+    // update send buffer with updated touchbuffer
+    updateMidi(_touchBuffer);
   }
 
-  lift(PointerEvent touch, int? note) {
+  lift(PointerEvent touch) {
     // only send noteoff if there is a previous touch event,
     // which still has a note attached to it
-    TouchEvent? eventInBuffer = _touchBuffer.findByPointer(touch.pointer);
+    TouchEvent? eventInBuffer = _touchBuffer.getByID(touch.pointer);
     if (eventInBuffer == null) return;
 
-    // send noteOff and remove from touchbuffer
-    if (eventInBuffer.note != null) {
-      updateSendBufferAndSend(eventInBuffer.note!, false);
-    }
-
-    _touchBuffer.remove(touch.pointer);
-    // _touchBuffer.debug();
+    // update send buffer with updated touchbuffer
+    _touchBuffer.markDying(touch);
+    updateMidi(_touchBuffer);
+    _touchBuffer.remove(touch);
   }
 
   // DISPOSE:
   @override
   dispose() {
-    for (int note = 0; note < 128; note++) {
-      if (_sendBuffer[note].noteIsOn) {
-        NoteOffMessage(
-          channel: note % 15 + 1, // TODO TEMP
-          note: note,
-        ).send();
-        if (_settings.sendCC) {
-          CCMessage(
-            channel: (_settings.channel + 1) % 16,
-            controller: note,
+    if (_settings.playMode == PlayMode.mpe) {
+      MPEinitMessage(memberChannels: 0, upperZone: _settings.upperZone);
+    }
+    for (int c = 0; c < 16; c++) {
+      for (int note = 0; note < 128; note++) {
+        if (_noteOnMemory[c][note]) {
+          NoteOffMessage(
+            channel: c,
+            note: note,
           ).send();
+          if (_settings.sendCC) {
+            CCMessage(
+              channel: (c + 1) % 16,
+              controller: note,
+            ).send();
+          }
         }
       }
     }
@@ -169,24 +174,83 @@ class MidiSender extends ChangeNotifier {
     }
   }
 }
+//////////////////////////////////////////////////////////////////////////////
 
-class NoteEvent {
-  /// Data Structure that golds
-  NoteEvent([this.velocity = 0])
-      : triggerTime = velocity > 0 ? DateTime.now().millisecondsSinceEpoch : 0;
+// SEND BUFFER:
+//   final List<NoteEvent> _sendBuffer =
+//       List.List.generate(128, (_) => NoteEvent(), growable: false);
 
-  final int velocity;
-  int triggerTime;
-  bool checkingSustain = false;
+//   bool noteIsOn(int note) =>
+//       note >= 0 && note < 128 ? _sendBuffer[note].noteIsOn : false;
 
-  void updateTriggerTime() =>
-      triggerTime = DateTime.now().millisecondsSinceEpoch;
+//   void updateSendBufferAndSend(int note, bool noteOn) async {
+//     if (noteOn) {
+//       if (_settings.sendCC) {
+//         CCMessage(
+//           channel: (_settings.channel + 1) % 16,
+//           controller: note,
+//           value: 127,
+//         ).send();
+//       }
+//       NoteOnMessage(
+//         channel: note % 15 + 1, // TODO TEMP
+//         note: note,
+//         velocity: _settings.velocity,
+//       ).send();
 
-  bool get noteIsOn => velocity > 0 ? true : false;
-  bool get noteIsOff => velocity == 0 ? true : false;
-}
+//       _sendBuffer[note] = NoteEvent(_settings.velocity);
+//     } else {
+//       if (_settings.sendCC) {
+//         CCMessage(
+//           channel: (_settings.channel + 1) % 16,
+//           controller: note,
+//         ).send();
+//       }
 
-class NoteBuffer {
-  /// Data Structure holding and managing all currently active note events
-  NoteBuffer();
-}
+//       // SUSTAIN:
+//       if (_settings.sustainTimeUsable > 0) {
+//         if (_sendBuffer[note].checkingSustain) return;
+//         _sendBuffer[note].checkingSustain = true;
+
+//         while (!await Future.delayed(
+//           const Duration(milliseconds: 5),
+//           () =>
+//               DateTime.now().millisecondsSinceEpoch -
+//                   _sendBuffer[note].triggerTime >
+//               _settings.sustainTimeUsable,
+//         )) {
+//           // Waiting for next check in 5 milliseconds...
+//         }
+//         _sendBuffer[note].checkingSustain = false;
+//       }
+//       ////////////////
+
+//       NoteOffMessage(
+//         channel: note % 15 + 1, // TODO TEMP
+//         note: note,
+//         velocity: 0,
+//       ).send();
+
+//       _sendBuffer[note] = NoteEvent();
+//     }
+
+//     notifyListeners();
+//   }
+
+//   void updateSendBufferWithTouchBuffer() {
+//     List<int> allCurrentlyTouched = _touchBuffer.buffer
+//         .where((element) => element.note != null)
+//         .map((element) => element.note!)
+//         .toList();
+
+//     for (int n = 0; n < 128; n++) {
+//       if (allCurrentlyTouched.contains(n) && _sendBuffer[n].noteIsOff) {
+//         updateSendBufferAndSend(n, true);
+//       } else if (!allCurrentlyTouched.contains(n) && _sendBuffer[n].noteIsOn) {
+//         updateSendBufferAndSend(n, false);
+//       } else if (allCurrentlyTouched.contains(n) && _sendBuffer[n].noteIsOn) {
+//         _sendBuffer[n].updateTriggerTime();
+//       }
+//     }
+//   }
+// }

@@ -89,19 +89,13 @@ class _SlidePadsState extends State<SlidePads> {
 
             upAndCancel(PointerEvent touch) {
               if (mounted) {
-                int? result = _detectTappedItem(touch);
-                context.read<MidiSender>().lift(touch, result);
+                // int? result = _detectTappedItem(touch);
+                context.read<MidiSender>().lift(touch);
 
                 if (settings.playMode.afterTouch) {
                   context.read<AftertouchModel>().lift(touch);
                 }
               }
-            }
-
-            // TODO not great!
-            if (settings.playMode == PlayMode.mpe) {
-              disposeMode = PlayMode.mpe;
-              MPEinitMessage(memberChannels: 15).send();
             }
 
             return Stack(
@@ -151,14 +145,5 @@ class _SlidePadsState extends State<SlidePads> {
         );
       },
     );
-  }
-
-  // handle MPE init somewhere else
-  @override
-  void dispose() {
-    if (disposeMode == PlayMode.mpe) {
-      MPEinitMessage(memberChannels: 0).send();
-    }
-    super.dispose();
   }
 }

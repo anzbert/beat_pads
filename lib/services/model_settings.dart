@@ -13,6 +13,18 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
+  // MPE settings
+  double maxMPEControlDrawRadius =
+      150; // TODO : fixed/ changable or screen dependant?
+
+  int _memberChannels = 15;
+  int get memberChannels {
+    if (playMode != PlayMode.mpe) return 1;
+    return _memberChannels;
+  }
+
+  bool upperZone = false;
+
   // layout:
   Layout get layout => prefs.settings.layout.value;
 
@@ -238,7 +250,12 @@ class Settings extends ChangeNotifier {
       sustainTimeStep = LoadSettings.defaults().sustainTimeStep.value;
 
   // channel:
-  int get channel => prefs.settings.channel.value;
+  int get channel {
+    if (playMode == PlayMode.mpe) {
+      return upperZone ? 15 : 0;
+    }
+    return prefs.settings.channel.value;
+  }
 
   set channel(int newChannel) {
     if (newChannel < 0 || newChannel > 15) return;
