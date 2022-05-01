@@ -69,17 +69,19 @@ class MidiSender extends ChangeNotifier {
         notifyListeners();
       }
       if (noteHovered != null &&
-          eventInBuffer.noteEvent.currentNoteOn == null &&
-          noteHovered != null) {
+          eventInBuffer.noteEvent.currentNoteOn == null) {
         eventInBuffer.noteEvent
             .revive(_settings.memberChan, noteHovered, _settings.velocity);
         notifyListeners();
       }
-    } // Poly AT
+    }
+    // Poly AT
     else if (_settings.playMode == PlayMode.polyAT) {
-    } // CC
+    }
+    // CC
     else if (_settings.playMode == PlayMode.cc) {
-    } // MPE
+    }
+    // MPE
     else if (_settings.playMode == PlayMode.mpe) {}
   }
 
@@ -99,9 +101,7 @@ class MidiSender extends ChangeNotifier {
       MPEinitMessage(memberChannels: 0, upperZone: _settings.upperZone);
     }
     for (TouchEvent touch in _touchBuffer.buffer) {
-      if (touch.noteEvent.currentNoteOn != null) {
-        touch.noteEvent.kill();
-      }
+      touch.noteEvent.kill();
     }
     _disposed = true;
     super.dispose();
