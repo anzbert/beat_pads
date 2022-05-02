@@ -1,5 +1,6 @@
 import 'package:beat_pads/services/_services.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_midi_command/flutter_midi_command_messages.dart';
 
 class TouchBuffer {
   double maxRadius;
@@ -60,7 +61,8 @@ class TouchEvent {
   final int uniqueID;
 
   NoteEvent noteEvent;
-  final List<ModEvent> modulationEvents = [];
+  ModMapping modMapping = ModMapping();
+  // final List<MidiMessage> modulationEvents = [];
 
   // Geometry parameters:
   final Offset origin;
@@ -109,4 +111,14 @@ class TouchEvent {
     if (input < threshold) return 0;
     return Utils.mapValueToTargetRange(input, threshold, 1, 0, 1);
   }
+}
+
+class ModMapping {
+  PolyATMessage? polyAT;
+  CCMessage? cc;
+  CCMessage? cc2;
+  ATMessage? at;
+
+  /// Modulation possible on a pad
+  ModMapping({this.polyAT, this.cc, this.at});
 }

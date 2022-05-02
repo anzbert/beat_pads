@@ -89,20 +89,28 @@ class MidiSender extends ChangeNotifier {
 
     // Poly AT
     else if (_settings.playMode == PlayMode.polyAT) {
-      PolyATMessage(
-        channel: _settings.channel,
-        note: eventInBuffer.noteEvent.currentNoteOn!,
-        pressure: (eventInBuffer.radialChange() * 127).toInt(),
-      ).send();
+      int newPressure = (eventInBuffer.radialChange() * 127).toInt();
+
+      if (eventInBuffer.modMapping.polyAT?.pressure != newPressure) {
+        eventInBuffer.modMapping.polyAT = PolyATMessage(
+          channel: _settings.channel,
+          note: eventInBuffer.noteEvent.currentNoteOn!,
+          pressure: (newPressure).toInt(),
+        )..send();
+      }
     }
 
     // CC
     else if (_settings.playMode == PlayMode.cc) {
-      CCMessage(
-        channel: _settings.channel,
-        controller: eventInBuffer.noteEvent.currentNoteOn!,
-        value: (eventInBuffer.radialChange() * 127).toInt(),
-      ).send();
+      int newCC = (eventInBuffer.radialChange() * 127).toInt();
+
+      if (eventInBuffer.modMapping.polyAT?.pressure != newCC) {
+        eventInBuffer.modMapping.cc = CCMessage(
+          channel: _settings.channel,
+          controller: eventInBuffer.noteEvent.currentNoteOn!,
+          value: (eventInBuffer.radialChange() * 127).toInt(),
+        )..send();
+      }
     }
     // MPE
     else if (_settings.playMode == PlayMode.mpe) {

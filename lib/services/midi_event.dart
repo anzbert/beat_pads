@@ -34,13 +34,3 @@ class NoteEvent {
     }
   }
 }
-
-class ModEvent {
-  ModEvent(int channel, int parameter, int value);
-}
-
-// class SlideEvent extends Event {}
-
-// class PitchBend extends Event {}
-
-// class CCEvent extends Event {}
