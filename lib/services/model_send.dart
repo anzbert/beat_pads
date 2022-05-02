@@ -117,14 +117,14 @@ class MidiSender extends ChangeNotifier {
       // print(eventInBuffer.directionalChangeFromCartesianOrigin().dx);
 
       PitchBendMessage(
-              channel: _settings.channel,
+              channel: eventInBuffer.noteEvent.channel,
               bend:
                   (eventInBuffer.directionalChangeFromCartesianOrigin().dy * 2 -
                       1))
           .send();
 
       CCMessage(
-        channel: _settings.channel,
+        channel: eventInBuffer.noteEvent.channel,
         controller: 74, // <- slide controller is #74
         value: (eventInBuffer.absoluteDirectionalChangeFromCenter().dx * 127)
             .toInt(),

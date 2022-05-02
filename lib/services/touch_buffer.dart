@@ -60,9 +60,9 @@ class TouchBuffer {
 class TouchEvent {
   final int uniqueID;
 
+  // Note and modulation parameters:
   NoteEvent noteEvent;
   ModMapping modMapping = ModMapping();
-  // final List<MidiMessage> modulationEvents = [];
 
   // Geometry parameters:
   final Offset origin;
@@ -71,6 +71,7 @@ class TouchEvent {
   final double threshold;
   Offset newPosition;
 
+  /// Holds geometry, note and modulation information
   TouchEvent(this.uniqueID, this.origin, this.noteEvent, this.maxRadius,
       this.threshold)
       : newPosition = origin,
@@ -118,7 +119,8 @@ class ModMapping {
   CCMessage? cc;
   CCMessage? cc2;
   ATMessage? at;
+  PitchBendMessage? pitchBend;
 
   /// Modulation possible on a pad
-  ModMapping({this.polyAT, this.cc, this.at});
+  ModMapping({this.polyAT, this.cc, this.at, this.pitchBend});
 }

@@ -18,7 +18,7 @@ class Settings extends ChangeNotifier {
       110; // TODO : fixed/ changable or screen dependant?
   double moveThreshhold = 0.1;
 
-  bool _upperZone = false; // temp fixed
+  bool _upperZone = true; // temp fixed
   bool get upperZone => _upperZone;
   set upperZone(bool newVal) {
     if (newVal) {
@@ -40,7 +40,7 @@ class Settings extends ChangeNotifier {
 
     _channelCounter++;
 
-    if (_channelCounter >= upperLimit || _channelCounter < lowerLimit) {
+    if (_channelCounter > upperLimit || _channelCounter < lowerLimit) {
       _channelCounter = lowerLimit;
     }
 
