@@ -43,7 +43,7 @@ class _SlidePadsState extends State<SlidePads> {
 
   @override
   Widget build(BuildContext context) {
-    var screenSize = MediaQuery.of(context).size;
+    Size screenSize = MediaQuery.of(context).size;
     return MultiProvider(
       providers: [
         // proxyproviders, to update all other models, when Settings change:
@@ -55,23 +55,15 @@ class _SlidePadsState extends State<SlidePads> {
           create: (context) => MidiSender(context.read<Settings>()),
           update: (_, settings, midiSender) => midiSender!.update(settings),
         ),
-        ChangeNotifierProxyProvider<Settings, AftertouchModel>(
-          create: ((context) =>
-              AftertouchModel(context.read<Settings>(), screenSize)),
-          update: (_, settings, atModel) => atModel!.update(settings),
-        )
       ],
       builder: (context, child) {
         return Consumer(
           builder: (BuildContext context, Settings settings, _) {
             down(PointerEvent touch) {
               int? result = _detectTappedItem(touch);
+
               if (mounted && result != null) {
                 context.read<MidiSender>().push(touch, result);
-
-                if (settings.playMode.afterTouch) {
-                  context.read<AftertouchModel>().push(touch, result);
-                }
               }
             }
 
@@ -80,22 +72,13 @@ class _SlidePadsState extends State<SlidePads> {
 
               if (mounted) {
                 int? result = _detectTappedItem(touch);
-                if (settings.playMode.afterTouch) {
-                  context.read<AftertouchModel>().move(touch);
-                } else {
-                  context.read<MidiSender>().move(touch, result);
-                }
+                context.read<MidiSender>().move(touch, result);
               }
             }
 
             upAndCancel(PointerEvent touch) {
               if (mounted) {
-                // int? result = _detectTappedItem(touch);
                 context.read<MidiSender>().lift(touch);
-
-                if (settings.playMode.afterTouch) {
-                  context.read<AftertouchModel>().lift(touch);
-                }
               }
             }
 

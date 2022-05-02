@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class MidiSender extends ChangeNotifier {
   MidiSender(this._settings)
       : _baseOctave = _settings.baseOctave,
-        _touchBuffer = TouchBuffer(_settings.maxMPEControlDrawRadius) {
+        touchBuffer = TouchBuffer(_settings.maxMPEControlDrawRadius) {
     if (_settings.playMode == PlayMode.mpe) {
       MPEinitMessage(
           memberChannels: _settings.memberChannels,
@@ -15,7 +15,7 @@ class MidiSender extends ChangeNotifier {
   Settings _settings;
   int _baseOctave;
   bool _disposed = false;
-  final TouchBuffer _touchBuffer;
+  final TouchBuffer touchBuffer;
 
   MidiSender update(Settings settings) {
     _settings = settings;
@@ -27,18 +27,24 @@ class MidiSender extends ChangeNotifier {
 
   _updateBaseOctave() {
     if (_settings.baseOctave != _baseOctave) {
-      for (TouchEvent event in _touchBuffer.buffer) {
+      for (TouchEvent event in touchBuffer.buffer) {
         event.markDirty();
       }
       _baseOctave = _settings.baseOctave;
     }
   }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  MIDI HANDLING:
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  // UTILITY
+  double getEased(double value) {
+    return Curves.easeIn.transform(value.clamp(0, 1));
+  }
+
+  // MIDI HANDLING:
 
   bool isNoteOnInAnyChannel(int note) {
-    for (TouchEvent touch in _touchBuffer.buffer) {
+    for (TouchEvent touch in touchBuffer.buffer) {
       if (touch.noteEvent.currentNoteOn == note) {
         return true;
       }
@@ -49,17 +55,17 @@ class MidiSender extends ChangeNotifier {
 /////////////////////////////////////////////////////////////////////////////////////////////////////
   // TOUCH HANDLING:
   push(PointerEvent touch, int noteTapped) {
-    _touchBuffer.addNoteOn(
+    touchBuffer.addNoteOn(
         touch, noteTapped, _settings.memberChan, _settings.velocity);
     notifyListeners();
   }
 
   move(PointerEvent touch, int? noteHovered) {
-    TouchEvent? eventInBuffer = _touchBuffer.getByID(touch.pointer);
+    TouchEvent? eventInBuffer = touchBuffer.getByID(touch.pointer);
     if (eventInBuffer == null) return;
     if (eventInBuffer.dirty) return;
 
-    _touchBuffer.updatePosition(touch, noteHovered);
+    eventInBuffer.updatePosition(touch.position);
 
     // SLIDE
     if (_settings.playMode == PlayMode.slide) {
@@ -77,6 +83,8 @@ class MidiSender extends ChangeNotifier {
     }
     // Poly AT
     else if (_settings.playMode == PlayMode.polyAT) {
+      eventInBuffer.updatePosition(touch.position);
+      notifyListeners();
     }
     // CC
     else if (_settings.playMode == PlayMode.cc) {
@@ -86,11 +94,11 @@ class MidiSender extends ChangeNotifier {
   }
 
   lift(PointerEvent touch) {
-    TouchEvent? eventInBuffer = _touchBuffer.getByID(touch.pointer);
+    TouchEvent? eventInBuffer = touchBuffer.getByID(touch.pointer);
     if (eventInBuffer == null) return;
 
     eventInBuffer.noteEvent.kill();
-    _touchBuffer.remove(eventInBuffer);
+    touchBuffer.remove(eventInBuffer);
     notifyListeners();
   }
 
@@ -100,7 +108,7 @@ class MidiSender extends ChangeNotifier {
     if (_settings.playMode == PlayMode.mpe) {
       MPEinitMessage(memberChannels: 0, upperZone: _settings.upperZone);
     }
-    for (TouchEvent touch in _touchBuffer.buffer) {
+    for (TouchEvent touch in touchBuffer.buffer) {
       touch.noteEvent.kill();
     }
     _disposed = true;

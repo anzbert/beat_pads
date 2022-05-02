@@ -13,26 +13,36 @@ class PaintAfterTouchCircle extends StatelessWidget {
     final RenderBox? box = context.findAncestorRenderObjectOfType<RenderBox>();
     if (box == null) return Stack();
 
-    return Consumer<AftertouchModel>(
-      builder: (context, paintModel, child) {
+    return Consumer<MidiSender>(
+      builder: (context, midiSender, child) {
+        print(midiSender.touchBuffer.buffer);
+        midiSender.touchBuffer.buffer.forEach((element) {
+          // print(element.radialChange());
+        });
+        final buffer = midiSender.touchBuffer.buffer.where((e) {
+          return e.radialChange() > 0.1;
+        });
+        print(buffer);
         return Stack(
           children: [
-            ...paintModel.atCircleBuffer.values.map(
+            ...buffer.map(
               (atCircle) {
                 return Stack(
                   children: [
                     PaintCircle(
-                      box.globalToLocal(atCircle.center),
-                      paintModel.atCircleBuffer.maxRadius,
-                      Palette.lightPink.color.withOpacity(
-                          paintModel.getOpacity(atCircle.radius, scale: 0.5)),
+                      box.globalToLocal(atCircle.origin),
+                      midiSender.touchBuffer.maxRadius,
+                      Palette.lightPink.color
+                          .withOpacity(atCircle.radialChange() * 0.5),
                       stroke: false,
                     ),
                     PaintCircle(
-                      box.globalToLocal(atCircle.center),
-                      atCircle.radius,
-                      Palette.laserLemon.color.withOpacity(
-                          paintModel.getOpacity(atCircle.radius, scale: 0.6)),
+                      box.globalToLocal(atCircle.origin),
+                      atCircle.radialChange() *
+                          midiSender.touchBuffer.maxRadius,
+                      Palette.laserLemon.color
+                          .withOpacity(atCircle.radialChange() * 0.7),
+                      stroke: true,
                     ),
                   ],
                 );
