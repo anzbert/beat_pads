@@ -1,41 +1,43 @@
 import 'package:flutter_midi_command/flutter_midi_command_messages.dart';
 
-abstract class Event {
+class NoteEvent {
   int channel;
-  int? currentNoteOn;
-  int releaseTime = 0;
 
-  Event(this.channel, this.currentNoteOn);
+  int _releaseTime = 0;
 
-  void updateReleaseTime() =>
-      releaseTime = DateTime.now().millisecondsSinceEpoch;
+  int get releaseTime => _releaseTime;
 
-  kill();
-}
+  int? _currentNoteOn;
+  int? get currentNoteOn => _currentNoteOn;
 
-class NoteEvent extends Event {
-  NoteEvent(int channel, int note, int velocity) : super(channel, note) {
-    NoteOnMessage(channel: channel, note: note, velocity: velocity).send();
+  /// Create and Send a NoteOn event, to be checked and manipulated later
+  NoteEvent(this.channel, this._currentNoteOn, int velocity) {
+    NoteOnMessage(channel: channel, note: _currentNoteOn!, velocity: velocity)
+        .send();
   }
 
-  revive(int newChan, int note, int velocity) {
+  void updateReleaseTime() =>
+      _releaseTime = DateTime.now().millisecondsSinceEpoch;
+
+  void revive(int newChan, int note, int velocity) {
     channel = newChan;
-    currentNoteOn = note;
+    _currentNoteOn = note;
     NoteOnMessage(channel: newChan, note: note, velocity: velocity).send();
   }
 
-  @override
-  kill() {
-    if (currentNoteOn != null) {
-      NoteOffMessage(channel: channel, note: currentNoteOn!).send();
+  void kill() {
+    if (_currentNoteOn != null) {
       updateReleaseTime();
-
-      currentNoteOn = null;
+      // TODO auto sustain function here!!!
+      NoteOffMessage(channel: channel, note: currentNoteOn!).send();
+      _currentNoteOn = null;
     }
   }
 }
 
-// class ATEvent extends Event {}
+class ModEvent {
+  ModEvent(int channel, int parameter, int value);
+}
 
 // class SlideEvent extends Event {}
 

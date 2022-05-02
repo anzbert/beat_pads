@@ -1,12 +1,11 @@
 import 'package:beat_pads/services/_services.dart';
-
 import 'package:flutter/material.dart';
 
 class TouchBuffer {
   double maxRadius;
   double threshold;
 
-  /// Data Structure that holds Touch Events
+  /// Data Structure that holds Touch Events, which hold notes and perform geometry operations
   TouchBuffer(this.maxRadius, this.threshold);
 
   List<TouchEvent> _buffer = [];
@@ -22,14 +21,14 @@ class TouchBuffer {
     return null;
   }
 
-  void updateGeometry(double maxR, double thresh) {
+  void updateGeometryParameters(double maxR, double thresh) {
     maxRadius = maxR;
     threshold = thresh;
   }
 
-  void addNoteOn(PointerEvent touch, int note, int channel, int velocity) {
-    _buffer.add(TouchEvent(touch.pointer, touch.position,
-        NoteEvent(channel, note, velocity), maxRadius, threshold));
+  void addNoteOn(PointerEvent touch, NoteEvent noteEvent) {
+    _buffer.add(TouchEvent(
+        touch.pointer, touch.position, noteEvent, maxRadius, threshold));
   }
 
   void updatePosition(PointerEvent updatedEvent) {
@@ -58,27 +57,30 @@ class TouchBuffer {
 }
 
 class TouchEvent {
-  final double maxDiameter;
   final int uniqueID;
+
   NoteEvent noteEvent;
-  final List<Event> mpeEvents = [];
-  final Offset origin; // unique pointer down event
-  Offset newPosition;
+  final List<ModEvent> modulationEvents = [];
+
+  // Geometry parameters:
+  final Offset origin;
   final double maxRadius;
+  final double maxDiameter;
   final double threshold;
+  Offset newPosition;
 
   TouchEvent(this.uniqueID, this.origin, this.noteEvent, this.maxRadius,
       this.threshold)
       : newPosition = origin,
         maxDiameter = maxRadius * 2;
 
-  void updatePosition(Offset updatedPosition) {
-    newPosition = updatedPosition;
-  }
-
   bool _dirty = false;
   void markDirty() => _dirty = true;
   bool get dirty => _dirty;
+
+  void updatePosition(Offset updatedPosition) {
+    newPosition = updatedPosition;
+  }
 
   // GEOMETRY functions:
   double radialChange() {

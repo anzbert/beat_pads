@@ -3,6 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_midi_command/flutter_midi_command_messages.dart';
 
 class MidiSender extends ChangeNotifier {
+  final TouchBuffer touchBuffer;
+  Settings _settings;
+  int _baseOctave;
+  bool _disposed = false;
+
+  /// Handles touches and Midi sending
   MidiSender(this._settings)
       : _baseOctave = _settings.baseOctave,
         touchBuffer = TouchBuffer(
@@ -14,17 +20,12 @@ class MidiSender extends ChangeNotifier {
     }
   }
 
-  Settings _settings;
-  int _baseOctave;
-  bool _disposed = false;
-  final TouchBuffer touchBuffer;
-
+  /// Handle all setting changes happening in the lifetime of the pad grid here.
+  /// At the moment only octave changes affect it.
   MidiSender update(Settings settings) {
     _settings = settings;
-    // Handle all setting changes happening in the lifetime of the pad grid here.
-    // At the moment only octave changes affect it.
     _updateBaseOctave();
-    touchBuffer.updateGeometry(
+    touchBuffer.updateGeometryParameters(
         _settings.maxMPEControlDrawRadius, _settings.moveThreshhold);
     return this;
   }
@@ -38,7 +39,7 @@ class MidiSender extends ChangeNotifier {
     }
   }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 
   // MIDI HANDLING:
   bool isNoteOnInAnyChannel(int note) {
@@ -52,16 +53,19 @@ class MidiSender extends ChangeNotifier {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
   // TOUCH HANDLING:
-  push(PointerEvent touch, int noteTapped) {
-    touchBuffer.addNoteOn(
-        touch, noteTapped, _settings.memberChan, _settings.velocity);
+
+  /// Handles new Touches occuring
+  void push(PointerEvent touch, int noteTapped) {
+    NoteEvent noteOn =
+        NoteEvent(_settings.memberChan, noteTapped, _settings.velocity);
+    touchBuffer.addNoteOn(touch, noteOn);
     notifyListeners();
   }
 
-  move(PointerEvent touch, int? noteHovered) {
+  /// Handles sliding of the finger after the inital touch
+  void move(PointerEvent touch, int? noteHovered) {
     TouchEvent? eventInBuffer = touchBuffer.getByID(touch.pointer);
-    if (eventInBuffer == null) return;
-    if (eventInBuffer.dirty) return;
+    if (eventInBuffer == null || eventInBuffer.dirty) return;
 
     eventInBuffer.updatePosition(touch.position);
     if (_settings.playMode.afterTouch) notifyListeners(); // for circle drawing
@@ -102,7 +106,7 @@ class MidiSender extends ChangeNotifier {
     }
     // MPE
     else if (_settings.playMode == PlayMode.mpe) {
-      print(eventInBuffer.directionalChangeFromCartesianOrigin().dx);
+      // print(eventInBuffer.directionalChangeFromCartesianOrigin().dx);
 
       PitchBendMessage(
               channel: _settings.channel,
@@ -120,7 +124,8 @@ class MidiSender extends ChangeNotifier {
     }
   }
 
-  lift(PointerEvent touch) {
+  /// Cleans up Touchevent, when touch ends
+  void lift(PointerEvent touch) {
     TouchEvent? eventInBuffer = touchBuffer.getByID(touch.pointer);
     if (eventInBuffer == null) return;
 
@@ -131,7 +136,7 @@ class MidiSender extends ChangeNotifier {
 
   // DISPOSE:
   @override
-  dispose() {
+  void dispose() {
     if (_settings.playMode == PlayMode.mpe) {
       MPEinitMessage(memberChannels: 0, upperZone: _settings.upperZone);
     }
@@ -149,4 +154,3 @@ class MidiSender extends ChangeNotifier {
     }
   }
 }
-//////////////////////////////////////////////////////////////////////////////
