@@ -15,7 +15,8 @@ class Settings extends ChangeNotifier {
 
   // MPE settings
   double maxMPEControlDrawRadius =
-      150; // TODO : fixed/ changable or screen dependant?
+      110; // TODO : fixed/ changable or screen dependant?
+  double moveThreshhold = 0.1;
 
   bool _upperZone = false; // temp fixed
   bool get upperZone => _upperZone;

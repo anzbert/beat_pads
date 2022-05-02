@@ -1,10 +1,12 @@
 import 'package:beat_pads/services/_services.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_midi_command/flutter_midi_command_messages.dart';
 
 class MidiSender extends ChangeNotifier {
   MidiSender(this._settings)
       : _baseOctave = _settings.baseOctave,
-        touchBuffer = TouchBuffer(_settings.maxMPEControlDrawRadius) {
+        touchBuffer = TouchBuffer(
+            _settings.maxMPEControlDrawRadius, _settings.moveThreshhold) {
     if (_settings.playMode == PlayMode.mpe) {
       MPEinitMessage(
           memberChannels: _settings.memberChannels,
@@ -22,6 +24,8 @@ class MidiSender extends ChangeNotifier {
     // Handle all setting changes happening in the lifetime of the pad grid here.
     // At the moment only octave changes affect it.
     _updateBaseOctave();
+    touchBuffer.updateGeometry(
+        _settings.maxMPEControlDrawRadius, _settings.moveThreshhold);
     return this;
   }
 
@@ -36,13 +40,7 @@ class MidiSender extends ChangeNotifier {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  // UTILITY
-  double getEased(double value) {
-    return Curves.easeIn.transform(value.clamp(0, 1));
-  }
-
   // MIDI HANDLING:
-
   bool isNoteOnInAnyChannel(int note) {
     for (TouchEvent touch in touchBuffer.buffer) {
       if (touch.noteEvent.currentNoteOn == note) {
@@ -66,6 +64,7 @@ class MidiSender extends ChangeNotifier {
     if (eventInBuffer.dirty) return;
 
     eventInBuffer.updatePosition(touch.position);
+    if (_settings.playMode.afterTouch) notifyListeners(); // for circle drawing
 
     // SLIDE
     if (_settings.playMode == PlayMode.slide) {
@@ -81,16 +80,32 @@ class MidiSender extends ChangeNotifier {
         notifyListeners();
       }
     }
+
+    // TODO send directly or add to noteevent??
+
     // Poly AT
-    else if (_settings.playMode == PlayMode.polyAT) {
-      eventInBuffer.updatePosition(touch.position);
-      notifyListeners();
+    else if (_settings.playMode == PlayMode.polyAT &&
+        eventInBuffer.radialChange() > 0) {
+      PolyATMessage(
+        channel: _settings.channel,
+        note: eventInBuffer.noteEvent.currentNoteOn!,
+        pressure: (eventInBuffer.radialChange() * 127).toInt(),
+      ).send();
     }
+
     // CC
-    else if (_settings.playMode == PlayMode.cc) {
+    else if (_settings.playMode == PlayMode.cc &&
+        eventInBuffer.radialChange() > 0) {
+      CCMessage(
+        channel: _settings.channel,
+        controller: eventInBuffer.noteEvent.currentNoteOn!,
+        value: (eventInBuffer.radialChange() * 127).toInt(),
+      ).send();
     }
     // MPE
-    else if (_settings.playMode == PlayMode.mpe) {}
+    else if (_settings.playMode == PlayMode.mpe) {
+      // double dx = eventInBuffer.
+    }
   }
 
   lift(PointerEvent touch) {

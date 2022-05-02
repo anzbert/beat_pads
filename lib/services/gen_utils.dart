@@ -4,6 +4,21 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 abstract class Utils {
+// UTILITY
+  double easeIn(double value) {
+    return Curves.easeIn.transform(value.clamp(0, 1));
+  }
+
+  /// map value from on range to another
+  static double mapValueToTargetRange(double inputValue, double inputRangeStart,
+      double inputRangeEnd, double outputRangeStart, double outputRangeEnd) {
+    double inputRange = inputRangeEnd - inputRangeStart;
+    double outputRange = outputRangeEnd - outputRangeStart;
+
+    return (inputValue - inputRangeStart) * outputRange / inputRange +
+        outputRangeStart;
+  }
+
   /// Rotate a list by a given int value (positive = forward / negative = backwards)
   static List<T> rotateList<T>(List<T> list, int rotateBy) {
     if (list.isEmpty || rotateBy == 0) return list;
