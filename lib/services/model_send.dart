@@ -7,7 +7,7 @@ class MidiSender extends ChangeNotifier {
   Settings _settings;
   int _baseOctave;
   bool _disposed = false;
-  List<NoteEvent> releasedEvents = [];
+  List<NoteEvent> releasedNoteBuffer = [];
   bool checkerRunning = false;
   bool preview;
 
@@ -15,7 +15,6 @@ class MidiSender extends ChangeNotifier {
   MidiSender(this._settings, Size screenSize, {this.preview = false})
       : _baseOctave = _settings.baseOctave,
         touchBuffer = TouchBuffer(_settings, screenSize) {
-    print("rebuild ${_settings.playMode} $preview");
     if (_settings.playMode == PlayMode.mpe && preview == false) {
       MPEinitMessage(
               memberChannels: _settings.memberChannels,
@@ -49,43 +48,26 @@ class MidiSender extends ChangeNotifier {
       if (touch.noteEvent.note == note) return true;
     }
     if (_settings.sustainTimeUsable > 0) {
-      for (NoteEvent event in releasedEvents) {
+      for (NoteEvent event in releasedNoteBuffer) {
         if (event.note == note) return true;
       }
     }
     return false;
   }
 
-  // bool isNoteOnInChannel(int note, int channel) {
-  //   for (TouchEvent touch in touchBuffer.buffer) {
-  //     if (touch.noteEvent.note == note && touch.noteEvent.channel == channel) {
-  //       return true;
-  //     }
-  //   }
-  //   if (_settings.sustainTimeUsable > 0) {
-  //     for (NoteEvent event in releasedEvents) {
-  //       if (event.note == note && event.channel == channel) {
-  //         return true;
-  //       }
-  //     }
-  //   }
-
-  //   return false;
-  // }
-
   /// Update note in the released events buffer, by adding it or updating
   /// the timer of the corresponding note
   void updateReleasedEvent(NoteEvent event) {
-    int index = releasedEvents.indexWhere((element) =>
+    int index = releasedNoteBuffer.indexWhere((element) =>
         element.note == event.note && element.channel == event.channel);
 
     if (index >= 0) {
-      releasedEvents[index].updateReleaseTime(); // update time
+      releasedNoteBuffer[index].updateReleaseTime(); // update time
     } else {
       event.updateReleaseTime();
-      releasedEvents.add(event); // or add to buffer
+      releasedNoteBuffer.add(event); // or add to buffer
     }
-    if (releasedEvents.isNotEmpty) checkReleasedEvents();
+    if (releasedNoteBuffer.isNotEmpty) checkReleasedEvents();
   }
 
   /// Async function, which checks for expiry of the auto-sustain on all released notes
@@ -93,14 +75,14 @@ class MidiSender extends ChangeNotifier {
     if (checkerRunning) return; // only one running instance possible !
     checkerRunning = true;
 
-    while (releasedEvents.isNotEmpty) {
+    while (releasedNoteBuffer.isNotEmpty) {
       await Future.delayed(const Duration(milliseconds: 5), () {
-        for (int i = 0; i < releasedEvents.length; i++) {
+        for (int i = 0; i < releasedNoteBuffer.length; i++) {
           if (DateTime.now().millisecondsSinceEpoch -
-                  releasedEvents[i].releaseTime >
+                  releasedNoteBuffer[i].releaseTime >
               _settings.sustainTimeUsable) {
-            releasedEvents[i].noteOff();
-            releasedEvents.removeAt(i);
+            releasedNoteBuffer[i].noteOff();
+            releasedNoteBuffer.removeAt(i);
             notifyListeners();
           }
         }
@@ -233,7 +215,7 @@ class MidiSender extends ChangeNotifier {
     for (TouchEvent touch in touchBuffer.buffer) {
       touch.noteEvent.noteOff();
     }
-    for (NoteEvent event in releasedEvents) {
+    for (NoteEvent event in releasedNoteBuffer) {
       event.noteOff();
     }
     _disposed = true;
