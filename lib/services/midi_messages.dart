@@ -135,6 +135,7 @@ class RPNNullMessage extends MidiMessage {
 
   RPNNullMessage({this.channel = 0});
 
+  @override
   void send() {
     data = Uint8List(6);
     // Data Entry MSB

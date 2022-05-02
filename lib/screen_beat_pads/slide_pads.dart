@@ -8,7 +8,9 @@ import 'package:beat_pads/shared/_shared.dart';
 import 'package:beat_pads/services/_services.dart';
 
 class SlidePads extends StatefulWidget {
-  const SlidePads({Key? key}) : super(key: key);
+  const SlidePads({Key? key, this.preview = false}) : super(key: key);
+
+  final bool preview;
 
   @override
   State<SlidePads> createState() => _SlidePadsState();
@@ -44,6 +46,7 @@ class _SlidePadsState extends State<SlidePads> {
   @override
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
+
     return MultiProvider(
       providers: [
         // proxyproviders, to update all other models, when Settings change:
@@ -52,8 +55,10 @@ class _SlidePadsState extends State<SlidePads> {
           update: (_, settings, midiReceiver) => midiReceiver!.update(settings),
         ),
         ChangeNotifierProxyProvider<Settings, MidiSender>(
-          create: (context) => MidiSender(context.read<Settings>()),
-          update: (_, settings, midiSender) => midiSender!.update(settings),
+          create: (context) => MidiSender(context.read<Settings>(), screenSize,
+              preview: widget.preview),
+          update: (_, settings, midiSender) =>
+              midiSender!.update(settings, screenSize),
         ),
       ],
       builder: (context, child) {

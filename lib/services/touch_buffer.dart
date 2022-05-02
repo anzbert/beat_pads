@@ -4,9 +4,10 @@ import 'package:flutter_midi_command/flutter_midi_command_messages.dart';
 
 class TouchBuffer {
   final Settings _settings;
+  final Size _screenSize;
 
   /// Data Structure that holds Touch Events, which hold notes and perform geometry operations
-  TouchBuffer(this._settings);
+  TouchBuffer(this._settings, this._screenSize);
 
   List<TouchEvent> _buffer = [];
   List<TouchEvent> get buffer => _buffer;
@@ -20,28 +21,23 @@ class TouchBuffer {
     return null;
   }
 
+  /// Add touchevent with noteevent to buffer
   void addNoteOn(PointerEvent touch, NoteEvent noteEvent) {
-    _buffer.add(TouchEvent(touch, noteEvent, _settings));
+    _buffer.add(TouchEvent(touch, noteEvent, _settings, _screenSize));
   }
 
-  void updatePosition(PointerEvent updatedEvent) {
-    int index = _buffer
-        .indexWhere((element) => element.uniqueID == updatedEvent.pointer);
-    if (index == -1) return;
-
-    _buffer[index].updatePosition(updatedEvent.position);
-  }
-
+  /// Remove touchevent from buffer
   void remove(TouchEvent event) {
     _buffer =
         _buffer.where((element) => element.uniqueID != event.uniqueID).toList();
   }
 
-  double getAverageChangeOfAllPads() {
+  /// Get an average radial change from all currently active notes
+  double getAverageRadialChangeOfAllPads() {
     if (buffer.isEmpty) return 0;
 
     double total = buffer
-        .where((element) => element.noteEvent.currentNoteOn != null)
+        .where((element) => element.noteEvent.noteOnMessage != null)
         .map((e) => e.radialChange())
         .reduce(((value, element) => value + element));
 
@@ -64,18 +60,21 @@ class TouchEvent {
   Offset newPosition;
 
   /// Holds geometry, note and modulation information this.uniqueID, this.origin,
-  TouchEvent(PointerEvent touch, this.noteEvent, Settings _settings)
+  TouchEvent(
+      PointerEvent touch, this.noteEvent, Settings _settings, Size _screenSize)
       : origin = touch.position,
         newPosition = touch.position,
         uniqueID = touch.pointer,
-        maxDiameter = _settings.maxMPEControlDrawRadius * 2,
-        threshold = _settings.moveThreshhold,
-        maxRadius = _settings.maxMPEControlDrawRadius;
+        maxDiameter = _screenSize.width * 2 * 0.15,
+        threshold = 0.2,
+        maxRadius = _screenSize.width * 0.15;
 
-  bool _dirty = false;
+  /// Prevents touchevent from receiving further position updates in move()
   void markDirty() => _dirty = true;
+  bool _dirty = false;
   bool get dirty => _dirty;
 
+  /// updates stored touch event with latest touch position. Used for geometry
   void updatePosition(Offset updatedPosition) {
     newPosition = updatedPosition;
   }

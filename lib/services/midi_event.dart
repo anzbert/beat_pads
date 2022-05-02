@@ -1,31 +1,29 @@
 import 'package:flutter_midi_command/flutter_midi_command_messages.dart';
 
 class NoteEvent {
-  int channel;
+  final int channel;
+  final int note;
   int releaseTime = 0;
-  int? currentNoteOn;
 
-  bool checkingSustain = false;
+  NoteOnMessage? noteOnMessage;
 
   /// Create and Send a NoteOn event, to be checked and manipulated later
-  NoteEvent(this.channel, this.currentNoteOn, int velocity) {
-    NoteOnMessage(channel: channel, note: currentNoteOn!, velocity: velocity)
-        .send();
-  }
-
-  // void revive(int newChan, int note, int velocity) {
-  //   channel = newChan;
-  //   _currentNoteOn = note;
-  //   NoteOnMessage(channel: newChan, note: note, velocity: velocity).send();
-  // }
+  NoteEvent(this.channel, this.note, int velocity)
+      : noteOnMessage = NoteOnMessage(
+          channel: channel,
+          note: note,
+          velocity: velocity,
+        );
 
   void updateReleaseTime() =>
       releaseTime = DateTime.now().millisecondsSinceEpoch;
 
+  void noteOn() => noteOnMessage?.send();
+
   void noteOff() {
-    if (currentNoteOn != null) {
-      NoteOffMessage(channel: channel, note: currentNoteOn!).send();
-      currentNoteOn = null;
+    if (noteOnMessage != null) {
+      NoteOffMessage(channel: channel, note: note).send();
+      noteOnMessage = null;
     }
   }
 }

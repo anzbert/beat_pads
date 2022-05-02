@@ -9,7 +9,9 @@ import 'package:provider/provider.dart';
 import 'package:beat_pads/screen_beat_pads/button_lock_screen.dart';
 
 class BeatPadsScreen extends StatelessWidget {
-  const BeatPadsScreen({Key? key}) : super(key: key);
+  const BeatPadsScreen({Key? key, this.preview = false}) : super(key: key);
+
+  final bool preview;
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +56,9 @@ class BeatPadsScreen extends StatelessWidget {
                 // PADS
                 Expanded(
                   flex: 60,
-                  child: SlidePads(),
+                  child: SlidePads(
+                    preview: preview,
+                  ),
                 ),
                 Expanded(
                   flex: 1,

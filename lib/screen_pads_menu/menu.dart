@@ -44,7 +44,7 @@ class PadsMenu extends StatelessWidget {
                             padding: const EdgeInsets.all(4.0),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(6.0),
-                              child: BeatPadsScreen(),
+                              child: BeatPadsScreen(preview: true),
                             ),
                           ),
                         ),
