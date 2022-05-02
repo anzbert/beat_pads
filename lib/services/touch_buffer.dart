@@ -3,14 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_midi_command/flutter_midi_command_messages.dart';
 
 class TouchBuffer {
-  double maxRadius;
-  double threshold;
+  final Settings _settings;
 
   /// Data Structure that holds Touch Events, which hold notes and perform geometry operations
-  TouchBuffer(this.maxRadius, this.threshold);
+  TouchBuffer(this._settings);
 
   List<TouchEvent> _buffer = [];
-
   List<TouchEvent> get buffer => _buffer;
 
   TouchEvent? getByID(int id) {
@@ -22,14 +20,8 @@ class TouchBuffer {
     return null;
   }
 
-  void updateGeometryParameters(double maxR, double thresh) {
-    maxRadius = maxR;
-    threshold = thresh;
-  }
-
   void addNoteOn(PointerEvent touch, NoteEvent noteEvent) {
-    _buffer.add(TouchEvent(
-        touch.pointer, touch.position, noteEvent, maxRadius, threshold));
+    _buffer.add(TouchEvent(touch, noteEvent, _settings));
   }
 
   void updatePosition(PointerEvent updatedEvent) {
@@ -71,11 +63,14 @@ class TouchEvent {
   final double threshold;
   Offset newPosition;
 
-  /// Holds geometry, note and modulation information
-  TouchEvent(this.uniqueID, this.origin, this.noteEvent, this.maxRadius,
-      this.threshold)
-      : newPosition = origin,
-        maxDiameter = maxRadius * 2;
+  /// Holds geometry, note and modulation information this.uniqueID, this.origin,
+  TouchEvent(PointerEvent touch, this.noteEvent, Settings _settings)
+      : origin = touch.position,
+        newPosition = touch.position,
+        uniqueID = touch.pointer,
+        maxDiameter = _settings.maxMPEControlDrawRadius * 2,
+        threshold = _settings.moveThreshhold,
+        maxRadius = _settings.maxMPEControlDrawRadius;
 
   bool _dirty = false;
   void markDirty() => _dirty = true;

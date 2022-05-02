@@ -27,15 +27,14 @@ class PaintAfterTouchCircle extends StatelessWidget {
                   children: [
                     PaintCircle(
                       box.globalToLocal(atCircle.origin),
-                      midiSender.touchBuffer.maxRadius,
+                      atCircle.maxRadius,
                       Palette.lightPink.color
                           .withOpacity(atCircle.radialChange() * 0.5),
                       stroke: false,
                     ),
                     PaintCircle(
                       box.globalToLocal(atCircle.origin),
-                      atCircle.radialChange() *
-                          midiSender.touchBuffer.maxRadius,
+                      atCircle.radialChange() * atCircle.maxRadius,
                       Palette.laserLemon.color
                           .withOpacity(atCircle.radialChange() * 0.7),
                       stroke: true,

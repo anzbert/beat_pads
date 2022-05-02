@@ -11,8 +11,7 @@ class MidiSender extends ChangeNotifier {
   /// Handles touches and Midi sending
   MidiSender(this._settings)
       : _baseOctave = _settings.baseOctave,
-        touchBuffer = TouchBuffer(
-            _settings.maxMPEControlDrawRadius, _settings.moveThreshhold) {
+        touchBuffer = TouchBuffer(_settings) {
     if (_settings.playMode == PlayMode.mpe) {
       MPEinitMessage(
           memberChannels: _settings.memberChannels,
@@ -25,8 +24,6 @@ class MidiSender extends ChangeNotifier {
   MidiSender update(Settings settings) {
     _settings = settings;
     _updateBaseOctave();
-    touchBuffer.updateGeometryParameters(
-        _settings.maxMPEControlDrawRadius, _settings.moveThreshhold);
     return this;
   }
 
