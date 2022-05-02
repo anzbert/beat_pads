@@ -116,6 +116,7 @@ class MidiSender extends ChangeNotifier {
     else if (_settings.playMode == PlayMode.mpe) {
       // print(eventInBuffer.directionalChangeFromCartesianOrigin().dx);
 
+      // Y AXIS:
       PitchBendMessage(
               channel: eventInBuffer.noteEvent.channel,
               bend:
@@ -123,12 +124,16 @@ class MidiSender extends ChangeNotifier {
                       1))
           .send();
 
-      CCMessage(
-        channel: eventInBuffer.noteEvent.channel,
-        controller: 74, // <- slide controller is #74
-        value: (eventInBuffer.absoluteDirectionalChangeFromCenter().dx * 127)
-            .toInt(),
-      ).send();
+      // X AXIS:
+      int newCC = (eventInBuffer.absoluteDirectionalChangeFromCenter().dx * 127)
+          .toInt();
+      if (newCC != eventInBuffer.modMapping.cc?.value) {
+        eventInBuffer.modMapping.cc = CCMessage(
+          channel: eventInBuffer.noteEvent.channel,
+          controller: 74, // <- slide controller is #74
+          value: newCC,
+        )..send();
+      }
     }
   }
 

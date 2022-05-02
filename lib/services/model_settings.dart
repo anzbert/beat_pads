@@ -13,28 +13,19 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
-  // MPE settings
+  // MPE settings (testing)
   double maxMPEControlDrawRadius =
       110; // TODO : fixed/ changable or screen dependant?
   double moveThreshhold = 0.1;
-
-  bool _upperZone = true; // temp fixed
-  bool get upperZone => _upperZone;
-  set upperZone(bool newVal) {
-    if (newVal) {
-      channel = 15;
-    } else {
-      channel = 0;
-    }
-    _upperZone = newVal;
-  }
-
   final int memberChannels = 8; // temp fixed
+  bool upperZone = false; // temp fixed
+
+  // ROUND ROBBIN METHOD
   int _channelCounter = -1;
   int get memberChan {
     if (playMode != PlayMode.mpe) return channel;
-    int upperLimit = _upperZone ? 14 : memberChannels;
-    int lowerLimit = _upperZone ? 15 - memberChannels : 1;
+    int upperLimit = upperZone ? 14 : memberChannels;
+    int lowerLimit = upperZone ? 15 - memberChannels : 1;
 
     _channelCounter = _channelCounter == -1 ? lowerLimit : _channelCounter;
 
