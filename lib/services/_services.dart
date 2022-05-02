@@ -14,4 +14,4 @@ export './paint_line.dart';
 export './touch_buffer.dart';
 export './pads_playmodes.dart';
 export './midi_messages.dart';
-export 'midi_event.dart';
+export './midi_event.dart';

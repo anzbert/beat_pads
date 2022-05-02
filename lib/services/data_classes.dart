@@ -14,12 +14,3 @@ class Vector2D {
     return [x, y];
   }
 }
-
-// class MidiTriplet {
-//   int channel;
-//   int parameter;
-//   int value;
-
-//   // 3 Byte Midi-Data
-//   MidiTriplet(this.channel, this.parameter, [this.value = 0]);
-// }

@@ -7,6 +7,8 @@ class MidiSender extends ChangeNotifier {
   Settings _settings;
   int _baseOctave;
   bool _disposed = false;
+  List<NoteEvent> releasedEvents = [];
+  bool checkerRunning = false;
 
   /// Handles touches and Midi sending
   MidiSender(this._settings)
@@ -37,15 +39,73 @@ class MidiSender extends ChangeNotifier {
   }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-
-  // MIDI HANDLING:
   bool isNoteOnInAnyChannel(int note) {
     for (TouchEvent touch in touchBuffer.buffer) {
       if (touch.noteEvent.currentNoteOn == note) {
         return true;
       }
     }
+    if (_settings.sustainTimeUsable > 0) {
+      for (NoteEvent event in releasedEvents) {
+        if (event.currentNoteOn == note) {
+          return true;
+        }
+      }
+    }
     return false;
+  }
+
+  bool isNoteOnInChannel(int note, int channel) {
+    for (TouchEvent touch in touchBuffer.buffer) {
+      if (touch.noteEvent.currentNoteOn == note &&
+          touch.noteEvent.channel == channel) {
+        return true;
+      }
+    }
+    if (_settings.sustainTimeUsable > 0) {
+      for (NoteEvent event in releasedEvents) {
+        if (event.currentNoteOn == note && event.channel == channel) {
+          return true;
+        }
+      }
+    }
+
+    return false;
+  }
+
+  void updateReleasedEvents(NoteEvent event) {
+    int index = releasedEvents.indexWhere((element) =>
+        element.currentNoteOn == event.currentNoteOn &&
+        element.channel == event.channel);
+
+    if (index >= 0) {
+      releasedEvents[index].updateReleaseTime();
+    } else {
+      event.updateReleaseTime();
+      releasedEvents.add(event);
+    }
+    if (releasedEvents.isNotEmpty) checkReleasedEvents();
+  }
+
+  void checkReleasedEvents() async {
+    if (checkerRunning) return;
+    checkerRunning = true;
+
+    while (releasedEvents.isNotEmpty) {
+      await Future.delayed(const Duration(milliseconds: 5), () {
+        for (int i = 0; i < releasedEvents.length; i++) {
+          if (DateTime.now().millisecondsSinceEpoch -
+                  releasedEvents[i].releaseTime >
+              _settings.sustainTimeUsable) {
+            releasedEvents[i].noteOff();
+            releasedEvents.removeAt(i);
+            notifyListeners();
+          }
+        }
+      });
+    }
+
+    checkerRunning = false;
   }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -69,15 +129,22 @@ class MidiSender extends ChangeNotifier {
 
     // SLIDE
     if (_settings.playMode == PlayMode.slide) {
+      // Turn note off:
       if (noteHovered != eventInBuffer.noteEvent.currentNoteOn &&
           eventInBuffer.noteEvent.currentNoteOn != null) {
-        eventInBuffer.noteEvent.kill();
+        if (_settings.sustainTimeUsable <= 0) {
+          eventInBuffer.noteEvent.noteOff();
+        } else {
+          updateReleasedEvents(eventInBuffer.noteEvent);
+        }
+
         notifyListeners();
       }
+      // Play new note:
       if (noteHovered != null &&
           eventInBuffer.noteEvent.currentNoteOn == null) {
-        eventInBuffer.noteEvent
-            .revive(_settings.memberChan, noteHovered, _settings.velocity);
+        eventInBuffer.noteEvent =
+            NoteEvent(_settings.memberChan, noteHovered, _settings.velocity);
         notifyListeners();
       }
     }
@@ -111,8 +178,6 @@ class MidiSender extends ChangeNotifier {
     }
     // MPE
     else if (_settings.playMode == PlayMode.mpe) {
-      // print(eventInBuffer.directionalChangeFromCartesianOrigin().dx);
-
       // Y AXIS:
       PitchBendMessage(
               channel: eventInBuffer.noteEvent.channel,
@@ -139,8 +204,13 @@ class MidiSender extends ChangeNotifier {
     TouchEvent? eventInBuffer = touchBuffer.getByID(touch.pointer);
     if (eventInBuffer == null) return;
 
-    eventInBuffer.noteEvent.kill();
-    touchBuffer.remove(eventInBuffer);
+    if (_settings.sustainTimeUsable <= 0) {
+      eventInBuffer.noteEvent.noteOff();
+      touchBuffer.remove(eventInBuffer);
+    } else {
+      updateReleasedEvents(eventInBuffer.noteEvent);
+      touchBuffer.remove(eventInBuffer);
+    }
     notifyListeners();
   }
 
@@ -151,7 +221,10 @@ class MidiSender extends ChangeNotifier {
       MPEinitMessage(memberChannels: 0, upperZone: _settings.upperZone);
     }
     for (TouchEvent touch in touchBuffer.buffer) {
-      touch.noteEvent.kill();
+      touch.noteEvent.noteOff();
+    }
+    for (NoteEvent event in releasedEvents) {
+      event.noteOff();
     }
     _disposed = true;
     super.dispose();
