@@ -94,15 +94,20 @@ class TouchEvent {
     return Offset(limitValue(factorX.abs()), limitValue(factorY.abs()));
   }
 
-  // TODO remove middle with threshold?
-  Offset directionalChangeFromCartesianOrigin() {
-    double factorX = (newPosition.dx - origin.dx + maxRadius) / maxDiameter;
-    double factorY = (newPosition.dy - origin.dy + maxRadius) / maxDiameter;
+  // broken
+  Offset directionalChangeFromCenter() {
+    double factorX = ((newPosition.dx - origin.dx) / maxRadius).clamp(-1, 1);
+    double factorY = ((-newPosition.dy + origin.dy) / maxRadius).clamp(-1, 1);
 
-    return Offset(factorX.clamp(0, 1), 1 - factorY.clamp(0, 1));
+    return Offset(limitValue(factorX), limitValue(factorY));
   }
 
+  /// only return value when above threshhold. also remap range to start past threshold at 0.
   double limitValue(double input) {
+    if (input.isNegative) {
+      if (input > -threshold) return 0;
+      return Utils.mapValueToTargetRange(input, -1, -threshold, -1, 0);
+    }
     if (input < threshold) return 0;
     return Utils.mapValueToTargetRange(input, threshold, 1, 0, 1);
   }

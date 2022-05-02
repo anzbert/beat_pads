@@ -170,12 +170,14 @@ class MidiSender extends ChangeNotifier {
     // MPE
     else if (_settings.playMode == PlayMode.mpe) {
       // Y AXIS:
-      PitchBendMessage(
-              channel: eventInBuffer.noteEvent.channel,
-              bend:
-                  (eventInBuffer.directionalChangeFromCartesianOrigin().dy * 2 -
-                      1))
-          .send();
+      double newPB = (eventInBuffer.directionalChangeFromCenter().dy);
+
+      if (newPB != eventInBuffer.modMapping.pitchBend?.bend) {
+        eventInBuffer.modMapping.pitchBend = PitchBendMessage(
+          channel: eventInBuffer.noteEvent.channel,
+          bend: newPB,
+        )..send();
+      }
 
       // X AXIS:
       int newCC = (eventInBuffer.absoluteDirectionalChangeFromCenter().dx * 127)
