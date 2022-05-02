@@ -15,14 +15,10 @@ class PaintAfterTouchCircle extends StatelessWidget {
 
     return Consumer<MidiSender>(
       builder: (context, midiSender, child) {
-        print(midiSender.touchBuffer.buffer);
-        midiSender.touchBuffer.buffer.forEach((element) {
-          // print(element.radialChange());
-        });
         final buffer = midiSender.touchBuffer.buffer.where((e) {
           return e.radialChange() > 0.1;
         });
-        print(buffer);
+
         return Stack(
           children: [
             ...buffer.map(

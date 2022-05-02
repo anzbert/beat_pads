@@ -83,29 +83,28 @@ class TouchEvent {
   // GEOMETRY functions:
   double radialChange() {
     double distanceFactor =
-        Utils.offsetDistance(origin, newPosition) / maxRadius;
+        (Utils.offsetDistance(origin, newPosition) / maxRadius).clamp(0, 1);
 
-    return limitValue(distanceFactor.clamp(0, 1));
+    return limitValue(distanceFactor);
   }
 
-  Offset directionalChangeFromCenter() {
-    double factorX = (newPosition.dx - origin.dx) / maxRadius;
-    double factorY = (newPosition.dy - origin.dy) / maxRadius;
+  Offset absoluteDirectionalChangeFromCenter() {
+    double factorX = ((newPosition.dx - origin.dx) / maxRadius).clamp(-1, 1);
+    double factorY = ((newPosition.dy - origin.dy) / maxRadius).clamp(-1, 1);
 
-    return Offset(
-        limitValue(factorX).clamp(0, 1), limitValue(factorY).clamp(0, 1));
+    return Offset(limitValue(factorX.abs()), limitValue(factorY.abs()));
   }
 
-  Offset directionalChangeFromCartesianOrigin(int uniqueID) {
+  // TODO remove middle with threshold?
+  Offset directionalChangeFromCartesianOrigin() {
     double factorX = (newPosition.dx - origin.dx + maxRadius) / maxDiameter;
     double factorY = (newPosition.dy - origin.dy + maxRadius) / maxDiameter;
 
-    return Offset(
-        limitValue(factorX).clamp(0, 1), 1 - limitValue(factorY).clamp(0, 1));
+    return Offset(factorX.clamp(0, 1), 1 - factorY.clamp(0, 1));
   }
 
   double limitValue(double input) {
-    double limited = input > threshold ? input : 0;
-    return Utils.mapValueToTargetRange(limited, threshold, 1, 0, 1);
+    if (input < threshold) return 0;
+    return Utils.mapValueToTargetRange(input, threshold, 1, 0, 1);
   }
 }

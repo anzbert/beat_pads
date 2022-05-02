@@ -84,8 +84,7 @@ class MidiSender extends ChangeNotifier {
     // TODO send directly or add to noteevent??
 
     // Poly AT
-    else if (_settings.playMode == PlayMode.polyAT &&
-        eventInBuffer.radialChange() > 0) {
+    else if (_settings.playMode == PlayMode.polyAT) {
       PolyATMessage(
         channel: _settings.channel,
         note: eventInBuffer.noteEvent.currentNoteOn!,
@@ -94,8 +93,7 @@ class MidiSender extends ChangeNotifier {
     }
 
     // CC
-    else if (_settings.playMode == PlayMode.cc &&
-        eventInBuffer.radialChange() > 0) {
+    else if (_settings.playMode == PlayMode.cc) {
       CCMessage(
         channel: _settings.channel,
         controller: eventInBuffer.noteEvent.currentNoteOn!,
@@ -104,7 +102,21 @@ class MidiSender extends ChangeNotifier {
     }
     // MPE
     else if (_settings.playMode == PlayMode.mpe) {
-      // double dx = eventInBuffer.
+      print(eventInBuffer.directionalChangeFromCartesianOrigin().dx);
+
+      PitchBendMessage(
+              channel: _settings.channel,
+              bend:
+                  (eventInBuffer.directionalChangeFromCartesianOrigin().dy * 2 -
+                      1))
+          .send();
+
+      CCMessage(
+        channel: _settings.channel,
+        controller: 74, // <- slide controller is #74
+        value: (eventInBuffer.absoluteDirectionalChangeFromCenter().dx * 127)
+            .toInt(),
+      ).send();
     }
   }
 
