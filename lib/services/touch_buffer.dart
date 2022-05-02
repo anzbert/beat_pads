@@ -57,6 +57,7 @@ class TouchEvent {
   final double maxRadius;
   final double maxDiameter;
   final double threshold;
+
   Offset newPosition;
 
   /// Holds geometry, note and modulation information this.uniqueID, this.origin,
@@ -66,7 +67,7 @@ class TouchEvent {
         newPosition = touch.position,
         uniqueID = touch.pointer,
         maxDiameter = _screenSize.width * 2 * 0.15,
-        threshold = 0.2,
+        threshold = 0.15,
         maxRadius = _screenSize.width * 0.15;
 
   /// Prevents touchevent from receiving further position updates in move()
@@ -80,26 +81,35 @@ class TouchEvent {
   }
 
   // GEOMETRY functions:
-  double radialChange() {
+  double radialChangeWithThreshold([Curve curve = Curves.easeIn]) {
     double distanceFactor =
         (Utils.offsetDistance(origin, newPosition) / maxRadius).clamp(0, 1);
 
-    return limitValue(distanceFactor);
+    return curveTransform(limitValue(distanceFactor), curve);
   }
 
-  Offset absoluteDirectionalChangeFromCenter() {
+  double radialChange([Curve curve = Curves.easeIn]) {
+    double distanceFactor =
+        (Utils.offsetDistance(origin, newPosition) / maxRadius).clamp(0, 1);
+
+    return curveTransform(distanceFactor, curve);
+  }
+
+  Offset absoluteDirectionalChangeFromCenter([Curve curve = Curves.easeIn]) {
     double factorX = ((newPosition.dx - origin.dx) / maxRadius).clamp(-1, 1);
     double factorY = ((newPosition.dy - origin.dy) / maxRadius).clamp(-1, 1);
 
-    return Offset(limitValue(factorX.abs()), limitValue(factorY.abs()));
+    return Offset(curveTransform(limitValue(factorX.abs()), curve),
+        curveTransform(limitValue(factorY.abs()), curve));
   }
 
   // broken
-  Offset directionalChangeFromCenter() {
+  Offset directionalChangeFromCenter([Curve curve = Curves.easeIn]) {
     double factorX = ((newPosition.dx - origin.dx) / maxRadius).clamp(-1, 1);
     double factorY = ((-newPosition.dy + origin.dy) / maxRadius).clamp(-1, 1);
 
-    return Offset(limitValue(factorX), limitValue(factorY));
+    return Offset(curveTransform(limitValue(factorX), curve),
+        curveTransform(limitValue(factorY), curve));
   }
 
   /// only return value when above threshhold. also remap range to start past threshold at 0.
@@ -110,6 +120,15 @@ class TouchEvent {
     }
     if (input < threshold) return 0;
     return Utils.mapValueToTargetRange(input, threshold, 1, 0, 1);
+  }
+
+  /// negative save curve transform
+  double curveTransform(double input, Curve curve) {
+    if (input.isNegative) {
+      double temp = input.abs();
+      return -curve.transform(temp.clamp(0, 1));
+    }
+    return curve.transform(input.clamp(0, 1));
   }
 }
 

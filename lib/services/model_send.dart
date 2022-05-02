@@ -101,8 +101,9 @@ class MidiSender extends ChangeNotifier {
         NoteEvent(_settings.memberChan, noteTapped, _settings.velocity)
           ..noteOn();
 
-    touchBuffer.addNoteOn(touch, noteOn);
+    // TODO reset existing pitch bends, etc ( see MPE spec!)
 
+    touchBuffer.addNoteOn(touch, noteOn);
     notifyListeners();
   }
 
@@ -144,7 +145,8 @@ class MidiSender extends ChangeNotifier {
 
     // Poly AT
     else if (_settings.playMode == PlayMode.polyAT) {
-      int newPressure = (eventInBuffer.radialChange() * 127).toInt();
+      int newPressure =
+          (eventInBuffer.radialChangeWithThreshold() * 127).toInt();
 
       if (eventInBuffer.modMapping.polyAT?.pressure != newPressure) {
         eventInBuffer.modMapping.polyAT = PolyATMessage(
@@ -157,13 +159,13 @@ class MidiSender extends ChangeNotifier {
 
     // CC
     else if (_settings.playMode == PlayMode.cc) {
-      int newCC = (eventInBuffer.radialChange() * 127).toInt();
+      int newCC = (eventInBuffer.radialChangeWithThreshold() * 127).toInt();
 
       if (eventInBuffer.modMapping.polyAT?.pressure != newCC) {
         eventInBuffer.modMapping.cc = CCMessage(
           channel: _settings.channel,
           controller: eventInBuffer.noteEvent.note,
-          value: (eventInBuffer.radialChange() * 127).toInt(),
+          value: (eventInBuffer.radialChangeWithThreshold() * 127).toInt(),
         )..send();
       }
     }

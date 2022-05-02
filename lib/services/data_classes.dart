@@ -1,5 +1,3 @@
-import 'package:flutter_midi_command/flutter_midi_command.dart';
-
 class Vector2D {
   const Vector2D(this.x, this.y);
 

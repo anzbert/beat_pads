@@ -16,7 +16,7 @@ class PaintAfterTouchCircle extends StatelessWidget {
     return Consumer<MidiSender>(
       builder: (context, midiSender, child) {
         final buffer = midiSender.touchBuffer.buffer.where((e) {
-          return e.radialChange() > 0.1;
+          return e.radialChange() > 0.01;
         });
 
         return Stack(
@@ -28,15 +28,15 @@ class PaintAfterTouchCircle extends StatelessWidget {
                     PaintCircle(
                       box.globalToLocal(atCircle.origin),
                       atCircle.maxRadius,
-                      Palette.lightPink.color
-                          .withOpacity(atCircle.radialChange() * 0.5),
+                      Palette.lightPink.color.withOpacity(
+                          atCircle.radialChange(Curves.easeOut) * 0.6),
                       stroke: false,
                     ),
                     PaintCircle(
                       box.globalToLocal(atCircle.origin),
                       atCircle.radialChange() * atCircle.maxRadius,
-                      Palette.laserLemon.color
-                          .withOpacity(atCircle.radialChange() * 0.7),
+                      Palette.laserLemon.color.withOpacity(
+                          atCircle.radialChange(Curves.easeOut) * 0.8),
                       stroke: true,
                     ),
                   ],
