@@ -10,14 +10,13 @@ class PaintAfterTouchCircle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Get Renderbox for gloabl to local offset conversion:
     final RenderBox? box = context.findAncestorRenderObjectOfType<RenderBox>();
     if (box == null) return Stack();
 
     return Consumer<MidiSender>(
       builder: (context, midiSender, child) {
-        final buffer = midiSender.touchBuffer.buffer.where((e) {
-          return e.radialChange() > 0.01;
-        });
+        final buffer = midiSender.touchBuffer.buffer;
 
         return Stack(
           children: [
@@ -29,14 +28,14 @@ class PaintAfterTouchCircle extends StatelessWidget {
                       box.globalToLocal(atCircle.origin),
                       atCircle.maxRadius,
                       Palette.lightPink.color.withOpacity(
-                          atCircle.radialChange(Curves.easeOut) * 0.6),
+                          atCircle.radialChange(curve: Curves.easeOut) * 0.6),
                       stroke: false,
                     ),
                     PaintCircle(
                       box.globalToLocal(atCircle.origin),
                       atCircle.radialChange() * atCircle.maxRadius,
                       Palette.laserLemon.color.withOpacity(
-                          atCircle.radialChange(Curves.easeOut) * 0.8),
+                          atCircle.radialChange(curve: Curves.easeOut) * 0.8),
                       stroke: true,
                     ),
                   ],

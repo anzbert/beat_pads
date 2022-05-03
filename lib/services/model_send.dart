@@ -145,8 +145,7 @@ class MidiSender extends ChangeNotifier {
 
     // Poly AT
     else if (_settings.playMode == PlayMode.polyAT) {
-      int newPressure =
-          (eventInBuffer.radialChangeWithThreshold() * 127).toInt();
+      int newPressure = (eventInBuffer.radialChange() * 127).toInt();
 
       if (eventInBuffer.modMapping.polyAT?.pressure != newPressure) {
         eventInBuffer.modMapping.polyAT = PolyATMessage(
@@ -159,13 +158,13 @@ class MidiSender extends ChangeNotifier {
 
     // CC
     else if (_settings.playMode == PlayMode.cc) {
-      int newCC = (eventInBuffer.radialChangeWithThreshold() * 127).toInt();
+      int newCC = (eventInBuffer.radialChange() * 127).toInt();
 
       if (eventInBuffer.modMapping.polyAT?.pressure != newCC) {
         eventInBuffer.modMapping.cc = CCMessage(
           channel: _settings.channel,
           controller: eventInBuffer.noteEvent.note,
-          value: (eventInBuffer.radialChangeWithThreshold() * 127).toInt(),
+          value: (eventInBuffer.radialChange() * 127).toInt(),
         )..send();
       }
     }
