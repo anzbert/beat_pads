@@ -4,6 +4,28 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 abstract class Utils {
+// UTILITY
+
+  /// Apply a curve to a positive *and* to a __negative__ value
+  /// Input range is 0 to 1.0
+  static double curveTransform(double input, Curve curve) {
+    if (input.isNegative) {
+      double temp = input.abs();
+      return -curve.transform(temp.clamp(0, 1));
+    }
+    return curve.transform(input.clamp(0, 1));
+  }
+
+  /// Map input value from one range to another
+  static double mapValueToTargetRange(double inputValue, double inputRangeStart,
+      double inputRangeEnd, double outputRangeStart, double outputRangeEnd) {
+    double inputRange = inputRangeEnd - inputRangeStart;
+    double outputRange = outputRangeEnd - outputRangeStart;
+
+    return (inputValue - inputRangeStart) * outputRange / inputRange +
+        outputRangeStart;
+  }
+
   /// Rotate a list by a given int value (positive = forward / negative = backwards)
   static List<T> rotateList<T>(List<T> list, int rotateBy) {
     if (list.isEmpty || rotateBy == 0) return list;

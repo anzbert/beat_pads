@@ -28,7 +28,7 @@ class _ModWheelState extends State<ModWheel> {
           value: _mod.toDouble(),
           onChanged: (v) {
             setState(() => _mod = v.toInt());
-            MidiUtils.modWheelMessage(widget.channel, 127 - v.toInt());
+            MidiUtils.sendModWheelMessage(widget.channel, 127 - v.toInt());
           },
         ),
       ),
@@ -37,7 +37,7 @@ class _ModWheelState extends State<ModWheel> {
 
   @override
   void dispose() {
-    // MidiUtils.modWheelMessage(widget.channel, 0);
+    // MidiUtils.sendModWheelMessage(widget.channel, 0);
     super.dispose();
   }
 }

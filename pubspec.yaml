@@ -15,10 +15,11 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 0.4.5+24
+version: 0.4.6+26
 
 environment:
-  sdk: ">=2.16.0-134.5.beta <3.0.0"
+  # sdk: ">=2.16.0-134.5.beta <3.0.0"
+  sdk: ">=2.17.0-0 <3.0.0" # 2.17 allows using of new enhanced enums
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -42,13 +43,13 @@ dependencies:
   simple_gradient_text: ^1.2.2
 
   flutter_midi_command:
+    ^0.4.7
     # path: /Users/anz/localDev/FlutterMidiCommand
-    # ^0.4.5
-    git:
-      url: https://github.com/anzbert/FlutterMidiCommand.git
-      ref: null_checks
+    # git:
+    #   url: https://github.com/anzbert/FlutterMidiCommand.git
+    #   ref: null_checks
 
-  # rive: ^0.8.1
+  # rive: ^0.8.4 # 0.8.4 still produces compiler warnings
   rive:
     git:
       url: https://github.com/rive-app/rive-flutter.git

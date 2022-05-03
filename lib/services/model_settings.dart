@@ -13,6 +13,50 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
+  // MPE settings (testing)
+  double maxMPEControlDrawRadius =
+      110; // TODO : fixed/ changable or screen dependant?
+  double moveThreshhold = 0.1;
+  final int memberChannels = 8; // temp fixed
+  bool upperZone = false; // temp fixed
+
+  // ROUND ROBBIN METHOD
+  int _channelCounter = -1;
+  int get memberChan {
+    if (playMode != PlayMode.mpe) return channel;
+    int upperLimit = upperZone ? 14 : memberChannels;
+    int lowerLimit = upperZone ? 15 - memberChannels : 1;
+
+    _channelCounter = _channelCounter == -1 ? lowerLimit : _channelCounter;
+
+    _channelCounter++;
+
+    if (_channelCounter > upperLimit || _channelCounter < lowerLimit) {
+      _channelCounter = lowerLimit;
+    }
+
+    return _channelCounter;
+  }
+
+// channel (master channel):
+  int get channel {
+    if (playMode == PlayMode.mpe) {
+      return upperZone ? 15 : 0;
+    }
+    return prefs.settings.channel.value;
+  }
+
+  set channel(int newChannel) {
+    if (newChannel < 0 || newChannel > 15) return;
+    if (playMode == PlayMode.mpe) {
+      if (newChannel != 0 || newChannel != 15) return;
+    }
+
+    prefs.settings.channel.value = newChannel;
+    prefs.settings.channel.save();
+    notifyListeners();
+  }
+
   // layout:
   Layout get layout => prefs.settings.layout.value;
 
@@ -40,7 +84,16 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
-  // pads:
+  // play mode
+  PlayMode get playMode => prefs.settings.playMode.value;
+
+  set playMode(PlayMode newValue) {
+    prefs.settings.playMode.value = newValue;
+    prefs.settings.playMode.save();
+    notifyListeners();
+  }
+
+  // pad grid:
   List<List<int>> get rows {
     return prefs.settings.layout.value.getGrid(this).rows;
   }
@@ -54,7 +107,7 @@ class Settings extends ChangeNotifier {
     if (note < 0 || note > 11) return;
     prefs.settings.rootNote.value = note;
     prefs.settings.rootNote.save();
-    prefs.settings.base.value = note; // TODO: is this always a good idea?
+    prefs.settings.base.value = note;
     prefs.settings.base.save();
     notifyListeners();
   }
@@ -227,16 +280,6 @@ class Settings extends ChangeNotifier {
 
   resetSustainTimeStep() =>
       sustainTimeStep = LoadSettings.defaults().sustainTimeStep.value;
-
-  // channel:
-  int get channel => prefs.settings.channel.value;
-
-  set channel(int newChannel) {
-    if (newChannel < 0 || newChannel > 15) return;
-    prefs.settings.channel.value = newChannel;
-    prefs.settings.channel.save();
-    notifyListeners();
-  }
 
 // pitchbend:
   bool get pitchBend => prefs.settings.pitchBend.value;

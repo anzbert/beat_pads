@@ -22,7 +22,7 @@ class SlideBeatPad extends StatelessWidget {
         : 0;
 
     final bool noteOn =
-        Provider.of<MidiSender>(context, listen: true).noteIsOn(note);
+        Provider.of<MidiSender>(context, listen: true).isNoteOn(note);
 
     // PAD COLOR:
     final Color splashColor = Palette.lightPink.color;
@@ -92,9 +92,7 @@ class SlideBeatPad extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if (settings.layout == Layout.XpressPads_Standard ||
-                          settings.layout == Layout.XpressPads_LatinJazz ||
-                          settings.layout == Layout.XpressPads_Xtreme)
+                      if (settings.layout.gmPercussion)
                         Text(
                           MidiUtils.getNoteName(note, gmPercussionLabels: true),
                           style: TextStyle(

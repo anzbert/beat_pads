@@ -1,40 +1,48 @@
-// ignore_for_file: constant_identifier_names
-
 import 'package:beat_pads/services/_services.dart';
 
-abstract class LayoutUtils {
-  /// get Layout from its name as a String
-  static Layout? fromString(String key) {
-    for (Layout layout in Layout.values) {
-      if (layout.name == key) return layout;
+enum Layout {
+  majorThird("Major Third"),
+  minorThird("Minor Third"),
+  quart("Quart"),
+  continuous("Continuous"),
+  scaleNotesOnly("Scale Notes Only"),
+  magicToneNetwork("Magic Tone Network"),
+  xPressPadsStandard("XpressPads Standard"),
+  xPressPadsLatinJazz("XpressPads Latin/Jazz"),
+  xPressPadsXtreme("XpressPads Xtreme");
+
+  const Layout(this.title);
+  final String title;
+
+  static Layout? fromName(String key) {
+    for (Layout mode in Layout.values) {
+      if (mode.name == key) return mode;
     }
     return null;
   }
-}
 
-/// Selectable Pad Grid Layouts
-enum Layout {
-  Major_Third,
-  Minor_Third,
-  Quart,
-  Continuous,
-  Scale_Notes_Only,
-  Magic_Tone_Network,
-  XpressPads_Standard,
-  XpressPads_LatinJazz,
-  XpressPads_Xtreme,
-}
+  bool get gmPercussion {
+    switch (this) {
+      case Layout.xPressPadsStandard:
+        return true;
+      case Layout.xPressPadsLatinJazz:
+        return true;
+      case Layout.xPressPadsXtreme:
+        return true;
+      default:
+        return false;
+    }
+  }
 
-extension LayoutExt on Layout {
   LayoutProps get props {
     switch (this) {
-      case Layout.Magic_Tone_Network:
+      case Layout.magicToneNetwork:
         return LayoutProps(resizable: true, defaultDimensions: Vector2D(8, 8));
-      case Layout.XpressPads_Standard:
+      case Layout.xPressPadsStandard:
         return LayoutProps(resizable: false);
-      case Layout.XpressPads_LatinJazz:
+      case Layout.xPressPadsLatinJazz:
         return LayoutProps(resizable: false);
-      case Layout.XpressPads_Xtreme:
+      case Layout.xPressPadsXtreme:
         return LayoutProps(resizable: false, defaultDimensions: Vector2D(8, 4));
       default:
         return LayoutProps(resizable: true);
@@ -43,23 +51,23 @@ extension LayoutExt on Layout {
 
   Grid getGrid(Settings settings) {
     switch (this) {
-      case Layout.Continuous:
+      case Layout.continuous:
         return GridRowInterval(settings, rowInterval: settings.width);
-      case Layout.Minor_Third:
+      case Layout.minorThird:
         return GridRowInterval(settings, rowInterval: 3);
-      case Layout.Major_Third:
+      case Layout.majorThird:
         return GridRowInterval(settings, rowInterval: 4);
-      case Layout.Quart:
+      case Layout.quart:
         return GridRowInterval(settings, rowInterval: 5);
-      case Layout.Scale_Notes_Only:
+      case Layout.scaleNotesOnly:
         return GridScaleOnly(settings);
-      case Layout.Magic_Tone_Network:
+      case Layout.magicToneNetwork:
         return GridMTN(settings);
-      case Layout.XpressPads_Standard:
+      case Layout.xPressPadsStandard:
         return GridXpressPads(settings, XPP.standard);
-      case Layout.XpressPads_LatinJazz:
+      case Layout.xPressPadsLatinJazz:
         return GridXpressPads(settings, XPP.latinJazz);
-      case Layout.XpressPads_Xtreme:
+      case Layout.xPressPadsXtreme:
         return GridXpressPads(settings, XPP.xtreme);
     }
   }
@@ -185,22 +193,26 @@ class GridXpressPads extends Grid {
   }
 }
 
-// constant data about XPP layouts
-enum XPP { standard, latinJazz, xtreme }
+// constant data about XPP layouts:
+enum XPP {
+  standard,
+  latinJazz,
+  xtreme;
 
-extension XPPConstants on XPP {
   List<int> get list {
     switch (this) {
       case XPP.standard:
-        return standard;
+        return XppConstants.standardGrid;
       case XPP.latinJazz:
-        return latinJazz;
+        return XppConstants.latinJazzGrid;
       case XPP.xtreme:
-        return xtreme;
+        return XppConstants.xtremeGrid;
     }
   }
+}
 
-  static const List<int> standard = [
+abstract class XppConstants {
+  static const List<int> standardGrid = [
     36,
     42,
     42,
@@ -218,7 +230,7 @@ extension XPPConstants on XPP {
     51,
     49,
   ];
-  static const List<int> latinJazz = [
+  static const List<int> latinJazzGrid = [
     36,
     44,
     44,
@@ -236,7 +248,7 @@ extension XPPConstants on XPP {
     37,
     51,
   ];
-  static const List<int> xtreme = [
+  static const List<int> xtremeGrid = [
     37,
     36,
     42,

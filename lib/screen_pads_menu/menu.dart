@@ -1,5 +1,6 @@
 import 'package:beat_pads/screen_beat_pads/_screen_beat_pads.dart';
 import 'package:beat_pads/screen_pads_menu/box_credits.dart';
+import 'package:beat_pads/screen_pads_menu/drop_down_playmode.dart';
 import 'package:beat_pads/screen_pads_menu/slider_int.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -43,7 +44,7 @@ class PadsMenu extends StatelessWidget {
                             padding: const EdgeInsets.all(4.0),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(6.0),
-                              child: BeatPadsScreen(),
+                              child: BeatPadsScreen(preview: true),
                             ),
                           ),
                         ),
@@ -161,6 +162,11 @@ class PadsMenu extends StatelessWidget {
             ),
           Divider(),
           ListTile(
+            title: Text("Slide / Aftertouch"),
+            subtitle: Text("Touch Sliding and Polyphonic Aftertouch"),
+            trailing: DropdownPlayMode(),
+          ),
+          ListTile(
             title: Text("Sustain Button"),
             subtitle: Text(
                 "Adds Sustain Button next to Pads. LOCK Sustain ON by pushing and sliding away from Button"),
@@ -234,7 +240,7 @@ class PadsMenu extends StatelessWidget {
             message: "Received Midi Buffer cleared",
             onPressed: () {
               Provider.of<MidiReceiver>(context, listen: false).resetRxBuffer();
-              MidiUtils.killAllMessage(settings.channel);
+              MidiUtils.sendKillAllMessage(settings.channel);
             },
           ),
           CreditsBox(),

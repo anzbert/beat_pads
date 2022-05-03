@@ -18,6 +18,8 @@ class HitTestObject extends SingleChildRenderObjectWidget {
   }
 }
 
+// should have get size function here or just layoutbuilder instead?
+// https://www.woolha.com/tutorials/flutter-get-widget-size-and-position
 class TestProxyBox extends RenderProxyBox {
   int index;
   TestProxyBox(this.index);

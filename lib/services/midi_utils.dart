@@ -28,34 +28,38 @@ enum MidiMessageType {
 
 abstract class MidiUtils {
   /// Kill all notes on a channel
-  static void killAllMessage(int channel) {
+  static void sendKillAllMessage(int channel) {
     CCMessage(channel: channel, controller: 123, value: 0).send();
   }
 
   /// Send CC Off on all controllers on a channel
-  static void allCCOffMessage(int channel) {
+  /// Maybe a silly approach and not recommended
+  static void sendAllCCOffMessage(int channel) {
     for (int n = 0; n < 128; n++) {
       CCMessage(channel: channel, controller: n, value: 0).send();
     }
   }
 
-  /// Send Note Off on all notes on a channel
-  static void allNotesOffMessage(int channel) {
+  /// Brute Force Send Note Off on all notes on a channel
+  /// Maybe a silly approach and not recommended
+  static void sendAllNotesOffMessage(int channel) {
     for (int n = 0; n < 128; n++) {
       NoteOffMessage(channel: channel, note: n, velocity: 0).send();
     }
   }
 
-  static void sustainMessage(int channel, bool state) {
+  /// Sends a Sustain-pedal midi message
+  static void sendSustainMessage(int channel, bool state) {
     CCMessage(channel: channel, controller: 64, value: state ? 127 : 0).send();
   }
 
-  static void modWheelMessage(int channel, int value) {
+  /// Sends a Mod Wheel midi message
+  static void sendModWheelMessage(int channel, int value) {
     CCMessage(channel: channel, controller: 1, value: value.clamp(0, 127))
         .send();
   }
 
-  /// Get note name based on midi value
+  /// Get note name String based on a midi value
   static String getNoteName(
     int value, {
     NoteSign sign = NoteSign.sharp,

@@ -44,7 +44,8 @@ class Prefs {
 
 // DEFAULT VALUES:
   static const Map<String, dynamic> _defaults = {
-    "layout": "Major_Third",
+    "layout": "majorThird",
+    "playMode": "slide",
     "rootNote": 0,
     "width": 4,
     "height": 4,
@@ -70,6 +71,7 @@ class Prefs {
 
 class LoadSettings {
   final Setting<Layout> layout;
+  final Setting<PlayMode> playMode;
   final Setting<String> scaleString;
   final Setting<int> channel;
   final Setting<int> rootNote;
@@ -123,8 +125,10 @@ class LoadSettings {
             midiScales.containsKey(loadedMap['scaleString'])
                 ? loadedMap['scaleString']
                 : midiScales.keys.toList()[0]),
-        layout = Setting<Layout>('layout',
-            LayoutUtils.fromString(loadedMap['layout']) ?? Layout.values[0]);
+        layout = Setting<Layout>(
+            'layout', Layout.fromName(loadedMap['layout']) ?? Layout.values[0]),
+        playMode = Setting<PlayMode>('playMode',
+            PlayMode.fromName(loadedMap['playMode']) ?? PlayMode.values[0]);
 
   factory LoadSettings.defaults() {
     return LoadSettings(Prefs._defaults);
@@ -144,6 +148,9 @@ class Setting<T> {
     if (value is Layout) {
       Layout cast = value as Layout;
       result = await _sharedPrefs.setString("layout", cast.name);
+    } else if (value is PlayMode) {
+      PlayMode cast = value as PlayMode;
+      result = await _sharedPrefs.setString("playMode", cast.name);
     } else if (value is int) {
       result = await _sharedPrefs.setInt(sharedPrefsKey, value as int);
     } else if (value is String) {

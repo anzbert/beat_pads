@@ -9,3 +9,8 @@ export './data_classes.dart';
 export './model_receive.dart';
 export './model_send.dart';
 export './model_settings.dart';
+export './paint_aftertouch.dart';
+export './touch_buffer.dart';
+export './pads_playmodes.dart';
+export './midi_messages.dart';
+export 'midi_events.dart';

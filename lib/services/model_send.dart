@@ -3,163 +3,228 @@ import 'package:flutter/material.dart';
 import 'package:flutter_midi_command/flutter_midi_command_messages.dart';
 
 class MidiSender extends ChangeNotifier {
-  MidiSender(this._settings) : _baseOctave = _settings.baseOctave;
+  final TouchBuffer touchBuffer;
   Settings _settings;
   int _baseOctave;
   bool _disposed = false;
+  List<NoteEvent> releasedNoteBuffer = [];
+  bool checkerRunning = false;
+  bool preview;
 
-  MidiSender update(Settings settings) {
+  /// Handles Touches and Midi Message sending
+  MidiSender(this._settings, Size screenSize, {this.preview = false})
+      : _baseOctave = _settings.baseOctave,
+        touchBuffer = TouchBuffer(_settings, screenSize) {
+    if (_settings.playMode == PlayMode.mpe && preview == false) {
+      MPEinitMessage(
+              memberChannels: _settings.memberChannels,
+              upperZone: _settings.upperZone)
+          .send();
+    }
+  }
+
+  /// Handle all setting changes happening in the lifetime of the pad grid here.
+  /// At the moment, only octave changes affect it directly.
+  MidiSender update(Settings settings, Size size) {
     _settings = settings;
     _updateBaseOctave();
     return this;
   }
 
+  /// Mark active TouchEvents as *dirty*, when the octave was changed
+  /// preventing their position from being updated further in their lifetime.
   _updateBaseOctave() {
     if (_settings.baseOctave != _baseOctave) {
-      // declare all events dirty
-      for (TouchEvent event in _touchBuffer.buffer) {
-        event.blockSlide = true;
+      for (TouchEvent event in touchBuffer.buffer) {
+        event.markDirty();
       }
       _baseOctave = _settings.baseOctave;
     }
   }
 
-  // SEND BUFFER:
-  final List<NoteEvent> _sendBuffer =
-      List.generate(128, (_) => NoteEvent(), growable: false);
+// ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  bool noteIsOn(int note) =>
-      note >= 0 && note < 128 ? _sendBuffer[note].noteIsOn : false;
-
-  void updateSendBufferAndSend(int note, bool noteOn) async {
-    if (noteOn) {
-      if (_settings.sendCC) {
-        CCMessage(
-          channel: (_settings.channel + 1) % 16,
-          controller: note,
-          value: 127,
-        ).send();
+  /// Returns if a given note is ON in any channel, or, if provided, in a specific channel.
+  /// Checks releasebuffer and active touchbuffer
+  bool isNoteOn(int note, [int? channel]) {
+    for (TouchEvent touch in touchBuffer.buffer) {
+      if (channel == null && touch.noteEvent.note == note) return true;
+      if (channel == channel && touch.noteEvent.note == note) return true;
+    }
+    if (_settings.sustainTimeUsable > 0) {
+      for (NoteEvent event in releasedNoteBuffer) {
+        if (channel == null && event.note == note) return true;
+        if (channel == channel && event.note == note) return true;
       }
-      NoteOnMessage(
-        channel: _settings.channel,
-        note: note,
-        velocity: _settings.velocity,
-      ).send();
+    }
+    return false;
+  }
 
-      _sendBuffer[note] = NoteEvent(_settings.velocity);
+  /// Update note in the released events buffer, by adding it or updating
+  /// the timer of the corresponding note
+  void updateReleasedEvent(NoteEvent event) {
+    int index = releasedNoteBuffer.indexWhere((element) =>
+        element.note == event.note && element.channel == event.channel);
+
+    if (index >= 0) {
+      releasedNoteBuffer[index].updateReleaseTime(); // update time
     } else {
-      if (_settings.sendCC) {
-        CCMessage(
-          channel: (_settings.channel + 1) % 16,
-          controller: note,
-        ).send();
-      }
+      event.updateReleaseTime();
+      releasedNoteBuffer.add(event); // or add to buffer
+    }
+    if (releasedNoteBuffer.isNotEmpty) checkReleasedEvents();
+  }
 
-      // SUSTAIN:
-      if (_settings.sustainTimeUsable > 0) {
-        if (_sendBuffer[note].checkingSustain) return;
-        _sendBuffer[note].checkingSustain = true;
+  /// Async function, which checks for expiry of the auto-sustain on all released notes
+  void checkReleasedEvents() async {
+    if (checkerRunning) return; // only one running instance possible!
+    checkerRunning = true;
 
-        while (!await Future.delayed(
-          const Duration(milliseconds: 5),
-          () =>
-              DateTime.now().millisecondsSinceEpoch -
-                  _sendBuffer[note].triggerTime >
-              _settings.sustainTimeUsable,
-        )) {
-          // Waiting for next check in 5 milliseconds...
+    while (releasedNoteBuffer.isNotEmpty) {
+      await Future.delayed(const Duration(milliseconds: 5), () {
+        for (int i = 0; i < releasedNoteBuffer.length; i++) {
+          if (DateTime.now().millisecondsSinceEpoch -
+                  releasedNoteBuffer[i].releaseTime >
+              _settings.sustainTimeUsable) {
+            releasedNoteBuffer[i].noteOff();
+            releasedNoteBuffer.removeAt(i);
+            notifyListeners();
+          }
         }
-        _sendBuffer[note].checkingSustain = false;
+      });
+    }
+
+    checkerRunning = false;
+  }
+
+  /// Handles a new touch on a pad, creating and sending new noteOn events
+  /// in the touch buffer
+  void handleNewTouch(PointerEvent touch, int noteTapped) {
+    NoteEvent noteOn =
+        NoteEvent(_settings.memberChan, noteTapped, _settings.velocity)
+          ..noteOn();
+
+    // TODO reset existing pitch bends, etc ( see MPE spec!)
+
+    touchBuffer.addNoteOn(touch, noteOn);
+    notifyListeners();
+  }
+
+  /// Handles panning of the finger on the screen after the inital touch,
+  /// as well as Midi Message sending behaviour in the different play modes
+  void handlePan(PointerEvent touch, int? noteHovered) {
+    TouchEvent? eventInBuffer = touchBuffer.getByID(touch.pointer);
+    if (eventInBuffer == null || eventInBuffer.dirty) return;
+
+    eventInBuffer.updatePosition(touch.position);
+    notifyListeners(); // for circle drawing
+
+    // SLIDE
+    if (_settings.playMode == PlayMode.slide) {
+      // Turn note off:
+      if (noteHovered != eventInBuffer.noteEvent.note &&
+          eventInBuffer.noteEvent.noteOnMessage != null) {
+        if (_settings.sustainTimeUsable == 0) {
+          eventInBuffer.noteEvent.noteOff();
+        } else {
+          updateReleasedEvent(NoteEvent(
+            eventInBuffer.noteEvent.channel,
+            eventInBuffer.noteEvent.note,
+            _settings.velocity,
+          ));
+          eventInBuffer.noteEvent.noteOnMessage = null;
+        }
+
+        notifyListeners();
       }
-      ////////////////
+      // Play new note:
+      if (noteHovered != null &&
+          eventInBuffer.noteEvent.noteOnMessage == null) {
+        eventInBuffer.noteEvent =
+            NoteEvent(_settings.memberChan, noteHovered, _settings.velocity)
+              ..noteOn();
+        notifyListeners();
+      }
+    }
 
-      NoteOffMessage(
-        channel: _settings.channel,
-        note: note,
-        velocity: 0,
-      ).send();
+    // Poly AT
+    else if (_settings.playMode == PlayMode.polyAT) {
+      int newPressure = (eventInBuffer.radialChange() * 127).toInt();
 
-      _sendBuffer[note] = NoteEvent();
+      if (eventInBuffer.modMapping.polyAT?.pressure != newPressure) {
+        eventInBuffer.modMapping.polyAT = PolyATMessage(
+          channel: _settings.channel,
+          note: eventInBuffer.noteEvent.note,
+          pressure: (newPressure).toInt(),
+        )..send();
+      }
+    }
+
+    // CC
+    else if (_settings.playMode == PlayMode.cc) {
+      int newCC = (eventInBuffer.radialChange() * 127).toInt();
+
+      if (eventInBuffer.modMapping.polyAT?.pressure != newCC) {
+        eventInBuffer.modMapping.cc = CCMessage(
+          channel: _settings.channel,
+          controller: eventInBuffer.noteEvent.note,
+          value: (eventInBuffer.radialChange() * 127).toInt(),
+        )..send();
+      }
+    }
+    // MPE
+    else if (_settings.playMode == PlayMode.mpe) {
+      // Y AXIS:
+      double newPB = (eventInBuffer.directionalChangeFromCenter().dy);
+
+      if (newPB != eventInBuffer.modMapping.pitchBend?.bend) {
+        eventInBuffer.modMapping.pitchBend = PitchBendMessage(
+          channel: eventInBuffer.noteEvent.channel,
+          bend: newPB,
+        )..send();
+      }
+
+      // X AXIS:
+      int newCC =
+          (eventInBuffer.directionalChangeFromCenter().dx.abs() * 127).toInt();
+      if (newCC != eventInBuffer.modMapping.cc?.value) {
+        eventInBuffer.modMapping.cc = CCMessage(
+          channel: eventInBuffer.noteEvent.channel,
+          controller: 74, // <- slide controller is #74
+          value: newCC,
+        )..send();
+      }
+    }
+  }
+
+  /// Cleans up Touchevent, when contact with screen ends and the pointer is removed
+  /// Adds released events to a buffer when auto-sustain is being used
+  void handleEndTouch(PointerEvent touch) {
+    TouchEvent? eventInBuffer = touchBuffer.getByID(touch.pointer);
+    if (eventInBuffer == null) return;
+
+    if (_settings.sustainTimeUsable <= 0) {
+      eventInBuffer.noteEvent.noteOff();
+      touchBuffer.remove(eventInBuffer);
+    } else {
+      updateReleasedEvent(eventInBuffer.noteEvent);
+      touchBuffer.remove(eventInBuffer);
     }
 
     notifyListeners();
   }
 
-  void updateSendBufferWithTouchBuffer() {
-    List<int> allCurrentlyTouched = _touchBuffer.buffer
-        .where((element) => element.note != null)
-        .map((element) => element.note!)
-        .toList();
-
-    for (int n = 0; n < 128; n++) {
-      if (allCurrentlyTouched.contains(n) && _sendBuffer[n].noteIsOff) {
-        updateSendBufferAndSend(n, true);
-      } else if (!allCurrentlyTouched.contains(n) && _sendBuffer[n].noteIsOn) {
-        updateSendBufferAndSend(n, false);
-      } else if (allCurrentlyTouched.contains(n) && _sendBuffer[n].noteIsOn) {
-        _sendBuffer[n].updateTriggerTime();
-      }
-    }
-  }
-
-  // TOUCH HANDLING:
-  final _touchBuffer = TouchBuffer();
-
-  push(PointerEvent touch, int note) {
-    // add event to touchbuffer and send noteOn
-    _touchBuffer.buffer.add(TouchEvent(touch, note));
-    updateSendBufferAndSend(note, true);
-  }
-
-  slide(PointerEvent touch, int? note) {
-    // check if it is a legeit event that has previously been registered by a push()
-    TouchEvent? eventInBuffer = _touchBuffer.findByPointer(touch.pointer);
-    if (eventInBuffer == null) return;
-
-    // check if previous events are dirty (by octave change):
-    if (eventInBuffer.blockSlide) return;
-
-    // update touchbuffer with this new event:
-    _touchBuffer.updateWith(TouchEvent(touch, note));
-
-    // update send buffer with updated touchbuffer and send noteOn and noteOff's
-    updateSendBufferWithTouchBuffer();
-
-    // print("touchbuffer: ${_touchBuffer._buffer.length}");
-    // print("sendbuffer: ${_sendBuffer.length}");
-  }
-
-  lift(PointerEvent touch, int? note) {
-    // only send noteoff if there is a previous touch event,
-    // which still has a note attached to it
-    TouchEvent? eventInBuffer = _touchBuffer.findByPointer(touch.pointer);
-    if (eventInBuffer == null) return;
-
-    // send noteOff and remove from touchbuffer
-    if (eventInBuffer.note != null) {
-      updateSendBufferAndSend(eventInBuffer.note!, false);
-    }
-
-    _touchBuffer.removeEvent(touch.pointer);
-    // _touchBuffer.debug();
-  }
-
   // DISPOSE:
   @override
-  dispose() {
-    for (int note = 0; note < 128; note++) {
-      if (_sendBuffer[note].noteIsOn) {
-        NoteOffMessage(
-          channel: _settings.channel,
-          note: note,
-        ).send();
-        if (_settings.sendCC) {
-          CCMessage(
-            channel: (_settings.channel + 1) % 16,
-            controller: note,
-          ).send();
-        }
-      }
+  void dispose() {
+    if (_settings.playMode == PlayMode.mpe && preview == false) {
+      MPEinitMessage(memberChannels: 0, upperZone: _settings.upperZone).send();
+    }
+    for (TouchEvent touch in touchBuffer.buffer) {
+      touch.noteEvent.noteOff();
+    }
+    for (NoteEvent event in releasedNoteBuffer) {
+      event.noteOff();
     }
     _disposed = true;
     super.dispose();
@@ -171,66 +236,4 @@ class MidiSender extends ChangeNotifier {
       super.notifyListeners();
     }
   }
-}
-
-class TouchBuffer {
-  TouchBuffer();
-
-  List<TouchEvent> _buffer = [];
-  List<TouchEvent> get buffer => _buffer;
-
-  TouchEvent? findByPointer(int searchPointer) {
-    for (TouchEvent event in _buffer) {
-      if (event.touch.pointer == searchPointer) {
-        return event;
-      }
-    }
-    return null;
-  }
-
-  debug() {
-    for (var event in _buffer) {
-      Utils.logd(event.touch);
-    }
-  }
-
-  clear() => _buffer = [];
-
-  bool updateWith(TouchEvent updatedEvent) {
-    int index = _buffer.indexWhere(
-        (element) => element.touch.pointer == updatedEvent.touch.pointer);
-    if (index == -1) return false;
-
-    _buffer[index] = updatedEvent;
-    return true;
-  }
-
-  void removeEvent(int searchID) {
-    _buffer =
-        _buffer.where((element) => element.touch.pointer != searchID).toList();
-  }
-}
-
-class TouchEvent {
-  TouchEvent(this.touch, this.note);
-
-  final PointerEvent touch; // unique pointer down event
-
-  int? note;
-  bool blockSlide = false;
-}
-
-class NoteEvent {
-  NoteEvent([this.velocity = 0])
-      : triggerTime = velocity > 0 ? DateTime.now().millisecondsSinceEpoch : 0;
-
-  final int velocity;
-  int triggerTime;
-  bool checkingSustain = false;
-
-  void updateTriggerTime() =>
-      triggerTime = DateTime.now().millisecondsSinceEpoch;
-
-  bool get noteIsOn => velocity > 0 ? true : false;
-  bool get noteIsOff => velocity == 0 ? true : false;
 }

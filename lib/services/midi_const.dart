@@ -27,7 +27,8 @@ const Map<int, String> midiNotesFlats = {
   10: "Bb",
 };
 
-// Scales (thx to gleitz [https://gist.github.com/gleitz/6845751])
+//(thx to gleitz [https://gist.github.com/gleitz/6845751])
+/// Selection of musical scales
 const Map<String, List<int>> midiScales = {
   'chromatic': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
   'major': [0, 2, 4, 5, 7, 9, 11],
@@ -114,6 +115,7 @@ const Map<String, List<int>> midiScales = {
   'bebop tonic minor': [0, 2, 3, 5, 7, 8, 9, 11]
 };
 
+/// General Midi Standard Percussion layout
 const Map<int, String> gm2PercStandard = {
   27: "High Q",
   28: "Slap",

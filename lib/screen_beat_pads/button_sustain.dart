@@ -32,22 +32,24 @@ class _SustainButtonRectState extends State<SustainButtonRect> {
   @override
   void dispose() {
     if (disposeChannel != null && sustainState == true) {
-      MidiUtils.sustainMessage(disposeChannel!, false);
+      MidiUtils.sendSustainMessage(disposeChannel!, false);
     }
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+
     int channel = Provider.of<Settings>(context, listen: true).channel;
     disposeChannel = channel;
-    double padSize = MediaQuery.of(context).size.width * 0.005;
+    double padSize = screenWidth * 0.005;
     return Padding(
       padding: EdgeInsets.fromLTRB(0, padSize, padSize, padSize),
       child: Listener(
         onPointerDown: (_) {
           if (!sustainState) {
-            MidiUtils.sustainMessage(channel, true);
+            MidiUtils.sendSustainMessage(channel, true);
             setState(() {
               sustainState = true;
             });
@@ -55,7 +57,7 @@ class _SustainButtonRectState extends State<SustainButtonRect> {
         },
         onPointerUp: (touch) {
           if (!notOnButtonRect(touch.position)) {
-            MidiUtils.sustainMessage(channel, false);
+            MidiUtils.sendSustainMessage(channel, false);
             if (mounted) {
               setState(() {
                 sustainState = false;
@@ -63,9 +65,15 @@ class _SustainButtonRectState extends State<SustainButtonRect> {
             }
           }
         },
-        child: ElevatedButton(
+        child: Container(
           key: key,
-          onPressed: () {},
+          decoration: BoxDecoration(
+            borderRadius:
+                BorderRadius.all(Radius.circular(screenWidth * 0.008)),
+            color: sustainState
+                ? Palette.lightPink.color
+                : Palette.lightPink.color.withAlpha(120),
+          ),
           child: RotatedBox(
             quarterTurns: 1,
             child: FittedBox(
@@ -74,17 +82,11 @@ class _SustainButtonRectState extends State<SustainButtonRect> {
                 'Sustain',
                 style: TextStyle(
                   fontSize: 100,
+                  fontWeight: FontWeight.w500,
+                  color: Palette.darkGrey.color,
                 ),
               ),
             ),
-          ),
-          style: ElevatedButton.styleFrom(
-            alignment: Alignment.center,
-            padding: EdgeInsets.all(0),
-            primary: sustainState
-                ? Palette.lightPink.color
-                : Palette.lightPink.color.withAlpha(120),
-            onPrimary: Palette.darkGrey.color,
           ),
         ),
       ),
