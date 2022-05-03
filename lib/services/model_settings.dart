@@ -107,7 +107,7 @@ class Settings extends ChangeNotifier {
     if (note < 0 || note > 11) return;
     prefs.settings.rootNote.value = note;
     prefs.settings.rootNote.save();
-    prefs.settings.base.value = note; // TODO: is this always a good idea?
+    prefs.settings.base.value = note;
     prefs.settings.base.save();
     notifyListeners();
   }

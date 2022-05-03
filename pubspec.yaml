@@ -43,13 +43,13 @@ dependencies:
   simple_gradient_text: ^1.2.2
 
   flutter_midi_command:
+    ^0.4.7
     # path: /Users/anz/localDev/FlutterMidiCommand
-    # ^0.4.5
-    git:
-      url: https://github.com/anzbert/FlutterMidiCommand.git
-      ref: null_checks
+    # git:
+    #   url: https://github.com/anzbert/FlutterMidiCommand.git
+    #   ref: null_checks
 
-  # rive: ^0.8.1
+  # rive: ^0.8.4
   rive:
     git:
       url: https://github.com/rive-app/rive-flutter.git

@@ -114,12 +114,10 @@ packages:
   flutter_midi_command:
     dependency: "direct main"
     description:
-      path: "."
-      ref: null_checks
-      resolved-ref: "1408307e458fe2ccca741b38c8483de7bf716b9b"
-      url: "https://github.com/anzbert/FlutterMidiCommand.git"
-    source: git
-    version: "0.4.5"
+      name: flutter_midi_command
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.4.7"
   flutter_midi_command_linux:
     dependency: transitive
     description:
@@ -289,10 +287,10 @@ packages:
     description:
       path: "."
       ref: master
-      resolved-ref: "671d6ce6a2e8c4362b0f82a4385fb93598ffa999"
+      resolved-ref: "2fe38ca33788f40a3feb670ddb8c99b12b80fda2"
       url: "https://github.com/rive-app/rive-flutter.git"
     source: git
-    version: "0.8.3"
+    version: "0.8.4"
   shared_preferences:
     dependency: "direct main"
     description:
