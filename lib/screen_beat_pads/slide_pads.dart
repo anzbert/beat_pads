@@ -68,7 +68,7 @@ class _SlidePadsState extends State<SlidePads> {
               int? result = _detectTappedItem(touch);
 
               if (mounted && result != null) {
-                context.read<MidiSender>().push(touch, result);
+                context.read<MidiSender>().handleNewTouch(touch, result);
               }
             }
 
@@ -77,13 +77,13 @@ class _SlidePadsState extends State<SlidePads> {
 
               if (mounted) {
                 int? result = _detectTappedItem(touch);
-                context.read<MidiSender>().move(touch, result);
+                context.read<MidiSender>().handlePan(touch, result);
               }
             }
 
             upAndCancel(PointerEvent touch) {
               if (mounted) {
-                context.read<MidiSender>().lift(touch);
+                context.read<MidiSender>().handleEndTouch(touch);
               }
             }
 

@@ -5,11 +5,18 @@ import 'package:flutter/material.dart';
 
 abstract class Utils {
 // UTILITY
-  double easeIn(double value) {
-    return Curves.easeIn.transform(value.clamp(0, 1));
+
+  /// Apply a curve to a positive *and* to a __negative__ value
+  /// Input range is 0 to 1.0
+  static double curveTransform(double input, Curve curve) {
+    if (input.isNegative) {
+      double temp = input.abs();
+      return -curve.transform(temp.clamp(0, 1));
+    }
+    return curve.transform(input.clamp(0, 1));
   }
 
-  /// map value from on range to another
+  /// Map input value from one range to another
   static double mapValueToTargetRange(double inputValue, double inputRangeStart,
       double inputRangeEnd, double outputRangeStart, double outputRangeEnd) {
     double inputRange = inputRangeEnd - inputRangeStart;

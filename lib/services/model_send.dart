@@ -11,7 +11,7 @@ class MidiSender extends ChangeNotifier {
   bool checkerRunning = false;
   bool preview;
 
-  /// Handles touches and Midi sending
+  /// Handles Touches and Midi Message sending
   MidiSender(this._settings, Size screenSize, {this.preview = false})
       : _baseOctave = _settings.baseOctave,
         touchBuffer = TouchBuffer(_settings, screenSize) {
@@ -24,13 +24,15 @@ class MidiSender extends ChangeNotifier {
   }
 
   /// Handle all setting changes happening in the lifetime of the pad grid here.
-  /// At the moment only octave changes affect it.
+  /// At the moment, only octave changes affect it directly.
   MidiSender update(Settings settings, Size size) {
     _settings = settings;
     _updateBaseOctave();
     return this;
   }
 
+  /// Mark active TouchEvents as *dirty*, when the octave was changed
+  /// preventing their position from being updated further in their lifetime.
   _updateBaseOctave() {
     if (_settings.baseOctave != _baseOctave) {
       for (TouchEvent event in touchBuffer.buffer) {
@@ -42,14 +44,17 @@ class MidiSender extends ChangeNotifier {
 
 // ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  /// check if a note is on in any channel, in releasebuffer and active touchbuffer
-  bool isNoteOnInAnyChannel(int note) {
+  /// Returns if a given note is ON in any channel, or, if provided, in a specific channel.
+  /// Checks releasebuffer and active touchbuffer
+  bool isNoteOn(int note, [int? channel]) {
     for (TouchEvent touch in touchBuffer.buffer) {
-      if (touch.noteEvent.note == note) return true;
+      if (channel == null && touch.noteEvent.note == note) return true;
+      if (channel == channel && touch.noteEvent.note == note) return true;
     }
     if (_settings.sustainTimeUsable > 0) {
       for (NoteEvent event in releasedNoteBuffer) {
-        if (event.note == note) return true;
+        if (channel == null && event.note == note) return true;
+        if (channel == channel && event.note == note) return true;
       }
     }
     return false;
@@ -72,7 +77,7 @@ class MidiSender extends ChangeNotifier {
 
   /// Async function, which checks for expiry of the auto-sustain on all released notes
   void checkReleasedEvents() async {
-    if (checkerRunning) return; // only one running instance possible !
+    if (checkerRunning) return; // only one running instance possible!
     checkerRunning = true;
 
     while (releasedNoteBuffer.isNotEmpty) {
@@ -92,11 +97,9 @@ class MidiSender extends ChangeNotifier {
     checkerRunning = false;
   }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-  // TOUCH HANDLING:
-
-  /// Handles new Touches occuring
-  void push(PointerEvent touch, int noteTapped) {
+  /// Handles a new touch on a pad, creating and sending new noteOn events
+  /// in the touch buffer
+  void handleNewTouch(PointerEvent touch, int noteTapped) {
     NoteEvent noteOn =
         NoteEvent(_settings.memberChan, noteTapped, _settings.velocity)
           ..noteOn();
@@ -107,8 +110,9 @@ class MidiSender extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Handles sliding of the finger after the inital touch
-  void move(PointerEvent touch, int? noteHovered) {
+  /// Handles panning of the finger on the screen after the inital touch,
+  /// as well as Midi Message sending behaviour in the different play modes
+  void handlePan(PointerEvent touch, int? noteHovered) {
     TouchEvent? eventInBuffer = touchBuffer.getByID(touch.pointer);
     if (eventInBuffer == null || eventInBuffer.dirty) return;
 
@@ -181,8 +185,8 @@ class MidiSender extends ChangeNotifier {
       }
 
       // X AXIS:
-      int newCC = (eventInBuffer.absoluteDirectionalChangeFromCenter().dx * 127)
-          .toInt();
+      int newCC =
+          (eventInBuffer.directionalChangeFromCenter().dx.abs() * 127).toInt();
       if (newCC != eventInBuffer.modMapping.cc?.value) {
         eventInBuffer.modMapping.cc = CCMessage(
           channel: eventInBuffer.noteEvent.channel,
@@ -193,8 +197,9 @@ class MidiSender extends ChangeNotifier {
     }
   }
 
-  /// Cleans up Touchevent, when touch ends
-  void lift(PointerEvent touch) {
+  /// Cleans up Touchevent, when contact with screen ends and the pointer is removed
+  /// Adds released events to a buffer when auto-sustain is being used
+  void handleEndTouch(PointerEvent touch) {
     TouchEvent? eventInBuffer = touchBuffer.getByID(touch.pointer);
     if (eventInBuffer == null) return;
 
