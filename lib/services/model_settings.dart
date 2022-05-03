@@ -13,51 +13,52 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
-  // MPE settings (testing)
-  double maxMPEControlDrawRadius =
-      110; // TODO : fixed/ changable or screen dependant?
-  double moveThreshhold = 0.1;
-  final int memberChannels = 8; // temp fixed
-  bool upperZone = false; // temp fixed
+  // MPE settings (testing) TODO : fixed/ changable or screen dependant?
+  // double modulationRadius = 110; // temp fixed
+  // double modulationDeadZone = 0.1; // temp fixed
+  final int totalMemberChannels = 8; // temp fixed
 
-  // ROUND ROBBIN METHOD
+  // ROUND ROBBIN METHOD (probably needs overhaul)
   int _channelCounter = -1;
-  int get memberChan {
+  int get memberChannel {
     if (playMode != PlayMode.mpe) return channel;
-    int upperLimit = upperZone ? 14 : memberChannels;
-    int lowerLimit = upperZone ? 15 - memberChannels : 1;
+    int upperLimit = upperZone ? 14 : totalMemberChannels;
+    int lowerLimit = upperZone ? 15 - totalMemberChannels : 1;
 
     _channelCounter = _channelCounter == -1 ? lowerLimit : _channelCounter;
-
     _channelCounter++;
 
     if (_channelCounter > upperLimit || _channelCounter < lowerLimit) {
       _channelCounter = lowerLimit;
     }
-
     return _channelCounter;
   }
 
-// channel (master channel):
+  // CHANNEL (= Master Channel):
   int get channel {
     if (playMode == PlayMode.mpe) {
-      return upperZone ? 15 : 0;
+      return prefs.settings.channel.value > 7 ? 15 : 0;
     }
     return prefs.settings.channel.value;
   }
 
+  bool get upperZone => prefs.settings.channel.value > 7 ? true : false;
+  set upperZone(bool newZone) => channel = newZone ? 15 : 0;
+
   set channel(int newChannel) {
     if (newChannel < 0 || newChannel > 15) return;
-    if (playMode == PlayMode.mpe) {
-      if (newChannel != 0 || newChannel != 15) return;
-    }
 
-    prefs.settings.channel.value = newChannel;
+    if (playMode == PlayMode.mpe) {
+      if (newChannel < 8) prefs.settings.channel.value = 0;
+      if (newChannel > 7) prefs.settings.channel.value = 15;
+    } else {
+      prefs.settings.channel.value = newChannel;
+    }
     prefs.settings.channel.save();
     notifyListeners();
   }
 
-  // layout:
+  // LAYOUT:
   Layout get layout => prefs.settings.layout.value;
 
   set layout(Layout newLayout) {

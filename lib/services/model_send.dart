@@ -17,7 +17,7 @@ class MidiSender extends ChangeNotifier {
         touchBuffer = TouchBuffer(_settings, screenSize) {
     if (_settings.playMode == PlayMode.mpe && preview == false) {
       MPEinitMessage(
-              memberChannels: _settings.memberChannels,
+              memberChannels: _settings.totalMemberChannels,
               upperZone: _settings.upperZone)
           .send();
     }
@@ -101,7 +101,7 @@ class MidiSender extends ChangeNotifier {
   /// in the touch buffer
   void handleNewTouch(PointerEvent touch, int noteTapped) {
     NoteEvent noteOn =
-        NoteEvent(_settings.memberChan, noteTapped, _settings.velocity)
+        NoteEvent(_settings.memberChannel, noteTapped, _settings.velocity)
           ..noteOn();
 
     // TODO reset existing pitch bends, etc ( see MPE spec!)
@@ -141,7 +141,7 @@ class MidiSender extends ChangeNotifier {
       if (noteHovered != null &&
           eventInBuffer.noteEvent.noteOnMessage == null) {
         eventInBuffer.noteEvent =
-            NoteEvent(_settings.memberChan, noteHovered, _settings.velocity)
+            NoteEvent(_settings.memberChannel, noteHovered, _settings.velocity)
               ..noteOn();
         notifyListeners();
       }

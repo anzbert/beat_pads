@@ -64,7 +64,7 @@ class TouchEvent {
   final Offset origin;
   final double maxRadius;
   final double maxDiameter;
-  final double threshold;
+  final double deadZone;
   Offset newPosition;
 
   /// Holds geometry, note and modulation information this.uniqueID, this.origin,
@@ -74,9 +74,8 @@ class TouchEvent {
         newPosition = touch.position,
         uniqueID = touch.pointer,
         maxDiameter = _screenSize.width * 2 * 0.15,
-        threshold = 0.15,
-        maxRadius = _screenSize.width *
-            0.15; // TODO havnt decided on best source or menu item
+        deadZone = 0.15,
+        maxRadius = _screenSize.width * 0.15;
 
   /// Prevents touchevent from receiving further position updates in move(). Irreversible!
   void markDirty() => _dirty = true;
@@ -90,12 +89,12 @@ class TouchEvent {
 
   /// Get the radial change factor from the origin of the
   /// touch to the current position in the context of the maximum radius.
-  double radialChange({Curve curve = Curves.easeIn, bool threshold = true}) {
+  double radialChange({Curve curve = Curves.easeIn, bool deadZone = true}) {
     double distanceFactor =
         (Utils.offsetDistance(origin, newPosition) / maxRadius).clamp(0, 1);
 
     return Utils.curveTransform(
-      threshold ? applyThreshold(distanceFactor) : distanceFactor,
+      deadZone ? applyDeadZone(distanceFactor) : distanceFactor,
       curve,
     );
   }
@@ -103,31 +102,31 @@ class TouchEvent {
   /// Get the directional change factor from the origin of the
   /// touch to the current position in the context of the maximum radius.
   Offset directionalChangeFromCenter(
-      {Curve curve = Curves.easeIn, bool threshold = true}) {
+      {Curve curve = Curves.easeIn, bool deadZone = true}) {
     double factorX = ((newPosition.dx - origin.dx) / maxRadius).clamp(-1, 1);
     double factorY = ((-newPosition.dy + origin.dy) / maxRadius).clamp(-1, 1);
 
     return Offset(
       Utils.curveTransform(
-        threshold ? applyThreshold(factorX) : factorX,
+        deadZone ? applyDeadZone(factorX) : factorX,
         curve,
       ),
       Utils.curveTransform(
-        threshold ? applyThreshold(factorY) : factorY,
+        deadZone ? applyDeadZone(factorY) : factorY,
         curve,
       ),
     );
   }
 
-  /// Applies a threshold to an input value, which means that the function
+  /// Applies a deadZone to an input value, which means that the function
   /// only returns a value when it is above the given threshhold.
-  /// Then remaps range **from** 0 to 1.0 **to** threshold to 1.0.
-  double applyThreshold(double input) {
+  /// Then remaps range **from** 0 to 1.0 **to** deadZone to 1.0.
+  double applyDeadZone(double input) {
     if (input.isNegative) {
-      if (input > -threshold) return 0;
-      return Utils.mapValueToTargetRange(input, -1, -threshold, -1, 0);
+      if (input > -deadZone) return 0;
+      return Utils.mapValueToTargetRange(input, -1, -deadZone, -1, 0);
     }
-    if (input < threshold) return 0;
-    return Utils.mapValueToTargetRange(input, threshold, 1, 0, 1);
+    if (input < deadZone) return 0;
+    return Utils.mapValueToTargetRange(input, deadZone, 1, 0, 1);
   }
 }
