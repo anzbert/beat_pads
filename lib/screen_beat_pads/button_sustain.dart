@@ -32,7 +32,7 @@ class _SustainButtonRectState extends State<SustainButtonRect> {
   @override
   void dispose() {
     if (disposeChannel != null && sustainState == true) {
-      MidiUtils.sustainMessage(disposeChannel!, false);
+      MidiUtils.sendSustainMessage(disposeChannel!, false);
     }
     super.dispose();
   }
@@ -49,7 +49,7 @@ class _SustainButtonRectState extends State<SustainButtonRect> {
       child: Listener(
         onPointerDown: (_) {
           if (!sustainState) {
-            MidiUtils.sustainMessage(channel, true);
+            MidiUtils.sendSustainMessage(channel, true);
             setState(() {
               sustainState = true;
             });
@@ -57,7 +57,7 @@ class _SustainButtonRectState extends State<SustainButtonRect> {
         },
         onPointerUp: (touch) {
           if (!notOnButtonRect(touch.position)) {
-            MidiUtils.sustainMessage(channel, false);
+            MidiUtils.sendSustainMessage(channel, false);
             if (mounted) {
               setState(() {
                 sustainState = false;
