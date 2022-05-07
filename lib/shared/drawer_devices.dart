@@ -1,4 +1,5 @@
 import 'package:beat_pads/services/_services.dart';
+import 'package:beat_pads/services/model_variables.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_midi_command/flutter_midi_command.dart';
 
@@ -7,6 +8,7 @@ import 'package:beat_pads/shared/_shared.dart';
 import 'dart:io' show Platform;
 
 import 'package:provider/provider.dart';
+import 'package:simple_gradient_text/simple_gradient_text.dart';
 
 class _MidiConfigState extends State<MidiConfig> {
   final MidiCommand _midiCommand = MidiCommand();
@@ -31,13 +33,38 @@ class _MidiConfigState extends State<MidiConfig> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Select Devices"),
+        title: GradientText(
+          'Devices',
+          style: Theme.of(context).textTheme.headline4,
+          colors: [
+            Palette.lightPink.color,
+            Palette.cadetBlue.color,
+            Palette.laserLemon.color,
+          ],
+        ),
+        leading: Builder(builder: (BuildContext context) {
+          return IconButton(
+            color: Palette.cadetBlue.color,
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(
+              Icons.arrow_back_rounded,
+              color: Palette.lightPink.color,
+              size: 36,
+            ),
+          );
+        }),
         actions: [
           IconButton(
               onPressed: () {
                 setState(() {});
               },
-              icon: Icon(Icons.refresh)),
+              icon: Icon(
+                Icons.refresh,
+                size: 36,
+                color: Palette.laserLemon.color,
+              )),
         ],
       ),
       body: FutureBuilder(
@@ -61,12 +88,9 @@ class _MidiConfigState extends State<MidiConfig> {
                 Builder(builder: (context) {
                     WidgetsBinding.instance.addPostFrameCallback(
                       (_) {
-                        context.read<Settings>().connectedDevices = _devices!
-                            .fold<int>(
-                                0,
-                                (previousValue, element) => element.connected
-                                    ? previousValue + 1
-                                    : previousValue);
+                        context.read<Variables>().connectedDevices = [
+                          ..._devices!.where((element) => element.connected)
+                        ];
                       },
                     );
                     return ListView(
@@ -77,7 +101,7 @@ class _MidiConfigState extends State<MidiConfig> {
                               margin: EdgeInsets.symmetric(vertical: 8),
                               color: device.connected
                                   ? Palette.cadetBlue.color
-                                  : Palette.cadetBlue.color.withAlpha(40),
+                                  : Palette.tan.color.withOpacity(0.1),
                               child: TextButton(
                                 onPressed: () {
                                   setDevice(device);
@@ -92,7 +116,7 @@ class _MidiConfigState extends State<MidiConfig> {
                                         device.name,
                                         style: Theme.of(context)
                                             .textTheme
-                                            .titleMedium,
+                                            .titleMedium!,
                                       ),
                                       if (device.connected)
                                         Icon(

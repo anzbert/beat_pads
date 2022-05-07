@@ -1,3 +1,4 @@
+import 'package:beat_pads/services/model_variables.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -26,6 +27,7 @@ class App extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => Settings(prefs)),
+        ChangeNotifierProvider(create: (context) => Variables()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

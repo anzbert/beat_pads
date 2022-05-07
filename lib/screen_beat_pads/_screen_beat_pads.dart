@@ -2,6 +2,7 @@ import 'package:beat_pads/screen_beat_pads/buttons_controls.dart';
 import 'package:beat_pads/screen_beat_pads/slide_pads.dart';
 import 'package:beat_pads/screen_beat_pads/slider_mod_wheel.dart';
 import 'package:beat_pads/screen_beat_pads/slider_pitch_eased.dart';
+import 'package:beat_pads/services/model_variables.dart';
 import 'package:flutter/material.dart';
 import 'package:beat_pads/services/_services.dart';
 import 'package:provider/provider.dart';
@@ -20,7 +21,7 @@ class BeatPadsScreen extends StatelessWidget {
           body: SafeArea(
             child: LayoutBuilder(
               builder: ((context, constraints) {
-                context.read<Settings>().padArea =
+                context.read<Variables>().padArea =
                     Size(constraints.maxWidth, constraints.maxHeight);
                 return Consumer<Settings>(builder: (context, settings, _) {
                   return Row(
@@ -29,6 +30,10 @@ class BeatPadsScreen extends StatelessWidget {
                     children: [
                       // SKIP laggy edge area. OS uses edges to detect system gestures
                       // and messes with touch detection
+
+                      Column(
+                        children: [],
+                      ),
                       Expanded(
                         flex: 2,
                         child: SizedBox(),

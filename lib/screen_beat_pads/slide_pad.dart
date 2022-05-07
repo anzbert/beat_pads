@@ -1,3 +1,4 @@
+import 'package:beat_pads/services/model_variables.dart';
 import 'package:beat_pads/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -52,11 +53,11 @@ class SlideBeatPad extends StatelessWidget {
     }
 
     // double screenWidth = MediaQuery.of(context).size.width;
-    double fontSize = context.watch<Settings>().padArea.width * 0.025;
+    double fontSize = context.watch<Variables>().padArea.width * 0.025;
     BorderRadius padRadius = BorderRadius.all(Radius.circular(
-        context.watch<Settings>().padArea.width * ThemeConst.padRadiusFactor));
+        context.watch<Variables>().padArea.width * ThemeConst.padRadiusFactor));
     double padSpacing =
-        context.watch<Settings>().padArea.width * ThemeConst.padSpacingFactor;
+        context.watch<Variables>().padArea.width * ThemeConst.padSpacingFactor;
 
     return Container(
       padding: EdgeInsets.all(padSpacing),

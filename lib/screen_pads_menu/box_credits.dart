@@ -15,6 +15,8 @@ class CreditsBox extends StatelessWidget {
     }
   }
 
+  final double _linkFontSize = 18;
+
   @override
   Widget build(BuildContext context) {
     return InfoBox(
@@ -26,8 +28,10 @@ class CreditsBox extends StatelessWidget {
             Wrap(children: [Text("Made by A. Mueller")]),
             TextButton(
               child: Text(
-                "anzio.dev",
-                style: TextStyle(decoration: TextDecoration.underline),
+                "Anzio.dev",
+                style: TextStyle(
+                    decoration: TextDecoration.underline,
+                    fontSize: _linkFontSize),
               ),
               onPressed: () async => await webView("https://www.anzio.dev"),
             )
@@ -40,7 +44,9 @@ class CreditsBox extends StatelessWidget {
             TextButton(
               child: Text(
                 "FreePik.com",
-                style: TextStyle(decoration: TextDecoration.underline),
+                style: TextStyle(
+                    decoration: TextDecoration.underline,
+                    fontSize: _linkFontSize),
               ),
               onPressed: () async => await webView("https://www.freepik.com"),
             )
@@ -52,7 +58,9 @@ class CreditsBox extends StatelessWidget {
             Wrap(children: [Text("Logo Animated with Rive")]),
             TextButton(
               child: Text("Rive.app",
-                  style: TextStyle(decoration: TextDecoration.underline)),
+                  style: TextStyle(
+                      decoration: TextDecoration.underline,
+                      fontSize: _linkFontSize)),
               onPressed: () async => await webView("https://www.rive.app"),
             )
           ],
@@ -66,7 +74,9 @@ class CreditsBox extends StatelessWidget {
             TextButton(
               child: Text(
                 "XpressPads.com",
-                style: TextStyle(decoration: TextDecoration.underline),
+                style: TextStyle(
+                    decoration: TextDecoration.underline,
+                    fontSize: _linkFontSize),
               ),
               onPressed: () async =>
                   await webView("https://www.xpresspads.com"),
@@ -82,7 +92,9 @@ class CreditsBox extends StatelessWidget {
             TextButton(
               child: Text(
                 "anzbert@gmail.com",
-                style: TextStyle(decoration: TextDecoration.underline),
+                style: TextStyle(
+                    decoration: TextDecoration.underline,
+                    fontSize: _linkFontSize),
               ),
               onPressed: () async {
                 final Uri encoded = Uri(

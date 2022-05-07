@@ -1,4 +1,5 @@
 import 'package:beat_pads/screen_pads_menu/box_credits.dart';
+import 'package:beat_pads/services/model_variables.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -26,7 +27,7 @@ class MenuSystem extends StatelessWidget {
           ListTile(
             title: ElevatedButton(
               child: Text(
-                "Connect Midi (${settings.connectedDevices} connected)",
+                "Connect Midi (${context.watch<Variables>().connectedDevices.length} connected)",
               ),
               onPressed: () {
                 Scaffold.of(context).openDrawer();

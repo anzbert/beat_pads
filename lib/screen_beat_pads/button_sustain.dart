@@ -1,4 +1,5 @@
 import 'package:beat_pads/services/_services.dart';
+import 'package:beat_pads/services/model_variables.dart';
 import 'package:beat_pads/shared/colors.dart';
 import 'package:beat_pads/theme.dart';
 import 'package:flutter/material.dart';
@@ -43,10 +44,10 @@ class _SustainButtonRectState extends State<SustainButtonRect> {
     int channel = Provider.of<Settings>(context, listen: true).channel;
     disposeChannel = channel;
     double padSpacing =
-        context.watch<Settings>().padArea.width * ThemeConst.padSpacingFactor;
+        context.watch<Variables>().padArea.width * ThemeConst.padSpacingFactor;
 
     double padRadius =
-        context.watch<Settings>().padArea.width * ThemeConst.padRadiusFactor;
+        context.watch<Variables>().padArea.width * ThemeConst.padRadiusFactor;
 
     return Padding(
       padding: EdgeInsets.fromLTRB(0, padSpacing, padSpacing, padSpacing),
