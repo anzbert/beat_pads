@@ -5,7 +5,12 @@ class Variables extends ChangeNotifier {
   /// A Provider for non-persistent global working Variables
   Variables();
 
-  Size padArea = Size(0, 0);
+  Size _padArea = Size(0, 0);
+  Size get padArea => _padArea;
+  set padArea(Size newVal) {
+    _padArea = newVal;
+    // notifyListeners();
+  }
 
   List<MidiDevice> _connectedDevices = [];
   List<MidiDevice> get connectedDevices => _connectedDevices;

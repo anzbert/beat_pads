@@ -79,14 +79,16 @@ class _PadMenuScreenState extends State<PadMenuScreen> {
             child: MidiConfig(),
           ),
           bottomNavigationBar: BottomNavigationBar(
-            selectedItemColor: Palette.yellowGreen.color,
-            backgroundColor: Palette.darkGrey.color,
+            type: BottomNavigationBarType.fixed,
+            selectedItemColor: Palette.cadetBlue.color,
+            backgroundColor: Palette.darkGrey.color.withOpacity(0.5),
             currentIndex: selectedMenu.index,
             onTap: (int tappedIndex) {
               setState(() => selectedMenu = Menu.values[tappedIndex]);
             },
             items: [
               BottomNavigationBarItem(
+                // backgroundColor: Palette.laserLemon.color.withAlpha(20),
                 icon: Icon(Icons.apps),
                 activeIcon: Icon(
                   Icons.apps,

@@ -40,6 +40,24 @@ class CreditsBox extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Wrap(children: [
+              Text("Magic Tone Network / XpressPads by A. Samek")
+            ]),
+            TextButton(
+              child: Text(
+                "XpressPads.com",
+                style: TextStyle(
+                    decoration: TextDecoration.underline,
+                    fontSize: _linkFontSize),
+              ),
+              onPressed: () async =>
+                  await webView("https://www.xpresspads.com"),
+            )
+          ],
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
             Wrap(children: [Text("Dog Icon by 'catalyststuff'")]),
             TextButton(
               child: Text(
@@ -62,24 +80,6 @@ class CreditsBox extends StatelessWidget {
                       decoration: TextDecoration.underline,
                       fontSize: _linkFontSize)),
               onPressed: () async => await webView("https://www.rive.app"),
-            )
-          ],
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Wrap(children: [
-              Text("Magic Tone Network / XpressPads by A. Samek")
-            ]),
-            TextButton(
-              child: Text(
-                "XpressPads.com",
-                style: TextStyle(
-                    decoration: TextDecoration.underline,
-                    fontSize: _linkFontSize),
-              ),
-              onPressed: () async =>
-                  await webView("https://www.xpresspads.com"),
             )
           ],
         ),

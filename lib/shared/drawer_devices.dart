@@ -33,25 +33,31 @@ class _MidiConfigState extends State<MidiConfig> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: GradientText(
-          'Devices',
-          style: Theme.of(context).textTheme.headline4,
-          colors: [
-            Palette.lightPink.color,
-            Palette.cadetBlue.color,
-            Palette.laserLemon.color,
-          ],
+        title: Text(
+          "Devices",
+          style: Theme.of(context).textTheme.headline5,
         ),
+        // GradientText(
+        //   'Devices',
+        //   style: Theme.of(context).textTheme.headline4,
+        //   colors: [
+        //     // Palette.lightGrey.color,
+        //     Palette.whiteLike.color,
+        //     Palette.whiteLike.color,
+        //     // Palette.lightPink.color,
+        //     // Palette.cadetBlue.color,
+        //     // Palette.laserLemon.color,
+        //   ],
+        // ),
         leading: Builder(builder: (BuildContext context) {
           return IconButton(
-            color: Palette.cadetBlue.color,
             onPressed: () {
               Navigator.pop(context);
             },
             icon: Icon(
-              Icons.arrow_back_rounded,
-              color: Palette.lightPink.color,
-              size: 36,
+              Icons.arrow_back,
+              // color: Palette.whiteLike.color,
+              size: 32,
             ),
           );
         }),
@@ -63,7 +69,7 @@ class _MidiConfigState extends State<MidiConfig> {
               icon: Icon(
                 Icons.refresh,
                 size: 36,
-                color: Palette.laserLemon.color,
+                color: Palette.yellowGreen.color,
               )),
         ],
       ),
@@ -95,13 +101,25 @@ class _MidiConfigState extends State<MidiConfig> {
                     );
                     return ListView(
                       children: [
+                        if (_devices!.isEmpty)
+                          Container(
+                            margin: EdgeInsets.symmetric(vertical: 8),
+                            color: Palette.lightPink.color,
+                            child: Center(
+                              child: Text(
+                                "No Midi Adapter found...",
+                                style: TextStyle(color: Palette.darkGrey.color),
+                              ),
+                            ),
+                            height: 50,
+                          ),
                         ..._devices!.map(
                           (device) {
                             return Container(
                               margin: EdgeInsets.symmetric(vertical: 8),
                               color: device.connected
                                   ? Palette.cadetBlue.color
-                                  : Palette.tan.color.withOpacity(0.1),
+                                  : Palette.cadetBlue.color.withOpacity(0.1),
                               child: TextButton(
                                 onPressed: () {
                                   setDevice(device);
@@ -133,7 +151,7 @@ class _MidiConfigState extends State<MidiConfig> {
                         ),
                         if (Platform.isAndroid)
                           TextInfoBox(
-                            header: "USB Setup",
+                            header: "USB",
                             body: [
                               "Connect USB cable to Host Device",
                               "Slide down the Notification Menu and set the USB connection mode to 'Midi'",
@@ -144,19 +162,19 @@ class _MidiConfigState extends State<MidiConfig> {
                           ),
                         if (Platform.isIOS)
                           TextInfoBox(
-                            header: "USB Setup",
+                            header: "USB",
                             body: [
                               "Connect USB cable to Host Device",
                               "Open 'Audio MIDI Setup' on Mac and click 'Enable' under iPad/iPhone in the 'Audio Devices' Window",
                               "Refresh this Device List",
                               "Tap 'IDAM MIDI Host' to Connect",
                               "",
-                              "Note: USB connection ONLY works with MacOS devices due to Apple's MIDI implementation!",
+                              "Note: USB connection only works with MacOS devices without third-party adapters, due to Apple's MIDI implementation!",
                             ],
                           ),
                         if (Platform.isIOS)
                           TextInfoBox(
-                            header: "WiFi Setup",
+                            header: "WiFi",
                             body: [
                               "Connect to same WiFi as Host Device",
                               "Connect to 'Network Session 1' in this Device List",

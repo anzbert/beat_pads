@@ -11,7 +11,7 @@ class Preview extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox.expand(
       child: Container(
-        color: Palette.darkGrey.color,
+        color: Palette.darkGrey.color.withOpacity(0.5),
         child: Padding(
           padding: const EdgeInsets.all(0.0),
           child: IgnorePointer(
@@ -35,7 +35,7 @@ class Preview extends StatelessWidget {
                     child: Text(
                       "Preview",
                       style: TextStyle(
-                        color: Palette.lightGrey.color.withOpacity(0.3),
+                        color: Palette.lightGrey.color.withOpacity(0.4),
                       ),
                     ),
                   ),

@@ -32,7 +32,11 @@ class ReturnToMenuButton extends StatelessWidget {
             child: ElevatedButton(
               onPressed: () {},
               child: Tooltip(
+                decoration: BoxDecoration(
+                    color: Palette.cadetBlue.color.withOpacity(0.7),
+                    borderRadius: BorderRadius.circular(3)),
                 message: "Long-Press for Menu",
+                // richMessage: TextSpan(text: "sdfsd"),
                 triggerMode: TooltipTriggerMode.tap,
                 showDuration: Duration(milliseconds: 1000),
                 padding: EdgeInsets.all(5),
@@ -45,10 +49,11 @@ class ReturnToMenuButton extends StatelessWidget {
                 ),
               ),
               style: ElevatedButton.styleFrom(
+                elevation: 10,
                 padding: EdgeInsets.all(0),
                 alignment: Alignment.center,
-                primary: Palette.tan.color,
-                onPrimary: Palette.darkGrey.color,
+                primary: Palette.tan.color.withOpacity(0.7),
+                onPrimary: Palette.darkGrey.color.withOpacity(0.9),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(padRadius),
                 ),

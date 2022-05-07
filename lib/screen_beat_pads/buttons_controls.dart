@@ -14,10 +14,6 @@ class ControlButtonsRect extends StatelessWidget {
       builder: (context, settings, child) {
         return Column(
           children: [
-            AspectRatio(
-              aspectRatio: 1 / 1,
-              child: ReturnToMenuButton(),
-            ),
             if (settings.octaveButtons)
               Expanded(
                 flex: 1,

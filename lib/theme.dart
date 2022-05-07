@@ -40,6 +40,13 @@ var appTheme = ThemeData.dark().copyWith(
       return Palette.lightGrey.color;
     }),
   ),
+  // textTheme: TextTheme(
+  //   bodyText1: TextStyle(),
+  //   bodyText2: TextStyle(),
+  // ).apply(
+  //   bodyColor: Colors.orange,
+  //   displayColor: Colors.blue,
+  // ),
 );
 
 abstract class ThemeConst {
