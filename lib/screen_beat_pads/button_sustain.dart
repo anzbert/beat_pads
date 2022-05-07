@@ -1,5 +1,6 @@
 import 'package:beat_pads/services/_services.dart';
 import 'package:beat_pads/shared/colors.dart';
+import 'package:beat_pads/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -39,13 +40,16 @@ class _SustainButtonRectState extends State<SustainButtonRect> {
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-
     int channel = Provider.of<Settings>(context, listen: true).channel;
     disposeChannel = channel;
-    double padSize = screenWidth * 0.005;
+    double padSpacing =
+        context.watch<Settings>().padArea.width * ThemeConst.padSpacingFactor;
+
+    double padRadius =
+        context.watch<Settings>().padArea.width * ThemeConst.padRadiusFactor;
+
     return Padding(
-      padding: EdgeInsets.fromLTRB(0, padSize, padSize, padSize),
+      padding: EdgeInsets.fromLTRB(0, padSpacing, padSpacing, padSpacing),
       child: Listener(
         onPointerDown: (_) {
           if (!sustainState) {
@@ -68,8 +72,7 @@ class _SustainButtonRectState extends State<SustainButtonRect> {
         child: Container(
           key: key,
           decoration: BoxDecoration(
-            borderRadius:
-                BorderRadius.all(Radius.circular(screenWidth * 0.008)),
+            borderRadius: BorderRadius.all(Radius.circular(padRadius)),
             color: sustainState
                 ? Palette.lightPink.color
                 : Palette.lightPink.color.withAlpha(120),

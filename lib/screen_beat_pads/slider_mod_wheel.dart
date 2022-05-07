@@ -1,7 +1,9 @@
 import 'package:beat_pads/screen_beat_pads/slider_themed.dart';
 import 'package:beat_pads/services/_services.dart';
 import 'package:beat_pads/shared/colors.dart';
+import 'package:beat_pads/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ModWheel extends StatefulWidget {
   const ModWheel({Key? key, required this.channel}) : super(key: key);

@@ -1,7 +1,9 @@
 import 'dart:math';
 
+import 'package:beat_pads/services/_services.dart';
 import 'package:beat_pads/shared/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ThemedSlider extends StatelessWidget {
   ThemedSlider({
@@ -23,7 +25,8 @@ class ThemedSlider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
+    double width = context.watch<Settings>().padArea.width;
+    // double width = MediaQuery.of(context).size.width;
 
     return FractionallySizedBox(
       widthFactor: 0.9,

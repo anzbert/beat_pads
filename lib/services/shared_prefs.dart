@@ -60,7 +60,7 @@ class Prefs {
     "pitchBend": false,
     "octaveButtons": false,
     "sustainButton": false,
-    "lockScreenButton": false,
+    // "lockScreenButton": false,
     "randomVelocity": false,
     "scaleString": "chromatic",
     "channel": 2,
@@ -90,7 +90,7 @@ class LoadSettings {
   final Setting<bool> pitchBend;
   final Setting<bool> octaveButtons;
   final Setting<bool> sustainButton;
-  final Setting<bool> lockScreenButton;
+  // final Setting<bool> lockScreenButton;
   final Setting<bool> randomVelocity;
 
   LoadSettings(Map<String, dynamic> loadedMap)
@@ -116,8 +116,8 @@ class LoadSettings {
             Setting<bool>('octaveButtons', loadedMap['octaveButtons']!!),
         sustainButton =
             Setting<bool>('sustainButton', loadedMap['sustainButton']!),
-        lockScreenButton =
-            Setting<bool>('lockScreenButton', loadedMap['lockScreenButton']!),
+        // lockScreenButton =
+        //     Setting<bool>('lockScreenButton', loadedMap['lockScreenButton']!),
         randomVelocity =
             Setting<bool>('randomVelocity', loadedMap['randomVelocity']!),
         scaleString = Setting<String>(

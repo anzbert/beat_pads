@@ -1,3 +1,4 @@
+import 'package:beat_pads/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -11,7 +12,7 @@ class SlideBeatPad extends StatelessWidget {
   }) : super(key: key);
 
   final int note;
-  final EdgeInsets padPadding = const EdgeInsets.all(2.5);
+  // final EdgeInsets EdgeInsets.all(padSpacing) = const EdgeInsets.all(2.5);
 
   @override
   Widget build(BuildContext context) {
@@ -50,13 +51,15 @@ class SlideBeatPad extends StatelessWidget {
       color = Palette.yellowGreen.color; // default pad color
     }
 
-    double screenWidth = MediaQuery.of(context).size.width;
-    double fontSize = screenWidth * 0.021;
-    BorderRadius padRadius =
-        BorderRadius.all(Radius.circular(screenWidth * 0.008));
+    // double screenWidth = MediaQuery.of(context).size.width;
+    double fontSize = context.watch<Settings>().padArea.width * 0.025;
+    BorderRadius padRadius = BorderRadius.all(Radius.circular(
+        context.watch<Settings>().padArea.width * ThemeConst.padRadiusFactor));
+    double padSpacing =
+        context.watch<Settings>().padArea.width * ThemeConst.padSpacingFactor;
 
     return Container(
-      padding: EdgeInsets.all(screenWidth * 0.005),
+      padding: EdgeInsets.all(padSpacing),
       height: double.infinity,
       width: double.infinity,
       child: Material(
@@ -70,7 +73,7 @@ class SlideBeatPad extends StatelessWidget {
             InkWell(
                 borderRadius: padRadius,
                 child: Padding(
-                  padding: padPadding,
+                  padding: EdgeInsets.all(padSpacing),
                   child: Text(
                     note.toString(),
                     style: TextStyle(
@@ -88,7 +91,7 @@ class SlideBeatPad extends StatelessWidget {
                 borderRadius: padRadius,
                 splashColor: splashColor,
                 child: Padding(
-                  padding: padPadding,
+                  padding: EdgeInsets.all(padSpacing),
                   child: FittedBox(
                     fit: BoxFit.scaleDown,
                     child: Column(
@@ -104,7 +107,7 @@ class SlideBeatPad extends StatelessWidget {
                                   gmPercussionLabels: true),
                               style: TextStyle(
                                   color: padTextColor,
-                                  fontSize: screenWidth * 0.02),
+                                  fontSize: fontSize * 0.5),
                             ),
                           ),
                         Flexible(
@@ -115,8 +118,7 @@ class SlideBeatPad extends StatelessWidget {
                                   ? MidiUtils.getNoteName(note)
                                   : note.toString(),
                               style: TextStyle(
-                                  color: padTextColor,
-                                  fontSize: screenWidth * 0.04)),
+                                  color: padTextColor, fontSize: fontSize)),
                         ),
                       ],
                     ),

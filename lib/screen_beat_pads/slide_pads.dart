@@ -48,10 +48,6 @@ class _SlidePadsState extends State<SlidePads> {
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
 
-    // if (!widget.preview) {
-    //   DeviceUtils.landscapeLeftOnly().then((_) {});
-    // }
-
     return MultiProvider(
       providers: [
         // proxyproviders, to update all other models, when Settings change:

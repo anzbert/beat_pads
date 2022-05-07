@@ -1,20 +1,22 @@
 import 'package:beat_pads/shared/colors.dart';
+import 'package:beat_pads/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:beat_pads/services/_services.dart';
 
-class OctaveButtonsRect extends StatelessWidget {
-  const OctaveButtonsRect({Key? key}) : super(key: key);
+class OctaveButtons extends StatelessWidget {
+  const OctaveButtons({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    double padSize = MediaQuery.of(context).size.width * 0.005;
+    double padSpacing =
+        context.watch<Settings>().padArea.width * ThemeConst.padSpacingFactor;
     return Column(
       children: [
         Expanded(
           flex: 1,
           child: Padding(
-            padding: EdgeInsets.fromLTRB(0, padSize, padSize, padSize),
+            padding: EdgeInsets.fromLTRB(0, padSpacing, padSpacing, padSpacing),
             child: ElevatedButton(
               onPressed: () {
                 Provider.of<Settings>(context, listen: false).baseOctave++;
@@ -38,7 +40,7 @@ class OctaveButtonsRect extends StatelessWidget {
         Expanded(
           flex: 1,
           child: Padding(
-            padding: EdgeInsets.fromLTRB(0, padSize, padSize, padSize),
+            padding: EdgeInsets.fromLTRB(0, padSpacing, padSpacing, padSpacing),
             child: ElevatedButton(
               onPressed: () {
                 Provider.of<Settings>(context, listen: false).baseOctave--;

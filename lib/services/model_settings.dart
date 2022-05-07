@@ -13,6 +13,8 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
+  Size padArea = Size(0, 0);
+
   // MPE settings (testing) TODO : fixed/ changable or screen dependant?
   // double modulationRadius = 110; // temp fixed
   // double modulationDeadZone = 0.1; // temp fixed
@@ -194,13 +196,13 @@ class Settings extends ChangeNotifier {
   }
 
   // lock screen button:
-  bool get lockScreenButton => prefs.settings.lockScreenButton.value;
+  // bool get lockScreenButton => prefs.settings.lockScreenButton.value;
 
-  set lockScreenButton(bool newValue) {
-    prefs.settings.lockScreenButton.value = newValue;
-    prefs.settings.lockScreenButton.save();
-    notifyListeners();
-  }
+  // set lockScreenButton(bool newValue) {
+  //   prefs.settings.lockScreenButton.value = newValue;
+  //   prefs.settings.lockScreenButton.save();
+  //   notifyListeners();
+  // }
 
   // velocity:
   bool get randomVelocity => prefs.settings.randomVelocity.value;

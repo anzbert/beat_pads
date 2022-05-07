@@ -9,37 +9,40 @@ class Preview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: EdgeInsets.all(0),
-      child: Padding(
-        padding: const EdgeInsets.all(2.0),
-        child: IgnorePointer(
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              AspectRatio(
-                aspectRatio: 16 / 9,
-                child: Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(6.0),
-                    child: BeatPadsScreen(preview: true),
-                  ),
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 50),
-                width: double.infinity,
-                child: FittedBox(
-                  child: Text(
-                    "Preview",
-                    style: TextStyle(
-                      color: Palette.lightGrey.color.withOpacity(0.3),
+    return SizedBox.expand(
+      child: Container(
+        color: Palette.darkGrey.color,
+        // margin: EdgeInsets.all(5),
+        child: Padding(
+          padding: const EdgeInsets.all(0.0),
+          child: IgnorePointer(
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                AspectRatio(
+                  aspectRatio: 16 / 9,
+                  child: Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(6.0),
+                      child: BeatPadsScreen(preview: true),
                     ),
                   ),
                 ),
-              ),
-            ],
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 50),
+                  width: double.infinity,
+                  child: FittedBox(
+                    child: Text(
+                      "Preview",
+                      style: TextStyle(
+                        color: Palette.lightGrey.color.withOpacity(0.3),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

@@ -21,14 +21,14 @@ class MenuSystem extends StatelessWidget {
                   fontSize: Theme.of(context).textTheme.headline5!.fontSize),
             ),
           ),
-          ListTile(
-            title: Text("Lock Screen Button"),
-            subtitle: Text("Adds Rotation Lock Button. Long Press to Use"),
-            trailing: Switch(
-                value: settings.lockScreenButton,
-                onChanged: (value) =>
-                    settings.lockScreenButton = !settings.lockScreenButton),
-          ),
+          // ListTile(
+          //   title: Text("Lock Screen Button"),
+          //   subtitle: Text("Adds Rotation Lock Button. Long Press to Use"),
+          //   trailing: Switch(
+          //       value: settings.lockScreenButton,
+          //       onChanged: (value) =>
+          //           settings.lockScreenButton = !settings.lockScreenButton),
+          // ),
           SwitchWakeLock(),
           ListTile(
             title: ElevatedButton(

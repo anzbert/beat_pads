@@ -1,6 +1,15 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 abstract class DeviceUtils {
+  /// check if the orientation is currently Portrait
+  static bool isPortrait(BuildContext context) =>
+      MediaQuery.of(context).orientation.name == "portrait";
+
+  /// check if the orientation is currently Landscape
+  static bool isLandscape(BuildContext context) =>
+      MediaQuery.of(context).orientation.name == "landscape";
+
   /// Lock Orientation to Portrait
   static Future<void> portraitOnly() {
     return SystemChrome.setPreferredOrientations([
