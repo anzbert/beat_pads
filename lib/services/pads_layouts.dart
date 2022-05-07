@@ -9,7 +9,7 @@ enum Layout {
   magicToneNetwork("Magic Tone Network"),
   xPressPadsStandard("XpressPads Standard"),
   xPressPadsLatinJazz("XpressPads Latin/Jazz"),
-  xPressPadsXO("XpressPads for XO"),
+  xPressPadsXO("XpressPads with XO"),
   xPressPadsXtreme("XpressPads Xtreme");
 
   const Layout(this.title);

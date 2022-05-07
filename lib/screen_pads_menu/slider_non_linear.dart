@@ -43,12 +43,19 @@ class NonLinearSlider extends StatelessWidget {
               ? Text(actualValue!)
               : Text(readValue.toString()),
         ),
-        Slider(
-          min: start.toDouble(),
-          max: steps.toDouble(),
-          value: readValue.toDouble(),
-          onChanged: (value) {
-            setValue(value.toInt());
+        LayoutBuilder(
+          builder: (context, constraints) {
+            return SizedBox(
+              width: constraints.maxWidth * 0.9,
+              child: Slider(
+                min: start.toDouble(),
+                max: steps.toDouble(),
+                value: readValue.toDouble(),
+                onChanged: (value) {
+                  setValue(value.toInt());
+                },
+              ),
+            );
           },
         ),
       ],

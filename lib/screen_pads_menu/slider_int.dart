@@ -36,12 +36,19 @@ class IntSlider extends StatelessWidget {
           ),
           trailing: Text(readValue.toString()),
         ),
-        Slider(
-          min: min.toDouble(),
-          max: max.toDouble(),
-          value: readValue.toDouble(),
-          onChanged: (value) {
-            setValue(value.toInt());
+        LayoutBuilder(
+          builder: (context, constraints) {
+            return SizedBox(
+              width: constraints.maxWidth * 0.9,
+              child: Slider(
+                min: min.toDouble(),
+                max: max.toDouble(),
+                value: readValue.toDouble(),
+                onChanged: (value) {
+                  setValue(value.toInt());
+                },
+              ),
+            );
           },
         ),
       ],

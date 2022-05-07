@@ -38,17 +38,24 @@ class MidiRangeSelector extends StatelessWidget {
           ),
           trailing: Text("$readMin - $readMax"),
         ),
-        RangeSlider(
-          values: RangeValues(readMin.toDouble(), readMax.toDouble()),
-          max: 128,
-          labels: RangeLabels(
-            "Min",
-            "Max",
-          ),
-          onChanged: (RangeValues values) {
-            setMin(values.start.toInt());
-            setMax(values.end.toInt());
-          },
+        LayoutBuilder(
+          builder: ((context, constraints) {
+            return SizedBox(
+              width: constraints.maxWidth * 0.9,
+              child: RangeSlider(
+                values: RangeValues(readMin.toDouble(), readMax.toDouble()),
+                max: 128,
+                labels: RangeLabels(
+                  "Min",
+                  "Max",
+                ),
+                onChanged: (RangeValues values) {
+                  setMin(values.start.toInt());
+                  setMax(values.end.toInt());
+                },
+              ),
+            );
+          }),
         ),
       ],
     );
