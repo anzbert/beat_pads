@@ -1,9 +1,12 @@
+import 'package:beat_pads/services/_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_midi_command/flutter_midi_command.dart';
 
 import 'package:beat_pads/shared/_shared.dart';
 
 import 'dart:io' show Platform;
+
+import 'package:provider/provider.dart';
 
 class _MidiConfigState extends State<MidiConfig> {
   final MidiCommand _midiCommand = MidiCommand();
@@ -55,78 +58,93 @@ class _MidiConfigState extends State<MidiConfig> {
                   ))
                 :
                 // OTHERWISE, SHOW LIST:
-                ListView(
-                    children: [
-                      ..._devices!.map((device) {
-                        return Container(
-                          margin: EdgeInsets.symmetric(vertical: 8),
-                          color: device.connected
-                              ? Palette.cadetBlue.color
-                              : Palette.cadetBlue.color.withAlpha(40),
-                          child: TextButton(
-                            onPressed: () {
-                              setDevice(device);
-                            },
-                            child: SizedBox(
-                              height: 40,
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    device.name,
-                                    style:
-                                        Theme.of(context).textTheme.titleMedium,
+                Builder(builder: (context) {
+                    WidgetsBinding.instance.addPostFrameCallback(
+                      (_) {
+                        context.read<Settings>().connectedDevices = _devices!
+                            .fold<int>(
+                                0,
+                                (previousValue, element) => element.connected
+                                    ? previousValue + 1
+                                    : previousValue);
+                      },
+                    );
+                    return ListView(
+                      children: [
+                        ..._devices!.map(
+                          (device) {
+                            return Container(
+                              margin: EdgeInsets.symmetric(vertical: 8),
+                              color: device.connected
+                                  ? Palette.cadetBlue.color
+                                  : Palette.cadetBlue.color.withAlpha(40),
+                              child: TextButton(
+                                onPressed: () {
+                                  setDevice(device);
+                                },
+                                child: SizedBox(
+                                  height: 40,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        device.name,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleMedium,
+                                      ),
+                                      if (device.connected)
+                                        Icon(
+                                          Icons.check,
+                                          size: 24,
+                                          color: Colors.white,
+                                        )
+                                    ],
                                   ),
-                                  if (device.connected)
-                                    Icon(
-                                      Icons.check,
-                                      size: 24,
-                                      color: Colors.white,
-                                    )
-                                ],
+                                ),
                               ),
-                            ),
+                            );
+                          },
+                        ),
+                        if (Platform.isAndroid)
+                          TextInfoBox(
+                            header: "USB Setup",
+                            body: [
+                              "Connect USB cable to Host Device",
+                              "Slide down the Notification Menu and set the USB connection mode to 'Midi'",
+                              "If there is no Midi option available, your Android phone may only show this setting in the Developer Menu. Please refer to readily available instructions online on how to access it on your Device",
+                              "Once Midi mode is activated, refresh this Device List",
+                              "Tap USB Device to Connect",
+                            ],
                           ),
-                        );
-                      }).toList(),
-                      if (Platform.isAndroid)
-                        TextInfoBox(
-                          header: "USB Setup",
-                          body: [
-                            "Connect USB cable to Host Device",
-                            "Slide down the Notification Menu and set the USB connection mode to 'Midi'",
-                            "If there is no Midi option available, your Android phone may only show this setting in the Developer Menu. Please refer to readily available instructions online on how to access it on your Device",
-                            "Once Midi mode is activated, refresh this Device List",
-                            "Tap USB Device to Connect",
-                          ],
-                        ),
-                      if (Platform.isIOS)
-                        TextInfoBox(
-                          header: "USB Setup",
-                          body: [
-                            "Connect USB cable to Host Device",
-                            "Open 'Audio MIDI Setup' on Mac and click 'Enable' under iPad/iPhone in the 'Audio Devices' Window",
-                            "Refresh this Device List",
-                            "Tap 'IDAM MIDI Host' to Connect",
-                            "",
-                            "Note: USB connection ONLY works with MacOS devices due to Apple's MIDI implementation!",
-                          ],
-                        ),
-                      if (Platform.isIOS)
-                        TextInfoBox(
-                          header: "WiFi Setup",
-                          body: [
-                            "Connect to same WiFi as Host Device",
-                            "Connect to 'Network Session 1' in this Device List",
-                            "Open 'Audio MIDI Setup' on Mac and open the 'MIDI Studio' window",
-                            "Create a Session in the 'MIDI Network Setup' window and connect to your iPad/iPhone",
-                            "",
-                            "Note: Wireless Midi Protocols add Latency. Connection to Windows Hosts via WiFi requires third-party Software"
-                          ],
-                        ),
-                    ],
-                  );
+                        if (Platform.isIOS)
+                          TextInfoBox(
+                            header: "USB Setup",
+                            body: [
+                              "Connect USB cable to Host Device",
+                              "Open 'Audio MIDI Setup' on Mac and click 'Enable' under iPad/iPhone in the 'Audio Devices' Window",
+                              "Refresh this Device List",
+                              "Tap 'IDAM MIDI Host' to Connect",
+                              "",
+                              "Note: USB connection ONLY works with MacOS devices due to Apple's MIDI implementation!",
+                            ],
+                          ),
+                        if (Platform.isIOS)
+                          TextInfoBox(
+                            header: "WiFi Setup",
+                            body: [
+                              "Connect to same WiFi as Host Device",
+                              "Connect to 'Network Session 1' in this Device List",
+                              "Open 'Audio MIDI Setup' on Mac and open the 'MIDI Studio' window",
+                              "Create a Session in the 'MIDI Network Setup' window and connect to your iPad/iPhone",
+                              "",
+                              "Note: Wireless Midi Protocols add Latency. Connection to Windows Hosts via WiFi requires third-party Software"
+                            ],
+                          ),
+                      ],
+                    );
+                  });
           } else if (snapshot.hasError) {
             return Center(child: Text(snapshot.error.toString()));
           } else {

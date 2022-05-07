@@ -20,17 +20,21 @@ class InfoBox extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
-            // mainAxisSize: MainAxisSize.min,
             children: [
               if (header != null)
                 Padding(
                   padding: const EdgeInsets.only(bottom: 12),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Text(
-                        header!,
-                        style: Theme.of(context).textTheme.headline5,
+                      Expanded(
+                        child: Divider(),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16),
+                        child: Text(
+                          header!,
+                          style: Theme.of(context).textTheme.headline5,
+                        ),
                       ),
                     ],
                   ),

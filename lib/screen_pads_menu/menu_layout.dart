@@ -34,6 +34,7 @@ class MenuLayout extends StatelessWidget {
             child: ListView(
               children: <Widget>[
                 ListTile(
+                  title: Divider(),
                   trailing: Text(
                     "Layout Settings",
                     style: TextStyle(

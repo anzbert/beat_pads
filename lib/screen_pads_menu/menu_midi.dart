@@ -16,6 +16,7 @@ class MenuMidi extends StatelessWidget {
       return ListView(
         children: <Widget>[
           ListTile(
+            title: Divider(),
             trailing: Text(
               "Midi Settings",
               style: TextStyle(

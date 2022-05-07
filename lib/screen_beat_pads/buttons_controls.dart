@@ -14,18 +14,20 @@ class ControlButtonsRect extends StatelessWidget {
       builder: (context, settings, child) {
         return Column(
           children: [
-            Expanded(
-              flex: 2,
+            AspectRatio(
+              aspectRatio: 1 / 1,
               child: ReturnToMenuButton(),
             ),
-            Expanded(
-              flex: 6,
-              child: settings.octaveButtons ? OctaveButtons() : SizedBox(),
-            ),
-            Expanded(
-              flex: 6,
-              child: settings.sustainButton ? SustainButtonRect() : SizedBox(),
-            ),
+            if (settings.octaveButtons)
+              Expanded(
+                flex: 1,
+                child: OctaveButtons(),
+              ),
+            if (settings.sustainButton)
+              Expanded(
+                flex: 1,
+                child: SustainButtonRect(),
+              ),
           ],
         );
       },

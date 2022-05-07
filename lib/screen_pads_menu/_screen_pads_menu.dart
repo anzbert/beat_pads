@@ -44,20 +44,16 @@ class _PadMenuScreenState extends State<PadMenuScreen> {
               ],
             ),
             leading: Builder(builder: (BuildContext context) {
-              return Row(
-                children: [
-                  IconButton(
-                    color: Palette.cadetBlue.color,
-                    onPressed: () {
-                      Scaffold.of(context).openDrawer();
-                    },
-                    icon: Icon(
-                      Icons.import_export_rounded,
-                      color: Palette.lightPink.color,
-                      size: 36,
-                    ),
-                  ),
-                ],
+              return IconButton(
+                color: Palette.cadetBlue.color,
+                onPressed: () {
+                  Scaffold.of(context).openDrawer();
+                },
+                icon: Icon(
+                  Icons.menu,
+                  color: Palette.lightPink.color,
+                  size: 36,
+                ),
               );
             }),
             actions: [

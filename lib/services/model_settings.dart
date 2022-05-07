@@ -15,6 +15,14 @@ class Settings extends ChangeNotifier {
 
   Size padArea = Size(0, 0);
 
+  int _connectedDevices = 0;
+  int get connectedDevices => _connectedDevices;
+  set connectedDevices(int newVal) {
+    _connectedDevices = newVal;
+    print(newVal);
+    notifyListeners();
+  }
+
   // MPE settings (testing) TODO : fixed/ changable or screen dependant?
   // double modulationRadius = 110; // temp fixed
   // double modulationDeadZone = 0.1; // temp fixed

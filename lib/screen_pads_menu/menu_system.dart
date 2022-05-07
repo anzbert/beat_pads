@@ -15,25 +15,45 @@ class MenuSystem extends StatelessWidget {
       return ListView(
         children: <Widget>[
           ListTile(
+            title: Divider(),
             trailing: Text(
               "System Settings",
               style: TextStyle(
                   fontSize: Theme.of(context).textTheme.headline5!.fontSize),
             ),
           ),
-          // ListTile(
-          //   title: Text("Lock Screen Button"),
-          //   subtitle: Text("Adds Rotation Lock Button. Long Press to Use"),
-          //   trailing: Switch(
-          //       value: settings.lockScreenButton,
-          //       onChanged: (value) =>
-          //           settings.lockScreenButton = !settings.lockScreenButton),
-          // ),
-          SwitchWakeLock(),
+          SwitchWakeLockTile(),
+          ListTile(
+            title: ElevatedButton(
+              child: Text(
+                "Connect Midi (${settings.connectedDevices} connected)",
+              ),
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+              style: ElevatedButton.styleFrom(
+                  primary: Palette.laserLemon.color,
+                  textStyle: TextStyle(fontWeight: FontWeight.bold)),
+            ),
+          ),
+          ListTile(
+            title: SnackMessageButton(
+              label: "Reset Midi Buffers",
+              message: "Received Midi Buffer cleared",
+              onPressed: () {
+                Provider.of<MidiReceiver>(context, listen: false)
+                    .resetRxBuffer();
+                MidiUtils.sendAllNotesOffMessage(settings.channel);
+              },
+            ),
+          ),
           ListTile(
             title: ElevatedButton(
               child: Text(
                 "Reset All Settings",
+              ),
+              style: ElevatedButton.styleFrom(
+                primary: Palette.lightPink.color,
               ),
               onPressed: () {
                 Function resetAllSettings =
@@ -59,17 +79,6 @@ class MenuSystem extends StatelessWidget {
                     ],
                   ),
                 );
-              },
-            ),
-          ),
-          ListTile(
-            title: SnackMessageButton(
-              label: "Reset Midi Buffers",
-              message: "Received Midi Buffer cleared",
-              onPressed: () {
-                Provider.of<MidiReceiver>(context, listen: false)
-                    .resetRxBuffer();
-                MidiUtils.sendAllNotesOffMessage(settings.channel);
               },
             ),
           ),

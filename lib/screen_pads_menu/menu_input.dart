@@ -9,12 +9,10 @@ class MenuInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<Settings>(builder: (context, settings, child) {
-      // final bool resizableGrid =
-      //     settings.layout.props.resizable; // Is the layout fixed or resizable?
-
       return ListView(
         children: <Widget>[
           ListTile(
+            title: Divider(),
             trailing: Text(
               "Input Settings",
               style: TextStyle(
