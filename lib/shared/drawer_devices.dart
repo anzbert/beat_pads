@@ -1,4 +1,3 @@
-import 'package:beat_pads/services/_services.dart';
 import 'package:beat_pads/services/model_variables.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_midi_command/flutter_midi_command.dart';
@@ -8,7 +7,6 @@ import 'package:beat_pads/shared/_shared.dart';
 import 'dart:io' show Platform;
 
 import 'package:provider/provider.dart';
-import 'package:simple_gradient_text/simple_gradient_text.dart';
 
 class _MidiConfigState extends State<MidiConfig> {
   final MidiCommand _midiCommand = MidiCommand();
@@ -113,7 +111,7 @@ class _MidiConfigState extends State<MidiConfig> {
                             ),
                             height: 50,
                           ),
-                        ..._devices!.map(
+                        ..._devices.map(
                           (device) {
                             return Container(
                               margin: EdgeInsets.symmetric(vertical: 8),

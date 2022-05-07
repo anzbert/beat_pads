@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 
 import 'package:beat_pads/services/_services.dart';
-import 'package:flutter_midi_command/flutter_midi_command.dart';
 
 class Settings extends ChangeNotifier {
   Settings(this.prefs);
