@@ -31,9 +31,6 @@ class BeatPadsScreen extends StatelessWidget {
                       // SKIP laggy edge area. OS uses edges to detect system gestures
                       // and messes with touch detection
 
-                      Column(
-                        children: [],
-                      ),
                       Expanded(
                         flex: 2,
                         child: SizedBox(),
