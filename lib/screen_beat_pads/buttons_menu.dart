@@ -14,6 +14,9 @@ class ReturnToMenuButton extends StatelessWidget {
     double padSpacing =
         context.watch<Settings>().padArea.width * ThemeConst.padSpacingFactor;
 
+    double padRadius =
+        context.watch<Settings>().padArea.width * ThemeConst.padRadiusFactor;
+
     return LayoutBuilder(
       builder: ((context, constraints) {
         return Padding(
@@ -30,6 +33,7 @@ class ReturnToMenuButton extends StatelessWidget {
               child: Tooltip(
                 message: "Long-Press for Menu",
                 triggerMode: TooltipTriggerMode.tap,
+                showDuration: Duration(milliseconds: 1000),
                 padding: EdgeInsets.all(5),
                 child: FittedBox(
                   fit: BoxFit.contain,
@@ -42,8 +46,11 @@ class ReturnToMenuButton extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 padding: EdgeInsets.all(0),
                 alignment: Alignment.center,
-                primary: Palette.cadetBlue.color,
+                primary: Palette.tan.color,
                 onPrimary: Palette.darkGrey.color,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(padRadius),
+                ),
               ),
             ),
           ),

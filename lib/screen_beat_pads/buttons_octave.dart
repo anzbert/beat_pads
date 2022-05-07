@@ -11,6 +11,8 @@ class OctaveButtons extends StatelessWidget {
   Widget build(BuildContext context) {
     double padSpacing =
         context.watch<Settings>().padArea.width * ThemeConst.padSpacingFactor;
+    double padRadius =
+        context.watch<Settings>().padArea.width * ThemeConst.padRadiusFactor;
     return Column(
       children: [
         Expanded(
@@ -33,6 +35,9 @@ class OctaveButtons extends StatelessWidget {
                 alignment: Alignment.center,
                 primary: Palette.cadetBlue.color,
                 onPrimary: Palette.darkGrey.color,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(padRadius),
+                ),
               ),
             ),
           ),
@@ -57,6 +62,9 @@ class OctaveButtons extends StatelessWidget {
                 alignment: Alignment.center,
                 primary: Palette.laserLemon.color,
                 onPrimary: Palette.darkGrey.color,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(padRadius),
+                ),
               ),
             ),
           ),

@@ -285,11 +285,9 @@ packages:
   rive:
     dependency: "direct main"
     description:
-      path: "."
-      ref: master
-      resolved-ref: "2fe38ca33788f40a3feb670ddb8c99b12b80fda2"
-      url: "https://github.com/rive-app/rive-flutter.git"
-    source: git
+      name: rive
+      url: "https://pub.dartlang.org"
+    source: hosted
     version: "0.8.4"
   shared_preferences:
     dependency: "direct main"

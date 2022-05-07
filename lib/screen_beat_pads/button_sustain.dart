@@ -72,7 +72,7 @@ class _SustainButtonRectState extends State<SustainButtonRect> {
         child: Container(
           key: key,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(padRadius)),
+            borderRadius: BorderRadius.all(Radius.circular(padRadius * 1)),
             color: sustainState
                 ? Palette.lightPink.color
                 : Palette.lightPink.color.withAlpha(120),

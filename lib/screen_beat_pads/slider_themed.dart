@@ -26,10 +26,9 @@ class ThemedSlider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double width = context.watch<Settings>().padArea.width;
-    // double width = MediaQuery.of(context).size.width;
 
     return FractionallySizedBox(
-      widthFactor: 0.9,
+      widthFactor: 0.8,
       child: Stack(
         alignment: Alignment.center,
         children: [

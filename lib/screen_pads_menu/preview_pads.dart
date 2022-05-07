@@ -12,7 +12,6 @@ class Preview extends StatelessWidget {
     return SizedBox.expand(
       child: Container(
         color: Palette.darkGrey.color,
-        // margin: EdgeInsets.all(5),
         child: Padding(
           padding: const EdgeInsets.all(0.0),
           child: IgnorePointer(

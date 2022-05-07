@@ -92,36 +92,33 @@ class SlideBeatPad extends StatelessWidget {
                 splashColor: splashColor,
                 child: Padding(
                   padding: EdgeInsets.all(padSpacing),
-                  child: FittedBox(
-                    fit: BoxFit.scaleDown,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        if (settings.layout.gmPercussion)
-                          Flexible(
-                            fit: FlexFit.loose,
-                            flex: 1,
-                            child: Text(
-                              MidiUtils.getNoteName(note,
-                                  gmPercussionLabels: true),
-                              style: TextStyle(
-                                  color: padTextColor,
-                                  fontSize: fontSize * 0.5),
-                            ),
-                          ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (settings.layout.gmPercussion)
                         Flexible(
                           fit: FlexFit.loose,
                           flex: 1,
                           child: Text(
-                              settings.showNoteNames
-                                  ? MidiUtils.getNoteName(note)
-                                  : note.toString(),
-                              style: TextStyle(
-                                  color: padTextColor, fontSize: fontSize)),
+                            MidiUtils.getNoteName(note,
+                                gmPercussionLabels: true),
+                            style: TextStyle(
+                                color: padTextColor, fontSize: fontSize * 0.5),
+                          ),
                         ),
-                      ],
-                    ),
+                      Flexible(
+                        fit: FlexFit.loose,
+                        flex: 1,
+                        child: Text(
+                            settings.showNoteNames
+                                ? MidiUtils.getNoteName(note)
+                                : note.toString(),
+                            style: TextStyle(
+                                color: padTextColor, fontSize: fontSize)),
+                      ),
+                    ],
                   ),
                 ),
               ),
