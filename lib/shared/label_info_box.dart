@@ -22,9 +22,19 @@ class TextInfoBox extends StatelessWidget {
               if (header != null)
                 Padding(
                   padding: const EdgeInsets.only(bottom: 12),
-                  child: Text(
-                    header!,
-                    style: Theme.of(context).textTheme.headline5,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Divider(),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16.0),
+                        child: Text(
+                          header!,
+                          style: Theme.of(context).textTheme.headline5,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ...body
