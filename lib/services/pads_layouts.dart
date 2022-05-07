@@ -9,6 +9,7 @@ enum Layout {
   magicToneNetwork("Magic Tone Network"),
   xPressPadsStandard("XpressPads Standard"),
   xPressPadsLatinJazz("XpressPads Latin/Jazz"),
+  xPressPadsXO("XpressPads for XO"),
   xPressPadsXtreme("XpressPads Xtreme");
 
   const Layout(this.title);
@@ -27,6 +28,8 @@ enum Layout {
         return true;
       case Layout.xPressPadsLatinJazz:
         return true;
+      case Layout.xPressPadsXO:
+        return true;
       case Layout.xPressPadsXtreme:
         return true;
       default:
@@ -41,6 +44,8 @@ enum Layout {
       case Layout.xPressPadsStandard:
         return LayoutProps(resizable: false);
       case Layout.xPressPadsLatinJazz:
+        return LayoutProps(resizable: false);
+      case Layout.xPressPadsXO:
         return LayoutProps(resizable: false);
       case Layout.xPressPadsXtreme:
         return LayoutProps(resizable: false, defaultDimensions: Vector2D(8, 4));
@@ -67,6 +72,8 @@ enum Layout {
         return GridXpressPads(settings, XPP.standard);
       case Layout.xPressPadsLatinJazz:
         return GridXpressPads(settings, XPP.latinJazz);
+      case Layout.xPressPadsXO:
+        return GridXpressPads(settings, XPP.xo);
       case Layout.xPressPadsXtreme:
         return GridXpressPads(settings, XPP.xtreme);
     }
@@ -197,6 +204,7 @@ class GridXpressPads extends Grid {
 enum XPP {
   standard,
   latinJazz,
+  xo,
   xtreme;
 
   List<int> get list {
@@ -205,6 +213,8 @@ enum XPP {
         return XppConstants.standardGrid;
       case XPP.latinJazz:
         return XppConstants.latinJazzGrid;
+      case XPP.xo:
+        return XppConstants.standardGridXO;
       case XPP.xtreme:
         return XppConstants.xtremeGrid;
     }
@@ -229,6 +239,24 @@ abstract class XppConstants {
     51,
     51,
     49,
+  ];
+  static const List<int> standardGridXO = [
+    36,
+    40,
+    40,
+    36,
+    38,
+    41,
+    41,
+    38,
+    39,
+    42,
+    42,
+    39,
+    43,
+    37,
+    37,
+    43,
   ];
   static const List<int> latinJazzGrid = [
     36,
