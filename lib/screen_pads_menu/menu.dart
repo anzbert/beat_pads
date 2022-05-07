@@ -240,7 +240,7 @@ class PadsMenu extends StatelessWidget {
             message: "Received Midi Buffer cleared",
             onPressed: () {
               Provider.of<MidiReceiver>(context, listen: false).resetRxBuffer();
-              MidiUtils.sendKillAllMessage(settings.channel);
+              MidiUtils.sendAllNotesOffMessage(settings.channel);
             },
           ),
           CreditsBox(),

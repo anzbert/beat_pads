@@ -1,3 +1,4 @@
+import 'package:beat_pads/services/gen_utils.dart';
 import 'package:flutter_midi_command/flutter_midi_command_messages.dart';
 
 import './midi_const.dart';
@@ -28,24 +29,8 @@ enum MidiMessageType {
 
 abstract class MidiUtils {
   /// Kill all notes on a channel
-  static void sendKillAllMessage(int channel) {
-    CCMessage(channel: channel, controller: 123, value: 0).send();
-  }
-
-  /// Send CC Off on all controllers on a channel
-  /// Maybe a silly approach and not recommended
-  static void sendAllCCOffMessage(int channel) {
-    for (int n = 0; n < 128; n++) {
-      CCMessage(channel: channel, controller: n, value: 0).send();
-    }
-  }
-
-  /// Brute Force Send Note Off on all notes on a channel
-  /// Maybe a silly approach and not recommended
   static void sendAllNotesOffMessage(int channel) {
-    for (int n = 0; n < 128; n++) {
-      NoteOffMessage(channel: channel, note: n, velocity: 0).send();
-    }
+    CCMessage(channel: channel, controller: 123, value: 0).send();
   }
 
   /// Sends a Sustain-pedal midi message
@@ -53,7 +38,19 @@ abstract class MidiUtils {
     CCMessage(channel: channel, controller: 64, value: state ? 127 : 0).send();
   }
 
-  /// Sends a Mod Wheel midi message
+  /// Sends a Frequency Cutoff / Slide (MPE) midi message. Takes a value from -1 to 1.
+  static CCMessage slideMessage(
+    int channel,
+    double value, {
+    bool initial64 = false,
+  }) {
+    double finalValue = initial64 ? (value + 1) / 2 * 127 : value.abs() * 127;
+
+    return CCMessage(
+        channel: channel, controller: 74, value: finalValue.toInt());
+  }
+
+  /// Sends a Mod Wheel midi message. Takes a value from 0 - 127
   static void sendModWheelMessage(int channel, int value) {
     CCMessage(channel: channel, controller: 1, value: value.clamp(0, 127))
         .send();

@@ -42,9 +42,6 @@ class Settings extends ChangeNotifier {
     return prefs.settings.channel.value;
   }
 
-  bool get upperZone => prefs.settings.channel.value > 7 ? true : false;
-  set upperZone(bool newZone) => channel = newZone ? 15 : 0;
-
   set channel(int newChannel) {
     if (newChannel < 0 || newChannel > 15) return;
 
@@ -57,6 +54,9 @@ class Settings extends ChangeNotifier {
     prefs.settings.channel.save();
     notifyListeners();
   }
+
+  bool get upperZone => prefs.settings.channel.value > 7 ? true : false;
+  set upperZone(bool newZone) => channel = newZone ? 15 : 0;
 
   // LAYOUT:
   Layout get layout => prefs.settings.layout.value;

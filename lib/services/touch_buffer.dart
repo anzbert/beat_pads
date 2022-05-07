@@ -88,7 +88,8 @@ class TouchEvent {
   }
 
   /// Get the radial change factor from the origin of the
-  /// touch to the current position in the context of the maximum radius.
+  /// touch to the current position in the context of the maximum Radius.
+  /// Produces values from 0 to 1 from center to maxium Radius.
   double radialChange({Curve curve = Curves.easeIn, bool deadZone = true}) {
     double distanceFactor =
         (Utils.offsetDistance(origin, newPosition) / maxRadius).clamp(0, 1);
@@ -100,7 +101,8 @@ class TouchEvent {
   }
 
   /// Get the directional change factor from the origin of the
-  /// touch to the current position in the context of the maximum radius.
+  /// touch to the current position in the context of the maximum Radius.
+  /// Produced values from -1 to 1 on X and Y Axis within the maximum Diameter.
   Offset directionalChangeFromCenter(
       {Curve curve = Curves.easeIn, bool deadZone = true}) {
     double factorX = ((newPosition.dx - origin.dx) / maxRadius).clamp(-1, 1);
