@@ -1,7 +1,5 @@
-import 'package:beat_pads/screen_pads_menu/drop_down_playmode.dart';
-
 import 'package:beat_pads/screen_pads_menu/slider_int.dart';
-import 'package:beat_pads/shared/colors.dart';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

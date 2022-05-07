@@ -2,24 +2,30 @@ import 'package:flutter/services.dart';
 
 abstract class DeviceUtils {
   /// Lock Orientation to Portrait
-  static void portraitOnly() {
-    SystemChrome.setPreferredOrientations([
+  static Future<void> portraitOnly() {
+    return SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
   }
 
   /// Lock Orientation to Landscape
-  static void landscapeOnly() {
-    SystemChrome.setPreferredOrientations([
+  static Future<void> landscapeOnly() {
+    return SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeLeft,
       DeviceOrientation.landscapeRight,
     ]);
   }
 
+  static Future<void> landscapeLeftOnly() {
+    return SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeLeft,
+    ]);
+  }
+
   /// Unlock Rotation
-  static void enableRotation() {
-    SystemChrome.setPreferredOrientations([
+  static Future<void> enableRotation() {
+    return SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
       DeviceOrientation.landscapeLeft,

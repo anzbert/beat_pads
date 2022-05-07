@@ -31,6 +31,38 @@ class MenuSystem extends StatelessWidget {
           ),
           SwitchWakeLock(),
           ListTile(
+            title: ElevatedButton(
+              child: Text(
+                "Reset All Settings",
+              ),
+              onPressed: () {
+                Function resetAllSettings =
+                    Provider.of<Settings>(context, listen: false).resetAll;
+                showDialog<String>(
+                  context: context,
+                  builder: (BuildContext context) => AlertDialog(
+                    title: const Text('Reset'),
+                    content: const Text(
+                        'Return all Settings to their default values?'),
+                    actions: <Widget>[
+                      TextButton(
+                        onPressed: () => Navigator.pop(context, 'Cancel'),
+                        child: const Text('Cancel'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context, 'OK');
+                          resetAllSettings();
+                        },
+                        child: const Text('OK'),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ),
+          ListTile(
             title: SnackMessageButton(
               label: "Reset Midi Buffers",
               message: "Received Midi Buffer cleared",

@@ -1,3 +1,4 @@
+import 'package:beat_pads/screen_beat_pads/_screen_beat_pads.dart';
 import 'package:beat_pads/screen_pads_menu/menu_input.dart';
 import 'package:beat_pads/screen_pads_menu/menu_layout.dart';
 import 'package:beat_pads/screen_pads_menu/menu_midi.dart';
@@ -6,7 +7,6 @@ import 'package:flutter/material.dart';
 
 import 'package:beat_pads/shared/_shared.dart';
 
-import 'package:provider/provider.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 import 'package:beat_pads/services/_services.dart';
 
@@ -35,55 +35,46 @@ class _PadMenuScreenState extends State<PadMenuScreen> {
           'Beat Pads',
           style: Theme.of(context).textTheme.headline4,
           colors: [
-            Palette.cadetBlue.color,
             Palette.lightPink.color,
             Palette.yellowGreen.color,
+            Palette.cadetBlue.color,
           ],
         ),
         leading: Builder(builder: (BuildContext context) {
-          return IconButton(
-            onPressed: () {
-              Scaffold.of(context).openDrawer();
-            },
-            icon: Icon(
-              Icons.settings,
-              color: Palette.yellowGreen.color,
-              size: 36,
-            ),
+          return Row(
+            children: [
+              IconButton(
+                color: Palette.cadetBlue.color,
+                onPressed: () {
+                  Scaffold.of(context).openDrawer();
+                },
+                icon: Icon(
+                  Icons.import_export_rounded,
+                  color: Palette.lightPink.color,
+                  size: 36,
+                ),
+              ),
+            ],
           );
         }),
         actions: [
-          IconButton(
-            icon: Icon(
-              Icons.refresh,
-              color: Palette.yellowGreen.color,
-              size: 36,
+          Padding(
+            padding: const EdgeInsets.only(right: 8),
+            child: IconButton(
+              icon: Icon(
+                Icons.check_rounded,
+                color: Palette.cadetBlue.color,
+                size: 36,
+              ),
+              onPressed: () async {
+                DeviceUtils.landscapeLeftOnly().then(
+                  (_) => Navigator.push(
+                    context,
+                    TransitionUtils.fade(BeatPadsScreen()),
+                  ),
+                );
+              },
             ),
-            onPressed: () {
-              Function resetAllSettings =
-                  Provider.of<Settings>(context, listen: false).resetAll;
-              showDialog<String>(
-                context: context,
-                builder: (BuildContext context) => AlertDialog(
-                  title: const Text('Reset'),
-                  content: const Text(
-                      'Return all Settings to their default values?'),
-                  actions: <Widget>[
-                    TextButton(
-                      onPressed: () => Navigator.pop(context, 'Cancel'),
-                      child: const Text('Cancel'),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pop(context, 'OK');
-                        resetAllSettings();
-                      },
-                      child: const Text('OK'),
-                    ),
-                  ],
-                ),
-              );
-            },
           )
         ],
       ),

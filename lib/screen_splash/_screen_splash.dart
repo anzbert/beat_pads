@@ -1,11 +1,10 @@
+import 'package:beat_pads/screen_pads_menu/_screen_pads_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:rive/rive.dart';
 
 import 'package:beat_pads/shared/_shared.dart';
 import 'package:beat_pads/services/_services.dart';
-
-import 'package:beat_pads/screen_home/_screen_home.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -25,7 +24,7 @@ class _SplashScreenState extends State<SplashScreen> {
         onPointerDown: (_) {
           Navigator.pushReplacement(
             context,
-            TransitionUtils.fade(HomeScreen()),
+            TransitionUtils.fade(PadMenuScreen()),
           );
         },
         child: Center(

@@ -3,6 +3,7 @@ import 'package:beat_pads/screen_beat_pads/slide_pad.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+
 import 'package:provider/provider.dart';
 import 'package:beat_pads/shared/_shared.dart';
 import 'package:beat_pads/services/_services.dart';
@@ -47,6 +48,10 @@ class _SlidePadsState extends State<SlidePads> {
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
 
+    // if (!widget.preview) {
+    //   DeviceUtils.landscapeLeftOnly().then((_) {});
+    // }
+
     return MultiProvider(
       providers: [
         // proxyproviders, to update all other models, when Settings change:
@@ -86,6 +91,9 @@ class _SlidePadsState extends State<SlidePads> {
                 context.read<MidiSender>().handleEndTouch(touch);
               }
             }
+
+            // DeviceUtils.landscapeOnly();
+            // DeviceUtils.enableRotation();
 
             return Stack(
               children: [
