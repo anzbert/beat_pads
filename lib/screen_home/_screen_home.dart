@@ -23,9 +23,10 @@ class HomeScreen extends StatelessWidget {
               ChangeNotifierProvider(
                   create: (context) => Settings(snapshot.data!)),
             ],
-            child: inPortrait
-                ? PadMenuScreen() // PORTRAIT: SHOW PADS MENU
-                : BeatPadsScreen(), // LANDSCAPE: PLAY PADS
+            child: PadMenuScreen(),
+            // child: inPortrait
+            // ? PadMenuScreen() // PORTRAIT: SHOW PADS MENU
+            // : BeatPadsScreen(), // LANDSCAPE: PLAY PADS
           );
         }
         // ERROR HANDLING:

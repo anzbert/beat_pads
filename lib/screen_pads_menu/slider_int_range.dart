@@ -1,8 +1,8 @@
 import 'package:beat_pads/theme.dart';
 import 'package:flutter/material.dart';
 
-class MidiRangeSelector extends StatelessWidget {
-  const MidiRangeSelector({
+class MidiRangeSelectorTile extends StatelessWidget {
+  const MidiRangeSelectorTile({
     Key? key,
     this.label = "#Label",
     this.resetFunction,

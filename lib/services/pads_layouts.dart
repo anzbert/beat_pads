@@ -28,8 +28,6 @@ enum Layout {
         return true;
       case Layout.xPressPadsLatinJazz:
         return true;
-      case Layout.xPressPadsXO:
-        return true;
       case Layout.xPressPadsXtreme:
         return true;
       default:

@@ -1,3 +1,4 @@
+import 'package:beat_pads/shared/colors.dart';
 import 'package:flutter/material.dart';
 
 /// A Card-based Info-Text Box Widget that takes an array of Strings and an optional header
@@ -11,6 +12,7 @@ class InfoBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Card(
+        color: Palette.darkGrey.color,
         margin: EdgeInsets.fromLTRB(8, 30, 8, 8),
         elevation: 5,
         child: Padding(
@@ -23,9 +25,14 @@ class InfoBox extends StatelessWidget {
               if (header != null)
                 Padding(
                   padding: const EdgeInsets.only(bottom: 12),
-                  child: Text(
-                    header!,
-                    style: Theme.of(context).textTheme.headline5,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        header!,
+                        style: Theme.of(context).textTheme.headline5,
+                      ),
+                    ],
                   ),
                 ),
               ...body

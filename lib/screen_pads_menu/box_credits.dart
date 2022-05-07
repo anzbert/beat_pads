@@ -18,7 +18,7 @@ class CreditsBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InfoBox(
-      header: "Beat Pads",
+      header: "Credits",
       body: [
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,

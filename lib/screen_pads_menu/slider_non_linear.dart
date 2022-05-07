@@ -1,8 +1,8 @@
 import 'package:beat_pads/theme.dart';
 import 'package:flutter/material.dart';
 
-class NonLinearSlider extends StatelessWidget {
-  const NonLinearSlider({
+class NonLinearSliderTile extends StatelessWidget {
+  const NonLinearSliderTile({
     this.label = "#Label",
     this.subtitle,
     this.resetFunction,

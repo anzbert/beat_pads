@@ -1,8 +1,8 @@
 import 'package:beat_pads/theme.dart';
 import 'package:flutter/material.dart';
 
-class IntSlider extends StatelessWidget {
-  const IntSlider(
+class IntSliderTile extends StatelessWidget {
+  const IntSliderTile(
       {this.label = "#label",
       this.min = 0,
       this.max = 128,

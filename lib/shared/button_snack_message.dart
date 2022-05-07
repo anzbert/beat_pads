@@ -16,17 +16,15 @@ class SnackMessageButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: ElevatedButton(
-        onPressed: () {
-          ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text(message)));
-        },
-        child: Text(
-          label,
-          style: TextStyle(
-            color: Palette.darkGrey.color,
-          ),
+    return ElevatedButton(
+      onPressed: () {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(message)));
+      },
+      child: Text(
+        label,
+        style: TextStyle(
+          color: Palette.darkGrey.color,
         ),
       ),
     );

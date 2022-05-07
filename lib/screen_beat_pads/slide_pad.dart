@@ -89,22 +89,37 @@ class SlideBeatPad extends StatelessWidget {
                 splashColor: splashColor,
                 child: Padding(
                   padding: padPadding,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      if (settings.layout.gmPercussion)
-                        Text(
-                          MidiUtils.getNoteName(note, gmPercussionLabels: true),
-                          style: TextStyle(
-                              color: padTextColor, fontSize: fontSize * 0.6),
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (settings.layout.gmPercussion)
+                          Flexible(
+                            fit: FlexFit.loose,
+                            flex: 1,
+                            child: Text(
+                              MidiUtils.getNoteName(note,
+                                  gmPercussionLabels: true),
+                              style: TextStyle(
+                                  color: padTextColor,
+                                  fontSize: screenWidth * 0.02),
+                            ),
+                          ),
+                        Flexible(
+                          fit: FlexFit.loose,
+                          flex: 1,
+                          child: Text(
+                              settings.showNoteNames
+                                  ? MidiUtils.getNoteName(note)
+                                  : note.toString(),
+                              style: TextStyle(
+                                  color: padTextColor,
+                                  fontSize: screenWidth * 0.04)),
                         ),
-                      Text(
-                          settings.showNoteNames
-                              ? MidiUtils.getNoteName(note)
-                              : note.toString(),
-                          style: TextStyle(
-                              color: padTextColor, fontSize: fontSize)),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
