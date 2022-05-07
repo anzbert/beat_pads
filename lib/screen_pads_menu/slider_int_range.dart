@@ -1,3 +1,4 @@
+import 'package:beat_pads/theme.dart';
 import 'package:flutter/material.dart';
 
 class MidiRangeSelector extends StatelessWidget {
@@ -41,7 +42,7 @@ class MidiRangeSelector extends StatelessWidget {
         LayoutBuilder(
           builder: ((context, constraints) {
             return SizedBox(
-              width: constraints.maxWidth * 0.9,
+              width: constraints.maxWidth * ThemeConst.sliderWidthFactor,
               child: RangeSlider(
                 values: RangeValues(readMin.toDouble(), readMax.toDouble()),
                 max: 128,

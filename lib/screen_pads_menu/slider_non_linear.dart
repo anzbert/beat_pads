@@ -1,3 +1,4 @@
+import 'package:beat_pads/theme.dart';
 import 'package:flutter/material.dart';
 
 class NonLinearSlider extends StatelessWidget {
@@ -46,7 +47,7 @@ class NonLinearSlider extends StatelessWidget {
         LayoutBuilder(
           builder: (context, constraints) {
             return SizedBox(
-              width: constraints.maxWidth * 0.9,
+              width: constraints.maxWidth * ThemeConst.sliderWidthFactor,
               child: Slider(
                 min: start.toDouble(),
                 max: steps.toDouble(),

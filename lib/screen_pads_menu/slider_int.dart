@@ -1,3 +1,4 @@
+import 'package:beat_pads/theme.dart';
 import 'package:flutter/material.dart';
 
 class IntSlider extends StatelessWidget {
@@ -39,7 +40,7 @@ class IntSlider extends StatelessWidget {
         LayoutBuilder(
           builder: (context, constraints) {
             return SizedBox(
-              width: constraints.maxWidth * 0.9,
+              width: constraints.maxWidth * ThemeConst.sliderWidthFactor,
               child: Slider(
                 min: min.toDouble(),
                 max: max.toDouble(),
