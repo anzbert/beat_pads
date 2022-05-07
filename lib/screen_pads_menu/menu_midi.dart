@@ -25,16 +25,18 @@ class MenuMidi extends StatelessWidget {
             ),
           ),
           IntSliderTile(
+            resetValue: settings.resetChannel,
             min: 1,
             max: 16,
             label: "Midi Channel",
+            subtitle: "Master Channel to send and receive on",
             setValue: (v) => settings.channel = v - 1,
             readValue: settings.channel + 1,
           ),
           Divider(),
           ListTile(
             title: Text("Random Velocity"),
-            subtitle: Text("Random Velocity Within a given Range"),
+            subtitle: Text("Random Velocity within a given Range"),
             trailing: Switch(
                 value: settings.randomVelocity,
                 onChanged: (value) => settings.randomizeVelocity = value),
@@ -42,6 +44,7 @@ class MenuMidi extends StatelessWidget {
           if (!settings.randomVelocity)
             IntSliderTile(
               label: "Fixed Velocity",
+              subtitle: "Velocity to send when pressing a Pad",
               readValue: settings.velocity,
               setValue: (v) => settings.velocity = v,
               resetValue: settings.resetVelocity,

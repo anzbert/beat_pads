@@ -55,6 +55,8 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
+  void resetChannel() => channel = LoadSettings.defaults().channel.value;
+
   bool get upperZone => prefs.settings.channel.value > 7 ? true : false;
   set upperZone(bool newZone) => channel = newZone ? 15 : 0;
 

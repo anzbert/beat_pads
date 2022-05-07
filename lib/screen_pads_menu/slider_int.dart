@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 class IntSliderTile extends StatelessWidget {
   const IntSliderTile(
       {this.label = "#label",
+      this.subtitle,
       this.min = 0,
       this.max = 128,
       required this.setValue,
@@ -13,6 +14,7 @@ class IntSliderTile extends StatelessWidget {
       : super(key: key);
 
   final String label;
+  final String? subtitle;
   final int min;
   final int max;
   final Function setValue;
@@ -32,9 +34,15 @@ class IntSliderTile extends StatelessWidget {
                 TextButton(
                   onPressed: () => resetValue!(),
                   child: Text("Reset"),
+                  style: TextButton.styleFrom(
+                    minimumSize: Size.zero,
+                    padding: EdgeInsets.symmetric(horizontal: 12),
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
                 )
             ],
           ),
+          subtitle: subtitle != null ? Text(subtitle!) : null,
           trailing: Text(readValue.toString()),
         ),
         LayoutBuilder(
