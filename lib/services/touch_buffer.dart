@@ -73,9 +73,9 @@ class TouchEvent {
       : origin = touch.position,
         newPosition = touch.position,
         uniqueID = touch.pointer,
-        maxDiameter = _screenSize.width * 2 * 0.15,
-        deadZone = 0.15,
-        maxRadius = _screenSize.width * 0.15;
+        maxDiameter = _screenSize.longestSide * _settings.modulationRadius * 2,
+        deadZone = _settings.modulationDeadZone,
+        maxRadius = _screenSize.longestSide * _settings.modulationRadius;
 
   /// Prevents touchevent from receiving further position updates in move(). Irreversible!
   void markDirty() => _dirty = true;

@@ -36,7 +36,7 @@ class Painter extends CustomPainter {
     // origin
     brush.style = PaintingStyle.fill;
     brush.color = color.withOpacity(0.4);
-    canvas.drawCircle(o1, 10, brush);
+    canvas.drawCircle(o1, 7, brush);
   }
 
   @override

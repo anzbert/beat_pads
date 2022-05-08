@@ -20,28 +20,26 @@ class PaintAfterTouchCircle extends StatelessWidget {
       builder: (context, midiSender, child) {
         final buffer = midiSender.touchBuffer.buffer;
 
-        int dimensions = 2;
-
         return Stack(
           children: [
             ...buffer.map(
-              (atCircle) {
-                return dimensions == 1
+              (touchEvent) {
+                return context.watch<Settings>().modulationXandY == false
                     ? Stack(
                         children: [
                           PaintCircle(
-                            box.globalToLocal(atCircle.origin),
-                            atCircle.maxRadius,
+                            box.globalToLocal(touchEvent.origin),
+                            touchEvent.maxRadius,
                             Palette.lightPink.color.withOpacity(
-                                atCircle.radialChange(curve: Curves.easeOut) *
+                                touchEvent.radialChange(curve: Curves.easeOut) *
                                     0.6),
                             stroke: false,
                           ),
                           PaintCircle(
-                            box.globalToLocal(atCircle.origin),
-                            atCircle.radialChange() * atCircle.maxRadius,
+                            box.globalToLocal(touchEvent.origin),
+                            touchEvent.radialChange() * touchEvent.maxRadius,
                             Palette.laserLemon.color.withOpacity(
-                                atCircle.radialChange(curve: Curves.easeOut) *
+                                touchEvent.radialChange(curve: Curves.easeOut) *
                                     0.8),
                             stroke: true,
                           ),
@@ -50,21 +48,22 @@ class PaintAfterTouchCircle extends StatelessWidget {
                     : Stack(
                         children: [
                           PaintSquare(
-                            box.globalToLocal(atCircle.origin),
-                            atCircle.maxRadius,
+                            box.globalToLocal(touchEvent.origin),
+                            touchEvent.maxRadius,
                             Palette.lightPink.color.withOpacity(
-                                atCircle.radialChange(curve: Curves.easeOut) *
+                                touchEvent.radialChange(curve: Curves.easeOut) *
                                     0.6),
                             stroke: false,
                           ),
                           PaintXYLines(
-                            box.globalToLocal(atCircle.origin),
-                            atCircle.directionalChangeFromCenter(
+                            box.globalToLocal(touchEvent.origin),
+                            touchEvent.directionalChangeFromCenter(
                                     curve: Curves.linear, deadZone: true) *
-                                atCircle.maxRadius,
-                            atCircle.maxRadius,
+                                touchEvent.maxRadius,
+                            touchEvent.maxRadius,
+                            touchEvent.deadZone,
                             Palette.laserLemon.color.withOpacity(
-                                atCircle.radialChange(curve: Curves.easeOut) *
+                                touchEvent.radialChange(curve: Curves.easeOut) *
                                     0.8),
                             stroke: true,
                           ),

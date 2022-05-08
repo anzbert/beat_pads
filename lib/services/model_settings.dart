@@ -13,9 +13,27 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
-  // MPE settings (testing) TODO : fixed/ changable or screen dependant?
-  // double modulationRadius = 110; // temp fixed
-  // double modulationDeadZone = 0.1; // temp fixed
+  // MPE and Aftertouch settings
+  double _modulationRadius = 0.11; // temp fixed
+  double get modulationRadius => _modulationRadius;
+  set modulationRadius(double newVal) {
+    _modulationRadius = newVal;
+    notifyListeners();
+  }
+
+  double _modulationDeadZone = 0.15; // temp fixed
+  double get modulationDeadZone => _modulationDeadZone;
+  set modulationDeadZone(double newVal) {
+    _modulationDeadZone = newVal;
+    notifyListeners();
+  }
+
+  bool _modulationXandY = true;
+  bool get modulationXandY => _modulationXandY;
+  set modulationXandY(bool newVal) {
+    _modulationXandY = newVal;
+    notifyListeners();
+  }
 
   int _totalMemberChannels = 8; // temp fixed
   int get totalMemberChannels => _totalMemberChannels;
@@ -198,15 +216,6 @@ class Settings extends ChangeNotifier {
     prefs.settings.sustainButton.save();
     notifyListeners();
   }
-
-  // lock screen button:
-  // bool get lockScreenButton => prefs.settings.lockScreenButton.value;
-
-  // set lockScreenButton(bool newValue) {
-  //   prefs.settings.lockScreenButton.value = newValue;
-  //   prefs.settings.lockScreenButton.save();
-  //   notifyListeners();
-  // }
 
   // velocity:
   bool get randomVelocity => prefs.settings.randomVelocity.value;
