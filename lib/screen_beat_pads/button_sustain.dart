@@ -43,12 +43,10 @@ class _SustainButtonRectState extends State<SustainButtonRect> {
   Widget build(BuildContext context) {
     int channel = Provider.of<Settings>(context, listen: true).channel;
     disposeChannel = channel;
-    double padSpacing =
-        context.watch<Variables>().padArea.width * ThemeConst.padSpacingFactor;
 
-    double padRadius =
-        context.watch<Variables>().padArea.width * ThemeConst.padRadiusFactor;
-
+    double width = MediaQuery.of(context).size.width;
+    double padSpacing = width * ThemeConst.padSpacingFactor;
+    double padRadius = width * ThemeConst.padRadiusFactor;
     return Padding(
       padding: EdgeInsets.fromLTRB(0, padSpacing, padSpacing, padSpacing),
       child: Listener(

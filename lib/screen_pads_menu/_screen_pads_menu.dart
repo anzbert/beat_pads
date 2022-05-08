@@ -29,111 +29,106 @@ class _PadMenuScreenState extends State<PadMenuScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: DeviceUtils.enableRotation(),
-      builder: ((context, _) {
-        return Scaffold(
-          appBar: AppBar(
-            title: GradientText(
-              'Beat Pads',
-              style: Theme.of(context).textTheme.headline4,
-              colors: [
-                Palette.lightPink.color,
-                Palette.cadetBlue.color,
-                Palette.laserLemon.color,
-              ],
-            ),
-            leading: Builder(builder: (BuildContext context) {
-              return IconButton(
-                color: Palette.cadetBlue.color,
-                onPressed: () {
-                  Scaffold.of(context).openDrawer();
-                },
-                icon: Icon(
-                  Icons.menu,
-                  color: Palette.lightPink.color,
-                  size: 36,
-                ),
-              );
-            }),
-            actions: [
-              Padding(
-                padding: const EdgeInsets.only(right: 8),
-                child: IconButton(
-                  icon: Icon(
-                    Icons.play_circle_fill_rounded,
-                    color: Palette.laserLemon.color,
-                    size: 36,
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      TransitionUtils.fade(BeatPadsScreen()),
-                    );
-                  },
-                ),
-              )
-            ],
-          ),
-          drawer: Drawer(
-            child: MidiConfig(),
-          ),
-          bottomNavigationBar: BottomNavigationBar(
-            type: BottomNavigationBarType.fixed,
-            selectedItemColor: Palette.cadetBlue.color,
-            backgroundColor: Palette.darkGrey.color.withOpacity(0.5),
-            currentIndex: selectedMenu.index,
-            onTap: (int tappedIndex) {
-              setState(() => selectedMenu = Menu.values[tappedIndex]);
+    return Scaffold(
+      appBar: AppBar(
+        title: GradientText(
+          'Beat Pads',
+          style: Theme.of(context).textTheme.headline4,
+          colors: [
+            Palette.lightPink.color,
+            Palette.cadetBlue.color,
+            Palette.laserLemon.color,
+          ],
+        ),
+        leading: Builder(builder: (BuildContext context) {
+          return IconButton(
+            color: Palette.cadetBlue.color,
+            onPressed: () {
+              Scaffold.of(context).openDrawer();
             },
-            items: [
-              BottomNavigationBarItem(
-                // backgroundColor: Palette.laserLemon.color.withAlpha(20),
-                icon: Icon(Icons.apps),
-                activeIcon: Icon(
-                  Icons.apps,
-                  color: Palette.cadetBlue.color,
-                ),
-                label: "Layout",
+            icon: Icon(
+              Icons.menu,
+              color: Palette.lightPink.color,
+              size: 36,
+            ),
+          );
+        }),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 8),
+            child: IconButton(
+              icon: Icon(
+                Icons.play_circle_fill_rounded,
+                color: Palette.laserLemon.color,
+                size: 36,
               ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.touch_app),
-                activeIcon: Icon(
-                  Icons.touch_app,
-                  color: Palette.cadetBlue.color,
-                ),
-                label: "Input",
-              ),
-              BottomNavigationBarItem(
-                activeIcon: Icon(
-                  Icons.music_note,
-                  color: Palette.cadetBlue.color,
-                ),
-                icon: Icon(Icons.music_note),
-                label: "Midi",
-              ),
-              BottomNavigationBarItem(
-                activeIcon: Icon(
-                  Icons.settings,
-                  color: Palette.cadetBlue.color,
-                ),
-                icon: Icon(Icons.settings),
-                label: "System",
-              ),
-            ],
-          ),
-          body: SafeArea(
-            child: Builder(
-              builder: (context) {
-                if (selectedMenu == Menu.input) return MenuInput();
-                if (selectedMenu == Menu.midi) return MenuMidi();
-                if (selectedMenu == Menu.system) return MenuSystem();
-                return MenuLayout();
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  TransitionUtils.fade(BeatPadsScreen()),
+                );
               },
             ),
+          )
+        ],
+      ),
+      drawer: Drawer(
+        child: MidiConfig(),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        selectedItemColor: Palette.cadetBlue.color,
+        backgroundColor: Palette.darkGrey.color.withOpacity(0.5),
+        currentIndex: selectedMenu.index,
+        onTap: (int tappedIndex) {
+          setState(() => selectedMenu = Menu.values[tappedIndex]);
+        },
+        items: [
+          BottomNavigationBarItem(
+            // backgroundColor: Palette.laserLemon.color.withAlpha(20),
+            icon: Icon(Icons.apps),
+            activeIcon: Icon(
+              Icons.apps,
+              color: Palette.cadetBlue.color,
+            ),
+            label: "Layout",
           ),
-        );
-      }),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.touch_app),
+            activeIcon: Icon(
+              Icons.touch_app,
+              color: Palette.cadetBlue.color,
+            ),
+            label: "Input",
+          ),
+          BottomNavigationBarItem(
+            activeIcon: Icon(
+              Icons.music_note,
+              color: Palette.cadetBlue.color,
+            ),
+            icon: Icon(Icons.music_note),
+            label: "Midi",
+          ),
+          BottomNavigationBarItem(
+            activeIcon: Icon(
+              Icons.settings,
+              color: Palette.cadetBlue.color,
+            ),
+            icon: Icon(Icons.settings),
+            label: "System",
+          ),
+        ],
+      ),
+      body: SafeArea(
+        child: Builder(
+          builder: (context) {
+            if (selectedMenu == Menu.input) return MenuInput();
+            if (selectedMenu == Menu.midi) return MenuMidi();
+            if (selectedMenu == Menu.system) return MenuSystem();
+            return MenuLayout();
+          },
+        ),
+      ),
     );
   }
 }

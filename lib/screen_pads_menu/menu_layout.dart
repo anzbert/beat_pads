@@ -25,9 +25,10 @@ class MenuLayout extends StatelessWidget {
         crossAxisAlignment:
             isPortrait ? CrossAxisAlignment.center : CrossAxisAlignment.start,
         children: [
-          Expanded(
+          Flexible(
+            fit: FlexFit.loose,
             flex: 2,
-            child: Preview(),
+            child: FittedBox(child: Preview()),
           ),
           Expanded(
             flex: 3,

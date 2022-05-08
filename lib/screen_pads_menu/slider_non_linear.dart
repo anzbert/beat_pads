@@ -49,10 +49,11 @@ class NonLinearSliderTile extends StatelessWidget {
               ? Text(actualValue!)
               : Text(readValue.toString()),
         ),
-        LayoutBuilder(
-          builder: (context, constraints) {
+        Builder(
+          builder: (context) {
+            double width = MediaQuery.of(context).size.width;
             return SizedBox(
-              width: constraints.maxWidth * ThemeConst.sliderWidthFactor,
+              width: width * ThemeConst.sliderWidthFactor,
               child: Slider(
                 min: start.toDouble(),
                 max: steps.toDouble(),

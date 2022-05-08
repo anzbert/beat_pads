@@ -88,9 +88,6 @@ class _SlidePadsState extends State<SlidePads> {
               }
             }
 
-            // DeviceUtils.landscapeOnly();
-            // DeviceUtils.enableRotation();
-
             return Stack(
               children: [
                 Listener(

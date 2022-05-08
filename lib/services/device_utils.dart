@@ -19,27 +19,30 @@ abstract class DeviceUtils {
   }
 
   /// Lock Orientation to Landscape
-  static Future<void> landscapeOnly() {
-    return SystemChrome.setPreferredOrientations([
+  static Future<bool> landscapeOnly() async {
+    await SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeLeft,
       DeviceOrientation.landscapeRight,
     ]);
+    return true;
   }
 
-  static Future<void> landscapeLeftOnly() {
-    return SystemChrome.setPreferredOrientations([
+  static Future<bool> landscapeLeftOnly() async {
+    await SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeLeft,
     ]);
+    return true;
   }
 
   /// Unlock Rotation
-  static Future<void> enableRotation() {
-    return SystemChrome.setPreferredOrientations([
+  static Future<bool> enableRotation() async {
+    await SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
       DeviceOrientation.landscapeLeft,
       DeviceOrientation.landscapeRight,
     ]);
+    return true;
   }
 
   /// Hide Top and Bottom Menu Bars

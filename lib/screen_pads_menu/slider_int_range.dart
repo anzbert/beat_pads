@@ -44,10 +44,11 @@ class MidiRangeSelectorTile extends StatelessWidget {
           ),
           trailing: Text("$readMin - $readMax"),
         ),
-        LayoutBuilder(
-          builder: ((context, constraints) {
+        Builder(
+          builder: ((context) {
+            double width = MediaQuery.of(context).size.width;
             return SizedBox(
-              width: constraints.maxWidth * ThemeConst.sliderWidthFactor,
+              width: width * ThemeConst.sliderWidthFactor,
               child: RangeSlider(
                 values: RangeValues(readMin.toDouble(), readMax.toDouble()),
                 max: 128,

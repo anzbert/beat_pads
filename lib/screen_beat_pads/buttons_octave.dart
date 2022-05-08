@@ -10,10 +10,9 @@ class OctaveButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double padSpacing =
-        context.watch<Variables>().padArea.width * ThemeConst.padSpacingFactor;
-    double padRadius =
-        context.watch<Variables>().padArea.width * ThemeConst.padRadiusFactor;
+    double width = MediaQuery.of(context).size.width;
+    double padSpacing = width * ThemeConst.padSpacingFactor;
+    double padRadius = width * ThemeConst.padRadiusFactor;
     return Column(
       children: [
         Expanded(

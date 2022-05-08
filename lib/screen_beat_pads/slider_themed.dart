@@ -1,9 +1,7 @@
 import 'dart:math';
 
-import 'package:beat_pads/services/model_variables.dart';
 import 'package:beat_pads/shared/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class ThemedSlider extends StatelessWidget {
   ThemedSlider({
@@ -25,8 +23,7 @@ class ThemedSlider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double width = context.watch<Variables>().padArea.width;
-
+    double width = MediaQuery.of(context).size.width;
     return FractionallySizedBox(
       widthFactor: 0.8,
       child: Stack(
@@ -37,11 +34,11 @@ class ThemedSlider extends StatelessWidget {
               decoration: BoxDecoration(
                 color: _trackColor.withAlpha(100),
                 borderRadius: BorderRadius.all(
-                  Radius.circular(width * 0.010),
+                  Radius.circular(width * 0.01),
                 ),
               ),
               height: double.infinity,
-              width: width * 0.010,
+              width: width * 0.015,
             ),
           SliderTheme(
               data: SliderTheme.of(context).copyWith(
@@ -50,7 +47,7 @@ class ThemedSlider extends StatelessWidget {
                 inactiveTrackColor: _trackColor,
                 thumbColor: thumbColor,
                 thumbShape: CustomSliderThumbCircle(
-                    thumbRadius: width * 0.038, label: label, midiVal: midiVal),
+                    thumbRadius: width * 0.04, label: label, midiVal: midiVal),
                 // RoundSliderThumbShape(
                 //   enabledThumbRadius: width * 0.038,
                 // ),

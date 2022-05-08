@@ -16,79 +16,81 @@ class BeatPadsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: preview ? null : DeviceUtils.landscapeOnly(),
-      builder: ((context, _) {
-        return Scaffold(
-          body: SafeArea(
-            child: Consumer<Settings>(builder: (context, settings, _) {
-              return LayoutBuilder(
-                builder: ((context, constraints) {
-                  context.read<Variables>().padArea =
-                      Size(constraints.maxWidth, constraints.maxHeight);
-                  return Stack(
-                    children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          // SKIP laggy edge area. OS uses edges to detect system gestures
-                          // and messes with touch detection
+      future:
+          preview ? DeviceUtils.enableRotation() : DeviceUtils.landscapeOnly(),
+      builder: ((context, AsyncSnapshot<bool?> done) {
+        if (done.hasData && done.data == true) {
+          return Scaffold(
+            body: SafeArea(
+              child: Consumer<Settings>(builder: (context, settings, _) {
+                return Stack(
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        // SKIP laggy edge area. OS uses edges to detect system gestures
+                        // and messes with touch detection
+                        Expanded(
+                          flex: 1,
+                          child: SizedBox(),
+                        ),
+                        // CONTROL BUTTONS
+                        if (settings.octaveButtons || settings.sustainButton)
                           Expanded(
-                            flex: 1,
-                            child: SizedBox(),
+                            flex: 5,
+                            child: ControlButtonsRect(),
                           ),
-                          // CONTROL BUTTONS
-                          if (settings.octaveButtons || settings.sustainButton)
-                            Expanded(
-                              flex: 5,
-                              child: ControlButtonsRect(),
-                            ),
-                          // PITCH BEND
-                          if (settings.pitchBend)
-                            Expanded(
-                              flex: 7,
-                              child: PitchSliderEased(
-                                channel: settings.channel,
-                                resetTime: settings.pitchBendEaseCalculated,
-                              ),
-                            ),
-                          // MOD WHEEL
-                          if (settings.modWheel)
-                            Expanded(
-                              flex: 7,
-                              child: ModWheel(
-                                channel: settings.channel,
-                              ),
-                            ),
-                          // PADS
+                        // PITCH BEND
+                        if (settings.pitchBend)
                           Expanded(
-                            flex: 60,
-                            child: SlidePads(
-                              preview: preview,
+                            flex: 7,
+                            child: PitchSliderEased(
+                              channel: settings.channel,
+                              resetTime: settings.pitchBendEaseCalculated,
                             ),
                           ),
+                        // MOD WHEEL
+                        if (settings.modWheel)
                           Expanded(
-                            flex: 1,
-                            child: SizedBox(),
+                            flex: 7,
+                            child: ModWheel(
+                              channel: settings.channel,
+                            ),
                           ),
-                        ],
-                      ),
-                      Positioned.directional(
-                        top: context.watch<Variables>().padArea.width * 0.005,
-                        end: context.watch<Variables>().padArea.width * 0.005,
+                        // PADS
+                        Expanded(
+                          flex: 60,
+                          child: SlidePads(
+                            preview: preview,
+                          ),
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: SizedBox(),
+                        ),
+                      ],
+                    ),
+                    Builder(builder: (context) {
+                      double width = MediaQuery.of(context).size.width;
+                      return Positioned.directional(
+                        top: width * 0.006,
+                        end: width * 0.006,
                         textDirection: TextDirection.ltr,
                         child: SizedBox.square(
-                          dimension:
-                              context.watch<Variables>().padArea.width * 0.05,
+                          dimension: width * 0.06,
                           child: ReturnToMenuButton(),
                         ),
-                      ),
-                    ],
-                  );
-                }),
-              );
-            }),
-          ),
+                      );
+                    }),
+                  ],
+                );
+              }),
+            ),
+          );
+        }
+        return SizedBox(
+          child: Text("rotation error"),
         );
       }),
     );

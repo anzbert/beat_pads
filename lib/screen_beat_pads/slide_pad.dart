@@ -52,13 +52,12 @@ class SlideBeatPad extends StatelessWidget {
       color = Palette.yellowGreen.color; // default pad color
     }
 
-    // double screenWidth = MediaQuery.of(context).size.width;
-    double fontSize = context.watch<Variables>().padArea.width * 0.025;
-    BorderRadius padRadius = BorderRadius.all(Radius.circular(
-        context.watch<Variables>().padArea.width * ThemeConst.padRadiusFactor));
-    double padSpacing =
-        context.watch<Variables>().padArea.width * ThemeConst.padSpacingFactor;
+    double width = MediaQuery.of(context).size.width;
 
+    double fontSize = width * 0.022;
+    BorderRadius padRadius =
+        BorderRadius.all(Radius.circular(width * ThemeConst.padRadiusFactor));
+    double padSpacing = width * ThemeConst.padSpacingFactor;
     return Container(
       padding: EdgeInsets.all(padSpacing),
       height: double.infinity,
