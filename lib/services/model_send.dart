@@ -162,37 +162,75 @@ class MidiSender extends ChangeNotifier {
 
     // CC
     else if (_settings.playMode == PlayMode.cc) {
-      int newCC = (eventInBuffer.radialChange() * 127).toInt();
+      if (_settings.modulationXandY) {
+        // Y AXIS:
+        int newCCy =
+            (eventInBuffer.directionalChangeFromCenter().dy.abs() * 127)
+                .toInt();
+        if (newCCy != eventInBuffer.modMapping.cc?.value) {
+          eventInBuffer.modMapping.cc = CCMessage(
+            channel: (eventInBuffer.noteEvent.channel + 2) % 16,
+            controller: eventInBuffer.noteEvent.note,
+            value: newCCy,
+          )..send();
+        }
 
-      if (eventInBuffer.modMapping.polyAT?.pressure != newCC) {
-        eventInBuffer.modMapping.cc = CCMessage(
-          channel: _settings.channel,
-          controller: eventInBuffer.noteEvent.note,
-          value: (eventInBuffer.radialChange() * 127).toInt(),
-        )..send();
+        // X AXIS:
+        int newCCx =
+            (eventInBuffer.directionalChangeFromCenter().dx.abs() * 127)
+                .toInt();
+        if (newCCx != eventInBuffer.modMapping.cc2?.value) {
+          eventInBuffer.modMapping.cc2 = CCMessage(
+            channel: (eventInBuffer.noteEvent.channel + 3) % 16,
+            controller: eventInBuffer.noteEvent.note,
+            value: newCCx,
+          )..send();
+        }
+      } else {
+        int newCC = (eventInBuffer.radialChange() * 127).toInt();
+
+        if (eventInBuffer.modMapping.polyAT?.pressure != newCC) {
+          eventInBuffer.modMapping.cc = CCMessage(
+            channel: _settings.channel,
+            controller: eventInBuffer.noteEvent.note,
+            value: (eventInBuffer.radialChange() * 127).toInt(),
+          )..send();
+        }
       }
     }
     // MPE
     else if (_settings.playMode == PlayMode.mpe) {
-      // Y AXIS:
-      double newPB = (eventInBuffer.directionalChangeFromCenter().dy);
+      if (_settings.modulationXandY) {
+        // Y AXIS:
+        double newPB = (eventInBuffer.directionalChangeFromCenter().dy);
 
-      if (newPB != eventInBuffer.modMapping.pitchBend?.bend) {
-        eventInBuffer.modMapping.pitchBend = PitchBendMessage(
-          channel: eventInBuffer.noteEvent.channel,
-          bend: newPB,
-        )..send();
-      }
+        if (newPB != eventInBuffer.modMapping.pitchBend?.bend) {
+          eventInBuffer.modMapping.pitchBend = PitchBendMessage(
+            channel: eventInBuffer.noteEvent.channel,
+            bend: newPB,
+          )..send();
+        }
 
-      // X AXIS:
-      int newCC =
-          (eventInBuffer.directionalChangeFromCenter().dx.abs() * 127).toInt();
-      if (newCC != eventInBuffer.modMapping.cc?.value) {
-        eventInBuffer.modMapping.cc = CCMessage(
-          channel: eventInBuffer.noteEvent.channel,
-          controller: 74, // <- slide controller is #74
-          value: newCC,
-        )..send();
+        // X AXIS:
+        int newCC = (eventInBuffer.directionalChangeFromCenter().dx.abs() * 127)
+            .toInt();
+        if (newCC != eventInBuffer.modMapping.cc?.value) {
+          eventInBuffer.modMapping.cc = CCMessage(
+            channel: eventInBuffer.noteEvent.channel,
+            controller: 74, // <- slide controller is #74
+            value: newCC,
+          )..send();
+        }
+      } else {
+        // RADIUS:
+        int newPressure = (eventInBuffer.radialChange() * 127).toInt();
+
+        if (eventInBuffer.modMapping.at?.pressure != newPressure) {
+          eventInBuffer.modMapping.at = ATMessage(
+            channel: _settings.channel,
+            pressure: (newPressure).toInt(),
+          )..send();
+        }
       }
     }
   }

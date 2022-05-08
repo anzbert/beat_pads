@@ -1,9 +1,9 @@
 enum PlayMode {
   slide("Sliding"),
   noSlide("No Sliding"),
-  polyAT("Aftertouch (test)"),
+  polyAT("Poly Aftertouch"),
   mpe("MPE (test)"),
-  cc("Send CC (test)");
+  cc("Send CC");
 
   const PlayMode(this.title);
   final String title;

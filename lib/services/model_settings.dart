@@ -21,12 +21,16 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
+  void resetModulationRadius() => modulationRadius = 0.11;
+
   double _modulationDeadZone = 0.15; // temp fixed
   double get modulationDeadZone => _modulationDeadZone;
   set modulationDeadZone(double newVal) {
     _modulationDeadZone = newVal;
     notifyListeners();
   }
+
+  void resetDeadZone() => modulationDeadZone = 0.15;
 
   bool _modulationXandY = true;
   bool get modulationXandY => _modulationXandY;

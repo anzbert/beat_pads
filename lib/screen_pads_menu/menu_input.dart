@@ -25,15 +25,19 @@ class MenuInput extends StatelessWidget {
             subtitle: Text("Sliding Behaviour, MPE and Aftertouch"),
             trailing: DropdownPlayMode(),
           ),
-          if (settings.playMode == PlayMode.mpe)
+          if (settings.playMode == PlayMode.mpe ||
+              settings.playMode == PlayMode.cc)
             ListTile(
               title: Text("2-D Modulation"),
-              subtitle: Text(
-                  "Modulate 2 Parameters on the X and Y Axis. Turn off to modulate only one"),
+              subtitle: settings.playMode == PlayMode.mpe
+                  ? Text(
+                      "Modulate PitchBend (Y Axis) and Slide (X Axis). Turn off to modulate only Aftertouch (Radius)")
+                  : Text(
+                      "Modulate two CC on the Y and X Axis, on channels above the current one. Turn off to modulate only one CC by Radius"),
               trailing: Switch(
                   value: settings.modulationXandY,
                   onChanged: (value) => settings.modulationXandY = value),
-            ), // TODO MPE options!!!! :
+            ),
           if (settings.playMode.afterTouch)
             IntSliderTile(
               min: 5,
@@ -41,10 +45,10 @@ class MenuInput extends StatelessWidget {
               label: "Modulation Size",
               subtitle:
                   "Size of the modulation field relative to the screen width",
-              trailing: Text("${settings.modulationRadius}%"),
+              trailing: Text("${(settings.modulationRadius * 100).toInt()}%"),
               readValue: (settings.modulationRadius * 100).toInt(),
               setValue: (v) => settings.modulationRadius = v / 100,
-              resetValue: settings.resetVelocity,
+              resetValue: settings.resetModulationRadius,
             ),
           if (settings.playMode.afterTouch)
             IntSliderTile(
@@ -52,11 +56,11 @@ class MenuInput extends StatelessWidget {
               max: 30,
               label: "Modulation Deadzone",
               subtitle:
-                  "Size of the center of the modulation field, which does not affect modulation",
-              trailing: Text("${settings.modulationDeadZone}%"),
+                  "Size of the non-reactive center of the modulation field, relative to the modulation field size",
+              trailing: Text("${(settings.modulationDeadZone * 100).toInt()}%"),
               readValue: (settings.modulationDeadZone * 100).toInt(),
               setValue: (v) => settings.modulationDeadZone = v / 100,
-              resetValue: settings.resetVelocity,
+              resetValue: settings.resetDeadZone,
             ),
         ],
       );
