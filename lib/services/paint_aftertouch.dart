@@ -1,9 +1,9 @@
 import 'package:beat_pads/services/_services.dart';
+import 'package:beat_pads/services/paint_radius.dart';
+import 'package:beat_pads/services/paint_xy.dart';
 import 'package:beat_pads/services/paint_circle.dart';
 import 'package:beat_pads/services/paint_square.dart';
-import 'package:beat_pads/services/paint_xy_lines.dart';
-import 'package:beat_pads/shared/colors.dart';
-
+import 'package:beat_pads/shared/_shared.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -27,45 +27,45 @@ class PaintAfterTouchCircle extends StatelessWidget {
                 return context.watch<Settings>().modulationXandY == false
                     ? Stack(
                         children: [
-                          PaintCircle(
-                            box.globalToLocal(touchEvent.origin),
-                            touchEvent.maxRadius,
-                            Palette.lightPink.color.withOpacity(
-                                touchEvent.radialChange(curve: Curves.easeOut) *
-                                    0.6),
-                            stroke: false,
+                          CustomPaint(
+                            painter: CustomPaintCircle(
+                              box.globalToLocal(touchEvent.origin),
+                              touchEvent,
+                              Palette.lightPink.color.withOpacity(touchEvent
+                                      .radialChange(curve: Curves.easeOut) *
+                                  0.6),
+                            ),
                           ),
-                          PaintCircle(
-                            box.globalToLocal(touchEvent.origin),
-                            touchEvent.radialChange() * touchEvent.maxRadius,
-                            Palette.laserLemon.color.withOpacity(
-                                touchEvent.radialChange(curve: Curves.easeOut) *
-                                    0.8),
-                            stroke: true,
+                          CustomPaint(
+                            painter: CustomPaintRadius(
+                              box.globalToLocal(touchEvent.origin),
+                              touchEvent,
+                              Palette.laserLemon.color.withOpacity(touchEvent
+                                      .radialChange(curve: Curves.easeOut) *
+                                  0.8),
+                            ),
                           ),
                         ],
                       )
                     : Stack(
                         children: [
-                          PaintSquare(
-                            box.globalToLocal(touchEvent.origin),
-                            touchEvent.maxRadius,
-                            Palette.lightPink.color.withOpacity(
-                                touchEvent.radialChange(curve: Curves.easeOut) *
-                                    0.6),
-                            stroke: false,
+                          CustomPaint(
+                            painter: CustomPaintSquare(
+                              box.globalToLocal(touchEvent.origin),
+                              touchEvent,
+                              Palette.lightPink.color.withOpacity(touchEvent
+                                      .radialChange(curve: Curves.easeOut) *
+                                  0.6),
+                            ),
                           ),
-                          PaintXYLines(
-                            box.globalToLocal(touchEvent.origin),
-                            touchEvent.directionalChangeFromCenter(
-                                    curve: Curves.linear, deadZone: true) *
-                                touchEvent.maxRadius,
-                            touchEvent.maxRadius,
-                            touchEvent.deadZone,
-                            Palette.laserLemon.color.withOpacity(
-                                touchEvent.radialChange(curve: Curves.easeOut) *
-                                    0.8),
-                            stroke: true,
+                          CustomPaint(
+                            painter: CustomPaintXYSquare(
+                              box.globalToLocal(touchEvent.origin),
+                              touchEvent,
+                              Palette.laserLemon.color.withOpacity(touchEvent
+                                      .radialChange(curve: Curves.easeOut) *
+                                  0.8),
+                            ),
                           ),
                         ],
                       );
