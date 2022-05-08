@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 class CustomPaintRadius extends CustomPainter {
   CustomPaintRadius(this.origin, this.touchEvent, this.color,
       {this.stroke = true})
-      : change = touchEvent.radialChange() * touchEvent.maxRadius;
+      : change = touchEvent.radialChange(curve: Curves.linear) *
+            touchEvent.maxRadius;
   final Offset origin;
   final TouchEvent touchEvent;
   final Color color;
@@ -24,7 +25,7 @@ class CustomPaintRadius extends CustomPainter {
 
     // deadZone
     brush.style = PaintingStyle.fill;
-    brush.color = color.withOpacity(0.8);
+    brush.color = color.withOpacity(0.4);
     canvas.drawCircle(
         origin, touchEvent.maxRadius * touchEvent.deadZone, brush);
   }
