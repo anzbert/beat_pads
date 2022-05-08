@@ -16,7 +16,13 @@ class Settings extends ChangeNotifier {
   // MPE settings (testing) TODO : fixed/ changable or screen dependant?
   // double modulationRadius = 110; // temp fixed
   // double modulationDeadZone = 0.1; // temp fixed
-  final int totalMemberChannels = 8; // temp fixed
+
+  int _totalMemberChannels = 8; // temp fixed
+  int get totalMemberChannels => _totalMemberChannels;
+  set totalMemberChannels(int newVal) {
+    _totalMemberChannels = newVal;
+    notifyListeners();
+  }
 
   // ROUND ROBBIN METHOD (probably needs overhaul)
   int _channelCounter = -1;

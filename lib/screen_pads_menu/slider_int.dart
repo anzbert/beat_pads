@@ -10,6 +10,7 @@ class IntSliderTile extends StatelessWidget {
       required this.setValue,
       required this.readValue,
       this.resetValue,
+      required this.trailing,
       Key? key})
       : super(key: key);
 
@@ -20,6 +21,7 @@ class IntSliderTile extends StatelessWidget {
   final Function setValue;
   final int readValue;
   final Function? resetValue;
+  final Widget trailing;
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +45,7 @@ class IntSliderTile extends StatelessWidget {
             ],
           ),
           subtitle: subtitle != null ? Text(subtitle!) : null,
-          trailing: Text(readValue.toString()),
+          trailing: trailing,
         ),
         Builder(
           builder: (context) {

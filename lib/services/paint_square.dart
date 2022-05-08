@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class PaintCircle extends StatelessWidget {
-  const PaintCircle(this.o1, this.radius, this.color, {this.stroke = true});
+class PaintSquare extends StatelessWidget {
+  const PaintSquare(this.o1, this.radius, this.color, {this.stroke = true});
   final Offset o1;
   final double radius;
   final Color color;
@@ -31,7 +31,9 @@ class Painter extends CustomPainter {
 
     if (stroke) brush.style = PaintingStyle.stroke;
 
-    canvas.drawCircle(o1, radius, brush);
+    Rect rect = Rect.fromCircle(center: o1, radius: radius);
+
+    canvas.drawRRect(RRect.fromRectAndRadius(rect, Radius.circular(5)), brush);
 
     // origin
     brush.style = PaintingStyle.fill;

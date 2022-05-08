@@ -85,7 +85,6 @@ class _PadMenuScreenState extends State<PadMenuScreen> {
         },
         items: [
           BottomNavigationBarItem(
-            // backgroundColor: Palette.laserLemon.color.withAlpha(20),
             icon: Icon(Icons.apps),
             activeIcon: Icon(
               Icons.apps,

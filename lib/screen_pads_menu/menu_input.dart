@@ -20,8 +20,8 @@ class MenuInput extends StatelessWidget {
             ),
           ),
           ListTile(
-            title: Text("Slide / Aftertouch"),
-            subtitle: Text("Touch Sliding and Polyphonic Aftertouch"),
+            title: Text("Input Mode"),
+            subtitle: Text("Sliding Behaviour, MPE and Aftertouch"),
             trailing: DropdownPlayMode(),
           ),
         ],

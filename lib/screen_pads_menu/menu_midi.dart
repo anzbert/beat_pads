@@ -27,10 +27,24 @@ class MenuMidi extends StatelessWidget {
             resetValue: settings.resetChannel,
             min: 1,
             max: 16,
-            label: "Midi Channel",
-            subtitle: "Master Channel to send and receive on",
+            label: "Master Channel",
+            subtitle:
+                "Midi Channel to send and receive on. Only 1 or 16 with MPE.",
+            trailing: Text((settings.channel + 1).toString()),
             setValue: (v) => settings.channel = v - 1,
             readValue: settings.channel + 1,
+          ),
+          IntSliderTile(
+            // resetValue: settings.resetChannel,
+            min: 1,
+            max: 15,
+            label: "MPE Member Channels",
+            subtitle: "Number of member channels to allocate in MPE mode",
+            trailing: Text(settings.upperZone
+                ? "${15 - settings.totalMemberChannels} to 15"
+                : "2 to ${settings.totalMemberChannels + 1}"),
+            setValue: (v) => settings.totalMemberChannels = v,
+            readValue: settings.totalMemberChannels,
           ),
           Divider(),
           ListTile(
@@ -44,6 +58,7 @@ class MenuMidi extends StatelessWidget {
             IntSliderTile(
               label: "Fixed Velocity",
               subtitle: "Velocity to send when pressing a Pad",
+              trailing: Text(settings.velocity.toString()),
               readValue: settings.velocity,
               setValue: (v) => settings.velocity = v,
               resetValue: settings.resetVelocity,
