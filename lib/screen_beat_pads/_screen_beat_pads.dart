@@ -16,15 +16,15 @@ class BeatPadsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: preview ? null : DeviceUtils.landscapeLeftOnly(),
+      future: preview ? null : DeviceUtils.landscapeOnly(),
       builder: ((context, _) {
         return Scaffold(
           body: SafeArea(
-            child: LayoutBuilder(
-              builder: ((context, constraints) {
-                context.read<Variables>().padArea =
-                    Size(constraints.maxWidth, constraints.maxHeight);
-                return Consumer<Settings>(builder: (context, settings, _) {
+            child: Consumer<Settings>(builder: (context, settings, _) {
+              return LayoutBuilder(
+                builder: ((context, constraints) {
+                  context.read<Variables>().padArea =
+                      Size(constraints.maxWidth, constraints.maxHeight);
                   return Stack(
                     children: [
                       Row(
@@ -33,7 +33,6 @@ class BeatPadsScreen extends StatelessWidget {
                         children: [
                           // SKIP laggy edge area. OS uses edges to detect system gestures
                           // and messes with touch detection
-
                           Expanded(
                             flex: 1,
                             child: SizedBox(),
@@ -86,9 +85,9 @@ class BeatPadsScreen extends StatelessWidget {
                       ),
                     ],
                   );
-                });
-              }),
-            ),
+                }),
+              );
+            }),
           ),
         );
       }),
