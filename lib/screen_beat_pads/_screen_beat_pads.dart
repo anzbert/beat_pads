@@ -3,7 +3,7 @@ import 'package:beat_pads/screen_beat_pads/buttons_menu.dart';
 import 'package:beat_pads/screen_beat_pads/slide_pads.dart';
 import 'package:beat_pads/screen_beat_pads/slider_mod_wheel.dart';
 import 'package:beat_pads/screen_beat_pads/slider_pitch_eased.dart';
-import 'package:beat_pads/services/model_variables.dart';
+
 import 'package:flutter/material.dart';
 import 'package:beat_pads/services/_services.dart';
 import 'package:provider/provider.dart';

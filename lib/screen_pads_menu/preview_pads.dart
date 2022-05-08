@@ -1,4 +1,5 @@
 import 'package:beat_pads/screen_beat_pads/_screen_beat_pads.dart';
+import 'package:beat_pads/services/device_utils.dart';
 import 'package:beat_pads/shared/_shared.dart';
 import 'package:flutter/material.dart';
 
@@ -13,38 +14,59 @@ class Preview extends StatelessWidget {
       fit: BoxFit.scaleDown,
       child: SizedBox(
         width: MediaQuery.of(context).size.width,
-        child: Container(
-          color: Palette.darkGrey.color.withOpacity(0.5),
-          child: Padding(
-            padding: const EdgeInsets.all(0.0),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(16.0),
+          child: Container(
+            color: Palette.darkGrey.color.withOpacity(0.5),
             child: IgnorePointer(
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  AspectRatio(
-                    aspectRatio: 16 / 9,
-                    child: Padding(
-                      padding: const EdgeInsets.all(4.0),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(6.0),
-                        child: BeatPadsScreen(preview: true),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 50),
-                    width: double.infinity,
-                    child: FittedBox(
-                      child: Text(
-                        "Preview",
-                        style: TextStyle(
-                          color: Palette.lightGrey.color.withOpacity(0.4),
+              child: DeviceUtils.isPortrait(context)
+                  ? Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        AspectRatio(
+                          aspectRatio: 16 / 9,
+                          child: Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: BeatPadsScreen(preview: true),
+                          ),
                         ),
-                      ),
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 50),
+                          width: double.infinity,
+                          child: FittedBox(
+                            child: Text(
+                              "Preview",
+                              style: TextStyle(
+                                color: Palette.lightGrey.color.withOpacity(0.4),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  : Column(
+                      children: [
+                        AspectRatio(
+                          aspectRatio: 16 / 9,
+                          child: Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: BeatPadsScreen(preview: true),
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 100),
+                          width: double.infinity,
+                          child: FittedBox(
+                            child: Text(
+                              "Preview",
+                              style: TextStyle(
+                                color: Palette.lightGrey.color,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                ],
-              ),
             ),
           ),
         ),

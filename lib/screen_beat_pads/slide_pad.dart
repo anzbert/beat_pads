@@ -1,4 +1,3 @@
-import 'package:beat_pads/services/model_variables.dart';
 import 'package:beat_pads/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

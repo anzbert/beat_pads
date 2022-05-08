@@ -1,4 +1,3 @@
-import 'package:beat_pads/services/model_variables.dart';
 import 'package:beat_pads/shared/colors.dart';
 import 'package:beat_pads/theme.dart';
 import 'package:flutter/material.dart';
