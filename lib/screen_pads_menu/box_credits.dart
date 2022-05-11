@@ -6,12 +6,15 @@ import 'package:beat_pads/services/_services.dart';
 class CreditsBox extends StatelessWidget {
   const CreditsBox({Key? key}) : super(key: key);
 
-  Future<bool> webView(String url) async {
-    Uri uri = Uri.dataFromString(url);
-    if (await canLaunchUrl(uri)) {
-      return await launchUrl(uri);
+  Future<bool> webView(String host) async {
+    final httpUri = Uri(
+      scheme: 'http',
+      host: host,
+    );
+    if (await canLaunchUrl(httpUri)) {
+      return await launchUrl(httpUri);
     } else {
-      Utils.logd("Failure to launch webview with:\n$url");
+      Utils.logd("Failure to launch webview with:\n$httpUri");
       return false;
     }
   }
@@ -34,7 +37,7 @@ class CreditsBox extends StatelessWidget {
                     decoration: TextDecoration.underline,
                     fontSize: _linkFontSize),
               ),
-              onPressed: () async => await webView("https://www.anzio.dev"),
+              onPressed: () async => await webView("anzio.dev"),
             )
           ],
         ),
@@ -51,8 +54,7 @@ class CreditsBox extends StatelessWidget {
                     decoration: TextDecoration.underline,
                     fontSize: _linkFontSize),
               ),
-              onPressed: () async =>
-                  await webView("https://www.xpresspads.com"),
+              onPressed: () async => await webView("xpresspads.com"),
             )
           ],
         ),
@@ -67,7 +69,7 @@ class CreditsBox extends StatelessWidget {
                     decoration: TextDecoration.underline,
                     fontSize: _linkFontSize),
               ),
-              onPressed: () async => await webView("https://www.freepik.com"),
+              onPressed: () async => await webView("freepik.com"),
             )
           ],
         ),
@@ -80,7 +82,7 @@ class CreditsBox extends StatelessWidget {
                   style: TextStyle(
                       decoration: TextDecoration.underline,
                       fontSize: _linkFontSize)),
-              onPressed: () async => await webView("https://www.rive.app"),
+              onPressed: () async => await webView("rive.app"),
             )
           ],
         ),
@@ -104,7 +106,11 @@ class CreditsBox extends StatelessWidget {
                   query:
                       'subject=App Feedback&body=Feedback for Beat pads', //add subject and body here
                 );
-                await webView(encoded.toString());
+                if (await canLaunchUrl(encoded)) {
+                  await launchUrl(encoded);
+                } else {
+                  Utils.logd("Failure to launch webview with:\n$encoded");
+                }
               },
             )
           ],
