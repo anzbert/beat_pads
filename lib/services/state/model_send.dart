@@ -162,7 +162,7 @@ class MidiSender extends ChangeNotifier {
 
     // CC
     else if (_settings.playMode == PlayMode.cc) {
-      if (_settings.modulationXandY) {
+      if (_settings.modulation2d) {
         // Y AXIS:
         int newCCy =
             (eventInBuffer.directionalChangeFromCenter().dy.abs() * 127)
@@ -200,7 +200,7 @@ class MidiSender extends ChangeNotifier {
     }
     // MPE
     else if (_settings.playMode == PlayMode.mpe) {
-      if (_settings.modulationXandY) {
+      if (_settings.modulation2d) {
         // Y AXIS:
         double newPB = (eventInBuffer.directionalChangeFromCenter().dy);
 

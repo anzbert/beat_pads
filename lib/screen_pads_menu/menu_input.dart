@@ -1,3 +1,4 @@
+import 'package:beat_pads/screen_pads_menu/drop_down_modulation.dart';
 import 'package:beat_pads/screen_pads_menu/drop_down_playmode.dart';
 import 'package:beat_pads/screen_pads_menu/slider_int.dart';
 
@@ -22,23 +23,63 @@ class MenuInput extends StatelessWidget {
           ),
           ListTile(
             title: Text("Input Mode"),
-            subtitle: Text("Sliding Behaviour, MPE and Aftertouch"),
+            subtitle: Text("Slidable Input, Polyphonic Aftertouch or MPE"),
             trailing: DropdownPlayMode(),
           ),
-          if (settings.playMode == PlayMode.mpe ||
-              settings.playMode == PlayMode.cc)
+          if (settings.playMode == PlayMode.mpe)
             ListTile(
               title: Text("2-D Modulation"),
-              subtitle: settings.playMode == PlayMode.mpe
-                  ? Text(
-                      "Modulate PitchBend (Y Axis) and Slide (X Axis). Turn off to modulate only Aftertouch (Radius)")
-                  : Text(
-                      "Modulate two CC on the Y and X Axis, on channels above the current one. Turn off to modulate only one CC by Radius"),
+              subtitle: Text(
+                  "Modulate 2 Values on the X and Y Axis. Turn off to modulate only 1 Value by Radius"),
               trailing: Switch(
-                  value: settings.modulationXandY,
-                  onChanged: (value) => settings.modulationXandY = value),
+                  value: settings.modulation2d,
+                  onChanged: (value) => settings.modulation2d = value),
             ),
-          if (settings.playMode.afterTouch)
+          if (settings.playMode == PlayMode.mpe && settings.modulation2d)
+            ListTile(
+              title: Text("Modulation X-Axis"),
+              subtitle: Text("Modulate this parameter horizontally"),
+              trailing: DropdownModulation(
+                readValue: settings.modulation2dX,
+                setValue: (v) => settings.modulation2dX = v,
+                otherValue: settings.modulation2dY,
+              ),
+            ),
+          if (settings.playMode == PlayMode.mpe && settings.modulation2d)
+            ListTile(
+              title: Text("Modulation Y-Axis"),
+              subtitle: Text("Modulate this parameter vertically"),
+              trailing: DropdownModulation(
+                readValue: settings.modulation2dY,
+                setValue: (v) => settings.modulation2dY = v,
+                otherValue: settings.modulation2dX,
+              ),
+            ),
+          if (settings.playMode == PlayMode.mpe &&
+              settings.modulation2d == false)
+            ListTile(
+              title: Text("Modulation by Radius"),
+              subtitle: Text(
+                  "Modulate this parameter by the distance from the initial touch position"),
+              trailing: DropdownModulation(
+                includeCenter64: false,
+                readValue: settings.modulation1dR,
+                setValue: (v) => settings.modulation1dR = v,
+              ),
+            ),
+          if (settings.playMode == PlayMode.mpe)
+            IntSliderTile(
+              min: 1,
+              max: 48,
+              label: "Pitchbend Range",
+              subtitle:
+                  "Semitone Range of MPE Pitchbend. 48 is the MPE default",
+              trailing: Text("${settings.mpePitchbendRange}"),
+              readValue: settings.mpePitchbendRange,
+              setValue: (v) => settings.mpePitchbendRange = v,
+              resetValue: settings.resetMPEPitchbendRange,
+            ),
+          if (settings.playMode.modulatable)
             IntSliderTile(
               min: 5,
               max: 25,
@@ -50,7 +91,7 @@ class MenuInput extends StatelessWidget {
               setValue: (v) => settings.modulationRadius = v / 100,
               resetValue: settings.resetModulationRadius,
             ),
-          if (settings.playMode.afterTouch)
+          if (settings.playMode.modulatable)
             IntSliderTile(
               min: 0,
               max: 30,

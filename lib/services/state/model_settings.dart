@@ -1,3 +1,4 @@
+import 'package:beat_pads/services/pads_modulation.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 
@@ -14,10 +15,42 @@ class Settings extends ChangeNotifier {
   }
 
   // MPE and Aftertouch settings
+  MPEModulation _modulation2dX = MPEModulation.slide;
+  MPEModulation get modulation2dX => _modulation2dX;
+  set modulation2dX(MPEModulation newVal) {
+    _modulation2dX = newVal;
+    notifyListeners();
+  }
+
+  MPEModulation _modulation2dY = MPEModulation.pitchBend;
+  MPEModulation get modulation2dY => _modulation2dY;
+  set modulation2dY(MPEModulation newVal) {
+    _modulation2dY = newVal;
+    notifyListeners();
+  }
+
+  MPEModulation _modulation1dR = MPEModulation.afterTouch;
+  MPEModulation get modulation1dR => _modulation1dR;
+  set modulation1dR(MPEModulation newVal) {
+    if (newVal.center64) return;
+    _modulation1dR = newVal;
+    notifyListeners();
+  }
+
+  int _mpePitchbendRange = 48;
+  int get mpePitchbendRange => _mpePitchbendRange;
+  set mpePitchbendRange(int newVal) {
+    if (newVal > 48 || newVal < 0) return;
+    _mpePitchbendRange = newVal;
+    notifyListeners();
+  }
+
+  void resetMPEPitchbendRange() => mpePitchbendRange = 48;
+
   double _modulationRadius = 0.11; // temp fixed
   double get modulationRadius => _modulationRadius;
   set modulationRadius(double newVal) {
-    _modulationRadius = newVal;
+    _modulationRadius = newVal.clamp(0, 1);
     notifyListeners();
   }
 
@@ -26,23 +59,23 @@ class Settings extends ChangeNotifier {
   double _modulationDeadZone = 0.15; // temp fixed
   double get modulationDeadZone => _modulationDeadZone;
   set modulationDeadZone(double newVal) {
-    _modulationDeadZone = newVal;
+    _modulationDeadZone = newVal.clamp(0, 1);
     notifyListeners();
   }
 
   void resetDeadZone() => modulationDeadZone = 0.15;
 
-  bool _modulationXandY = true;
-  bool get modulationXandY => _modulationXandY;
-  set modulationXandY(bool newVal) {
-    _modulationXandY = newVal;
+  bool _modulation2d = true;
+  bool get modulation2d => _modulation2d;
+  set modulation2d(bool newVal) {
+    _modulation2d = newVal;
     notifyListeners();
   }
 
   int _totalMemberChannels = 8; // temp fixed
   int get totalMemberChannels => _totalMemberChannels;
   set totalMemberChannels(int newVal) {
-    _totalMemberChannels = newVal;
+    _totalMemberChannels = newVal.clamp(1, 15);
     notifyListeners();
   }
 

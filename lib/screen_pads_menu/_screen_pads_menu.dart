@@ -5,7 +5,7 @@ import 'package:beat_pads/screen_pads_menu/menu_midi.dart';
 import 'package:beat_pads/screen_pads_menu/menu_system.dart';
 import 'package:flutter/material.dart';
 
-import 'package:beat_pads/shared/_shared.dart';
+import 'package:beat_pads/shared_components/_shared.dart';
 
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 import 'package:beat_pads/services/_services.dart';

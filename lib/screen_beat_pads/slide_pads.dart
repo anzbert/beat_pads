@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 import 'package:provider/provider.dart';
-import 'package:beat_pads/shared/_shared.dart';
+import 'package:beat_pads/shared_components/_shared.dart';
 import 'package:beat_pads/services/_services.dart';
 
 class SlidePads extends StatefulWidget {
@@ -128,7 +128,7 @@ class _SlidePadsState extends State<SlidePads> {
                     ],
                   ),
                 ),
-                if (settings.playMode.afterTouch) PaintAfterTouchCircle(),
+                if (settings.playMode.modulatable) PaintAfterTouchCircle(),
               ],
             );
           },

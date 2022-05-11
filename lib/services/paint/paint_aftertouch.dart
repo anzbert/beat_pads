@@ -1,9 +1,8 @@
 import 'package:beat_pads/services/_services.dart';
-import 'package:beat_pads/services/paint_radius.dart';
-import 'package:beat_pads/services/paint_xy.dart';
-import 'package:beat_pads/services/paint_circle.dart';
-import 'package:beat_pads/services/paint_square.dart';
-import 'package:beat_pads/shared/_shared.dart';
+import 'package:beat_pads/services/paint/paint_radius.dart';
+import 'package:beat_pads/services/paint/paint_xy.dart';
+import 'package:beat_pads/services/paint/paint_circle.dart';
+import 'package:beat_pads/services/paint/paint_square.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -24,7 +23,9 @@ class PaintAfterTouchCircle extends StatelessWidget {
           children: [
             ...buffer.map(
               (touchEvent) {
-                return context.watch<Settings>().modulationXandY == false
+                return context.watch<Settings>().modulation2d == false ||
+                        context.watch<Settings>().playMode == PlayMode.polyAT
+                    // CIRCLE / RADIUS
                     ? Stack(
                         children: [
                           CustomPaint(
@@ -47,6 +48,7 @@ class PaintAfterTouchCircle extends StatelessWidget {
                           ),
                         ],
                       )
+                    // SQUARE / X AND Y
                     : Stack(
                         children: [
                           CustomPaint(

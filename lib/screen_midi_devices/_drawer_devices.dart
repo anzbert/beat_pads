@@ -1,8 +1,8 @@
-import 'package:beat_pads/services/model_variables.dart';
+import 'package:beat_pads/services/_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_midi_command/flutter_midi_command.dart';
 
-import 'package:beat_pads/shared/_shared.dart';
+import 'package:beat_pads/shared_components/_shared.dart';
 
 import 'dart:io' show Platform;
 

@@ -1,11 +1,10 @@
 import 'package:beat_pads/screen_pads_menu/box_credits.dart';
-import 'package:beat_pads/services/model_variables.dart';
+import 'package:beat_pads/services/_services.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:beat_pads/shared/_shared.dart';
-import 'package:beat_pads/services/_services.dart';
+import 'package:beat_pads/shared_components/_shared.dart';
 
 import 'package:beat_pads/screen_pads_menu/switch_wake_lock.dart';
 

@@ -1,4 +1,4 @@
-import '_shared.dart';
+import 'package:beat_pads/services/constants/colors_const.dart';
 
 import 'package:flutter/material.dart';
 

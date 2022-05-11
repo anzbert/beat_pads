@@ -1,16 +1,23 @@
-export './device_utils.dart';
-export './gen_utils.dart';
-export './midi_const.dart';
-export './midi_utils.dart';
+export 'classes/data_classes.dart';
+
+export 'constants/midi_const.dart';
+export './constants/colors_const.dart';
+
+export './paint/paint_aftertouch.dart';
+
+export 'state/shared_prefs.dart';
+export './state/model_receive.dart';
+export './state/model_send.dart';
+export './state/model_settings.dart';
+export './state/model_variables.dart';
+
+export 'utils/device_utils.dart';
+export 'utils/gen_utils.dart';
+export 'utils/midi_utils.dart';
+export 'utils/transition_utils.dart';
+
 export './pads_layouts.dart';
-export './transition_utils.dart';
-export './shared_prefs.dart';
-export './data_classes.dart';
-export './model_receive.dart';
-export './model_send.dart';
-export './model_settings.dart';
-export './paint_aftertouch.dart';
 export './touch_buffer.dart';
 export './pads_playmodes.dart';
-export './midi_messages.dart';
+export 'midi_messages.dart';
 export 'midi_events.dart';

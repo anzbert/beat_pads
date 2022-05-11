@@ -1,6 +1,6 @@
 import 'dart:math';
+import 'package:beat_pads/services/_services.dart';
 
-import 'package:beat_pads/shared/colors.dart';
 import 'package:flutter/material.dart';
 
 class ThemedSlider extends StatelessWidget {

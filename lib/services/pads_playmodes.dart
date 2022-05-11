@@ -15,7 +15,7 @@ enum PlayMode {
     return null;
   }
 
-  bool get afterTouch {
+  bool get modulatable {
     switch (this) {
       case PlayMode.polyAT:
         return true;

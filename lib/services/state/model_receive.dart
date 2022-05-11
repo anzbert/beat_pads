@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_midi_command/flutter_midi_command.dart';
 import 'dart:async';
 
-import '../services/_services.dart';
+import '../_services.dart';
 
 class MidiReceiver extends ChangeNotifier {
   StreamSubscription<MidiPacket>? _rxSubscription;
@@ -40,6 +40,8 @@ class MidiReceiver extends ChangeNotifier {
       }
 
       MidiMessageType type = MidiUtils.getMidiMessageType(statusByte);
+
+      // TODO: add CC receiver for mod wheel
 
       if (type == MidiMessageType.noteOn || type == MidiMessageType.noteOff) {
         int note = packet.data[1];

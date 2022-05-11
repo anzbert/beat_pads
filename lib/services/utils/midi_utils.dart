@@ -1,6 +1,6 @@
 import 'package:flutter_midi_command/flutter_midi_command_messages.dart';
 
-import './midi_const.dart';
+import '../constants/midi_const.dart';
 
 enum MidiMessageType {
   unknown,

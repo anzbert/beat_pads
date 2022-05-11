@@ -1,5 +1,5 @@
-import 'package:beat_pads/shared/_shared.dart';
 import 'package:flutter/material.dart';
+import 'package:beat_pads/services/_services.dart';
 
 class RotateLabel extends StatelessWidget {
   const RotateLabel({Key? key}) : super(key: key);
