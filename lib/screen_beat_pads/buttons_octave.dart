@@ -21,20 +21,20 @@ class OctaveButtons extends StatelessWidget {
               onPressed: () {
                 Provider.of<Settings>(context, listen: false).baseOctave++;
               },
-              child: FittedBox(
-                fit: BoxFit.contain,
-                child: Icon(
-                  Icons.add,
-                  size: 100,
-                ),
-              ),
               style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.all(0),
+                padding: const EdgeInsets.all(0),
                 alignment: Alignment.center,
                 primary: Palette.cadetBlue.color,
                 onPrimary: Palette.darkGrey.color,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(padRadius),
+                ),
+              ),
+              child: const FittedBox(
+                fit: BoxFit.contain,
+                child: Icon(
+                  Icons.add,
+                  size: 100,
                 ),
               ),
             ),
@@ -48,20 +48,20 @@ class OctaveButtons extends StatelessWidget {
               onPressed: () {
                 Provider.of<Settings>(context, listen: false).baseOctave--;
               },
-              child: FittedBox(
-                fit: BoxFit.contain,
-                child: Icon(
-                  Icons.remove,
-                  size: 100,
-                ),
-              ),
               style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.all(0),
+                padding: const EdgeInsets.all(0),
                 alignment: Alignment.center,
                 primary: Palette.laserLemon.color,
                 onPrimary: Palette.darkGrey.color,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(padRadius),
+                ),
+              ),
+              child: const FittedBox(
+                fit: BoxFit.contain,
+                child: Icon(
+                  Icons.remove,
+                  size: 100,
                 ),
               ),
             ),

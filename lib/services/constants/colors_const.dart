@@ -16,19 +16,19 @@ extension RGB on Palette {
   Color get color {
     switch (this) {
       case Palette.cadetBlue:
-        return HSLColor.fromAHSL(1, 212, 0.31, 0.69).toColor();
+        return const HSLColor.fromAHSL(1, 212, 0.31, 0.69).toColor();
       case Palette.yellowGreen:
-        return HSLColor.fromAHSL(1, 89, 1, .84).toColor();
+        return const HSLColor.fromAHSL(1, 89, 1, .84).toColor();
       case Palette.laserLemon:
-        return HSLColor.fromAHSL(1, 61, 1, .71).toColor();
+        return const HSLColor.fromAHSL(1, 61, 1, .71).toColor();
       case Palette.tan:
-        return HSLColor.fromAHSL(1, 28, .59, .63).toColor();
+        return const HSLColor.fromAHSL(1, 28, .59, .63).toColor();
       case Palette.lightPink:
-        return HSLColor.fromAHSL(1, 351, .77, .82).toColor();
+        return const HSLColor.fromAHSL(1, 351, .77, .82).toColor();
       case Palette.darkGrey:
         return Colors.grey[800]!;
       case Palette.lightGrey:
-        return HSLColor.fromAHSL(1, 0, .0, .33).toColor();
+        return const HSLColor.fromAHSL(1, 0, .0, .33).toColor();
       case Palette.whiteLike:
         return Colors.white70;
     }

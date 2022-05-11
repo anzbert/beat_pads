@@ -35,12 +35,12 @@ class IntSliderTile extends StatelessWidget {
               if (resetValue != null)
                 TextButton(
                   onPressed: () => resetValue!(),
-                  child: Text("Reset"),
                   style: TextButton.styleFrom(
                     minimumSize: Size.zero,
-                    padding: EdgeInsets.symmetric(horizontal: 12),
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
                     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   ),
+                  child: const Text("Reset"),
                 )
             ],
           ),

@@ -15,25 +15,25 @@ class MenuSystem extends StatelessWidget {
       return ListView(
         children: <Widget>[
           ListTile(
-            title: Divider(),
+            title: const Divider(),
             trailing: Text(
               "System Settings",
               style: TextStyle(
                   fontSize: Theme.of(context).textTheme.headline5!.fontSize),
             ),
           ),
-          SwitchWakeLockTile(),
+          const SwitchWakeLockTile(),
           ListTile(
             title: ElevatedButton(
-              child: Text(
-                "Connect Midi (${context.watch<Variables>().connectedDevices.length} connected)",
-              ),
               onPressed: () {
                 Scaffold.of(context).openDrawer();
               },
               style: ElevatedButton.styleFrom(
                   primary: Palette.laserLemon.color,
-                  textStyle: TextStyle(fontWeight: FontWeight.bold)),
+                  textStyle: const TextStyle(fontWeight: FontWeight.bold)),
+              child: Text(
+                "Connect Midi (${context.watch<Variables>().connectedDevices.length} connected)",
+              ),
             ),
           ),
           ListTile(
@@ -49,11 +49,11 @@ class MenuSystem extends StatelessWidget {
           ),
           ListTile(
             title: ElevatedButton(
-              child: Text(
-                "Reset All Settings",
-              ),
               style: ElevatedButton.styleFrom(
                 primary: Palette.lightPink.color,
+              ),
+              child: const Text(
+                "Reset All Settings",
               ),
               onPressed: () {
                 Function resetAllSettings =
@@ -82,7 +82,7 @@ class MenuSystem extends StatelessWidget {
               },
             ),
           ),
-          CreditsBox(),
+          const CreditsBox(),
         ],
       );
     });

@@ -20,7 +20,8 @@ class CustomPaintSquare extends CustomPainter {
 
     Rect rect = Rect.fromCircle(center: o1, radius: touchEvent.maxRadius);
 
-    canvas.drawRRect(RRect.fromRectAndRadius(rect, Radius.circular(5)), brush);
+    canvas.drawRRect(
+        RRect.fromRectAndRadius(rect, const Radius.circular(5)), brush);
   }
 
   @override

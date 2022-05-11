@@ -128,7 +128,8 @@ class _SlidePadsState extends State<SlidePads> {
                     ],
                   ),
                 ),
-                if (settings.playMode.modulatable) PaintAfterTouchCircle(),
+                if (settings.playMode.modulatable)
+                  const PaintAfterTouchCircle(),
               ],
             );
           },

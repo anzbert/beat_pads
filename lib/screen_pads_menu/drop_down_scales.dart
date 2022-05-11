@@ -8,8 +8,8 @@ class DropdownScales extends StatelessWidget {
   final items = midiScales.keys
       .toList()
       .map((String entry) => DropdownMenuItem<String>(
-            child: Text(entry),
             value: entry,
+            child: Text(entry),
           ))
       .toList();
 

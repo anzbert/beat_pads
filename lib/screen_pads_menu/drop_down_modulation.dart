@@ -22,8 +22,12 @@ class DropdownModulation extends StatelessWidget {
               if (includeCenter64) return true; // return all modulations
               return !modulation.center64;
             })
-            .map((modulation) => DropdownMenuItem(
-                child: Text(modulation.title), value: modulation))
+            .map(
+              (modulation) => DropdownMenuItem(
+                value: modulation,
+                child: Text(modulation.title),
+              ),
+            )
             .toList(),
         super(key: key);
 

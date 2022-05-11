@@ -3,7 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class Prefs {
   Prefs._();
-  late SharedPreferences _sharedPrefs;
+  late SharedPreferences sharedPrefs;
   late Map<String, dynamic> _startUpSettings;
   late LoadSettings settings;
 
@@ -11,10 +11,10 @@ class Prefs {
     Prefs instance = Prefs._();
 
     // late inits:
-    instance._sharedPrefs = await SharedPreferences.getInstance();
+    instance.sharedPrefs = await SharedPreferences.getInstance();
 
     instance._startUpSettings = Prefs._defaults.map((key, value) {
-      var loadedVal = instance._sharedPrefs.get(key) ?? value;
+      var loadedVal = instance.sharedPrefs.get(key) ?? value;
       // var loadedVal = value; // debug: set to default
       return MapEntry(key, loadedVal);
     });
@@ -28,13 +28,13 @@ class Prefs {
     for (MapEntry<String, dynamic> entry in Prefs._defaults.entries) {
       switch (entry.value.runtimeType) {
         case int:
-          await _sharedPrefs.setInt(entry.key, entry.value);
+          await sharedPrefs.setInt(entry.key, entry.value);
           break;
         case bool:
-          await _sharedPrefs.setBool(entry.key, entry.value);
+          await sharedPrefs.setBool(entry.key, entry.value);
           break;
         case String:
-          await _sharedPrefs.setString(entry.key, entry.value);
+          await sharedPrefs.setString(entry.key, entry.value);
           break;
         default:
           throw "type not recognised";
@@ -142,21 +142,21 @@ class Setting<T> {
   T value;
 
   Future<bool> save() async {
-    SharedPreferences _sharedPrefs = await SharedPreferences.getInstance();
+    SharedPreferences sharedPrefs = await SharedPreferences.getInstance();
     bool result = true;
 
     if (value is Layout) {
       Layout cast = value as Layout;
-      result = await _sharedPrefs.setString("layout", cast.name);
+      result = await sharedPrefs.setString("layout", cast.name);
     } else if (value is PlayMode) {
       PlayMode cast = value as PlayMode;
-      result = await _sharedPrefs.setString("playMode", cast.name);
+      result = await sharedPrefs.setString("playMode", cast.name);
     } else if (value is int) {
-      result = await _sharedPrefs.setInt(sharedPrefsKey, value as int);
+      result = await sharedPrefs.setInt(sharedPrefsKey, value as int);
     } else if (value is String) {
-      result = await _sharedPrefs.setString(sharedPrefsKey, value as String);
+      result = await sharedPrefs.setString(sharedPrefsKey, value as String);
     } else if (value is bool) {
-      result = await _sharedPrefs.setBool(sharedPrefsKey, value as bool);
+      result = await sharedPrefs.setBool(sharedPrefsKey, value as bool);
     }
 
     if (!result) Utils.logd("Setting<${value.runtimeType}>.save() error");

@@ -65,14 +65,14 @@ class _PadMenuScreenState extends State<PadMenuScreen> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  TransitionUtils.fade(BeatPadsScreen()),
+                  TransitionUtils.fade(const BeatPadsScreen()),
                 );
               },
             ),
           )
         ],
       ),
-      drawer: Drawer(
+      drawer: const Drawer(
         child: MidiConfig(),
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -85,7 +85,7 @@ class _PadMenuScreenState extends State<PadMenuScreen> {
         },
         items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.apps),
+            icon: const Icon(Icons.apps),
             activeIcon: Icon(
               Icons.apps,
               color: Palette.cadetBlue.color,
@@ -93,7 +93,7 @@ class _PadMenuScreenState extends State<PadMenuScreen> {
             label: "Layout",
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.touch_app),
+            icon: const Icon(Icons.touch_app),
             activeIcon: Icon(
               Icons.touch_app,
               color: Palette.cadetBlue.color,
@@ -105,7 +105,7 @@ class _PadMenuScreenState extends State<PadMenuScreen> {
               Icons.music_note,
               color: Palette.cadetBlue.color,
             ),
-            icon: Icon(Icons.music_note),
+            icon: const Icon(Icons.music_note),
             label: "Midi",
           ),
           BottomNavigationBarItem(
@@ -113,7 +113,7 @@ class _PadMenuScreenState extends State<PadMenuScreen> {
               Icons.settings,
               color: Palette.cadetBlue.color,
             ),
-            icon: Icon(Icons.settings),
+            icon: const Icon(Icons.settings),
             label: "System",
           ),
         ],

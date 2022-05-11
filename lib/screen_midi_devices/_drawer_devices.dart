@@ -8,7 +8,7 @@ import 'dart:io' show Platform;
 
 import 'package:provider/provider.dart';
 
-class _MidiConfigState extends State<MidiConfig> {
+class MidiConfigState extends State<MidiConfig> {
   final MidiCommand _midiCommand = MidiCommand();
 
   bool connecting = false;
@@ -52,7 +52,7 @@ class _MidiConfigState extends State<MidiConfig> {
             onPressed: () {
               Navigator.pop(context);
             },
-            icon: Icon(
+            icon: const Icon(
               Icons.arrow_back,
               // color: Palette.whiteLike.color,
               size: 32,
@@ -76,7 +76,7 @@ class _MidiConfigState extends State<MidiConfig> {
         builder:
             ((BuildContext context, AsyncSnapshot<List<MidiDevice>?> snapshot) {
           if (snapshot.hasData && snapshot.data!.isNotEmpty) {
-            List<MidiDevice>? _devices = snapshot.data;
+            List<MidiDevice>? devices = snapshot.data;
             return connecting
                 // WHILE CONNECTING SHOW CIRCULAR PROGRESS INDICATOR:
                 ? Center(
@@ -93,28 +93,28 @@ class _MidiConfigState extends State<MidiConfig> {
                     WidgetsBinding.instance.addPostFrameCallback(
                       (_) {
                         context.read<Variables>().connectedDevices = [
-                          ..._devices!.where((element) => element.connected)
+                          ...devices!.where((element) => element.connected)
                         ];
                       },
                     );
                     return ListView(
                       children: [
-                        if (_devices!.isEmpty)
+                        if (devices!.isEmpty)
                           Container(
-                            margin: EdgeInsets.symmetric(vertical: 8),
+                            margin: const EdgeInsets.symmetric(vertical: 8),
                             color: Palette.lightPink.color,
+                            height: 50,
                             child: Center(
                               child: Text(
                                 "No Midi Adapter found...",
                                 style: TextStyle(color: Palette.darkGrey.color),
                               ),
                             ),
-                            height: 50,
                           ),
-                        ..._devices.map(
+                        ...devices.map(
                           (device) {
                             return Container(
-                              margin: EdgeInsets.symmetric(vertical: 8),
+                              margin: const EdgeInsets.symmetric(vertical: 8),
                               color: device.connected
                                   ? Palette.cadetBlue.color
                                   : Palette.cadetBlue.color.withOpacity(0.1),
@@ -135,7 +135,7 @@ class _MidiConfigState extends State<MidiConfig> {
                                             .titleMedium!,
                                       ),
                                       if (device.connected)
-                                        Icon(
+                                        const Icon(
                                           Icons.check,
                                           size: 24,
                                           color: Colors.white,
@@ -148,7 +148,7 @@ class _MidiConfigState extends State<MidiConfig> {
                           },
                         ),
                         if (Platform.isAndroid)
-                          TextInfoBox(
+                          const TextInfoBox(
                             header: "USB",
                             body: [
                               "Connect USB cable to Host Device",
@@ -159,7 +159,7 @@ class _MidiConfigState extends State<MidiConfig> {
                             ],
                           ),
                         if (Platform.isIOS)
-                          TextInfoBox(
+                          const TextInfoBox(
                             header: "USB",
                             body: [
                               "Connect USB cable to Host Device",
@@ -171,7 +171,7 @@ class _MidiConfigState extends State<MidiConfig> {
                             ],
                           ),
                         if (Platform.isIOS)
-                          TextInfoBox(
+                          const TextInfoBox(
                             header: "WiFi",
                             body: [
                               "Connect to same WiFi as Host Device",
@@ -188,7 +188,7 @@ class _MidiConfigState extends State<MidiConfig> {
           } else if (snapshot.hasError) {
             return Center(child: Text(snapshot.error.toString()));
           } else {
-            return Center(child: Text("No Midi Devices Detected"));
+            return const Center(child: Text("No Midi Devices Detected"));
           }
         }),
       ),
@@ -207,5 +207,5 @@ class _MidiConfigState extends State<MidiConfig> {
 class MidiConfig extends StatefulWidget {
   const MidiConfig({Key? key}) : super(key: key);
   @override
-  _MidiConfigState createState() => _MidiConfigState();
+  MidiConfigState createState() => MidiConfigState();
 }

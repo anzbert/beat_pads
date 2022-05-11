@@ -18,8 +18,15 @@ class DropdownNumbers extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final list = List<DropdownMenuItem<int>>.generate(max - min,
-        (i) => DropdownMenuItem(child: Text("${i + min}"), value: i + min));
+    final list = List<DropdownMenuItem<int>>.generate(
+      max - min,
+      (i) => DropdownMenuItem(
+        value: i + min,
+        child: Text(
+          "${i + min}",
+        ),
+      ),
+    );
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),

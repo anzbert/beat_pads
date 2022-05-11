@@ -2,18 +2,18 @@ import 'package:beat_pads/services/_services.dart';
 import 'package:flutter/material.dart';
 
 class TouchBuffer {
-  final Settings _settings;
-  final Size _screenSize;
+  final Settings settings;
+  final Size screenSize;
 
   /// Data Structure that holds Touch Events, which hold notes and perform geometry operations
-  TouchBuffer(this._settings, this._screenSize);
+  TouchBuffer(this.settings, this.screenSize);
 
   List<TouchEvent> _buffer = [];
   List<TouchEvent> get buffer => _buffer;
 
   /// Add touchevent with noteevent to buffer
   void addNoteOn(PointerEvent touch, NoteEvent noteEvent) {
-    _buffer.add(TouchEvent(touch, noteEvent, _settings, _screenSize));
+    _buffer.add(TouchEvent(touch, noteEvent, settings, screenSize));
   }
 
   /// Find and return a TouchEvent from the buffer by its uniqueID, if possible
@@ -69,13 +69,13 @@ class TouchEvent {
 
   /// Holds geometry, note and modulation information this.uniqueID, this.origin,
   TouchEvent(
-      PointerEvent touch, this.noteEvent, Settings _settings, Size _screenSize)
+      PointerEvent touch, this.noteEvent, Settings settings, Size screenSize)
       : origin = touch.position,
         newPosition = touch.position,
         uniqueID = touch.pointer,
-        maxDiameter = _screenSize.longestSide * _settings.modulationRadius * 2,
-        deadZone = _settings.modulationDeadZone,
-        maxRadius = _screenSize.longestSide * _settings.modulationRadius;
+        maxDiameter = screenSize.longestSide * settings.modulationRadius * 2,
+        deadZone = settings.modulationDeadZone,
+        maxRadius = screenSize.longestSide * settings.modulationRadius;
 
   /// Prevents touchevent from receiving further position updates in move(). Irreversible!
   void markDirty() => _dirty = true;

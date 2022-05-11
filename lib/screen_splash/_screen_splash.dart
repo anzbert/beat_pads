@@ -23,14 +23,14 @@ class _SplashScreenState extends State<SplashScreen> {
         onPointerDown: (_) {
           Navigator.pushReplacement(
             context,
-            TransitionUtils.fade(PadMenuScreen()),
+            TransitionUtils.fade(const PadMenuScreen()),
           );
         },
         child: Center(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Expanded(
+              const Expanded(
                 flex: 10,
                 child: RiveAnimation.asset(
                   'assets/anim/doggo.riv',
@@ -80,12 +80,12 @@ class _SplashScreenState extends State<SplashScreen> {
                         animatedTexts: [
                           FadeAnimatedText(
                             'Tap To Continue',
-                            duration: Duration(milliseconds: 1400),
-                            textStyle: TextStyle(color: Colors.black),
+                            duration: const Duration(milliseconds: 1400),
+                            textStyle: const TextStyle(color: Colors.black),
                           ),
                         ],
                       )
-                    : Text(""),
+                    : const Text(""),
               ),
             ],
           ),

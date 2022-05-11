@@ -33,12 +33,12 @@ class MidiRangeSelectorTile extends StatelessWidget {
               if (resetFunction != null)
                 TextButton(
                   onPressed: () => resetFunction!(),
-                  child: Text("Reset"),
                   style: TextButton.styleFrom(
                     minimumSize: Size.zero,
-                    padding: EdgeInsets.symmetric(horizontal: 12),
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
                     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   ),
+                  child: const Text("Reset"),
                 ),
             ],
           ),
@@ -52,7 +52,7 @@ class MidiRangeSelectorTile extends StatelessWidget {
               child: RangeSlider(
                 values: RangeValues(readMin.toDouble(), readMax.toDouble()),
                 max: 128,
-                labels: RangeLabels(
+                labels: const RangeLabels(
                   "Min",
                   "Max",
                 ),

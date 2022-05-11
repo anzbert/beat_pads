@@ -8,7 +8,7 @@ class RotateLabel extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content: Text("Rotate 90 degrees to Landscape to play the Pads")));
       },
       child: Card(

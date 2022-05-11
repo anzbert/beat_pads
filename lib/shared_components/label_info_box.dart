@@ -12,7 +12,7 @@ class TextInfoBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Card(
-        margin: EdgeInsets.fromLTRB(8, 30, 8, 8),
+        margin: const EdgeInsets.fromLTRB(8, 30, 8, 8),
         elevation: 5,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 16),
@@ -24,7 +24,7 @@ class TextInfoBox extends StatelessWidget {
                   padding: const EdgeInsets.only(bottom: 12),
                   child: Row(
                     children: [
-                      Expanded(
+                      const Expanded(
                         child: Divider(),
                       ),
                       Padding(
@@ -41,7 +41,7 @@ class TextInfoBox extends StatelessWidget {
                   .map(
                     (text) => Column(children: [
                       Text(text),
-                      SizedBox(
+                      const SizedBox(
                         height: 5,
                       )
                     ]),

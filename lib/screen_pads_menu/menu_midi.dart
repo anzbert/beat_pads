@@ -16,7 +16,7 @@ class MenuMidi extends StatelessWidget {
       return ListView(
         children: <Widget>[
           ListTile(
-            title: Divider(),
+            title: const Divider(),
             trailing: Text(
               "Midi Settings",
               style: TextStyle(
@@ -46,10 +46,10 @@ class MenuMidi extends StatelessWidget {
             setValue: (v) => settings.totalMemberChannels = v,
             readValue: settings.totalMemberChannels,
           ),
-          Divider(),
+          const Divider(),
           ListTile(
-            title: Text("Random Velocity"),
-            subtitle: Text("Random Velocity within a given Range"),
+            title: const Text("Random Velocity"),
+            subtitle: const Text("Random Velocity within a given Range"),
             trailing: Switch(
                 value: settings.randomVelocity,
                 onChanged: (value) => settings.randomizeVelocity = value),
@@ -72,7 +72,7 @@ class MenuMidi extends StatelessWidget {
               setMax: (v) => settings.velocityMax = v,
               resetFunction: settings.resetVelocity,
             ),
-          Divider(),
+          const Divider(),
           NonLinearSliderTile(
             label: "Auto Sustain",
             subtitle: "Delay in Milliseconds before sending NoteOff Message",
@@ -84,8 +84,8 @@ class MenuMidi extends StatelessWidget {
             steps: 25,
           ),
           ListTile(
-            title: Text("Send CC"),
-            subtitle: Text(
+            title: const Text("Send CC"),
+            subtitle: const Text(
                 "Send Control Change Message along with Note, one Midi Channel higher than the Note"),
             trailing: Switch(
                 value: settings.sendCC,

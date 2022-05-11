@@ -6,7 +6,12 @@ class DropdownPlayMode extends StatelessWidget {
   DropdownPlayMode({Key? key}) : super(key: key);
 
   final items = PlayMode.values
-      .map((mode) => DropdownMenuItem(child: Text(mode.title), value: mode))
+      .map(
+        (mode) => DropdownMenuItem(
+          value: mode,
+          child: Text(mode.title),
+        ),
+      )
       .toList();
 
   @override

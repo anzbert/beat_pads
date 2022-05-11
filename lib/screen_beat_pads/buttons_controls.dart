@@ -14,12 +14,12 @@ class ControlButtonsRect extends StatelessWidget {
         return Column(
           children: [
             if (settings.octaveButtons)
-              Expanded(
+              const Expanded(
                 flex: 1,
                 child: OctaveButtons(),
               ),
             if (settings.sustainButton)
-              Expanded(
+              const Expanded(
                 flex: 1,
                 child: SustainButtonRect(),
               ),

@@ -26,11 +26,11 @@ class _LockScreenButtonState extends State<LockScreenButton> {
         },
         child: IconButton(
           onPressed: () {},
-          padding: EdgeInsets.all(0),
+          padding: const EdgeInsets.all(0),
           color: screenLocked
               ? Colors.red
               : Theme.of(context).secondaryHeaderColor,
-          icon: Icon(Icons.lock),
+          icon: const Icon(Icons.lock),
         ));
   }
 

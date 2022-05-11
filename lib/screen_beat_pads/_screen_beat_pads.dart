@@ -31,13 +31,13 @@ class BeatPadsScreen extends StatelessWidget {
                       children: [
                         // SKIP laggy edge area. OS uses edges to detect system gestures
                         // and messes with touch detection
-                        Expanded(
+                        const Expanded(
                           flex: 1,
                           child: SizedBox(),
                         ),
                         // CONTROL BUTTONS
                         if (settings.octaveButtons || settings.sustainButton)
-                          Expanded(
+                          const Expanded(
                             flex: 5,
                             child: ControlButtonsRect(),
                           ),
@@ -65,7 +65,7 @@ class BeatPadsScreen extends StatelessWidget {
                             preview: preview,
                           ),
                         ),
-                        Expanded(
+                        const Expanded(
                           flex: 1,
                           child: SizedBox(),
                         ),
@@ -79,7 +79,7 @@ class BeatPadsScreen extends StatelessWidget {
                         textDirection: TextDirection.ltr,
                         child: SizedBox.square(
                           dimension: width * 0.06,
-                          child: ReturnToMenuButton(),
+                          child: const ReturnToMenuButton(),
                         ),
                       );
                     }),
@@ -89,7 +89,7 @@ class BeatPadsScreen extends StatelessWidget {
             ),
           );
         }
-        return SizedBox(
+        return const SizedBox(
           child: Text("rotation error"),
         );
       }),

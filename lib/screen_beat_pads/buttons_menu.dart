@@ -20,36 +20,35 @@ class ReturnToMenuButton extends StatelessWidget {
         onLongPress: () {
           Navigator.push(
             context,
-            TransitionUtils.fade(PadMenuScreen()),
+            TransitionUtils.fade(const PadMenuScreen()),
           );
         },
         child: ElevatedButton(
           onPressed: () {},
-          child: Tooltip(
-            decoration: BoxDecoration(
-                color: Palette.cadetBlue.color.withOpacity(0.7),
-                borderRadius: BorderRadius.circular(3)),
-            message: "Long-Press for Menu",
-            // richMessage: TextSpan(text: "Long-Press"),
-            triggerMode: TooltipTriggerMode.tap,
-            showDuration: Duration(milliseconds: 1000),
-            padding: EdgeInsets.all(5),
-            child: FittedBox(
-              fit: BoxFit.contain,
-              child: Icon(
-                Icons.menu_rounded,
-                size: 100,
-              ),
-            ),
-          ),
           style: ElevatedButton.styleFrom(
             elevation: 10,
-            padding: EdgeInsets.all(0),
+            padding: const EdgeInsets.all(0),
             alignment: Alignment.center,
             primary: Palette.tan.color.withOpacity(0.7),
             onPrimary: Palette.darkGrey.color.withOpacity(0.9),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(padRadius),
+            ),
+          ),
+          child: Tooltip(
+            decoration: BoxDecoration(
+                color: Palette.cadetBlue.color.withOpacity(0.7),
+                borderRadius: BorderRadius.circular(3)),
+            message: "Long-Press for Menu",
+            triggerMode: TooltipTriggerMode.tap,
+            showDuration: const Duration(milliseconds: 1000),
+            padding: const EdgeInsets.all(5),
+            child: const FittedBox(
+              fit: BoxFit.contain,
+              child: Icon(
+                Icons.menu_rounded,
+                size: 100,
+              ),
             ),
           ),
         ),

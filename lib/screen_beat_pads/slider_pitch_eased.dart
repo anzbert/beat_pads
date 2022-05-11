@@ -14,10 +14,10 @@ class PitchSliderEased extends StatefulWidget {
   final int resetTime;
 
   @override
-  _PitchSliderEased createState() => _PitchSliderEased();
+  PitchSliderEasedState createState() => PitchSliderEasedState();
 }
 
-class _PitchSliderEased extends State<PitchSliderEased>
+class PitchSliderEasedState extends State<PitchSliderEased>
     with SingleTickerProviderStateMixin {
   late Animation<double> _animation;
   late AnimationController _controller;

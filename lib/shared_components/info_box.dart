@@ -13,7 +13,7 @@ class InfoBox extends StatelessWidget {
     return Center(
       child: Card(
         color: Palette.darkGrey.color,
-        margin: EdgeInsets.fromLTRB(8, 30, 8, 8),
+        margin: const EdgeInsets.fromLTRB(8, 30, 8, 8),
         elevation: 5,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 16),
@@ -26,7 +26,7 @@ class InfoBox extends StatelessWidget {
                   padding: const EdgeInsets.only(bottom: 12),
                   child: Row(
                     children: [
-                      Expanded(
+                      const Expanded(
                         child: Divider(),
                       ),
                       Padding(
@@ -43,7 +43,7 @@ class InfoBox extends StatelessWidget {
                   .map(
                     (text) => Column(children: [
                       text,
-                      SizedBox(
+                      const SizedBox(
                         height: 8,
                       )
                     ]),

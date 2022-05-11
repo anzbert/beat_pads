@@ -14,7 +14,7 @@ class MenuInput extends StatelessWidget {
       return ListView(
         children: <Widget>[
           ListTile(
-            title: Divider(),
+            title: const Divider(),
             trailing: Text(
               "Input Settings",
               style: TextStyle(
@@ -22,14 +22,15 @@ class MenuInput extends StatelessWidget {
             ),
           ),
           ListTile(
-            title: Text("Input Mode"),
-            subtitle: Text("Slidable Input, Polyphonic Aftertouch or MPE"),
+            title: const Text("Input Mode"),
+            subtitle:
+                const Text("Slidable Input, Polyphonic Aftertouch or MPE"),
             trailing: DropdownPlayMode(),
           ),
           if (settings.playMode == PlayMode.mpe)
             ListTile(
-              title: Text("2-D Modulation"),
-              subtitle: Text(
+              title: const Text("2-D Modulation"),
+              subtitle: const Text(
                   "Modulate 2 Values on the X and Y Axis. Turn off to modulate only 1 Value by Radius"),
               trailing: Switch(
                   value: settings.modulation2d,
@@ -37,8 +38,8 @@ class MenuInput extends StatelessWidget {
             ),
           if (settings.playMode == PlayMode.mpe && settings.modulation2d)
             ListTile(
-              title: Text("Modulation X-Axis"),
-              subtitle: Text("Modulate this parameter horizontally"),
+              title: const Text("Modulation X-Axis"),
+              subtitle: const Text("Modulate this parameter horizontally"),
               trailing: DropdownModulation(
                 readValue: settings.modulation2dX,
                 setValue: (v) => settings.modulation2dX = v,
@@ -47,8 +48,8 @@ class MenuInput extends StatelessWidget {
             ),
           if (settings.playMode == PlayMode.mpe && settings.modulation2d)
             ListTile(
-              title: Text("Modulation Y-Axis"),
-              subtitle: Text("Modulate this parameter vertically"),
+              title: const Text("Modulation Y-Axis"),
+              subtitle: const Text("Modulate this parameter vertically"),
               trailing: DropdownModulation(
                 readValue: settings.modulation2dY,
                 setValue: (v) => settings.modulation2dY = v,
@@ -58,8 +59,8 @@ class MenuInput extends StatelessWidget {
           if (settings.playMode == PlayMode.mpe &&
               settings.modulation2d == false)
             ListTile(
-              title: Text("Modulation by Radius"),
-              subtitle: Text(
+              title: const Text("Modulation by Radius"),
+              subtitle: const Text(
                   "Modulate this parameter by the distance from the initial touch position"),
               trailing: DropdownModulation(
                 includeCenter64: false,

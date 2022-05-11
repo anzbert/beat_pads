@@ -7,8 +7,9 @@ class CreditsBox extends StatelessWidget {
   const CreditsBox({Key? key}) : super(key: key);
 
   Future<bool> webView(String url) async {
-    if (await canLaunch(url)) {
-      return await launch(url);
+    Uri uri = Uri.dataFromString(url);
+    if (await canLaunchUrl(uri)) {
+      return await launchUrl(uri);
     } else {
       Utils.logd("Failure to launch webview with:\n$url");
       return false;
@@ -25,7 +26,7 @@ class CreditsBox extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Wrap(children: [Text("Made by A. Mueller")]),
+            Wrap(children: const [Text("Made by A. Mueller")]),
             TextButton(
               child: Text(
                 "Anzio.dev",
@@ -40,7 +41,7 @@ class CreditsBox extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Wrap(children: [
+            Wrap(children: const [
               Text("Magic Tone Network / XpressPads by A. Samek")
             ]),
             TextButton(
@@ -58,7 +59,7 @@ class CreditsBox extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Wrap(children: [Text("Dog Icon by 'catalyststuff'")]),
+            Wrap(children: const [Text("Dog Icon by 'catalyststuff'")]),
             TextButton(
               child: Text(
                 "FreePik.com",
@@ -73,7 +74,7 @@ class CreditsBox extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Wrap(children: [Text("Logo Animated with Rive")]),
+            Wrap(children: const [Text("Logo Animated with Rive")]),
             TextButton(
               child: Text("Rive.app",
                   style: TextStyle(
@@ -87,7 +88,7 @@ class CreditsBox extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Wrap(
-              children: [Text("Please send improvement suggestions to")],
+              children: const [Text("Please send improvement suggestions to")],
             ),
             TextButton(
               child: Text(

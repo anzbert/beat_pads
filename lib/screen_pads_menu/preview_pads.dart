@@ -22,15 +22,15 @@ class Preview extends StatelessWidget {
                   ? Stack(
                       alignment: Alignment.center,
                       children: [
-                        AspectRatio(
+                        const AspectRatio(
                           aspectRatio: 16 / 9,
                           child: Padding(
-                            padding: const EdgeInsets.all(4.0),
+                            padding: EdgeInsets.all(4.0),
                             child: BeatPadsScreen(preview: true),
                           ),
                         ),
                         Container(
-                          padding: EdgeInsets.symmetric(horizontal: 50),
+                          padding: const EdgeInsets.symmetric(horizontal: 50),
                           width: double.infinity,
                           child: FittedBox(
                             child: Text(
@@ -45,15 +45,15 @@ class Preview extends StatelessWidget {
                     )
                   : Column(
                       children: [
-                        AspectRatio(
+                        const AspectRatio(
                           aspectRatio: 16 / 9,
                           child: Padding(
-                            padding: const EdgeInsets.all(4.0),
+                            padding: EdgeInsets.all(4.0),
                             child: BeatPadsScreen(preview: true),
                           ),
                         ),
                         Container(
-                          padding: EdgeInsets.symmetric(horizontal: 100),
+                          padding: const EdgeInsets.symmetric(horizontal: 100),
                           width: double.infinity,
                           child: FittedBox(
                             child: Text(

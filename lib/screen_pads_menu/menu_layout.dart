@@ -25,7 +25,7 @@ class MenuLayout extends StatelessWidget {
         crossAxisAlignment:
             isPortrait ? CrossAxisAlignment.center : CrossAxisAlignment.start,
         children: [
-          Flexible(
+          const Flexible(
             fit: FlexFit.loose,
             flex: 2,
             child: FittedBox(child: Preview()),
@@ -35,7 +35,7 @@ class MenuLayout extends StatelessWidget {
             child: ListView(
               children: <Widget>[
                 ListTile(
-                  title: Divider(),
+                  title: const Divider(),
                   trailing: Text(
                     "Layout Settings",
                     style: TextStyle(
@@ -44,14 +44,14 @@ class MenuLayout extends StatelessWidget {
                   ),
                 ),
                 ListTile(
-                  title: Text("Layout"),
-                  subtitle: Text("Row Intervals and other Layouts"),
+                  title: const Text("Layout"),
+                  subtitle: const Text("Row Intervals and other Layouts"),
                   trailing: DropdownLayout(),
                 ),
-                Divider(),
+                const Divider(),
                 if (resizableGrid)
                   ListTile(
-                    title: Text("Grid Width"),
+                    title: const Text("Grid Width"),
                     trailing: DropdownNumbers(
                       setValue: (v) => settings.width = v,
                       readValue: settings.width,
@@ -59,40 +59,40 @@ class MenuLayout extends StatelessWidget {
                   ),
                 if (resizableGrid)
                   ListTile(
-                    title: Text("Grid Height"),
+                    title: const Text("Grid Height"),
                     trailing: DropdownNumbers(
                       setValue: (v) => settings.height = v,
                       readValue: settings.height,
                     ),
                   ),
-                if (resizableGrid) Divider(),
+                if (resizableGrid) const Divider(),
                 if (resizableGrid)
                   ListTile(
-                    title: Text("Scale Root Note"),
-                    subtitle:
-                        Text("Higlight selected Scale with this Root Note"),
+                    title: const Text("Scale Root Note"),
+                    subtitle: const Text(
+                        "Higlight selected Scale with this Root Note"),
                     trailing: DropdownRootNote(
                         setValue: (v) => settings.rootNote = v,
                         readValue: settings.rootNote),
                   ),
                 if (resizableGrid)
                   ListTile(
-                    title: Text("Scale"),
+                    title: const Text("Scale"),
                     trailing: DropdownScales(),
                   ),
                 ListTile(
-                  title: Text("Show Note Names"),
-                  subtitle: Text("Switch between Names and Midi Values"),
+                  title: const Text("Show Note Names"),
+                  subtitle: const Text("Switch between Names and Midi Values"),
                   trailing: Switch(
                       value: settings.showNoteNames,
                       onChanged: (value) => settings.showNoteNames = value),
                 ),
-                if (resizableGrid) Divider(),
+                if (resizableGrid) const Divider(),
                 if (resizableGrid)
                   ListTile(
-                    title: Text("Base Note"),
-                    subtitle:
-                        Text("The lowest Note in the Grid on the bottom left"),
+                    title: const Text("Base Note"),
+                    subtitle: const Text(
+                        "The lowest Note in the Grid on the bottom left"),
                     trailing: DropdownRootNote(
                         setValue: (v) {
                           settings.base = v;
@@ -108,16 +108,17 @@ class MenuLayout extends StatelessWidget {
                   ),
                 if (resizableGrid)
                   ListTile(
-                    title: Text("Octave Buttons"),
-                    subtitle: Text("Adds Base Octave Controls next to Pads"),
+                    title: const Text("Octave Buttons"),
+                    subtitle:
+                        const Text("Adds Base Octave Controls next to Pads"),
                     trailing: Switch(
                         value: settings.octaveButtons,
                         onChanged: (value) => settings.octaveButtons = value),
                   ),
-                if (resizableGrid) Divider(),
+                if (resizableGrid) const Divider(),
                 ListTile(
-                  title: Text("Sustain Button"),
-                  subtitle: Text(
+                  title: const Text("Sustain Button"),
+                  subtitle: const Text(
                       "Adds Sustain Button next to Pads. LOCK Sustain ON by pushing and sliding away from Button"),
                   trailing: Switch(
                       value: settings.sustainButton,
@@ -125,16 +126,16 @@ class MenuLayout extends StatelessWidget {
                           settings.sustainButton = !settings.sustainButton),
                 ),
                 ListTile(
-                  title: Text("Mod Wheel"),
-                  subtitle: Text("Adds Mod Wheel Slider next to Pads"),
+                  title: const Text("Mod Wheel"),
+                  subtitle: const Text("Adds Mod Wheel Slider next to Pads"),
                   trailing: Switch(
                       value: settings.modWheel,
                       onChanged: (value) =>
                           settings.modWheel = !settings.modWheel),
                 ),
                 ListTile(
-                  title: Text("Pitch Bender"),
-                  subtitle: Text("Adds Pitch Bend Slider next to Pads"),
+                  title: const Text("Pitch Bender"),
+                  subtitle: const Text("Adds Pitch Bend Slider next to Pads"),
                   trailing: Switch(
                       value: settings.pitchBend,
                       onChanged: (value) =>

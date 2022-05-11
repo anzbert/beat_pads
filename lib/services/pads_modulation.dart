@@ -1,5 +1,3 @@
-import 'package:collection/collection.dart';
-
 enum MPEModulation {
   afterTouch("Aftertouch", center64: false),
   pitchBend("Pitchbend", center64: true),
@@ -17,7 +15,10 @@ enum MPEModulation {
   });
 
   static MPEModulation? fromName(String key) {
-    return MPEModulation.values.firstWhereOrNull((val) => val.name == key);
+    for (MPEModulation mode in MPEModulation.values) {
+      if (mode.name == key) return mode;
+    }
+    return null;
   }
 }
 
