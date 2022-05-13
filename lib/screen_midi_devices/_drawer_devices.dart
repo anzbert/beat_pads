@@ -1,3 +1,4 @@
+import 'package:beat_pads/screen_midi_devices/button_refresh.dart';
 import 'package:beat_pads/services/_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_midi_command/flutter_midi_command.dart';
@@ -55,19 +56,17 @@ class MidiConfigState extends State<MidiConfig> {
             icon: const Icon(
               Icons.arrow_back,
               // color: Palette.whiteLike.color,
-              size: 32,
+              size: 30,
             ),
           );
         }),
         actions: [
-          IconButton(
-              onPressed: () {
-                setState(() {});
-              },
+          RefreshButton(
+              onPressed: () => setState(() {}),
               icon: Icon(
                 Icons.refresh,
-                size: 36,
-                color: Palette.yellowGreen.color,
+                size: 30,
+                color: Palette.laserLemon.color,
               )),
         ],
       ),
