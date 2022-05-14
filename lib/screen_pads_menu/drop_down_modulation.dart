@@ -1,4 +1,4 @@
-import 'package:beat_pads/services/_pads_modulation.dart';
+import 'package:beat_pads/services/_temp_modulation.dart';
 import 'package:flutter/material.dart';
 
 class DropdownModulation extends StatelessWidget {
@@ -15,7 +15,8 @@ class DropdownModulation extends StatelessWidget {
               if (modulation == MPEModulation.slide &&
                   otherValue == MPEModulation.slide64) return false;
               if (modulation == MPEModulation.slide64 &&
-                  otherValue == MPEModulation.slide) return false;
+                  otherValue == MPEModulation.slide)
+                return false; // TODO too much if and then
               return true;
             })
             .where((modulation) {

@@ -3,6 +3,7 @@ import 'package:beat_pads/screen_beat_pads/buttons_menu.dart';
 import 'package:beat_pads/screen_beat_pads/slide_pads.dart';
 import 'package:beat_pads/screen_beat_pads/slider_mod_wheel.dart';
 import 'package:beat_pads/screen_beat_pads/slider_pitch_eased.dart';
+import 'package:beat_pads/screen_midi_devices/_drawer_devices.dart';
 
 import 'package:flutter/material.dart';
 import 'package:beat_pads/services/_services.dart';
@@ -24,6 +25,7 @@ class BeatPadsScreen extends StatelessWidget {
             body: SafeArea(
               child: Consumer<Settings>(builder: (context, settings, _) {
                 return Stack(
+                  // alignment: Alignment.topCenter,
                   children: [
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -83,9 +85,30 @@ class BeatPadsScreen extends StatelessWidget {
                         ),
                       );
                     }),
+                    if (context.watch<Variables>().connectedDevices.isEmpty &&
+                        !preview)
+                      Positioned(
+                        bottom: 15,
+                        right: 15,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Scaffold.of(context).openDrawer();
+                          },
+                          style: ElevatedButton.styleFrom(
+                              primary: Palette.lightPink.color.withOpacity(0.9),
+                              textStyle:
+                                  const TextStyle(fontWeight: FontWeight.bold)),
+                          child: const Text(
+                            "Select Midi Device",
+                          ),
+                        ),
+                      ),
                   ],
                 );
               }),
+            ),
+            drawer: const Drawer(
+              child: MidiConfig(),
             ),
           );
         }

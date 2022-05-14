@@ -14,15 +14,15 @@
  - maxRadius is always 1 or -1, which can be turned to 1D by converting to absolute 1/0/1 or -1/0/-1!
  */
 
-void main() {
-//   on drop down change , get new mpe object
-  SendMpe mpe = SendMpe(
-      Mods.pitchbend.getMod(), Mods.slide.getMod(), Mods.aftertouch.getMod());
+// void main() {
+// //   on drop down change , get new mpe object
+//   SendMpe mpe = SendMpe(
+//       Mods.pitchbend.getMod(), Mods.slide.getMod(), Mods.aftertouch.getMod());
 
-  mpe.xMod.send(0, 5, .3);
-  mpe.yMod.send(5, 35, -.4);
-  mpe.rMod.send(4, 3, .66);
-}
+//   mpe.xMod.send(0, 5, .3);
+//   mpe.yMod.send(5, 35, -.4);
+//   mpe.rMod.send(4, 3, .66);
+// }
 
 class SendMpe {
   final Mod xMod;
