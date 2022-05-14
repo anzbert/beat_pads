@@ -99,7 +99,7 @@ class MidiSender extends ChangeNotifier {
                   releasedNoteBuffer[i].releaseTime >
               _settings.sustainTimeUsable) {
             releasedNoteBuffer[i].noteOff();
-            releasedNoteBuffer.removeAt(i);
+            releasedNoteBuffer.removeAt(i); // TODO event gets removed here!
             notifyListeners();
           }
         }
@@ -162,24 +162,32 @@ class MidiSender extends ChangeNotifier {
 
     // Poly AT
     else if (_settings.playMode == PlayMode.polyAT) {
-      polyAfterTouch1D.send(_settings.channel, eventInBuffer.noteEvent.note,
-          eventInBuffer.radialChange());
+      polyAfterTouch1D.send(
+        _settings.channel,
+        eventInBuffer.noteEvent.note,
+        eventInBuffer.radialChange(),
+      );
     }
 
     // MPE
     else if (_settings.playMode == PlayMode.mpe) {
       if (_settings.modulation2D) {
         mpeModulations.xMod.send(
-            _settings.channel,
-            eventInBuffer.noteEvent.note,
-            eventInBuffer.directionalChangeFromCenter().dx);
+          eventInBuffer.noteEvent.channel,
+          eventInBuffer.noteEvent.note,
+          eventInBuffer.directionalChangeFromCenter().dx,
+        );
         mpeModulations.yMod.send(
-            _settings.channel,
-            eventInBuffer.noteEvent.note,
-            eventInBuffer.directionalChangeFromCenter().dy);
+          eventInBuffer.noteEvent.channel,
+          eventInBuffer.noteEvent.note,
+          eventInBuffer.directionalChangeFromCenter().dy,
+        );
       } else {
-        mpeModulations.rMod.send(_settings.channel,
-            eventInBuffer.noteEvent.note, eventInBuffer.radialChange());
+        mpeModulations.rMod.send(
+          eventInBuffer.noteEvent.channel,
+          eventInBuffer.noteEvent.note,
+          eventInBuffer.radialChange(),
+        );
       }
     }
     // CC
@@ -194,11 +202,13 @@ class MidiSender extends ChangeNotifier {
     TouchEvent? eventInBuffer = touchBuffer.getByID(touch.pointer);
     if (eventInBuffer == null) return;
 
-    if (_settings.sustainTimeUsable <= 0) {
+    if (_settings.sustainTimeUsable == 0) {
       eventInBuffer.noteEvent.noteOff();
-      touchBuffer.remove(eventInBuffer);
+      touchBuffer.remove(eventInBuffer); // events gets removed
+
     } else {
-      updateReleasedEvent(eventInBuffer.noteEvent);
+      updateReleasedEvent(
+          eventInBuffer.noteEvent); // event passed to release buffer
       touchBuffer.remove(eventInBuffer);
     }
 

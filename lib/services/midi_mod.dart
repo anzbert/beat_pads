@@ -1,4 +1,4 @@
-import 'package:beat_pads/services/utils/gen_utils.dart';
+import 'package:beat_pads/services/_services.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_midi_command/flutter_midi_command_messages.dart';
 

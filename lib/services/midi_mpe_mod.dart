@@ -130,18 +130,18 @@ class ModSlide642D extends Mod {
 class ModNull extends Mod {
   @override
   void send(int channel, int note, double distance) {
-    // Utils.logd("Sending debug placeholder: $channel / $note / $distance");
+    Utils.logd("Sending debug placeholder: $channel / $note / $distance");
   }
 }
 
-// pick those from dropdown -> return constructors
+// for dropdown menu
 enum MPEmods {
-  pitchbend("Pitch Bend (2D)", Dims.two, Group.pitch),
-  slide("Slide (1D)", Dims.one, Group.slide),
-  mpeAftertouch("Aftertouch (1D)", Dims.one, Group.at),
-  pitchbendUp("Pitch Bend Up (1D)", Dims.one, Group.pitch),
-  pitchbendDown("Pitch Bend Down (1D)", Dims.one, Group.pitch),
-  slide64("Slide initial64 (2D)", Dims.two, Group.slide),
+  pitchbend("Pitch Bend", Dims.two, Group.pitch),
+  pitchbendUp("Pitch Bend Up only", Dims.one, Group.pitch),
+  pitchbendDown("Pitch Bend Down only", Dims.one, Group.pitch),
+  mpeAftertouch("Aftertouch", Dims.one, Group.at),
+  slide("Slide", Dims.one, Group.slide),
+  slide64("Slide (initial 64)", Dims.two, Group.slide),
   none("None", Dims.two, Group.none),
   ;
 
@@ -151,7 +151,7 @@ enum MPEmods {
 
   const MPEmods(this.title, this.dimensions, this.exclusiveGroup);
 
-  Mod getMod([int pitchBendMax = 48]) {
+  Mod getMod(int pitchBendMax) {
     if (this == MPEmods.pitchbend) return ModPitchBendFull2D(pitchBendMax);
     if (this == MPEmods.pitchbendUp) return ModPitchBendUp1D(pitchBendMax);
     if (this == MPEmods.pitchbendDown) return ModPitchBendDown1D(pitchBendMax);

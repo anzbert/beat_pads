@@ -166,7 +166,8 @@ class MidiConfigState extends State<MidiConfig> {
                               "Refresh this Device List",
                               "Tap 'IDAM MIDI Host' to Connect",
                               "",
-                              "Note: USB connection only works with MacOS devices without third-party adapters, due to Apple's MIDI implementation!",
+                              "",
+                              "Note: USB without third-party adapters works only with MacOS devices, due to Apple's MIDI implementation!",
                             ],
                           ),
                         if (Platform.isIOS)
@@ -178,7 +179,8 @@ class MidiConfigState extends State<MidiConfig> {
                               "Open 'Audio MIDI Setup' on Mac and open the 'MIDI Studio' window",
                               "Create a Session in the 'MIDI Network Setup' window and connect to your iPad/iPhone",
                               "",
-                              "Note: Wireless Midi Protocols add Latency. Connection to Windows Hosts via WiFi requires third-party Software"
+                              "",
+                              "Note: Wireless Protocols add Latency. Connection to Windows Hosts via WiFi requires third-party Software (like Apple Bonjour)"
                             ],
                           ),
                       ],

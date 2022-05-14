@@ -70,16 +70,19 @@ class MenuInput extends StatelessWidget {
               ),
             ),
           if (settings.playMode == PlayMode.mpe)
-            IntSliderTile(
-              min: 1,
-              max: 48,
-              label: "Pitchbend Range",
-              subtitle: "Maximum MPE Pitchbend in Semitones",
-              trailing: Text("${settings.mpePitchbendRange} st"),
-              readValue: settings.mpePitchbendRange,
-              setValue: (v) => settings.mpePitchbendRange = v,
-              resetValue: settings.resetMPEPitchbendRange,
-            ),
+            if (settings.mpe1DRadius.exclusiveGroup == Group.pitch ||
+                settings.mpe2DX.exclusiveGroup == Group.pitch ||
+                settings.mpe2DY.exclusiveGroup == Group.pitch)
+              IntSliderTile(
+                min: 1,
+                max: 48,
+                label: "Pitchbend Range",
+                subtitle: "Maximum MPE Pitchbend in Semitones",
+                trailing: Text("${settings.mpePitchbendRange} st"),
+                readValue: settings.mpePitchbendRange,
+                setValue: (v) => settings.mpePitchbendRange = v,
+                resetValue: settings.resetMPEPitchbendRange,
+              ),
           if (settings.playMode.singleChannel)
             ListTile(
               title: const Text("Send CC"),

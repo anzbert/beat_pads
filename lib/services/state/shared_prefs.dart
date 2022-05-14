@@ -65,8 +65,6 @@ class Prefs {
     "channel": 2,
     "pitchBendEase": 0,
     "modWheel": false,
-
-    // new:
     "mpeMemberChannels": 8,
     "modulation2D": true,
     "modulationDeadZone": 15,
@@ -161,7 +159,7 @@ class LoadSettings {
                 ? loadedMap['scaleString']
                 : midiScales.keys.toList()[0]),
         playMode = Setting<PlayMode>('playMode',
-            PlayMode.fromName(loadedMap['playMode']) ?? PlayMode.values[0]);
+            PlayMode.fromName(loadedMap['playMode']) ?? PlayMode.slide);
 
   factory LoadSettings.defaults() {
     return LoadSettings(Prefs._defaults);
