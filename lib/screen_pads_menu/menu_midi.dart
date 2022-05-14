@@ -83,14 +83,15 @@ class MenuMidi extends StatelessWidget {
             start: 0,
             steps: 25,
           ),
-          ListTile(
-            title: const Text("Send CC"),
-            subtitle: const Text(
-                "Send Control Change Message along with Note, one Midi Channel higher than the Note"),
-            trailing: Switch(
-                value: settings.sendCC,
-                onChanged: (value) => settings.sendCC = value),
-          ),
+          // TODO reimplement sendCC
+          // ListTile(
+          //   title: const Text("Send CC"),
+          //   subtitle: const Text(
+          //       "Send Control Change Message along with Note, one Midi Channel higher than the Note"),
+          //   trailing: Switch(
+          //       value: settings.sendCC,
+          //       onChanged: (value) => settings.sendCC = value),
+          // ),
         ],
       );
     });

@@ -15,8 +15,9 @@ class DropdownModulation extends StatelessWidget {
               if (modulation == MPEModulation.slide &&
                   otherValue == MPEModulation.slide64) return false;
               if (modulation == MPEModulation.slide64 &&
-                  otherValue == MPEModulation.slide)
-                return false; // TODO too much if and then
+                  otherValue == MPEModulation.slide) {
+                return false;
+              } // TODO too much if and then
               return true;
             })
             .where((modulation) {
