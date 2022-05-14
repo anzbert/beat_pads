@@ -19,5 +19,5 @@ export 'utils/transition_utils.dart';
 export './pads_layouts.dart';
 export './touch_buffer.dart';
 export './pads_playmodes.dart';
-export 'midi_messages.dart';
-export 'midi_events.dart';
+export 'midi_mpe_message.dart';
+export 'midi_note_event.dart';
