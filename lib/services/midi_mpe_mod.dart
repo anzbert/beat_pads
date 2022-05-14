@@ -26,6 +26,7 @@
 */
 
 import 'package:beat_pads/services/_services.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_midi_command/flutter_midi_command_messages.dart';
 
 class SendMpe {
@@ -43,11 +44,11 @@ class ModPitchBendFull2D extends Mod {
   @override
   void send(int channel, int note, double distance) {
     double pitchChange = distance * 0x3FFF;
-    if (lastSentValue != pitchChange) {
+    if (!listEquals<num>([channel, pitchChange], lastSentValues)) {
       PitchBendMessage(channel: channel, bend: distance * pitchBendMax / 48)
           .send();
 
-      lastSentValue = pitchChange;
+      lastSentValues = [channel, pitchChange];
     }
   }
 }
@@ -57,13 +58,14 @@ class ModPitchBendUp1D extends Mod {
   ModPitchBendUp1D(this.pitchBendMax);
   @override
   void send(int channel, int note, double distance) {
-    double pitchChange = distance * 0x3FFF;
-    if (lastSentValue != pitchChange) {
+    double pitchChange = distance.abs() * 0x3FFF;
+
+    if (!listEquals<num>([channel, pitchChange], lastSentValues)) {
       PitchBendMessage(
               channel: channel, bend: distance.abs() * pitchBendMax / 48)
           .send();
 
-      lastSentValue = pitchChange;
+      lastSentValues = [channel, pitchChange];
     }
   }
 }
@@ -73,13 +75,14 @@ class ModPitchBendDown1D extends Mod {
   ModPitchBendDown1D(this.pitchBendMax);
   @override
   void send(int channel, int note, double distance) {
-    double pitchChange = distance * 0x3FFF;
-    if (lastSentValue != pitchChange) {
+    double pitchChange = distance.abs() * 0x3FFF;
+
+    if (!listEquals<num>([channel, pitchChange], lastSentValues)) {
       PitchBendMessage(
               channel: channel, bend: -distance.abs() * pitchBendMax / 48)
           .send();
 
-      lastSentValue = pitchChange;
+      lastSentValues = [channel, pitchChange];
     }
   }
 }
@@ -88,9 +91,10 @@ class ModMPEAftertouch1D extends Mod {
   @override
   void send(int channel, int note, double distance) {
     int atChange = (distance.abs() * 127).toInt();
-    if (atChange != lastSentValue) {
+
+    if (!listEquals<num>([channel, atChange], lastSentValues)) {
       ATMessage(channel: channel, pressure: atChange).send();
-      lastSentValue = atChange;
+      lastSentValues = [channel, atChange];
     }
   }
 }
@@ -99,11 +103,12 @@ class ModSlide1D extends Mod {
   @override
   void send(int channel, int note, double distance) {
     int slideChange = (distance.abs() * 127).toInt();
-    if (slideChange != lastSentValue) {
+
+    if (!listEquals<num>([channel, note, slideChange], lastSentValues)) {
       CCMessage(
               channel: channel, controller: CC.slide.value, value: slideChange)
           .send();
-      lastSentValue = slideChange;
+      lastSentValues = [channel, note, slideChange];
     }
   }
 }
@@ -112,11 +117,12 @@ class ModSlide642D extends Mod {
   @override
   void send(int channel, int note, double distance) {
     int slideChange = ((distance + 1) / 2 * 127).toInt();
-    if (slideChange != lastSentValue) {
+
+    if (!listEquals<num>([channel, note, slideChange], lastSentValues)) {
       CCMessage(
               channel: channel, controller: CC.slide.value, value: slideChange)
           .send();
-      lastSentValue = slideChange;
+      lastSentValues = [channel, note, slideChange];
     }
   }
 }
