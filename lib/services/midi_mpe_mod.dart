@@ -137,10 +137,10 @@ class ModNull extends Mod {
 // pick those from dropdown -> return constructors
 enum MPEmods {
   pitchbend("Pitch Bend (2D)", Dims.two, Group.pitch),
+  slide("Slide (1D)", Dims.one, Group.slide),
+  mpeAftertouch("Aftertouch (1D)", Dims.one, Group.at),
   pitchbendUp("Pitch Bend Up (1D)", Dims.one, Group.pitch),
   pitchbendDown("Pitch Bend Down (1D)", Dims.one, Group.pitch),
-  mpeAftertouch("Aftertouch (1D)", Dims.one, Group.at),
-  slide("Slide (1D)", Dims.one, Group.slide),
   slide64("Slide initial64 (2D)", Dims.two, Group.slide),
   none("None", Dims.two, Group.none),
   ;
@@ -162,7 +162,7 @@ enum MPEmods {
     return ModNull();
   }
 
-  MPEmods? fromName(String key) {
+  static MPEmods? fromName(String key) {
     for (MPEmods mod in MPEmods.values) {
       if (mod.name == key) return mod;
     }

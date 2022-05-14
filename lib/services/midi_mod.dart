@@ -1,3 +1,4 @@
+import 'package:beat_pads/services/utils/gen_utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_midi_command/flutter_midi_command_messages.dart';
 
@@ -13,7 +14,7 @@ abstract class Mod {
 
   /// Resets value. Only if this method is implemented
   void reset() {
-    // not implemented by default
+    Utils.logd("Reset not implemented for $this");
   }
 }
 

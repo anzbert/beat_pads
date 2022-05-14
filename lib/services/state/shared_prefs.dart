@@ -111,9 +111,16 @@ class LoadSettings {
   final Setting<bool> randomVelocity;
 
   LoadSettings(Map<String, dynamic> loadedMap)
-      : mpe2DX = Setting<MPEmods>('mpe2DX', loadedMap['mpe2DX']),
-        mpe2DY = Setting<MPEmods>('mpe2DY', loadedMap['mpe2DY']),
-        mpe1DRadius = Setting<MPEmods>('mpe1DRadius', loadedMap['mpe1DRadius']),
+      : mpe2DX = Setting<MPEmods>(
+            'mpe2DX', MPEmods.fromName(loadedMap['mpe2DX']) ?? MPEmods.slide),
+        mpe2DY = Setting<MPEmods>('mpe2DY',
+            MPEmods.fromName(loadedMap['mpe2DY']) ?? MPEmods.pitchbend),
+        mpe1DRadius = Setting<MPEmods>(
+            'mpe1DRadius',
+            MPEmods.fromName(loadedMap['mpe1DRadius']) ??
+                MPEmods.mpeAftertouch),
+        layout = Setting<Layout>(
+            'layout', Layout.fromName(loadedMap['layout']) ?? Layout.values[0]),
         mpePitchBendRange =
             Setting<int>('mpePitchBendRange', loadedMap['mpePitchBendRange']!),
         mpeMemberChannels =
@@ -153,8 +160,6 @@ class LoadSettings {
             midiScales.containsKey(loadedMap['scaleString'])
                 ? loadedMap['scaleString']
                 : midiScales.keys.toList()[0]),
-        layout = Setting<Layout>(
-            'layout', Layout.fromName(loadedMap['layout']) ?? Layout.values[0]),
         playMode = Setting<PlayMode>('playMode',
             PlayMode.fromName(loadedMap['playMode']) ?? PlayMode.values[0]);
 
@@ -178,6 +183,9 @@ class Setting<T> {
       result = await sharedPrefs.setString("layout", cast.name);
     } else if (value is PlayMode) {
       PlayMode cast = value as PlayMode;
+      result = await sharedPrefs.setString("playMode", cast.name);
+    } else if (value is MPEmods) {
+      MPEmods cast = value as MPEmods;
       result = await sharedPrefs.setString("playMode", cast.name);
     } else if (value is int) {
       result = await sharedPrefs.setInt(sharedPrefsKey, value as int);
