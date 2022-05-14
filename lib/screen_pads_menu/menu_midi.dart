@@ -34,19 +34,17 @@ class MenuMidi extends StatelessWidget {
             setValue: (v) => settings.channel = v - 1,
             readValue: settings.channel + 1,
           ),
-          if (settings.playMode == PlayMode.mpe)
-            IntSliderTile(
-              // resetValue: settings.resetChannel,
-              min: 1,
-              max: 15,
-              label: "MPE Member Channels",
-              subtitle: "Number of member channels to allocate in MPE mode",
-              trailing: Text(settings.upperZone
-                  ? "${15 - settings.mpeMemberChannels} to 15"
-                  : "2 to ${settings.mpeMemberChannels + 1}"),
-              setValue: (v) => settings.mpeMemberChannels = v,
-              readValue: settings.mpeMemberChannels,
-            ),
+          IntSliderTile(
+            min: 1,
+            max: 15,
+            label: "MPE Member Channels",
+            subtitle: "Number of member channels to allocate in MPE mode",
+            trailing: Text(settings.upperZone
+                ? "${15 - settings.mpeMemberChannels} to 15"
+                : "2 to ${settings.mpeMemberChannels + 1}"),
+            setValue: (v) => settings.mpeMemberChannels = v,
+            readValue: settings.mpeMemberChannels,
+          ),
           const Divider(),
           ListTile(
             title: const Text("Random Velocity"),

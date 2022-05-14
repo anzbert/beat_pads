@@ -9,7 +9,7 @@ import 'package:beat_pads/shared_components/_shared.dart';
 import 'package:beat_pads/screen_pads_menu/switch_wake_lock.dart';
 
 class MenuSystem extends StatelessWidget {
-  final double buttonMinWidth = 280;
+  final double buttonMinWidth = 300;
 
   @override
   Widget build(BuildContext context) {

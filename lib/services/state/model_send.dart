@@ -114,9 +114,8 @@ class MidiSender extends ChangeNotifier {
   void handleNewTouch(PointerEvent touch, int noteTapped) {
     NoteEvent noteOn = NoteEvent(
         _settings.memberChannel, noteTapped, _settings.velocity)
+      // TODO reset existing pitch bends, etc ( see MPE spec!) before sending noteOn!!
       ..noteOn(cc: _settings.playMode.singleChannel ? _settings.sendCC : false);
-
-    // TODO reset existing pitch bends, etc ( see MPE spec!)
 
     touchBuffer.addNoteOn(touch, noteOn);
     notifyListeners();

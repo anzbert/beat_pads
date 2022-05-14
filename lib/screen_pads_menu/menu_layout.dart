@@ -20,13 +20,14 @@ class MenuLayout extends StatelessWidget {
           settings.layout.props.resizable; // Is the layout fixed or resizable?
       bool isPortrait =
           MediaQuery.of(context).orientation.name == "portrait" ? true : false;
+
       return Flex(
         direction: isPortrait ? Axis.vertical : Axis.horizontal,
         crossAxisAlignment:
             isPortrait ? CrossAxisAlignment.center : CrossAxisAlignment.start,
         children: [
           const Flexible(
-            fit: FlexFit.loose,
+            fit: FlexFit.tight,
             flex: 2,
             child: FittedBox(child: Preview()),
           ),
