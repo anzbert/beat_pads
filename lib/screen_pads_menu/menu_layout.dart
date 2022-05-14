@@ -119,19 +119,11 @@ class MenuLayout extends StatelessWidget {
                 ListTile(
                   title: const Text("Sustain Button"),
                   subtitle: const Text(
-                      "Adds Sustain Button next to Pads. LOCK Sustain ON by pushing and sliding away from Button"),
+                      "Adds Sustain Button next to Pads. LOCK Sustain ON by double-tapping or sliding off the Button"),
                   trailing: Switch(
                       value: settings.sustainButton,
                       onChanged: (value) =>
                           settings.sustainButton = !settings.sustainButton),
-                ),
-                ListTile(
-                  title: const Text("Mod Wheel"),
-                  subtitle: const Text("Adds Mod Wheel Slider next to Pads"),
-                  trailing: Switch(
-                      value: settings.modWheel,
-                      onChanged: (value) =>
-                          settings.modWheel = !settings.modWheel),
                 ),
                 ListTile(
                   title: const Text("Pitch Bender"),
@@ -153,6 +145,14 @@ class MenuLayout extends StatelessWidget {
                     start: 0,
                     steps: 25,
                   ),
+                ListTile(
+                  title: const Text("Mod Wheel"),
+                  subtitle: const Text("Adds Mod Wheel Slider next to Pads"),
+                  trailing: Switch(
+                      value: settings.modWheel,
+                      onChanged: (value) =>
+                          settings.modWheel = !settings.modWheel),
+                ),
               ],
             ),
           ),

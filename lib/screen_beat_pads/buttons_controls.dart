@@ -1,4 +1,5 @@
-import 'package:beat_pads/screen_beat_pads/button_sustain.dart';
+import 'package:beat_pads/screen_beat_pads/button_sustain_doubletap.dart';
+import 'package:beat_pads/screen_beat_pads/button_sustain_slideoff.dart';
 import 'package:beat_pads/screen_beat_pads/buttons_octave.dart';
 import 'package:beat_pads/services/_services.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +22,7 @@ class ControlButtonsRect extends StatelessWidget {
             if (settings.sustainButton)
               const Expanded(
                 flex: 1,
-                child: SustainButtonRect(),
+                child: SustainButtonDoubleTap(),
               ),
           ],
         );
