@@ -13,78 +13,96 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
+  // final Setting<int> modulationDeadZone;
+  // final Setting<int> modulationRadius;
+  // final Setting<bool> modulation2D;
+  // final Setting<int> mpeMemberChannels;
+  // final Setting<int> mpePitchBendRange;
+  // final Setting<MPEmods> mpe1DRadius;
+  // final Setting<MPEmods> mpe2DX;
+  // final Setting<MPEmods> mpe2DY;
+
   // MPE and Aftertouch settings
   // # for dropdown menu:
-  MPEmods _modulation2dX = MPEmods.slide;
-  MPEmods get modulation2dX => _modulation2dX;
-  set modulation2dX(MPEmods newVal) {
-    _modulation2dX = newVal;
+  MPEmods get mpe2DX => prefs.settings.mpe2DX.value;
+  set mpe2DX(MPEmods newVal) {
+    prefs.settings.mpe2DX.value = newVal;
+    prefs.settings.mpe2DX.save();
     notifyListeners();
   }
 
-  MPEmods _modulation2dY = MPEmods.pitchbend;
-  MPEmods get modulation2dY => _modulation2dY;
-  set modulation2dY(MPEmods newVal) {
-    _modulation2dY = newVal;
+  MPEmods get mpe2DY => prefs.settings.mpe2DY.value;
+  set mpe2DY(MPEmods newVal) {
+    prefs.settings.mpe2DY.value = newVal;
+    prefs.settings.mpe2DY.save();
     notifyListeners();
   }
 
-  MPEmods _modulation1dR = MPEmods.mpeAftertouch;
-  MPEmods get modulation1dR => _modulation1dR;
-  set modulation1dR(MPEmods newVal) {
-    _modulation1dR = newVal;
+  MPEmods get mpe1DRadius => prefs.settings.mpe1DRadius.value;
+  set mpe1DRadius(MPEmods newVal) {
+    prefs.settings.mpe1DRadius.value = newVal;
+    prefs.settings.mpe1DRadius.save();
     notifyListeners();
   }
   // # end of dropdown menus
 
-  int _mpePitchbendRange = 48;
-  int get mpePitchbendRange => _mpePitchbendRange;
+  int get mpePitchbendRange => prefs.settings.mpePitchBendRange.value;
   set mpePitchbendRange(int newVal) {
     if (newVal > 48 || newVal < 0) return;
-    _mpePitchbendRange = newVal;
+    prefs.settings.mpePitchBendRange.value = newVal;
+    prefs.settings.mpePitchBendRange.save();
     notifyListeners();
   }
 
-  void resetMPEPitchbendRange() => mpePitchbendRange = 48;
+  void resetMPEPitchbendRange() =>
+      mpePitchbendRange = LoadSettings.defaults().mpePitchBendRange.value;
 
-  double _modulationRadius = 0.11; // temp fixed
-  double get modulationRadius => _modulationRadius;
+  double get modulationRadius => prefs.settings.modulationRadius.value / 100;
   set modulationRadius(double newVal) {
-    _modulationRadius = newVal.clamp(0, 1);
+    prefs.settings.modulationRadius.value = (newVal.clamp(0, 1) * 100).toInt();
+    prefs.settings.modulationRadius.save();
     notifyListeners();
   }
 
-  void resetModulationRadius() => modulationRadius = 0.11;
+  void resetModulationRadius() =>
+      modulationRadius = LoadSettings.defaults().modulationRadius.value / 100;
 
-  double _modulationDeadZone = 0.15; // temp fixed
-  double get modulationDeadZone => _modulationDeadZone;
+  double get modulationDeadZone =>
+      prefs.settings.modulationDeadZone.value / 100;
   set modulationDeadZone(double newVal) {
-    _modulationDeadZone = newVal.clamp(0, 1);
+    prefs.settings.modulationDeadZone.value =
+        (newVal.clamp(0, 1) * 100).toInt();
+    prefs.settings.modulationDeadZone.save();
     notifyListeners();
   }
 
-  void resetDeadZone() => modulationDeadZone = 0.15;
+  void resetDeadZone() => modulationDeadZone =
+      LoadSettings.defaults().modulationDeadZone.value / 100;
 
-  bool _modulation2d = true;
-  bool get modulation2d => _modulation2d;
-  set modulation2d(bool newVal) {
-    _modulation2d = newVal;
+  bool get modulation2D => prefs.settings.modulation2D.value;
+  set modulation2D(bool newVal) {
+    prefs.settings.modulation2D.value = newVal;
+    prefs.settings.modulation2D.save();
     notifyListeners();
   }
 
-  int _totalMemberChannels = 8; // temp fixed
-  int get totalMemberChannels => _totalMemberChannels;
-  set totalMemberChannels(int newVal) {
-    _totalMemberChannels = newVal.clamp(1, 15);
+  int get mpeMemberChannels => prefs.settings.mpeMemberChannels.value;
+  set mpeMemberChannels(int newVal) {
+    prefs.settings.mpeMemberChannels.value = newVal.clamp(1, 15);
+    prefs.settings.mpeMemberChannels.save();
     notifyListeners();
   }
+
+  void resetMpeMemberChannels() =>
+      mpeMemberChannels = LoadSettings.defaults().mpeMemberChannels.value;
 
   // ROUND ROBBIN METHOD (probably needs overhaul)
+  // TODO overhaul channel MPE allocator
   int _channelCounter = -1;
   int get memberChannel {
     if (playMode != PlayMode.mpe) return channel;
-    int upperLimit = upperZone ? 14 : totalMemberChannels;
-    int lowerLimit = upperZone ? 15 - totalMemberChannels : 1;
+    int upperLimit = upperZone ? 14 : mpeMemberChannels;
+    int lowerLimit = upperZone ? 15 - mpeMemberChannels : 1;
 
     _channelCounter = _channelCounter == -1 ? lowerLimit : _channelCounter;
     _channelCounter++;

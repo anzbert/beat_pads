@@ -23,7 +23,7 @@ class PaintAfterTouchCircle extends StatelessWidget {
           children: [
             ...buffer.map(
               (touchEvent) {
-                return context.watch<Settings>().modulation2d == false ||
+                return context.watch<Settings>().modulation2D == false ||
                         context.watch<Settings>().playMode == PlayMode.polyAT
                     // CIRCLE / RADIUS
                     ? Stack(

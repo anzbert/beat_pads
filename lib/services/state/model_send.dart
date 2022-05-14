@@ -18,13 +18,13 @@ class MidiSender extends ChangeNotifier {
         touchBuffer = TouchBuffer(_settings, screenSize),
         polyAfterTouch1D = ModPolyAfterTouch1D(),
         mpeModulations = SendMpe(
-          _settings.modulation2dX.getMod(_settings.mpePitchbendRange),
-          _settings.modulation2dY.getMod(_settings.mpePitchbendRange),
-          _settings.modulation1dR.getMod(_settings.mpePitchbendRange),
+          _settings.mpe2DX.getMod(_settings.mpePitchbendRange),
+          _settings.mpe2DY.getMod(_settings.mpePitchbendRange),
+          _settings.mpe1DRadius.getMod(_settings.mpePitchbendRange),
         ) {
     if (_settings.playMode == PlayMode.mpe && !preview) {
       MPEinitMessage(
-              memberChannels: _settings.totalMemberChannels,
+              memberChannels: _settings.mpeMemberChannels,
               upperZone: _settings.upperZone)
           .send();
     }
@@ -36,9 +36,9 @@ class MidiSender extends ChangeNotifier {
     _settings = settings;
     _updateBaseOctave();
     mpeModulations = SendMpe(
-      _settings.modulation2dX.getMod(_settings.mpePitchbendRange),
-      _settings.modulation2dY.getMod(_settings.mpePitchbendRange),
-      _settings.modulation1dR.getMod(_settings.mpePitchbendRange),
+      _settings.mpe2DX.getMod(_settings.mpePitchbendRange),
+      _settings.mpe2DY.getMod(_settings.mpePitchbendRange),
+      _settings.mpe1DRadius.getMod(_settings.mpePitchbendRange),
     );
     return this;
   }
@@ -168,7 +168,7 @@ class MidiSender extends ChangeNotifier {
 
     // MPE
     else if (_settings.playMode == PlayMode.mpe) {
-      if (_settings.modulation2d) {
+      if (_settings.modulation2D) {
         mpeModulations.xMod.send(
             _settings.channel,
             eventInBuffer.noteEvent.note,

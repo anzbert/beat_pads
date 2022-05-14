@@ -60,16 +60,34 @@ class Prefs {
     "pitchBend": false,
     "octaveButtons": false,
     "sustainButton": false,
-    // "lockScreenButton": false,
     "randomVelocity": false,
     "scaleString": "chromatic",
     "channel": 2,
     "pitchBendEase": 0,
     "modWheel": false,
+
+    // new:
+    "mpeMemberChannels": 8,
+    "modulation2D": true,
+    "modulationDeadZone": 15,
+    "modulationRadius": 11,
+    "mpePitchBendRange": 48,
+    "mpe1DRadius": "mpeAftertouch",
+    "mpe2DX": "slide",
+    "mpe2DY": "pitchbend",
   };
 }
 
 class LoadSettings {
+  final Setting<int> modulationDeadZone;
+  final Setting<int> modulationRadius;
+  final Setting<bool> modulation2D;
+  final Setting<int> mpeMemberChannels;
+  final Setting<int> mpePitchBendRange;
+  final Setting<MPEmods> mpe1DRadius;
+  final Setting<MPEmods> mpe2DX;
+  final Setting<MPEmods> mpe2DY;
+
   final Setting<Layout> layout;
   final Setting<PlayMode> playMode;
   final Setting<String> scaleString;
@@ -90,11 +108,23 @@ class LoadSettings {
   final Setting<bool> pitchBend;
   final Setting<bool> octaveButtons;
   final Setting<bool> sustainButton;
-  // final Setting<bool> lockScreenButton;
   final Setting<bool> randomVelocity;
 
   LoadSettings(Map<String, dynamic> loadedMap)
-      : rootNote = Setting<int>("rootnote", loadedMap['rootNote']!),
+      : mpe2DX = Setting<MPEmods>('mpe2DX', loadedMap['mpe2DX']),
+        mpe2DY = Setting<MPEmods>('mpe2DY', loadedMap['mpe2DY']),
+        mpe1DRadius = Setting<MPEmods>('mpe1DRadius', loadedMap['mpe1DRadius']),
+        mpePitchBendRange =
+            Setting<int>('mpePitchBendRange', loadedMap['mpePitchBendRange']!),
+        mpeMemberChannels =
+            Setting<int>('mpeMemberChannels', loadedMap['mpeMemberChannels']!),
+        modulation2D =
+            Setting<bool>('modulation2D', loadedMap['modulation2D']!),
+        modulationDeadZone = Setting<int>(
+            "modulationDeadZone", loadedMap['modulationDeadZone']!),
+        modulationRadius =
+            Setting<int>("modulationRadius", loadedMap['modulationRadius']!),
+        rootNote = Setting<int>("rootnote", loadedMap['rootNote']!),
         channel = Setting<int>('channel', loadedMap['channel']!),
         width = Setting<int>('width', loadedMap['width']!),
         height = Setting<int>('height', loadedMap['height']!),
@@ -116,8 +146,6 @@ class LoadSettings {
             Setting<bool>('octaveButtons', loadedMap['octaveButtons']!!),
         sustainButton =
             Setting<bool>('sustainButton', loadedMap['sustainButton']!),
-        // lockScreenButton =
-        //     Setting<bool>('lockScreenButton', loadedMap['lockScreenButton']!),
         randomVelocity =
             Setting<bool>('randomVelocity', loadedMap['randomVelocity']!),
         scaleString = Setting<String>(

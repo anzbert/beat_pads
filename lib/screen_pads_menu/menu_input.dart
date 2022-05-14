@@ -34,39 +34,39 @@ class MenuInput extends StatelessWidget {
               subtitle: const Text(
                   "Modulate 2 Values on X and Y or only 1 by Radius"),
               trailing: Switch(
-                  value: settings.modulation2d,
-                  onChanged: (value) => settings.modulation2d = value),
+                  value: settings.modulation2D,
+                  onChanged: (value) => settings.modulation2D = value),
             ),
-          if (settings.playMode == PlayMode.mpe && settings.modulation2d)
+          if (settings.playMode == PlayMode.mpe && settings.modulation2D)
             ListTile(
               title: const Text("X-Axis"),
               // subtitle: const Text("Modulate this parameter horizontally"),
               trailing: DropdownModulation(
-                readValue: settings.modulation2dX,
-                setValue: (v) => settings.modulation2dX = v,
-                otherValue: settings.modulation2dY,
+                readValue: settings.mpe2DX,
+                setValue: (v) => settings.mpe2DX = v,
+                otherValue: settings.mpe2DY,
               ),
             ),
-          if (settings.playMode == PlayMode.mpe && settings.modulation2d)
+          if (settings.playMode == PlayMode.mpe && settings.modulation2D)
             ListTile(
               title: const Text("Y-Axis"),
               // subtitle: const Text("Modulate this parameter vertically"),
               trailing: DropdownModulation(
-                readValue: settings.modulation2dY,
-                setValue: (v) => settings.modulation2dY = v,
-                otherValue: settings.modulation2dX,
+                readValue: settings.mpe2DY,
+                setValue: (v) => settings.mpe2DY = v,
+                otherValue: settings.mpe2DX,
               ),
             ),
           if (settings.playMode == PlayMode.mpe &&
-              settings.modulation2d == false)
+              settings.modulation2D == false)
             ListTile(
               title: const Text("Radius"),
               // subtitle: const Text(
               //     "Modulate this parameter by the distance from the initial touch position"),
               trailing: DropdownModulation(
                 dimensions: Dims.one,
-                readValue: settings.modulation1dR,
-                setValue: (v) => settings.modulation1dR = v,
+                readValue: settings.mpe1DRadius,
+                setValue: (v) => settings.mpe1DRadius = v,
               ),
             ),
           if (settings.playMode == PlayMode.mpe)

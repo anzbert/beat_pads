@@ -42,10 +42,10 @@ class MenuMidi extends StatelessWidget {
               label: "MPE Member Channels",
               subtitle: "Number of member channels to allocate in MPE mode",
               trailing: Text(settings.upperZone
-                  ? "${15 - settings.totalMemberChannels} to 15"
-                  : "2 to ${settings.totalMemberChannels + 1}"),
-              setValue: (v) => settings.totalMemberChannels = v,
-              readValue: settings.totalMemberChannels,
+                  ? "${15 - settings.mpeMemberChannels} to 15"
+                  : "2 to ${settings.mpeMemberChannels + 1}"),
+              setValue: (v) => settings.mpeMemberChannels = v,
+              readValue: settings.mpeMemberChannels,
             ),
           const Divider(),
           ListTile(
