@@ -15,13 +15,13 @@ class DropdownModulation extends StatelessWidget {
       this.dimensions,
       Key? key})
       : items = MPEmods.values
-            .where((modulation) {
-              if (otherValue == null) return true;
-              if (modulation.exclusiveGroup == otherValue.exclusiveGroup) {
-                return false;
-              }
-              return true;
-            })
+            // .where((modulation) {
+            //   if (otherValue == null) return true;
+            //   if (modulation.exclusiveGroup == otherValue.exclusiveGroup) {
+            //     return false;
+            //   }
+            //   return true;
+            // })
             .where((modulation) {
               if (dimensions != null) {
                 if (dimensions != modulation.dimensions) {
@@ -33,7 +33,14 @@ class DropdownModulation extends StatelessWidget {
             .map(
               (modulation) => DropdownMenuItem(
                 value: modulation,
-                child: Text(modulation.title),
+                enabled: modulation.exclusiveGroup == otherValue?.exclusiveGroup
+                    ? false
+                    : true,
+                child: Text(modulation.title,
+                    style:
+                        modulation.exclusiveGroup == otherValue?.exclusiveGroup
+                            ? TextStyle(color: Palette.lightGrey.color)
+                            : null),
               ),
             )
             .toList(),

@@ -24,22 +24,23 @@ class MenuInput extends StatelessWidget {
           ListTile(
             title: const Text("Input Mode"),
             subtitle:
-                const Text("Slidable Input, Polyphonic Aftertouch or MPE"),
+                const Text("Slidable Behavious, Polyphonic Aftertouch and MPE"),
             trailing: DropdownPlayMode(),
           ),
+          const Divider(),
           if (settings.playMode == PlayMode.mpe)
             ListTile(
               title: const Text("2-D Modulation"),
               subtitle: const Text(
-                  "Modulate 2 Values on the X and Y Axis. Turn off to modulate only 1 Value by Radius"),
+                  "Modulate 2 Values on X and Y or only 1 by Radius"),
               trailing: Switch(
                   value: settings.modulation2d,
                   onChanged: (value) => settings.modulation2d = value),
             ),
           if (settings.playMode == PlayMode.mpe && settings.modulation2d)
             ListTile(
-              title: const Text("Modulation X-Axis"),
-              subtitle: const Text("Modulate this parameter horizontally"),
+              title: const Text("X-Axis"),
+              // subtitle: const Text("Modulate this parameter horizontally"),
               trailing: DropdownModulation(
                 readValue: settings.modulation2dX,
                 setValue: (v) => settings.modulation2dX = v,
@@ -48,8 +49,8 @@ class MenuInput extends StatelessWidget {
             ),
           if (settings.playMode == PlayMode.mpe && settings.modulation2d)
             ListTile(
-              title: const Text("Modulation Y-Axis"),
-              subtitle: const Text("Modulate this parameter vertically"),
+              title: const Text("Y-Axis"),
+              // subtitle: const Text("Modulate this parameter vertically"),
               trailing: DropdownModulation(
                 readValue: settings.modulation2dY,
                 setValue: (v) => settings.modulation2dY = v,
@@ -59,9 +60,9 @@ class MenuInput extends StatelessWidget {
           if (settings.playMode == PlayMode.mpe &&
               settings.modulation2d == false)
             ListTile(
-              title: const Text("Modulation by Radius"),
-              subtitle: const Text(
-                  "Modulate this parameter by the distance from the initial touch position"),
+              title: const Text("Radius"),
+              // subtitle: const Text(
+              //     "Modulate this parameter by the distance from the initial touch position"),
               trailing: DropdownModulation(
                 dimensions: Dims.one,
                 readValue: settings.modulation1dR,
@@ -73,13 +74,22 @@ class MenuInput extends StatelessWidget {
               min: 1,
               max: 48,
               label: "Pitchbend Range",
-              subtitle:
-                  "Semitone Range of MPE Pitchbend. 48 is the MPE default",
-              trailing: Text("${settings.mpePitchbendRange}"),
+              subtitle: "Maximum MPE Pitchbend in Semitones",
+              trailing: Text("${settings.mpePitchbendRange} st"),
               readValue: settings.mpePitchbendRange,
               setValue: (v) => settings.mpePitchbendRange = v,
               resetValue: settings.resetMPEPitchbendRange,
             ),
+          if (settings.playMode.singleChannel)
+            ListTile(
+              title: const Text("Send CC"),
+              subtitle: const Text(
+                  "Send CC along with Note one Midi Channel above. Useful for triggering note dependant effects"),
+              trailing: Switch(
+                  value: settings.sendCC,
+                  onChanged: (value) => settings.sendCC = value),
+            ),
+          if (settings.playMode.modulatable) const Divider(),
           if (settings.playMode.modulatable)
             IntSliderTile(
               min: 5,

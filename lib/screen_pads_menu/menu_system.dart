@@ -25,6 +25,7 @@ class MenuSystem extends StatelessWidget {
             ),
           ),
           const SwitchWakeLockTile(),
+          const Divider(),
           Center(
             child: ConstrainedBox(
               constraints: BoxConstraints(minWidth: buttonMinWidth),
@@ -36,7 +37,7 @@ class MenuSystem extends StatelessWidget {
                     primary: Palette.laserLemon.color,
                     textStyle: const TextStyle(fontWeight: FontWeight.bold)),
                 child: Text(
-                  "Connect Midi (${context.watch<Variables>().connectedDevices.length} connected)",
+                  "Select Midi Device (${context.watch<Variables>().connectedDevices.length} selected)",
                 ),
               ),
             ),
@@ -93,6 +94,7 @@ class MenuSystem extends StatelessWidget {
               ),
             ),
           ),
+          const Divider(),
           const CreditsBox(),
         ],
       );

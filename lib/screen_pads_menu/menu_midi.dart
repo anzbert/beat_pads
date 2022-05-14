@@ -34,18 +34,19 @@ class MenuMidi extends StatelessWidget {
             setValue: (v) => settings.channel = v - 1,
             readValue: settings.channel + 1,
           ),
-          IntSliderTile(
-            // resetValue: settings.resetChannel,
-            min: 1,
-            max: 15,
-            label: "MPE Member Channels",
-            subtitle: "Number of member channels to allocate in MPE mode",
-            trailing: Text(settings.upperZone
-                ? "${15 - settings.totalMemberChannels} to 15"
-                : "2 to ${settings.totalMemberChannels + 1}"),
-            setValue: (v) => settings.totalMemberChannels = v,
-            readValue: settings.totalMemberChannels,
-          ),
+          if (settings.playMode == PlayMode.mpe)
+            IntSliderTile(
+              // resetValue: settings.resetChannel,
+              min: 1,
+              max: 15,
+              label: "MPE Member Channels",
+              subtitle: "Number of member channels to allocate in MPE mode",
+              trailing: Text(settings.upperZone
+                  ? "${15 - settings.totalMemberChannels} to 15"
+                  : "2 to ${settings.totalMemberChannels + 1}"),
+              setValue: (v) => settings.totalMemberChannels = v,
+              readValue: settings.totalMemberChannels,
+            ),
           const Divider(),
           ListTile(
             title: const Text("Random Velocity"),
@@ -83,15 +84,6 @@ class MenuMidi extends StatelessWidget {
             start: 0,
             steps: 25,
           ),
-          // TODO reimplement sendCC
-          // ListTile(
-          //   title: const Text("Send CC"),
-          //   subtitle: const Text(
-          //       "Send Control Change Message along with Note, one Midi Channel higher than the Note"),
-          //   trailing: Switch(
-          //       value: settings.sendCC,
-          //       onChanged: (value) => settings.sendCC = value),
-          // ),
         ],
       );
     });

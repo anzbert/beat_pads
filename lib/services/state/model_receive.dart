@@ -23,6 +23,8 @@ class MidiReceiver extends ChangeNotifier {
   final List<int> _rxBuffer = List.filled(128, 0);
   List<int> get rxBuffer => _rxBuffer;
 
+  int? modWheelValue;
+
   resetRxBuffer() {
     rxBuffer.fillRange(0, 128, 0);
     notifyListeners();
@@ -41,8 +43,18 @@ class MidiReceiver extends ChangeNotifier {
 
       MidiMessageType type = MidiUtils.getMidiMessageType(statusByte);
 
-      // TODO: add CC receiver for mod wheel
+      // CC receiver for mod wheel:
+      if (type == MidiMessageType.cc) {
+        int controller = packet.data[1];
+        int value = packet.data[2];
 
+        if (controller == 1 && modWheelValue != value) {
+          modWheelValue = value;
+          notifyListeners();
+        }
+      }
+
+      // note handling:
       if (type == MidiMessageType.noteOn || type == MidiMessageType.noteOff) {
         int note = packet.data[1];
         int velocity = packet.data[2];

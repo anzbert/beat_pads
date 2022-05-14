@@ -4,6 +4,7 @@ class NoteEvent {
   final int channel;
   final int note;
 
+  CCMessage? ccMessage;
   NoteOnMessage? noteOnMessage;
   int releaseTime = 0;
 
@@ -20,7 +21,14 @@ class NoteEvent {
       releaseTime = DateTime.now().millisecondsSinceEpoch;
 
   /// Send this noteEvent's NoteOnMessage
-  void noteOn() => noteOnMessage?.send();
+  void noteOn({cc = false}) {
+    noteOnMessage?.send();
+    if (cc) {
+      ccMessage =
+          CCMessage(channel: (channel + 1) % 16, controller: note, value: 127)
+            ..send();
+    }
+  }
 
   /// Send this noteEvent's NoteOffMessage, if note is still on
   void noteOff() {
@@ -28,16 +36,9 @@ class NoteEvent {
       NoteOffMessage(channel: channel, note: note).send();
       noteOnMessage = null;
     }
+    if (ccMessage != null) {
+      CCMessage(channel: (channel + 1) % 16, controller: note, value: 0).send();
+      ccMessage = null;
+    }
   }
 }
-
-// class ModMapping {
-//   PolyATMessage? polyAT;
-//   CCMessage? cc;
-//   CCMessage? cc2;
-//   ATMessage? at;
-//   PitchBendMessage? pitchBend;
-
-//   /// All Modulation Midi Messages possible on a pad
-//   ModMapping({this.polyAT, this.cc, this.at, this.pitchBend});
-// }

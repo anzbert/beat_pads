@@ -2,7 +2,7 @@ enum PlayMode {
   slide("Sliding"),
   noSlide("No Sliding"),
   polyAT("Poly Aftertouch"),
-  mpe("MPE (test)"),
+  mpe("MPE"),
   // cc("Send CC"),
   ;
 
@@ -27,5 +27,15 @@ enum PlayMode {
       default:
         return false;
     }
+  }
+
+  bool get singleChannel {
+    if (this == PlayMode.mpe) return false;
+    return true;
+  }
+
+  bool get multiChannel {
+    if (this == PlayMode.mpe) return true;
+    return false;
   }
 }

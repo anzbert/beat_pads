@@ -11,7 +11,7 @@ abstract class Mod {
   void send(int channel, int note, double distance);
 }
 
-class PolyAfterTouch1D extends Mod {
+class ModPolyAfterTouch1D extends Mod {
   @override
   void send(int channel, int note, double distance) {
     int polyATChange = (distance.abs() * 127).toInt();

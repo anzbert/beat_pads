@@ -19,7 +19,7 @@ export 'utils/transition_utils.dart';
 export './pads_layouts.dart';
 export './touch_buffer.dart';
 export './pads_playmodes.dart';
-export 'midi_mpe_message.dart';
+export 'midi_mpe_init.dart';
 export 'midi_note_event.dart';
 export 'midi_mpe_mod.dart';
 export 'midi_mod.dart';

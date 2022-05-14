@@ -119,7 +119,7 @@ class MenuLayout extends StatelessWidget {
                 ListTile(
                   title: const Text("Sustain Button"),
                   subtitle: const Text(
-                      "Adds Sustain Button next to Pads. LOCK Sustain ON by double-tapping or sliding off the Button"),
+                      "Adds Sustain Button next to Pads. Lock ON by double-tap or sliding off the Button"),
                   trailing: Switch(
                       value: settings.sustainButton,
                       onChanged: (value) =>

@@ -15,7 +15,7 @@ class _SwitchWakeLockTileState extends State<SwitchWakeLockTile> {
   Widget build(BuildContext context) {
     return ListTile(
       title: const Text("Wake Lock"),
-      subtitle: const Text("Keep the Screen on When Using the Pads"),
+      subtitle: const Text("Keep the Screen on when using the Pads"),
       trailing: Switch(
           value: wakeLock,
           onChanged: (value) {

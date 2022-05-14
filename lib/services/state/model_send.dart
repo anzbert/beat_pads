@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 class MidiSender extends ChangeNotifier {
   final TouchBuffer touchBuffer;
+  final ModPolyAfterTouch1D polyAfterTouch1D;
   Settings _settings;
   int _baseOctave;
   bool _disposed = false;
@@ -10,16 +11,18 @@ class MidiSender extends ChangeNotifier {
   bool checkerRunning = false;
   bool preview;
   SendMpe mpeModulations;
-  PolyAfterTouch1D polyAfterTouch1D;
 
   /// Handles Touches and Midi Message sending
   MidiSender(this._settings, Size screenSize, {this.preview = false})
       : _baseOctave = _settings.baseOctave,
         touchBuffer = TouchBuffer(_settings, screenSize),
-        mpeModulations = SendMpe(_settings.modulation2dX.getMod(),
-            _settings.modulation2dY.getMod(), _settings.modulation1dR.getMod()),
-        polyAfterTouch1D = PolyAfterTouch1D() {
-    if (_settings.playMode == PlayMode.mpe && preview == false) {
+        polyAfterTouch1D = ModPolyAfterTouch1D(),
+        mpeModulations = SendMpe(
+          _settings.modulation2dX.getMod(_settings.mpePitchbendRange),
+          _settings.modulation2dY.getMod(_settings.mpePitchbendRange),
+          _settings.modulation1dR.getMod(_settings.mpePitchbendRange),
+        ) {
+    if (_settings.playMode == PlayMode.mpe && !preview) {
       MPEinitMessage(
               memberChannels: _settings.totalMemberChannels,
               upperZone: _settings.upperZone)
@@ -32,8 +35,11 @@ class MidiSender extends ChangeNotifier {
   MidiSender update(Settings settings, Size size) {
     _settings = settings;
     _updateBaseOctave();
-    mpeModulations = SendMpe(_settings.modulation2dX.getMod(),
-        _settings.modulation2dY.getMod(), _settings.modulation1dR.getMod());
+    mpeModulations = SendMpe(
+      _settings.modulation2dX.getMod(_settings.mpePitchbendRange),
+      _settings.modulation2dY.getMod(_settings.mpePitchbendRange),
+      _settings.modulation1dR.getMod(_settings.mpePitchbendRange),
+    );
     return this;
   }
 
@@ -106,9 +112,9 @@ class MidiSender extends ChangeNotifier {
   /// Handles a new touch on a pad, creating and sending new noteOn events
   /// in the touch buffer
   void handleNewTouch(PointerEvent touch, int noteTapped) {
-    NoteEvent noteOn =
-        NoteEvent(_settings.memberChannel, noteTapped, _settings.velocity)
-          ..noteOn();
+    NoteEvent noteOn = NoteEvent(
+        _settings.memberChannel, noteTapped, _settings.velocity)
+      ..noteOn(cc: _settings.playMode.singleChannel ? _settings.sendCC : false);
 
     // TODO reset existing pitch bends, etc ( see MPE spec!)
 
@@ -146,9 +152,10 @@ class MidiSender extends ChangeNotifier {
       // Play new note:
       if (noteHovered != null &&
           eventInBuffer.noteEvent.noteOnMessage == null) {
-        eventInBuffer.noteEvent =
-            NoteEvent(_settings.memberChannel, noteHovered, _settings.velocity)
-              ..noteOn();
+        eventInBuffer.noteEvent = NoteEvent(
+            _settings.memberChannel, noteHovered, _settings.velocity)
+          ..noteOn(
+              cc: _settings.playMode.singleChannel ? _settings.sendCC : false);
         notifyListeners();
       }
     }

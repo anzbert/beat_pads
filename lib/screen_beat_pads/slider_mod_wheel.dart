@@ -2,6 +2,7 @@ import 'package:beat_pads/screen_beat_pads/slider_themed.dart';
 import 'package:beat_pads/services/_services.dart';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ModWheel extends StatefulWidget {
   const ModWheel({Key? key, required this.channel}) : super(key: key);
@@ -13,10 +14,16 @@ class ModWheel extends StatefulWidget {
 }
 
 class _ModWheelState extends State<ModWheel> {
-  int _mod = 0;
+  int _mod = 63;
 
   @override
   Widget build(BuildContext context) {
+    int? receivedMidi = context.watch<MidiReceiver>().modWheelValue;
+    if (receivedMidi != null) {
+      _mod = receivedMidi;
+      context.read<MidiReceiver>().modWheelValue = null;
+    }
+
     return RotatedBox(
       quarterTurns: 1,
       child: ThemedSlider(
