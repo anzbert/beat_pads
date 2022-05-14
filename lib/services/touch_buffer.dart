@@ -58,7 +58,6 @@ class TouchEvent {
 
   // Note and modulation parameters:
   NoteEvent noteEvent;
-  ModMapping modMapping = ModMapping();
 
   // Geometry parameters:
   final Offset origin;

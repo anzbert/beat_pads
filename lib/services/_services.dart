@@ -1,6 +1,6 @@
 export 'classes/data_classes.dart';
 
-export 'constants/midi_const.dart';
+export './constants/midi_const.dart';
 export './constants/colors_const.dart';
 
 export './paint/paint_aftertouch.dart';
@@ -21,3 +21,5 @@ export './touch_buffer.dart';
 export './pads_playmodes.dart';
 export 'midi_mpe_message.dart';
 export 'midi_note_event.dart';
+export 'midi_mpe_mod.dart';
+export 'midi_mod.dart';

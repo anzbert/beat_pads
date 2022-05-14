@@ -63,7 +63,7 @@ class MenuInput extends StatelessWidget {
               subtitle: const Text(
                   "Modulate this parameter by the distance from the initial touch position"),
               trailing: DropdownModulation(
-                includeCenter64: false,
+                dimensions: Dims.one,
                 readValue: settings.modulation1dR,
                 setValue: (v) => settings.modulation1dR = v,
               ),

@@ -1,4 +1,3 @@
-import 'package:beat_pads/services/_temp_modulation.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 
@@ -15,27 +14,28 @@ class Settings extends ChangeNotifier {
   }
 
   // MPE and Aftertouch settings
-  MPEModulation _modulation2dX = MPEModulation.slide;
-  MPEModulation get modulation2dX => _modulation2dX;
-  set modulation2dX(MPEModulation newVal) {
+  // # for dropdown menu:
+  MPEmods _modulation2dX = MPEmods.slide;
+  MPEmods get modulation2dX => _modulation2dX;
+  set modulation2dX(MPEmods newVal) {
     _modulation2dX = newVal;
     notifyListeners();
   }
 
-  MPEModulation _modulation2dY = MPEModulation.pitchBend;
-  MPEModulation get modulation2dY => _modulation2dY;
-  set modulation2dY(MPEModulation newVal) {
+  MPEmods _modulation2dY = MPEmods.pitchbend;
+  MPEmods get modulation2dY => _modulation2dY;
+  set modulation2dY(MPEmods newVal) {
     _modulation2dY = newVal;
     notifyListeners();
   }
 
-  MPEModulation _modulation1dR = MPEModulation.afterTouch;
-  MPEModulation get modulation1dR => _modulation1dR;
-  set modulation1dR(MPEModulation newVal) {
-    if (newVal.center64) return;
+  MPEmods _modulation1dR = MPEmods.mpeAftertouch;
+  MPEmods get modulation1dR => _modulation1dR;
+  set modulation1dR(MPEmods newVal) {
     _modulation1dR = newVal;
     notifyListeners();
   }
+  // # end of dropdown menus
 
   int _mpePitchbendRange = 48;
   int get mpePitchbendRange => _mpePitchbendRange;

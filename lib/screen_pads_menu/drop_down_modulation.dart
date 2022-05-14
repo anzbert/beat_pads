@@ -1,28 +1,34 @@
-import 'package:beat_pads/services/_temp_modulation.dart';
+import 'package:beat_pads/services/_services.dart';
 import 'package:flutter/material.dart';
 
 class DropdownModulation extends StatelessWidget {
+  final MPEmods? otherValue;
+  final MPEmods readValue;
+  final Dims? dimensions;
+  final Function setValue;
+  final List<DropdownMenuItem<MPEmods>> items;
+
   DropdownModulation(
       {required this.readValue,
       required this.setValue,
       this.otherValue,
-      this.includeCenter64 = true,
+      this.dimensions,
       Key? key})
-      : items = MPEModulation.values
+      : items = MPEmods.values
             .where((modulation) {
               if (otherValue == null) return true;
-              if (modulation == otherValue) return false;
-              if (modulation == MPEModulation.slide &&
-                  otherValue == MPEModulation.slide64) return false;
-              if (modulation == MPEModulation.slide64 &&
-                  otherValue == MPEModulation.slide) {
+              if (modulation.exclusiveGroup == otherValue.exclusiveGroup) {
                 return false;
-              } // TODO too much if and then
+              }
               return true;
             })
             .where((modulation) {
-              if (includeCenter64) return true; // return all modulations
-              return !modulation.center64;
+              if (dimensions != null) {
+                if (dimensions != modulation.dimensions) {
+                  return false;
+                }
+              }
+              return true;
             })
             .map(
               (modulation) => DropdownMenuItem(
@@ -33,18 +39,11 @@ class DropdownModulation extends StatelessWidget {
             .toList(),
         super(key: key);
 
-  final MPEModulation? otherValue;
-  final MPEModulation readValue;
-  final bool includeCenter64;
-  final Function setValue;
-
-  final List<DropdownMenuItem<MPEModulation>> items;
-
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: DropdownButton<MPEModulation>(
+      child: DropdownButton<MPEmods>(
         value: readValue,
         items: items,
         onChanged: (value) {

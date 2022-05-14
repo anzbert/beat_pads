@@ -31,13 +31,13 @@ class NoteEvent {
   }
 }
 
-class ModMapping {
-  PolyATMessage? polyAT;
-  CCMessage? cc;
-  CCMessage? cc2;
-  ATMessage? at;
-  PitchBendMessage? pitchBend;
+// class ModMapping {
+//   PolyATMessage? polyAT;
+//   CCMessage? cc;
+//   CCMessage? cc2;
+//   ATMessage? at;
+//   PitchBendMessage? pitchBend;
 
-  /// All Modulation Midi Messages possible on a pad
-  ModMapping({this.polyAT, this.cc, this.at, this.pitchBend});
-}
+//   /// All Modulation Midi Messages possible on a pad
+//   ModMapping({this.polyAT, this.cc, this.at, this.pitchBend});
+// }

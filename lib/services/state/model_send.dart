@@ -1,6 +1,5 @@
 import 'package:beat_pads/services/_services.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_midi_command/flutter_midi_command_messages.dart';
 
 class MidiSender extends ChangeNotifier {
   final TouchBuffer touchBuffer;
@@ -10,11 +9,16 @@ class MidiSender extends ChangeNotifier {
   List<NoteEvent> releasedNoteBuffer = [];
   bool checkerRunning = false;
   bool preview;
+  SendMpe mpeModulations;
+  PolyAfterTouch1D polyAfterTouch1D;
 
   /// Handles Touches and Midi Message sending
   MidiSender(this._settings, Size screenSize, {this.preview = false})
       : _baseOctave = _settings.baseOctave,
-        touchBuffer = TouchBuffer(_settings, screenSize) {
+        touchBuffer = TouchBuffer(_settings, screenSize),
+        mpeModulations = SendMpe(_settings.modulation2dX.getMod(),
+            _settings.modulation2dY.getMod(), _settings.modulation1dR.getMod()),
+        polyAfterTouch1D = PolyAfterTouch1D() {
     if (_settings.playMode == PlayMode.mpe && preview == false) {
       MPEinitMessage(
               memberChannels: _settings.totalMemberChannels,
@@ -28,6 +32,8 @@ class MidiSender extends ChangeNotifier {
   MidiSender update(Settings settings, Size size) {
     _settings = settings;
     _updateBaseOctave();
+    mpeModulations = SendMpe(_settings.modulation2dX.getMod(),
+        _settings.modulation2dY.getMod(), _settings.modulation1dR.getMod());
     return this;
   }
 
@@ -149,90 +155,30 @@ class MidiSender extends ChangeNotifier {
 
     // Poly AT
     else if (_settings.playMode == PlayMode.polyAT) {
-      int newPressure = (eventInBuffer.radialChange() * 127).toInt();
-
-      if (eventInBuffer.modMapping.polyAT?.pressure != newPressure) {
-        eventInBuffer.modMapping.polyAT = PolyATMessage(
-          channel: _settings.channel,
-          note: eventInBuffer.noteEvent.note,
-          pressure: (newPressure).toInt(),
-        )..send();
-      }
+      polyAfterTouch1D.send(_settings.channel, eventInBuffer.noteEvent.note,
+          eventInBuffer.radialChange());
     }
 
-    // CC
-    else if (_settings.playMode == PlayMode.cc) {
-      if (_settings.modulation2d) {
-        // Y AXIS:
-        int newCCy =
-            (eventInBuffer.directionalChangeFromCenter().dy.abs() * 127)
-                .toInt();
-        if (newCCy != eventInBuffer.modMapping.cc?.value) {
-          eventInBuffer.modMapping.cc = CCMessage(
-            channel: (eventInBuffer.noteEvent.channel + 2) % 16,
-            controller: eventInBuffer.noteEvent.note,
-            value: newCCy,
-          )..send();
-        }
-
-        // X AXIS:
-        int newCCx =
-            (eventInBuffer.directionalChangeFromCenter().dx.abs() * 127)
-                .toInt();
-        if (newCCx != eventInBuffer.modMapping.cc2?.value) {
-          eventInBuffer.modMapping.cc2 = CCMessage(
-            channel: (eventInBuffer.noteEvent.channel + 3) % 16,
-            controller: eventInBuffer.noteEvent.note,
-            value: newCCx,
-          )..send();
-        }
-      } else {
-        int newCC = (eventInBuffer.radialChange() * 127).toInt();
-
-        if (eventInBuffer.modMapping.polyAT?.pressure != newCC) {
-          eventInBuffer.modMapping.cc = CCMessage(
-            channel: _settings.channel,
-            controller: eventInBuffer.noteEvent.note,
-            value: (eventInBuffer.radialChange() * 127).toInt(),
-          )..send();
-        }
-      }
-    }
     // MPE
     else if (_settings.playMode == PlayMode.mpe) {
       if (_settings.modulation2d) {
-        // Y AXIS:
-        double newPB = (eventInBuffer.directionalChangeFromCenter().dy);
-
-        if (newPB != eventInBuffer.modMapping.pitchBend?.bend) {
-          eventInBuffer.modMapping.pitchBend = PitchBendMessage(
-            channel: eventInBuffer.noteEvent.channel,
-            bend: newPB,
-          )..send();
-        }
-
-        // X AXIS:
-        int newCC = (eventInBuffer.directionalChangeFromCenter().dx.abs() * 127)
-            .toInt();
-        if (newCC != eventInBuffer.modMapping.cc?.value) {
-          eventInBuffer.modMapping.cc = CCMessage(
-            channel: eventInBuffer.noteEvent.channel,
-            controller: 74, // <- slide controller is #74
-            value: newCC,
-          )..send();
-        }
+        mpeModulations.xMod.send(
+            _settings.channel,
+            eventInBuffer.noteEvent.note,
+            eventInBuffer.directionalChangeFromCenter().dx);
+        mpeModulations.yMod.send(
+            _settings.channel,
+            eventInBuffer.noteEvent.note,
+            eventInBuffer.directionalChangeFromCenter().dy);
       } else {
-        // RADIUS:
-        int newPressure = (eventInBuffer.radialChange() * 127).toInt();
-
-        if (eventInBuffer.modMapping.at?.pressure != newPressure) {
-          eventInBuffer.modMapping.at = ATMessage(
-            channel: _settings.channel,
-            pressure: (newPressure).toInt(),
-          )..send();
-        }
+        mpeModulations.rMod.send(_settings.channel,
+            eventInBuffer.noteEvent.note, eventInBuffer.radialChange());
       }
     }
+    // CC
+    // else if (_settings.playMode == PlayMode.cc) {
+    //   // not implemented yet
+    // }
   }
 
   /// Cleans up Touchevent, when contact with screen ends and the pointer is removed
