@@ -144,8 +144,10 @@ enum MPEmods {
   mpeAftertouch("Aftertouch", Dims.one, Group.at),
   slide("Slide", Dims.one, Group.slide),
   slide64("Slide (center 64)", Dims.two, Group.slide),
+  pan("Pan", Dims.one, Group.pan),
   pan64("Pan (center 64)", Dims.two, Group.pan),
-  none("None", Dims.two, Group.none),
+
+  none("None", Dims.one, Group.none),
   ;
 
   final String title;
@@ -161,6 +163,7 @@ enum MPEmods {
     if (this == MPEmods.mpeAftertouch) return ModMPEAftertouch1D();
     if (this == MPEmods.slide) return ModCC1D(CC.slide);
     if (this == MPEmods.slide64) return ModCC642D(CC.slide);
+    if (this == MPEmods.pan) return ModCC1D(CC.pan);
     if (this == MPEmods.pan64) return ModCC642D(CC.pan);
 
     return ModNull();
@@ -179,9 +182,7 @@ enum Group {
   pitch,
   slide,
   at,
-  cc,
   pan,
-  volume,
   none;
 }
 

@@ -18,7 +18,7 @@ class ReturnToMenuButton extends StatelessWidget {
       padding: EdgeInsets.fromLTRB(0, padSpacing, padSpacing, padSpacing),
       child: GestureDetector(
         onLongPress: () {
-          Navigator.push(
+          Navigator.pushReplacement(
             context,
             TransitionUtils.fade(const PadMenuScreen()),
           );

@@ -199,6 +199,17 @@ enum CC {
 
   final int value;
   const CC(this.value);
+
+  /// A list of all undefined and general purpose CCs (76 in total)
+  static List<int> get available {
+    return [
+      3,
+      9,
+      ...List.generate(64 - 14, (index) => index + 14),
+      ...List.generate(91 - 85, (index) => index + 85),
+      ...List.generate(120 - 102, (index) => index + 102),
+    ];
+  }
 }
 
 /*

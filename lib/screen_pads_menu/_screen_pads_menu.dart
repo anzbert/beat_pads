@@ -67,7 +67,7 @@ class _PadMenuScreenState extends State<PadMenuScreen> {
                       size: 36,
                     ),
                     onPressed: () {
-                      Navigator.push(
+                      Navigator.pushReplacement(
                         context,
                         TransitionUtils.fade(const BeatPadsScreen()),
                       );

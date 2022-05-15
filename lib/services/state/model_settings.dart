@@ -13,16 +13,6 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
-  // final Setting<int> modulationDeadZone;
-  // final Setting<int> modulationRadius;
-  // final Setting<bool> modulation2D;
-  // final Setting<int> mpeMemberChannels;
-  // final Setting<int> mpePitchBendRange;
-  // final Setting<MPEmods> mpe1DRadius;
-  // final Setting<MPEmods> mpe2DX;
-  // final Setting<MPEmods> mpe2DY;
-
-  // MPE and Aftertouch settings
   // # for dropdown menu:
   MPEmods get mpe2DX => prefs.settings.mpe2DX.value;
   set mpe2DX(MPEmods newVal) {
@@ -95,23 +85,6 @@ class Settings extends ChangeNotifier {
 
   void resetMpeMemberChannels() =>
       mpeMemberChannels = LoadSettings.defaults().mpeMemberChannels.value;
-
-  // ROUND ROBBIN METHOD (probably needs overhaul)
-  // TODO overhaul channel MPE allocator
-  int _channelCounter = -1;
-  int get memberChannel {
-    if (playMode != PlayMode.mpe) return channel;
-    int upperLimit = upperZone ? 14 : mpeMemberChannels;
-    int lowerLimit = upperZone ? 15 - mpeMemberChannels : 1;
-
-    _channelCounter = _channelCounter == -1 ? lowerLimit : _channelCounter;
-    _channelCounter++;
-
-    if (_channelCounter > upperLimit || _channelCounter < lowerLimit) {
-      _channelCounter = lowerLimit;
-    }
-    return _channelCounter;
-  }
 
   // CHANNEL (= Master Channel):
   int get channel {

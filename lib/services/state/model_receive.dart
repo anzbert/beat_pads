@@ -49,7 +49,7 @@ class MidiReceiver extends ChangeNotifier {
         int value = packet.data[2];
 
         if (controller == 1 && modWheelValue != value) {
-          modWheelValue = value;
+          modWheelValue = 127 - value;
           notifyListeners();
         }
       }

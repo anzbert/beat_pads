@@ -1,8 +1,4 @@
 import 'package:beat_pads/services/_services.dart';
-import 'package:beat_pads/services/paint/paint_radius.dart';
-import 'package:beat_pads/services/paint/paint_xy.dart';
-import 'package:beat_pads/services/paint/paint_circle.dart';
-import 'package:beat_pads/services/paint/paint_square.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

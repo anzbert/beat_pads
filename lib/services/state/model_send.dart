@@ -11,6 +11,7 @@ class MidiSender extends ChangeNotifier {
   bool preview;
   final ModPolyAfterTouch1D polyATMod;
   SendMpe mpeMods;
+  late MemberChannelProvider channelProvider;
 
   /// Handles Touches and Midi Message sending
   MidiSender(this._settings, Size screenSize, {this.preview = false})
@@ -28,6 +29,10 @@ class MidiSender extends ChangeNotifier {
               upperZone: _settings.upperZone)
           .send();
     }
+    channelProvider = MemberChannelProvider(
+      _settings.upperZone,
+      _settings.mpeMemberChannels,
+    );
   }
 
   /// Handle all setting changes happening in the lifetime of the pad grid here.
@@ -99,7 +104,9 @@ class MidiSender extends ChangeNotifier {
                   releasedNoteBuffer[i].releaseTime >
               _settings.sustainTimeUsable) {
             releasedNoteBuffer[i].noteOff();
-            releasedNoteBuffer.removeAt(i); // TODO event gets removed here!
+
+            channelProvider.releaseChannel(releasedNoteBuffer[i]);
+            releasedNoteBuffer.removeAt(i); // event gets removed here!
             notifyListeners();
           }
         }
@@ -112,7 +119,11 @@ class MidiSender extends ChangeNotifier {
   /// Handles a new touch on a pad, creating and sending new noteOn events
   /// in the touch buffer
   void handleNewTouch(PointerEvent touch, int noteTapped) {
-    int newChannel = _settings.memberChannel; // get new channel from generator
+    int newChannel = _settings.playMode == PlayMode.mpe
+        ? channelProvider.provideChannel(touchBuffer.buffer)
+        : _settings.channel; // get new channel from generator
+
+    print(touchBuffer.buffer.length);
 
     // reset note modulation before sending note
     if (_settings.playMode == PlayMode.mpe) {
@@ -166,7 +177,7 @@ class MidiSender extends ChangeNotifier {
       if (noteHovered != null &&
           eventInBuffer.noteEvent.noteOnMessage == null) {
         eventInBuffer.noteEvent = NoteEvent(
-            _settings.memberChannel, noteHovered, _settings.velocity)
+            _settings.channel, noteHovered, _settings.velocity)
           ..noteOn(
               cc: _settings.playMode.singleChannel ? _settings.sendCC : false);
         notifyListeners();
@@ -217,6 +228,8 @@ class MidiSender extends ChangeNotifier {
 
     if (_settings.sustainTimeUsable == 0) {
       eventInBuffer.noteEvent.noteOff();
+
+      channelProvider.releaseChannel(eventInBuffer.noteEvent);
       touchBuffer.remove(eventInBuffer); // events gets removed
 
     } else {
