@@ -9,10 +9,8 @@ enum Palette {
   lightPink,
   darkGrey,
   lightGrey,
-  whiteLike,
-}
+  whiteLike;
 
-extension RGB on Palette {
   Color get color {
     switch (this) {
       case Palette.cadetBlue:
