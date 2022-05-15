@@ -43,7 +43,7 @@ class ModPitchBendFull2D extends Mod {
 
   @override
   void send(int channel, int note, double distance) {
-    double pitchChange = distance * 0x3FFF;
+    int pitchChange = (distance * 0x3FFF).toInt();
     if (!listEquals<num>([channel, pitchChange], lastSentValues)) {
       PitchBendMessage(channel: channel, bend: distance * pitchBendMax / 48)
           .send();
@@ -58,7 +58,7 @@ class ModPitchBendUp1D extends Mod {
   ModPitchBendUp1D(this.pitchBendMax);
   @override
   void send(int channel, int note, double distance) {
-    double pitchChange = distance.abs() * 0x3FFF;
+    int pitchChange = (distance.abs() * 0x3FFF).toInt();
 
     if (!listEquals<num>([channel, pitchChange], lastSentValues)) {
       PitchBendMessage(
@@ -75,7 +75,7 @@ class ModPitchBendDown1D extends Mod {
   ModPitchBendDown1D(this.pitchBendMax);
   @override
   void send(int channel, int note, double distance) {
-    double pitchChange = distance.abs() * 0x3FFF;
+    int pitchChange = (distance.abs() * 0x3FFF).toInt();
 
     if (!listEquals<num>([channel, pitchChange], lastSentValues)) {
       PitchBendMessage(
@@ -99,30 +99,32 @@ class ModMPEAftertouch1D extends Mod {
   }
 }
 
-class ModSlide1D extends Mod {
+class ModCC1D extends Mod {
+  final CC cc;
+  ModCC1D(this.cc);
+
   @override
   void send(int channel, int note, double distance) {
-    int slideChange = (distance.abs() * 127).toInt();
+    int ccChange = (distance.abs() * 127).toInt();
 
-    if (!listEquals<num>([channel, note, slideChange], lastSentValues)) {
-      CCMessage(
-              channel: channel, controller: CC.slide.value, value: slideChange)
-          .send();
-      lastSentValues = [channel, note, slideChange];
+    if (!listEquals<num>([channel, note, ccChange], lastSentValues)) {
+      CCMessage(channel: channel, controller: cc.value, value: ccChange).send();
+      lastSentValues = [channel, note, ccChange];
     }
   }
 }
 
-class ModSlide642D extends Mod {
+class ModCC642D extends Mod {
+  final CC cc;
+  ModCC642D(this.cc);
+
   @override
   void send(int channel, int note, double distance) {
-    int slideChange = ((distance + 1) / 2 * 127).toInt();
+    int ccChange = ((distance + 1) / 2 * 127).toInt();
 
-    if (!listEquals<num>([channel, note, slideChange], lastSentValues)) {
-      CCMessage(
-              channel: channel, controller: CC.slide.value, value: slideChange)
-          .send();
-      lastSentValues = [channel, note, slideChange];
+    if (!listEquals<num>([channel, note, ccChange], lastSentValues)) {
+      CCMessage(channel: channel, controller: cc.value, value: ccChange).send();
+      lastSentValues = [channel, note, ccChange];
     }
   }
 }
@@ -141,7 +143,8 @@ enum MPEmods {
   pitchbendDown("Pitch Bend Down only", Dims.one, Group.pitch),
   mpeAftertouch("Aftertouch", Dims.one, Group.at),
   slide("Slide", Dims.one, Group.slide),
-  slide64("Slide (initial 64)", Dims.two, Group.slide),
+  slide64("Slide (center 64)", Dims.two, Group.slide),
+  pan64("Pan (center 64)", Dims.two, Group.pan),
   none("None", Dims.two, Group.none),
   ;
 
@@ -156,8 +159,9 @@ enum MPEmods {
     if (this == MPEmods.pitchbendUp) return ModPitchBendUp1D(pitchBendMax);
     if (this == MPEmods.pitchbendDown) return ModPitchBendDown1D(pitchBendMax);
     if (this == MPEmods.mpeAftertouch) return ModMPEAftertouch1D();
-    if (this == MPEmods.slide) return ModSlide1D();
-    if (this == MPEmods.slide64) return ModSlide642D();
+    if (this == MPEmods.slide) return ModCC1D(CC.slide);
+    if (this == MPEmods.slide64) return ModCC642D(CC.slide);
+    if (this == MPEmods.pan64) return ModCC642D(CC.pan);
 
     return ModNull();
   }
@@ -176,6 +180,8 @@ enum Group {
   slide,
   at,
   cc,
+  pan,
+  volume,
   none;
 }
 

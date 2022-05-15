@@ -185,6 +185,7 @@ enum CC {
   breath(2),
   footPedal(4),
   volume(7),
+  pan(10),
   expression(11),
   sustainPedal(64),
   portamento(65),
@@ -209,7 +210,7 @@ MIDI CC List – Complete List
 	4 Foot Pedal (MSB)
 	5 Portamento Time (MSB)
 	6 Data Entry (MSB)
-	7 Volume (MSB)
+	7 Volume / Gain (MSB)
 	8 Balance (MSB
 	9 = Undefined
 	10 Pan position (MSB)
@@ -231,7 +232,7 @@ MIDI CC List – Complete List
 	71 Resonance (Timbre)
 	72 Sound Release Time
 	73 Sound Attack Time
-	74 Frequency Cutoff (Brightness)
+	74 Frequency Cutoff (Brightness) / Timbre
 	75 Sound Control 6
 	76 Sound Control 7
 	77 Sound Control 8

@@ -4,7 +4,7 @@ import 'package:flutter_midi_command/flutter_midi_command_messages.dart';
 
 abstract class Mod {
   /// Stores last sent value. Used to prevent unnecessary Midi messages
-  List<num>? lastSentValues;
+  List<int> lastSentValues = [];
 
   /// sends Modulation Midi Message
   ///

@@ -3,21 +3,21 @@ import 'package:flutter/material.dart';
 
 class MidiSender extends ChangeNotifier {
   final TouchBuffer touchBuffer;
-  final ModPolyAfterTouch1D polyAfterTouch1D;
   Settings _settings;
   int _baseOctave;
   bool _disposed = false;
   List<NoteEvent> releasedNoteBuffer = [];
   bool checkerRunning = false;
   bool preview;
-  SendMpe mpeModulations;
+  final ModPolyAfterTouch1D polyATMod;
+  SendMpe mpeMods;
 
   /// Handles Touches and Midi Message sending
   MidiSender(this._settings, Size screenSize, {this.preview = false})
       : _baseOctave = _settings.baseOctave,
         touchBuffer = TouchBuffer(_settings, screenSize),
-        polyAfterTouch1D = ModPolyAfterTouch1D(),
-        mpeModulations = SendMpe(
+        polyATMod = ModPolyAfterTouch1D(),
+        mpeMods = SendMpe(
           _settings.mpe2DX.getMod(_settings.mpePitchbendRange),
           _settings.mpe2DY.getMod(_settings.mpePitchbendRange),
           _settings.mpe1DRadius.getMod(_settings.mpePitchbendRange),
@@ -35,7 +35,7 @@ class MidiSender extends ChangeNotifier {
   MidiSender update(Settings settings, Size size) {
     _settings = settings;
     _updateBaseOctave();
-    mpeModulations = SendMpe(
+    mpeMods = SendMpe(
       _settings.mpe2DX.getMod(_settings.mpePitchbendRange),
       _settings.mpe2DY.getMod(_settings.mpePitchbendRange),
       _settings.mpe1DRadius.getMod(_settings.mpePitchbendRange),
@@ -112,11 +112,25 @@ class MidiSender extends ChangeNotifier {
   /// Handles a new touch on a pad, creating and sending new noteOn events
   /// in the touch buffer
   void handleNewTouch(PointerEvent touch, int noteTapped) {
-    NoteEvent noteOn = NoteEvent(
-        _settings.memberChannel, noteTapped, _settings.velocity)
-      // TODO reset existing pitch bends, etc ( see MPE spec!) before sending noteOn!!
+    int newChannel = _settings.memberChannel; // get new channel from generator
+
+    // reset note modulation before sending note
+    if (_settings.playMode == PlayMode.mpe) {
+      if (_settings.modulation2D) {
+        mpeMods.xMod.send(newChannel, noteTapped, 0);
+        mpeMods.yMod.send(newChannel, noteTapped, 0);
+      } else {
+        mpeMods.rMod.send(newChannel, noteTapped, 0);
+      }
+    } else if (_settings.playMode == PlayMode.polyAT) {
+      polyATMod.send(newChannel, noteTapped, 0);
+    }
+
+    // create and send note
+    NoteEvent noteOn = NoteEvent(newChannel, noteTapped, _settings.velocity)
       ..noteOn(cc: _settings.playMode.singleChannel ? _settings.sendCC : false);
 
+    // add touch with note to buffer
     touchBuffer.addNoteOn(touch, noteOn);
     notifyListeners();
   }
@@ -161,7 +175,7 @@ class MidiSender extends ChangeNotifier {
 
     // Poly AT
     else if (_settings.playMode == PlayMode.polyAT) {
-      polyAfterTouch1D.send(
+      polyATMod.send(
         _settings.channel,
         eventInBuffer.noteEvent.note,
         eventInBuffer.radialChange(),
@@ -171,18 +185,18 @@ class MidiSender extends ChangeNotifier {
     // MPE
     else if (_settings.playMode == PlayMode.mpe) {
       if (_settings.modulation2D) {
-        mpeModulations.xMod.send(
+        mpeMods.xMod.send(
           eventInBuffer.noteEvent.channel,
           eventInBuffer.noteEvent.note,
           eventInBuffer.directionalChangeFromCenter().dx,
         );
-        mpeModulations.yMod.send(
+        mpeMods.yMod.send(
           eventInBuffer.noteEvent.channel,
           eventInBuffer.noteEvent.note,
           eventInBuffer.directionalChangeFromCenter().dy,
         );
       } else {
-        mpeModulations.rMod.send(
+        mpeMods.rMod.send(
           eventInBuffer.noteEvent.channel,
           eventInBuffer.noteEvent.note,
           eventInBuffer.radialChange(),
