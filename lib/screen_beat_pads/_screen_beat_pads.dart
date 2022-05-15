@@ -105,11 +105,7 @@ class BeatPadsScreen extends StatelessWidget {
                                 ),
                               );
                             }),
-                          if (context
-                                  .watch<Variables>()
-                                  .connectedDevices
-                                  .isEmpty &&
-                              !preview)
+                          if (settings.connectedDevices.isEmpty && !preview)
                             Positioned(
                               bottom: 15,
                               right: 15,

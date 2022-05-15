@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 
 import 'package:beat_pads/services/_services.dart';
+import 'package:flutter_midi_command/flutter_midi_command.dart';
 
 class Settings extends ChangeNotifier {
   Settings(this.prefs);
@@ -10,6 +11,13 @@ class Settings extends ChangeNotifier {
   resetAll() async {
     await prefs.resetStoredValues();
     prefs = await Prefs.initAsync();
+    notifyListeners();
+  }
+
+  List<MidiDevice> _connectedDevices = [];
+  List<MidiDevice> get connectedDevices => _connectedDevices;
+  set connectedDevices(List<MidiDevice> newVal) {
+    _connectedDevices = newVal;
     notifyListeners();
   }
 

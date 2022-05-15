@@ -36,8 +36,8 @@ class MenuSystem extends StatelessWidget {
                 style: ElevatedButton.styleFrom(
                     primary: Palette.laserLemon.color,
                     textStyle: const TextStyle(fontWeight: FontWeight.bold)),
-                child: Text(
-                  "Select Midi Device (${context.watch<Variables>().connectedDevices.length} selected)",
+                child: const Text(
+                  "Select Midi Device)",
                 ),
               ),
             ),

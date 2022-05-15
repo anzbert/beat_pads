@@ -91,7 +91,7 @@ class MidiConfigState extends State<MidiConfig> {
                 Builder(builder: (context) {
                     WidgetsBinding.instance.addPostFrameCallback(
                       (_) {
-                        context.read<Variables>().connectedDevices = [
+                        context.read<Settings>().connectedDevices = [
                           ...devices!.where((element) => element.connected)
                         ];
                       },

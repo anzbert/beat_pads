@@ -123,8 +123,6 @@ class MidiSender extends ChangeNotifier {
         ? channelProvider.provideChannel(touchBuffer.buffer)
         : _settings.channel; // get new channel from generator
 
-    print(touchBuffer.buffer.length);
-
     // reset note modulation before sending note
     if (_settings.playMode == PlayMode.mpe) {
       if (_settings.modulation2D) {
