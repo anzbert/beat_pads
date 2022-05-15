@@ -33,23 +33,31 @@ class TouchBuffer {
   }
 
   /// Get an average radial change from all currently active notes.
-  /// For example, this is a common method to determine Channel Pressure
-  double getAverageRadialChangeOfAllPads([int? channel]) {
+  /// This is a common method to determine Channel Pressure
+  double averageRadialChangeOfActiveNotes() {
     if (buffer.isEmpty) return 0;
 
     double total = buffer
-        .where((element) {
-          if (channel == null) {
-            return element.noteEvent.noteOnMessage != null;
-          } else {
-            return element.noteEvent.noteOnMessage != null &&
-                element.noteEvent.channel == channel;
-          }
-        })
+        .where((element) => element.noteEvent.noteOnMessage != null)
         .map((e) => e.radialChange())
         .reduce(((value, element) => value + element));
 
     return total / buffer.length;
+  }
+
+  /// Get an average directional change from all currently active notes.
+  /// This is a common method to determine Channel Pressure
+  Offset averageDirectionalChangeOfActiveNotes({bool absolute = false}) {
+    if (buffer.isEmpty) return const Offset(0, 0);
+
+    Offset total = buffer
+        .where((element) => element.noteEvent.noteOnMessage != null)
+        .map((e) => e.directionalChangeFromCenter())
+        .reduce(((value, element) => absolute
+            ? value + Offset(element.dx.abs(), element.dy.abs())
+            : value + element));
+
+    return Offset(total.dx / buffer.length, total.dy / buffer.length);
   }
 }
 

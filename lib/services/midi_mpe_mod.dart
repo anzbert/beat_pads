@@ -12,17 +12,6 @@
  input from geometry:
  - center is always 0 !
  - maxRadius is always 1 or -1, which can be turned to 1D by converting to absolute 1/0/1 or -1/0/-1!
- 
-
-// void main() {
-// //   on drop down change , get new mpe object
-//   SendMpe mpe = SendMpe(
-//       MPEmods.pitchbend.getMod(), MPEmods.slide.getMod(), MPEmods.aftertouch.getMod());
-
-//   mpe.xMod.send(0, 5, .3);
-//   mpe.yMod.send(5, 35, -.4);
-//   mpe.rMod.send(4, 3, .66);
-// }
 */
 
 import 'package:beat_pads/services/_services.dart';
@@ -37,50 +26,26 @@ class SendMpe {
   SendMpe(this.xMod, this.yMod, this.rMod);
 }
 
-class ModPitchBendFull2D extends Mod {
+class ModPitchBend extends Mod {
   final int pitchBendMax;
-  ModPitchBendFull2D(this.pitchBendMax);
+  final Range range;
+  ModPitchBend(this.pitchBendMax, this.range);
+
+  double dist(double input) {
+    if (range == Range.up) return input.abs();
+    if (range == Range.down) return -input.abs();
+    return input;
+  }
 
   @override
   void send(int channel, int note, double distance) {
     int pitchChange = (distance * 0x3FFF).toInt();
-    if (!listEquals<num>([channel, pitchChange], lastSentValues)) {
-      PitchBendMessage(channel: channel, bend: distance * pitchBendMax / 48)
-          .send();
-
-      lastSentValues = [channel, pitchChange];
-    }
-  }
-}
-
-class ModPitchBendUp1D extends Mod {
-  final int pitchBendMax;
-  ModPitchBendUp1D(this.pitchBendMax);
-  @override
-  void send(int channel, int note, double distance) {
-    int pitchChange = (distance.abs() * 0x3FFF).toInt();
 
     if (!listEquals<num>([channel, pitchChange], lastSentValues)) {
       PitchBendMessage(
-              channel: channel, bend: distance.abs() * pitchBendMax / 48)
-          .send();
-
-      lastSentValues = [channel, pitchChange];
-    }
-  }
-}
-
-class ModPitchBendDown1D extends Mod {
-  final int pitchBendMax;
-  ModPitchBendDown1D(this.pitchBendMax);
-  @override
-  void send(int channel, int note, double distance) {
-    int pitchChange = (distance.abs() * 0x3FFF).toInt();
-
-    if (!listEquals<num>([channel, pitchChange], lastSentValues)) {
-      PitchBendMessage(
-              channel: channel, bend: -distance.abs() * pitchBendMax / 48)
-          .send();
+        channel: channel,
+        bend: dist(distance) * pitchBendMax / 48,
+      ).send();
 
       lastSentValues = [channel, pitchChange];
     }
@@ -157,14 +122,30 @@ enum MPEmods {
   const MPEmods(this.title, this.dimensions, this.exclusiveGroup);
 
   Mod getMod(int pitchBendMax) {
-    if (this == MPEmods.pitchbend) return ModPitchBendFull2D(pitchBendMax);
-    if (this == MPEmods.pitchbendUp) return ModPitchBendUp1D(pitchBendMax);
-    if (this == MPEmods.pitchbendDown) return ModPitchBendDown1D(pitchBendMax);
     if (this == MPEmods.mpeAftertouch) return ModMPEAftertouch1D();
     if (this == MPEmods.slide) return ModCC1D(CC.slide);
     if (this == MPEmods.slide64) return ModCC642D(CC.slide);
     if (this == MPEmods.pan) return ModCC1D(CC.pan);
     if (this == MPEmods.pan64) return ModCC642D(CC.pan);
+
+    if (this == MPEmods.pitchbend) {
+      return ModPitchBend(
+        pitchBendMax,
+        Range.full,
+      );
+    }
+    if (this == MPEmods.pitchbendUp) {
+      return ModPitchBend(
+        pitchBendMax,
+        Range.up,
+      );
+    }
+    if (this == MPEmods.pitchbendDown) {
+      return ModPitchBend(
+        pitchBendMax,
+        Range.down,
+      );
+    }
 
     return ModNull();
   }
@@ -190,4 +171,12 @@ enum Group {
 enum Dims {
   one,
   two,
+  three;
+}
+
+// Pitchbend Range
+enum Range {
+  up,
+  down,
+  full;
 }

@@ -93,6 +93,17 @@ class MenuInput extends StatelessWidget {
                   onChanged: (value) => settings.sendCC = value),
             ),
           if (settings.playMode.modulatable) const Divider(),
+          // if (settings.playMode.modulatable)
+          //   Container(
+          //     child: CustomPaint(
+          //       painter: CustomPaintCircle(
+          //         Offset(200, 200),
+          //         TouchEvent(PointerEvent()),
+          //         Palette.lightPink.color.withOpacity(
+          //             touchEvent.radialChange(curve: Curves.easeOut) * 0.6),
+          //       ),
+          //     ),
+          //   ),
           if (settings.playMode.modulatable)
             IntSliderTile(
               min: 5,
