@@ -88,6 +88,15 @@ class MenuLayout extends StatelessWidget {
                       value: settings.showNoteNames,
                       onChanged: (value) => settings.showNoteNames = value),
                 ),
+                ListTile(
+                  title: const Text("Colored Pads"),
+                  subtitle: const Text(
+                      "Color pads according to their interval to the root of the scale"),
+                  trailing: Switch(
+                      value: settings.coloredIntervals,
+                      onChanged: (value) => settings.coloredIntervals =
+                          !settings.coloredIntervals),
+                ),
                 if (resizableGrid) const Divider(),
                 if (resizableGrid)
                   ListTile(

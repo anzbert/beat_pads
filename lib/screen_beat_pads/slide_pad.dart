@@ -41,13 +41,17 @@ class SlideBeatPad extends StatelessWidget {
 
     } else if (!MidiUtils.isNoteInScale(
         note, settings.scaleList, settings.rootNote)) {
-      color = Palette.yellowGreen.color.withAlpha(160); // not in current scale
+      color = Palette.yellowGreen.color.withAlpha(100); // not in current scale
+
+    } else if (settings.coloredIntervals) {
+      color =
+          Palette.intervalColor(settings.rootNote, note); // colored intervals
 
     } else if (note % 12 == settings.rootNote) {
-      color = Palette.laserLemon.color; // root note
+      color = Palette.baseRed.color; // root note
 
     } else {
-      color = Palette.yellowGreen.color; // default pad color
+      color = Palette.yellowGreen.color; // default fallback pad color
     }
 
     double width = MediaQuery.of(context).size.width;

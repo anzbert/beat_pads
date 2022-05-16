@@ -73,10 +73,12 @@ class Prefs {
     "mpe1DRadius": "mpeAftertouch",
     "mpe2DX": "slide",
     "mpe2DY": "pitchbend",
+    "coloredIntervals": false,
   };
 }
 
 class LoadSettings {
+  final Setting<bool> coloredIntervals;
   final Setting<int> modulationDeadZone;
   final Setting<int> modulationRadius;
   final Setting<bool> modulation2D;
@@ -143,6 +145,8 @@ class LoadSettings {
         sendCC = Setting<bool>('sendCC', loadedMap['sendCC']!),
         showNoteNames =
             Setting<bool>('showNoteNames', loadedMap['showNoteNames']!),
+        coloredIntervals =
+            Setting<bool>("coloredIntervals", loadedMap["coloredIntervals"]!),
         pitchBend = Setting<bool>('pitchBend', loadedMap['pitchBend']!),
         pitchBendEase =
             Setting<int>('pitchBendEase', loadedMap['pitchBendEase']!),

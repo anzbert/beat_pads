@@ -21,6 +21,15 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
+  // colored Intervals:
+  bool get coloredIntervals => prefs.settings.coloredIntervals.value;
+
+  set coloredIntervals(bool newValue) {
+    prefs.settings.coloredIntervals.value = newValue;
+    prefs.settings.coloredIntervals.save();
+    notifyListeners();
+  }
+
   // # for dropdown menu:
   MPEmods get mpe2DX => prefs.settings.mpe2DX.value;
   set mpe2DX(MPEmods newVal) {

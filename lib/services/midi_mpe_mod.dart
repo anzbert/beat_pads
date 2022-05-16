@@ -174,7 +174,7 @@ enum Dims {
   three;
 }
 
-// Pitchbend Range
+/// Pitchbend Range
 enum Range {
   up,
   down,
