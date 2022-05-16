@@ -15,24 +15,19 @@ class SlideBeatPad extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Settings settings = Provider.of<Settings>(context, listen: true);
+    double width = MediaQuery.of(context).size.shortestSide;
 
+    final Settings settings = Provider.of<Settings>(context, listen: true);
     final int rxNote = note < 127 && note >= 0
         ? Provider.of<MidiReceiver>(context, listen: true).rxBuffer[note]
         : 0;
-
     final bool noteOn =
         Provider.of<MidiSender>(context, listen: true).isNoteOn(note);
 
     // PAD COLOR:
-    final Color splashColor = Palette.lightPink.color;
-    final Color padTextColor = Palette.darkGrey.color;
+    Color color;
 
-    final Color color;
-    if (noteOn) {
-      color = splashColor.withAlpha(220); // maintain color when pushed
-
-    } else if (rxNote > 0) {
+    if (rxNote > 0) {
       color = Palette.cadetBlue.color.withAlpha(
           rxNote * 2); // receiving midi signal adjusted by received velocity
 
@@ -44,24 +39,27 @@ class SlideBeatPad extends StatelessWidget {
       color = Palette.yellowGreen.color.withAlpha(100); // not in current scale
 
     } else if (settings.coloredIntervals) {
-      // color = Palette.colorizeByColorWheel(
-      //     settings.rootNote, note); // colored intervals
-      color = Palette.colorizeByCircleOfFifth(
+      color = Palette.colorizeByColorWheel(
           settings.rootNote, note); // colored intervals
+      // color = Palette.colorizeByCircleOfFifth(
+      //     settings.rootNote, note); // colored intervals
 
     } else if (note % 12 == settings.rootNote) {
-      color = Palette.baseRed.color; // root note
+      color = Palette.laserLemon.color; // root note
 
     } else {
       color = Palette.yellowGreen.color; // default fallback pad color
     }
 
-    double width = MediaQuery.of(context).size.width;
+    if (noteOn) color = color.withOpacity(0.6);
+    final Color splashColor = color.withOpacity(0.3);
+    final Color padTextColor = Palette.darkGrey.color;
 
     double fontSize = width * 0.022;
     BorderRadius padRadius =
         BorderRadius.all(Radius.circular(width * ThemeConst.padRadiusFactor));
     double padSpacing = width * ThemeConst.padSpacingFactor;
+
     return Container(
       padding: EdgeInsets.all(padSpacing),
       height: double.infinity,

@@ -36,28 +36,18 @@ enum Palette {
   }
 
   static Color colorizeByColorWheel(int root, int note) {
-    const double hueShift = 0;
-    final double hue = ((360 / 12) * ((note - root) % 12) + hueShift) % 360;
+    const double hueShiftBase = 0;
+    final double hue = (30 * ((note - root) % 12) + hueShiftBase) % 360;
     return HSLColor.fromAHSL(1, hue, .95, .80).toColor();
   }
-
-  // static Color colorizeByConsonance(int root, int note) {
-  //   // Octave // P5, P4 // M3, m6 // m3, M6 // M2, m7 // m2, M7 // TT
-  //   const consonanceOrder = [];
-
-  //   const double hueShift = 0;
-  //   final double hue =
-  //       ((360 / 12) * (consonanceOrder[(note - root) % 12]) + hueShift) % 360;
-  //   return HSLColor.fromAHSL(1, hue, .95, .80).toColor();
-  // }
 
   static Color colorizeByCircleOfFifth(int root, int note) {
     // final createCoF = List.generate(12, (index) => (index * 7) % 12);
     const circleOfFifth = [0, 7, 2, 9, 4, 11, 6, 1, 8, 3, 10, 5];
 
-    const double hueShift = 0;
+    const double hueShiftBase = 0;
     final double hue =
-        ((360 / 12) * (circleOfFifth[(note - root) % 12]) + hueShift) % 360;
+        ((30 * circleOfFifth[(note - root) % 12]) + hueShiftBase) % 360;
     return HSLColor.fromAHSL(1, hue, .95, .80).toColor();
   }
 }

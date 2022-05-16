@@ -45,7 +45,7 @@ class BeatPadsScreen extends StatelessWidget {
                     ],
                     builder: (context, _) {
                       return Stack(
-                        // alignment: Alignment.topCenter,
+                        alignment: Alignment.center,
                         children: [
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
