@@ -44,8 +44,10 @@ class SlideBeatPad extends StatelessWidget {
       color = Palette.yellowGreen.color.withAlpha(100); // not in current scale
 
     } else if (settings.coloredIntervals) {
-      color =
-          Palette.intervalColor(settings.rootNote, note); // colored intervals
+      // color = Palette.colorizeByColorWheel(
+      //     settings.rootNote, note); // colored intervals
+      color = Palette.colorizeByCircleOfFifth(
+          settings.rootNote, note); // colored intervals
 
     } else if (note % 12 == settings.rootNote) {
       color = Palette.baseRed.color; // root note
