@@ -2,8 +2,8 @@ import 'package:beat_pads/services/_services.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class PaintAfterTouchCircle extends StatelessWidget {
-  const PaintAfterTouchCircle({Key? key}) : super(key: key);
+class PaintModulation extends StatelessWidget {
+  const PaintModulation({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +12,7 @@ class PaintAfterTouchCircle extends StatelessWidget {
     if (box == null) return Stack();
 
     return Consumer<MidiSender>(
-      builder: (context, midiSender, child) {
+      builder: (context, MidiSender midiSender, _) {
         final buffer = midiSender.touchBuffer.buffer;
 
         return Stack(
@@ -22,57 +22,38 @@ class PaintAfterTouchCircle extends StatelessWidget {
                 return context.watch<Settings>().modulation2D == false ||
                         context.watch<Settings>().playMode == PlayMode.polyAT
                     // CIRCLE / RADIUS
-                    ? Stack(
-                        children: [
-                          CustomPaint(
-                            painter: CustomPaintCircle(
-                              box.globalToLocal(touchEvent.origin),
-                              touchEvent.maxRadius,
-                              Palette.lightPink.color.withOpacity(touchEvent
-                                      .radialChange(curve: Curves.easeOut) *
-                                  0.6),
-                            ),
-                          ),
-                          CustomPaint(
-                            painter: CustomPaintRadius(
-                              box.globalToLocal(touchEvent.origin),
-                              touchEvent.maxRadius,
-                              touchEvent.deadZone,
+                    ? CustomPaint(
+                        painter: CustomPaintRadius(
+                          origin: box.globalToLocal(touchEvent.origin),
+                          maxRadius: touchEvent.maxRadius,
+                          deadZone: touchEvent.deadZone,
+                          change:
                               touchEvent.radialChange(curve: Curves.linear) *
                                   touchEvent.maxRadius,
-                              Palette.laserLemon.color.withOpacity(touchEvent
-                                      .radialChange(curve: Curves.easeOut) *
+                          colorBack: Palette.lightPink.color.withOpacity(
+                              touchEvent.radialChange(curve: Curves.easeOut) *
+                                  0.6),
+                          colorFront: Palette.laserLemon.color.withOpacity(
+                              touchEvent.radialChange(curve: Curves.easeOut) *
                                   0.8),
-                            ),
-                          ),
-                        ],
+                        ),
                       )
                     // SQUARE / X AND Y
-                    : Stack(
-                        children: [
-                          CustomPaint(
-                            painter: CustomPaintSquare(
-                              box.globalToLocal(touchEvent.origin),
+                    : CustomPaint(
+                        painter: CustomPaintXYSquare(
+                          origin: box.globalToLocal(touchEvent.origin),
+                          maxRadius: touchEvent.maxRadius,
+                          deadZone: touchEvent.deadZone,
+                          change: touchEvent.directionalChangeFromCenter(
+                                  curve: Curves.linear, deadZone: true) *
                               touchEvent.maxRadius,
-                              Palette.lightPink.color.withOpacity(touchEvent
-                                      .radialChange(curve: Curves.easeOut) *
+                          colorBack: Palette.lightPink.color.withOpacity(
+                              touchEvent.radialChange(curve: Curves.easeOut) *
                                   0.6),
-                            ),
-                          ),
-                          CustomPaint(
-                            painter: CustomPaintXYSquare(
-                              box.globalToLocal(touchEvent.origin),
-                              touchEvent.maxRadius,
-                              touchEvent.deadZone,
-                              touchEvent.directionalChangeFromCenter(
-                                      curve: Curves.linear, deadZone: true) *
-                                  touchEvent.maxRadius,
-                              Palette.laserLemon.color.withOpacity(touchEvent
-                                      .radialChange(curve: Curves.easeOut) *
+                          colorFront: Palette.laserLemon.color.withOpacity(
+                              touchEvent.radialChange(curve: Curves.easeOut) *
                                   0.8),
-                            ),
-                          ),
-                        ],
+                        ),
                       );
               },
             ),

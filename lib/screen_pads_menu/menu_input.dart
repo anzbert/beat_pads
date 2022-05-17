@@ -1,6 +1,7 @@
 import 'package:beat_pads/screen_pads_menu/drop_down_modulation.dart';
 import 'package:beat_pads/screen_pads_menu/drop_down_playmode.dart';
 import 'package:beat_pads/screen_pads_menu/slider_int.dart';
+import 'package:beat_pads/screen_pads_menu/slider_modulation_size.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -93,33 +94,22 @@ class MenuInput extends StatelessWidget {
                   onChanged: (value) => settings.sendCC = value),
             ),
           if (settings.playMode.modulatable) const Divider(),
-          // if (settings.playMode.modulatable)
-          //   Container(
-          //     child: CustomPaint(
-          //       painter: CustomPaintCircle(
-          //         Offset(200, 200),
-          //         TouchEvent(PointerEvent()),
-          //         Palette.lightPink.color.withOpacity(
-          //             touchEvent.radialChange(curve: Curves.easeOut) * 0.6),
-          //       ),
-          //     ),
-          //   ),
           if (settings.playMode.modulatable)
-            IntSliderTile(
+            ModSizeSliderTile(
               min: 5,
               max: 25,
               label: "Modulation Size",
               subtitle:
-                  "Size of the modulation field relative to the screen width",
+                  "Modulation field radius, relative to the pad screen width",
               trailing: Text("${(settings.modulationRadius * 100).toInt()}%"),
               readValue: (settings.modulationRadius * 100).toInt(),
               setValue: (v) => settings.modulationRadius = v / 100,
               resetValue: settings.resetModulationRadius,
             ),
           if (settings.playMode.modulatable)
-            IntSliderTile(
-              min: 0,
-              max: 30,
+            ModSizeSliderTile(
+              min: 10,
+              max: 40,
               label: "Modulation Deadzone",
               subtitle:
                   "Size of the non-reactive center of the modulation field, relative to the modulation field size",

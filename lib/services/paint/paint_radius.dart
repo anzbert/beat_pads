@@ -1,25 +1,35 @@
 import 'package:flutter/material.dart';
 
 class CustomPaintRadius extends CustomPainter {
-  CustomPaintRadius(
-    this.origin,
-    this.maxRadius,
-    this.deadZone,
-    this.change,
-    this.color,
-  );
-  // : change = touchEvent.radialChange(curve: Curves.linear) *
-  //           touchEvent.maxRadius;
+  CustomPaintRadius({
+    required this.origin,
+    required this.maxRadius,
+    required this.deadZone,
+    required this.change,
+    required this.colorBack,
+    required this.colorFront,
+  });
+
   final Offset origin;
   final double maxRadius;
   final double deadZone;
-  final Color color;
+  final Color colorBack;
+  final Color colorFront;
   final double change;
 
   @override
   void paint(Canvas canvas, Size size) {
+    // BACK
+    Paint brushBack = Paint()
+      ..color = colorBack
+      ..strokeWidth = 8
+      ..strokeCap = StrokeCap.round;
+
+    canvas.drawCircle(origin, maxRadius, brushBack);
+
+    // FRONT
     Paint brush = Paint()
-      ..color = color
+      ..color = colorFront
       ..style = PaintingStyle.stroke
       ..strokeWidth = 6
       ..strokeCap = StrokeCap.round;
@@ -29,12 +39,14 @@ class CustomPaintRadius extends CustomPainter {
 
     // deadZone
     brush.style = PaintingStyle.fill;
-    brush.color = color.withOpacity(0.4);
+    brush.color = colorFront.withOpacity(0.4);
     canvas.drawCircle(origin, maxRadius * deadZone, brush);
   }
 
   @override
   bool shouldRepaint(CustomPaintRadius oldDelegate) {
-    return oldDelegate.change != change;
+    return oldDelegate.change != change ||
+        oldDelegate.deadZone != deadZone ||
+        oldDelegate.maxRadius != maxRadius;
   }
 }

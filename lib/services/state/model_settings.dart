@@ -81,7 +81,8 @@ class Settings extends ChangeNotifier {
 
   void resetBaseHue() => baseHue = LoadSettings.defaults().baseHue.value;
 
-  double get modulationRadius => prefs.settings.modulationRadius.value / 100;
+  double get modulationRadius =>
+      prefs.settings.modulationRadius.value.clamp(5, 25) / 100;
   set modulationRadius(double newVal) {
     prefs.settings.modulationRadius.value = (newVal.clamp(0, 1) * 100).toInt();
     prefs.settings.modulationRadius.save();
@@ -92,7 +93,7 @@ class Settings extends ChangeNotifier {
       modulationRadius = LoadSettings.defaults().modulationRadius.value / 100;
 
   double get modulationDeadZone =>
-      prefs.settings.modulationDeadZone.value / 100;
+      prefs.settings.modulationDeadZone.value.clamp(10, 40) / 100;
   set modulationDeadZone(double newVal) {
     prefs.settings.modulationDeadZone.value =
         (newVal.clamp(0, 1) * 100).toInt();
