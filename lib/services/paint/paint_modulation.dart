@@ -30,10 +30,10 @@ class PaintModulation extends StatelessWidget {
                           change:
                               touchEvent.radialChange(curve: Curves.linear) *
                                   touchEvent.maxRadius,
-                          colorBack: Palette.lightPink.color.withOpacity(
+                          colorBack: Palette.lightPink.withOpacity(
                               touchEvent.radialChange(curve: Curves.easeOut) *
                                   0.6),
-                          colorFront: Palette.laserLemon.color.withOpacity(
+                          colorFront: Palette.laserLemon.withOpacity(
                               touchEvent.radialChange(curve: Curves.easeOut) *
                                   0.8),
                         ),
@@ -47,10 +47,10 @@ class PaintModulation extends StatelessWidget {
                           change: touchEvent.directionalChangeFromCenter(
                                   curve: Curves.linear, deadZone: true) *
                               touchEvent.maxRadius,
-                          colorBack: Palette.lightPink.color.withOpacity(
+                          colorBack: Palette.lightPink.withOpacity(
                               touchEvent.radialChange(curve: Curves.easeOut) *
                                   0.6),
-                          colorFront: Palette.laserLemon.color.withOpacity(
+                          colorFront: Palette.laserLemon.withOpacity(
                               touchEvent.radialChange(curve: Curves.easeOut) *
                                   0.8),
                         ),

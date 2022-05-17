@@ -1,36 +1,16 @@
 import 'package:beat_pads/services/_services.dart';
 import 'package:flutter/material.dart';
 
-enum Palette {
-  cadetBlue,
-  yellowGreen,
-  laserLemon,
-  tan,
-  lightPink,
-  darkGrey,
-  lightGrey,
-  whiteLike;
-
-  Color get color {
-    switch (this) {
-      case Palette.cadetBlue:
-        return const HSLColor.fromAHSL(1, 212, 0.31, 0.69).toColor();
-      case Palette.yellowGreen:
-        return const HSLColor.fromAHSL(1, 90, .90, .84).toColor();
-      case Palette.laserLemon:
-        return const HSLColor.fromAHSL(1, 61, 1, .71).toColor();
-      case Palette.tan:
-        return const HSLColor.fromAHSL(1, 28, .59, .63).toColor();
-      case Palette.lightPink:
-        return const HSLColor.fromAHSL(1, 0, .95, .80).toColor();
-      case Palette.darkGrey:
-        return Colors.grey[800]!;
-      case Palette.lightGrey:
-        return const HSLColor.fromAHSL(1, 0, .0, .33).toColor();
-      case Palette.whiteLike:
-        return Colors.white70;
-    }
-  }
+abstract class Palette {
+  static Color cadetBlue =
+      const HSLColor.fromAHSL(1, 212, 0.31, 0.69).toColor();
+  static Color yellowGreen = const HSLColor.fromAHSL(1, 90, .90, .84).toColor();
+  static Color laserLemon = const HSLColor.fromAHSL(1, 61, 1, .71).toColor();
+  static Color tan = const HSLColor.fromAHSL(1, 28, .59, .63).toColor();
+  static Color lightPink = const HSLColor.fromAHSL(1, 0, .95, .80).toColor();
+  static Color darkGrey = const Color.fromRGBO(66, 66, 66, 1);
+  static Color lightGrey = const HSLColor.fromAHSL(1, 0, .0, .33).toColor();
+  static Color whiteLike = const Color.fromRGBO(255, 255, 255, 0.702);
 }
 
 enum PadColors {
@@ -54,11 +34,11 @@ enum PadColors {
     final double hue;
 
     // out of midi range
-    if (note > 127 || note < 0) return Palette.darkGrey.color;
+    if (note > 127 || note < 0) return Palette.darkGrey;
 
     // received Midi
     if (receivedVelocity > 0) {
-      return Palette.cadetBlue.color.withAlpha(receivedVelocity * 2);
+      return Palette.cadetBlue.withAlpha(receivedVelocity * 2);
     }
 
     // Color Schemes

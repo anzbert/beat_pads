@@ -40,12 +40,12 @@ class MidiConfigState extends State<MidiConfig> {
         //   'Devices',
         //   style: Theme.of(context).textTheme.headline4,
         //   colors: [
-        //     // Palette.lightGrey.color,
-        //     Palette.whiteLike.color,
-        //     Palette.whiteLike.color,
-        //     // Palette.lightPink.color,
-        //     // Palette.cadetBlue.color,
-        //     // Palette.laserLemon.color,
+        //     // Palette.lightGrey,
+        //     Palette.whiteLike,
+        //     Palette.whiteLike,
+        //     // Palette.lightPink,
+        //     // Palette.cadetBlue,
+        //     // Palette.laserLemon,
         //   ],
         // ),
         leading: Builder(builder: (BuildContext context) {
@@ -55,7 +55,7 @@ class MidiConfigState extends State<MidiConfig> {
             },
             icon: const Icon(
               Icons.arrow_back,
-              // color: Palette.whiteLike.color,
+              // color: Palette.whiteLike,
               size: 30,
             ),
           );
@@ -66,7 +66,7 @@ class MidiConfigState extends State<MidiConfig> {
               icon: Icon(
                 Icons.refresh,
                 size: 30,
-                color: Palette.laserLemon.color,
+                color: Palette.laserLemon,
               )),
         ],
       ),
@@ -83,7 +83,7 @@ class MidiConfigState extends State<MidiConfig> {
                     width: 50,
                     height: 50,
                     child: CircularProgressIndicator(
-                      color: Palette.cadetBlue.color,
+                      color: Palette.cadetBlue,
                     ),
                   ))
                 :
@@ -101,12 +101,12 @@ class MidiConfigState extends State<MidiConfig> {
                         if (devices!.isEmpty)
                           Container(
                             margin: const EdgeInsets.symmetric(vertical: 8),
-                            color: Palette.lightPink.color,
+                            color: Palette.lightPink,
                             height: 50,
                             child: Center(
                               child: Text(
                                 "No Midi Adapter found...",
-                                style: TextStyle(color: Palette.darkGrey.color),
+                                style: TextStyle(color: Palette.darkGrey),
                               ),
                             ),
                           ),
@@ -115,8 +115,8 @@ class MidiConfigState extends State<MidiConfig> {
                             return Container(
                               margin: const EdgeInsets.symmetric(vertical: 8),
                               color: device.connected
-                                  ? Palette.cadetBlue.color
-                                  : Palette.cadetBlue.color.withOpacity(0.1),
+                                  ? Palette.cadetBlue
+                                  : Palette.cadetBlue.withOpacity(0.1),
                               child: TextButton(
                                 onPressed: () {
                                   setDevice(device);

@@ -32,7 +32,7 @@ class DropdownModulation extends StatelessWidget {
                 child: Text(modulation.title,
                     style:
                         modulation.exclusiveGroup == otherValue?.exclusiveGroup
-                            ? TextStyle(color: Palette.lightGrey.color)
+                            ? TextStyle(color: Palette.lightGrey)
                             : null),
               ),
             )

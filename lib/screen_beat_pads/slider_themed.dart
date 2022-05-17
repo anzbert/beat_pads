@@ -18,7 +18,7 @@ class ThemedSlider extends StatelessWidget {
   final String label;
   final bool midiVal;
 
-  final Color _trackColor = Palette.lightGrey.color;
+  final Color _trackColor = Palette.lightGrey;
   final Color thumbColor;
 
   @override
@@ -128,7 +128,7 @@ class CustomSliderThumbCircle extends SliderComponentShape {
       style: TextStyle(
         fontSize: thumbRadius * .66,
         fontWeight: FontWeight.w700,
-        color: Palette.darkGrey.color, //Text Color of Value on Thumb
+        color: Palette.darkGrey, //Text Color of Value on Thumb
       ),
       text: midiVal ? getMidiValue(value) : label,
     );

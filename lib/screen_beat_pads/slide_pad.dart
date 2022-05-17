@@ -39,7 +39,7 @@ class SlideBeatPad extends StatelessWidget {
 
     final Label label = PadLabels.getLabel(settings, note);
     final double fontSize = screenWidth * 0.021;
-    final Color padTextColor = Palette.darkGrey.color;
+    final Color padTextColor = Palette.darkGrey;
 
     return Container(
       padding: EdgeInsets.all(padSpacing),
@@ -61,7 +61,7 @@ class SlideBeatPad extends StatelessWidget {
                     note.toString(),
                     style: TextStyle(
                       fontStyle: FontStyle.italic,
-                      color: Palette.lightGrey.color,
+                      color: Palette.lightGrey,
                       fontSize: fontSize * 0.8,
                     ),
                   ),

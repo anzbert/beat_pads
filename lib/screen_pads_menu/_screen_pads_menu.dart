@@ -39,20 +39,20 @@ class _PadMenuScreenState extends State<PadMenuScreen> {
                 'Beat Pads',
                 style: Theme.of(context).textTheme.headline4,
                 colors: [
-                  Palette.lightPink.color,
-                  Palette.cadetBlue.color,
-                  Palette.laserLemon.color,
+                  Palette.lightPink,
+                  Palette.cadetBlue,
+                  Palette.laserLemon,
                 ],
               ),
               leading: Builder(builder: (BuildContext context) {
                 return IconButton(
-                  color: Palette.cadetBlue.color,
+                  color: Palette.cadetBlue,
                   onPressed: () {
                     Scaffold.of(context).openDrawer();
                   },
                   icon: Icon(
                     Icons.menu,
-                    color: Palette.lightPink.color,
+                    color: Palette.lightPink,
                     size: 36,
                   ),
                 );
@@ -63,7 +63,7 @@ class _PadMenuScreenState extends State<PadMenuScreen> {
                   child: IconButton(
                     icon: Icon(
                       Icons.play_circle_fill_rounded,
-                      color: Palette.laserLemon.color,
+                      color: Palette.laserLemon,
                       size: 36,
                     ),
                     onPressed: () {
@@ -81,8 +81,8 @@ class _PadMenuScreenState extends State<PadMenuScreen> {
             ),
             bottomNavigationBar: BottomNavigationBar(
               type: BottomNavigationBarType.fixed,
-              selectedItemColor: Palette.cadetBlue.color,
-              backgroundColor: Palette.darkGrey.color.withOpacity(0.5),
+              selectedItemColor: Palette.cadetBlue,
+              backgroundColor: Palette.darkGrey.withOpacity(0.5),
               currentIndex: selectedMenu.index,
               onTap: (int tappedIndex) {
                 setState(() => selectedMenu = Menu.values[tappedIndex]);
@@ -92,14 +92,14 @@ class _PadMenuScreenState extends State<PadMenuScreen> {
                   icon: const Icon(Icons.apps),
                   activeIcon: Icon(
                     Icons.apps,
-                    color: Palette.cadetBlue.color,
+                    color: Palette.cadetBlue,
                   ),
                   label: "Layout",
                 ),
                 BottomNavigationBarItem(
                   activeIcon: Icon(
                     Icons.music_note,
-                    color: Palette.cadetBlue.color,
+                    color: Palette.cadetBlue,
                   ),
                   icon: const Icon(Icons.music_note),
                   label: "Midi",
@@ -108,14 +108,14 @@ class _PadMenuScreenState extends State<PadMenuScreen> {
                   icon: const Icon(Icons.touch_app),
                   activeIcon: Icon(
                     Icons.touch_app,
-                    color: Palette.cadetBlue.color,
+                    color: Palette.cadetBlue,
                   ),
                   label: "Input",
                 ),
                 BottomNavigationBarItem(
                   activeIcon: Icon(
                     Icons.settings,
-                    color: Palette.cadetBlue.color,
+                    color: Palette.cadetBlue,
                   ),
                   icon: const Icon(Icons.settings),
                   label: "System",

@@ -39,7 +39,7 @@ class PitchSliderEasedState extends State<PitchSliderEased>
       quarterTurns: 1,
       child: ThemedSlider(
         label: "",
-        thumbColor: Palette.tan.color,
+        thumbColor: Palette.tan,
         centerLine: true,
         child: Slider(
           min: -1,

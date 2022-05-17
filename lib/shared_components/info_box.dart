@@ -12,7 +12,7 @@ class InfoBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Card(
-        color: Palette.darkGrey.color,
+        color: Palette.darkGrey,
         margin: const EdgeInsets.fromLTRB(8, 30, 8, 8),
         elevation: 5,
         child: Padding(

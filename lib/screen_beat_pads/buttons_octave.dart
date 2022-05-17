@@ -24,8 +24,8 @@ class OctaveButtons extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.all(0),
                 alignment: Alignment.center,
-                primary: Palette.cadetBlue.color,
-                onPrimary: Palette.darkGrey.color,
+                primary: Palette.cadetBlue,
+                onPrimary: Palette.darkGrey,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(padRadius),
                 ),
@@ -51,8 +51,8 @@ class OctaveButtons extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.all(0),
                 alignment: Alignment.center,
-                primary: Palette.laserLemon.color,
-                onPrimary: Palette.darkGrey.color,
+                primary: Palette.laserLemon,
+                onPrimary: Palette.darkGrey,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(padRadius),
                 ),

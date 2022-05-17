@@ -28,7 +28,7 @@ class _ModWheelState extends State<ModWheel> {
       quarterTurns: 1,
       child: ThemedSlider(
         midiVal: true,
-        thumbColor: Palette.cadetBlue.color,
+        thumbColor: Palette.cadetBlue,
         child: Slider(
           min: 0,
           max: 127,

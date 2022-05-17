@@ -16,7 +16,7 @@ class Preview extends StatelessWidget {
         child: ClipRRect(
           borderRadius: BorderRadius.circular(16.0),
           child: Container(
-            color: Palette.darkGrey.color.withOpacity(0.5),
+            color: Palette.darkGrey.withOpacity(0.5),
             child: IgnorePointer(
               child: DeviceUtils.isPortrait(context)
                   ? Stack(
@@ -36,7 +36,7 @@ class Preview extends StatelessWidget {
                             child: Text(
                               "Preview",
                               style: TextStyle(
-                                color: Palette.lightGrey.color.withOpacity(0.4),
+                                color: Palette.lightGrey.withOpacity(0.4),
                               ),
                             ),
                           ),
@@ -59,7 +59,7 @@ class Preview extends StatelessWidget {
                             child: Text(
                               "Preview",
                               style: TextStyle(
-                                color: Palette.lightGrey.color,
+                                color: Palette.lightGrey,
                               ),
                             ),
                           ),

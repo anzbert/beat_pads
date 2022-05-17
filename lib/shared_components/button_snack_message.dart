@@ -24,7 +24,7 @@ class SnackMessageButton extends StatelessWidget {
       child: Text(
         label,
         style: TextStyle(
-          color: Palette.darkGrey.color,
+          color: Palette.darkGrey,
         ),
       ),
     );

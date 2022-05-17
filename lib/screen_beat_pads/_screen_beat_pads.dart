@@ -114,8 +114,7 @@ class BeatPadsScreen extends StatelessWidget {
                                   Scaffold.of(context).openDrawer();
                                 },
                                 style: ElevatedButton.styleFrom(
-                                    primary: Palette.lightPink.color
-                                        .withOpacity(0.9),
+                                    primary: Palette.lightPink.withOpacity(0.9),
                                     textStyle: const TextStyle(
                                         fontWeight: FontWeight.bold)),
                                 child: const Text(

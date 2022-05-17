@@ -38,8 +38,8 @@ class IntCounter extends StatelessWidget {
               },
               style: ElevatedButton.styleFrom(
                 shape: const CircleBorder(),
-                primary: Palette.laserLemon.color,
-                onPrimary: Palette.darkGrey.color,
+                primary: Palette.laserLemon,
+                onPrimary: Palette.darkGrey,
               ),
               child: const Icon(Icons.remove),
             ),
@@ -53,8 +53,8 @@ class IntCounter extends StatelessWidget {
               },
               style: ElevatedButton.styleFrom(
                 shape: const CircleBorder(),
-                primary: Palette.cadetBlue.color,
-                onPrimary: Palette.darkGrey.color,
+                primary: Palette.cadetBlue,
+                onPrimary: Palette.darkGrey,
               ),
               child: const Icon(Icons.add),
             ),

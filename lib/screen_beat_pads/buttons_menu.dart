@@ -29,15 +29,15 @@ class ReturnToMenuButton extends StatelessWidget {
             elevation: 10,
             padding: const EdgeInsets.all(0),
             alignment: Alignment.center,
-            primary: Palette.tan.color.withOpacity(0.7),
-            onPrimary: Palette.darkGrey.color.withOpacity(0.9),
+            primary: Palette.tan.withOpacity(0.7),
+            onPrimary: Palette.darkGrey.withOpacity(0.9),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(padRadius),
             ),
           ),
           child: Tooltip(
             decoration: BoxDecoration(
-                color: Palette.cadetBlue.color.withOpacity(0.7),
+                color: Palette.cadetBlue.withOpacity(0.7),
                 borderRadius: BorderRadius.circular(3)),
             message: "Long-Press for Menu",
             triggerMode: TooltipTriggerMode.tap,

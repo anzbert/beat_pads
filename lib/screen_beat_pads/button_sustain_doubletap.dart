@@ -66,8 +66,8 @@ class _SustainButtonDoubleTapState extends State<SustainButtonDoubleTap> {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(padRadius * 1)),
             color: sustainState
-                ? Palette.lightPink.color
-                : Palette.lightPink.color.withAlpha(120),
+                ? Palette.lightPink
+                : Palette.lightPink.withAlpha(120),
           ),
           child: RotatedBox(
             quarterTurns: 1,
@@ -78,7 +78,7 @@ class _SustainButtonDoubleTapState extends State<SustainButtonDoubleTap> {
                 style: TextStyle(
                   fontSize: 100,
                   fontWeight: FontWeight.w500,
-                  color: Palette.darkGrey.color,
+                  color: Palette.darkGrey,
                 ),
               ),
             ),

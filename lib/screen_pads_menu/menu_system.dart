@@ -34,7 +34,7 @@ class MenuSystem extends StatelessWidget {
                   Scaffold.of(context).openDrawer();
                 },
                 style: ElevatedButton.styleFrom(
-                    primary: Palette.laserLemon.color,
+                    primary: Palette.laserLemon,
                     textStyle: const TextStyle(fontWeight: FontWeight.bold)),
                 child: const Text(
                   "Select Midi Device)",
@@ -61,7 +61,7 @@ class MenuSystem extends StatelessWidget {
               constraints: BoxConstraints(minWidth: buttonMinWidth),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  primary: Palette.lightPink.color,
+                  primary: Palette.lightPink,
                 ),
                 child: const Text(
                   "Reset All Settings",

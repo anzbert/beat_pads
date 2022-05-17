@@ -30,9 +30,8 @@ class PaintModPreview extends StatelessWidget {
               maxRadius: settings.modulationRadius * screenSize.longestSide,
               deadZone: settings.modulationDeadZone,
               change: settings.modulationRadius * screenSize.longestSide,
-              colorBack: Palette.lightPink.color.withOpacity(fixedChange * 0.6),
-              colorFront:
-                  Palette.laserLemon.color.withOpacity(fixedChange * 0.8),
+              colorBack: Palette.lightPink.withOpacity(fixedChange * 0.6),
+              colorFront: Palette.laserLemon.withOpacity(fixedChange * 0.8),
             ),
           );
         }
@@ -45,8 +44,8 @@ class PaintModPreview extends StatelessWidget {
             maxRadius: settings.modulationRadius * screenSize.longestSide,
             deadZone: settings.modulationDeadZone,
             change: const Offset(0, 0),
-            colorBack: Palette.lightPink.color.withOpacity(fixedChange * 0.6),
-            colorFront: Palette.laserLemon.color.withOpacity(fixedChange * 0.8),
+            colorBack: Palette.lightPink.withOpacity(fixedChange * 0.6),
+            colorFront: Palette.laserLemon.withOpacity(fixedChange * 0.8),
           ),
         );
       },
