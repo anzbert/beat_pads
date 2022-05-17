@@ -38,6 +38,7 @@ enum Palette {
 
 enum PadColors {
   colorWheel("In Pitch"),
+  // halfColorWheel("In Pitch (Halfed Color Range)"),
   circleOfFifth("In Circle of Fifths"),
   highlightRoot("Just Highlight Root");
 

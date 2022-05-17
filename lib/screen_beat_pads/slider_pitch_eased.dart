@@ -69,6 +69,10 @@ class PitchSliderEasedState extends State<PitchSliderEased>
               _controller.forward();
             } else {
               setState(() => _pitch = 0);
+              PitchBendMessage(
+                channel: widget.channel,
+                bend: 0,
+              ).send();
             }
           },
           onChangeStart: (_) {
