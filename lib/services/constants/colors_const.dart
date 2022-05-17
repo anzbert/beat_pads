@@ -52,33 +52,44 @@ enum PadColors {
     return null;
   }
 
-  Color colorize(int root, int note, List<int> scaleList, double hueShiftBase) {
-    final double alpha =
-        MidiUtils.isNoteInScale(note, scaleList, root) ? 1.0 : 0.33;
-
+  Color colorize(
+      Settings settings, int note, bool noteOn, int receivedVelocity) {
     final double hue;
 
-    // Wheel
+    // out of midi range
+    if (note > 127 || note < 0) return Palette.darkGrey.color;
+
+    // received Midi
+    if (receivedVelocity > 0) {
+      return Palette.cadetBlue.color.withAlpha(receivedVelocity * 2);
+    }
+
+    // Color Schemes
     if (this == PadColors.colorWheel) {
-      hue = (30 * ((note - root) % 12) + hueShiftBase) % 360;
-    }
-    // CoF
-    else if (this == PadColors.circleOfFifth) {
+      hue = (30 * ((note - settings.rootNote) % 12) + settings.baseHue) % 360;
+    } else if (this == PadColors.circleOfFifth) {
       const circleOfFifth = [0, 7, 2, 9, 4, 11, 6, 1, 8, 3, 10, 5];
-      hue = ((30 * circleOfFifth[(note - root) % 12]) + hueShiftBase) % 360;
-    }
-    // Default
-    else {
-      if (note % 12 == root) {
-        hue = hueShiftBase;
+      hue = ((30 * circleOfFifth[(note - settings.rootNote) % 12]) +
+              settings.baseHue) %
+          360;
+    } else {
+      if (note % 12 == settings.rootNote) {
+        hue = settings.baseHue.toDouble();
       } else {
-        hue = (hueShiftBase + 210) % 360;
+        hue = (settings.baseHue + 210) % 360;
       }
     }
 
-    return HSLColor.fromColor(Palette.baseRed.color)
-        .withHue(hue)
-        .withAlpha(alpha)
-        .toColor();
+    final double alpha =
+        MidiUtils.isNoteInScale(note, settings.scaleList, settings.rootNote)
+            ? 1.0
+            : 0.33;
+
+    return HSLColor.fromAHSL(
+      alpha,
+      hue,
+      .95,
+      noteOn ? .60 : .80,
+    ).toColor();
   }
 }

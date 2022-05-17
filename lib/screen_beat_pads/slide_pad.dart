@@ -14,42 +14,31 @@ class SlideBeatPad extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.shortestSide;
-
     final Settings settings = Provider.of<Settings>(context, listen: true);
-    final int rxNote = note < 127 && note >= 0
+    final double screenWidth = MediaQuery.of(context).size.width;
+
+    final int rxNoteVelocity = note < 127 && note >= 0
         ? Provider.of<MidiReceiver>(context, listen: true).rxBuffer[note]
         : 0;
     final bool noteOn =
         Provider.of<MidiSender>(context, listen: true).isNoteOn(note);
 
     // PAD COLOR:
-    Color color;
+    final Color color = settings.padColors.colorize(
+      settings,
+      note,
+      noteOn,
+      rxNoteVelocity,
+    );
 
-    if (rxNote > 0) {
-      color = Palette.cadetBlue.color.withAlpha(
-          rxNote * 2); // receiving midi signal adjusted by received velocity
-
-    } else if (note > 127 || note < 0) {
-      color = Palette.darkGrey.color; // out of midi range
-
-    } else {
-      color = settings.padColors.colorize(
-        settings.rootNote,
-        note,
-        settings.scaleList,
-        settings.baseHue.toDouble(),
-      );
-    }
-
-    if (noteOn) color = color.withOpacity(0.6);
     final Color splashColor = color.withOpacity(0.3);
-    final Color padTextColor = Palette.darkGrey.color;
 
-    double fontSize = width * 0.022;
-    BorderRadius padRadius =
-        BorderRadius.all(Radius.circular(width * ThemeConst.padRadiusFactor));
-    double padSpacing = width * ThemeConst.padSpacingFactor;
+    final BorderRadius padRadius = BorderRadius.all(
+        Radius.circular(screenWidth * ThemeConst.padRadiusFactor));
+    final double padSpacing = screenWidth * ThemeConst.padSpacingFactor;
+
+    final Color padTextColor = Palette.darkGrey.color;
+    final double fontSize = screenWidth * 0.021;
 
     return Container(
       padding: EdgeInsets.all(padSpacing),
