@@ -9,7 +9,6 @@ enum Palette {
   lightPink,
   darkGrey,
   lightGrey,
-  baseRed,
   whiteLike;
 
   Color get color {
@@ -23,15 +22,13 @@ enum Palette {
       case Palette.tan:
         return const HSLColor.fromAHSL(1, 28, .59, .63).toColor();
       case Palette.lightPink:
-        return const HSLColor.fromAHSL(1, 351, .77, .85).toColor();
+        return const HSLColor.fromAHSL(1, 0, .95, .80).toColor();
       case Palette.darkGrey:
         return Colors.grey[800]!;
       case Palette.lightGrey:
         return const HSLColor.fromAHSL(1, 0, .0, .33).toColor();
       case Palette.whiteLike:
         return Colors.white70;
-      case Palette.baseRed:
-        return const HSLColor.fromAHSL(1, 0, .95, .80).toColor();
     }
   }
 }

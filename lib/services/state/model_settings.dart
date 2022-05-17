@@ -21,6 +21,14 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
+// notenames:
+  PadLabels get padLabels => prefs.settings.padLabels.value;
+  set padLabels(PadLabels newVal) {
+    prefs.settings.padLabels.value = newVal;
+    prefs.settings.padLabels.save();
+    notifyListeners();
+  }
+
   // colored Intervals:
   PadColors get padColors => prefs.settings.padColors.value;
   set padColors(PadColors newVal) {
@@ -319,15 +327,6 @@ class Settings extends ChangeNotifier {
       velocityMax = LoadSettings.defaults().velocityMin.value;
       velocityMin = LoadSettings.defaults().velocityMax.value;
     }
-  }
-
-  // notenames:
-  bool get showNoteNames => prefs.settings.showNoteNames.value;
-
-  set showNoteNames(bool newValue) {
-    prefs.settings.showNoteNames.value = newValue;
-    prefs.settings.showNoteNames.save();
-    notifyListeners();
   }
 
   // send CC:

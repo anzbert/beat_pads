@@ -6,6 +6,7 @@ export 'midi_mpe_init.dart';
 export 'midi_mpe_members.dart';
 export 'midi_mpe_mod.dart';
 export 'midi_note_event.dart';
+export 'pads_labels.dart';
 export 'pads_layouts.dart';
 export 'pads_playmodes.dart';
 export 'paint/paint.dart';

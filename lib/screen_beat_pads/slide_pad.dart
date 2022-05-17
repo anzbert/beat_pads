@@ -37,8 +37,9 @@ class SlideBeatPad extends StatelessWidget {
         Radius.circular(screenWidth * ThemeConst.padRadiusFactor));
     final double padSpacing = screenWidth * ThemeConst.padSpacingFactor;
 
-    final Color padTextColor = Palette.darkGrey.color;
+    final Label label = PadLabels.getLabel(settings, note);
     final double fontSize = screenWidth * 0.021;
+    final Color padTextColor = Palette.darkGrey.color;
 
     return Container(
       padding: EdgeInsets.all(padSpacing),
@@ -79,27 +80,30 @@ class SlideBeatPad extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if (settings.layout.gmPercussion)
+                      if (label.subtitle != null)
                         Flexible(
                           fit: FlexFit.loose,
                           flex: 1,
                           child: Text(
-                            MidiUtils.getNoteName(note,
-                                gmPercussionLabels: true),
+                            label.subtitle!,
                             style: TextStyle(
-                                color: padTextColor, fontSize: fontSize * 0.5),
+                              color: padTextColor,
+                              fontSize: fontSize * 0.6,
+                            ),
                           ),
                         ),
-                      Flexible(
-                        fit: FlexFit.loose,
-                        flex: 1,
-                        child: Text(
-                            settings.showNoteNames
-                                ? MidiUtils.getNoteName(note)
-                                : note.toString(),
+                      if (label.title != null)
+                        Flexible(
+                          fit: FlexFit.loose,
+                          flex: 1,
+                          child: Text(
+                            label.title!,
                             style: TextStyle(
-                                color: padTextColor, fontSize: fontSize)),
-                      ),
+                              color: padTextColor,
+                              fontSize: fontSize,
+                            ),
+                          ),
+                        ),
                     ],
                   ),
                 ),

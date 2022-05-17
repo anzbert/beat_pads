@@ -56,7 +56,6 @@ class Prefs {
     "velocityMax": 120,
     "sustainTimeStep": 0,
     "sendCC": false,
-    "showNoteNames": true,
     "pitchBend": false,
     "octaveButtons": false,
     "sustainButton": false,
@@ -73,6 +72,7 @@ class Prefs {
     "mpe1DRadius": "mpeAftertouch",
     "mpe2DX": "slide",
     "mpe2DY": "pitchbend",
+    "padLabels": "note",
     "padColors": "highlightRoot",
     "baseHue": 240,
   };
@@ -87,6 +87,7 @@ class LoadSettings {
   final Setting<MPEmods> mpe1DRadius;
   final Setting<int> baseHue;
   final Setting<PadColors> padColors;
+  final Setting<PadLabels> padLabels;
   final Setting<MPEmods> mpe2DX;
   final Setting<MPEmods> mpe2DY;
 
@@ -106,14 +107,15 @@ class LoadSettings {
   final Setting<int> pitchBendEase;
   final Setting<bool> modWheel;
   final Setting<bool> sendCC;
-  final Setting<bool> showNoteNames;
   final Setting<bool> pitchBend;
   final Setting<bool> octaveButtons;
   final Setting<bool> sustainButton;
   final Setting<bool> randomVelocity;
 
   LoadSettings(Map<String, dynamic> loadedMap)
-      : padColors = Setting<PadColors>(
+      : padLabels = Setting<PadLabels>("padLabels",
+            PadLabels.fromName(loadedMap["padLabels"]) ?? PadLabels.note),
+        padColors = Setting<PadColors>(
             "padColors",
             PadColors.fromName(loadedMap["padColors"]) ??
                 PadColors.circleOfFifth),
@@ -150,8 +152,6 @@ class LoadSettings {
         sustainTimeStep =
             Setting<int>('sustainTimeStep', loadedMap['sustainTimeStep']!),
         sendCC = Setting<bool>('sendCC', loadedMap['sendCC']!),
-        showNoteNames =
-            Setting<bool>('showNoteNames', loadedMap['showNoteNames']!),
         pitchBend = Setting<bool>('pitchBend', loadedMap['pitchBend']!),
         pitchBendEase =
             Setting<int>('pitchBendEase', loadedMap['pitchBendEase']!),
@@ -191,6 +191,9 @@ class Setting<T> {
     } else if (value is PadColors) {
       PadColors cast = value as PadColors;
       result = await sharedPrefs.setString("padColors", cast.name);
+    } else if (value is PadLabels) {
+      PadLabels cast = value as PadLabels;
+      result = await sharedPrefs.setString("padLabels", cast.name);
     } else if (value is PlayMode) {
       PlayMode cast = value as PlayMode;
       result = await sharedPrefs.setString("playMode", cast.name);

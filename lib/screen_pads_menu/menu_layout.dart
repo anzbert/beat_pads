@@ -1,4 +1,5 @@
 import 'package:beat_pads/screen_pads_menu/drop_down_colors.dart';
+import 'package:beat_pads/screen_pads_menu/drop_down_padlabels.dart';
 import 'package:beat_pads/screen_pads_menu/preview_pads.dart';
 import 'package:beat_pads/screen_pads_menu/slider_int.dart';
 
@@ -153,11 +154,10 @@ class MenuLayout extends StatelessWidget {
                 ),
                 const Divider(),
                 ListTile(
-                  title: const Text("Show Note Names"),
-                  subtitle: const Text("Switch between Names and Midi Values"),
-                  trailing: Switch(
-                      value: settings.showNoteNames,
-                      onChanged: (value) => settings.showNoteNames = value),
+                  title: const Text("Pad Labels"),
+                  subtitle:
+                      const Text("Choose between Midi Values and Note Names"),
+                  trailing: DropdownPadLabels(),
                 ),
                 ListTile(
                   title: const Text("Pad Colors"),
