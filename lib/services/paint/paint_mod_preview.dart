@@ -23,7 +23,10 @@ class PaintModPreview extends StatelessWidget {
         if (!settings.modulation2D) {
           return CustomPaint(
             painter: CustomPaintRadius(
-              origin: box.globalToLocal(screenSize.center(Offset.zero)),
+              origin: box.globalToLocal(Offset(
+                  screenSize.width / 2,
+                  screenSize.height /
+                      (DeviceUtils.isPortrait(context) ? 2.5 : 2))),
               maxRadius: settings.modulationRadius * screenSize.longestSide,
               deadZone: settings.modulationDeadZone,
               change: settings.modulationRadius * screenSize.longestSide,
@@ -35,7 +38,10 @@ class PaintModPreview extends StatelessWidget {
         }
         return CustomPaint(
           painter: CustomPaintXYSquare(
-            origin: box.globalToLocal(screenSize.center(Offset.zero)),
+            origin: box.globalToLocal(Offset(
+                screenSize.width / 2,
+                screenSize.height /
+                    (DeviceUtils.isPortrait(context) ? 2.5 : 2))),
             maxRadius: settings.modulationRadius * screenSize.longestSide,
             deadZone: settings.modulationDeadZone,
             change: const Offset(0, 0),
