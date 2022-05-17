@@ -73,17 +73,17 @@ class MenuLayout extends StatelessWidget {
                 if (resizableGrid) const Divider(),
                 if (resizableGrid)
                   ListTile(
+                    title: const Text("Scale"),
+                    trailing: DropdownScales(),
+                  ),
+                if (resizableGrid)
+                  ListTile(
                     title: const Text("Scale Root Note"),
                     subtitle: const Text(
                         "Higlight selected Scale with this Root Note"),
                     trailing: DropdownRootNote(
                         setValue: (v) => settings.rootNote = v,
                         readValue: settings.rootNote),
-                  ),
-                if (resizableGrid)
-                  ListTile(
-                    title: const Text("Scale"),
-                    trailing: DropdownScales(),
                   ),
                 if (resizableGrid) const Divider(),
                 if (resizableGrid)
@@ -161,7 +161,7 @@ class MenuLayout extends StatelessWidget {
                 ),
                 ListTile(
                   title: const Text("Pad Colors"),
-                  subtitle: const Text("Choose a Pad Color Scheme"),
+                  subtitle: const Text("Colorize Pads by Distance to the Root"),
                   trailing: DropdownPadColors(),
                 ),
                 IntSliderTile(

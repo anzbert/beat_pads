@@ -37,9 +37,9 @@ enum Palette {
 }
 
 enum PadColors {
-  colorWheel("Color Wheel"),
-  circleOfFifth("Circle of Fifth"),
-  highlightRoot("Highlight Root");
+  colorWheel("In Pitch"),
+  circleOfFifth("In Circle of Fifths"),
+  highlightRoot("Just Highlight Root");
 
   final String title;
   const PadColors(this.title);
