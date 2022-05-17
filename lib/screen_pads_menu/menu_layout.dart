@@ -165,10 +165,10 @@ class MenuLayout extends StatelessWidget {
                   trailing: DropdownPadColors(),
                 ),
                 IntSliderTile(
-                  label: "Root Note Hue",
+                  label: "Hue",
                   min: 0,
                   max: 360,
-                  // subtitle: "Velocity to send when pressing a Pad",
+                  subtitle: "Root Note Hue from the RGB Color Wheel",
                   trailing: Text(settings.baseHue.toString()),
                   readValue: settings.baseHue,
                   setValue: (v) => settings.baseHue = v,
