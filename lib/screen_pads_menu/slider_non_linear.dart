@@ -57,7 +57,7 @@ class NonLinearSliderTile extends StatelessWidget {
               child: Slider(
                 min: start.toDouble(),
                 max: steps.toDouble(),
-                value: readValue.toDouble(),
+                value: readValue.clamp(start, steps).toDouble(),
                 onChanged: (value) {
                   setValue(value.toInt());
                 },

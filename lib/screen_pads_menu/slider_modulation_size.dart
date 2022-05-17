@@ -77,7 +77,9 @@ class _ModSizeSliderTileState extends State<ModSizeSliderTile> {
                   child: Slider(
                     min: widget.min.toDouble(),
                     max: widget.max.toDouble(),
-                    value: widget.readValue.toDouble(),
+                    value: widget.readValue
+                        .clamp(widget.min, widget.max)
+                        .toDouble(),
                     onChanged: (value) {
                       widget.setValue(value.toInt());
                     },

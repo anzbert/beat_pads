@@ -55,7 +55,7 @@ class IntSliderTile extends StatelessWidget {
               child: Slider(
                 min: min.toDouble(),
                 max: max.toDouble(),
-                value: readValue.toDouble(),
+                value: readValue.clamp(min, max).toDouble(),
                 onChanged: (value) {
                   setValue(value.toInt());
                 },
