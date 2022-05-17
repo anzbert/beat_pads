@@ -15,13 +15,6 @@ class DropdownModulation extends StatelessWidget {
       this.dimensions,
       Key? key})
       : items = MPEmods.values
-            // .where((modulation) {
-            //   if (otherValue == null) return true;
-            //   if (modulation.exclusiveGroup == otherValue.exclusiveGroup) {
-            //     return false;
-            //   }
-            //   return true;
-            // })
             .where((modulation) {
               if (dimensions != null) {
                 if (dimensions != modulation.dimensions) {

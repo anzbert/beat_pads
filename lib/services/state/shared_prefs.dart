@@ -73,18 +73,20 @@ class Prefs {
     "mpe1DRadius": "mpeAftertouch",
     "mpe2DX": "slide",
     "mpe2DY": "pitchbend",
-    "coloredIntervals": false,
+    "padColors": "highlightRoot",
+    "baseHue": 240,
   };
 }
 
 class LoadSettings {
-  final Setting<bool> coloredIntervals;
   final Setting<int> modulationDeadZone;
   final Setting<int> modulationRadius;
   final Setting<bool> modulation2D;
   final Setting<int> mpeMemberChannels;
   final Setting<int> mpePitchBendRange;
   final Setting<MPEmods> mpe1DRadius;
+  final Setting<int> baseHue;
+  final Setting<PadColors> padColors;
   final Setting<MPEmods> mpe2DX;
   final Setting<MPEmods> mpe2DY;
 
@@ -111,7 +113,11 @@ class LoadSettings {
   final Setting<bool> randomVelocity;
 
   LoadSettings(Map<String, dynamic> loadedMap)
-      : mpe2DX = Setting<MPEmods>(
+      : padColors = Setting<PadColors>(
+            "padColors",
+            PadColors.fromName(loadedMap["padColors"]) ??
+                PadColors.circleOfFifth),
+        mpe2DX = Setting<MPEmods>(
             'mpe2DX', MPEmods.fromName(loadedMap['mpe2DX']) ?? MPEmods.slide),
         mpe2DY = Setting<MPEmods>('mpe2DY',
             MPEmods.fromName(loadedMap['mpe2DY']) ?? MPEmods.pitchbend),
@@ -131,6 +137,7 @@ class LoadSettings {
             "modulationDeadZone", loadedMap['modulationDeadZone']!),
         modulationRadius =
             Setting<int>("modulationRadius", loadedMap['modulationRadius']!),
+        baseHue = Setting<int>("baseHue", loadedMap["baseHue"]!),
         rootNote = Setting<int>("rootnote", loadedMap['rootNote']!),
         channel = Setting<int>('channel', loadedMap['channel']!),
         width = Setting<int>('width', loadedMap['width']!),
@@ -145,8 +152,6 @@ class LoadSettings {
         sendCC = Setting<bool>('sendCC', loadedMap['sendCC']!),
         showNoteNames =
             Setting<bool>('showNoteNames', loadedMap['showNoteNames']!),
-        coloredIntervals =
-            Setting<bool>("coloredIntervals", loadedMap["coloredIntervals"]!),
         pitchBend = Setting<bool>('pitchBend', loadedMap['pitchBend']!),
         pitchBendEase =
             Setting<int>('pitchBendEase', loadedMap['pitchBendEase']!),
@@ -183,6 +188,9 @@ class Setting<T> {
     if (value is Layout) {
       Layout cast = value as Layout;
       result = await sharedPrefs.setString("layout", cast.name);
+    } else if (value is PadColors) {
+      PadColors cast = value as PadColors;
+      result = await sharedPrefs.setString("padColors", cast.name);
     } else if (value is PlayMode) {
       PlayMode cast = value as PlayMode;
       result = await sharedPrefs.setString("playMode", cast.name);

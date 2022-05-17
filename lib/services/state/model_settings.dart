@@ -22,13 +22,23 @@ class Settings extends ChangeNotifier {
   }
 
   // colored Intervals:
-  bool get coloredIntervals => prefs.settings.coloredIntervals.value;
-
-  set coloredIntervals(bool newValue) {
-    prefs.settings.coloredIntervals.value = newValue;
-    prefs.settings.coloredIntervals.save();
+  PadColors get padColors => prefs.settings.padColors.value;
+  set padColors(PadColors newVal) {
+    prefs.settings.padColors.value = newVal;
+    prefs.settings.padColors.save();
     notifyListeners();
   }
+
+  int get mpePitchbendRange => prefs.settings.mpePitchBendRange.value;
+  set mpePitchbendRange(int newVal) {
+    if (newVal > 360 || newVal < 0) return;
+    prefs.settings.mpePitchBendRange.value = newVal;
+    prefs.settings.mpePitchBendRange.save();
+    notifyListeners();
+  }
+
+  void resetMPEPitchbendRange() =>
+      mpePitchbendRange = LoadSettings.defaults().mpePitchBendRange.value;
 
   // # for dropdown menu:
   MPEmods get mpe2DX => prefs.settings.mpe2DX.value;
@@ -53,16 +63,15 @@ class Settings extends ChangeNotifier {
   }
   // # end of dropdown menus
 
-  int get mpePitchbendRange => prefs.settings.mpePitchBendRange.value;
-  set mpePitchbendRange(int newVal) {
-    if (newVal > 48 || newVal < 0) return;
-    prefs.settings.mpePitchBendRange.value = newVal;
-    prefs.settings.mpePitchBendRange.save();
+  int get baseHue => prefs.settings.baseHue.value;
+  set baseHue(int newVal) {
+    if (newVal > 360 || newVal < 0) return;
+    prefs.settings.baseHue.value = newVal;
+    prefs.settings.baseHue.save();
     notifyListeners();
   }
 
-  void resetMPEPitchbendRange() =>
-      mpePitchbendRange = LoadSettings.defaults().mpePitchBendRange.value;
+  void resetBaseHue() => baseHue = LoadSettings.defaults().baseHue.value;
 
   double get modulationRadius => prefs.settings.modulationRadius.value / 100;
   set modulationRadius(double newVal) {

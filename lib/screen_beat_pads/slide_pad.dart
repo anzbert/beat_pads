@@ -11,7 +11,6 @@ class SlideBeatPad extends StatelessWidget {
   }) : super(key: key);
 
   final int note;
-  // final EdgeInsets EdgeInsets.all(padSpacing) = const EdgeInsets.all(2.5);
 
   @override
   Widget build(BuildContext context) {
@@ -34,21 +33,13 @@ class SlideBeatPad extends StatelessWidget {
     } else if (note > 127 || note < 0) {
       color = Palette.darkGrey.color; // out of midi range
 
-    } else if (!MidiUtils.isNoteInScale(
-        note, settings.scaleList, settings.rootNote)) {
-      color = Palette.yellowGreen.color.withAlpha(100); // not in current scale
-
-    } else if (settings.coloredIntervals) {
-      color = Palette.colorizeByColorWheel(
-          settings.rootNote, note); // colored intervals
-      // color = Palette.colorizeByCircleOfFifth(
-      //     settings.rootNote, note); // colored intervals
-
-    } else if (note % 12 == settings.rootNote) {
-      color = Palette.laserLemon.color; // root note
-
     } else {
-      color = Palette.yellowGreen.color; // default fallback pad color
+      color = settings.padColors.colorize(
+        settings.rootNote,
+        note,
+        settings.scaleList,
+        settings.baseHue.toDouble(),
+      );
     }
 
     if (noteOn) color = color.withOpacity(0.6);

@@ -1,6 +1,6 @@
+import 'package:beat_pads/services/_services.dart';
 import 'package:flutter/material.dart';
 
-/// Custom Palette for this App
 enum Palette {
   cadetBlue,
   yellowGreen,
@@ -34,37 +34,50 @@ enum Palette {
         return const HSLColor.fromAHSL(1, 0, .95, .80).toColor();
     }
   }
-
-  static Color colorizeByColorWheel(int root, int note) {
-    const double hueShiftBase = 0;
-    final double hue = (30 * ((note - root) % 12) + hueShiftBase) % 360;
-    return HSLColor.fromAHSL(1, hue, .95, .80).toColor();
-  }
-
-  static Color colorizeByCircleOfFifth(int root, int note) {
-    // final createCoF = List.generate(12, (index) => (index * 7) % 12);
-    const circleOfFifth = [0, 7, 2, 9, 4, 11, 6, 1, 8, 3, 10, 5];
-
-    const double hueShiftBase = 0;
-    final double hue =
-        ((30 * circleOfFifth[(note - root) % 12]) + hueShiftBase) % 360;
-    return HSLColor.fromAHSL(1, hue, .95, .80).toColor();
-  }
 }
 
-// Color _temp = HSLColor.fromAHSL(1, 351, .77, .82).toColor();
+enum PadColors {
+  colorWheel("Color Wheel"),
+  circleOfFifth("Circle of Fifth"),
+  highlightRoot("Highlight Root");
 
-/* CSS HSL */
-// --cadet-blue-crayola: hsla(212, 31%, 69%, 1); 
-// --yellow-green-crayola: hsla(89, 100%, 84%, 1); 
-// --laser-lemon: hsla(61, 100%, 71%, 1); 
-// --tan-crayola: hsla(28, 59%, 63%, 1); 
-// --light-pink: hsla(351, 77%, 82%, 1);
+  final String title;
+  const PadColors(this.title);
 
+  static PadColors? fromName(String key) {
+    for (PadColors mode in PadColors.values) {
+      if (mode.name == key) return mode;
+    }
+    return null;
+  }
 
-// RGB
-// --cadet-blue-crayola: #96adc8ff;
-// --yellow-green-crayola: #d7ffabff;
-// --laser-lemon: #fcff6cff;
-// --tan-crayola: #d89d6aff;
-// --light-pink: #f4acb7ff;
+  Color colorize(int root, int note, List<int> scaleList, double hueShiftBase) {
+    final double alpha =
+        MidiUtils.isNoteInScale(note, scaleList, root) ? 1.0 : 0.33;
+
+    final double hue;
+
+    // Wheel
+    if (this == PadColors.colorWheel) {
+      hue = (30 * ((note - root) % 12) + hueShiftBase) % 360;
+    }
+    // CoF
+    else if (this == PadColors.circleOfFifth) {
+      const circleOfFifth = [0, 7, 2, 9, 4, 11, 6, 1, 8, 3, 10, 5];
+      hue = ((30 * circleOfFifth[(note - root) % 12]) + hueShiftBase) % 360;
+    }
+    // Default
+    else {
+      if (note % 12 == root) {
+        hue = hueShiftBase;
+      } else {
+        hue = (hueShiftBase + 210) % 360;
+      }
+    }
+
+    return HSLColor.fromColor(Palette.baseRed.color)
+        .withHue(hue)
+        .withAlpha(alpha)
+        .toColor();
+  }
+}

@@ -1,4 +1,6 @@
+import 'package:beat_pads/screen_pads_menu/drop_down_colors.dart';
 import 'package:beat_pads/screen_pads_menu/preview_pads.dart';
+import 'package:beat_pads/screen_pads_menu/slider_int.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -83,22 +85,6 @@ class MenuLayout extends StatelessWidget {
                     title: const Text("Scale"),
                     trailing: DropdownScales(),
                   ),
-                ListTile(
-                  title: const Text("Show Note Names"),
-                  subtitle: const Text("Switch between Names and Midi Values"),
-                  trailing: Switch(
-                      value: settings.showNoteNames,
-                      onChanged: (value) => settings.showNoteNames = value),
-                ),
-                ListTile(
-                  title: const Text("Colored Pads"),
-                  subtitle: const Text(
-                      "Color pads according to their interval to the root of the scale"),
-                  trailing: Switch(
-                      value: settings.coloredIntervals,
-                      onChanged: (value) => settings.coloredIntervals =
-                          !settings.coloredIntervals),
-                ),
                 if (resizableGrid) const Divider(),
                 if (resizableGrid)
                   ListTile(
@@ -164,6 +150,29 @@ class MenuLayout extends StatelessWidget {
                       value: settings.modWheel,
                       onChanged: (value) =>
                           settings.modWheel = !settings.modWheel),
+                ),
+                const Divider(),
+                ListTile(
+                  title: const Text("Show Note Names"),
+                  subtitle: const Text("Switch between Names and Midi Values"),
+                  trailing: Switch(
+                      value: settings.showNoteNames,
+                      onChanged: (value) => settings.showNoteNames = value),
+                ),
+                ListTile(
+                  title: const Text("Pad Colors"),
+                  subtitle: const Text("Choose a Pad Color Scheme"),
+                  trailing: DropdownPadColors(),
+                ),
+                IntSliderTile(
+                  label: "Root Note Hue",
+                  min: 0,
+                  max: 360,
+                  // subtitle: "Velocity to send when pressing a Pad",
+                  trailing: Text(settings.baseHue.toString()),
+                  readValue: settings.baseHue,
+                  setValue: (v) => settings.baseHue = v,
+                  resetValue: settings.resetBaseHue,
                 ),
               ],
             ),
