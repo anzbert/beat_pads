@@ -1,14 +1,13 @@
-import 'package:beat_pads/services/touch_buffer.dart';
 import 'package:flutter/material.dart';
 
 class CustomPaintSquare extends CustomPainter {
   const CustomPaintSquare(
     this.o1,
-    this.touchEvent,
+    this.maxRadius,
     this.color,
   );
   final Offset o1;
-  final TouchEvent touchEvent;
+  final double maxRadius;
   final Color color;
 
   @override
@@ -18,7 +17,7 @@ class CustomPaintSquare extends CustomPainter {
       ..strokeWidth = 8
       ..strokeCap = StrokeCap.round;
 
-    Rect rect = Rect.fromCircle(center: o1, radius: touchEvent.maxRadius);
+    Rect rect = Rect.fromCircle(center: o1, radius: maxRadius);
 
     canvas.drawRRect(
         RRect.fromRectAndRadius(rect, const Radius.circular(5)), brush);

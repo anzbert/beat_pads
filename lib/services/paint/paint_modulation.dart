@@ -27,7 +27,7 @@ class PaintAfterTouchCircle extends StatelessWidget {
                           CustomPaint(
                             painter: CustomPaintCircle(
                               box.globalToLocal(touchEvent.origin),
-                              touchEvent,
+                              touchEvent.maxRadius,
                               Palette.lightPink.color.withOpacity(touchEvent
                                       .radialChange(curve: Curves.easeOut) *
                                   0.6),
@@ -36,7 +36,10 @@ class PaintAfterTouchCircle extends StatelessWidget {
                           CustomPaint(
                             painter: CustomPaintRadius(
                               box.globalToLocal(touchEvent.origin),
-                              touchEvent,
+                              touchEvent.maxRadius,
+                              touchEvent.deadZone,
+                              touchEvent.radialChange(curve: Curves.linear) *
+                                  touchEvent.maxRadius,
                               Palette.laserLemon.color.withOpacity(touchEvent
                                       .radialChange(curve: Curves.easeOut) *
                                   0.8),
@@ -50,7 +53,7 @@ class PaintAfterTouchCircle extends StatelessWidget {
                           CustomPaint(
                             painter: CustomPaintSquare(
                               box.globalToLocal(touchEvent.origin),
-                              touchEvent,
+                              touchEvent.maxRadius,
                               Palette.lightPink.color.withOpacity(touchEvent
                                       .radialChange(curve: Curves.easeOut) *
                                   0.6),
@@ -59,7 +62,11 @@ class PaintAfterTouchCircle extends StatelessWidget {
                           CustomPaint(
                             painter: CustomPaintXYSquare(
                               box.globalToLocal(touchEvent.origin),
-                              touchEvent,
+                              touchEvent.maxRadius,
+                              touchEvent.deadZone,
+                              touchEvent.directionalChangeFromCenter(
+                                      curve: Curves.linear, deadZone: true) *
+                                  touchEvent.maxRadius,
                               Palette.laserLemon.color.withOpacity(touchEvent
                                       .radialChange(curve: Curves.easeOut) *
                                   0.8),
