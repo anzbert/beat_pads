@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:beat_pads/services/_services.dart';
 
-class IntCounter extends StatelessWidget {
-  const IntCounter(
+class IntCounterTile extends StatelessWidget {
+  const IntCounterTile(
       {this.label = "#label",
       required this.readValue,
       required this.setValue,

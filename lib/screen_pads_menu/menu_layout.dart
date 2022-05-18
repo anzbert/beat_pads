@@ -99,7 +99,7 @@ class MenuLayout extends StatelessWidget {
                         readValue: settings.base),
                   ),
                 if (resizableGrid)
-                  IntCounter(
+                  IntCounterTile(
                     label: "Base Octave",
                     readValue: settings.baseOctave,
                     setValue: (v) => settings.baseOctave = v,
