@@ -117,6 +117,7 @@ class _SlidePadsState extends State<SlidePads> with TickerProviderStateMixin {
                               constrainedPosition, origin, animation.value)!),
                       null);
                 } else {
+                  controller.dispose();
                   context.read<MidiSender>().handleEndTouch(
                       CustomPointer(touch.pointer, touch.position));
                 }
