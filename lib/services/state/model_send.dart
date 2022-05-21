@@ -82,6 +82,7 @@ class MidiSender extends ChangeNotifier {
   void updateReleasedEvent(NoteEvent event) {
     int index = releasedNoteBuffer.indexWhere((element) =>
         element.note == event.note && element.channel == event.channel);
+    // element.note == event.note);
 
     if (index >= 0) {
       releasedNoteBuffer[index].updateReleaseTime(); // update time
@@ -98,19 +99,22 @@ class MidiSender extends ChangeNotifier {
     checkerRunning = true;
 
     while (releasedNoteBuffer.isNotEmpty) {
-      await Future.delayed(const Duration(milliseconds: 5), () {
-        for (int i = 0; i < releasedNoteBuffer.length; i++) {
-          if (DateTime.now().millisecondsSinceEpoch -
-                  releasedNoteBuffer[i].releaseTime >
-              _settings.sustainTimeUsable) {
-            releasedNoteBuffer[i].noteOff();
+      await Future.delayed(
+        const Duration(milliseconds: 5),
+        () {
+          for (int i = 0; i < releasedNoteBuffer.length; i++) {
+            if (DateTime.now().millisecondsSinceEpoch -
+                    releasedNoteBuffer[i].releaseTime >
+                _settings.sustainTimeUsable) {
+              releasedNoteBuffer[i].noteOff();
 
-            channelProvider.releaseChannel(releasedNoteBuffer[i]);
-            releasedNoteBuffer.removeAt(i); // event gets removed here!
-            notifyListeners();
+              channelProvider.releaseChannel(releasedNoteBuffer[i]);
+              releasedNoteBuffer.removeAt(i); // event gets removed here!
+              notifyListeners();
+            }
           }
-        }
-      });
+        },
+      );
     }
 
     checkerRunning = false;

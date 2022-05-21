@@ -51,11 +51,11 @@ class CustomPaintXYSquare extends CustomPainter {
     canvas.drawLine(originX, pointX, brush);
 
     // touch tracker
+    brush.style = PaintingStyle.fill;
     Offset touch = origin.translate(change.dx, -change.dy);
     canvas.drawCircle(touch, 12, brush);
 
     // deadzone
-    brush.style = PaintingStyle.fill;
     brush.color = colorFront.withOpacity(0.6);
     canvas.drawCircle(origin, maxRadius * deadZone, brush);
   }
