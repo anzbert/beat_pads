@@ -12,7 +12,7 @@ class TouchBuffer {
   List<TouchEvent> get buffer => _buffer;
 
   /// Add touchevent with noteevent to buffer
-  void addNoteOn(PointerEvent touch, NoteEvent noteEvent) {
+  void addNoteOn(CustomPointer touch, NoteEvent noteEvent) {
     _buffer.add(TouchEvent(touch, noteEvent, settings, screenSize));
   }
 
@@ -76,7 +76,7 @@ class TouchEvent {
 
   /// Holds geometry, note and modulation information this.uniqueID, this.origin,
   TouchEvent(
-      PointerEvent touch, this.noteEvent, Settings settings, Size screenSize)
+      CustomPointer touch, this.noteEvent, Settings settings, Size screenSize)
       : origin = touch.position,
         newPosition = touch.position,
         uniqueID = touch.pointer,

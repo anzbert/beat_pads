@@ -45,7 +45,7 @@ class PaintModulation extends StatelessWidget {
                           maxRadius: touchEvent.maxRadius,
                           deadZone: touchEvent.deadZone,
                           change: touchEvent.directionalChangeFromCenter(
-                                  curve: Curves.linear, deadZone: true) *
+                                  curve: Curves.linear) *
                               touchEvent.maxRadius,
                           colorBack: Palette.lightPink.withOpacity(
                               touchEvent.radialChange(curve: Curves.easeOut) *

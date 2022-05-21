@@ -118,7 +118,7 @@ class MidiSender extends ChangeNotifier {
 
   /// Handles a new touch on a pad, creating and sending new noteOn events
   /// in the touch buffer
-  void handleNewTouch(PointerEvent touch, int noteTapped) {
+  void handleNewTouch(CustomPointer touch, int noteTapped) {
     int newChannel = _settings.playMode == PlayMode.mpe
         ? channelProvider.provideChannel(touchBuffer.buffer)
         : _settings.channel; // get new channel from generator
@@ -146,7 +146,7 @@ class MidiSender extends ChangeNotifier {
 
   /// Handles panning of the finger on the screen after the inital touch,
   /// as well as Midi Message sending behaviour in the different play modes
-  void handlePan(PointerEvent touch, int? noteHovered) {
+  void handlePan(CustomPointer touch, int? noteHovered) {
     TouchEvent? eventInBuffer = touchBuffer.getByID(touch.pointer);
     if (eventInBuffer == null || eventInBuffer.dirty) return;
 
@@ -220,7 +220,7 @@ class MidiSender extends ChangeNotifier {
 
   /// Cleans up Touchevent, when contact with screen ends and the pointer is removed
   /// Adds released events to a buffer when auto-sustain is being used
-  void handleEndTouch(PointerEvent touch) {
+  void handleEndTouch(CustomPointer touch) {
     TouchEvent? eventInBuffer = touchBuffer.getByID(touch.pointer);
     if (eventInBuffer == null) return;
 
@@ -237,6 +237,18 @@ class MidiSender extends ChangeNotifier {
     }
 
     notifyListeners();
+  }
+
+  Offset? getOrigin(int pointer) {
+    TouchEvent? eventInBuffer = touchBuffer.getByID(pointer);
+    if (eventInBuffer == null) return null;
+    return eventInBuffer.origin;
+  }
+
+  int? getNote(int pointer) {
+    TouchEvent? eventInBuffer = touchBuffer.getByID(pointer);
+    if (eventInBuffer == null) return null;
+    return eventInBuffer.noteEvent.note;
   }
 
   // DISPOSE:

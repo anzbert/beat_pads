@@ -14,6 +14,8 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
+  int modEaseBackTime = 1000;
+
   List<MidiDevice> _connectedDevices = [];
   List<MidiDevice> get connectedDevices => _connectedDevices;
   set connectedDevices(List<MidiDevice> newVal) {
@@ -82,6 +84,8 @@ class Settings extends ChangeNotifier {
   void resetBaseHue() => baseHue = LoadSettings.defaults().baseHue.value;
 
   double get modulationRadius => prefs.settings.modulationRadius.value / 100;
+  double absoluteRadius(BuildContext context) =>
+      MediaQuery.of(context).size.longestSide * modulationRadius;
   set modulationRadius(double newVal) {
     prefs.settings.modulationRadius.value = (newVal.clamp(0, 1) * 100).toInt();
     prefs.settings.modulationRadius.save();

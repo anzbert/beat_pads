@@ -57,7 +57,7 @@ class MenuLayout extends StatelessWidget {
                   ListTile(
                     title: const Text("Grid Width"),
                     trailing: DropdownNumbers(
-                      max: ScreenSize.getSize(context).maxGrid,
+                      max: ScreenSize.getSizeEnum(context).maxGrid,
                       setValue: (v) => settings.width = v,
                       readValue: settings.width,
                     ),
@@ -66,7 +66,7 @@ class MenuLayout extends StatelessWidget {
                   ListTile(
                     title: const Text("Grid Height"),
                     trailing: DropdownNumbers(
-                      max: ScreenSize.getSize(context).maxGrid,
+                      max: ScreenSize.getSizeEnum(context).maxGrid,
                       setValue: (v) => settings.height = v,
                       readValue: settings.height,
                     ),

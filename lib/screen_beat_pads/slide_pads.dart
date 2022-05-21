@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:beat_pads/screen_beat_pads/slide_pad.dart';
 
 import 'package:flutter/gestures.dart';
@@ -15,7 +17,7 @@ class SlidePads extends StatefulWidget {
   State<SlidePads> createState() => _SlidePadsState();
 }
 
-class _SlidePadsState extends State<SlidePads> {
+class _SlidePadsState extends State<SlidePads> with TickerProviderStateMixin {
   final GlobalKey _padsWidgetKey = GlobalKey();
 
   PlayMode? disposeMode;
@@ -50,7 +52,8 @@ class _SlidePadsState extends State<SlidePads> {
           int? result = _detectTappedItem(touch);
 
           if (mounted && result != null) {
-            context.read<MidiSender>().handleNewTouch(touch, result);
+            context.read<MidiSender>().handleNewTouch(
+                CustomPointer(touch.pointer, touch.position), result);
           }
         }
 
@@ -59,13 +62,72 @@ class _SlidePadsState extends State<SlidePads> {
 
           if (mounted) {
             int? result = _detectTappedItem(touch);
-            context.read<MidiSender>().handlePan(touch, result);
+            context.read<MidiSender>().handlePan(
+                CustomPointer(touch.pointer, touch.position), result);
           }
         }
 
         upAndCancel(PointerEvent touch) {
           if (mounted) {
-            context.read<MidiSender>().handleEndTouch(touch);
+            if (settings.modEaseBackTime > 0 && settings.playMode.modulatable) {
+              AnimationController controller = AnimationController(
+                duration: Duration(milliseconds: settings.modEaseBackTime),
+                vsync: this,
+              );
+              Animation<double> curve = CurvedAnimation(
+                parent: controller,
+                curve: Curves.easeIn,
+              );
+              Animation<double> animation = Tween<double>(
+                begin: 0,
+                end: 1,
+              ).animate(curve);
+
+              Offset? origin =
+                  context.read<MidiSender>().getOrigin(touch.pointer);
+
+              Offset constrainedPosition = Offset.zero;
+              if (origin != null) {
+                constrainedPosition = settings.modulation2D
+                    ? Utils.limitToSquare(origin, touch.position,
+                        settings.absoluteRadius(context))
+                    : Utils.limitToCircle(origin, touch.position,
+                        settings.absoluteRadius(context));
+              }
+
+              int? initial = context.read<MidiSender>().getNote(touch.pointer);
+
+              animation.addListener(() {
+                int count = context
+                    .read<MidiSender>()
+                    .touchBuffer
+                    .buffer
+                    .map((e) => e.noteEvent.note)
+                    .fold(
+                      0,
+                      (value, element) =>
+                          element == initial ? value + 1 : value,
+                    );
+
+                if (!animation.isCompleted && origin != null && count == 1) {
+                  context.read<MidiSender>().handlePan(
+                      CustomPointer(
+                          touch.pointer,
+                          Offset.lerp(
+                              constrainedPosition, origin, animation.value)!),
+                      null);
+                } else {
+                  context.read<MidiSender>().handleEndTouch(
+                      CustomPointer(touch.pointer, touch.position));
+                }
+                setState(() {});
+              });
+              controller.forward();
+            } else {
+              context
+                  .read<MidiSender>()
+                  .handleEndTouch(CustomPointer(touch.pointer, touch.position));
+            }
           }
         }
 
@@ -115,4 +177,10 @@ class _SlidePadsState extends State<SlidePads> {
       },
     );
   }
+
+  // @override
+  // void dispose() {
+  //   _controller.dispose();
+  //   super.dispose();
+  // }
 }
