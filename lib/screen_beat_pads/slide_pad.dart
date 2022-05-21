@@ -1,7 +1,7 @@
+import 'package:beat_pads/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:beat_pads/shared/_shared.dart';
 import 'package:beat_pads/services/_services.dart';
 
 class SlideBeatPad extends StatelessWidget {
@@ -11,52 +11,38 @@ class SlideBeatPad extends StatelessWidget {
   }) : super(key: key);
 
   final int note;
-  final EdgeInsets padPadding = const EdgeInsets.all(2.5);
 
   @override
   Widget build(BuildContext context) {
     final Settings settings = Provider.of<Settings>(context, listen: true);
+    final double screenWidth = MediaQuery.of(context).size.width;
 
-    final int rxNote = note < 127 && note >= 0
+    final int rxNoteVelocity = note < 127 && note >= 0
         ? Provider.of<MidiReceiver>(context, listen: true).rxBuffer[note]
         : 0;
-
     final bool noteOn =
         Provider.of<MidiSender>(context, listen: true).isNoteOn(note);
 
     // PAD COLOR:
-    final Color splashColor = Palette.lightPink.color;
-    final Color padTextColor = Palette.darkGrey.color;
+    final Color color = settings.padColors.colorize(
+      settings,
+      note,
+      noteOn,
+      rxNoteVelocity,
+    );
 
-    final Color color;
-    if (noteOn) {
-      color = splashColor.withAlpha(220); // maintain color when pushed
+    final Color splashColor = color.withOpacity(0.3);
 
-    } else if (rxNote > 0) {
-      color = Palette.cadetBlue.color.withAlpha(
-          rxNote * 2); // receiving midi signal adjusted by received velocity
+    final BorderRadius padRadius = BorderRadius.all(
+        Radius.circular(screenWidth * ThemeConst.padRadiusFactor));
+    final double padSpacing = screenWidth * ThemeConst.padSpacingFactor;
 
-    } else if (note > 127 || note < 0) {
-      color = Palette.darkGrey.color; // out of midi range
-
-    } else if (!MidiUtils.isNoteInScale(
-        note, settings.scaleList, settings.rootNote)) {
-      color = Palette.yellowGreen.color.withAlpha(160); // not in current scale
-
-    } else if (note % 12 == settings.rootNote) {
-      color = Palette.laserLemon.color; // root note
-
-    } else {
-      color = Palette.yellowGreen.color; // default pad color
-    }
-
-    double screenWidth = MediaQuery.of(context).size.width;
-    double fontSize = screenWidth * 0.021;
-    BorderRadius padRadius =
-        BorderRadius.all(Radius.circular(screenWidth * 0.008));
+    final Label label = PadLabels.getLabel(settings, note);
+    final double fontSize = screenWidth * 0.021;
+    final Color padTextColor = Palette.darkGrey;
 
     return Container(
-      padding: EdgeInsets.all(screenWidth * 0.005),
+      padding: EdgeInsets.all(padSpacing),
       height: double.infinity,
       width: double.infinity,
       child: Material(
@@ -70,12 +56,12 @@ class SlideBeatPad extends StatelessWidget {
             InkWell(
                 borderRadius: padRadius,
                 child: Padding(
-                  padding: padPadding,
+                  padding: EdgeInsets.all(padSpacing),
                   child: Text(
                     note.toString(),
                     style: TextStyle(
                       fontStyle: FontStyle.italic,
-                      color: Palette.lightGrey.color,
+                      color: Palette.lightGrey,
                       fontSize: fontSize * 0.8,
                     ),
                   ),
@@ -88,22 +74,36 @@ class SlideBeatPad extends StatelessWidget {
                 borderRadius: padRadius,
                 splashColor: splashColor,
                 child: Padding(
-                  padding: padPadding,
+                  padding: EdgeInsets.all(padSpacing),
                   child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if (settings.layout.gmPercussion)
-                        Text(
-                          MidiUtils.getNoteName(note, gmPercussionLabels: true),
-                          style: TextStyle(
-                              color: padTextColor, fontSize: fontSize * 0.6),
+                      if (label.subtitle != null)
+                        Flexible(
+                          fit: FlexFit.loose,
+                          flex: 1,
+                          child: Text(
+                            label.subtitle!,
+                            style: TextStyle(
+                              color: padTextColor,
+                              fontSize: fontSize * 0.6,
+                            ),
+                          ),
                         ),
-                      Text(
-                          settings.showNoteNames
-                              ? MidiUtils.getNoteName(note)
-                              : note.toString(),
-                          style: TextStyle(
-                              color: padTextColor, fontSize: fontSize)),
+                      if (label.title != null)
+                        Flexible(
+                          fit: FlexFit.loose,
+                          flex: 1,
+                          child: Text(
+                            label.title!,
+                            style: TextStyle(
+                              color: padTextColor,
+                              fontSize: fontSize,
+                            ),
+                          ),
+                        ),
                     ],
                   ),
                 ),

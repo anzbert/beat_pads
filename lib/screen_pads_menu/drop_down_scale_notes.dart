@@ -29,12 +29,12 @@ class DropdownScaleNotes extends StatelessWidget {
 
     menuItems = items
         .map((note) => DropdownMenuItem<int>(
+              value: note,
               child: Text(MidiUtils.getNoteName(
                 note,
                 showOctaveIndex: true,
                 showNoteValue: true,
               )),
-              value: note,
             ))
         .toList();
 

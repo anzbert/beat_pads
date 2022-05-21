@@ -14,8 +14,13 @@ class DropdownRootNote extends StatelessWidget {
     List<DropdownMenuItem<int>> menuItems = List.generate(
         12,
         (index) => DropdownMenuItem<int>(
-              child: Text(MidiUtils.getNoteName(index, showOctaveIndex: false)),
               value: index,
+              child: Text(
+                MidiUtils.getNoteName(
+                  index,
+                  showOctaveIndex: false,
+                ),
+              ),
             ));
 
     return Padding(

@@ -1,46 +1,56 @@
 import 'package:flutter/material.dart';
 
-import 'shared/_shared.dart';
+import './services/_services.dart';
 
 var appTheme = ThemeData.dark().copyWith(
-  primaryColor: Palette.cadetBlue.color,
+  primaryColor: Palette.cadetBlue,
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
-      primary: Palette.cadetBlue.color,
-      onSurface: Palette.cadetBlue.color,
+      primary: Palette.cadetBlue,
+      onPrimary: Palette.darkGrey,
+      onSurface: Palette.cadetBlue,
     ),
   ),
   textButtonTheme: TextButtonThemeData(
     style: TextButton.styleFrom(
-      primary: Palette.cadetBlue.color,
+      primary: Palette.cadetBlue,
     ),
   ),
   sliderTheme: SliderThemeData(
-    activeTrackColor: Palette.cadetBlue.color,
-    thumbColor: Palette.cadetBlue.color,
+    activeTrackColor: Palette.cadetBlue,
+    thumbColor: Palette.cadetBlue,
   ),
   switchTheme: SwitchThemeData(
     thumbColor: MaterialStateProperty.resolveWith((Set<MaterialState> states) {
       if (states.contains(MaterialState.selected)) {
-        return Palette.yellowGreen.color;
+        return Palette.yellowGreen;
       }
       if (states.contains(MaterialState.disabled)) {
-        return Palette.darkGrey.color;
+        return Palette.darkGrey;
       }
-      return Palette.cadetBlue.color;
+      return Palette.cadetBlue;
     }),
     trackColor: MaterialStateProperty.resolveWith((Set<MaterialState> states) {
       if (states.contains(MaterialState.selected)) {
-        return Palette.yellowGreen.color.withAlpha(150);
+        return Palette.yellowGreen.withAlpha(150);
       }
       if (states.contains(MaterialState.disabled)) {
-        return Palette.darkGrey.color;
+        return Palette.darkGrey;
       }
-      return Palette.lightGrey.color;
+      return Palette.lightGrey;
     }),
   ),
+  // textTheme: TextTheme(
+  //   bodyText1: TextStyle(),
+  //   bodyText2: TextStyle(),
+  // ).apply(
+  //   bodyColor: Colors.orange,
+  //   displayColor: Colors.blue,
+  // ),
 );
 
 abstract class ThemeConst {
-  static double sliderWidthFactor = 0.85;
+  static double sliderWidthFactor = 0.8;
+  static double padSpacingFactor = 0.003;
+  static double padRadiusFactor = 0.006;
 }

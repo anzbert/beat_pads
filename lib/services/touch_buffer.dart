@@ -2,18 +2,18 @@ import 'package:beat_pads/services/_services.dart';
 import 'package:flutter/material.dart';
 
 class TouchBuffer {
-  final Settings _settings;
-  final Size _screenSize;
+  final Settings settings;
+  final Size screenSize;
 
   /// Data Structure that holds Touch Events, which hold notes and perform geometry operations
-  TouchBuffer(this._settings, this._screenSize);
+  TouchBuffer(this.settings, this.screenSize);
 
   List<TouchEvent> _buffer = [];
   List<TouchEvent> get buffer => _buffer;
 
   /// Add touchevent with noteevent to buffer
   void addNoteOn(PointerEvent touch, NoteEvent noteEvent) {
-    _buffer.add(TouchEvent(touch, noteEvent, _settings, _screenSize));
+    _buffer.add(TouchEvent(touch, noteEvent, settings, screenSize));
   }
 
   /// Find and return a TouchEvent from the buffer by its uniqueID, if possible
@@ -33,23 +33,31 @@ class TouchBuffer {
   }
 
   /// Get an average radial change from all currently active notes.
-  /// For example, this is a common method to determine Channel Pressure
-  double getAverageRadialChangeOfAllPads([int? channel]) {
+  /// This is a common method to determine Channel Pressure
+  double averageRadialChangeOfActiveNotes() {
     if (buffer.isEmpty) return 0;
 
     double total = buffer
-        .where((element) {
-          if (channel == null) {
-            return element.noteEvent.noteOnMessage != null;
-          } else {
-            return element.noteEvent.noteOnMessage != null &&
-                element.noteEvent.channel == channel;
-          }
-        })
+        .where((element) => element.noteEvent.noteOnMessage != null)
         .map((e) => e.radialChange())
         .reduce(((value, element) => value + element));
 
     return total / buffer.length;
+  }
+
+  /// Get an average directional change from all currently active notes.
+  /// This is a common method to determine Channel Pressure
+  Offset averageDirectionalChangeOfActiveNotes({bool absolute = false}) {
+    if (buffer.isEmpty) return const Offset(0, 0);
+
+    Offset total = buffer
+        .where((element) => element.noteEvent.noteOnMessage != null)
+        .map((e) => e.directionalChangeFromCenter())
+        .reduce(((value, element) => absolute
+            ? value + Offset(element.dx.abs(), element.dy.abs())
+            : value + element));
+
+    return Offset(total.dx / buffer.length, total.dy / buffer.length);
   }
 }
 
@@ -58,7 +66,6 @@ class TouchEvent {
 
   // Note and modulation parameters:
   NoteEvent noteEvent;
-  ModMapping modMapping = ModMapping();
 
   // Geometry parameters:
   final Offset origin;
@@ -69,13 +76,13 @@ class TouchEvent {
 
   /// Holds geometry, note and modulation information this.uniqueID, this.origin,
   TouchEvent(
-      PointerEvent touch, this.noteEvent, Settings _settings, Size _screenSize)
+      PointerEvent touch, this.noteEvent, Settings settings, Size screenSize)
       : origin = touch.position,
         newPosition = touch.position,
         uniqueID = touch.pointer,
-        maxDiameter = _screenSize.width * 2 * 0.15,
-        deadZone = 0.15,
-        maxRadius = _screenSize.width * 0.15;
+        maxDiameter = screenSize.longestSide * settings.modulationRadius * 2,
+        deadZone = settings.modulationDeadZone,
+        maxRadius = screenSize.longestSide * settings.modulationRadius;
 
   /// Prevents touchevent from receiving further position updates in move(). Irreversible!
   void markDirty() => _dirty = true;

@@ -1,8 +1,8 @@
-import 'package:beat_pads/shared/_shared.dart';
 import 'package:flutter/material.dart';
+import 'package:beat_pads/services/_services.dart';
 
-class IntCounter extends StatelessWidget {
-  const IntCounter(
+class IntCounterTile extends StatelessWidget {
+  const IntCounterTile(
       {this.label = "#label",
       required this.readValue,
       required this.setValue,
@@ -24,7 +24,7 @@ class IntCounter extends StatelessWidget {
           if (resetFunction != null)
             TextButton(
               onPressed: () => resetFunction!(),
-              child: Text("Reset"),
+              child: const Text("Reset"),
             ),
         ],
       ),
@@ -36,12 +36,12 @@ class IntCounter extends StatelessWidget {
               onPressed: () {
                 setValue(readValue - 1);
               },
-              child: Icon(Icons.remove),
               style: ElevatedButton.styleFrom(
-                shape: CircleBorder(),
-                primary: Palette.laserLemon.color,
-                onPrimary: Palette.darkGrey.color,
+                shape: const CircleBorder(),
+                primary: Palette.laserLemon,
+                onPrimary: Palette.darkGrey,
               ),
+              child: const Icon(Icons.remove),
             ),
             Text(readValue.toString(),
                 style: TextStyle(
@@ -51,12 +51,12 @@ class IntCounter extends StatelessWidget {
               onPressed: () {
                 setValue(readValue + 1);
               },
-              child: Icon(Icons.add),
               style: ElevatedButton.styleFrom(
-                shape: CircleBorder(),
-                primary: Palette.cadetBlue.color,
-                onPrimary: Palette.darkGrey.color,
+                shape: const CircleBorder(),
+                primary: Palette.cadetBlue,
+                onPrimary: Palette.darkGrey,
               ),
+              child: const Icon(Icons.add),
             ),
           ]),
     );

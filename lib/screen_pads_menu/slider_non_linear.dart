@@ -1,8 +1,8 @@
 import 'package:beat_pads/theme.dart';
 import 'package:flutter/material.dart';
 
-class NonLinearSlider extends StatelessWidget {
-  const NonLinearSlider({
+class NonLinearSliderTile extends StatelessWidget {
+  const NonLinearSliderTile({
     this.label = "#Label",
     this.subtitle,
     this.resetFunction,
@@ -35,7 +35,12 @@ class NonLinearSlider extends StatelessWidget {
               if (resetFunction != null)
                 TextButton(
                   onPressed: () => resetFunction!(),
-                  child: Text("Reset"),
+                  style: TextButton.styleFrom(
+                    minimumSize: Size.zero,
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
+                  child: const Text("Reset"),
                 )
             ],
           ),
@@ -44,14 +49,15 @@ class NonLinearSlider extends StatelessWidget {
               ? Text(actualValue!)
               : Text(readValue.toString()),
         ),
-        LayoutBuilder(
-          builder: (context, constraints) {
+        Builder(
+          builder: (context) {
+            double width = MediaQuery.of(context).size.width;
             return SizedBox(
-              width: constraints.maxWidth * ThemeConst.sliderWidthFactor,
+              width: width * ThemeConst.sliderWidthFactor,
               child: Slider(
                 min: start.toDouble(),
                 max: steps.toDouble(),
-                value: readValue.toDouble(),
+                value: readValue.clamp(start, steps).toDouble(),
                 onChanged: (value) {
                   setValue(value.toInt());
                 },

@@ -1,6 +1,6 @@
 import 'dart:math';
+import 'package:beat_pads/services/_services.dart';
 
-import 'package:beat_pads/shared/colors.dart';
 import 'package:flutter/material.dart';
 
 class ThemedSlider extends StatelessWidget {
@@ -18,15 +18,14 @@ class ThemedSlider extends StatelessWidget {
   final String label;
   final bool midiVal;
 
-  final Color _trackColor = Palette.lightGrey.color;
+  final Color _trackColor = Palette.lightGrey;
   final Color thumbColor;
 
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-
     return FractionallySizedBox(
-      widthFactor: 0.9,
+      widthFactor: 0.8,
       child: Stack(
         alignment: Alignment.center,
         children: [
@@ -35,11 +34,11 @@ class ThemedSlider extends StatelessWidget {
               decoration: BoxDecoration(
                 color: _trackColor.withAlpha(100),
                 borderRadius: BorderRadius.all(
-                  Radius.circular(width * 0.010),
+                  Radius.circular(width * 0.01),
                 ),
               ),
               height: double.infinity,
-              width: width * 0.010,
+              width: width * 0.015,
             ),
           SliderTheme(
               data: SliderTheme.of(context).copyWith(
@@ -48,7 +47,7 @@ class ThemedSlider extends StatelessWidget {
                 inactiveTrackColor: _trackColor,
                 thumbColor: thumbColor,
                 thumbShape: CustomSliderThumbCircle(
-                    thumbRadius: width * 0.038, label: label, midiVal: midiVal),
+                    thumbRadius: width * 0.04, label: label, midiVal: midiVal),
                 // RoundSliderThumbShape(
                 //   enabledThumbRadius: width * 0.038,
                 // ),
@@ -129,7 +128,7 @@ class CustomSliderThumbCircle extends SliderComponentShape {
       style: TextStyle(
         fontSize: thumbRadius * .66,
         fontWeight: FontWeight.w700,
-        color: Palette.darkGrey.color, //Text Color of Value on Thumb
+        color: Palette.darkGrey, //Text Color of Value on Thumb
       ),
       text: midiVal ? getMidiValue(value) : label,
     );

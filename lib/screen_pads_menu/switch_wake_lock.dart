@@ -1,21 +1,21 @@
 import 'package:wakelock/wakelock.dart';
 import 'package:flutter/material.dart';
 
-class SwitchWakeLock extends StatefulWidget {
-  const SwitchWakeLock({Key? key}) : super(key: key);
+class SwitchWakeLockTile extends StatefulWidget {
+  const SwitchWakeLockTile({Key? key}) : super(key: key);
 
   @override
-  State<SwitchWakeLock> createState() => _SwitchWakeLockState();
+  State<SwitchWakeLockTile> createState() => _SwitchWakeLockTileState();
 }
 
-class _SwitchWakeLockState extends State<SwitchWakeLock> {
+class _SwitchWakeLockTileState extends State<SwitchWakeLockTile> {
   bool wakeLock = false;
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text("Wake Lock"),
-      subtitle: Text("Keep the Screen on When Using the Pads"),
+      title: const Text("Wake Lock"),
+      subtitle: const Text("Keep the Screen on when using the Pads"),
       trailing: Switch(
           value: wakeLock,
           onChanged: (value) {

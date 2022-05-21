@@ -1,9 +1,10 @@
 enum PlayMode {
-  slide("Slide"),
-  noSlide("No Slide"),
-  polyAT("Aftertouch (test)"),
-  cc("Send CC (test)"),
-  mpe("MPE (test)");
+  slide("Sliding"),
+  noSlide("No Sliding"),
+  polyAT("Poly Aftertouch"),
+  mpe("MPE"),
+  // cc("Send CC"),
+  ;
 
   const PlayMode(this.title);
   final String title;
@@ -15,16 +16,26 @@ enum PlayMode {
     return null;
   }
 
-  bool get afterTouch {
+  bool get modulatable {
     switch (this) {
       case PlayMode.polyAT:
         return true;
-      case PlayMode.cc:
-        return true;
       case PlayMode.mpe:
         return true;
+      // case PlayMode.cc:
+      //   return true;
       default:
         return false;
     }
+  }
+
+  bool get singleChannel {
+    if (this == PlayMode.mpe) return false;
+    return true;
+  }
+
+  bool get multiChannel {
+    if (this == PlayMode.mpe) return true;
+    return false;
   }
 }

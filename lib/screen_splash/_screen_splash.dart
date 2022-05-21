@@ -1,11 +1,9 @@
+import 'package:beat_pads/screen_pads_menu/_screen_pads_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:rive/rive.dart';
 
-import 'package:beat_pads/shared/_shared.dart';
 import 'package:beat_pads/services/_services.dart';
-
-import 'package:beat_pads/screen_home/_screen_home.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -25,14 +23,14 @@ class _SplashScreenState extends State<SplashScreen> {
         onPointerDown: (_) {
           Navigator.pushReplacement(
             context,
-            TransitionUtils.fade(HomeScreen()),
+            TransitionUtils.fade(const PadMenuScreen()),
           );
         },
         child: Center(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Expanded(
+              const Expanded(
                 flex: 10,
                 child: RiveAnimation.asset(
                   'assets/anim/doggo.riv',
@@ -58,10 +56,10 @@ class _SplashScreenState extends State<SplashScreen> {
                             fontWeight: FontWeight.bold,
                           ),
                           colors: [
-                            Palette.cadetBlue.color,
-                            Palette.lightPink.color,
-                            Palette.darkGrey.color,
-                            Palette.yellowGreen.color,
+                            Palette.cadetBlue,
+                            Palette.lightPink,
+                            Palette.darkGrey,
+                            Palette.yellowGreen,
                           ],
                         ),
                       ],
@@ -82,12 +80,12 @@ class _SplashScreenState extends State<SplashScreen> {
                         animatedTexts: [
                           FadeAnimatedText(
                             'Tap To Continue',
-                            duration: Duration(milliseconds: 1400),
-                            textStyle: TextStyle(color: Colors.black),
+                            duration: const Duration(milliseconds: 1400),
+                            textStyle: const TextStyle(color: Colors.black),
                           ),
                         ],
                       )
-                    : Text(""),
+                    : const Text(""),
               ),
             ],
           ),

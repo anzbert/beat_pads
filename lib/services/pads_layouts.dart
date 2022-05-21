@@ -28,8 +28,6 @@ enum Layout {
         return true;
       case Layout.xPressPadsLatinJazz:
         return true;
-      case Layout.xPressPadsXO:
-        return true;
       case Layout.xPressPadsXtreme:
         return true;
       default:
@@ -40,7 +38,8 @@ enum Layout {
   LayoutProps get props {
     switch (this) {
       case Layout.magicToneNetwork:
-        return LayoutProps(resizable: true, defaultDimensions: Vector2D(8, 8));
+        return LayoutProps(
+            resizable: true, defaultDimensions: const Vector2D(8, 8));
       case Layout.xPressPadsStandard:
         return LayoutProps(resizable: false);
       case Layout.xPressPadsLatinJazz:
@@ -48,7 +47,8 @@ enum Layout {
       case Layout.xPressPadsXO:
         return LayoutProps(resizable: false);
       case Layout.xPressPadsXtreme:
-        return LayoutProps(resizable: false, defaultDimensions: Vector2D(8, 4));
+        return LayoutProps(
+            resizable: false, defaultDimensions: const Vector2D(8, 4));
       default:
         return LayoutProps(resizable: true);
     }

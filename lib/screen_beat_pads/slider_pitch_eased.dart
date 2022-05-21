@@ -1,7 +1,7 @@
 import 'package:beat_pads/screen_beat_pads/slider_themed.dart';
-import 'package:beat_pads/shared/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_midi_command/flutter_midi_command_messages.dart';
+import 'package:beat_pads/services/_services.dart';
 
 class PitchSliderEased extends StatefulWidget {
   const PitchSliderEased({
@@ -14,10 +14,10 @@ class PitchSliderEased extends StatefulWidget {
   final int resetTime;
 
   @override
-  _PitchSliderEased createState() => _PitchSliderEased();
+  PitchSliderEasedState createState() => PitchSliderEasedState();
 }
 
-class _PitchSliderEased extends State<PitchSliderEased>
+class PitchSliderEasedState extends State<PitchSliderEased>
     with SingleTickerProviderStateMixin {
   late Animation<double> _animation;
   late AnimationController _controller;
@@ -39,7 +39,7 @@ class _PitchSliderEased extends State<PitchSliderEased>
       quarterTurns: 1,
       child: ThemedSlider(
         label: "",
-        thumbColor: Palette.tan.color,
+        thumbColor: Palette.tan,
         centerLine: true,
         child: Slider(
           min: -1,
@@ -69,6 +69,10 @@ class _PitchSliderEased extends State<PitchSliderEased>
               _controller.forward();
             } else {
               setState(() => _pitch = 0);
+              PitchBendMessage(
+                channel: widget.channel,
+                bend: 0,
+              ).send();
             }
           },
           onChangeStart: (_) {

@@ -5,7 +5,7 @@ enum Dimension { width, height }
 class DropdownNumbers extends StatelessWidget {
   const DropdownNumbers(
       {this.min = 3,
-      this.max = 9,
+      this.max = 8,
       required this.setValue,
       required this.readValue,
       Key? key})
@@ -18,8 +18,15 @@ class DropdownNumbers extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final list = List<DropdownMenuItem<int>>.generate(max - min,
-        (i) => DropdownMenuItem(child: Text("${i + min}"), value: i + min));
+    final list = List<DropdownMenuItem<int>>.generate(
+      1 + max - min,
+      (i) => DropdownMenuItem(
+        value: i + min,
+        child: Text(
+          "${i + min}",
+        ),
+      ),
+    );
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
