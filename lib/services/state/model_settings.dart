@@ -14,7 +14,7 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
-  int modEaseBackTime = 1000;
+  // int modEaseBackTime = 1000;
 
   List<MidiDevice> _connectedDevices = [];
   List<MidiDevice> get connectedDevices => _connectedDevices;

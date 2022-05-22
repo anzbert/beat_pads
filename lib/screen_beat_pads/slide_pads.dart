@@ -69,9 +69,13 @@ class _SlidePadsState extends State<SlidePads> with TickerProviderStateMixin {
 
         upAndCancel(PointerEvent touch) {
           if (mounted) {
-            if (settings.modEaseBackTime > 0 && settings.playMode.modulatable) {
+            context
+                .read<MidiSender>()
+                .handleEndTouch(CustomPointer(touch.pointer, touch.position));
+            if (settings.sustainTimeUsable > 0 &&
+                settings.playMode.modulatable) {
               AnimationController controller = AnimationController(
-                duration: Duration(milliseconds: settings.modEaseBackTime),
+                duration: Duration(milliseconds: settings.sustainTimeUsable),
                 vsync: this,
               );
               Animation<double> curve = CurvedAnimation(
@@ -100,8 +104,7 @@ class _SlidePadsState extends State<SlidePads> with TickerProviderStateMixin {
               animation.addListener(() {
                 int count = context
                     .read<MidiSender>()
-                    .touchBuffer
-                    .buffer
+                    .releasedNoteBuffer
                     .map((e) => e.noteEvent.note)
                     .fold(
                       0,
@@ -124,10 +127,6 @@ class _SlidePadsState extends State<SlidePads> with TickerProviderStateMixin {
                 setState(() {});
               });
               controller.forward();
-            } else {
-              context
-                  .read<MidiSender>()
-                  .handleEndTouch(CustomPointer(touch.pointer, touch.position));
             }
           }
         }
