@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:beat_pads/screen_beat_pads/slide_pad.dart';
 
 import 'package:flutter/gestures.dart';
@@ -75,6 +73,12 @@ class _SlidePadsState extends State<SlidePads> with TickerProviderStateMixin {
 
             if (settings.sustainTimeUsable > 0 &&
                 settings.playMode.modulatable) {
+              TouchEvent? event = context
+                  .read<MidiSender>()
+                  .releaseBuffer
+                  .getByID(touch.pointer);
+              if (event == null || event.newPosition == event.origin) return;
+
               AnimationController controller = AnimationController(
                 duration: Duration(milliseconds: settings.sustainTimeUsable),
                 vsync: this,
@@ -88,35 +92,30 @@ class _SlidePadsState extends State<SlidePads> with TickerProviderStateMixin {
                 end: 1,
               ).animate(curve);
 
-              Offset? origin = context
-                  .read<MidiSender>()
-                  .releaseBuffer
-                  .getByID(touch.pointer)
-                  ?.origin;
+              Offset constrainedPosition = settings.modulation2D
+                  ? Utils.limitToSquare(event.origin, touch.position,
+                      settings.absoluteRadius(context))
+                  : Utils.limitToCircle(event.origin, touch.position,
+                      settings.absoluteRadius(context));
 
-              Offset constrainedPosition = Offset.zero;
-
-              if (origin != null) {
-                constrainedPosition = settings.modulation2D
-                    ? Utils.limitToSquare(origin, touch.position,
-                        settings.absoluteRadius(context))
-                    : Utils.limitToCircle(origin, touch.position,
-                        settings.absoluteRadius(context));
-              }
               animation.addListener(() {
-                if (!animation.isCompleted && origin != null) {
+                if (animation.isCompleted ||
+                    !context
+                        .read<MidiSender>()
+                        .releaseBuffer
+                        .isNoteInBuffer(event.noteEvent.note) ||
+                    !mounted) {
+                  controller.dispose();
+                  return;
+                } else {
                   context.read<MidiSender>().handlePan(
                       CustomPointer(
                           touch.pointer,
-                          Offset.lerp(
-                              constrainedPosition, origin, animation.value)!),
+                          Offset.lerp(constrainedPosition, event.origin,
+                              animation.value)!),
                       null);
-                } else {
-                  controller.dispose();
-                  context.read<MidiSender>().handleEndTouch(
-                      CustomPointer(touch.pointer, touch.position));
+                  setState(() {});
                 }
-                setState(() {});
               });
               controller.forward();
             }
@@ -169,10 +168,4 @@ class _SlidePadsState extends State<SlidePads> with TickerProviderStateMixin {
       },
     );
   }
-
-  // @override
-  // void dispose() {
-  //   _controller.dispose();
-  //   super.dispose();
-  // }
 }

@@ -6,8 +6,7 @@ class MidiSender extends ChangeNotifier {
   Settings _settings;
   int _baseOctave;
   bool _disposed = false;
-  // List<TouchEvent> releasedNoteBuffer = [];
-  bool checkerRunning = false;
+
   bool preview;
   final ModPolyAfterTouch1D polyATMod;
   SendMpe mpeMods;
@@ -111,7 +110,7 @@ class MidiSender extends ChangeNotifier {
 
     // remove from releasedNote buffer, if note was still pending there
     if (_settings.sustainTimeUsable > 0) {
-      releaseBuffer.removeReleasedEvent(noteOn);
+      releaseBuffer.removeNoteFromReleaseBuffer(noteTapped);
     }
 
     // add touch with note to buffer
@@ -122,13 +121,16 @@ class MidiSender extends ChangeNotifier {
   /// Handles panning of the finger on the screen after the inital touch,
   /// as well as Midi Message sending behaviour in the different play modes
   void handlePan(CustomPointer touch, int? noteHovered) {
-    TouchEvent? eventInBuffer = touchBuffer.getByID(touch.pointer);
+    TouchEvent? eventInBuffer = touchBuffer.getByID(touch.pointer) ??
+        releaseBuffer.getByID(touch.pointer);
+
     if (eventInBuffer == null || eventInBuffer.dirty) return;
 
     eventInBuffer.updatePosition(touch.position);
     notifyListeners(); // for circle drawing
 
-    // SLIDE
+    // /////////////////////////////////////////////////////////////////////////
+    // SLIDE ONLY
     if (_settings.playMode == PlayMode.slide) {
       // Turn note off:
       if (noteHovered != eventInBuffer.noteEvent.note &&
@@ -154,6 +156,8 @@ class MidiSender extends ChangeNotifier {
         notifyListeners();
       }
     }
+    // END OF SLIDE ONLY
+    // /////////////////////////////////////////////////////////////////////////
 
     // Poly AT
     else if (_settings.playMode == PlayMode.polyAT) {

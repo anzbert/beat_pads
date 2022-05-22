@@ -1,5 +1,4 @@
 import 'package:beat_pads/services/_services.dart';
-// import 'package:flutter/material.dart';
 
 class ReleaseBuffer {
   final Settings _settings;
@@ -11,7 +10,7 @@ class ReleaseBuffer {
   ReleaseBuffer(
       this._settings, this._channelProvider, this._notifyListenersOfParent);
 
-  final List<TouchEvent> _buffer = [];
+  List<TouchEvent> _buffer = [];
   List<TouchEvent> get buffer => _buffer;
 
   /// Find and return a TouchEvent from the buffer by its uniqueID, if possible
@@ -22,6 +21,14 @@ class ReleaseBuffer {
       }
     }
     return null;
+  }
+
+  bool isNoteInBuffer(int? note) {
+    if (note == null) return false;
+    for (var event in _buffer) {
+      if (event.noteEvent.note == note) return true;
+    }
+    return false;
   }
 
   /// Update note in the released events buffer, by adding it or updating
@@ -71,13 +78,8 @@ class ReleaseBuffer {
     checkerRunning = false;
   }
 
-  void removeReleasedEvent(NoteEvent event) {
-    int index = _buffer.indexWhere((element) =>
-        // element.note == event.note && element.channel == event.channel); // allow multiple channels
-        element.noteEvent.note == event.note);
-
-    if (index >= 0) {
-      _buffer.removeAt(index); // update time
-    }
+  void removeNoteFromReleaseBuffer(int note) {
+    _buffer =
+        _buffer.where((element) => element.noteEvent.note != note).toList();
   }
 }

@@ -71,17 +71,6 @@ class MenuMidi extends StatelessWidget {
               setMax: (v) => settings.velocityMax = v,
               resetFunction: settings.resetVelocity,
             ),
-          const Divider(),
-          NonLinearSliderTile(
-            label: "Auto Sustain",
-            subtitle: "Delay in Milliseconds before sending NoteOff Message",
-            readValue: settings.sustainTimeStep,
-            setValue: (v) => settings.sustainTimeStep = v,
-            resetFunction: () => settings.resetSustainTimeStep(),
-            actualValue: "${settings.sustainTimeUsable} ms",
-            start: 0,
-            steps: 25,
-          ),
         ],
       );
     });

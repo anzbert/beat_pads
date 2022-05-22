@@ -2,6 +2,7 @@ import 'package:beat_pads/screen_pads_menu/drop_down_modulation.dart';
 import 'package:beat_pads/screen_pads_menu/drop_down_playmode.dart';
 import 'package:beat_pads/screen_pads_menu/slider_int.dart';
 import 'package:beat_pads/screen_pads_menu/slider_modulation_size.dart';
+import 'package:beat_pads/screen_pads_menu/slider_non_linear.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -118,6 +119,17 @@ class MenuInput extends StatelessWidget {
               setValue: (v) => settings.modulationDeadZone = v / 100,
               resetValue: settings.resetDeadZone,
             ),
+          const Divider(),
+          NonLinearSliderTile(
+            label: "Auto Sustain",
+            subtitle: "Delay in Milliseconds before sending NoteOff Message",
+            readValue: settings.sustainTimeStep,
+            setValue: (v) => settings.sustainTimeStep = v,
+            resetFunction: () => settings.resetSustainTimeStep(),
+            actualValue: "${settings.sustainTimeUsable} ms",
+            start: 0,
+            steps: 25,
+          ),
         ],
       );
     });
