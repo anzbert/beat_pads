@@ -37,8 +37,12 @@ class MidiSender extends ChangeNotifier {
     releaseBuffer = ReleaseBuffer(
       _settings,
       channelProvider,
+      notifyListenersOfMidiSender,
     );
   }
+
+  /// Can be passed into Release Buffer Class
+  void notifyListenersOfMidiSender() => notifyListeners();
 
   /// Handle all setting changes happening in the lifetime of the pad grid here.
   /// At the moment, only octave changes affect it directly.

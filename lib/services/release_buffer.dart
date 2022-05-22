@@ -5,9 +5,11 @@ class ReleaseBuffer {
   final Settings _settings;
   final MemberChannelProvider _channelProvider;
   bool checkerRunning = false;
+  final Function _notifyListenersOfParent;
 
   /// Data Structure that holds released Events
-  ReleaseBuffer(this._settings, this._channelProvider);
+  ReleaseBuffer(
+      this._settings, this._channelProvider, this._notifyListenersOfParent);
 
   final List<TouchEvent> _buffer = [];
   List<TouchEvent> get buffer => _buffer;
@@ -46,7 +48,7 @@ class ReleaseBuffer {
                 _channelProvider.releaseChannel(_buffer[i].noteEvent);
               }
               _buffer.removeAt(i); // event gets removed here!
-              // notifyListeners();
+              _notifyListenersOfParent();
             }
           }
         },
