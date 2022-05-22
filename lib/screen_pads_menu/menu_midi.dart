@@ -5,8 +5,6 @@ import 'package:provider/provider.dart';
 
 import 'package:beat_pads/services/_services.dart';
 
-import 'package:beat_pads/screen_pads_menu/slider_non_linear.dart';
-
 import 'package:beat_pads/screen_pads_menu/slider_int_range.dart';
 
 class MenuMidi extends StatelessWidget {
