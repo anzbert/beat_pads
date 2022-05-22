@@ -14,6 +14,16 @@ class ReleaseBuffer {
   final List<TouchEvent> _buffer = [];
   List<TouchEvent> get buffer => _buffer;
 
+  /// Find and return a TouchEvent from the buffer by its uniqueID, if possible
+  TouchEvent? getByID(int id) {
+    for (TouchEvent event in _buffer) {
+      if (event.uniqueID == id) {
+        return event;
+      }
+    }
+    return null;
+  }
+
   /// Update note in the released events buffer, by adding it or updating
   /// the timer of the corresponding note
   void updateReleasedEvent(TouchEvent event) {
@@ -43,12 +53,15 @@ class ReleaseBuffer {
             if (DateTime.now().millisecondsSinceEpoch -
                     _buffer[i].noteEvent.releaseTime >
                 _settings.sustainTimeUsable) {
-              _buffer[i].noteEvent.noteOff();
+              _buffer[i].noteEvent.noteOff(); // note OFF
               if (_settings.playMode == PlayMode.mpe) {
-                _channelProvider.releaseChannel(_buffer[i].noteEvent);
+                _channelProvider.releaseChannel(
+                    _buffer[i].noteEvent); // release MPE channel
               }
-              _buffer.removeAt(i); // event gets removed here!
-              _notifyListenersOfParent();
+              _buffer.removeAt(i); // remove event from buffer
+              _notifyListenersOfParent(); // notify listeners so pads get updated
+            } else {
+              // lerp mpe
             }
           }
         },

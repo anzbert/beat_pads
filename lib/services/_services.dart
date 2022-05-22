@@ -12,5 +12,6 @@ export 'pads_playmodes.dart';
 export 'paint/paint.dart';
 export 'state/state.dart';
 export 'touch_buffer.dart';
+export 'touch_event.dart';
 export 'release_buffer.dart';
 export 'utils/utils.dart';

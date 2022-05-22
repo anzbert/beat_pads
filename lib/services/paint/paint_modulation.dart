@@ -13,11 +13,9 @@ class PaintModulation extends StatelessWidget {
 
     return Consumer<MidiSender>(
       builder: (context, MidiSender midiSender, _) {
-        final buffer = midiSender.touchBuffer.buffer;
-
         return Stack(
           children: [
-            ...buffer.map(
+            ...midiSender.touchBuffer.buffer.map(
               (touchEvent) {
                 return context.watch<Settings>().modulation2D == false ||
                         context.watch<Settings>().playMode == PlayMode.polyAT
