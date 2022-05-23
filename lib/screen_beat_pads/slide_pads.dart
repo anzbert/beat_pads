@@ -85,7 +85,7 @@ class _SlidePadsState extends State<SlidePads> with TickerProviderStateMixin {
               TouchEvent? event = context
                   .read<MidiSender>()
                   .playMode
-                  .releaseBuffer
+                  .touchReleaseBuffer
                   .getByID(touch.pointer);
               if (event == null || event.newPosition == event.origin) return;
 
@@ -113,7 +113,7 @@ class _SlidePadsState extends State<SlidePads> with TickerProviderStateMixin {
                     !context
                         .read<MidiSender>()
                         .playMode
-                        .releaseBuffer
+                        .touchReleaseBuffer
                         .isNoteInBuffer(event.noteEvent.note) ||
                     !mounted) {
                   controller.dispose();

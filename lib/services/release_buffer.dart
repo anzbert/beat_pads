@@ -1,13 +1,13 @@
 import 'package:beat_pads/services/services.dart';
 
-class ReleaseBuffer {
+class TouchReleaseBuffer {
   final Settings _settings;
   final MemberChannelProvider channelProvider;
   bool checkerRunning = false;
   final Function _notifyListenersOfParent;
 
   /// Data Structure that holds released Events
-  ReleaseBuffer(
+  TouchReleaseBuffer(
       this._settings, this.channelProvider, this._notifyListenersOfParent);
 
   List<TouchEvent> _buffer = [];

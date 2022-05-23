@@ -16,7 +16,7 @@ class PaintModulation extends StatelessWidget {
         return Stack(
           children: [
             ...[
-              ...midiSender.playMode.releaseBuffer.buffer,
+              ...midiSender.playMode.touchReleaseBuffer.buffer,
               ...midiSender.playMode.touchBuffer.buffer
             ].map(
               (touchEvent) {

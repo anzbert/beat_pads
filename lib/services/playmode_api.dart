@@ -1,19 +1,19 @@
 import 'package:beat_pads/services/services.dart';
 import 'package:flutter/material.dart';
 
-abstract class PlayModeHandler {
+class PlayModeHandler {
   final Settings settings;
   final Function notifyParent;
 
   final TouchBuffer touchBuffer;
-  final ReleaseBuffer releaseBuffer;
+  final TouchReleaseBuffer touchReleaseBuffer;
 
   PlayModeHandler(
     this.settings,
     Size screenSize,
     this.notifyParent,
   )   : touchBuffer = TouchBuffer(settings, screenSize),
-        releaseBuffer = ReleaseBuffer(
+        touchReleaseBuffer = TouchReleaseBuffer(
           settings,
           MemberChannelProvider(settings.upperZone, settings.mpeMemberChannels),
           notifyParent,
@@ -21,7 +21,7 @@ abstract class PlayModeHandler {
 
   void handleNewTouch(CustomPointer touch, int noteTapped) {
     if (settings.sustainTimeUsable > 0) {
-      releaseBuffer.removeNoteFromReleaseBuffer(noteTapped);
+      touchReleaseBuffer.removeNoteFromReleaseBuffer(noteTapped);
     }
 
     NoteEvent noteOn =
@@ -43,7 +43,7 @@ abstract class PlayModeHandler {
       touchBuffer.remove(eventInBuffer);
       notifyParent();
     } else {
-      releaseBuffer.updateReleasedEvent(
+      touchReleaseBuffer.updateReleasedEvent(
           eventInBuffer); // instead of note off, event passed to release buffer
       touchBuffer.remove(eventInBuffer);
     }
@@ -53,7 +53,7 @@ abstract class PlayModeHandler {
     for (TouchEvent touch in touchBuffer.buffer) {
       touch.noteEvent.noteOff();
     }
-    for (TouchEvent touch in releaseBuffer.buffer) {
+    for (TouchEvent touch in touchReleaseBuffer.buffer) {
       touch.noteEvent.noteOff();
     }
   }
@@ -72,7 +72,7 @@ abstract class PlayModeHandler {
       if (channel == channel && touch.noteEvent.note == note) return true;
     }
     if (settings.sustainTimeUsable > 0) {
-      for (TouchEvent event in releaseBuffer.buffer) {
+      for (TouchEvent event in touchReleaseBuffer.buffer) {
         if (channel == null && event.noteEvent.note == note) return true;
         if (channel == channel && event.noteEvent.note == note) return true;
       }

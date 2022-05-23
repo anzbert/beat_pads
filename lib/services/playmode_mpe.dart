@@ -13,10 +13,10 @@ class PlayModeMPE extends PlayModeHandler {
   @override
   void handleNewTouch(CustomPointer touch, int noteTapped) {
     if (settings.sustainTimeUsable > 0) {
-      releaseBuffer.removeNoteFromReleaseBuffer(noteTapped);
+      touchReleaseBuffer.removeNoteFromReleaseBuffer(noteTapped);
     }
 
-    int newChannel = releaseBuffer.channelProvider
+    int newChannel = touchReleaseBuffer.channelProvider
         .provideChannel(touchBuffer.buffer); // get new channel from generator
 
     if (settings.modulation2D) {
@@ -35,7 +35,8 @@ class PlayModeMPE extends PlayModeHandler {
 
   @override
   void handlePan(CustomPointer touch, int? note) {
-    TouchEvent? eventInBuffer = touchBuffer.getByID(touch.pointer);
+    TouchEvent? eventInBuffer = touchBuffer.getByID(touch.pointer) ??
+        touchReleaseBuffer.getByID(touch.pointer);
     if (eventInBuffer == null) return;
 
     eventInBuffer.updatePosition(touch.position);
@@ -63,7 +64,20 @@ class PlayModeMPE extends PlayModeHandler {
 
   @override
   void handleEndTouch(CustomPointer touch) {
-    throw ("sdsdsdas");
-    // TODO: implement handleEndTouch
+    TouchEvent? eventInBuffer = touchBuffer.getByID(touch.pointer);
+    if (eventInBuffer == null) return;
+
+    if (settings.sustainTimeUsable == 0) {
+      eventInBuffer.noteEvent.noteOff();
+
+      touchReleaseBuffer.channelProvider
+          .releaseChannel(eventInBuffer.noteEvent.channel);
+      touchBuffer.remove(eventInBuffer); // events gets removed
+      notifyParent();
+    } else {
+      touchReleaseBuffer
+          .updateReleasedEvent(eventInBuffer); // event passed to release buffer
+      touchBuffer.remove(eventInBuffer);
+    }
   }
 }

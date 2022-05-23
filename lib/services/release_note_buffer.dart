@@ -5,29 +5,11 @@ class NoteReleaseBuffer {
   bool checkerRunning = false;
   final Function _notifyListenersOfParent;
 
-  /// Data Structure that holds released Events
+  /// Data Structure that holds released Note Events. Only used by slide playmode!
   NoteReleaseBuffer(this._settings, this._notifyListenersOfParent);
 
   List<NoteEvent> _buffer = [];
   List<NoteEvent> get buffer => _buffer;
-
-  // /// Find and return a TouchEvent from the buffer by its uniqueID, if possible
-  // NoteEvent? getByNote(int id) {
-  //   for (NoteEvent event in _buffer) {
-  //     if (event.note == id) {
-  //       return event;
-  //     }
-  //   }
-  //   return null;
-  // }
-
-  // bool isNoteInBuffer(int? note) {
-  //   if (note == null) return false;
-  //   for (var event in _buffer) {
-  //     if (event.note == note) return true;
-  //   }
-  //   return false;
-  // }
 
   /// Update note in the released events buffer, by adding it or updating
   /// the timer of the corresponding note
@@ -42,11 +24,11 @@ class NoteReleaseBuffer {
       event.updateReleaseTime();
       _buffer.add(event); // or add to buffer
     }
-    if (_buffer.isNotEmpty) checkReleasedEvents();
+    if (_buffer.isNotEmpty) checkReleasedNoteEvents();
   }
 
   /// Async function, which checks for expiry of the auto-sustain on all released notes
-  void checkReleasedEvents() async {
+  void checkReleasedNoteEvents() async {
     if (checkerRunning) return; // only one running instance possible!
     checkerRunning = true;
 
