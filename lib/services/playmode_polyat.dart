@@ -1,25 +1,29 @@
 import 'package:beat_pads/services/services.dart';
 
-class PlayModePolyAT extends PlayModeApi {
-  PlayModePolyAT(super.settings, super.screenSize, super.notifyParent);
-
-  @override
-  void dispose() {
-    // TODO: implement dispose
-  }
-
-  @override
-  void handleEndTouch(CustomPointer touch) {
-    // TODO: implement handleEndTouch
-  }
+class PlayModePolyAT extends PlayModeHandler {
+  final ModPolyAfterTouch1D polyATMod;
+  PlayModePolyAT(super.settings, super.screenSize, super.notifyParent)
+      : polyATMod = ModPolyAfterTouch1D();
 
   @override
   void handleNewTouch(CustomPointer touch, int noteTapped) {
-    // TODO: implement handleNewTouch
+    polyATMod.send(settings.channel, noteTapped, 0);
+    super.handleNewTouch(touch, noteTapped);
   }
 
   @override
   void handlePan(CustomPointer touch, int? note) {
-    // TODO: implement handlePan
+    TouchEvent? eventInBuffer = touchBuffer.getByID(touch.pointer) ??
+        releaseBuffer.getByID(touch.pointer);
+    if (eventInBuffer == null) return;
+
+    eventInBuffer.updatePosition(touch.position);
+    notifyParent(); // for circle drawing
+
+    polyATMod.send(
+      settings.channel,
+      eventInBuffer.noteEvent.note,
+      eventInBuffer.radialChange(),
+    );
   }
 }

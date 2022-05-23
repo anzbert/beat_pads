@@ -2,13 +2,13 @@ import 'package:beat_pads/services/services.dart';
 
 class ReleaseBuffer {
   final Settings _settings;
-  final MemberChannelProvider _channelProvider;
+  final MemberChannelProvider channelProvider;
   bool checkerRunning = false;
   final Function _notifyListenersOfParent;
 
   /// Data Structure that holds released Events
   ReleaseBuffer(
-      this._settings, this._channelProvider, this._notifyListenersOfParent);
+      this._settings, this.channelProvider, this._notifyListenersOfParent);
 
   List<TouchEvent> _buffer = [];
   List<TouchEvent> get buffer => _buffer;
@@ -62,7 +62,7 @@ class ReleaseBuffer {
                 _settings.sustainTimeUsable) {
               _buffer[i].noteEvent.noteOff(); // note OFF
               if (_settings.playMode == PlayMode.mpe) {
-                _channelProvider.releaseChannel(
+                channelProvider.releaseChannel(
                     _buffer[i].noteEvent); // release MPE channel
               }
               _buffer.removeAt(i); // remove event from buffer

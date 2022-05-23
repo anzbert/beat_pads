@@ -40,7 +40,9 @@ class CustomPaintRadius extends CustomPainter {
     // deadZone
     brush.style = PaintingStyle.fill;
     brush.color = colorFront.withOpacity(0.4);
-    canvas.drawCircle(origin, maxRadius * deadZone, brush);
+    if (change > maxRadius * deadZone) {
+      canvas.drawCircle(origin, maxRadius * deadZone, brush);
+    }
   }
 
   @override
