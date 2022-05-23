@@ -1,3 +1,4 @@
+import 'package:beat_pads/screen_pads_menu/_screen_pads_menu.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 
@@ -14,7 +15,12 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
-  // int modEaseBackTime = 1000;
+  Menu _selectedMenu = Menu.layout;
+  Menu get selectedMenu => _selectedMenu;
+  set selectedMenu(Menu newMenu) {
+    _selectedMenu = newMenu;
+    notifyListeners();
+  }
 
   List<MidiDevice> _connectedDevices = [];
   List<MidiDevice> get connectedDevices => _connectedDevices;

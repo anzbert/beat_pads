@@ -62,15 +62,6 @@ class _SlidePadsState extends State<SlidePads> with TickerProviderStateMixin {
             int? result = _detectTappedItem(touch);
             context.read<MidiSender>().handlePan(
                 CustomPointer(touch.pointer, touch.position), result);
-
-            // if (settings.playMode == PlayMode.slide) {
-            //   context.read<MidiSender>().handleSlide(
-            //       CustomPointer(touch.pointer, touch.position), result);
-            // } //
-            // else if (settings.playMode.modulatable) {
-            //   context.read<MidiSender>().handleModulate(
-            //       CustomPointer(touch.pointer, touch.position), result);
-            // }
           }
         }
 

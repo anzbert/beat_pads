@@ -8,6 +8,8 @@ class NoteEvent {
   NoteOnMessage? noteOnMessage;
   int releaseTime = 0;
 
+  bool get isPlaying => noteOnMessage == null ? false : true;
+
   bool _kill = false;
   void markKill() => _kill = true;
   bool get kill => _kill;
