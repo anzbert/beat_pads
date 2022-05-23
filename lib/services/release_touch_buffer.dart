@@ -6,7 +6,7 @@ class TouchReleaseBuffer {
   bool checkerRunning = false;
   final Function _notifyListenersOfParent;
 
-  /// Data Structure that holds released Events
+  /// Data Structure that holds released Touch Events
   TouchReleaseBuffer(
       this._settings, this.releaseChannel, this._notifyListenersOfParent);
 

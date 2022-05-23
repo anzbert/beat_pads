@@ -1,7 +1,7 @@
 import 'package:beat_pads/services/services.dart';
 import 'package:flutter/material.dart';
 
-class PlayModeHandler {
+abstract class PlayModeHandler {
   final Settings settings;
   final Function notifyParent;
 
@@ -81,7 +81,7 @@ class PlayModeHandler {
     return false;
   }
 
-  // only useful in MPE:
+  // only useful if overriden in MPE:
   void releaseChannel(int channel) {}
 }
 

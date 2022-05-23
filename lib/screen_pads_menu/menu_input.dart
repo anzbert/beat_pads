@@ -71,6 +71,19 @@ class MenuInput extends StatelessWidget {
                 setValue: (v) => settings.mpe1DRadius = v,
               ),
             ),
+          if (settings.playMode == PlayMode.mpe) const Divider(),
+          NonLinearSliderTile(
+            label: "Release Delay",
+            subtitle: settings.playMode.modulatable
+                ? "Modulation Easing and NoteOff delay in Milliseconds"
+                : "NoteOff delay in Milliseconds",
+            readValue: settings.sustainTimeStep,
+            setValue: (v) => settings.sustainTimeStep = v,
+            resetFunction: () => settings.resetSustainTimeStep(),
+            actualValue: "${settings.sustainTimeUsable} ms",
+            start: 0,
+            steps: 25,
+          ),
           if (settings.playMode == PlayMode.mpe)
             if (settings.mpe1DRadius.exclusiveGroup == Group.pitch ||
                 settings.mpe2DX.exclusiveGroup == Group.pitch ||
@@ -119,17 +132,6 @@ class MenuInput extends StatelessWidget {
               setValue: (v) => settings.modulationDeadZone = v / 100,
               resetValue: settings.resetDeadZone,
             ),
-          const Divider(),
-          NonLinearSliderTile(
-            label: "Auto Sustain",
-            subtitle: "Delay in Milliseconds before sending NoteOff Message",
-            readValue: settings.sustainTimeStep,
-            setValue: (v) => settings.sustainTimeStep = v,
-            resetFunction: () => settings.resetSustainTimeStep(),
-            actualValue: "${settings.sustainTimeUsable} ms",
-            start: 0,
-            steps: 25,
-          ),
         ],
       );
     });
