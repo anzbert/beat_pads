@@ -14,6 +14,10 @@ class TouchEvent {
   final double deadZone;
   Offset newPosition;
 
+  bool _kill = false;
+  void markKill() => _kill = true;
+  bool get kill => _kill;
+
   /// Holds geometry, note and modulation information this.uniqueID, this.origin,
   TouchEvent(
       CustomPointer touch, this.noteEvent, Settings settings, Size screenSize)

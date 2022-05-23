@@ -8,6 +8,10 @@ class NoteEvent {
   NoteOnMessage? noteOnMessage;
   int releaseTime = 0;
 
+  bool _kill = false;
+  void markKill() => _kill = true;
+  bool get kill => _kill;
+
   /// Create and store a NoteOn event for its lifetime as well as its release time
   NoteEvent(this.channel, this.note, int velocity)
       : noteOnMessage = NoteOnMessage(

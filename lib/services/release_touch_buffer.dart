@@ -63,10 +63,11 @@ class TouchReleaseBuffer {
               releaseChannel(
                   _buffer[i].noteEvent.channel); // release MPE channel
 
-              _buffer.removeAt(i);
+              _buffer[i].markKill();
               _notifyListenersOfParent(); // notify to update pads
             }
           }
+          _buffer.removeWhere((element) => element.kill);
         },
       );
     }

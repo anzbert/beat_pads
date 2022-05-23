@@ -37,10 +37,11 @@ class NoteReleaseBuffer {
             if (DateTime.now().millisecondsSinceEpoch - _buffer[i].releaseTime >
                 _settings.sustainTimeUsable) {
               _buffer[i].noteOff(); // note OFF
-              _buffer.removeAt(i);
+              _buffer[i].markKill();
               _notifyListenersOfParent(); // notify to update pads
             }
           }
+          _buffer.removeWhere((element) => element.kill);
         },
       );
     }
