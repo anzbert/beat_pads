@@ -13,7 +13,7 @@ export 'playmode_api.dart';
 export 'playmode_mpe.dart';
 export 'playmode_polyat.dart';
 export 'playmode_slide.dart';
-export 'release_buffer.dart';
+export 'release_touch_buffer.dart';
 export 'release_note_buffer.dart';
 export 'state/state.dart';
 export 'touch_buffer.dart';

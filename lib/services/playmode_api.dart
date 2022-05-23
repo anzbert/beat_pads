@@ -6,18 +6,19 @@ class PlayModeHandler {
   final Function notifyParent;
 
   final TouchBuffer touchBuffer;
-  final TouchReleaseBuffer touchReleaseBuffer;
+  late TouchReleaseBuffer touchReleaseBuffer;
 
   PlayModeHandler(
     this.settings,
     Size screenSize,
     this.notifyParent,
-  )   : touchBuffer = TouchBuffer(settings, screenSize),
-        touchReleaseBuffer = TouchReleaseBuffer(
-          settings,
-          MemberChannelProvider(settings.upperZone, settings.mpeMemberChannels),
-          notifyParent,
-        );
+  ) : touchBuffer = TouchBuffer(settings, screenSize) {
+    touchReleaseBuffer = TouchReleaseBuffer(
+      settings,
+      releaseChannel,
+      notifyParent,
+    );
+  }
 
   void handleNewTouch(CustomPointer touch, int noteTapped) {
     if (settings.sustainTimeUsable > 0) {
@@ -79,6 +80,9 @@ class PlayModeHandler {
     }
     return false;
   }
+
+  // only useful in MPE:
+  void releaseChannel(int channel) {}
 }
 
 class PlayModeNoSlide extends PlayModeHandler {

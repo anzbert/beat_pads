@@ -2,13 +2,21 @@ import 'package:beat_pads/services/services.dart';
 
 class PlayModeMPE extends PlayModeHandler {
   final SendMpe mpeMods;
+  final MemberChannelProvider channelProvider;
 
   PlayModeMPE(super.settings, super.screenSize, super.notifyParent)
       : mpeMods = SendMpe(
           settings.mpe2DX.getMod(settings.mpePitchbendRange),
           settings.mpe2DY.getMod(settings.mpePitchbendRange),
           settings.mpe1DRadius.getMod(settings.mpePitchbendRange),
-        );
+        ),
+        channelProvider = MemberChannelProvider(
+            settings.upperZone, settings.mpeMemberChannels);
+
+  @override
+  void releaseChannel(int channel) {
+    channelProvider.releaseChannel(channel);
+  }
 
   @override
   void handleNewTouch(CustomPointer touch, int noteTapped) {
@@ -16,7 +24,7 @@ class PlayModeMPE extends PlayModeHandler {
       touchReleaseBuffer.removeNoteFromReleaseBuffer(noteTapped);
     }
 
-    int newChannel = touchReleaseBuffer.channelProvider
+    int newChannel = channelProvider
         .provideChannel(touchBuffer.buffer); // get new channel from generator
 
     if (settings.modulation2D) {
@@ -70,8 +78,7 @@ class PlayModeMPE extends PlayModeHandler {
     if (settings.sustainTimeUsable == 0) {
       eventInBuffer.noteEvent.noteOff();
 
-      touchReleaseBuffer.channelProvider
-          .releaseChannel(eventInBuffer.noteEvent.channel);
+      channelProvider.releaseChannel(eventInBuffer.noteEvent.channel);
       touchBuffer.remove(eventInBuffer); // events gets removed
       notifyParent();
     } else {
