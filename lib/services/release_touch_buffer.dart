@@ -34,9 +34,8 @@ class TouchReleaseBuffer {
   /// Update note in the released events buffer, by adding it or updating
   /// the timer of the corresponding note
   void updateReleasedEvent(TouchEvent event) {
-    int index = _buffer.indexWhere((element) =>
-        // element.note == event.note && element.channel == event.channel); // allow multiple channels
-        element.noteEvent.note == event.noteEvent.note);
+    int index = _buffer.indexWhere(
+        (element) => element.noteEvent.note == event.noteEvent.note);
 
     if (index >= 0) {
       _buffer[index].noteEvent.updateReleaseTime(); // update time
@@ -47,7 +46,6 @@ class TouchReleaseBuffer {
     if (_buffer.isNotEmpty) checkReleasedEvents();
   }
 
-  /// Async function, which checks for expiry of the auto-sustain on all released notes
   void checkReleasedEvents() async {
     if (checkerRunning) return; // only one running instance possible!
     checkerRunning = true;
@@ -61,20 +59,17 @@ class TouchReleaseBuffer {
                     _buffer[i].noteEvent.releaseTime >
                 _settings.sustainTimeUsable) {
               _buffer[i].noteEvent.noteOff(); // note OFF
-              if (_settings.playMode == PlayMode.mpe) {
-                releaseChannel(
-                    _buffer[i].noteEvent.channel); // release MPE channel
-              }
-              _buffer.removeAt(i); // remove event from buffer
-              _notifyListenersOfParent(); // notify listeners so pads get updated
-            } else {
-              // lerp mpe
+
+              releaseChannel(
+                  _buffer[i].noteEvent.channel); // release MPE channel
+
+              _buffer.removeAt(i);
+              _notifyListenersOfParent(); // notify to update pads
             }
           }
         },
       );
     }
-
     checkerRunning = false;
   }
 

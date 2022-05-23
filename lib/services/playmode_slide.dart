@@ -3,6 +3,9 @@ import 'package:beat_pads/services/services.dart';
 class PlayModeSlide extends PlayModeHandler {
   final NoteReleaseBuffer noteReleaseBuffer;
 
+  /// Sliding playmode. Uses notereleasebuffer instead of touchreleasebuffer,
+  /// since one touch can be the cause of many released notes in this mode.
+  /// There is no modulation, hence no tracking of touch required
   PlayModeSlide(
     super.settings,
     super.screenSize,
@@ -41,7 +44,7 @@ class PlayModeSlide extends PlayModeHandler {
             eventInBuffer.noteEvent.noteOnMessage?.velocity ??
                 settings.velocity,
           ),
-        ); // add touchevent to release buffer
+        ); // add note event to release buffer
         eventInBuffer.noteEvent.clear();
       }
 

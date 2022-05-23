@@ -14,9 +14,7 @@ class NoteReleaseBuffer {
   /// Update note in the released events buffer, by adding it or updating
   /// the timer of the corresponding note
   void updateReleasedNoteEvent(NoteEvent event) {
-    int index = _buffer.indexWhere((element) =>
-        // element.note == event.note && element.channel == event.channel); // allow multiple channels
-        element.note == event.note);
+    int index = _buffer.indexWhere((element) => element.note == event.note);
 
     if (index >= 0) {
       _buffer[index].updateReleaseTime(); // update time
@@ -27,7 +25,6 @@ class NoteReleaseBuffer {
     if (_buffer.isNotEmpty) checkReleasedNoteEvents();
   }
 
-  /// Async function, which checks for expiry of the auto-sustain on all released notes
   void checkReleasedNoteEvents() async {
     if (checkerRunning) return; // only one running instance possible!
     checkerRunning = true;
@@ -40,15 +37,13 @@ class NoteReleaseBuffer {
             if (DateTime.now().millisecondsSinceEpoch - _buffer[i].releaseTime >
                 _settings.sustainTimeUsable) {
               _buffer[i].noteOff(); // note OFF
-
-              _buffer.removeAt(i); // remove event from buffer
-              _notifyListenersOfParent(); // notify listeners so pads get updated
+              _buffer.removeAt(i);
+              _notifyListenersOfParent(); // notify to update pads
             }
           }
         },
       );
     }
-
     checkerRunning = false;
   }
 
