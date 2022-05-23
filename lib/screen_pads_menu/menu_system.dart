@@ -37,7 +37,7 @@ class MenuSystem extends StatelessWidget {
                     primary: Palette.laserLemon,
                     textStyle: const TextStyle(fontWeight: FontWeight.bold)),
                 child: const Text(
-                  "Select Midi Device)",
+                  "Select Midi Device",
                 ),
               ),
             ),

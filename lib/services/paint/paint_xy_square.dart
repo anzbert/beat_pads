@@ -57,15 +57,13 @@ class CustomPaintXYSquare extends CustomPainter {
 
     // deadzone
     brush.color = colorFront.withOpacity(0.6);
-    if (change.dx.abs() > maxRadius * deadZone ||
-        change.dy.abs() > maxRadius * deadZone) {
+    if (change.dx.abs() > deadZone || change.dy.abs() > deadZone) {
       canvas.drawCircle(origin, maxRadius * deadZone, brush);
     }
   }
 
   @override
   bool shouldRepaint(CustomPaintXYSquare oldDelegate) {
-    // return true;
     return oldDelegate.change != change ||
         oldDelegate.deadZone != deadZone ||
         oldDelegate.maxRadius != maxRadius;

@@ -7,7 +7,7 @@ class PaintModPreview extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  final double fixedChange = 0.5;
+  final double fixedChangeForPreview = 0.5;
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +19,6 @@ class PaintModPreview extends StatelessWidget {
 
     return Consumer<Settings>(
       builder: (context, settings, _) {
-        // CIRCLE / RADIUS
         if (!settings.modulation2D) {
           return CustomPaint(
             painter: CustomPaintRadius(
@@ -29,9 +28,11 @@ class PaintModPreview extends StatelessWidget {
                       (DeviceUtils.isPortrait(context) ? 2.5 : 2))),
               maxRadius: settings.modulationRadius * screenSize.longestSide,
               deadZone: settings.modulationDeadZone,
-              change: settings.modulationRadius * screenSize.longestSide,
-              colorBack: Palette.lightPink.withOpacity(fixedChange * 0.6),
-              colorFront: Palette.laserLemon.withOpacity(fixedChange * 0.8),
+              change: fixedChangeForPreview,
+              colorBack:
+                  Palette.lightPink.withOpacity(fixedChangeForPreview * 0.6),
+              colorFront:
+                  Palette.laserLemon.withOpacity(fixedChangeForPreview * 0.8),
             ),
           );
         }
@@ -43,9 +44,11 @@ class PaintModPreview extends StatelessWidget {
                     (DeviceUtils.isPortrait(context) ? 2.5 : 2))),
             maxRadius: settings.modulationRadius * screenSize.longestSide,
             deadZone: settings.modulationDeadZone,
-            change: const Offset(0, 0),
-            colorBack: Palette.lightPink.withOpacity(fixedChange * 0.6),
-            colorFront: Palette.laserLemon.withOpacity(fixedChange * 0.8),
+            change: Offset(fixedChangeForPreview, fixedChangeForPreview),
+            colorBack:
+                Palette.lightPink.withOpacity(fixedChangeForPreview * 0.6),
+            colorFront:
+                Palette.laserLemon.withOpacity(fixedChangeForPreview * 0.8),
           ),
         );
       },
