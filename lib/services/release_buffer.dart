@@ -63,7 +63,7 @@ class ReleaseBuffer {
               _buffer[i].noteEvent.noteOff(); // note OFF
               if (_settings.playMode == PlayMode.mpe) {
                 channelProvider.releaseChannel(
-                    _buffer[i].noteEvent); // release MPE channel
+                    _buffer[i].noteEvent.note); // release MPE channel
               }
               _buffer.removeAt(i); // remove event from buffer
               _notifyListenersOfParent(); // notify listeners so pads get updated

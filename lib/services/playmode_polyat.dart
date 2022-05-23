@@ -13,8 +13,7 @@ class PlayModePolyAT extends PlayModeHandler {
 
   @override
   void handlePan(CustomPointer touch, int? note) {
-    TouchEvent? eventInBuffer = touchBuffer.getByID(touch.pointer) ??
-        releaseBuffer.getByID(touch.pointer);
+    TouchEvent? eventInBuffer = touchBuffer.getByID(touch.pointer);
     if (eventInBuffer == null) return;
 
     eventInBuffer.updatePosition(touch.position);

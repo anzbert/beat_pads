@@ -8,7 +8,7 @@ class PlayModeMPE extends PlayModeHandler {
           settings.mpe2DX.getMod(settings.mpePitchbendRange),
           settings.mpe2DY.getMod(settings.mpePitchbendRange),
           settings.mpe1DRadius.getMod(settings.mpePitchbendRange),
-        ) {}
+        );
 
   @override
   void handleNewTouch(CustomPointer touch, int noteTapped) {
@@ -35,9 +35,7 @@ class PlayModeMPE extends PlayModeHandler {
 
   @override
   void handlePan(CustomPointer touch, int? note) {
-    TouchEvent? eventInBuffer = touchBuffer.getByID(touch.pointer) ??
-        releaseBuffer.getByID(touch.pointer);
-
+    TouchEvent? eventInBuffer = touchBuffer.getByID(touch.pointer);
     if (eventInBuffer == null) return;
 
     eventInBuffer.updatePosition(touch.position);
@@ -65,6 +63,7 @@ class PlayModeMPE extends PlayModeHandler {
 
   @override
   void handleEndTouch(CustomPointer touch) {
+    throw ("sdsdsdas");
     // TODO: implement handleEndTouch
   }
 }

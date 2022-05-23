@@ -20,9 +20,9 @@ class MemberChannelProvider {
         channelQueue = Queue.from(
             List.generate(members, (i) => i + (upperZone ? 15 - members : 1)));
 
-  void releaseChannel(NoteEvent event) {
-    if (!channelQueue.contains(event.channel)) {
-      channelQueue.addFirst(event.channel);
+  void releaseChannel(int channel) {
+    if (!channelQueue.contains(channel)) {
+      channelQueue.addFirst(channel);
     }
   }
 

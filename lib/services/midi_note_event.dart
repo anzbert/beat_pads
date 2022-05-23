@@ -30,6 +30,11 @@ class NoteEvent {
     }
   }
 
+  /// Cleaer Note On message without sending note off
+  void clear() {
+    noteOnMessage = null;
+  }
+
   /// Send this noteEvent's NoteOffMessage, if note is still on
   void noteOff() {
     if (noteOnMessage != null) {
