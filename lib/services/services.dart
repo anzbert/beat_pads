@@ -1,4 +1,3 @@
-export '_services.dart';
 export 'classes/classes.dart';
 export 'constants/constants.dart';
 export 'midi_mod.dart';
@@ -10,8 +9,12 @@ export 'pads_labels.dart';
 export 'pads_layouts.dart';
 export 'pads_playmodes.dart';
 export 'paint/paint.dart';
+export 'playmode_mpe.dart';
+export 'playmode_noslide.dart';
+export 'playmode_polyat.dart';
+export 'playmode_slide.dart';
+export 'release_buffer.dart';
 export 'state/state.dart';
 export 'touch_buffer.dart';
 export 'touch_event.dart';
-export 'release_buffer.dart';
 export 'utils/utils.dart';

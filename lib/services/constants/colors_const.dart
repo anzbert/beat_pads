@@ -1,4 +1,4 @@
-import 'package:beat_pads/services/_services.dart';
+import 'package:beat_pads/services/services.dart';
 import 'package:flutter/material.dart';
 
 abstract class Palette {

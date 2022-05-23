@@ -1,4 +1,4 @@
-import 'package:beat_pads/services/_services.dart';
+import 'package:beat_pads/services/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Prefs {

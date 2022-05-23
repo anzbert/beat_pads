@@ -1,5 +1,5 @@
 import 'package:beat_pads/screen_beat_pads/slider_themed.dart';
-import 'package:beat_pads/services/_services.dart';
+import 'package:beat_pads/services/services.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

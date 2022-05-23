@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:beat_pads/shared_components/_shared.dart';
 
 import 'package:simple_gradient_text/simple_gradient_text.dart';
-import 'package:beat_pads/services/_services.dart';
+import 'package:beat_pads/services/services.dart';
 
 class PadMenuScreen extends StatefulWidget {
   const PadMenuScreen({Key? key}) : super(key: key);

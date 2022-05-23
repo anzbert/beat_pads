@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:beat_pads/services/_services.dart';
+import 'package:beat_pads/services/services.dart';
 
 class DropdownPadLabels extends StatelessWidget {
   DropdownPadLabels({Key? key}) : super(key: key);

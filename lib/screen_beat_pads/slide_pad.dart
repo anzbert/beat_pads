@@ -2,7 +2,7 @@ import 'package:beat_pads/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:beat_pads/services/_services.dart';
+import 'package:beat_pads/services/services.dart';
 
 class SlideBeatPad extends StatelessWidget {
   const SlideBeatPad({
@@ -21,7 +21,7 @@ class SlideBeatPad extends StatelessWidget {
         ? Provider.of<MidiReceiver>(context, listen: true).rxBuffer[note]
         : 0;
     final bool noteOn =
-        Provider.of<MidiSender>(context, listen: true).isNoteOn(note);
+        Provider.of<MidiSender>(context, listen: true).playMode.isNoteOn(note);
 
     // PAD COLOR:
     final Color color = settings.padColors.colorize(

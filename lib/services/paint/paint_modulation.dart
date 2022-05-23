@@ -1,4 +1,4 @@
-import 'package:beat_pads/services/_services.dart';
+import 'package:beat_pads/services/services.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -16,8 +16,8 @@ class PaintModulation extends StatelessWidget {
         return Stack(
           children: [
             ...[
-              ...midiSender.releaseBuffer.buffer,
-              ...midiSender.touchBuffer.buffer
+              ...midiSender.playMode.releaseBuffer.buffer,
+              ...midiSender.playMode.touchBuffer.buffer
             ].map(
               (touchEvent) {
                 return context.watch<Settings>().modulation2D == false ||

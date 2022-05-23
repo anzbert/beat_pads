@@ -4,7 +4,7 @@ In the simplest workable implementation, a new note will be assigned to the Chan
 */
 
 import 'dart:collection';
-import 'package:beat_pads/services/_services.dart';
+import 'package:beat_pads/services/services.dart';
 
 class MemberChannelProvider {
   final bool upperZone;

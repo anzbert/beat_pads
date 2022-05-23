@@ -6,7 +6,7 @@ import 'package:flutter/rendering.dart';
 
 import 'package:provider/provider.dart';
 import 'package:beat_pads/shared_components/_shared.dart';
-import 'package:beat_pads/services/_services.dart';
+import 'package:beat_pads/services/services.dart';
 
 class SlidePads extends StatefulWidget {
   const SlidePads({Key? key}) : super(key: key);
@@ -62,6 +62,15 @@ class _SlidePadsState extends State<SlidePads> with TickerProviderStateMixin {
             int? result = _detectTappedItem(touch);
             context.read<MidiSender>().handlePan(
                 CustomPointer(touch.pointer, touch.position), result);
+
+            // if (settings.playMode == PlayMode.slide) {
+            //   context.read<MidiSender>().handleSlide(
+            //       CustomPointer(touch.pointer, touch.position), result);
+            // } //
+            // else if (settings.playMode.modulatable) {
+            //   context.read<MidiSender>().handleModulate(
+            //       CustomPointer(touch.pointer, touch.position), result);
+            // }
           }
         }
 
@@ -75,6 +84,7 @@ class _SlidePadsState extends State<SlidePads> with TickerProviderStateMixin {
                 settings.playMode.modulatable) {
               TouchEvent? event = context
                   .read<MidiSender>()
+                  .playMode
                   .releaseBuffer
                   .getByID(touch.pointer);
               if (event == null || event.newPosition == event.origin) return;
@@ -102,6 +112,7 @@ class _SlidePadsState extends State<SlidePads> with TickerProviderStateMixin {
                 if (animation.isCompleted ||
                     !context
                         .read<MidiSender>()
+                        .playMode
                         .releaseBuffer
                         .isNoteInBuffer(event.noteEvent.note) ||
                     !mounted) {
