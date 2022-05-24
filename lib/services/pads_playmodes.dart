@@ -42,11 +42,6 @@ enum PlayMode {
     return true;
   }
 
-  bool get multiChannel {
-    if (this == PlayMode.mpe) return true;
-    return false;
-  }
-
   PlayModeHandler getPlayModeApi(
       Settings settings, Size screenSize, Function notifyParent) {
     switch (this) {

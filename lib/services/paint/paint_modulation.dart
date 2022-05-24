@@ -21,7 +21,7 @@ class PaintModulation extends StatelessWidget {
             ].map(
               (touchEvent) {
                 return context.watch<Settings>().modulation2D == false ||
-                        context.watch<Settings>().playMode == PlayMode.polyAT
+                        context.watch<Settings>().playMode.oneDimensional
                     // CIRCLE / RADIUS
                     ? CustomPaint(
                         painter: CustomPaintRadius(
