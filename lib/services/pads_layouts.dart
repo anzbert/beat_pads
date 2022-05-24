@@ -6,11 +6,11 @@ enum Layout {
   quart("Quart"),
   continuous("Continuous"),
   scaleNotesOnly("Scale Notes Only"),
-  xPressPadsStandard("XpressPads Standard"),
-  xPressPadsLatinJazz("XpressPads Latin/Jazz"),
-  xPressPadsXO("XpressPads with XO"),
-  xPressPadsXtreme("XpressPads Xtreme 8x4"),
-  magicToneNetwork("Magic Tone Network 8x8");
+  magicToneNetwork("Magic Tone Network"),
+  xPressPadsStandard("XpressPads Standard 4x4"),
+  xPressPadsLatinJazz("XpressPads Latin/Jazz 4x4"),
+  xPressPadsXO("XpressPads with XO 4x4"),
+  xPressPadsXtreme("XpressPads Xtreme 8x4");
 
   const Layout(this.title);
   final String title;
@@ -41,11 +41,14 @@ enum Layout {
         return LayoutProps(
             resizable: true, defaultDimensions: const Vector2D(8, 8));
       case Layout.xPressPadsStandard:
-        return LayoutProps(resizable: false);
+        return LayoutProps(
+            resizable: false, defaultDimensions: const Vector2D(4, 4));
       case Layout.xPressPadsLatinJazz:
-        return LayoutProps(resizable: false);
+        return LayoutProps(
+            resizable: false, defaultDimensions: const Vector2D(4, 4));
       case Layout.xPressPadsXO:
-        return LayoutProps(resizable: false);
+        return LayoutProps(
+            resizable: false, defaultDimensions: const Vector2D(4, 4));
       case Layout.xPressPadsXtreme:
         return LayoutProps(
             resizable: false, defaultDimensions: const Vector2D(8, 4));
@@ -102,6 +105,7 @@ abstract class Grid {
   /// Get a List of Rows of all notes in the grid, starting from the top Row
   /// Useful for building the grid with a Column Widget
   List<List<int>> get rows {
+    if (settings.height * settings.width != list.length) return [[]];
     return List.generate(
       settings.height,
       (row) => List.generate(settings.width, (note) {

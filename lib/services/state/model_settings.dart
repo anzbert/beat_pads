@@ -161,10 +161,10 @@ class Settings extends ChangeNotifier {
 
   set layout(Layout newLayout) {
     if (newLayout.props.resizable == false) {
-      prefs.settings.rootNote.value = 0;
+      prefs.settings.rootNote.value = 0; // C
       prefs.settings.rootNote.save();
       prefs.settings.scaleString.value =
-          LoadSettings.defaults().scaleString.value;
+          LoadSettings.defaults().scaleString.value; // chromatic
       prefs.settings.scaleString.save();
     }
 
