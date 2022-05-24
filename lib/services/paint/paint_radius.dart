@@ -8,6 +8,7 @@ class CustomPaintRadius extends CustomPainter {
     required this.change,
     required this.colorBack,
     required this.colorFront,
+    required this.colorDeadZone,
   });
 
   final Offset origin;
@@ -15,6 +16,7 @@ class CustomPaintRadius extends CustomPainter {
   final double deadZone;
   final Color colorBack;
   final Color colorFront;
+  final Color colorDeadZone;
   final double change;
 
   @override
@@ -39,8 +41,8 @@ class CustomPaintRadius extends CustomPainter {
 
     // deadZone
     brush.style = PaintingStyle.fill;
-    brush.color = colorFront.withOpacity(0.4);
-    if (change > maxRadius * deadZone) {
+    brush.color = colorDeadZone;
+    if (change > deadZone) {
       canvas.drawCircle(origin, maxRadius * deadZone, brush);
     }
   }
@@ -49,6 +51,7 @@ class CustomPaintRadius extends CustomPainter {
   bool shouldRepaint(CustomPaintRadius oldDelegate) {
     return oldDelegate.change != change ||
         oldDelegate.deadZone != deadZone ||
+        oldDelegate.colorDeadZone != colorDeadZone ||
         oldDelegate.maxRadius != maxRadius;
   }
 }

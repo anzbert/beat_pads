@@ -33,6 +33,8 @@ class PaintModPreview extends StatelessWidget {
                   Palette.lightPink.withOpacity(fixedChangeForPreview * 0.6),
               colorFront:
                   Palette.laserLemon.withOpacity(fixedChangeForPreview * 0.8),
+              colorDeadZone:
+                  Palette.laserLemon.withOpacity(fixedChangeForPreview * 0.4),
             ),
           );
         }
@@ -49,6 +51,8 @@ class PaintModPreview extends StatelessWidget {
                 Palette.lightPink.withOpacity(fixedChangeForPreview * 0.6),
             colorFront:
                 Palette.laserLemon.withOpacity(fixedChangeForPreview * 0.8),
+            colorDeadZone:
+                Palette.laserLemon.withOpacity(fixedChangeForPreview * 0.4),
           ),
         );
       },

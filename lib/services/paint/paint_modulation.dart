@@ -28,15 +28,18 @@ class PaintModulation extends StatelessWidget {
                           origin: box.globalToLocal(touchEvent.origin),
                           maxRadius: touchEvent.maxRadius,
                           deadZone: touchEvent.deadZone,
-                          change:
-                              touchEvent.radialChange(curve: Curves.linear) *
-                                  touchEvent.maxRadius,
+                          change: touchEvent.radialChange(
+                                  curve: Curves.linear, deadZone: false) *
+                              touchEvent.maxRadius,
                           colorBack: Palette.lightPink.withOpacity(
                               touchEvent.radialChange(curve: Curves.easeOut) *
                                   0.6),
                           colorFront: Palette.laserLemon.withOpacity(
                               touchEvent.radialChange(curve: Curves.easeOut) *
                                   0.8),
+                          colorDeadZone: Palette.laserLemon.withOpacity(
+                              touchEvent.radialChange(curve: Curves.easeOut) *
+                                  0.4),
                         ),
                       )
                     // SQUARE / X AND Y
@@ -46,7 +49,7 @@ class PaintModulation extends StatelessWidget {
                           maxRadius: touchEvent.maxRadius,
                           deadZone: touchEvent.deadZone,
                           change: touchEvent.directionalChangeFromCenter(
-                                  curve: Curves.linear) *
+                                  curve: Curves.linear, deadZone: false) *
                               touchEvent.maxRadius,
                           colorBack: Palette.lightPink.withOpacity(
                               touchEvent.radialChange(curve: Curves.easeOut) *
@@ -54,6 +57,9 @@ class PaintModulation extends StatelessWidget {
                           colorFront: Palette.laserLemon.withOpacity(
                               touchEvent.radialChange(curve: Curves.easeOut) *
                                   0.8),
+                          colorDeadZone: Palette.laserLemon.withOpacity(
+                              touchEvent.radialChange(curve: Curves.easeOut) *
+                                  0.4),
                         ),
                       );
               },

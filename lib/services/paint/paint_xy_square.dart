@@ -9,6 +9,7 @@ class CustomPaintXYSquare extends CustomPainter {
     required this.change,
     required this.colorBack,
     required this.colorFront,
+    required this.colorDeadZone,
   });
 
   final Offset origin;
@@ -16,6 +17,7 @@ class CustomPaintXYSquare extends CustomPainter {
   final double deadZone;
   final Color colorFront;
   final Color colorBack;
+  final Color colorDeadZone;
   final Offset change;
 
   @override
@@ -56,7 +58,7 @@ class CustomPaintXYSquare extends CustomPainter {
     canvas.drawCircle(touch, 12, brush);
 
     // deadzone
-    brush.color = colorFront.withOpacity(0.6);
+    brush.color = colorDeadZone;
     if (change.dx.abs() > deadZone || change.dy.abs() > deadZone) {
       canvas.drawCircle(origin, maxRadius * deadZone, brush);
     }
@@ -66,6 +68,7 @@ class CustomPaintXYSquare extends CustomPainter {
   bool shouldRepaint(CustomPaintXYSquare oldDelegate) {
     return oldDelegate.change != change ||
         oldDelegate.deadZone != deadZone ||
+        oldDelegate.colorDeadZone != colorDeadZone ||
         oldDelegate.maxRadius != maxRadius;
   }
 }
