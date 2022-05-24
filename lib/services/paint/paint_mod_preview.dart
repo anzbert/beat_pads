@@ -7,7 +7,7 @@ class PaintModPreview extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  final double fixedChangeForPreview = 0.5;
+  final double fixedChangeForPreview = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +46,7 @@ class PaintModPreview extends StatelessWidget {
                     (DeviceUtils.isPortrait(context) ? 2.5 : 2))),
             maxRadius: settings.modulationRadius * screenSize.longestSide,
             deadZone: settings.modulationDeadZone,
-            change: Offset(fixedChangeForPreview, fixedChangeForPreview),
+            change: const Offset(0, 0),
             colorBack:
                 Palette.lightPink.withOpacity(fixedChangeForPreview * 0.6),
             colorFront:

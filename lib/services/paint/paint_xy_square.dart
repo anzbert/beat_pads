@@ -10,7 +10,7 @@ class CustomPaintXYSquare extends CustomPainter {
     required this.colorBack,
     required this.colorFront,
     required this.colorDeadZone,
-  });
+  }) : changeAbsolute = change * maxRadius;
 
   final Offset origin;
   final double maxRadius;
@@ -20,9 +20,11 @@ class CustomPaintXYSquare extends CustomPainter {
   final Color colorDeadZone;
   final Offset change;
 
+  final Offset changeAbsolute;
+
   @override
   void paint(Canvas canvas, Size size) {
-    // Background:
+    // BACK:
     Paint brushRect = Paint()
       ..color = colorBack
       ..strokeWidth = 8
@@ -30,38 +32,34 @@ class CustomPaintXYSquare extends CustomPainter {
 
     Rect rect = Rect.fromCircle(center: origin, radius: maxRadius);
 
-    canvas.drawRRect(
-        RRect.fromRectAndRadius(rect, const Radius.circular(12)), brushRect);
+    canvas.drawRRect(RRect.fromRectAndRadius(rect, const Radius.circular(12)),
+        brushRect); // background
 
-    // Foreground:
+    // FRONT:
     Paint brush = Paint()
       ..color = colorFront
       ..style = PaintingStyle.stroke
       ..strokeWidth = 6
       ..strokeCap = StrokeCap.round;
 
-    // Y
-    Offset originY = origin.translate(change.dx, -maxRadius);
+    Offset originY = origin.translate(changeAbsolute.dx, -maxRadius);
     Offset pointY = ((Offset.fromDirection(pi / 2)) + origin)
-        .translate(change.dx, maxRadius);
-    canvas.drawLine(originY, pointY, brush);
+        .translate(changeAbsolute.dx, maxRadius);
+    canvas.drawLine(originY, pointY, brush); // vertical Y line
 
-    // X
-    Offset originX = origin.translate(-maxRadius, -change.dy);
+    Offset originX = origin.translate(-maxRadius, -changeAbsolute.dy);
     Offset pointX = ((Offset.fromDirection(2 * pi)) + origin)
-        .translate(maxRadius, -change.dy);
-    canvas.drawLine(originX, pointX, brush);
+        .translate(maxRadius, -changeAbsolute.dy);
+    canvas.drawLine(originX, pointX, brush); // horizontal X line
 
-    // touch tracker
     brush.style = PaintingStyle.fill;
-    Offset touch = origin.translate(change.dx, -change.dy);
-    canvas.drawCircle(touch, 12, brush);
+    Offset touch = origin.translate(changeAbsolute.dx, -changeAbsolute.dy);
+    canvas.drawCircle(touch, 12, brush); // touch tracker
 
-    // deadzone
     brush.color = colorDeadZone;
-    if (change.dx.abs() > deadZone || change.dy.abs() > deadZone) {
-      canvas.drawCircle(origin, maxRadius * deadZone, brush);
-    }
+    // if (change.dx.abs() > deadZone || change.dy.abs() > deadZone) {
+    canvas.drawCircle(origin, maxRadius * deadZone, brush); // deadzone
+    // }
   }
 
   @override

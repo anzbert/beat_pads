@@ -9,7 +9,7 @@ class CustomPaintRadius extends CustomPainter {
     required this.colorBack,
     required this.colorFront,
     required this.colorDeadZone,
-  });
+  }) : changeAbsolute = change * maxRadius;
 
   final Offset origin;
   final double maxRadius;
@@ -18,6 +18,7 @@ class CustomPaintRadius extends CustomPainter {
   final Color colorFront;
   final Color colorDeadZone;
   final double change;
+  final double changeAbsolute;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -27,7 +28,7 @@ class CustomPaintRadius extends CustomPainter {
       ..strokeWidth = 8
       ..strokeCap = StrokeCap.round;
 
-    canvas.drawCircle(origin, maxRadius, brushBack);
+    canvas.drawCircle(origin, maxRadius, brushBack); // background
 
     // FRONT
     Paint brush = Paint()
@@ -36,14 +37,12 @@ class CustomPaintRadius extends CustomPainter {
       ..strokeWidth = 6
       ..strokeCap = StrokeCap.round;
 
-    // radius
-    canvas.drawCircle(origin, change, brush);
+    canvas.drawCircle(origin, changeAbsolute, brush); // radius
 
-    // deadZone
     brush.style = PaintingStyle.fill;
     brush.color = colorDeadZone;
     if (change > deadZone) {
-      canvas.drawCircle(origin, maxRadius * deadZone, brush);
+      canvas.drawCircle(origin, maxRadius * deadZone, brush); // deadZone
     }
   }
 
