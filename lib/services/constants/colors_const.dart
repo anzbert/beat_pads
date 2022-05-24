@@ -14,10 +14,10 @@ abstract class Palette {
 }
 
 enum PadColors {
-  colorWheel("In Pitch"),
+  colorWheel("Pitch"),
   // halfColorWheel("In Pitch (Halfed Color Range)"),
-  circleOfFifth("In Circle of Fifths"),
-  highlightRoot("Just Highlight Root");
+  circleOfFifth("Circle of Fifths"),
+  highlightRoot("Only Highlight Root");
 
   final String title;
   const PadColors(this.title);

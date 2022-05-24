@@ -6,11 +6,11 @@ enum Layout {
   quart("Quart"),
   continuous("Continuous"),
   scaleNotesOnly("Scale Notes Only"),
-  magicToneNetwork("Magic Tone Network"),
   xPressPadsStandard("XpressPads Standard"),
   xPressPadsLatinJazz("XpressPads Latin/Jazz"),
   xPressPadsXO("XpressPads with XO"),
-  xPressPadsXtreme("XpressPads Xtreme");
+  xPressPadsXtreme("XpressPads Xtreme 8x4"),
+  magicToneNetwork("Magic Tone Network 8x8");
 
   const Layout(this.title);
   final String title;
@@ -83,11 +83,11 @@ enum Layout {
 class LayoutProps {
   LayoutProps({
     required this.resizable,
-    this.defaultDimensions = const Vector2D(4, 4),
+    this.defaultDimensions,
   });
 
   final bool resizable;
-  final Vector2D defaultDimensions;
+  final Vector2D? defaultDimensions;
 }
 
 abstract class Grid {

@@ -60,7 +60,7 @@ class PadMenuScreen extends StatelessWidget {
                       size: 36,
                     ),
                     onPressed: () {
-                      Navigator.pushReplacement(
+                      Navigator.push(
                         context,
                         TransitionUtils.fade(const BeatPadsScreen()),
                       );
@@ -128,7 +128,7 @@ class PadMenuScreen extends StatelessWidget {
             ),
           );
         } else {
-          return const Text("menu orientation error");
+          return const SizedBox.expand();
         }
       },
     );

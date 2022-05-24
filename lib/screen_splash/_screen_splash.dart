@@ -18,10 +18,10 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: const HSLColor.fromAHSL(1, 240, 0.1, 0.99).toColor(),
       body: Listener(
         onPointerDown: (_) {
-          Navigator.pushReplacement(
+          Navigator.push(
             context,
             TransitionUtils.fade(const PadMenuScreen()),
           );

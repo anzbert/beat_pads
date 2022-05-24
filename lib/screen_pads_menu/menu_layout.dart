@@ -11,9 +11,9 @@ import 'package:beat_pads/services/services.dart';
 import 'package:beat_pads/screen_pads_menu/counter_int.dart';
 import 'package:beat_pads/screen_pads_menu/slider_non_linear.dart';
 import 'package:beat_pads/screen_pads_menu/drop_down_layout.dart';
-import 'package:beat_pads/screen_pads_menu/drop_down_int.dart';
 import 'package:beat_pads/screen_pads_menu/drop_down_notes.dart';
 import 'package:beat_pads/screen_pads_menu/drop_down_scales.dart';
+// import 'package:beat_pads/screen_pads_menu/drop_down_int.dart';
 
 class MenuLayout extends StatelessWidget {
   @override
@@ -49,28 +49,39 @@ class MenuLayout extends StatelessWidget {
                 ),
                 ListTile(
                   title: const Text("Layout"),
-                  subtitle: const Text("Row Intervals and other Layouts"),
                   trailing: DropdownLayout(),
                 ),
                 const Divider(),
                 if (resizableGrid)
-                  ListTile(
-                    title: const Text("Grid Width"),
-                    trailing: DropdownNumbers(
-                      max: ScreenSize.getSizeEnum(context).maxGrid,
-                      setValue: (v) => settings.width = v,
-                      readValue: settings.width,
-                    ),
+                  IntCounterTile(
+                    label: "Width",
+                    setValue: (v) => settings.width = v,
+                    readValue: settings.width,
                   ),
                 if (resizableGrid)
-                  ListTile(
-                    title: const Text("Grid Height"),
-                    trailing: DropdownNumbers(
-                      max: ScreenSize.getSizeEnum(context).maxGrid,
-                      setValue: (v) => settings.height = v,
-                      readValue: settings.height,
-                    ),
+                  IntCounterTile(
+                    label: "Height",
+                    setValue: (v) => settings.height = v,
+                    readValue: settings.height,
                   ),
+                // if (resizableGrid)
+                //   ListTile(
+                //     title: const Text("Width"),
+                //     trailing: DropdownNumbers(
+                //       max: ScreenSize.getSizeEnum(context).maxGrid,
+                // setValue: (v) => settings.width = v,
+                // readValue: settings.width,
+                //     ),
+                //   ),
+                // if (resizableGrid)
+                //   ListTile(
+                //     title: const Text("Height"),
+                //     trailing: DropdownNumbers(
+                //       max: ScreenSize.getSizeEnum(context).maxGrid,
+                // setValue: (v) => settings.height = v,
+                // readValue: settings.height,
+                //     ),
+                //   ),
                 if (resizableGrid) const Divider(),
                 if (resizableGrid)
                   ListTile(
@@ -168,7 +179,7 @@ class MenuLayout extends StatelessWidget {
                   label: "Hue",
                   min: 0,
                   max: 360,
-                  subtitle: "Root Note Hue from the RGB Color Wheel",
+                  subtitle: "Root Note Hue on the RGB Color Wheel",
                   trailing: Text(settings.baseHue.toString()),
                   readValue: settings.baseHue,
                   setValue: (v) => settings.baseHue = v,

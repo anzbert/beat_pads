@@ -132,9 +132,7 @@ class BeatPadsScreen extends StatelessWidget {
             ),
           );
         }
-        return const SizedBox(
-          child: Text("pad orientation error"),
-        );
+        return const SizedBox.expand();
       }),
     );
   }

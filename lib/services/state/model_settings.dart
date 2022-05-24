@@ -168,12 +168,12 @@ class Settings extends ChangeNotifier {
       prefs.settings.scaleString.save();
     }
 
-    if (prefs.settings.width.value != newLayout.props.defaultDimensions.x) {
-      prefs.settings.width.value = newLayout.props.defaultDimensions.x;
+    if (newLayout.props.defaultDimensions?.x != null) {
+      prefs.settings.width.value = newLayout.props.defaultDimensions!.x;
       prefs.settings.width.save();
     }
-    if (prefs.settings.height.value != newLayout.props.defaultDimensions.y) {
-      prefs.settings.height.value = newLayout.props.defaultDimensions.y;
+    if (newLayout.props.defaultDimensions?.y != null) {
+      prefs.settings.height.value = newLayout.props.defaultDimensions!.y;
       prefs.settings.height.save();
     }
 
@@ -246,16 +246,18 @@ class Settings extends ChangeNotifier {
   }
 
   // pad dimensions
-  int get width => prefs.settings.width.value;
-  int get height => prefs.settings.height.value;
+  int get width => prefs.settings.width.value.clamp(2, 16);
+  int get height => prefs.settings.height.value.clamp(2, 16);
 
   set width(int newValue) {
+    if (newValue < 3 || newValue > 16) return;
     prefs.settings.width.value = newValue;
     prefs.settings.width.save();
     notifyListeners();
   }
 
   set height(int newValue) {
+    if (newValue < 3 || newValue > 16) return;
     prefs.settings.height.value = newValue;
     prefs.settings.height.save();
     notifyListeners();
