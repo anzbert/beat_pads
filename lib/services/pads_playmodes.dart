@@ -28,6 +28,15 @@ enum PlayMode {
     }
   }
 
+  bool get oneDimensional {
+    switch (this) {
+      case PlayMode.mpe:
+        return false;
+      default:
+        return true;
+    }
+  }
+
   bool get singleChannel {
     if (this == PlayMode.mpe) return false;
     return true;

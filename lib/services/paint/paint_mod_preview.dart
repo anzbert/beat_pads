@@ -19,7 +19,7 @@ class PaintModPreview extends StatelessWidget {
 
     return Consumer<Settings>(
       builder: (context, settings, _) {
-        if (!settings.modulation2D) {
+        if (!settings.modulation2D || settings.playMode.oneDimensional) {
           return CustomPaint(
             painter: CustomPaintRadius(
               origin: box.globalToLocal(Offset(
