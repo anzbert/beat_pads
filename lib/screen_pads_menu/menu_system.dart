@@ -1,5 +1,5 @@
 import 'package:beat_pads/screen_pads_menu/box_credits.dart';
-import 'package:beat_pads/services/_services.dart';
+import 'package:beat_pads/services/services.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -37,7 +37,7 @@ class MenuSystem extends StatelessWidget {
                     primary: Palette.laserLemon,
                     textStyle: const TextStyle(fontWeight: FontWeight.bold)),
                 child: const Text(
-                  "Select Midi Device)",
+                  "Select Midi Device",
                 ),
               ),
             ),

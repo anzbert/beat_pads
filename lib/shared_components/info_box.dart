@@ -1,4 +1,4 @@
-import 'package:beat_pads/services/_services.dart';
+import 'package:beat_pads/services/services.dart';
 import 'package:flutter/material.dart';
 
 /// A Card-based Info-Text Box Widget that takes an array of Strings and an optional header

@@ -1,7 +1,8 @@
+import 'package:beat_pads/screen_pads_menu/_screen_pads_menu.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 
-import 'package:beat_pads/services/_services.dart';
+import 'package:beat_pads/services/services.dart';
 import 'package:flutter_midi_command/flutter_midi_command.dart';
 
 class Settings extends ChangeNotifier {
@@ -11,6 +12,13 @@ class Settings extends ChangeNotifier {
   resetAll() async {
     await prefs.resetStoredValues();
     prefs = await Prefs.initAsync();
+    notifyListeners();
+  }
+
+  Menu _selectedMenu = Menu.layout;
+  Menu get selectedMenu => _selectedMenu;
+  set selectedMenu(Menu newMenu) {
+    _selectedMenu = newMenu;
     notifyListeners();
   }
 
@@ -82,6 +90,8 @@ class Settings extends ChangeNotifier {
   void resetBaseHue() => baseHue = LoadSettings.defaults().baseHue.value;
 
   double get modulationRadius => prefs.settings.modulationRadius.value / 100;
+  double absoluteRadius(BuildContext context) =>
+      MediaQuery.of(context).size.longestSide * modulationRadius;
   set modulationRadius(double newVal) {
     prefs.settings.modulationRadius.value = (newVal.clamp(0, 1) * 100).toInt();
     prefs.settings.modulationRadius.save();
@@ -151,19 +161,19 @@ class Settings extends ChangeNotifier {
 
   set layout(Layout newLayout) {
     if (newLayout.props.resizable == false) {
-      prefs.settings.rootNote.value = 0;
+      prefs.settings.rootNote.value = 0; // C
       prefs.settings.rootNote.save();
       prefs.settings.scaleString.value =
-          LoadSettings.defaults().scaleString.value;
+          LoadSettings.defaults().scaleString.value; // chromatic
       prefs.settings.scaleString.save();
     }
 
-    if (prefs.settings.width.value != newLayout.props.defaultDimensions.x) {
-      prefs.settings.width.value = newLayout.props.defaultDimensions.x;
+    if (newLayout.props.defaultDimensions?.x != null) {
+      prefs.settings.width.value = newLayout.props.defaultDimensions!.x;
       prefs.settings.width.save();
     }
-    if (prefs.settings.height.value != newLayout.props.defaultDimensions.y) {
-      prefs.settings.height.value = newLayout.props.defaultDimensions.y;
+    if (newLayout.props.defaultDimensions?.y != null) {
+      prefs.settings.height.value = newLayout.props.defaultDimensions!.y;
       prefs.settings.height.save();
     }
 
@@ -236,16 +246,18 @@ class Settings extends ChangeNotifier {
   }
 
   // pad dimensions
-  int get width => prefs.settings.width.value;
-  int get height => prefs.settings.height.value;
+  int get width => prefs.settings.width.value.clamp(2, 16);
+  int get height => prefs.settings.height.value.clamp(2, 16);
 
   set width(int newValue) {
+    if (newValue < 3 || newValue > 16) return;
     prefs.settings.width.value = newValue;
     prefs.settings.width.save();
     notifyListeners();
   }
 
   set height(int newValue) {
+    if (newValue < 3 || newValue > 16) return;
     prefs.settings.height.value = newValue;
     prefs.settings.height.save();
     notifyListeners();

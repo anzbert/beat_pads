@@ -6,7 +6,7 @@ import 'package:beat_pads/screen_beat_pads/slider_pitch_eased.dart';
 import 'package:beat_pads/screen_midi_devices/_drawer_devices.dart';
 
 import 'package:flutter/material.dart';
-import 'package:beat_pads/services/_services.dart';
+import 'package:beat_pads/services/services.dart';
 import 'package:provider/provider.dart';
 
 Future<bool> _doNothing() async => true;
@@ -132,9 +132,7 @@ class BeatPadsScreen extends StatelessWidget {
             ),
           );
         }
-        return const SizedBox(
-          child: Text("pad orientation error"),
-        );
+        return const SizedBox.expand();
       }),
     );
   }

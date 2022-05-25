@@ -1,4 +1,4 @@
-import 'package:beat_pads/services/_services.dart';
+import 'package:beat_pads/services/services.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -13,29 +13,32 @@ class PaintModulation extends StatelessWidget {
 
     return Consumer<MidiSender>(
       builder: (context, MidiSender midiSender, _) {
-        final buffer = midiSender.touchBuffer.buffer;
-
         return Stack(
           children: [
-            ...buffer.map(
+            ...[
+              ...midiSender.playMode.touchReleaseBuffer.buffer,
+              ...midiSender.playMode.touchBuffer.buffer
+            ].map(
               (touchEvent) {
                 return context.watch<Settings>().modulation2D == false ||
-                        context.watch<Settings>().playMode == PlayMode.polyAT
+                        context.watch<Settings>().playMode.oneDimensional
                     // CIRCLE / RADIUS
                     ? CustomPaint(
                         painter: CustomPaintRadius(
                           origin: box.globalToLocal(touchEvent.origin),
                           maxRadius: touchEvent.maxRadius,
                           deadZone: touchEvent.deadZone,
-                          change:
-                              touchEvent.radialChange(curve: Curves.linear) *
-                                  touchEvent.maxRadius,
+                          change: touchEvent.radialChange(
+                              curve: Curves.linear, deadZone: false),
                           colorBack: Palette.lightPink.withOpacity(
                               touchEvent.radialChange(curve: Curves.easeOut) *
                                   0.6),
                           colorFront: Palette.laserLemon.withOpacity(
                               touchEvent.radialChange(curve: Curves.easeOut) *
                                   0.8),
+                          colorDeadZone: Palette.laserLemon.withOpacity(
+                              touchEvent.radialChange(curve: Curves.easeOut) *
+                                  0.4),
                         ),
                       )
                     // SQUARE / X AND Y
@@ -45,14 +48,16 @@ class PaintModulation extends StatelessWidget {
                           maxRadius: touchEvent.maxRadius,
                           deadZone: touchEvent.deadZone,
                           change: touchEvent.directionalChangeFromCenter(
-                                  curve: Curves.linear, deadZone: true) *
-                              touchEvent.maxRadius,
+                              curve: Curves.linear, deadZone: false),
                           colorBack: Palette.lightPink.withOpacity(
                               touchEvent.radialChange(curve: Curves.easeOut) *
                                   0.6),
                           colorFront: Palette.laserLemon.withOpacity(
                               touchEvent.radialChange(curve: Curves.easeOut) *
                                   0.8),
+                          colorDeadZone: Palette.laserLemon.withOpacity(
+                              touchEvent.radialChange(curve: Curves.easeOut) *
+                                  0.4),
                         ),
                       );
               },

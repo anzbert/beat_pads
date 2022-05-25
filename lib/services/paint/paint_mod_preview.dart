@@ -1,4 +1,4 @@
-import 'package:beat_pads/services/_services.dart';
+import 'package:beat_pads/services/services.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -7,7 +7,7 @@ class PaintModPreview extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  final double fixedChange = 0.5;
+  final double fixedChangeForPreview = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -19,8 +19,7 @@ class PaintModPreview extends StatelessWidget {
 
     return Consumer<Settings>(
       builder: (context, settings, _) {
-        // CIRCLE / RADIUS
-        if (!settings.modulation2D) {
+        if (!settings.modulation2D || settings.playMode.oneDimensional) {
           return CustomPaint(
             painter: CustomPaintRadius(
               origin: box.globalToLocal(Offset(
@@ -29,9 +28,13 @@ class PaintModPreview extends StatelessWidget {
                       (DeviceUtils.isPortrait(context) ? 2.5 : 2))),
               maxRadius: settings.modulationRadius * screenSize.longestSide,
               deadZone: settings.modulationDeadZone,
-              change: settings.modulationRadius * screenSize.longestSide,
-              colorBack: Palette.lightPink.withOpacity(fixedChange * 0.6),
-              colorFront: Palette.laserLemon.withOpacity(fixedChange * 0.8),
+              change: fixedChangeForPreview,
+              colorBack:
+                  Palette.lightPink.withOpacity(fixedChangeForPreview * 0.6),
+              colorFront:
+                  Palette.laserLemon.withOpacity(fixedChangeForPreview * 0.8),
+              colorDeadZone:
+                  Palette.laserLemon.withOpacity(fixedChangeForPreview * 0.4),
             ),
           );
         }
@@ -44,8 +47,12 @@ class PaintModPreview extends StatelessWidget {
             maxRadius: settings.modulationRadius * screenSize.longestSide,
             deadZone: settings.modulationDeadZone,
             change: const Offset(0, 0),
-            colorBack: Palette.lightPink.withOpacity(fixedChange * 0.6),
-            colorFront: Palette.laserLemon.withOpacity(fixedChange * 0.8),
+            colorBack:
+                Palette.lightPink.withOpacity(fixedChangeForPreview * 0.6),
+            colorFront:
+                Palette.laserLemon.withOpacity(fixedChangeForPreview * 0.8),
+            colorDeadZone:
+                Palette.laserLemon.withOpacity(fixedChangeForPreview * 0.4),
           ),
         );
       },

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_midi_command/flutter_midi_command.dart';
 import 'dart:async';
 
-import '../_services.dart';
+import '../services.dart';
 
 class MidiReceiver extends ChangeNotifier {
   StreamSubscription<MidiPacket>? _rxSubscription;

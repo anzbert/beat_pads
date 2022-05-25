@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:beat_pads/services/_services.dart';
+import 'package:beat_pads/services/services.dart';
 
 class IntCounterTile extends StatelessWidget {
   const IntCounterTile(
@@ -34,7 +34,7 @@ class IntCounterTile extends StatelessWidget {
           children: [
             ElevatedButton(
               onPressed: () {
-                setValue(readValue - 1);
+                if (readValue - 1 >= 0) setValue(readValue - 1); // no negatives
               },
               style: ElevatedButton.styleFrom(
                 shape: const CircleBorder(),

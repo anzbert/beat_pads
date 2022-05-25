@@ -1,4 +1,4 @@
-import 'package:beat_pads/services/_services.dart';
+import 'package:beat_pads/services/services.dart';
 import 'package:flutter/material.dart';
 
 class TouchBuffer {
@@ -12,7 +12,7 @@ class TouchBuffer {
   List<TouchEvent> get buffer => _buffer;
 
   /// Add touchevent with noteevent to buffer
-  void addNoteOn(PointerEvent touch, NoteEvent noteEvent) {
+  void addNoteOn(CustomPointer touch, NoteEvent noteEvent) {
     _buffer.add(TouchEvent(touch, noteEvent, settings, screenSize));
   }
 
@@ -58,84 +58,5 @@ class TouchBuffer {
             : value + element));
 
     return Offset(total.dx / buffer.length, total.dy / buffer.length);
-  }
-}
-
-class TouchEvent {
-  final int uniqueID;
-
-  // Note and modulation parameters:
-  NoteEvent noteEvent;
-
-  // Geometry parameters:
-  final Offset origin;
-  final double maxRadius;
-  final double maxDiameter;
-  final double deadZone;
-  Offset newPosition;
-
-  /// Holds geometry, note and modulation information this.uniqueID, this.origin,
-  TouchEvent(
-      PointerEvent touch, this.noteEvent, Settings settings, Size screenSize)
-      : origin = touch.position,
-        newPosition = touch.position,
-        uniqueID = touch.pointer,
-        maxDiameter = screenSize.longestSide * settings.modulationRadius * 2,
-        deadZone = settings.modulationDeadZone,
-        maxRadius = screenSize.longestSide * settings.modulationRadius;
-
-  /// Prevents touchevent from receiving further position updates in move(). Irreversible!
-  void markDirty() => _dirty = true;
-  bool _dirty = false;
-  bool get dirty => _dirty;
-
-  /// Updates stored touch event with latest touch position. Used for geometry
-  void updatePosition(Offset updatedPosition) {
-    newPosition = updatedPosition;
-  }
-
-  /// Get the radial change factor from the origin of the
-  /// touch to the current position in the context of the maximum Radius.
-  /// Produces values from 0 to 1 from center to maxium Radius.
-  double radialChange({Curve curve = Curves.easeIn, bool deadZone = true}) {
-    double distanceFactor =
-        (Utils.offsetDistance(origin, newPosition) / maxRadius).clamp(0, 1);
-
-    return Utils.curveTransform(
-      deadZone ? applyDeadZone(distanceFactor) : distanceFactor,
-      curve,
-    );
-  }
-
-  /// Get the directional change factor from the origin of the
-  /// touch to the current position in the context of the maximum Radius.
-  /// Produced values from -1 to 1 on X and Y Axis within the maximum Diameter.
-  Offset directionalChangeFromCenter(
-      {Curve curve = Curves.easeIn, bool deadZone = true}) {
-    double factorX = ((newPosition.dx - origin.dx) / maxRadius).clamp(-1, 1);
-    double factorY = ((-newPosition.dy + origin.dy) / maxRadius).clamp(-1, 1);
-
-    return Offset(
-      Utils.curveTransform(
-        deadZone ? applyDeadZone(factorX) : factorX,
-        curve,
-      ),
-      Utils.curveTransform(
-        deadZone ? applyDeadZone(factorY) : factorY,
-        curve,
-      ),
-    );
-  }
-
-  /// Applies a deadZone to an input value, which means that the function
-  /// only returns a value when it is above the given threshhold.
-  /// Then remaps range **from** 0 to 1.0 **to** deadZone to 1.0.
-  double applyDeadZone(double input) {
-    if (input.isNegative) {
-      if (input > -deadZone) return 0;
-      return Utils.mapValueToTargetRange(input, -1, -deadZone, -1, 0);
-    }
-    if (input < deadZone) return 0;
-    return Utils.mapValueToTargetRange(input, deadZone, 1, 0, 1);
   }
 }

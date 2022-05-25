@@ -3,9 +3,7 @@ import 'package:beat_pads/screen_pads_menu/slider_int.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:beat_pads/services/_services.dart';
-
-import 'package:beat_pads/screen_pads_menu/slider_non_linear.dart';
+import 'package:beat_pads/services/services.dart';
 
 import 'package:beat_pads/screen_pads_menu/slider_int_range.dart';
 
@@ -71,17 +69,6 @@ class MenuMidi extends StatelessWidget {
               setMax: (v) => settings.velocityMax = v,
               resetFunction: settings.resetVelocity,
             ),
-          const Divider(),
-          NonLinearSliderTile(
-            label: "Auto Sustain",
-            subtitle: "Delay in Milliseconds before sending NoteOff Message",
-            readValue: settings.sustainTimeStep,
-            setValue: (v) => settings.sustainTimeStep = v,
-            resetFunction: () => settings.resetSustainTimeStep(),
-            actualValue: "${settings.sustainTimeUsable} ms",
-            start: 0,
-            steps: 25,
-          ),
         ],
       );
     });

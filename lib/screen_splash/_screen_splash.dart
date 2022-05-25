@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:rive/rive.dart';
 
-import 'package:beat_pads/services/_services.dart';
+import 'package:beat_pads/services/services.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -18,10 +18,10 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: const HSLColor.fromAHSL(1, 240, 0.1, 0.99).toColor(),
       body: Listener(
         onPointerDown: (_) {
-          Navigator.pushReplacement(
+          Navigator.push(
             context,
             TransitionUtils.fade(const PadMenuScreen()),
           );

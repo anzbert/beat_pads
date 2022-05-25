@@ -2,11 +2,12 @@ import 'package:beat_pads/screen_pads_menu/drop_down_modulation.dart';
 import 'package:beat_pads/screen_pads_menu/drop_down_playmode.dart';
 import 'package:beat_pads/screen_pads_menu/slider_int.dart';
 import 'package:beat_pads/screen_pads_menu/slider_modulation_size.dart';
+import 'package:beat_pads/screen_pads_menu/slider_non_linear.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:beat_pads/services/_services.dart';
+import 'package:beat_pads/services/services.dart';
 
 class MenuInput extends StatelessWidget {
   @override
@@ -70,6 +71,19 @@ class MenuInput extends StatelessWidget {
                 setValue: (v) => settings.mpe1DRadius = v,
               ),
             ),
+          if (settings.playMode == PlayMode.mpe) const Divider(),
+          NonLinearSliderTile(
+            label: "Release Delay",
+            subtitle: settings.playMode.modulatable
+                ? "Modulation Easing and NoteOff delay in Milliseconds"
+                : "NoteOff delay in Milliseconds",
+            readValue: settings.sustainTimeStep,
+            setValue: (v) => settings.sustainTimeStep = v,
+            resetFunction: () => settings.resetSustainTimeStep(),
+            actualValue: "${settings.sustainTimeUsable} ms",
+            start: 0,
+            steps: 25,
+          ),
           if (settings.playMode == PlayMode.mpe)
             if (settings.mpe1DRadius.exclusiveGroup == Group.pitch ||
                 settings.mpe2DX.exclusiveGroup == Group.pitch ||

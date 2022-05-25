@@ -8,6 +8,12 @@ class NoteEvent {
   NoteOnMessage? noteOnMessage;
   int releaseTime = 0;
 
+  bool get isPlaying => noteOnMessage == null ? false : true;
+
+  bool _kill = false;
+  void markKill() => _kill = true;
+  bool get kill => _kill;
+
   /// Create and store a NoteOn event for its lifetime as well as its release time
   NoteEvent(this.channel, this.note, int velocity)
       : noteOnMessage = NoteOnMessage(
@@ -28,6 +34,11 @@ class NoteEvent {
           CCMessage(channel: (channel + 1) % 16, controller: note, value: 127)
             ..send();
     }
+  }
+
+  /// Cleaer Note On message without sending note off
+  void clear() {
+    noteOnMessage = null;
   }
 
   /// Send this noteEvent's NoteOffMessage, if note is still on

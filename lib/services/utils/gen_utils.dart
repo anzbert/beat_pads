@@ -6,6 +6,35 @@ import 'package:flutter/material.dart';
 abstract class Utils {
 // UTILITY
 
+  static Offset limitToSquare(Offset origin, Offset position, double radius) {
+    double vectorX = -origin.dx + position.dx;
+    double vectorY = -origin.dy + position.dy;
+
+    if (vectorX.abs() > radius) {
+      if (vectorX.isNegative) vectorX = -radius;
+      if (!vectorX.isNegative) vectorX = radius;
+    }
+    if (vectorY.abs() > radius) {
+      if (vectorY.isNegative) vectorY = -radius;
+      if (!vectorY.isNegative) vectorY = radius;
+    }
+    return Offset(vectorX, vectorY) + origin;
+  }
+
+  static Offset limitToCircle(Offset origin, Offset position, double radius) {
+    double vectorX = -origin.dx + position.dx;
+    double vectorY = -origin.dy + position.dy;
+
+    double distance = Utils.offsetDistance(origin, position);
+
+    if (distance > radius) {
+      Offset unitVector = Offset(vectorX, vectorY) / distance;
+      return unitVector * radius + origin;
+    }
+
+    return position;
+  }
+
   /// Apply a curve to a positive *and* to a __negative__ value
   /// Input range is 0 to 1.0
   static double curveTransform(double input, Curve curve) {

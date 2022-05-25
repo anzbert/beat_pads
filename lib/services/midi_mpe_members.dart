@@ -4,7 +4,7 @@ In the simplest workable implementation, a new note will be assigned to the Chan
 */
 
 import 'dart:collection';
-import 'package:beat_pads/services/_services.dart';
+import 'package:beat_pads/services/services.dart';
 
 class MemberChannelProvider {
   final bool upperZone;
@@ -20,9 +20,9 @@ class MemberChannelProvider {
         channelQueue = Queue.from(
             List.generate(members, (i) => i + (upperZone ? 15 - members : 1)));
 
-  void releaseChannel(NoteEvent event) {
-    if (!channelQueue.contains(event.channel)) {
-      channelQueue.addFirst(event.channel);
+  void releaseChannel(int channel) {
+    if (!channelQueue.contains(channel)) {
+      channelQueue.addFirst(channel);
     }
   }
 
