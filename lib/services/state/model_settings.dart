@@ -313,7 +313,7 @@ class Settings extends ChangeNotifier {
     if (!randomVelocity) return prefs.settings.velocity.value.clamp(10, 127);
     double randVelocity =
         _random.nextInt(velocityRange) + (velocityCenter - velocityRange / 2);
-    print(randVelocity);
+
     return randVelocity.clamp(10, 127).toInt();
   }
 
@@ -345,12 +345,9 @@ class Settings extends ChangeNotifier {
   }
 
   updateCenter() {
-    print(prefs.settings.velocityMin.value);
-    print(prefs.settings.velocityMax.value);
     _velocityCenter =
         (prefs.settings.velocityMax.value + prefs.settings.velocityMin.value) /
             2;
-    print(_velocityCenter);
   }
 
   setVelocity(int vel, {bool save = true}) {
