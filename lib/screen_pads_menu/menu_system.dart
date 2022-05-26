@@ -2,6 +2,7 @@ import 'package:beat_pads/screen_pads_menu/box_credits.dart';
 import 'package:beat_pads/services/services.dart';
 
 import 'package:flutter/material.dart';
+// import 'package:flutter_midi_command/flutter_midi_command.dart';
 import 'package:provider/provider.dart';
 
 import 'package:beat_pads/shared_components/_shared.dart';
@@ -25,6 +26,21 @@ class MenuSystem extends StatelessWidget {
             ),
           ),
           const SwitchWakeLockTile(),
+          // ListTile(
+          //   title: const Text("Virtual Device"),
+          //   // subtitle: const Text("Random Velocity within a given Range"),
+          //   trailing: Switch(
+          //       value: settings.virtualDevice,
+          //       onChanged: (value) {
+          //         settings.virtualDevice = value;
+          //         if (value) {
+          //           MidiCommand().addVirtualDevice(name: "BeatPadsVirtualMidi");
+          //           MidiCommand().devices.then((value) => print(value));
+          //         } else {
+          //           MidiCommand().removeVirtualDevice();
+          //         }
+          //       }),
+          // ),
           const Divider(),
           Center(
             child: ConstrainedBox(
@@ -47,7 +63,7 @@ class MenuSystem extends StatelessWidget {
               constraints: BoxConstraints(minWidth: buttonMinWidth),
               child: SnackMessageButton(
                 label: "Reset Midi Buffers",
-                message: "Received Midi Buffer cleared",
+                message: "Midi Buffer cleared & Stop all Notes sent",
                 onPressed: () {
                   Provider.of<MidiReceiver>(context, listen: false)
                       .resetRxBuffer();

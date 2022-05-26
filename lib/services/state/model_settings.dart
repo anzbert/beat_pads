@@ -15,6 +15,13 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
+  // bool _virtualDevice = false;
+  // bool get virtualDevice => _virtualDevice;
+  // set virtualDevice(bool newValue) {
+  //   _virtualDevice = newValue;
+  //   notifyListeners();
+  // }
+
   Menu _selectedMenu = Menu.layout;
   Menu get selectedMenu => _selectedMenu;
   set selectedMenu(Menu newMenu) {

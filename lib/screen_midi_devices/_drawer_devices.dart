@@ -180,7 +180,7 @@ class MidiConfigState extends State<MidiConfig> {
                               "Create a Session in the 'MIDI Network Setup' window and connect to your iPad/iPhone",
                               "",
                               "",
-                              "Note: Wireless Protocols add Latency. Connection to Windows Hosts via WiFi requires third-party Software (like Apple Bonjour)"
+                              "Note: Wireless Protocols add Latency. Connection to Windows Hosts via WiFi requires third-party Software (like Apple rtpMIDI)"
                             ],
                           ),
                       ],

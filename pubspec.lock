@@ -114,10 +114,17 @@ packages:
   flutter_midi_command:
     dependency: "direct main"
     description:
-      name: flutter_midi_command
+      path: "/Users/anz/localDev/FlutterMidiCommand"
+      relative: false
+    source: path
+    version: "0.4.8"
+  flutter_midi_command_linux:
+    dependency: transitive
+    description:
+      name: flutter_midi_command_linux
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.4.8"
+    version: "0.1.5"
   flutter_midi_command_platform_interface:
     dependency: transitive
     description:
@@ -267,7 +274,14 @@ packages:
       name: provider
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "6.0.2"
+    version: "6.0.3"
+  quiver:
+    dependency: transitive
+    description:
+      name: quiver
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.1.0"
   rive:
     dependency: "direct main"
     description:
@@ -385,6 +399,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.4.9"
+  tuple:
+    dependency: transitive
+    description:
+      name: tuple
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
   typed_data:
     dependency: transitive
     description:
@@ -510,7 +531,7 @@ packages:
       name: xml
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "6.0.1"
+    version: "6.1.0"
   yaml:
     dependency: transitive
     description:
