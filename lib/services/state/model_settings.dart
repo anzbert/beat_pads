@@ -9,7 +9,7 @@ class Settings extends ChangeNotifier {
   // Settings(this.prefs);
   Settings(this.prefs)
       : _velocityCenter = (prefs.settings.velocityMax.value +
-                prefs.settings.velocityMax.value) ~/
+                prefs.settings.velocityMax.value) /
             2;
   Prefs prefs;
 
@@ -311,10 +311,10 @@ class Settings extends ChangeNotifier {
   final _random = Random();
   int get velocity {
     if (!randomVelocity) return prefs.settings.velocity.value.clamp(10, 127);
-    int randVelocity =
-        _random.nextInt(velocityRange) + _velocityCenter - velocityRange;
-
-    return randVelocity.clamp(10, 127);
+    double randVelocity =
+        _random.nextInt(velocityRange) + (velocityCenter - velocityRange / 2);
+    print(randVelocity);
+    return randVelocity.clamp(10, 127).toInt();
   }
 
   set velocityMin(int min) {
@@ -333,22 +333,24 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
-  int _velocityCenter;
-  int get velocityCenter {
-    return _velocityCenter.clamp(
-        10 + velocityRange ~/ 2, 127 - velocityRange ~/ 2);
+  double _velocityCenter;
+  double get velocityCenter {
+    return _velocityCenter;
   }
 
-  set velocityCenter(int vel) {
+  set velocityCenter(double vel) {
     _velocityCenter =
-        vel.clamp(10 + velocityRange ~/ 2, 127 - velocityRange ~/ 2);
+        vel.clamp(10 + velocityRange / 2, 128 - velocityRange / 2);
     notifyListeners();
   }
 
   updateCenter() {
+    print(prefs.settings.velocityMin.value);
+    print(prefs.settings.velocityMax.value);
     _velocityCenter =
-        (prefs.settings.velocityMax.value + prefs.settings.velocityMax.value) ~/
+        (prefs.settings.velocityMax.value + prefs.settings.velocityMin.value) /
             2;
+    print(_velocityCenter);
   }
 
   setVelocity(int vel, {bool save = true}) {
