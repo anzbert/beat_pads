@@ -54,6 +54,7 @@ class MenuMidi extends StatelessWidget {
           if (!settings.randomVelocity)
             IntSliderTile(
               min: 10,
+              max: 127,
               label: "Fixed Velocity",
               subtitle: "Velocity to send when pressing a Pad",
               trailing: Text(settings.velocity.toString()),

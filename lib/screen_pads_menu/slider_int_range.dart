@@ -59,9 +59,8 @@ class MidiRangeSelectorTile extends StatelessWidget {
                   "Max",
                 ),
                 onChanged: (RangeValues values) {
-                  // print(values);
-                  setMin(values.start.round());
-                  setMax(values.end.round());
+                  setMin(values.start.toInt());
+                  setMax(values.end.toInt());
                 },
               ),
             );
