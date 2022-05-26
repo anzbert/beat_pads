@@ -13,12 +13,12 @@ class SustainButtonDoubleTap extends StatefulWidget {
 
 class _SustainButtonDoubleTapState extends State<SustainButtonDoubleTap> {
   bool sustainState = false;
-  int? disposeChannel;
 
   @override
   void dispose() {
-    if (disposeChannel != null && sustainState == true) {
-      MidiUtils.sendSustainMessage(disposeChannel!, false);
+    int channel = Provider.of<Settings>(context, listen: false).channel;
+    if (sustainState == true) {
+      MidiUtils.sendSustainMessage(channel, false);
     }
     super.dispose();
   }
@@ -26,7 +26,6 @@ class _SustainButtonDoubleTapState extends State<SustainButtonDoubleTap> {
   @override
   Widget build(BuildContext context) {
     int channel = Provider.of<Settings>(context, listen: true).channel;
-    disposeChannel = channel;
 
     double width = MediaQuery.of(context).size.width;
     double padSpacing = width * ThemeConst.padSpacingFactor;

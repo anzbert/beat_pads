@@ -56,6 +56,7 @@ class Prefs {
     "velocityMax": 120,
     "sustainTimeStep": 0,
     "sendCC": false,
+    "velocitySlider": false,
     "pitchBend": false,
     "octaveButtons": false,
     "sustainButton": false,
@@ -111,6 +112,7 @@ class LoadSettings {
   final Setting<bool> octaveButtons;
   final Setting<bool> sustainButton;
   final Setting<bool> randomVelocity;
+  final Setting<bool> velocitySlider;
 
   LoadSettings(Map<String, dynamic> loadedMap)
       : padLabels = Setting<PadLabels>("padLabels",
@@ -153,6 +155,8 @@ class LoadSettings {
             Setting<int>('sustainTimeStep', loadedMap['sustainTimeStep']!),
         sendCC = Setting<bool>('sendCC', loadedMap['sendCC']!),
         pitchBend = Setting<bool>('pitchBend', loadedMap['pitchBend']!),
+        velocitySlider =
+            Setting<bool>('velocitySlider', loadedMap['velocitySlider']!),
         pitchBendEase =
             Setting<int>('pitchBendEase', loadedMap['pitchBendEase']!),
         modWheel = Setting<bool>('modWheel', loadedMap['modWheel']!),

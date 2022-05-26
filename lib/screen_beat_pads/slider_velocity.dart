@@ -31,7 +31,7 @@ class _SliderVelocityState extends State<SliderVelocity> {
         builder: (context, settings, _) {
           if (!widget.randomVelocity) {
             return ThemedSlider(
-              thumbColor: Palette.cadetBlue,
+              thumbColor: Palette.laserLemon,
               child: Slider(
                 min: 10,
                 max: 127,
@@ -45,7 +45,7 @@ class _SliderVelocityState extends State<SliderVelocity> {
             return ThemedSlider(
               // showTrack: true,
               range: settings.velocityRange,
-              thumbColor: Palette.cadetBlue,
+              thumbColor: Palette.laserLemon,
               child: Slider(
                 min: 10,
                 max: 127,

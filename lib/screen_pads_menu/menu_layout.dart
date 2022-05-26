@@ -165,6 +165,14 @@ class MenuLayout extends StatelessWidget {
                       onChanged: (value) =>
                           settings.modWheel = !settings.modWheel),
                 ),
+                ListTile(
+                  title: const Text("Velocity"),
+                  subtitle: const Text("Adds Velocity Slider next to Pads"),
+                  trailing: Switch(
+                      value: settings.velocitySlider,
+                      onChanged: (value) =>
+                          settings.velocitySlider = !settings.velocitySlider),
+                ),
                 const Divider(),
                 ListTile(
                   title: const Text("Pad Labels"),

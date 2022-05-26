@@ -83,13 +83,14 @@ class BeatPadsScreen extends StatelessWidget {
                                   ),
                                 ),
                               // VELOCITY
-                              Expanded(
-                                flex: 7,
-                                child: SliderVelocity(
-                                  channel: settings.channel,
-                                  randomVelocity: settings.randomVelocity,
+                              if (settings.velocitySlider)
+                                Expanded(
+                                  flex: 7,
+                                  child: SliderVelocity(
+                                    channel: settings.channel,
+                                    randomVelocity: settings.randomVelocity,
+                                  ),
                                 ),
-                              ),
                               // PADS
                               const Expanded(
                                 flex: 60,

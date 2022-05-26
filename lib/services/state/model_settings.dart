@@ -377,6 +377,15 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
+  // velocity slider:
+  bool get velocitySlider => prefs.settings.velocitySlider.value;
+
+  set velocitySlider(bool newValue) {
+    prefs.settings.velocitySlider.value = newValue;
+    prefs.settings.velocitySlider.save();
+    notifyListeners();
+  }
+
 // pitchbend:
   bool get pitchBend => prefs.settings.pitchBend.value;
 
