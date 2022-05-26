@@ -406,7 +406,7 @@ class Settings extends ChangeNotifier {
   set sustainTimeStep(int newValue) {
     prefs.settings.sustainTimeStep.value =
         newValue.clamp(0, Timing.timingSteps.length ~/ 1.5);
-    ;
+
     prefs.settings.sustainTimeStep.save();
     notifyListeners();
   }
