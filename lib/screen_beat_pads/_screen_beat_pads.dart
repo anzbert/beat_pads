@@ -3,6 +3,7 @@ import 'package:beat_pads/screen_beat_pads/buttons_menu.dart';
 import 'package:beat_pads/screen_beat_pads/slide_pads.dart';
 import 'package:beat_pads/screen_beat_pads/slider_mod_wheel.dart';
 import 'package:beat_pads/screen_beat_pads/slider_pitch_eased.dart';
+import 'package:beat_pads/screen_beat_pads/slider_velocity.dart';
 import 'package:beat_pads/screen_midi_devices/_drawer_devices.dart';
 
 import 'package:flutter/material.dart';
@@ -81,6 +82,14 @@ class BeatPadsScreen extends StatelessWidget {
                                     channel: settings.channel,
                                   ),
                                 ),
+                              // VELOCITY
+                              Expanded(
+                                flex: 7,
+                                child: SliderVelocity(
+                                  channel: settings.channel,
+                                  randomVelocity: settings.randomVelocity,
+                                ),
+                              ),
                               // PADS
                               const Expanded(
                                 flex: 60,

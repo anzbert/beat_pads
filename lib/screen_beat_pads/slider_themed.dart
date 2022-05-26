@@ -9,14 +9,18 @@ class ThemedSlider extends StatelessWidget {
     required this.child,
     this.centerLine = false,
     required this.thumbColor,
-    this.label = "#",
+    this.label = "",
     this.midiVal = false,
+    this.showTrack = false,
+    this.range,
   }) : super(key: key);
 
   final Widget child;
   final bool centerLine;
   final String label;
   final bool midiVal;
+  final bool showTrack;
+  final int? range;
 
   final Color _trackColor = Palette.lightGrey;
   final Color thumbColor;
@@ -43,15 +47,24 @@ class ThemedSlider extends StatelessWidget {
           SliderTheme(
               data: SliderTheme.of(context).copyWith(
                 trackHeight: width * 0.015,
-                activeTrackColor: _trackColor,
+                activeTrackColor: showTrack ? Palette.cadetBlue : _trackColor,
                 inactiveTrackColor: _trackColor,
                 thumbColor: thumbColor,
-                thumbShape: CustomSliderThumbCircle(
-                    thumbRadius: width * 0.04, label: label, midiVal: midiVal),
-                // RoundSliderThumbShape(
-                //   enabledThumbRadius: width * 0.038,
-                // ),
+                overlayColor: Colors.transparent,
+                thumbShape: range == null
+                    ? CustomSliderThumbCircle(
+                        thumbRadius: width * 0.04,
+                        label: label,
+                        midiVal: midiVal)
+                    : CustomSliderThumbRect(
+                        thumbRadius: width * 0.04,
+                        thumbHeight: range!.toDouble()),
                 trackShape: CustomTrackShape(),
+
+                // rangeThumbShape: RoundRangeSliderThumbShape(
+                //   enabledThumbRadius: width * 0.02,
+                // ),
+                // rangeTrackShape: CustomRangeTrackShape(),
               ),
               child: child),
         ],
@@ -154,5 +167,52 @@ class CustomSliderThumbCircle extends SliderComponentShape {
 
   String getMidiValue(double value) {
     return (127 - value * 127).toInt().toString();
+  }
+}
+
+class CustomSliderThumbRect extends SliderComponentShape {
+  final double thumbRadius;
+  final double thumbHeight;
+
+  const CustomSliderThumbRect({
+    required this.thumbRadius,
+    this.thumbHeight = 20,
+  });
+
+  @override
+  Size getPreferredSize(bool isEnabled, bool isDiscrete) {
+    return Size.fromRadius(thumbRadius);
+  }
+
+  @override
+  void paint(
+    PaintingContext context,
+    Offset center, {
+    required Animation<double> activationAnimation,
+    required Animation<double> enableAnimation,
+    required bool isDiscrete,
+    required TextPainter labelPainter,
+    required RenderBox parentBox,
+    required SliderThemeData sliderTheme,
+    required TextDirection textDirection,
+    required double value,
+    required double textScaleFactor,
+    required Size sizeWithOverflow,
+  }) {
+    final Canvas canvas = context.canvas;
+
+    var fractionHeight = parentBox.constraints.maxWidth / 127 * thumbHeight;
+
+    final rRect = RRect.fromRectAndRadius(
+      Rect.fromCenter(
+          center: center, width: fractionHeight, height: thumbRadius),
+      Radius.circular(thumbRadius * .1),
+    );
+
+    final paint = Paint()
+      ..color = sliderTheme.thumbColor! //Thumb Background Color
+      ..style = PaintingStyle.fill;
+
+    canvas.drawRRect(rRect, paint);
   }
 }

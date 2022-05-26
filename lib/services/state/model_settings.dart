@@ -6,7 +6,11 @@ import 'package:beat_pads/services/services.dart';
 import 'package:flutter_midi_command/flutter_midi_command.dart';
 
 class Settings extends ChangeNotifier {
-  Settings(this.prefs);
+  // Settings(this.prefs);
+  Settings(this.prefs)
+      : _velocityCenter = (prefs.settings.velocityMax.value +
+                prefs.settings.velocityMax.value) ~/
+            2;
   Prefs prefs;
 
   resetAll() async {
@@ -54,8 +58,7 @@ class Settings extends ChangeNotifier {
 
   int get mpePitchbendRange => prefs.settings.mpePitchBendRange.value;
   set mpePitchbendRange(int newVal) {
-    if (newVal > 360 || newVal < 0) return;
-    prefs.settings.mpePitchBendRange.value = newVal;
+    prefs.settings.mpePitchBendRange.value = newVal.clamp(0, 48);
     prefs.settings.mpePitchBendRange.save();
     notifyListeners();
   }
@@ -88,8 +91,7 @@ class Settings extends ChangeNotifier {
 
   int get baseHue => prefs.settings.baseHue.value;
   set baseHue(int newVal) {
-    if (newVal > 360 || newVal < 0) return;
-    prefs.settings.baseHue.value = newVal;
+    prefs.settings.baseHue.value = newVal.clamp(0, 360);
     prefs.settings.baseHue.save();
     notifyListeners();
   }
@@ -146,13 +148,11 @@ class Settings extends ChangeNotifier {
   }
 
   set channel(int newChannel) {
-    if (newChannel < 0 || newChannel > 15) return;
-
     if (playMode == PlayMode.mpe) {
       if (newChannel < 8) prefs.settings.channel.value = 0;
       if (newChannel > 7) prefs.settings.channel.value = 15;
     } else {
-      prefs.settings.channel.value = newChannel;
+      prefs.settings.channel.value = newChannel.clamp(0, 15);
     }
     prefs.settings.channel.save();
     notifyListeners();
@@ -210,10 +210,9 @@ class Settings extends ChangeNotifier {
 
   // root note:
   set rootNote(int note) {
-    if (note < 0 || note > 11) return;
-    prefs.settings.rootNote.value = note;
+    prefs.settings.rootNote.value = note.clamp(0, 11);
     prefs.settings.rootNote.save();
-    prefs.settings.base.value = note;
+    prefs.settings.base.value = note.clamp(0, 11);
     prefs.settings.base.save();
     notifyListeners();
   }
@@ -225,8 +224,7 @@ class Settings extends ChangeNotifier {
   int get base => prefs.settings.base.value;
 
   set base(int note) {
-    if (note < 0 || note > 11) return;
-    prefs.settings.base.value = note;
+    prefs.settings.base.value = note.clamp(0, 11);
     prefs.settings.base.save();
     notifyListeners();
   }
@@ -253,8 +251,8 @@ class Settings extends ChangeNotifier {
   }
 
   // pad dimensions
-  int get width => prefs.settings.width.value.clamp(2, 16);
-  int get height => prefs.settings.height.value.clamp(2, 16);
+  int get width => prefs.settings.width.value.clamp(3, 16);
+  int get height => prefs.settings.height.value.clamp(3, 16);
 
   set width(int newValue) {
     if (newValue < 3 || newValue > 16) return;
@@ -308,43 +306,64 @@ class Settings extends ChangeNotifier {
 
   int get velocityMin => prefs.settings.velocityMin.value;
   int get velocityMax => prefs.settings.velocityMax.value;
+  int get velocityRange => velocityMax - velocityMin;
 
   final _random = Random();
   int get velocity {
-    if (!randomVelocity) return prefs.settings.velocity.value;
-    int randVelocity = _random.nextInt(prefs.settings.velocityMax.value -
-            prefs.settings.velocityMin.value) +
-        prefs.settings.velocityMin.value;
-    return randVelocity > 127 ? 127 : randVelocity;
+    if (!randomVelocity) return prefs.settings.velocity.value.clamp(10, 127);
+    int randVelocity =
+        _random.nextInt(velocityRange) + _velocityCenter - velocityRange;
+
+    return randVelocity.clamp(10, 127);
   }
 
   set velocityMin(int min) {
-    if (min < 0 || min > prefs.settings.velocityMax.value) return;
     prefs.settings.velocityMin.value = min;
+    // min.clamp(10, prefs.settings.velocityMax.value);
+    updateCenter();
     prefs.settings.velocityMin.save();
     notifyListeners();
   }
 
   set velocityMax(int max) {
-    if (max < prefs.settings.velocityMin.value || max > 127) return;
     prefs.settings.velocityMax.value = max;
+    // max.clamp(prefs.settings.velocityMin.value, 127);
+    updateCenter();
     prefs.settings.velocityMax.save();
     notifyListeners();
   }
 
-  set velocity(int vel) {
-    if (vel < 0 || vel > 127) return;
-    prefs.settings.velocity.value = vel;
-    prefs.settings.velocity.save();
+  int _velocityCenter;
+  int get velocityCenter {
+    return _velocityCenter.clamp(
+        10 + velocityRange ~/ 2, 127 - velocityRange ~/ 2);
+  }
+
+  set velocityCenter(int vel) {
+    _velocityCenter =
+        vel.clamp(10 + velocityRange ~/ 2, 127 - velocityRange ~/ 2);
+    notifyListeners();
+  }
+
+  updateCenter() {
+    _velocityCenter =
+        (prefs.settings.velocityMax.value + prefs.settings.velocityMax.value) ~/
+            2;
+  }
+
+  setVelocity(int vel, {bool save = true}) {
+    prefs.settings.velocity.value = vel.clamp(10, 127);
+
+    if (save) prefs.settings.velocity.save();
     notifyListeners();
   }
 
   resetVelocity() {
     if (!randomVelocity) {
-      velocity = LoadSettings.defaults().velocity.value;
+      setVelocity(LoadSettings.defaults().velocity.value);
     } else {
-      velocityMax = LoadSettings.defaults().velocityMin.value;
-      velocityMin = LoadSettings.defaults().velocityMax.value;
+      velocityMax = LoadSettings.defaults().velocityMax.value;
+      velocityMin = LoadSettings.defaults().velocityMin.value;
     }
   }
 

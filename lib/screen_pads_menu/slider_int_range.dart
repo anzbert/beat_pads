@@ -16,6 +16,7 @@ class MidiRangeSelectorTile extends StatelessWidget {
   final Function? resetFunction;
   final Function setMin;
   final Function setMax;
+
   final int readMin;
   final int readMax;
   final String label;
@@ -51,14 +52,16 @@ class MidiRangeSelectorTile extends StatelessWidget {
               width: width * ThemeConst.sliderWidthFactor,
               child: RangeSlider(
                 values: RangeValues(readMin.toDouble(), readMax.toDouble()),
-                max: 128,
+                min: 10,
+                max: 127,
                 labels: const RangeLabels(
                   "Min",
                   "Max",
                 ),
                 onChanged: (RangeValues values) {
-                  setMin(values.start.toInt());
-                  setMax(values.end.toInt());
+                  // print(values);
+                  setMin(values.start.round());
+                  setMax(values.end.round());
                 },
               ),
             );

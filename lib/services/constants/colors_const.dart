@@ -17,7 +17,7 @@ enum PadColors {
   colorWheel("Pitch"),
   // halfColorWheel("In Pitch (Halfed Color Range)"),
   circleOfFifth("Circle of Fifths"),
-  highlightRoot("Only Highlight Root");
+  highlightRoot("Highlight Root");
 
   final String title;
   const PadColors(this.title);

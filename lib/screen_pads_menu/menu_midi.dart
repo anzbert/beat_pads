@@ -38,8 +38,8 @@ class MenuMidi extends StatelessWidget {
             label: "MPE Member Channels",
             subtitle: "Number of member channels to allocate in MPE mode",
             trailing: Text(settings.upperZone
-                ? "${15 - settings.mpeMemberChannels} to 15"
-                : "2 to ${settings.mpeMemberChannels + 1}"),
+                ? "${settings.mpeMemberChannels} (${15 - settings.mpeMemberChannels} to 15)"
+                : "${settings.mpeMemberChannels} (2 to ${settings.mpeMemberChannels + 1})"),
             setValue: (v) => settings.mpeMemberChannels = v,
             readValue: settings.mpeMemberChannels,
           ),
@@ -53,11 +53,12 @@ class MenuMidi extends StatelessWidget {
           ),
           if (!settings.randomVelocity)
             IntSliderTile(
+              min: 10,
               label: "Fixed Velocity",
               subtitle: "Velocity to send when pressing a Pad",
               trailing: Text(settings.velocity.toString()),
               readValue: settings.velocity,
-              setValue: (v) => settings.velocity = v,
+              setValue: (v) => settings.setVelocity(v),
               resetValue: settings.resetVelocity,
             ),
           if (settings.randomVelocity)
