@@ -70,7 +70,7 @@ class BeatPadsScreen extends StatelessWidget {
                                   flex: 7,
                                   child: PitchSliderEased(
                                     channel: settings.channel,
-                                    resetTime: settings.pitchBendEaseCalculated,
+                                    resetTime: settings.pitchBendEaseUsable,
                                   ),
                                 ),
                               // MOD WHEEL

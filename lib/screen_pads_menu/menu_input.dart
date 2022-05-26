@@ -80,9 +80,11 @@ class MenuInput extends StatelessWidget {
             readValue: settings.sustainTimeStep,
             setValue: (v) => settings.sustainTimeStep = v,
             resetFunction: () => settings.resetSustainTimeStep(),
-            actualValue: "${settings.sustainTimeUsable} ms",
+            displayValue: settings.sustainTimeUsable < 1000
+                ? "${settings.sustainTimeUsable} ms"
+                : "${settings.sustainTimeUsable / 1000} s",
             start: 0,
-            steps: 25,
+            steps: Timing.timingSteps.length ~/ 1.5,
           ),
           if (settings.playMode == PlayMode.mpe)
             if (settings.mpe1DRadius.exclusiveGroup == Group.pitch ||

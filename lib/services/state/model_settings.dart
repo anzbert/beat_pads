@@ -357,20 +357,6 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
-  // sustain:
-  int get sustainTimeStep => prefs.settings.sustainTimeStep.value;
-
-  set sustainTimeStep(int timeInMs) {
-    prefs.settings.sustainTimeStep.value = timeInMs;
-    prefs.settings.sustainTimeStep.save();
-    notifyListeners();
-  }
-
-  int get sustainTimeUsable => (100 * sustainTimeStep).toInt();
-
-  resetSustainTimeStep() =>
-      sustainTimeStep = LoadSettings.defaults().sustainTimeStep.value;
-
 // pitchbend:
   bool get pitchBend => prefs.settings.pitchBend.value;
 
@@ -387,20 +373,6 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
-// pitchBendEase
-  int get pitchBendEase => prefs.settings.pitchBendEase.value;
-
-  set pitchBendEase(int timeInMs) {
-    prefs.settings.pitchBendEase.value = timeInMs;
-    prefs.settings.pitchBendEase.save();
-    notifyListeners();
-  }
-
-  int get pitchBendEaseCalculated => (100 * pitchBendEase).toInt();
-
-  resetPitchBendEase() =>
-      pitchBendEase = LoadSettings.defaults().pitchBendEase.value;
-
 // modWheel
   bool get modWheel => prefs.settings.modWheel.value;
 
@@ -409,4 +381,39 @@ class Settings extends ChangeNotifier {
     prefs.settings.modWheel.save();
     notifyListeners();
   }
+
+// pitchBendEase
+  int get pitchBendEase => prefs.settings.pitchBendEase.value
+      .clamp(0, Timing.timingSteps.length - 1);
+
+  set pitchBendEase(int newValue) {
+    prefs.settings.pitchBendEase.value =
+        newValue.clamp(0, Timing.timingSteps.length - 1);
+    prefs.settings.pitchBendEase.save();
+    notifyListeners();
+  }
+
+  int get pitchBendEaseUsable =>
+      Timing.timingSteps[pitchBendEase.clamp(0, Timing.timingSteps.length - 1)];
+
+  resetPitchBendEase() =>
+      pitchBendEase = LoadSettings.defaults().pitchBendEase.value;
+
+// sustain:
+  int get sustainTimeStep => prefs.settings.sustainTimeStep.value
+      .clamp(0, Timing.timingSteps.length ~/ 1.5);
+
+  set sustainTimeStep(int newValue) {
+    prefs.settings.sustainTimeStep.value =
+        newValue.clamp(0, Timing.timingSteps.length ~/ 1.5);
+    ;
+    prefs.settings.sustainTimeStep.save();
+    notifyListeners();
+  }
+
+  int get sustainTimeUsable => Timing
+      .timingSteps[sustainTimeStep.clamp(0, Timing.timingSteps.length ~/ 1.5)];
+
+  resetSustainTimeStep() =>
+      sustainTimeStep = LoadSettings.defaults().sustainTimeStep.value;
 }
