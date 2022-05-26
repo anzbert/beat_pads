@@ -60,11 +60,6 @@ class ThemedSlider extends StatelessWidget {
                         thumbRadius: width * 0.04,
                         thumbHeight: range!.toDouble()),
                 trackShape: CustomTrackShape(),
-
-                // rangeThumbShape: RoundRangeSliderThumbShape(
-                //   enabledThumbRadius: width * 0.02,
-                // ),
-                // rangeTrackShape: CustomRangeTrackShape(),
               ),
               child: child),
         ],

@@ -20,7 +20,7 @@ class _SliderVelocityState extends State<SliderVelocity> {
   @override
   void initState() {
     super.initState();
-    Provider.of<Settings>(context, listen: false).updateCenter();
+    context.read<Settings>().updateCenter();
   }
 
   @override
