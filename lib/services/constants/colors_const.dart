@@ -62,11 +62,13 @@ enum PadColors {
             ? 1.0
             : 0.33;
 
-    return HSLColor.fromAHSL(
-      alpha,
-      hue,
-      noteOn ? 1 : .95,
-      noteOn ? .95 : .80,
-    ).toColor();
+    return noteOn
+        ? Palette.darkGrey
+        : HSLColor.fromAHSL(
+            alpha,
+            hue,
+            .95,
+            .80,
+          ).toColor();
   }
 }
