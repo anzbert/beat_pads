@@ -1,4 +1,5 @@
 import 'package:beat_pads/screen_beat_pads/button_sustain_doubletap.dart';
+import 'package:beat_pads/screen_beat_pads/buttons_menu.dart';
 
 import 'package:beat_pads/screen_beat_pads/buttons_octave.dart';
 import 'package:beat_pads/services/services.dart';
@@ -14,6 +15,7 @@ class ControlButtonsRect extends StatelessWidget {
       builder: (context, settings, child) {
         return Column(
           children: [
+            const ReturnToMenuButton(),
             if (settings.octaveButtons)
               const Expanded(
                 flex: 1,

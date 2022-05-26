@@ -93,18 +93,21 @@ class BeatPadsScreen extends StatelessWidget {
                             ],
                           ),
                           if (!preview)
-                            Builder(builder: (context) {
-                              double width = MediaQuery.of(context).size.width;
-                              return Positioned.directional(
-                                top: width * 0.006,
-                                end: width * 0.006,
-                                textDirection: TextDirection.ltr,
-                                child: SizedBox.square(
-                                  dimension: width * 0.06,
-                                  child: const ReturnToMenuButton(),
-                                ),
-                              );
-                            }),
+                            if (!settings.sustainButton &&
+                                !settings.octaveButtons)
+                              Builder(builder: (context) {
+                                double width =
+                                    MediaQuery.of(context).size.width;
+                                return Positioned.directional(
+                                  top: width * 0.006,
+                                  start: width * 0.006,
+                                  textDirection: TextDirection.ltr,
+                                  child: SizedBox.square(
+                                    dimension: width * 0.06,
+                                    child: const ReturnToMenuButton(),
+                                  ),
+                                );
+                              }),
                           if (settings.connectedDevices.isEmpty && !preview)
                             Positioned(
                               bottom: 15,
