@@ -19,7 +19,7 @@ class PlayModeSlide extends PlayModeHandler {
     }
 
     NoteEvent noteOn =
-        NoteEvent(settings.channel, noteTapped, settings.velocity)
+        NoteEvent(settings.channel, noteTapped, velocityProvider.velocity)
           ..noteOn(cc: settings.sendCC);
 
     touchBuffer.addNoteOn(touch, noteOn);
@@ -42,7 +42,7 @@ class PlayModeSlide extends PlayModeHandler {
             eventInBuffer.noteEvent.channel,
             eventInBuffer.noteEvent.note,
             eventInBuffer.noteEvent.noteOnMessage?.velocity ??
-                settings.velocity,
+                velocityProvider.velocity,
           ),
         ); // add note event to release buffer
         eventInBuffer.noteEvent.clear();
@@ -52,8 +52,8 @@ class PlayModeSlide extends PlayModeHandler {
     }
     // Play new note:
     if (note != null && eventInBuffer.noteEvent.noteOnMessage == null) {
-      eventInBuffer
-          .noteEvent = NoteEvent(settings.channel, note, settings.velocity)
+      eventInBuffer.noteEvent = NoteEvent(
+          settings.channel, note, velocityProvider.velocity)
         ..noteOn(cc: settings.playMode.singleChannel ? settings.sendCC : false);
       notifyParent();
     }

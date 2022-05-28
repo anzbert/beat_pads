@@ -34,8 +34,9 @@ class PlayModeMPE extends PlayModeHandler {
       mpeMods.rMod.send(newChannel, noteTapped, 0);
     }
 
-    NoteEvent noteOn = NoteEvent(newChannel, noteTapped, settings.velocity)
-      ..noteOn(cc: false);
+    NoteEvent noteOn =
+        NoteEvent(newChannel, noteTapped, velocityProvider.velocity)
+          ..noteOn(cc: false);
 
     touchBuffer.addNoteOn(touch, noteOn);
     notifyParent();

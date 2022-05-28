@@ -1,9 +1,11 @@
+import 'package:beat_pads/services/midi_velocity.dart';
 import 'package:beat_pads/services/services.dart';
 import 'package:flutter/material.dart';
 
 abstract class PlayModeHandler {
   final Settings settings;
   final Function notifyParent;
+  final VelocityProvider velocityProvider;
 
   final TouchBuffer touchBuffer;
   late TouchReleaseBuffer touchReleaseBuffer;
@@ -12,7 +14,8 @@ abstract class PlayModeHandler {
     this.settings,
     Size screenSize,
     this.notifyParent,
-  ) : touchBuffer = TouchBuffer(settings, screenSize) {
+  )   : touchBuffer = TouchBuffer(settings, screenSize),
+        velocityProvider = VelocityProvider(settings, notifyParent) {
     touchReleaseBuffer = TouchReleaseBuffer(
       settings,
       releaseChannel,
@@ -26,7 +29,7 @@ abstract class PlayModeHandler {
     }
 
     NoteEvent noteOn =
-        NoteEvent(settings.channel, noteTapped, settings.velocity)
+        NoteEvent(settings.channel, noteTapped, velocityProvider.velocity)
           ..noteOn(cc: settings.sendCC);
 
     touchBuffer.addNoteOn(touch, noteOn);

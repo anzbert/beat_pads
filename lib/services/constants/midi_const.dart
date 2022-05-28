@@ -184,7 +184,7 @@ enum CC {
   modWheel(1),
   breath(2),
   footPedal(4),
-  volume(7),
+  gain(7),
   pan(10),
   expression(11),
   sustainPedal(64),

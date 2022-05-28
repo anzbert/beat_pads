@@ -111,6 +111,8 @@ enum MPEmods {
   slide64("Slide (center 64)", Dims.two, Group.slide),
   pan("Pan", Dims.one, Group.pan),
   pan64("Pan (center 64)", Dims.two, Group.pan),
+  gain("Gain", Dims.one, Group.gain),
+  gain64("Gain (center 64)", Dims.two, Group.gain),
 
   none("None", Dims.one, Group.none),
   ;
@@ -127,6 +129,8 @@ enum MPEmods {
     if (this == MPEmods.slide64) return ModCC642D(CC.slide);
     if (this == MPEmods.pan) return ModCC1D(CC.pan);
     if (this == MPEmods.pan64) return ModCC642D(CC.pan);
+    if (this == MPEmods.gain) return ModCC1D(CC.gain);
+    if (this == MPEmods.gain64) return ModCC642D(CC.gain);
 
     if (this == MPEmods.pitchbend) {
       return ModPitchBend(
@@ -164,6 +168,7 @@ enum Group {
   slide,
   at,
   pan,
+  gain,
   none;
 }
 

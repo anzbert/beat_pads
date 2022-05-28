@@ -1,19 +1,12 @@
 import 'package:beat_pads/screen_pads_menu/_screen_pads_menu.dart';
 import 'package:flutter/material.dart';
-import 'dart:math';
 
 import 'package:beat_pads/services/services.dart';
 import 'package:flutter_midi_command/flutter_midi_command.dart';
 
 class Settings extends ChangeNotifier {
-  // Settings(this.prefs);
-  Settings(this.prefs)
-      : _velocityCenter = (prefs.settings.velocityMax.value +
-                prefs.settings.velocityMax.value) /
-            2;
-
   Prefs prefs;
-  final _random = Random();
+  Settings(this.prefs);
 
   resetAll() async {
     await prefs.resetStoredValues();
@@ -309,56 +302,19 @@ class Settings extends ChangeNotifier {
   int get velocityMin => prefs.settings.velocityMin.value;
   int get velocityMax => prefs.settings.velocityMax.value;
   int get velocityRange => velocityMax - velocityMin;
+  double get velocityCenter => (velocityMax + velocityMin) / 2;
 
   set velocityMin(int min) {
     prefs.settings.velocityMin.value = min;
-    updateCenter();
     prefs.settings.velocityMin.save();
     notifyListeners();
   }
 
   set velocityMax(int max) {
     prefs.settings.velocityMax.value = max;
-    updateCenter();
     prefs.settings.velocityMax.save();
     notifyListeners();
   }
-
-  updateCenter() {
-    if (randomVelocity) {
-      _velocityCenter = (prefs.settings.velocityMax.value +
-              prefs.settings.velocityMin.value) /
-          2;
-    } else {
-      _velocityCenter = prefs.settings.velocity.value.toDouble();
-    }
-  }
-
-  double _velocityCenter;
-  double get velocityCenter => _velocityCenter;
-  set velocityCenterInRange(double vel) {
-    _velocityCenter = vel.clamp(9 + velocityRange / 2, 128 - velocityRange / 2);
-    notifyListeners();
-  }
-
-  set velocityCenterFixed(double vel) {
-    _velocityCenter = vel;
-    notifyListeners();
-  }
-
-  // ///////////////////////////////////
-  // this is what the midi sender grabs:
-  int get velocity {
-    if (!randomVelocity) {
-      return velocityCenter.round().clamp(10, 127); // fixed velocity
-    }
-
-    // random velocity based on center value, to allow for non-ranged slider operation
-    double randVelocity =
-        _random.nextInt(velocityRange) + (velocityCenter - velocityRange / 2);
-    return randVelocity.clamp(10, 127).round();
-  }
-  // ///////////////////////////////////
 
   setVelocity(int vel, {bool save = true}) {
     prefs.settings.velocity.value = vel.clamp(10, 127);
@@ -366,7 +322,7 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
-  get velocityMenu => prefs.settings.velocity.value;
+  int get velocity => prefs.settings.velocity.value;
 
   resetVelocity() {
     if (!randomVelocity) {
