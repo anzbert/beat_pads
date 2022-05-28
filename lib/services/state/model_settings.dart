@@ -312,7 +312,6 @@ class Settings extends ChangeNotifier {
 
   set velocityMin(int min) {
     prefs.settings.velocityMin.value = min;
-    // min.clamp(10, prefs.settings.velocityMax.value);
     updateCenter();
     prefs.settings.velocityMin.save();
     notifyListeners();
@@ -320,22 +319,30 @@ class Settings extends ChangeNotifier {
 
   set velocityMax(int max) {
     prefs.settings.velocityMax.value = max;
-    // max.clamp(prefs.settings.velocityMin.value, 127);
     updateCenter();
     prefs.settings.velocityMax.save();
     notifyListeners();
   }
 
   updateCenter() {
-    _velocityCenter =
-        (prefs.settings.velocityMax.value + prefs.settings.velocityMin.value) /
-            2;
+    if (randomVelocity) {
+      _velocityCenter = (prefs.settings.velocityMax.value +
+              prefs.settings.velocityMin.value) /
+          2;
+    } else {
+      _velocityCenter = prefs.settings.velocity.value.toDouble();
+    }
   }
 
   double _velocityCenter;
   double get velocityCenter => _velocityCenter;
-  set velocityCenter(double vel) {
+  set velocityCenterInRange(double vel) {
     _velocityCenter = vel.clamp(9 + velocityRange / 2, 128 - velocityRange / 2);
+    notifyListeners();
+  }
+
+  set velocityCenterFixed(double vel) {
+    _velocityCenter = vel;
     notifyListeners();
   }
 
@@ -343,7 +350,7 @@ class Settings extends ChangeNotifier {
   // this is what the midi sender grabs:
   int get velocity {
     if (!randomVelocity) {
-      return prefs.settings.velocity.value.clamp(10, 127); // fixed velocity
+      return velocityCenter.round().clamp(10, 127); // fixed velocity
     }
 
     // random velocity based on center value, to allow for non-ranged slider operation
@@ -358,6 +365,8 @@ class Settings extends ChangeNotifier {
     if (save) prefs.settings.velocity.save();
     notifyListeners();
   }
+
+  get velocityMenu => prefs.settings.velocity.value;
 
   resetVelocity() {
     if (!randomVelocity) {

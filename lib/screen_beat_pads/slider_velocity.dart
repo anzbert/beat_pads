@@ -37,13 +37,12 @@ class _SliderVelocityState extends State<SliderVelocity> {
                 max: 127,
                 value: settings.velocity.clamp(10, 127).toDouble(),
                 onChanged: (v) {
-                  settings.setVelocity(v.toInt(), save: false);
+                  settings.velocityCenterFixed = v;
                 },
               ),
             );
           } else {
             return ThemedSlider(
-              // showTrack: true,
               range: settings.velocityRange,
               thumbColor: Palette.laserLemon,
               child: Slider(
@@ -51,7 +50,7 @@ class _SliderVelocityState extends State<SliderVelocity> {
                 max: 127,
                 value: settings.velocityCenter.clamp(10, 127),
                 onChanged: (v) {
-                  settings.velocityCenter = v;
+                  settings.velocityCenterInRange = v;
                 },
               ),
             );
