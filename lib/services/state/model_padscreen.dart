@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import '../services.dart';
 
 class PadScreenVariables extends ChangeNotifier {
-  PadScreenVariables(this._settings, {this.preview = false});
+  /// this could be a temporary logic and variable object for the pads screen
+  PadScreenVariables(this.settings, {this.preview = false});
 
-  Settings _settings;
+  Settings settings;
   bool preview;
 
   PadScreenVariables update(Settings settings) {
-    _settings = settings;
+    settings = settings;
     return this;
   }
 }

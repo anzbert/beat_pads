@@ -43,13 +43,13 @@ class BeatPadsScreen extends StatelessWidget {
                         update: (_, settings, midiSender) =>
                             midiSender!.update(settings, screenSize),
                       ),
-                      ChangeNotifierProxyProvider<Settings, PadScreenVariables>(
-                        create: (context) => PadScreenVariables(
-                            context.read<Settings>(),
-                            preview: preview),
-                        update: (_, settings, padVariables) =>
-                            padVariables!.update(settings),
-                      ),
+                      // ChangeNotifierProxyProvider<Settings, PadScreenVariables>(
+                      //   create: (context) => PadScreenVariables(
+                      //       context.read<Settings>(),
+                      //       preview: preview),
+                      //   update: (_, settings, padVariables) =>
+                      //       padVariables!.update(settings),
+                      // ),
                     ],
                     builder: (context, _) {
                       return Stack(

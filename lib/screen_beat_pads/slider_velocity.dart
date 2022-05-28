@@ -29,25 +29,25 @@ class _SliderVelocityState extends State<SliderVelocity> {
               child: Slider(
                 min: 10,
                 max: 127,
-                value: sender.velocityProvider.velocityFixed
+                value: sender.playMode.velocityProvider.velocityFixed
                     .clamp(10, 127)
                     .toDouble(),
                 onChanged: (v) {
-                  sender.velocityProvider.velocityFixed = v.toInt();
+                  sender.playMode.velocityProvider.velocityFixed = v.toInt();
                 },
               ),
             );
           } else {
             return ThemedSlider(
-              range: sender.velocityProvider.velocityRange,
+              range: sender.playMode.velocityProvider.velocityRange,
               thumbColor: Palette.laserLemon,
               child: Slider(
                 min: 10,
                 max: 127,
-                value:
-                    sender.velocityProvider.velocityRandomCenter.clamp(10, 127),
+                value: sender.playMode.velocityProvider.velocityRandomCenter
+                    .clamp(10, 127),
                 onChanged: (v) {
-                  sender.velocityProvider.velocityRandomCenter = v;
+                  sender.playMode.velocityProvider.velocityRandomCenter = v;
                 },
               ),
             );
