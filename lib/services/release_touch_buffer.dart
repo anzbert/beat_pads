@@ -8,9 +8,12 @@ class TouchReleaseBuffer {
 
   /// Data Structure that holds released Touch Events
   TouchReleaseBuffer(
-      this._settings, this.releaseChannel, this._notifyListenersOfParent);
+      this._settings, this.releaseChannel, this._notifyListenersOfParent) {
+    // TODO debug:
+    // Utils.debugLog("touch release buffer:", _buffer, 1);
+  }
 
-  List<TouchEvent> _buffer = [];
+  final List<TouchEvent> _buffer = [];
   List<TouchEvent> get buffer => _buffer;
 
   /// Find and return a TouchEvent from the buffer by its uniqueID, if possible
@@ -29,6 +32,10 @@ class TouchReleaseBuffer {
       if (event.noteEvent.note == note) return true;
     }
     return false;
+  }
+
+  bool get hasActiveNotes {
+    return _buffer.any((element) => element.noteEvent.noteOnMessage != null);
   }
 
   /// Update note in the released events buffer, by adding it or updating
@@ -50,14 +57,15 @@ class TouchReleaseBuffer {
     if (checkerRunning) return; // only one running instance possible!
     checkerRunning = true;
 
-    while (_buffer.isNotEmpty) {
+    while (hasActiveNotes) {
       await Future.delayed(
         const Duration(milliseconds: 5),
         () {
           for (int i = 0; i < _buffer.length; i++) {
             if (DateTime.now().millisecondsSinceEpoch -
-                    _buffer[i].noteEvent.releaseTime >
-                _settings.sustainTimeUsable) {
+                        _buffer[i].noteEvent.releaseTime >
+                    _settings.noteSustainTimeUsable &&
+                _buffer[i].noteEvent.noteOnMessage != null) {
               _buffer[i].noteEvent.noteOff(); // note OFF
 
               releaseChannel(
@@ -67,7 +75,7 @@ class TouchReleaseBuffer {
               _notifyListenersOfParent(); // notify to update pads
             }
           }
-          _buffer.removeWhere((element) => element.kill);
+          killAllMarked();
         },
       );
     }
@@ -75,7 +83,10 @@ class TouchReleaseBuffer {
   }
 
   void removeNoteFromReleaseBuffer(int note) {
-    _buffer =
-        _buffer.where((element) => element.noteEvent.note != note).toList();
+    _buffer.removeWhere((element) => element.noteEvent.note == note);
+  }
+
+  void killAllMarked() {
+    _buffer.removeWhere((element) => element.kill);
   }
 }

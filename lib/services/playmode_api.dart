@@ -1,4 +1,3 @@
-import 'package:beat_pads/services/midi_velocity.dart';
 import 'package:beat_pads/services/services.dart';
 import 'package:flutter/material.dart';
 
@@ -24,7 +23,7 @@ abstract class PlayModeHandler {
   }
 
   void handleNewTouch(CustomPointer touch, int noteTapped) {
-    if (settings.sustainTimeUsable > 0) {
+    if (settings.noteSustainTimeUsable > 0) {
       touchReleaseBuffer.removeNoteFromReleaseBuffer(noteTapped);
     }
 
@@ -42,7 +41,7 @@ abstract class PlayModeHandler {
     TouchEvent? eventInBuffer = touchBuffer.getByID(touch.pointer);
     if (eventInBuffer == null) return;
 
-    if (settings.sustainTimeUsable == 0) {
+    if (settings.noteSustainTimeUsable == 0) {
       eventInBuffer.noteEvent.noteOff(); // noteOFF
       touchBuffer.remove(eventInBuffer);
       notifyParent();
@@ -55,10 +54,10 @@ abstract class PlayModeHandler {
 
   void dispose() {
     for (TouchEvent touch in touchBuffer.buffer) {
-      touch.noteEvent.noteOff();
+      if (touch.noteEvent.isPlaying) touch.noteEvent.noteOff();
     }
     for (TouchEvent touch in touchReleaseBuffer.buffer) {
-      touch.noteEvent.noteOff();
+      if (touch.noteEvent.isPlaying) touch.noteEvent.noteOff();
     }
   }
 
@@ -72,13 +71,21 @@ abstract class PlayModeHandler {
   /// Checks releasebuffer and active touchbuffer
   bool isNoteOn(int note, [int? channel]) {
     for (TouchEvent touch in touchBuffer.buffer) {
-      if (channel == null && touch.noteEvent.note == note) return true;
-      if (channel == channel && touch.noteEvent.note == note) return true;
+      if (channel == null &&
+          touch.noteEvent.note == note &&
+          touch.noteEvent.isPlaying) return true;
+      if (channel == channel &&
+          touch.noteEvent.note == note &&
+          touch.noteEvent.isPlaying) return true;
     }
-    if (settings.sustainTimeUsable > 0) {
+    if (settings.noteSustainTimeUsable > 0) {
       for (TouchEvent event in touchReleaseBuffer.buffer) {
-        if (channel == null && event.noteEvent.note == note) return true;
-        if (channel == channel && event.noteEvent.note == note) return true;
+        if (channel == null &&
+            event.noteEvent.note == note &&
+            event.noteEvent.isPlaying) return true;
+        if (channel == channel &&
+            event.noteEvent.note == note &&
+            event.noteEvent.isPlaying) return true;
       }
     }
     return false;

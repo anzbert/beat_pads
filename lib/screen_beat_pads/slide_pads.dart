@@ -17,8 +17,7 @@ class SlidePads extends StatefulWidget {
 
 class _SlidePadsState extends State<SlidePads> with TickerProviderStateMixin {
   final GlobalKey _padsWidgetKey = GlobalKey();
-
-  PlayMode? disposeMode;
+  List<ReturnAnimation> animations = [];
 
   int? _detectTappedItem(PointerEvent event) {
     final BuildContext? context = _padsWidgetKey.currentContext;
@@ -71,7 +70,7 @@ class _SlidePadsState extends State<SlidePads> with TickerProviderStateMixin {
                 .read<MidiSender>()
                 .handleEndTouch(CustomPointer(touch.pointer, touch.position));
 
-            if (settings.sustainTimeUsable > 0 &&
+            if (settings.modSustainTimeUsable > 0 &&
                 settings.playMode.modulatable) {
               TouchEvent? event = context
                   .read<MidiSender>()
@@ -80,18 +79,11 @@ class _SlidePadsState extends State<SlidePads> with TickerProviderStateMixin {
                   .getByID(touch.pointer);
               if (event == null || event.newPosition == event.origin) return;
 
-              AnimationController controller = AnimationController(
-                duration: Duration(milliseconds: settings.sustainTimeUsable),
-                vsync: this,
+              ReturnAnimation returnAnim = ReturnAnimation(
+                event.uniqueID,
+                settings.modSustainTimeUsable,
+                tickerProvider: this,
               );
-              Animation<double> curve = CurvedAnimation(
-                parent: controller,
-                curve: Curves.easeIn,
-              );
-              Animation<double> animation = Tween<double>(
-                begin: 0,
-                end: 1,
-              ).animate(curve);
 
               Offset constrainedPosition = settings.modulation2D
                   ? Utils.limitToSquare(event.origin, touch.position,
@@ -99,27 +91,41 @@ class _SlidePadsState extends State<SlidePads> with TickerProviderStateMixin {
                   : Utils.limitToCircle(event.origin, touch.position,
                       settings.absoluteRadius(context));
 
-              animation.addListener(() {
-                if (animation.isCompleted ||
-                    !context
-                        .read<MidiSender>()
-                        .playMode
-                        .touchReleaseBuffer
-                        .isNoteInBuffer(event.noteEvent.note) ||
-                    !mounted) {
-                  controller.dispose();
+              returnAnim.animation.addListener(() {
+                var event = context
+                    .read<MidiSender>()
+                    .playMode
+                    .touchReleaseBuffer
+                    .getByID(touch.pointer);
+
+                if (!mounted || event == null) {
+                  returnAnim.dispose();
+                  return;
+                }
+                if (returnAnim.isCompleted) {
+                  event.returnAnimation = false;
+                  returnAnim.dispose();
+                  event.markKill();
+                  context
+                      .read<MidiSender>()
+                      .playMode
+                      .touchReleaseBuffer
+                      .killAllMarked();
+                  animations.removeWhere((element) => element.isCompleted);
                   return;
                 } else {
                   context.read<MidiSender>().handlePan(
                       CustomPointer(
                           touch.pointer,
                           Offset.lerp(constrainedPosition, event.origin,
-                              animation.value)!),
+                              returnAnim.value)!),
                       null);
                   setState(() {});
                 }
               });
-              controller.forward();
+              event.returnAnimation = true;
+              returnAnim.forward();
+              animations.add(returnAnim);
             }
           }
         }
@@ -169,5 +175,13 @@ class _SlidePadsState extends State<SlidePads> with TickerProviderStateMixin {
         );
       },
     );
+  }
+
+  @override
+  void dispose() {
+    for (var anim in animations) {
+      anim.dispose();
+    }
+    super.dispose();
   }
 }

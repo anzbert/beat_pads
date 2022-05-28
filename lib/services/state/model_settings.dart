@@ -393,21 +393,39 @@ class Settings extends ChangeNotifier {
   resetPitchBendEase() =>
       pitchBendEase = LoadSettings.defaults().pitchBendEase.value;
 
-// sustain:
-  int get sustainTimeStep => prefs.settings.sustainTimeStep.value
+// note sustain:
+  int get noteSustainTimeStep => prefs.settings.noteSustainTimeStep.value
       .clamp(0, Timing.timingSteps.length ~/ 1.5);
 
-  set sustainTimeStep(int newValue) {
-    prefs.settings.sustainTimeStep.value =
+  set noteSustainTimeStep(int newValue) {
+    prefs.settings.noteSustainTimeStep.value =
         newValue.clamp(0, Timing.timingSteps.length ~/ 1.5);
 
-    prefs.settings.sustainTimeStep.save();
+    prefs.settings.noteSustainTimeStep.save();
     notifyListeners();
   }
 
-  int get sustainTimeUsable => Timing
-      .timingSteps[sustainTimeStep.clamp(0, Timing.timingSteps.length ~/ 1.5)];
+  int get noteSustainTimeUsable => Timing.timingSteps[
+      noteSustainTimeStep.clamp(0, Timing.timingSteps.length ~/ 1.5)];
 
-  resetSustainTimeStep() =>
-      sustainTimeStep = LoadSettings.defaults().sustainTimeStep.value;
+  resetNoteSustainTimeStep() =>
+      noteSustainTimeStep = LoadSettings.defaults().noteSustainTimeStep.value;
+
+// modulation sustain:
+  int get modSustainTimeStep => prefs.settings.modSustainTimeStep.value
+      .clamp(0, Timing.timingSteps.length ~/ 1.5);
+
+  set modSustainTimeStep(int newValue) {
+    prefs.settings.modSustainTimeStep.value =
+        newValue.clamp(0, Timing.timingSteps.length ~/ 1.5);
+
+    prefs.settings.modSustainTimeStep.save();
+    notifyListeners();
+  }
+
+  int get modSustainTimeUsable => Timing.timingSteps[
+      modSustainTimeStep.clamp(0, Timing.timingSteps.length ~/ 1.5)];
+
+  resetModSustainTimeStep() =>
+      modSustainTimeStep = LoadSettings.defaults().modSustainTimeStep.value;
 }

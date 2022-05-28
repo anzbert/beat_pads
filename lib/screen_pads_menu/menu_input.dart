@@ -74,18 +74,29 @@ class MenuInput extends StatelessWidget {
           if (settings.playMode == PlayMode.mpe) const Divider(),
           NonLinearSliderTile(
             label: "Release Delay",
-            subtitle: settings.playMode.modulatable
-                ? "Modulation Easing and NoteOff delay in Milliseconds"
-                : "NoteOff delay in Milliseconds",
-            readValue: settings.sustainTimeStep,
-            setValue: (v) => settings.sustainTimeStep = v,
-            resetFunction: () => settings.resetSustainTimeStep(),
-            displayValue: settings.sustainTimeUsable < 1000
-                ? "${settings.sustainTimeUsable} ms"
-                : "${settings.sustainTimeUsable / 1000} s",
+            subtitle: "NoteOff delay in Milliseconds",
+            readValue: settings.noteSustainTimeStep,
+            setValue: (v) => settings.noteSustainTimeStep = v,
+            resetFunction: () => settings.resetNoteSustainTimeStep(),
+            displayValue: settings.noteSustainTimeUsable < 1000
+                ? "${settings.noteSustainTimeUsable} ms"
+                : "${settings.noteSustainTimeUsable / 1000} s",
             start: 0,
             steps: Timing.timingSteps.length ~/ 1.5,
           ),
+          if (settings.playMode.modulatable)
+            NonLinearSliderTile(
+              label: "Modulation Ease Back Time",
+              subtitle: "Modulation Easing Back to Zero in Milliseconds",
+              readValue: settings.modSustainTimeStep,
+              setValue: (v) => settings.modSustainTimeStep = v,
+              resetFunction: () => settings.resetModSustainTimeStep(),
+              displayValue: settings.modSustainTimeUsable < 1000
+                  ? "${settings.modSustainTimeUsable} ms"
+                  : "${settings.modSustainTimeUsable / 1000} s",
+              start: 0,
+              steps: Timing.timingSteps.length ~/ 1.5,
+            ),
           if (settings.playMode == PlayMode.mpe)
             if (settings.mpe1DRadius.exclusiveGroup == Group.pitch ||
                 settings.mpe2DX.exclusiveGroup == Group.pitch ||

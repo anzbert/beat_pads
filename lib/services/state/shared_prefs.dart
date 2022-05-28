@@ -54,7 +54,8 @@ class Prefs {
     "velocity": 110,
     "velocityMin": 110,
     "velocityMax": 120,
-    "sustainTimeStep": 0,
+    "noteSustainTimeStep": 0,
+    "modSustainTimeStep": 0,
     "sendCC": false,
     "velocitySlider": false,
     "pitchBend": false,
@@ -104,7 +105,8 @@ class LoadSettings {
   final Setting<int> velocity;
   final Setting<int> velocityMin;
   final Setting<int> velocityMax;
-  final Setting<int> sustainTimeStep;
+  final Setting<int> noteSustainTimeStep;
+  final Setting<int> modSustainTimeStep;
   final Setting<int> pitchBendEase;
   final Setting<bool> modWheel;
   final Setting<bool> sendCC;
@@ -151,8 +153,10 @@ class LoadSettings {
         velocity = Setting<int>('velocity', loadedMap['velocity']!),
         velocityMin = Setting<int>('velocityMin', loadedMap['velocityMin']!),
         velocityMax = Setting<int>('velocityMax', loadedMap['velocityMax']!),
-        sustainTimeStep =
-            Setting<int>('sustainTimeStep', loadedMap['sustainTimeStep']!),
+        noteSustainTimeStep = Setting<int>(
+            'noteSustainTimeStep', loadedMap['noteSustainTimeStep']!),
+        modSustainTimeStep = Setting<int>(
+            'modSustainTimeStep', loadedMap['modSustainTimeStep']!),
         sendCC = Setting<bool>('sendCC', loadedMap['sendCC']!),
         pitchBend = Setting<bool>('pitchBend', loadedMap['pitchBend']!),
         velocitySlider =
