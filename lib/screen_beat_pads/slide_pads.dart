@@ -85,9 +85,7 @@ class _SlidePadsState extends State<SlidePads> with TickerProviderStateMixin {
 
               ReturnAnimation returnAnim = ReturnAnimation(
                 event.uniqueID,
-                settings.unlinkSustainTimes
-                    ? settings.modSustainTimeUsable
-                    : settings.noteSustainTimeUsable,
+                settings.modSustainTimeUsable,
                 tickerProvider: this,
               );
 
@@ -174,7 +172,7 @@ class _SlidePadsState extends State<SlidePads> with TickerProviderStateMixin {
                 ],
               ),
             ),
-            if (settings.playMode.modulatable) const PaintModulation(),
+            if (settings.playMode.modulatable) PaintModulation(),
           ],
         );
       },

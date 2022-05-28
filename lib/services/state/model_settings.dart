@@ -430,8 +430,10 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
-  int get modSustainTimeUsable => Timing.timingSteps[
-      modSustainTimeStep.clamp(0, Timing.timingSteps.length ~/ 1.5)];
+  int get modSustainTimeUsable => unlinkSustainTimes
+      ? Timing.timingSteps[
+          modSustainTimeStep.clamp(0, Timing.timingSteps.length ~/ 1.5)]
+      : noteSustainTimeUsable;
 
   resetModSustainTimeStep() =>
       modSustainTimeStep = LoadSettings.defaults().modSustainTimeStep.value;

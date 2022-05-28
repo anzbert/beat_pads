@@ -87,5 +87,6 @@ class TouchReleaseBuffer {
 
   void killAllMarkedReleasedTouchEvents() {
     _buffer.removeWhere((element) => element.kill);
+    _notifyListenersOfParent();
   }
 }

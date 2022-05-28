@@ -65,6 +65,9 @@ abstract class PlayModeHandler {
     for (var event in touchBuffer.buffer) {
       event.markDirty();
     }
+    for (var event in touchReleaseBuffer.buffer) {
+      event.markDirty();
+    }
   }
 
   /// Returns if a given note is ON in any channel, or, if provided, in a specific channel.

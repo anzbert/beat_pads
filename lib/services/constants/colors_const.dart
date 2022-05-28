@@ -11,6 +11,7 @@ abstract class Palette {
   static Color darkGrey = const Color.fromRGBO(66, 66, 66, 1);
   static Color lightGrey = const HSLColor.fromAHSL(1, 0, .0, .33).toColor();
   static Color whiteLike = const Color.fromRGBO(255, 255, 255, 0.702);
+  static Color dirty = const HSLColor.fromAHSL(0.25, 0, .0, .33).toColor();
 }
 
 enum PadColors {
