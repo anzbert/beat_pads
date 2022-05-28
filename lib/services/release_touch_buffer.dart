@@ -9,7 +9,6 @@ class TouchReleaseBuffer {
   /// Data Structure that holds released Touch Events
   TouchReleaseBuffer(
       this._settings, this.releaseChannel, this._notifyListenersOfParent) {
-    // TODO debug:
     // Utils.debugLog("touch release buffer:", _buffer, 1);
   }
 
@@ -71,11 +70,11 @@ class TouchReleaseBuffer {
               releaseChannel(
                   _buffer[i].noteEvent.channel); // release MPE channel
 
-              _buffer[i].markKill();
+              _buffer[i].markKillIfNoteOffAndNoAnimation();
               _notifyListenersOfParent(); // notify to update pads
             }
           }
-          killAllMarked();
+          killAllMarkedReleasedTouchEvents();
         },
       );
     }
@@ -86,7 +85,7 @@ class TouchReleaseBuffer {
     _buffer.removeWhere((element) => element.noteEvent.note == note);
   }
 
-  void killAllMarked() {
+  void killAllMarkedReleasedTouchEvents() {
     _buffer.removeWhere((element) => element.kill);
   }
 }

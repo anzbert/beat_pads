@@ -17,7 +17,11 @@ class SlidePads extends StatefulWidget {
 
 class _SlidePadsState extends State<SlidePads> with TickerProviderStateMixin {
   final GlobalKey _padsWidgetKey = GlobalKey();
-  List<ReturnAnimation> animations = [];
+
+  final List<ReturnAnimation> _animations = [];
+  void killAllMarkedAnimations() {
+    _animations.removeWhere((element) => element.kill);
+  }
 
   int? _detectTappedItem(PointerEvent event) {
     final BuildContext? context = _padsWidgetKey.currentContext;
@@ -81,7 +85,9 @@ class _SlidePadsState extends State<SlidePads> with TickerProviderStateMixin {
 
               ReturnAnimation returnAnim = ReturnAnimation(
                 event.uniqueID,
-                settings.modSustainTimeUsable,
+                settings.unlinkSustainTimes
+                    ? settings.modSustainTimeUsable
+                    : settings.noteSustainTimeUsable,
                 tickerProvider: this,
               );
 
@@ -92,26 +98,23 @@ class _SlidePadsState extends State<SlidePads> with TickerProviderStateMixin {
                       settings.absoluteRadius(context));
 
               returnAnim.animation.addListener(() {
-                var event = context
-                    .read<MidiSender>()
-                    .playMode
-                    .touchReleaseBuffer
-                    .getByID(touch.pointer);
+                TouchReleaseBuffer touchReleaseBuffer =
+                    context.read<MidiSender>().playMode.touchReleaseBuffer;
+                TouchEvent? touchEvent =
+                    touchReleaseBuffer.getByID(returnAnim.uniqueID);
 
-                if (!mounted || event == null) {
-                  returnAnim.dispose();
+                if (!mounted || touchEvent == null) {
+                  returnAnim.markKillAndDisposeController();
+                  killAllMarkedAnimations();
                   return;
                 }
                 if (returnAnim.isCompleted) {
-                  event.returnAnimation = false;
-                  returnAnim.dispose();
-                  event.markKill();
-                  context
-                      .read<MidiSender>()
-                      .playMode
-                      .touchReleaseBuffer
-                      .killAllMarked();
-                  animations.removeWhere((element) => element.isCompleted);
+                  touchEvent.hasReturnAnimation = false;
+                  touchEvent.markKillIfNoteOffAndNoAnimation();
+                  touchReleaseBuffer.killAllMarkedReleasedTouchEvents();
+
+                  returnAnim.markKillAndDisposeController();
+                  killAllMarkedAnimations();
                   return;
                 } else {
                   context.read<MidiSender>().handlePan(
@@ -123,9 +126,10 @@ class _SlidePadsState extends State<SlidePads> with TickerProviderStateMixin {
                   setState(() {});
                 }
               });
-              event.returnAnimation = true;
+
+              event.hasReturnAnimation = true;
               returnAnim.forward();
-              animations.add(returnAnim);
+              _animations.add(returnAnim);
             }
           }
         }
@@ -179,9 +183,10 @@ class _SlidePadsState extends State<SlidePads> with TickerProviderStateMixin {
 
   @override
   void dispose() {
-    for (var anim in animations) {
-      anim.dispose();
+    for (ReturnAnimation anim in _animations) {
+      anim.controller.dispose();
     }
+    _animations.clear();
     super.dispose();
   }
 }

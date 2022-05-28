@@ -284,10 +284,17 @@ class Settings extends ChangeNotifier {
 
   // sustain button:
   bool get sustainButton => prefs.settings.sustainButton.value;
-
   set sustainButton(bool newValue) {
     prefs.settings.sustainButton.value = newValue;
     prefs.settings.sustainButton.save();
+    notifyListeners();
+  }
+
+  // unlink sustain times button:
+  bool get unlinkSustainTimes => prefs.settings.unlinkSustainTimes.value;
+  set unlinkSustainTimes(bool newValue) {
+    prefs.settings.unlinkSustainTimes.value = newValue;
+    prefs.settings.unlinkSustainTimes.save();
     notifyListeners();
   }
 

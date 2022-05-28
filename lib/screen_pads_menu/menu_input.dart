@@ -72,9 +72,23 @@ class MenuInput extends StatelessWidget {
               ),
             ),
           if (settings.playMode == PlayMode.mpe) const Divider(),
+          if (settings.playMode.modulatable)
+            ListTile(
+              title: const Text("Advanced Delay Controls"),
+              subtitle:
+                  const Text("Control Modulation and Note Delay individually"),
+              trailing: Switch(
+                  value: settings.unlinkSustainTimes,
+                  onChanged: (value) => settings.unlinkSustainTimes =
+                      !settings.unlinkSustainTimes),
+            ),
           NonLinearSliderTile(
-            label: "Release Delay",
-            subtitle: "NoteOff delay in Milliseconds",
+            label: settings.unlinkSustainTimes
+                ? "Note Release Delay"
+                : "Release Delay",
+            subtitle: settings.unlinkSustainTimes
+                ? "Note Off Delay after Release in Milliseconds"
+                : "Note and Modulation Delay after Release in Milliseconds",
             readValue: settings.noteSustainTimeStep,
             setValue: (v) => settings.noteSustainTimeStep = v,
             resetFunction: () => settings.resetNoteSustainTimeStep(),
@@ -84,10 +98,10 @@ class MenuInput extends StatelessWidget {
             start: 0,
             steps: Timing.timingSteps.length ~/ 1.5,
           ),
-          if (settings.playMode.modulatable)
+          if (settings.playMode.modulatable && settings.unlinkSustainTimes)
             NonLinearSliderTile(
-              label: "Modulation Ease Back Time",
-              subtitle: "Modulation Easing Back to Zero in Milliseconds",
+              label: "Modulation Release Delay",
+              subtitle: "Modulation ease back after Release in Milliseconds",
               readValue: settings.modSustainTimeStep,
               setValue: (v) => settings.modSustainTimeStep = v,
               resetFunction: () => settings.resetModSustainTimeStep(),
@@ -111,15 +125,6 @@ class MenuInput extends StatelessWidget {
                 setValue: (v) => settings.mpePitchbendRange = v,
                 resetValue: settings.resetMPEPitchbendRange,
               ),
-          if (settings.playMode.singleChannel)
-            ListTile(
-              title: const Text("Send CC"),
-              subtitle: const Text(
-                  "Send CC along with Note one Midi Channel above. Useful for triggering note dependant effects"),
-              trailing: Switch(
-                  value: settings.sendCC,
-                  onChanged: (value) => settings.sendCC = value),
-            ),
           if (settings.playMode.modulatable) const Divider(),
           if (settings.playMode.modulatable)
             ModSizeSliderTile(
@@ -144,6 +149,16 @@ class MenuInput extends StatelessWidget {
               readValue: (settings.modulationDeadZone * 100).toInt(),
               setValue: (v) => settings.modulationDeadZone = v / 100,
               resetValue: settings.resetDeadZone,
+            ),
+          if (settings.playMode.singleChannel) const Divider(),
+          if (settings.playMode.singleChannel)
+            ListTile(
+              title: const Text("Send CC"),
+              subtitle: const Text(
+                  "Send CC along with Note one Midi Channel above. Useful for triggering note dependant effects"),
+              trailing: Switch(
+                  value: settings.sendCC,
+                  onChanged: (value) => settings.sendCC = value),
             ),
         ],
       );
