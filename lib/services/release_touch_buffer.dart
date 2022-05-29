@@ -62,9 +62,8 @@ class TouchReleaseBuffer {
         () {
           for (int i = 0; i < _buffer.length; i++) {
             if (DateTime.now().millisecondsSinceEpoch -
-                        _buffer[i].noteEvent.releaseTime >
-                    _settings.noteSustainTimeUsable &&
-                _buffer[i].noteEvent.noteOnMessage != null) {
+                    _buffer[i].noteEvent.releaseTime >
+                _settings.noteSustainTimeUsable) {
               _buffer[i].noteEvent.noteOff(); // note OFF
 
               releaseChannel(

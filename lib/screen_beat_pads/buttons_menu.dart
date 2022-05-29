@@ -42,7 +42,10 @@ class ReturnToMenuButton extends StatelessWidget {
               decoration: BoxDecoration(
                   color: Palette.cadetBlue.withOpacity(0.7),
                   borderRadius: BorderRadius.circular(3)),
-              message: "Long-Press for Menu",
+              richMessage: const TextSpan(
+                text: "Long-Press for Menu",
+                style: TextStyle(fontWeight: FontWeight.w600),
+              ),
               triggerMode: TooltipTriggerMode.tap,
               showDuration: const Duration(milliseconds: 1000),
               padding: const EdgeInsets.all(5),

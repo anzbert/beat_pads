@@ -39,11 +39,13 @@ class _ModWheelState extends State<ModWheel> {
               builder: (context, constraints) {
                 double width = MediaQuery.of(context).size.width;
                 double padRadius = width * ThemeConst.padRadiusFactor;
+                final double padSpacing = width * ThemeConst.padSpacingFactor;
                 return Container(
+                  margin: EdgeInsets.only(top: padSpacing),
                   decoration: BoxDecoration(
                     border: Border.all(
                       color: Palette.cadetBlue.withAlpha(120),
-                      width: 2,
+                      width: 4,
                     ),
                     borderRadius:
                         BorderRadius.all(Radius.circular(padRadius * 1)),

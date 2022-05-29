@@ -23,7 +23,8 @@ abstract class PlayModeHandler {
   }
 
   void handleNewTouch(CustomPointer touch, int noteTapped) {
-    if (settings.noteSustainTimeUsable > 0) {
+    if (settings.modSustainTimeUsable > 0 ||
+        settings.noteSustainTimeUsable > 0) {
       touchReleaseBuffer.removeNoteFromReleaseBuffer(noteTapped);
     }
 
@@ -41,7 +42,8 @@ abstract class PlayModeHandler {
     TouchEvent? eventInBuffer = touchBuffer.getByID(touch.pointer);
     if (eventInBuffer == null) return;
 
-    if (settings.noteSustainTimeUsable == 0) {
+    if (settings.modSustainTimeUsable == 0 &&
+        settings.noteSustainTimeUsable == 0) {
       eventInBuffer.noteEvent.noteOff(); // noteOFF
       touchBuffer.remove(eventInBuffer);
       notifyParent();
@@ -81,7 +83,8 @@ abstract class PlayModeHandler {
           touch.noteEvent.note == note &&
           touch.noteEvent.isPlaying) return true;
     }
-    if (settings.noteSustainTimeUsable > 0) {
+    if (settings.modSustainTimeUsable > 0 ||
+        settings.noteSustainTimeUsable > 0) {
       for (TouchEvent event in touchReleaseBuffer.buffer) {
         if (channel == null &&
             event.noteEvent.note == note &&
