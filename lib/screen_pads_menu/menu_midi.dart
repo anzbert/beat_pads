@@ -31,6 +31,7 @@ class MenuMidi extends StatelessWidget {
             trailing: Text((settings.channel + 1).toString()),
             setValue: (v) => settings.channel = v - 1,
             readValue: settings.channel + 1,
+            onChangeEnd: settings.prefs.settings.channel.save,
           ),
           IntSliderTile(
             min: 1,
@@ -42,6 +43,7 @@ class MenuMidi extends StatelessWidget {
                 : "${settings.mpeMemberChannels} (2 to ${settings.mpeMemberChannels + 1})"),
             setValue: (v) => settings.mpeMemberChannels = v,
             readValue: settings.mpeMemberChannels,
+            onChangeEnd: settings.prefs.settings.mpeMemberChannels.save,
           ),
           const Divider(),
           ListTile(
@@ -61,6 +63,7 @@ class MenuMidi extends StatelessWidget {
               readValue: settings.velocity,
               setValue: (v) => settings.setVelocity(v),
               resetValue: settings.resetVelocity,
+              onChangeEnd: settings.prefs.settings.velocity.save,
             ),
           if (settings.randomVelocity)
             MidiRangeSelectorTile(
@@ -70,6 +73,7 @@ class MenuMidi extends StatelessWidget {
               setMin: (v) => settings.velocityMin = v,
               setMax: (v) => settings.velocityMax = v,
               resetFunction: settings.resetVelocity,
+              onChangeEnd: settings.saveVelocityMinMax,
             ),
         ],
       );

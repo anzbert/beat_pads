@@ -97,6 +97,7 @@ class MenuInput extends StatelessWidget {
                 : "${settings.noteSustainTimeUsable / 1000} s",
             start: 0,
             steps: Timing.timingSteps.length ~/ 1.5,
+            onChangeEnd: settings.prefs.settings.noteSustainTimeStep.save,
           ),
           if (settings.playMode.modulatable && settings.unlinkSustainTimes)
             NonLinearSliderTile(
@@ -110,6 +111,7 @@ class MenuInput extends StatelessWidget {
                   : "${settings.modSustainTimeUsable / 1000} s",
               start: 0,
               steps: Timing.timingSteps.length ~/ 1.5,
+              onChangeEnd: settings.prefs.settings.modSustainTimeStep.save,
             ),
           if (settings.playMode == PlayMode.mpe)
             if (settings.mpe1DRadius.exclusiveGroup == Group.pitch ||
@@ -124,6 +126,7 @@ class MenuInput extends StatelessWidget {
                 readValue: settings.mpePitchbendRange,
                 setValue: (v) => settings.mpePitchbendRange = v,
                 resetValue: settings.resetMPEPitchbendRange,
+                onChangeEnd: settings.prefs.settings.mpePitchBendRange.save,
               ),
           if (settings.playMode.modulatable) const Divider(),
           if (settings.playMode.modulatable)
@@ -137,6 +140,7 @@ class MenuInput extends StatelessWidget {
               readValue: (settings.modulationRadius * 100).toInt(),
               setValue: (v) => settings.modulationRadius = v / 100,
               resetValue: settings.resetModulationRadius,
+              onChangeEnd: settings.prefs.settings.modulationRadius.save,
             ),
           if (settings.playMode.modulatable)
             ModSizeSliderTile(
@@ -149,6 +153,7 @@ class MenuInput extends StatelessWidget {
               readValue: (settings.modulationDeadZone * 100).toInt(),
               setValue: (v) => settings.modulationDeadZone = v / 100,
               resetValue: settings.resetDeadZone,
+              onChangeEnd: settings.prefs.settings.modulationDeadZone.save,
             ),
           if (settings.playMode.singleChannel) const Divider(),
           if (settings.playMode.singleChannel)

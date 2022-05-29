@@ -11,9 +11,11 @@ class IntSliderTile extends StatelessWidget {
       required this.readValue,
       this.resetValue,
       required this.trailing,
+      this.onChangeEnd,
       Key? key})
       : super(key: key);
 
+  final Function? onChangeEnd;
   final String label;
   final String? subtitle;
   final int min;
@@ -58,6 +60,9 @@ class IntSliderTile extends StatelessWidget {
                 value: readValue.clamp(min, max).toDouble(),
                 onChanged: (value) {
                   setValue(value.toInt());
+                },
+                onChangeEnd: (_) {
+                  if (onChangeEnd != null) onChangeEnd!();
                 },
               ),
             );

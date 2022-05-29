@@ -156,6 +156,7 @@ class MenuLayout extends StatelessWidget {
                         : "${settings.pitchBendEaseUsable / 1000} s",
                     start: 0,
                     steps: Timing.timingSteps.length - 1,
+                    onChangeEnd: settings.prefs.settings.pitchBendEase.save,
                   ),
                 ListTile(
                   title: const Text("Mod Wheel"),
@@ -194,6 +195,7 @@ class MenuLayout extends StatelessWidget {
                   readValue: settings.baseHue,
                   setValue: (v) => settings.baseHue = v,
                   resetValue: settings.resetBaseHue,
+                  onChangeEnd: settings.prefs.settings.baseHue.save,
                 ),
               ],
             ),
