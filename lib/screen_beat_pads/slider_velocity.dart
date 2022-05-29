@@ -29,7 +29,7 @@ class _SliderVelocityState extends State<SliderVelocity> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Flexible(
-              flex: 4,
+              flex: 5,
               child: FractionallySizedBox(
                 widthFactor: 0.9,
                 child: LayoutBuilder(
@@ -47,40 +47,34 @@ class _SliderVelocityState extends State<SliderVelocity> {
                       ),
                       padding:
                           EdgeInsets.all(constraints.maxWidth * paddingFactor),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Expanded(
-                            child: Center(
-                              child: Text(
-                                context.read<Settings>().randomVelocity
-                                    ? "${sender.playMode.velocityProvider.velocityRandomCenter.round()}"
-                                    : "${sender.playMode.velocityProvider.velocityFixed}",
-                                style: TextStyle(
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: RichText(
+                          text: TextSpan(
+                            text: context.read<Settings>().randomVelocity
+                                ? "${sender.playMode.velocityProvider.velocityRandomCenter.round()}"
+                                : "${sender.playMode.velocityProvider.velocityFixed}",
+                            style: DefaultTextStyle.of(context).style.copyWith(
                                   fontSize:
                                       constraints.maxWidth * fontSizeFactor,
-                                  fontWeight: FontWeight.w800,
                                   color: Palette.laserLemon,
                                 ),
-                              ),
-                            ),
-                          ),
-                          if (context.watch<Settings>().randomVelocity)
-                            Expanded(
-                              child: Text(
-                                "${String.fromCharCode(177)}${sender.playMode.velocityProvider.velocityRange ~/ 2}"
-                                    .toString(),
-                                style: TextStyle(
-                                  fontSize: constraints.maxWidth *
-                                      fontSizeFactor *
-                                      0.8,
-                                  fontWeight: FontWeight.w300,
-                                  color: Palette.laserLemon.withAlpha(180),
+                            children: <TextSpan>[
+                              if (context.watch<Settings>().randomVelocity)
+                                TextSpan(
+                                  text:
+                                      "\n${String.fromCharCode(177)}${sender.playMode.velocityProvider.velocityRange ~/ 2}",
+                                  style: TextStyle(
+                                    fontSize: constraints.maxWidth *
+                                        fontSizeFactor *
+                                        0.6,
+                                    fontWeight: FontWeight.w300,
+                                    color: Palette.laserLemon.withAlpha(180),
+                                  ),
                                 ),
-                              ),
-                            ),
-                        ],
+                            ],
+                          ),
+                        ),
                       ),
                     );
                   },

@@ -152,9 +152,12 @@ class MidiConfigState extends State<MidiConfig> {
                             body: [
                               "Connect USB cable to Host Device",
                               "Slide down the Notification Menu and set the USB connection mode to 'Midi'",
-                              "If there is no Midi option available, your Android phone may only show this setting in the Developer Menu. Please refer to readily available instructions online on how to access it on your Device",
+                              "If there is no Midi option available, your Android phone may only show this setting in the Developer Menu. Please refer to readily available instructions online on how to access this Menu on your Device",
                               "Once Midi mode is activated, refresh this Device List",
                               "Tap USB Device to Connect",
+                              "",
+                              "",
+                              "Note: The Developer menu allows you to set the default USB connection mode to Midi",
                             ],
                           ),
                         if (Platform.isIOS)

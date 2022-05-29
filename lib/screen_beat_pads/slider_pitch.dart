@@ -43,7 +43,7 @@ class PitchSliderEasedState extends State<PitchSliderEased>
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Flexible(
-          flex: 4,
+          flex: 5,
           child: FractionallySizedBox(
             widthFactor: 0.9,
             child: LayoutBuilder(
@@ -70,7 +70,7 @@ class PitchSliderEasedState extends State<PitchSliderEased>
                             "${(_pitch * 12).round()}",
                             style: TextStyle(
                               fontSize: constraints.maxWidth * fontSizeFactor,
-                              fontWeight: FontWeight.w800,
+                              // fontWeight: FontWeight.w800,
                               color: Palette.tan,
                             ),
                           ),

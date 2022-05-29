@@ -32,7 +32,7 @@ class _ModWheelState extends State<ModWheel> {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Flexible(
-          flex: 4,
+          flex: 5,
           child: FractionallySizedBox(
             widthFactor: 0.9,
             child: LayoutBuilder(
@@ -59,7 +59,7 @@ class _ModWheelState extends State<ModWheel> {
                             "$_mod",
                             style: TextStyle(
                               fontSize: constraints.maxWidth * fontSizeFactor,
-                              fontWeight: FontWeight.w800,
+                              // fontWeight: FontWeight.w800,
                               color: Palette.cadetBlue,
                             ),
                           ),
