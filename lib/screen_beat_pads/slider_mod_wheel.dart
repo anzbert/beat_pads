@@ -28,16 +28,57 @@ class _ModWheelState extends State<ModWheel> {
       context.read<MidiReceiver>().modWheelValue = null;
     }
 
-    return RotatedBox(
-      quarterTurns: 3,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Flexible(
-            flex: 30,
-            child: ThemedSlider(
-              midiVal: true,
-              thumbColor: Palette.cadetBlue,
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Flexible(
+          flex: 4,
+          child: FractionallySizedBox(
+            widthFactor: 0.9,
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                double width = MediaQuery.of(context).size.width;
+                double padRadius = width * ThemeConst.padRadiusFactor;
+                return Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Palette.cadetBlue.withAlpha(120),
+                      width: 2,
+                    ),
+                    borderRadius:
+                        BorderRadius.all(Radius.circular(padRadius * 1)),
+                  ),
+                  padding: EdgeInsets.all(constraints.maxWidth * paddingFactor),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: Center(
+                          child: Text(
+                            "$_mod",
+                            style: TextStyle(
+                              fontSize: constraints.maxWidth * fontSizeFactor,
+                              fontWeight: FontWeight.w800,
+                              color: Palette.cadetBlue,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ),
+        ),
+        Flexible(
+          flex: 30,
+          child: ThemedSlider(
+            label: "M",
+            thumbColor: Palette.cadetBlue,
+            child: RotatedBox(
+              quarterTurns: 0,
               child: Slider(
                 min: 0,
                 max: 127,
@@ -49,54 +90,8 @@ class _ModWheelState extends State<ModWheel> {
               ),
             ),
           ),
-          Flexible(
-            flex: 4,
-            child: RotatedBox(
-              quarterTurns: 1,
-              child: FractionallySizedBox(
-                widthFactor: 0.9,
-                child: LayoutBuilder(
-                  builder: (context, constraints) {
-                    double width = MediaQuery.of(context).size.width;
-                    double padRadius = width * ThemeConst.padRadiusFactor;
-                    return Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Palette.cadetBlue.withAlpha(120),
-                          width: 2,
-                        ),
-                        borderRadius:
-                            BorderRadius.all(Radius.circular(padRadius * 1)),
-                      ),
-                      padding:
-                          EdgeInsets.all(constraints.maxWidth * paddingFactor),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Expanded(
-                            child: Center(
-                              child: Text(
-                                "$_mod",
-                                style: TextStyle(
-                                  fontSize:
-                                      constraints.maxWidth * fontSizeFactor,
-                                  fontWeight: FontWeight.w800,
-                                  color: Palette.cadetBlue,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 

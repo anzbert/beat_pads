@@ -28,46 +28,47 @@ class ThemedSlider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    return FractionallySizedBox(
-      widthFactor: 0.8,
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          if (centerLine)
-            Container(
-              decoration: BoxDecoration(
-                color: _trackColor.withAlpha(100),
-                borderRadius: BorderRadius.all(
-                  Radius.circular(width * 0.01),
+    return RotatedBox(
+      quarterTurns: 3,
+      child: FractionallySizedBox(
+        widthFactor: 0.9,
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            if (centerLine)
+              Container(
+                decoration: BoxDecoration(
+                  color: _trackColor.withAlpha(100),
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(width * 0.01),
+                  ),
                 ),
+                height: double.infinity,
+                width: width * 0.015,
               ),
-              height: double.infinity,
-              width: width * 0.015,
-            ),
-          SliderTheme(
-              data: SliderTheme.of(context).copyWith(
-                // overlayShape: SliderComponentShape.noThumb,
-                // overlayShape: SliderComponentShape.noOverlay,
-                trackHeight: width * 0.015,
-                activeTrackColor: showTrack ? Palette.cadetBlue : _trackColor,
-                inactiveTrackColor: _trackColor,
-                thumbColor: thumbColor,
-                overlayColor: Colors.transparent,
-                thumbShape: range == null
-                    // ? CustomSliderThumbCircle(
-                    //     thumbRadius: width * 0.04,
-                    //     label: label,
-                    //     midiVal: midiVal)
-                    ? RoundSliderThumbShape(
-                        enabledThumbRadius: width * 0.033,
-                      )
-                    : CustomSliderThumbRect(
-                        thumbRadius: width * 0.07,
-                        thumbHeight: range!.toDouble()),
-                trackShape: CustomTrackShape(),
-              ),
-              child: child),
-        ],
+            SliderTheme(
+                data: SliderTheme.of(context).copyWith(
+                  trackHeight: width * 0.015,
+                  activeTrackColor: showTrack ? Palette.cadetBlue : _trackColor,
+                  inactiveTrackColor: _trackColor,
+                  thumbColor: thumbColor,
+                  overlayColor: Colors.transparent,
+                  thumbShape: range == null
+                      ? CustomSliderThumbCircle(
+                          thumbRadius: width * 0.04,
+                          label: label,
+                          midiVal: midiVal)
+                      // ? RoundSliderThumbShape(
+                      //     enabledThumbRadius: width * 0.033,
+                      //   )
+                      : CustomSliderThumbRect(
+                          thumbRadius: width * 0.07,
+                          thumbHeight: range!.toDouble()),
+                  trackShape: CustomTrackShape(),
+                ),
+                child: child),
+          ],
+        ),
       ),
     );
   }
@@ -159,14 +160,14 @@ class CustomSliderThumbCircle extends SliderComponentShape {
     canvas.save();
     final pivot = tp.size.center(textCenter);
     canvas.translate(pivot.dx, pivot.dy);
-    canvas.rotate(3 * pi / 2);
+    canvas.rotate(1 * pi / 2);
     canvas.translate(-pivot.dx, -pivot.dy);
     tp.paint(canvas, textCenter);
     canvas.restore();
   }
 
   String getMidiValue(double value) {
-    return (127 - value * 127).toInt().toString();
+    return (value * 127).toInt().toString();
   }
 }
 
