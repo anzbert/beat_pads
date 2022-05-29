@@ -29,8 +29,27 @@ class _ModWheelState extends State<ModWheel> {
     }
 
     return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.end,
       children: [
+        Flexible(
+          flex: 30,
+          child: ThemedSlider(
+            label: "M",
+            thumbColor: Palette.cadetBlue,
+            child: RotatedBox(
+              quarterTurns: 0,
+              child: Slider(
+                min: 0,
+                max: 127,
+                value: _mod.toDouble(),
+                onChanged: (v) {
+                  setState(() => _mod = v.toInt());
+                  MidiUtils.sendModWheelMessage(widget.channel, v.toInt());
+                },
+              ),
+            ),
+          ),
+        ),
         Flexible(
           flex: 5,
           child: FractionallySizedBox(
@@ -45,7 +64,7 @@ class _ModWheelState extends State<ModWheel> {
                   decoration: BoxDecoration(
                     border: Border.all(
                       color: Palette.cadetBlue.withAlpha(120),
-                      width: 4,
+                      width: width * ThemeConst.borderFactor,
                     ),
                     borderRadius:
                         BorderRadius.all(Radius.circular(padRadius * 1)),
@@ -71,25 +90,6 @@ class _ModWheelState extends State<ModWheel> {
                   ),
                 );
               },
-            ),
-          ),
-        ),
-        Flexible(
-          flex: 30,
-          child: ThemedSlider(
-            label: "M",
-            thumbColor: Palette.cadetBlue,
-            child: RotatedBox(
-              quarterTurns: 0,
-              child: Slider(
-                min: 0,
-                max: 127,
-                value: _mod.toDouble(),
-                onChanged: (v) {
-                  setState(() => _mod = v.toInt());
-                  MidiUtils.sendModWheelMessage(widget.channel, v.toInt());
-                },
-              ),
             ),
           ),
         ),

@@ -40,51 +40,8 @@ class PitchSliderEasedState extends State<PitchSliderEased>
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        Flexible(
-          flex: 5,
-          child: FractionallySizedBox(
-            widthFactor: 0.9,
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                double width = MediaQuery.of(context).size.width;
-                double padRadius = width * ThemeConst.padRadiusFactor;
-                final double padSpacing = width * ThemeConst.padSpacingFactor;
-                return Container(
-                  margin: EdgeInsets.only(top: padSpacing),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Palette.tan.withAlpha(120),
-                      width: 4,
-                    ),
-                    borderRadius:
-                        BorderRadius.all(Radius.circular(padRadius * 1)),
-                  ),
-                  padding: EdgeInsets.all(constraints.maxWidth * paddingFactor),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: Center(
-                          child: Text(
-                            "${(_pitch * 12).round()}",
-                            style: TextStyle(
-                              fontSize: constraints.maxWidth * fontSizeFactor,
-                              // fontWeight: FontWeight.w800,
-                              color: Palette.tan,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
-          ),
-        ),
         Flexible(
           flex: 30,
           child: ThemedSlider(
@@ -128,6 +85,49 @@ class PitchSliderEasedState extends State<PitchSliderEased>
               },
               onChangeStart: (_) {
                 _controller.stop();
+              },
+            ),
+          ),
+        ),
+        Flexible(
+          flex: 5,
+          child: FractionallySizedBox(
+            widthFactor: 0.9,
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                double width = MediaQuery.of(context).size.width;
+                double padRadius = width * ThemeConst.padRadiusFactor;
+                final double padSpacing = width * ThemeConst.padSpacingFactor;
+                return Container(
+                  margin: EdgeInsets.only(top: padSpacing),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Palette.tan.withAlpha(120),
+                      width: width * ThemeConst.borderFactor,
+                    ),
+                    borderRadius:
+                        BorderRadius.all(Radius.circular(padRadius * 1)),
+                  ),
+                  padding: EdgeInsets.all(constraints.maxWidth * paddingFactor),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: Center(
+                          child: Text(
+                            "${(_pitch * 12).round()}",
+                            style: TextStyle(
+                              fontSize: constraints.maxWidth * fontSizeFactor,
+                              // fontWeight: FontWeight.w800,
+                              color: Palette.tan,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
               },
             ),
           ),

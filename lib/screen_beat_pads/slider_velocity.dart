@@ -26,8 +26,44 @@ class _SliderVelocityState extends State<SliderVelocity> {
     return Consumer<MidiSender>(
       builder: (context, sender, _) {
         return Column(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.end,
           children: [
+            if (!widget.randomVelocity)
+              Flexible(
+                flex: 30,
+                child: ThemedSlider(
+                  label: "V",
+                  thumbColor: Palette.laserLemon,
+                  child: Slider(
+                    min: 10,
+                    max: 127,
+                    value: sender.playMode.velocityProvider.velocityFixed
+                        .clamp(10, 127)
+                        .toDouble(),
+                    onChanged: (v) {
+                      sender.playMode.velocityProvider.velocityFixed =
+                          v.toInt();
+                    },
+                  ),
+                ),
+              ),
+            if (widget.randomVelocity)
+              Flexible(
+                flex: 30,
+                child: ThemedSlider(
+                  range: sender.playMode.velocityProvider.velocityRange,
+                  thumbColor: Palette.laserLemon,
+                  child: Slider(
+                    min: 10,
+                    max: 127,
+                    value: sender.playMode.velocityProvider.velocityRandomCenter
+                        .clamp(10, 127),
+                    onChanged: (v) {
+                      sender.playMode.velocityProvider.velocityRandomCenter = v;
+                    },
+                  ),
+                ),
+              ),
             Flexible(
               flex: 5,
               child: FractionallySizedBox(
@@ -43,7 +79,7 @@ class _SliderVelocityState extends State<SliderVelocity> {
                       decoration: BoxDecoration(
                         border: Border.all(
                           color: Palette.laserLemon.withAlpha(120),
-                          width: 4,
+                          width: width * ThemeConst.borderFactor,
                         ),
                         borderRadius:
                             BorderRadius.all(Radius.circular(padRadius * 1)),
@@ -84,42 +120,6 @@ class _SliderVelocityState extends State<SliderVelocity> {
                 ),
               ),
             ),
-            if (!widget.randomVelocity)
-              Flexible(
-                flex: 30,
-                child: ThemedSlider(
-                  label: "V",
-                  thumbColor: Palette.laserLemon,
-                  child: Slider(
-                    min: 10,
-                    max: 127,
-                    value: sender.playMode.velocityProvider.velocityFixed
-                        .clamp(10, 127)
-                        .toDouble(),
-                    onChanged: (v) {
-                      sender.playMode.velocityProvider.velocityFixed =
-                          v.toInt();
-                    },
-                  ),
-                ),
-              ),
-            if (widget.randomVelocity)
-              Flexible(
-                flex: 30,
-                child: ThemedSlider(
-                  range: sender.playMode.velocityProvider.velocityRange,
-                  thumbColor: Palette.laserLemon,
-                  child: Slider(
-                    min: 10,
-                    max: 127,
-                    value: sender.playMode.velocityProvider.velocityRandomCenter
-                        .clamp(10, 127),
-                    onChanged: (v) {
-                      sender.playMode.velocityProvider.velocityRandomCenter = v;
-                    },
-                  ),
-                ),
-              ),
           ],
         );
       },
