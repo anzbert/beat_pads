@@ -28,8 +28,8 @@ class _SustainButtonDoubleTapState extends State<SustainButtonDoubleTap> {
     int channel = Provider.of<Settings>(context, listen: true).channel;
 
     double width = MediaQuery.of(context).size.width;
-    double padSpacing = width * ThemeConst.padSpacingFactor;
     double padRadius = width * ThemeConst.padRadiusFactor;
+    double padSpacing = width * ThemeConst.padSpacingFactor;
     return Padding(
       padding: EdgeInsets.fromLTRB(0, padSpacing, padSpacing, padSpacing),
       child: GestureDetector(

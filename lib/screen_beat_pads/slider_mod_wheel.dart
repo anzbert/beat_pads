@@ -1,5 +1,6 @@
 import 'package:beat_pads/screen_beat_pads/slider_themed.dart';
 import 'package:beat_pads/services/services.dart';
+import 'package:beat_pads/theme.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -16,6 +17,9 @@ class ModWheel extends StatefulWidget {
 class _ModWheelState extends State<ModWheel> {
   int _mod = 63;
 
+  final double fontSizeFactor = 0.3;
+  final double paddingFactor = 0.1;
+
   @override
   Widget build(BuildContext context) {
     int? receivedMidi = context.watch<MidiReceiver>().modWheelValue;
@@ -25,19 +29,73 @@ class _ModWheelState extends State<ModWheel> {
     }
 
     return RotatedBox(
-      quarterTurns: 1,
-      child: ThemedSlider(
-        midiVal: true,
-        thumbColor: Palette.cadetBlue,
-        child: Slider(
-          min: 0,
-          max: 127,
-          value: _mod.toDouble(),
-          onChanged: (v) {
-            setState(() => _mod = v.toInt());
-            MidiUtils.sendModWheelMessage(widget.channel, 127 - v.toInt());
-          },
-        ),
+      quarterTurns: 3,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Flexible(
+            flex: 30,
+            child: ThemedSlider(
+              midiVal: true,
+              thumbColor: Palette.cadetBlue,
+              child: Slider(
+                min: 0,
+                max: 127,
+                value: _mod.toDouble(),
+                onChanged: (v) {
+                  setState(() => _mod = v.toInt());
+                  MidiUtils.sendModWheelMessage(widget.channel, v.toInt());
+                },
+              ),
+            ),
+          ),
+          Flexible(
+            flex: 4,
+            child: RotatedBox(
+              quarterTurns: 1,
+              child: FractionallySizedBox(
+                widthFactor: 0.9,
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    double width = MediaQuery.of(context).size.width;
+                    double padRadius = width * ThemeConst.padRadiusFactor;
+                    return Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Palette.cadetBlue.withAlpha(120),
+                          width: 2,
+                        ),
+                        borderRadius:
+                            BorderRadius.all(Radius.circular(padRadius * 1)),
+                      ),
+                      padding:
+                          EdgeInsets.all(constraints.maxWidth * paddingFactor),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            child: Center(
+                              child: Text(
+                                "$_mod",
+                                style: TextStyle(
+                                  fontSize:
+                                      constraints.maxWidth * fontSizeFactor,
+                                  fontWeight: FontWeight.w800,
+                                  color: Palette.cadetBlue,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

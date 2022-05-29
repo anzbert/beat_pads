@@ -46,18 +46,23 @@ class ThemedSlider extends StatelessWidget {
             ),
           SliderTheme(
               data: SliderTheme.of(context).copyWith(
+                // overlayShape: SliderComponentShape.noThumb,
+                // overlayShape: SliderComponentShape.noOverlay,
                 trackHeight: width * 0.015,
                 activeTrackColor: showTrack ? Palette.cadetBlue : _trackColor,
                 inactiveTrackColor: _trackColor,
                 thumbColor: thumbColor,
                 overlayColor: Colors.transparent,
                 thumbShape: range == null
-                    ? CustomSliderThumbCircle(
-                        thumbRadius: width * 0.04,
-                        label: label,
-                        midiVal: midiVal)
+                    // ? CustomSliderThumbCircle(
+                    //     thumbRadius: width * 0.04,
+                    //     label: label,
+                    //     midiVal: midiVal)
+                    ? RoundSliderThumbShape(
+                        enabledThumbRadius: width * 0.033,
+                      )
                     : CustomSliderThumbRect(
-                        thumbRadius: width * 0.04,
+                        thumbRadius: width * 0.07,
                         thumbHeight: range!.toDouble()),
                 trackShape: CustomTrackShape(),
               ),
@@ -176,7 +181,7 @@ class CustomSliderThumbRect extends SliderComponentShape {
 
   @override
   Size getPreferredSize(bool isEnabled, bool isDiscrete) {
-    return Size.fromRadius(thumbRadius);
+    return Size.fromRadius(thumbRadius / 2);
   }
 
   @override

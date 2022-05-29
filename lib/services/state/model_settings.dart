@@ -358,7 +358,7 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
-// pitchbend:
+  // pitchbend:
   bool get pitchBend => prefs.settings.pitchBend.value;
 
   set pitchBend(bool newValue) {
@@ -374,7 +374,7 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
-// modWheel
+  // modWheel
   bool get modWheel => prefs.settings.modWheel.value;
 
   set modWheel(bool newValue) {
@@ -383,7 +383,7 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
-// pitchBendEase
+  // pitchBendEase
   int get pitchBendEase => prefs.settings.pitchBendEase.value
       .clamp(0, Timing.timingSteps.length - 1);
 
@@ -400,7 +400,7 @@ class Settings extends ChangeNotifier {
   resetPitchBendEase() =>
       pitchBendEase = LoadSettings.defaults().pitchBendEase.value;
 
-// note sustain:
+  // note sustain:
   int get noteSustainTimeStep => prefs.settings.noteSustainTimeStep.value
       .clamp(0, Timing.timingSteps.length ~/ 1.5);
 
@@ -418,7 +418,7 @@ class Settings extends ChangeNotifier {
   resetNoteSustainTimeStep() =>
       noteSustainTimeStep = LoadSettings.defaults().noteSustainTimeStep.value;
 
-// modulation sustain:
+  // modulation sustain:
   int get modSustainTimeStep => prefs.settings.modSustainTimeStep.value
       .clamp(0, Timing.timingSteps.length ~/ 1.5);
 
