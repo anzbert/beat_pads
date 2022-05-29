@@ -75,7 +75,7 @@ class _SliderVelocityState extends State<SliderVelocity> {
                     final double padSpacing =
                         width * ThemeConst.padSpacingFactor;
                     return Container(
-                      margin: EdgeInsets.only(top: padSpacing),
+                      margin: EdgeInsets.only(bottom: padSpacing),
                       decoration: BoxDecoration(
                         border: Border.all(
                           color: Palette.laserLemon.withAlpha(120),

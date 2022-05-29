@@ -99,7 +99,7 @@ class PitchSliderEasedState extends State<PitchSliderEased>
                 double padRadius = width * ThemeConst.padRadiusFactor;
                 final double padSpacing = width * ThemeConst.padSpacingFactor;
                 return Container(
-                  margin: EdgeInsets.only(top: padSpacing),
+                  margin: EdgeInsets.only(bottom: padSpacing),
                   decoration: BoxDecoration(
                     border: Border.all(
                       color: Palette.tan.withAlpha(120),

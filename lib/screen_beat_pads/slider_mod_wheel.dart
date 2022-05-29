@@ -60,7 +60,7 @@ class _ModWheelState extends State<ModWheel> {
                 double padRadius = width * ThemeConst.padRadiusFactor;
                 final double padSpacing = width * ThemeConst.padSpacingFactor;
                 return Container(
-                  margin: EdgeInsets.only(top: padSpacing),
+                  margin: EdgeInsets.only(bottom: padSpacing),
                   decoration: BoxDecoration(
                     border: Border.all(
                       color: Palette.cadetBlue.withAlpha(120),
