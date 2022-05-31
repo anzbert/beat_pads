@@ -3,9 +3,14 @@ import 'package:flutter/material.dart';
 import './services/services.dart';
 
 var appTheme = ThemeData.dark().copyWith(
+  dividerTheme: DividerThemeData(
+    thickness: 1,
+    color: Palette.lightGrey,
+  ),
   primaryColor: Palette.cadetBlue,
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
+      elevation: 6,
       primary: Palette.cadetBlue,
       onPrimary: Palette.darkGrey,
       onSurface: Palette.cadetBlue,

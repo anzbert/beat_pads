@@ -64,6 +64,8 @@ class PaintModulation extends StatelessWidget {
                           deadZone: touchEvent.deadZone,
                           change: touchEvent.directionalChangeFromCenter(
                               curve: Curves.linear, deadZone: false),
+                          radialChange:
+                              touchEvent.radialChange(curve: Curves.linear),
                           colorBack: touchEvent.dirty
                               ? dirtyColor
                               : Palette.lightPink.withOpacity(touchEvent

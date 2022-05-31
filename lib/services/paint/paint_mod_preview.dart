@@ -47,6 +47,7 @@ class PaintModPreview extends StatelessWidget {
               maxRadius: settings.modulationRadius * screenSize.longestSide,
               deadZone: settings.modulationDeadZone,
               change: const Offset(0, 0),
+              radialChange: fixedChangeForPreview,
               colorBack:
                   Palette.lightPink.withOpacity(fixedChangeForPreview * 0.6),
               colorFront:

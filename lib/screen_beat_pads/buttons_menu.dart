@@ -6,7 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:beat_pads/services/services.dart';
 
 class ReturnToMenuButton extends StatelessWidget {
-  const ReturnToMenuButton({Key? key}) : super(key: key);
+  const ReturnToMenuButton({Key? key, required this.transparent})
+      : super(key: key);
+
+  final bool transparent;
 
   @override
   Widget build(BuildContext context) {
@@ -29,11 +32,10 @@ class ReturnToMenuButton extends StatelessWidget {
           child: ElevatedButton(
             onPressed: () {},
             style: ElevatedButton.styleFrom(
-              elevation: 10,
               padding: const EdgeInsets.all(0),
               alignment: Alignment.center,
-              primary: Palette.tan.withOpacity(0.6),
-              onPrimary: Palette.darkGrey.withOpacity(0.85),
+              primary: Palette.tan.withOpacity(transparent ? 0.8 : 1),
+              onPrimary: Palette.darkGrey.withOpacity(transparent ? 0.8 : 1),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(padRadius),
               ),

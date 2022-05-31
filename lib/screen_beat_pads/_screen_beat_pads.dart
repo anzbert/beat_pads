@@ -138,7 +138,9 @@ class BeatPadsScreen extends StatelessWidget {
                                   textDirection: TextDirection.ltr,
                                   child: SizedBox.square(
                                     dimension: width * 0.06,
-                                    child: const ReturnToMenuButton(),
+                                    child: const ReturnToMenuButton(
+                                      transparent: true,
+                                    ),
                                   ),
                                 );
                               }),

@@ -41,12 +41,34 @@ class PitchSliderEasedState extends State<PitchSliderEased>
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     return Column(
-      mainAxisAlignment: MainAxisAlignment.end,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
+        Flexible(
+          flex: 3,
+          child: LayoutBuilder(builder: (context, constraints) {
+            return Align(
+              alignment: Alignment.bottomCenter,
+              child: Text(
+                "Pitch",
+                style: TextStyle(
+                  fontSize: constraints.maxWidth * fontSizeFactor,
+                  color: Palette.darker(Palette.tan, 0.6),
+                ),
+              ),
+            );
+          }),
+        ),
+        Center(
+          child: Divider(
+            indent: width * ThemeConst.borderFactor,
+            endIndent: width * ThemeConst.borderFactor,
+            thickness: width * ThemeConst.borderFactor,
+          ),
+        ),
         Flexible(
           flex: 30,
           child: ThemedSlider(
-            label: "P",
+            // label: "",
             thumbColor: Palette.tan,
             centerLine: true,
             child: Slider(
@@ -98,7 +120,7 @@ class PitchSliderEasedState extends State<PitchSliderEased>
           ),
         ),
         Flexible(
-          flex: 5,
+          flex: 4,
           child: FractionallySizedBox(
             widthFactor: 0.9,
             child: LayoutBuilder(
@@ -117,7 +139,7 @@ class PitchSliderEasedState extends State<PitchSliderEased>
                             "${(_pitch * 12).round()}",
                             style: TextStyle(
                               fontSize: constraints.maxWidth * fontSizeFactor,
-                              color: Palette.tan,
+                              color: Palette.darker(Palette.tan, 0.6),
                             ),
                           ),
                         ),

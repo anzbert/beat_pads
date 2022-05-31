@@ -64,6 +64,7 @@ class _SustainButtonDoubleTapState extends State<SustainButtonDoubleTap> {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(padRadius * 1)),
             color: sustainState ? Palette.lightPink : Palette.darkPink,
+            boxShadow: kElevationToShadow[6],
           ),
           child: RotatedBox(
             quarterTurns: 1,

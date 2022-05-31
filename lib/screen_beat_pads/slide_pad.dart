@@ -55,7 +55,6 @@ class SlideBeatPad extends StatelessWidget {
       child: Material(
         color: color,
         borderRadius: padRadius,
-        elevation: 5,
         shadowColor: Colors.black,
         child: note > 127 || note < 0
             ?

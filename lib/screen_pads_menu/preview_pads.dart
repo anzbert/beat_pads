@@ -9,18 +9,18 @@ class Preview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FittedBox(
-      fit: BoxFit.scaleDown,
-      child: SizedBox(
-        width: MediaQuery.of(context).size.width,
-        child: Container(
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: Palette.lightGrey,
-              width: 3,
-            ),
-            borderRadius: const BorderRadius.all(Radius.circular(5)),
-          ),
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: Palette.lightGrey,
+          width: 3,
+        ),
+        borderRadius: const BorderRadius.all(Radius.circular(5)),
+      ),
+      child: FittedBox(
+        fit: BoxFit.scaleDown,
+        child: SizedBox(
+          width: MediaQuery.of(context).size.width,
           child: IgnorePointer(
             child: DeviceUtils.isPortrait(context)
                 ? Stack(

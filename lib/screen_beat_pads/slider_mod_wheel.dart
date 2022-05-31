@@ -33,12 +33,34 @@ class _ModWheelState extends State<ModWheel> {
     }
     double width = MediaQuery.of(context).size.width;
     return Column(
-      mainAxisAlignment: MainAxisAlignment.end,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
+        Flexible(
+          flex: 3,
+          child: LayoutBuilder(builder: (context, constraints) {
+            return Align(
+              alignment: Alignment.bottomCenter,
+              child: Text(
+                "Mod",
+                style: TextStyle(
+                  fontSize: constraints.maxWidth * fontSizeFactor,
+                  color: Palette.darker(Palette.cadetBlue, 0.6),
+                ),
+              ),
+            );
+          }),
+        ),
+        Center(
+          child: Divider(
+            indent: width * ThemeConst.borderFactor,
+            endIndent: width * ThemeConst.borderFactor,
+            thickness: width * ThemeConst.borderFactor,
+          ),
+        ),
         Flexible(
           flex: 30,
           child: ThemedSlider(
-            label: "M",
+            // label: "",
             thumbColor: Palette.cadetBlue,
             child: RotatedBox(
               quarterTurns: 0,
@@ -62,7 +84,7 @@ class _ModWheelState extends State<ModWheel> {
           ),
         ),
         Flexible(
-          flex: 5,
+          flex: 4,
           child: FractionallySizedBox(
             widthFactor: 0.9,
             child: LayoutBuilder(
@@ -81,7 +103,7 @@ class _ModWheelState extends State<ModWheel> {
                             "$_mod",
                             style: TextStyle(
                               fontSize: constraints.maxWidth * fontSizeFactor,
-                              color: Palette.cadetBlue,
+                              color: Palette.darker(Palette.cadetBlue, 0.6),
                             ),
                           ),
                         ),

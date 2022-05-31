@@ -7,6 +7,7 @@ class CustomPaintXYSquare extends CustomPainter {
     required this.maxRadius,
     required this.deadZone,
     required this.change,
+    required this.radialChange,
     required this.colorBack,
     required this.colorFront,
     required this.colorDeadZone,
@@ -15,6 +16,7 @@ class CustomPaintXYSquare extends CustomPainter {
   final Offset origin;
   final double maxRadius;
   final double deadZone;
+  final double radialChange;
   final Color colorFront;
   final Color colorBack;
   final Color colorDeadZone;
@@ -30,10 +32,18 @@ class CustomPaintXYSquare extends CustomPainter {
       ..strokeWidth = 8
       ..strokeCap = StrokeCap.round;
 
-    Rect rect = Rect.fromCircle(center: origin, radius: maxRadius);
+    RRect roundedRect = RRect.fromRectAndRadius(
+        Rect.fromCircle(
+          center: origin,
+          radius: maxRadius,
+        ),
+        const Radius.circular(12));
 
-    canvas.drawRRect(RRect.fromRectAndRadius(rect, const Radius.circular(12)),
-        brushRect); // background
+    var pathBack = Path()..addRRect(roundedRect);
+    canvas.drawShadow(
+        pathBack, Colors.black.withOpacity(radialChange), 6, true);
+    canvas.drawPath(pathBack, brushRect);
+    // canvas.drawRRect(roundedRect, brushRect); // background
 
     // FRONT:
     Paint brush = Paint()
@@ -57,9 +67,7 @@ class CustomPaintXYSquare extends CustomPainter {
     canvas.drawCircle(touch, 12, brush); // touch tracker
 
     brush.color = colorDeadZone;
-    // if (change.dx.abs() > deadZone || change.dy.abs() > deadZone) {
     canvas.drawCircle(origin, maxRadius * deadZone, brush); // deadzone
-    // }
   }
 
   @override

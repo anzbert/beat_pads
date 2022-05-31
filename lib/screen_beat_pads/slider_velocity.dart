@@ -27,13 +27,35 @@ class _SliderVelocityState extends State<SliderVelocity> {
     return Consumer<MidiSender>(
       builder: (context, sender, _) {
         return Column(
-          mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Flexible(
+              flex: 3,
+              child: LayoutBuilder(builder: (context, constraints) {
+                return Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Text(
+                    "Vel",
+                    style: TextStyle(
+                      fontSize: constraints.maxWidth * fontSizeFactor,
+                      color: Palette.darker(Palette.laserLemon, 0.6),
+                    ),
+                  ),
+                );
+              }),
+            ),
+            Center(
+              child: Divider(
+                indent: width * ThemeConst.borderFactor,
+                endIndent: width * ThemeConst.borderFactor,
+                thickness: width * ThemeConst.borderFactor,
+              ),
+            ),
             if (!widget.randomVelocity)
               Flexible(
                 flex: 30,
                 child: ThemedSlider(
-                  label: "V",
+                  // label: "",
                   thumbColor: Palette.laserLemon,
                   child: Slider(
                     min: 10,
@@ -73,7 +95,7 @@ class _SliderVelocityState extends State<SliderVelocity> {
               ),
             ),
             Flexible(
-              flex: 5,
+              flex: 4,
               child: FractionallySizedBox(
                 widthFactor: 0.9,
                 child: LayoutBuilder(
@@ -100,25 +122,26 @@ class _SliderVelocityState extends State<SliderVelocity> {
                                           Palette.laserLemon, 0.6),
                                     )),
                           ),
-                          if (context.select(
-                              (Settings settings) => settings.randomVelocity))
-                            Flexible(
-                              flex: 1,
-                              child: Align(
-                                alignment: Alignment.centerRight,
-                                child: Text(
-                                  "${String.fromCharCode(177)}${sender.playMode.velocityProvider.velocityRange ~/ 2}",
-                                  style: TextStyle(
-                                    fontSize: constraints.maxWidth *
-                                        fontSizeFactor *
-                                        0.6,
-                                    fontWeight: FontWeight.w300,
-                                    color:
-                                        Palette.darker(Palette.laserLemon, 0.6),
-                                  ),
-                                ),
-                              ),
-                            ),
+                          Flexible(
+                            flex: 1,
+                            child: context.select((Settings settings) =>
+                                    settings.randomVelocity)
+                                ? Align(
+                                    alignment: Alignment.centerRight,
+                                    child: Text(
+                                      "${String.fromCharCode(177)}${sender.playMode.velocityProvider.velocityRange ~/ 2}",
+                                      style: TextStyle(
+                                        fontSize: constraints.maxWidth *
+                                            fontSizeFactor *
+                                            0.6,
+                                        fontWeight: FontWeight.w300,
+                                        color: Palette.darker(
+                                            Palette.laserLemon, 0.6),
+                                      ),
+                                    ),
+                                  )
+                                : const SizedBox.expand(),
+                          ),
                         ],
                       ),
                     );

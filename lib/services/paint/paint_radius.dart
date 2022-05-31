@@ -28,7 +28,15 @@ class CustomPaintRadius extends CustomPainter {
       ..strokeWidth = 8
       ..strokeCap = StrokeCap.round;
 
-    canvas.drawCircle(origin, maxRadius, brushBack); // background
+    var pathBack = Path()
+      ..addOval(Rect.fromCircle(
+        center: origin,
+        radius: maxRadius,
+      ));
+
+    canvas.drawShadow(pathBack, Colors.black.withOpacity(change), 6, true);
+    canvas.drawPath(pathBack, brushBack);
+    // canvas.drawCircle(origin, maxRadius, brushBack); // background
 
     // FRONT
     Paint brush = Paint()
@@ -38,6 +46,14 @@ class CustomPaintRadius extends CustomPainter {
       ..strokeCap = StrokeCap.round;
 
     canvas.drawCircle(origin, changeAbsolute, brush); // radius
+    // var pathFront = Path()
+    //   ..addOval(Rect.fromCircle(
+    //     center: origin,
+    //     radius: changeAbsolute,
+    //   ));
+
+    // canvas.drawShadow(pathFront, const Color(0xff000000), 3, true);
+    // canvas.drawPath(pathFront, brush);
 
     brush.style = PaintingStyle.fill;
     brush.color = colorDeadZone;
