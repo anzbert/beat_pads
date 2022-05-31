@@ -54,9 +54,12 @@ class _ModWheelState extends State<ModWheel> {
             ),
           ),
         ),
-        Divider(
-          indent: width * ThemeConst.borderFactor,
-          thickness: width * ThemeConst.borderFactor,
+        Center(
+          child: Divider(
+            indent: width * ThemeConst.borderFactor,
+            endIndent: width * ThemeConst.borderFactor,
+            thickness: width * ThemeConst.borderFactor,
+          ),
         ),
         Flexible(
           flex: 5,
@@ -64,35 +67,29 @@ class _ModWheelState extends State<ModWheel> {
             widthFactor: 0.9,
             child: LayoutBuilder(
               builder: (context, constraints) {
-                // double padRadius = width * ThemeConst.padRadiusFactor;
                 final double padSpacing = width * ThemeConst.padSpacingFactor;
                 return Container(
-                  margin: EdgeInsets.symmetric(vertical: padSpacing),
-                  // decoration: BoxDecoration(
-                  //   border: Border.all(
-                  //     color: Palette.cadetBlue.withAlpha(120),
-                  //     width: width * ThemeConst.borderFactor,
-                  //   ),
-                  //   borderRadius:
-                  //       BorderRadius.all(Radius.circular(padRadius * 1)),
-                  // ),
-                  padding: EdgeInsets.all(constraints.maxWidth * paddingFactor),
+                  margin: EdgeInsets.only(bottom: padSpacing),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Expanded(
+                        flex: 2,
                         child: Center(
                           child: Text(
                             "$_mod",
                             style: TextStyle(
                               fontSize: constraints.maxWidth * fontSizeFactor,
-                              // fontWeight: FontWeight.w800,
                               color: Palette.cadetBlue,
                             ),
                           ),
                         ),
                       ),
+                      const Expanded(
+                        flex: 1,
+                        child: SizedBox.expand(),
+                      )
                     ],
                   ),
                 );
