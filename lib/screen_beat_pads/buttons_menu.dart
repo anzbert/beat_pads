@@ -34,8 +34,10 @@ class ReturnToMenuButton extends StatelessWidget {
             style: ElevatedButton.styleFrom(
               padding: const EdgeInsets.all(0),
               alignment: Alignment.center,
-              primary: Palette.tan.withOpacity(transparent ? 0.8 : 1),
-              onPrimary: Palette.darkGrey.withOpacity(transparent ? 0.8 : 1),
+              primary: transparent
+                  ? Colors.transparent
+                  : Palette.darker(Palette.cadetBlue, 0.3),
+              onPrimary: Palette.lightGrey.withOpacity(transparent ? 0.5 : 1),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(padRadius),
               ),
@@ -47,7 +49,7 @@ class ReturnToMenuButton extends StatelessWidget {
                   borderRadius: BorderRadius.circular(3)),
               richMessage: const TextSpan(
                 text: "Long-Press for Menu",
-                style: TextStyle(fontWeight: FontWeight.w600),
+                // style: TextStyle(fontWeight: FontWeight.w500),
               ),
               triggerMode: TooltipTriggerMode.tap,
               showDuration: const Duration(milliseconds: 1000),

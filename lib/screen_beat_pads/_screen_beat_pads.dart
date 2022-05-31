@@ -85,18 +85,6 @@ class BeatPadsScreen extends StatelessWidget {
                                             settings.pitchBendEaseUsable),
                                   ),
                                 ),
-                              // MOD WHEEL
-                              if (context.select(
-                                  (Settings settings) => settings.modWheel))
-                                Expanded(
-                                  flex: 7,
-                                  child: ModWheel(
-                                    preview: preview,
-                                    channel: context.select(
-                                        (Settings settings) =>
-                                            settings.channel),
-                                  ),
-                                ),
                               // VELOCITY
                               if (context.select((Settings settings) =>
                                   settings.velocitySlider))
@@ -111,6 +99,19 @@ class BeatPadsScreen extends StatelessWidget {
                                             settings.randomVelocity),
                                   ),
                                 ),
+                              // MOD WHEEL
+                              if (context.select(
+                                  (Settings settings) => settings.modWheel))
+                                Expanded(
+                                  flex: 7,
+                                  child: ModWheel(
+                                    preview: preview,
+                                    channel: context.select(
+                                        (Settings settings) =>
+                                            settings.channel),
+                                  ),
+                                ),
+
                               // PADS
                               Expanded(
                                 flex: 60,

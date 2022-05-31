@@ -156,7 +156,6 @@ class MidiConfigState extends State<MidiConfig> {
                               "Once Midi mode is activated, refresh this Device List",
                               "Tap USB Device to Connect",
                               "",
-                              "",
                               "Note: The Developer menu allows you to set the default USB connection mode to Midi",
                             ],
                           ),
@@ -168,7 +167,6 @@ class MidiConfigState extends State<MidiConfig> {
                               "Open 'Audio MIDI Setup' on Mac and click 'Enable' under iPad/iPhone in the 'Audio Devices' Window",
                               "Refresh this Device List",
                               "Tap 'IDAM MIDI Host' to Connect",
-                              "",
                               "",
                               "Note: USB without third-party adapters works only with MacOS devices, due to Apple's MIDI implementation!",
                             ],
@@ -182,8 +180,7 @@ class MidiConfigState extends State<MidiConfig> {
                               "Open 'Audio MIDI Setup' on Mac and open the 'MIDI Studio' window",
                               "Create a Session in the 'MIDI Network Setup' window and connect to your iPad/iPhone",
                               "",
-                              "",
-                              "Note: Wireless Protocols add Latency. Connection to Windows Hosts via WiFi requires third-party Software (like Apple rtpMIDI)"
+                              "Note: Wireless Protocols add Latency. Connection to Windows Hosts via WiFi requires third-party Software (like 'rtpMIDI')"
                             ],
                           ),
                       ],

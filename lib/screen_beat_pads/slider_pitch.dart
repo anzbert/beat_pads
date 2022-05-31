@@ -52,7 +52,7 @@ class PitchSliderEasedState extends State<PitchSliderEased>
                 "Pitch",
                 style: TextStyle(
                   fontSize: constraints.maxWidth * fontSizeFactor,
-                  color: Palette.darker(Palette.tan, 0.6),
+                  color: Palette.darker(Palette.laserLemon, 0.6),
                 ),
               ),
             );
@@ -69,7 +69,7 @@ class PitchSliderEasedState extends State<PitchSliderEased>
           flex: 30,
           child: ThemedSlider(
             // label: "",
-            thumbColor: Palette.tan,
+            thumbColor: Palette.laserLemon,
             centerLine: true,
             child: Slider(
               min: -1,
@@ -139,7 +139,7 @@ class PitchSliderEasedState extends State<PitchSliderEased>
                             "${(_pitch * 12).round()}",
                             style: TextStyle(
                               fontSize: constraints.maxWidth * fontSizeFactor,
-                              color: Palette.darker(Palette.tan, 0.6),
+                              color: Palette.darker(Palette.laserLemon, 0.6),
                             ),
                           ),
                         ),

@@ -75,7 +75,7 @@ class PadMenuScreen extends StatelessWidget {
             bottomNavigationBar: BottomNavigationBar(
               type: BottomNavigationBarType.fixed,
               selectedItemColor: Palette.cadetBlue,
-              backgroundColor: Palette.lightGrey,
+              backgroundColor: Palette.darkGrey,
               currentIndex: context
                   .select((Settings settings) => settings.selectedMenu.index),
               onTap: (int tappedIndex) {

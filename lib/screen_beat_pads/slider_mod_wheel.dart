@@ -44,7 +44,7 @@ class _ModWheelState extends State<ModWheel> {
                 "Mod",
                 style: TextStyle(
                   fontSize: constraints.maxWidth * fontSizeFactor,
-                  color: Palette.darker(Palette.cadetBlue, 0.6),
+                  color: Palette.darker(Palette.tan, 0.6),
                 ),
               ),
             );
@@ -61,7 +61,7 @@ class _ModWheelState extends State<ModWheel> {
           flex: 30,
           child: ThemedSlider(
             // label: "",
-            thumbColor: Palette.cadetBlue,
+            thumbColor: Palette.tan,
             child: RotatedBox(
               quarterTurns: 0,
               child: Slider(
@@ -103,7 +103,7 @@ class _ModWheelState extends State<ModWheel> {
                             "$_mod",
                             style: TextStyle(
                               fontSize: constraints.maxWidth * fontSizeFactor,
-                              color: Palette.darker(Palette.cadetBlue, 0.6),
+                              color: Palette.darker(Palette.tan, 0.6),
                             ),
                           ),
                         ),

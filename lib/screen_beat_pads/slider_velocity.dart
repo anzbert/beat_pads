@@ -38,7 +38,7 @@ class _SliderVelocityState extends State<SliderVelocity> {
                     "Vel",
                     style: TextStyle(
                       fontSize: constraints.maxWidth * fontSizeFactor,
-                      color: Palette.darker(Palette.laserLemon, 0.6),
+                      color: Palette.darker(Palette.cadetBlue, 0.6),
                     ),
                   ),
                 );
@@ -56,7 +56,7 @@ class _SliderVelocityState extends State<SliderVelocity> {
                 flex: 30,
                 child: ThemedSlider(
                   // label: "",
-                  thumbColor: Palette.laserLemon,
+                  thumbColor: Palette.cadetBlue,
                   child: Slider(
                     min: 10,
                     max: 127,
@@ -75,7 +75,7 @@ class _SliderVelocityState extends State<SliderVelocity> {
                 flex: 30,
                 child: ThemedSlider(
                   range: sender.playMode.velocityProvider.velocityRange,
-                  thumbColor: Palette.laserLemon,
+                  thumbColor: Palette.cadetBlue,
                   child: Slider(
                     min: 10,
                     max: 127,
@@ -119,7 +119,7 @@ class _SliderVelocityState extends State<SliderVelocity> {
                                       fontSize:
                                           constraints.maxWidth * fontSizeFactor,
                                       color: Palette.darker(
-                                          Palette.laserLemon, 0.6),
+                                          Palette.cadetBlue, 0.6),
                                     )),
                           ),
                           Flexible(
@@ -136,7 +136,7 @@ class _SliderVelocityState extends State<SliderVelocity> {
                                             0.6,
                                         fontWeight: FontWeight.w300,
                                         color: Palette.darker(
-                                            Palette.laserLemon, 0.6),
+                                            Palette.cadetBlue, 0.6),
                                       ),
                                     ),
                                   )

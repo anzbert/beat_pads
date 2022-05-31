@@ -38,7 +38,7 @@ class ThemedSlider extends StatelessWidget {
             if (centerLine)
               Container(
                 decoration: BoxDecoration(
-                  color: Palette.darker(_trackColor, 0.75),
+                  color: Palette.darker(_trackColor, 0.8),
                   borderRadius: BorderRadius.all(
                     Radius.circular(width * 0.01),
                   ),
