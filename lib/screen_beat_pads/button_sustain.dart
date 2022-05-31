@@ -52,14 +52,14 @@ class _SustainButtonDoubleTapState extends State<SustainButtonDoubleTap> {
             });
           }
         },
-        // onTapCancel: () {
-        //   if (sustainState) {
-        //     setState(() {
-        //       sustainState = false;
-        //       MidiUtils.sendSustainMessage(widget.channel, sustainState);
-        //     });
-        //   }
-        // },
+        onPanEnd: (_) {
+          if (sustainState) {
+            setState(() {
+              sustainState = false;
+              MidiUtils.sendSustainMessage(widget.channel, sustainState);
+            });
+          }
+        },
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(padRadius * 1)),

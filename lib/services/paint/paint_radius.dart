@@ -6,6 +6,7 @@ class CustomPaintRadius extends CustomPainter {
     required this.maxRadius,
     required this.deadZone,
     required this.change,
+    required this.dirty,
     required this.colorBack,
     required this.colorFront,
     required this.colorDeadZone,
@@ -19,6 +20,7 @@ class CustomPaintRadius extends CustomPainter {
   final Color colorDeadZone;
   final double change;
   final double changeAbsolute;
+  final bool dirty;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -34,7 +36,9 @@ class CustomPaintRadius extends CustomPainter {
         radius: maxRadius,
       ));
 
-    canvas.drawShadow(pathBack, Colors.black.withOpacity(change), 6, true);
+    if (!dirty) {
+      canvas.drawShadow(pathBack, Colors.black.withOpacity(change), 6, true);
+    }
     canvas.drawPath(pathBack, brushBack);
     // canvas.drawCircle(origin, maxRadius, brushBack); // background
 

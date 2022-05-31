@@ -10,11 +10,11 @@ abstract class Palette {
   static Color lightPink = const HSLColor.fromAHSL(1, 0, .95, .80).toColor();
   static Color darkPink = const HSLColor.fromAHSL(1, 0, .15, .50).toColor();
   static Color darkGrey = const Color.fromARGB(255, 66, 66, 66);
-  static Color lightGrey = const HSLColor.fromAHSL(1, 0, .0, .3).toColor();
-  static Color splashColor = const HSLColor.fromAHSL(1, 0, .0, .40).toColor();
+  static Color lightGrey = const HSLColor.fromAHSL(1, 0, .0, .33).toColor();
+  static Color splashColor = const HSLColor.fromAHSL(1, 0, .0, .35).toColor();
   static Color whiteLike = const Color.fromRGBO(255, 255, 255, 0.702);
   static Color dirtyTranslucent =
-      const HSLColor.fromAHSL(0.1, 0, .0, .33).toColor();
+      const HSLColor.fromAHSL(0.2, 0, .0, .33).toColor();
 
   static Color darker(Color color, double factor) {
     HSLColor hsl = HSLColor.fromColor(color);

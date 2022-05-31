@@ -7,6 +7,7 @@ class CustomPaintXYSquare extends CustomPainter {
     required this.maxRadius,
     required this.deadZone,
     required this.change,
+    required this.dirty,
     required this.radialChange,
     required this.colorBack,
     required this.colorFront,
@@ -21,6 +22,7 @@ class CustomPaintXYSquare extends CustomPainter {
   final Color colorBack;
   final Color colorDeadZone;
   final Offset change;
+  final bool dirty;
 
   final Offset changeAbsolute;
 
@@ -40,8 +42,10 @@ class CustomPaintXYSquare extends CustomPainter {
         const Radius.circular(12));
 
     var pathBack = Path()..addRRect(roundedRect);
-    canvas.drawShadow(
-        pathBack, Colors.black.withOpacity(radialChange), 6, true);
+    if (!dirty) {
+      canvas.drawShadow(
+          pathBack, Colors.black.withOpacity(radialChange), 6, true);
+    }
     canvas.drawPath(pathBack, brushRect);
     // canvas.drawRRect(roundedRect, brushRect); // background
 

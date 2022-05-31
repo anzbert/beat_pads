@@ -22,6 +22,7 @@ class PaintModPreview extends StatelessWidget {
         if (!settings.modulation2D || settings.playMode.oneDimensional) {
           return CustomPaint(
             painter: CustomPaintRadius(
+              dirty: false,
               origin: box.globalToLocal(Offset(
                   screenSize.width / 2,
                   screenSize.height /
@@ -40,6 +41,7 @@ class PaintModPreview extends StatelessWidget {
         } else {
           return CustomPaint(
             painter: CustomPaintXYSquare(
+              dirty: false,
               origin: box.globalToLocal(Offset(
                   screenSize.width / 2,
                   screenSize.height /
