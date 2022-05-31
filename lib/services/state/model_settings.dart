@@ -337,13 +337,13 @@ class Settings extends ChangeNotifier {
 
   set velocityMin(int min) {
     prefs.settings.velocityMin.value = min;
-    // prefs.settings.velocityMin.save();
+    // saved by slider
     notifyListeners();
   }
 
   set velocityMax(int max) {
     prefs.settings.velocityMax.value = max;
-    // prefs.settings.velocityMax.save();
+    // saved by slider
     notifyListeners();
   }
 
@@ -354,7 +354,7 @@ class Settings extends ChangeNotifier {
 
   setVelocity(int vel) {
     prefs.settings.velocity.value = vel.clamp(10, 127);
-    // prefs.settings.velocity.save(); // saved by slider
+    // saved by slider
     notifyListeners();
   }
 
@@ -425,7 +425,7 @@ class Settings extends ChangeNotifier {
   set pitchBendEase(int newValue) {
     prefs.settings.pitchBendEase.value =
         newValue.clamp(0, Timing.timingSteps.length - 1);
-    // prefs.settings.pitchBendEase.save();
+    // saved by slider
     notifyListeners();
   }
 
@@ -446,8 +446,7 @@ class Settings extends ChangeNotifier {
   set noteSustainTimeStep(int newValue) {
     prefs.settings.noteSustainTimeStep.value =
         newValue.clamp(0, Timing.timingSteps.length ~/ 1.5);
-
-    // prefs.settings.noteSustainTimeStep.save();
+    // saved by slider
     notifyListeners();
   }
 
@@ -457,6 +456,7 @@ class Settings extends ChangeNotifier {
   resetNoteSustainTimeStep() {
     prefs.settings.noteSustainTimeStep.value =
         LoadSettings.defaults().noteSustainTimeStep.value;
+    notifyListeners();
     prefs.settings.noteSustainTimeStep.save();
   }
 
@@ -467,8 +467,7 @@ class Settings extends ChangeNotifier {
   set modSustainTimeStep(int newValue) {
     prefs.settings.modSustainTimeStep.value =
         newValue.clamp(0, Timing.timingSteps.length ~/ 1.5);
-
-    // prefs.settings.modSustainTimeStep.save();
+    // saved by slider
     notifyListeners();
   }
 

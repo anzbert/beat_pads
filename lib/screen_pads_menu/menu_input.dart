@@ -12,7 +12,7 @@ import 'package:beat_pads/services/services.dart';
 class MenuInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Consumer<Settings>(builder: (context, settings, child) {
+    return Consumer<Settings>(builder: (context, settings, _) {
       return ListView(
         children: <Widget>[
           ListTile(
@@ -91,7 +91,7 @@ class MenuInput extends StatelessWidget {
                 : "Note and Modulation Delay after Release in Milliseconds",
             readValue: settings.noteSustainTimeStep,
             setValue: (v) => settings.noteSustainTimeStep = v,
-            resetFunction: () => settings.resetNoteSustainTimeStep(),
+            resetFunction: settings.resetNoteSustainTimeStep,
             displayValue: settings.noteSustainTimeUsable < 1000
                 ? "${settings.noteSustainTimeUsable} ms"
                 : "${settings.noteSustainTimeUsable / 1000} s",
@@ -105,7 +105,7 @@ class MenuInput extends StatelessWidget {
               subtitle: "Modulation ease back after Release in Milliseconds",
               readValue: settings.modSustainTimeStep,
               setValue: (v) => settings.modSustainTimeStep = v,
-              resetFunction: () => settings.resetModSustainTimeStep(),
+              resetFunction: settings.resetModSustainTimeStep,
               displayValue: settings.modSustainTimeUsable < 1000
                   ? "${settings.modSustainTimeUsable} ms"
                   : "${settings.modSustainTimeUsable / 1000} s",

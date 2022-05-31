@@ -134,7 +134,7 @@ class MenuLayout extends StatelessWidget {
                         "Set time in Milliseconds for Pitch Bend Slider to ease back to Zero",
                     readValue: settings.pitchBendEase,
                     setValue: (v) => settings.pitchBendEase = v,
-                    resetFunction: () => settings.resetPitchBendEase,
+                    resetFunction: settings.resetPitchBendEase,
                     displayValue: settings.pitchBendEaseUsable < 1000
                         ? "${settings.pitchBendEaseUsable} ms"
                         : "${settings.pitchBendEaseUsable / 1000} s",
