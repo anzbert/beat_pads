@@ -30,12 +30,13 @@ class BeatPadsScreen extends StatelessWidget {
                 return MultiProvider(
                     providers: [
                       // proxyproviders, to update all other models, when Settings change:
-                      ChangeNotifierProxyProvider<Settings, MidiReceiver>(
-                        create: (context) =>
-                            MidiReceiver(context.read<Settings>()),
-                        update: (_, settings, midiReceiver) =>
-                            midiReceiver!.update(settings),
-                      ),
+                      if (!preview)
+                        ChangeNotifierProxyProvider<Settings, MidiReceiver>(
+                          create: (context) =>
+                              MidiReceiver(context.read<Settings>()),
+                          update: (_, settings, midiReceiver) =>
+                              midiReceiver!.update(settings),
+                        ),
                       ChangeNotifierProxyProvider<Settings, MidiSender>(
                         create: (context) => MidiSender(
                             context.read<Settings>(), screenSize,
@@ -43,13 +44,10 @@ class BeatPadsScreen extends StatelessWidget {
                         update: (_, settings, midiSender) =>
                             midiSender!.update(settings, screenSize),
                       ),
-                      // ChangeNotifierProxyProvider<Settings, PadScreenVariables>(
-                      //   create: (context) => PadScreenVariables(
-                      //       context.read<Settings>(),
-                      //       preview: preview),
-                      //   update: (_, settings, padVariables) =>
-                      //       padVariables!.update(settings),
-                      // ),
+                      ChangeNotifierProvider<PadScreenVariables>(
+                        create: (context) =>
+                            PadScreenVariables(preview: preview),
+                      ),
                     ],
                     builder: (context, _) {
                       return Stack(

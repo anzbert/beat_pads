@@ -17,25 +17,28 @@ import 'package:beat_pads/screen_pads_menu/drop_down_scales.dart';
 class MenuLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Consumer<Settings>(builder: (context, settings, child) {
-      final bool resizableGrid =
-          settings.layout.props.resizable; // Is the layout fixed or resizable?
-      bool isPortrait =
-          MediaQuery.of(context).orientation.name == "portrait" ? true : false;
-
-      return Flex(
-        direction: isPortrait ? Axis.vertical : Axis.horizontal,
-        crossAxisAlignment:
-            isPortrait ? CrossAxisAlignment.center : CrossAxisAlignment.start,
-        children: [
-          const Flexible(
-            fit: FlexFit.tight,
-            flex: 2,
-            child: FittedBox(child: Preview()),
+    bool isPortrait =
+        MediaQuery.of(context).orientation.name == "portrait" ? true : false;
+    return Flex(
+      direction: isPortrait ? Axis.vertical : Axis.horizontal,
+      crossAxisAlignment:
+          isPortrait ? CrossAxisAlignment.center : CrossAxisAlignment.start,
+      children: [
+        const Flexible(
+          fit: FlexFit.tight,
+          flex: 2,
+          child: FittedBox(
+            child: RepaintBoundary(
+              child: Preview(),
+            ),
           ),
-          Expanded(
-            flex: 3,
-            child: ListView(
+        ),
+        Expanded(
+          flex: 3,
+          child: Consumer<Settings>(builder: (context, settings, child) {
+            final bool resizableGrid = settings
+                .layout.props.resizable; // Is the layout fixed or resizable?
+            return ListView(
               children: <Widget>[
                 ListTile(
                   title: const Divider(),
@@ -179,10 +182,10 @@ class MenuLayout extends StatelessWidget {
                   onChangeEnd: settings.prefs.settings.baseHue.save,
                 ),
               ],
-            ),
-          ),
-        ],
-      );
-    });
+            );
+          }),
+        ),
+      ],
+    );
   }
 }

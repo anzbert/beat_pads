@@ -22,7 +22,9 @@ class _ModWheelState extends State<ModWheel> {
 
   @override
   Widget build(BuildContext context) {
-    int? receivedMidi = context.watch<MidiReceiver>().modWheelValue;
+    int? receivedMidi = !context.read<PadScreenVariables>().preview
+        ? null
+        : context.watch<MidiReceiver>().modWheelValue;
     if (receivedMidi != null) {
       _mod = receivedMidi;
       context.read<MidiReceiver>().modWheelValue = null;

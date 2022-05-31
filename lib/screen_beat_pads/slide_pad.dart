@@ -14,12 +14,16 @@ class SlideBeatPad extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("object");
     final Settings settings = Provider.of<Settings>(context, listen: true);
     final double screenWidth = MediaQuery.of(context).size.width;
 
-    final int rxNoteVelocity = note < 127 && note >= 0
-        ? Provider.of<MidiReceiver>(context, listen: true).rxBuffer[note]
-        : 0;
+    final int rxNoteVelocity = context.read<PadScreenVariables>().preview
+        ? 0
+        : note < 127 && note >= 0
+            ? Provider.of<MidiReceiver>(context, listen: true).rxBuffer[note]
+            : 0;
+
     final bool noteOn =
         Provider.of<MidiSender>(context, listen: true).playMode.isNoteOn(note);
 
