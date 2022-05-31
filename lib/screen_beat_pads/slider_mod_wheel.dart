@@ -6,8 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ModWheel extends StatefulWidget {
-  const ModWheel({Key? key, required this.channel}) : super(key: key);
+  const ModWheel({Key? key, required this.channel, required this.preview})
+      : super(key: key);
 
+  final bool preview;
   final int channel;
 
   @override
@@ -22,9 +24,9 @@ class _ModWheelState extends State<ModWheel> {
 
   @override
   Widget build(BuildContext context) {
-    int? receivedMidi = !context.read<PadScreenVariables>().preview
+    int? receivedMidi = widget.preview
         ? null
-        : context.watch<MidiReceiver>().modWheelValue;
+        : context.select((MidiReceiver receiver) => receiver.modWheelValue);
     if (receivedMidi != null) {
       _mod = receivedMidi;
       context.read<MidiReceiver>().modWheelValue = null;

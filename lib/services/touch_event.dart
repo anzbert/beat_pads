@@ -91,4 +91,12 @@ class TouchEvent {
   String toString() {
     return "noteEvent: ${noteEvent.note} / isAnimated: $hasReturnAnimation / noteOn: ${noteEvent.isPlaying}";
   }
+
+  bool get isModulating {
+    if (directionalChangeFromCenter() != const Offset(0, 0) &&
+        radialChange() != 0) {
+      return true;
+    }
+    return false;
+  }
 }

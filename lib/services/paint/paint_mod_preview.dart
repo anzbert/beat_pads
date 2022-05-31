@@ -37,24 +37,25 @@ class PaintModPreview extends StatelessWidget {
                   Palette.laserLemon.withOpacity(fixedChangeForPreview * 0.4),
             ),
           );
+        } else {
+          return CustomPaint(
+            painter: CustomPaintXYSquare(
+              origin: box.globalToLocal(Offset(
+                  screenSize.width / 2,
+                  screenSize.height /
+                      (DeviceUtils.isPortrait(context) ? 2.5 : 2))),
+              maxRadius: settings.modulationRadius * screenSize.longestSide,
+              deadZone: settings.modulationDeadZone,
+              change: const Offset(0, 0),
+              colorBack:
+                  Palette.lightPink.withOpacity(fixedChangeForPreview * 0.6),
+              colorFront:
+                  Palette.laserLemon.withOpacity(fixedChangeForPreview * 0.8),
+              colorDeadZone:
+                  Palette.laserLemon.withOpacity(fixedChangeForPreview * 0.4),
+            ),
+          );
         }
-        return CustomPaint(
-          painter: CustomPaintXYSquare(
-            origin: box.globalToLocal(Offset(
-                screenSize.width / 2,
-                screenSize.height /
-                    (DeviceUtils.isPortrait(context) ? 2.5 : 2))),
-            maxRadius: settings.modulationRadius * screenSize.longestSide,
-            deadZone: settings.modulationDeadZone,
-            change: const Offset(0, 0),
-            colorBack:
-                Palette.lightPink.withOpacity(fixedChangeForPreview * 0.6),
-            colorFront:
-                Palette.laserLemon.withOpacity(fixedChangeForPreview * 0.8),
-            colorDeadZone:
-                Palette.laserLemon.withOpacity(fixedChangeForPreview * 0.4),
-          ),
-        );
       },
     );
   }

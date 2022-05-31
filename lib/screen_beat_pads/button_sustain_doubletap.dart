@@ -2,10 +2,12 @@ import 'package:beat_pads/services/services.dart';
 
 import 'package:beat_pads/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class SustainButtonDoubleTap extends StatefulWidget {
-  const SustainButtonDoubleTap({Key? key}) : super(key: key);
+  const SustainButtonDoubleTap({Key? key, required this.channel})
+      : super(key: key);
+
+  final int channel;
 
   @override
   State<SustainButtonDoubleTap> createState() => _SustainButtonDoubleTapState();
@@ -16,17 +18,14 @@ class _SustainButtonDoubleTapState extends State<SustainButtonDoubleTap> {
 
   @override
   void dispose() {
-    int channel = Provider.of<Settings>(context, listen: false).channel;
     if (sustainState == true) {
-      MidiUtils.sendSustainMessage(channel, false);
+      MidiUtils.sendSustainMessage(widget.channel, false);
     }
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    int channel = Provider.of<Settings>(context, listen: true).channel;
-
     double width = MediaQuery.of(context).size.width;
     double padRadius = width * ThemeConst.padRadiusFactor;
     double padSpacing = width * ThemeConst.padSpacingFactor;
@@ -35,13 +34,13 @@ class _SustainButtonDoubleTapState extends State<SustainButtonDoubleTap> {
       child: GestureDetector(
         onDoubleTap: () => setState(() {
           sustainState = !sustainState;
-          MidiUtils.sendSustainMessage(channel, sustainState);
+          MidiUtils.sendSustainMessage(widget.channel, sustainState);
         }),
         onTapDown: (_) {
           if (!sustainState) {
             setState(() {
               sustainState = true;
-              MidiUtils.sendSustainMessage(channel, sustainState);
+              MidiUtils.sendSustainMessage(widget.channel, sustainState);
             });
           }
         },
@@ -49,7 +48,7 @@ class _SustainButtonDoubleTapState extends State<SustainButtonDoubleTap> {
           if (sustainState) {
             setState(() {
               sustainState = false;
-              MidiUtils.sendSustainMessage(channel, sustainState);
+              MidiUtils.sendSustainMessage(widget.channel, sustainState);
             });
           }
         },
@@ -57,7 +56,7 @@ class _SustainButtonDoubleTapState extends State<SustainButtonDoubleTap> {
         //   if (sustainState) {
         //     setState(() {
         //       sustainState = false;
-        //       MidiUtils.sendSustainMessage(channel, sustainState);
+        //       MidiUtils.sendSustainMessage(widget.channel, sustainState);
         //     });
         //   }
         // },

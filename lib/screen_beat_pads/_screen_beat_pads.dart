@@ -20,14 +20,13 @@ class BeatPadsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: preview ? _doNothing() : DeviceUtils.landscapeOnly(),
-      builder: ((context, AsyncSnapshot<bool?> done) {
-        if (done.hasData && done.data == true) {
-          return Scaffold(
-            body: SafeArea(
-              child: Consumer<Settings>(builder: (context, settings, _) {
-                Size screenSize = MediaQuery.of(context).size;
-                return MultiProvider(
+        future: preview ? _doNothing() : DeviceUtils.landscapeOnly(),
+        builder: ((context, AsyncSnapshot<bool?> done) {
+          if (done.hasData && done.data == true) {
+            Size screenSize = MediaQuery.of(context).size;
+            return Scaffold(
+              body: SafeArea(
+                child: MultiProvider(
                     providers: [
                       // proxyproviders, to update all other models, when Settings change:
                       if (!preview)
@@ -44,10 +43,10 @@ class BeatPadsScreen extends StatelessWidget {
                         update: (_, settings, midiSender) =>
                             midiSender!.update(settings, screenSize),
                       ),
-                      ChangeNotifierProvider<PadScreenVariables>(
-                        create: (context) =>
-                            PadScreenVariables(preview: preview),
-                      ),
+                      // ChangeNotifierProvider<PadScreenVariables>(
+                      //   create: (context) =>
+                      //       PadScreenVariables(preview: preview),
+                      // ),
                     ],
                     builder: (context, _) {
                       return Stack(
@@ -64,42 +63,60 @@ class BeatPadsScreen extends StatelessWidget {
                                 child: SizedBox(),
                               ),
                               // CONTROL BUTTONS
-                              if (settings.octaveButtons ||
-                                  settings.sustainButton)
+                              if (context.select((Settings settings) =>
+                                      settings.octaveButtons) ||
+                                  context.select((Settings settings) =>
+                                      settings.sustainButton))
                                 const Expanded(
                                   flex: 5,
                                   child: ControlButtonsRect(),
                                 ),
                               // PITCH BEND
-                              if (settings.pitchBend)
+                              if (context.select(
+                                  (Settings settings) => settings.pitchBend))
                                 Expanded(
                                   flex: 7,
                                   child: PitchSliderEased(
-                                    channel: settings.channel,
-                                    resetTime: settings.pitchBendEaseUsable,
+                                    channel: context.select(
+                                        (Settings settings) =>
+                                            settings.channel),
+                                    resetTime: context.select(
+                                        (Settings settings) =>
+                                            settings.pitchBendEaseUsable),
                                   ),
                                 ),
                               // MOD WHEEL
-                              if (settings.modWheel)
+                              if (context.select(
+                                  (Settings settings) => settings.modWheel))
                                 Expanded(
                                   flex: 7,
                                   child: ModWheel(
-                                    channel: settings.channel,
+                                    preview: preview,
+                                    channel: context.select(
+                                        (Settings settings) =>
+                                            settings.channel),
                                   ),
                                 ),
                               // VELOCITY
-                              if (settings.velocitySlider)
+                              if (context.select((Settings settings) =>
+                                  settings.velocitySlider))
                                 Expanded(
                                   flex: 7,
                                   child: SliderVelocity(
-                                    channel: settings.channel,
-                                    randomVelocity: settings.randomVelocity,
+                                    channel: context.select(
+                                        (Settings settings) =>
+                                            settings.channel),
+                                    randomVelocity: context.select(
+                                        (Settings settings) =>
+                                            settings.randomVelocity),
                                   ),
                                 ),
                               // PADS
-                              const Expanded(
+                              Expanded(
                                 flex: 60,
-                                child: SlidePads(),
+                                child: SlidePads(
+                                  preview: preview,
+                                ),
                               ),
                               const Expanded(
                                 flex: 1,
@@ -108,8 +125,10 @@ class BeatPadsScreen extends StatelessWidget {
                             ],
                           ),
                           if (!preview)
-                            if (!settings.sustainButton &&
-                                !settings.octaveButtons)
+                            if (!context.select((Settings settings) =>
+                                    settings.sustainButton) &&
+                                !context.select((Settings settings) =>
+                                    settings.octaveButtons))
                               Builder(builder: (context) {
                                 double width =
                                     MediaQuery.of(context).size.width;
@@ -123,7 +142,9 @@ class BeatPadsScreen extends StatelessWidget {
                                   ),
                                 );
                               }),
-                          if (settings.connectedDevices.isEmpty && !preview)
+                          if (context.select((Settings settings) =>
+                                  settings.connectedDevices.isEmpty) &&
+                              !preview)
                             Positioned(
                               bottom: 15,
                               right: 15,
@@ -142,16 +163,14 @@ class BeatPadsScreen extends StatelessWidget {
                             ),
                         ],
                       );
-                    });
-              }),
-            ),
-            drawer: const Drawer(
-              child: MidiConfig(),
-            ),
-          );
-        }
-        return const SizedBox.expand();
-      }),
-    );
+                    }),
+              ),
+              drawer: const Drawer(
+                child: MidiConfig(),
+              ),
+            );
+          }
+          return const SizedBox.expand();
+        }));
   }
 }

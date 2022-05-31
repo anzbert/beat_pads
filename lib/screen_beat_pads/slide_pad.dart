@@ -5,20 +5,21 @@ import 'package:provider/provider.dart';
 import 'package:beat_pads/services/services.dart';
 
 class SlideBeatPad extends StatelessWidget {
+  final bool preview;
+
   const SlideBeatPad({
     required this.note,
     Key? key,
+    required this.preview,
   }) : super(key: key);
 
   final int note;
 
   @override
   Widget build(BuildContext context) {
-    print("object");
-    final Settings settings = Provider.of<Settings>(context, listen: true);
     final double screenWidth = MediaQuery.of(context).size.width;
 
-    final int rxNoteVelocity = context.read<PadScreenVariables>().preview
+    final int rxNoteVelocity = preview
         ? 0
         : note < 127 && note >= 0
             ? Provider.of<MidiReceiver>(context, listen: true).rxBuffer[note]
@@ -26,6 +27,8 @@ class SlideBeatPad extends StatelessWidget {
 
     final bool noteOn =
         Provider.of<MidiSender>(context, listen: true).playMode.isNoteOn(note);
+
+    final Settings settings = Provider.of<Settings>(context, listen: true);
 
     // PAD COLOR:
     final Color color = settings.padColors.colorize(

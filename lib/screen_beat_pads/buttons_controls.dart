@@ -22,9 +22,9 @@ class ControlButtonsRect extends StatelessWidget {
                 child: OctaveButtons(),
               ),
             if (settings.sustainButton)
-              const Expanded(
+              Expanded(
                 flex: 1,
-                child: SustainButtonDoubleTap(),
+                child: SustainButtonDoubleTap(channel: settings.channel),
               ),
           ],
         );

@@ -21,7 +21,7 @@ class DropdownLayout extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: DropdownButton<Layout>(
-        value: Provider.of<Settings>(context, listen: true).layout,
+        value: context.select((Settings settings) => settings.layout),
         items: items,
         onChanged: (value) {
           if (value != null) {

@@ -19,10 +19,18 @@ class PaintModulation extends StatelessWidget {
             ...[
               ...midiSender.playMode.touchReleaseBuffer.buffer,
               ...midiSender.playMode.touchBuffer.buffer
-            ].map(
+            ]
+                .where(
+              (element) =>
+                  element.isModulating, // filter smaller than deadzone events
+            )
+                .map(
               (touchEvent) {
-                return context.watch<Settings>().modulation2D == false ||
-                        context.watch<Settings>().playMode.oneDimensional
+                return context.select(
+                                (Settings settings) => settings.modulation2D) ==
+                            false ||
+                        context.select((Settings settings) =>
+                            settings.playMode.oneDimensional)
                     // CIRCLE / RADIUS
                     ? CustomPaint(
                         painter: CustomPaintRadius(

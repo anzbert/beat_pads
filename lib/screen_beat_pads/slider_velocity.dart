@@ -99,7 +99,8 @@ class _SliderVelocityState extends State<SliderVelocity> {
                                   color: Palette.laserLemon,
                                 ),
                             children: <TextSpan>[
-                              if (context.watch<Settings>().randomVelocity)
+                              if (context.select((Settings settings) =>
+                                  settings.randomVelocity))
                                 TextSpan(
                                   text:
                                       "\n${String.fromCharCode(177)}${sender.playMode.velocityProvider.velocityRange ~/ 2}",
