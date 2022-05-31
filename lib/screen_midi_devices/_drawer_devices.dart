@@ -116,7 +116,7 @@ class MidiConfigState extends State<MidiConfig> {
                               margin: const EdgeInsets.symmetric(vertical: 8),
                               color: device.connected
                                   ? Palette.cadetBlue
-                                  : Palette.cadetBlue.withOpacity(0.1),
+                                  : Palette.darker(Palette.cadetBlue, 0.4),
                               child: TextButton(
                                 onPressed: () {
                                   setDevice(device);
@@ -152,9 +152,12 @@ class MidiConfigState extends State<MidiConfig> {
                             body: [
                               "Connect USB cable to Host Device",
                               "Slide down the Notification Menu and set the USB connection mode to 'Midi'",
-                              "If there is no Midi option available, your Android phone may only show this setting in the Developer Menu. Please refer to readily available instructions online on how to access it on your Device",
+                              "If there is no Midi option available, your Android phone may only show this setting in the Developer Menu. Please refer to readily available instructions online on how to access this Menu on your Device",
                               "Once Midi mode is activated, refresh this Device List",
                               "Tap USB Device to Connect",
+                              "",
+                              "",
+                              "Note: The Developer menu allows you to set the default USB connection mode to Midi",
                             ],
                           ),
                         if (Platform.isIOS)
@@ -180,7 +183,7 @@ class MidiConfigState extends State<MidiConfig> {
                               "Create a Session in the 'MIDI Network Setup' window and connect to your iPad/iPhone",
                               "",
                               "",
-                              "Note: Wireless Protocols add Latency. Connection to Windows Hosts via WiFi requires third-party Software (like Apple Bonjour)"
+                              "Note: Wireless Protocols add Latency. Connection to Windows Hosts via WiFi requires third-party Software (like Apple rtpMIDI)"
                             ],
                           ),
                       ],

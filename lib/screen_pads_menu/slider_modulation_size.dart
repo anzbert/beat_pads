@@ -11,6 +11,7 @@ class ModSizeSliderTile extends StatefulWidget {
       required this.setValue,
       required this.readValue,
       this.resetValue,
+      this.onChangeEnd,
       required this.trailing,
       Key? key})
       : super(key: key);
@@ -20,6 +21,7 @@ class ModSizeSliderTile extends StatefulWidget {
   final int min;
   final int max;
   final Function setValue;
+  final Function? onChangeEnd;
   final int readValue;
   final Function? resetValue;
   final Widget trailing;
@@ -86,9 +88,12 @@ class _ModSizeSliderTileState extends State<ModSizeSliderTile> {
                     onChangeStart: (_) => setState(() {
                       showPreview = true;
                     }),
-                    onChangeEnd: (_) => setState(() {
-                      showPreview = false;
-                    }),
+                    onChangeEnd: (_) {
+                      setState(() {
+                        showPreview = false;
+                      });
+                      if (widget.onChangeEnd != null) widget.onChangeEnd!();
+                    },
                   ),
                 );
               },

@@ -21,7 +21,7 @@ class MidiSender extends ChangeNotifier {
         .getPlayModeApi(_settings, screenSize, notifyListenersOfMidiSender);
   }
 
-  /// Can be passed into Release Buffer Class
+  /// Can be passed into sub-Classes
   void notifyListenersOfMidiSender() => notifyListeners();
 
   /// Handle all setting changes happening in the lifetime of the pad grid here.
@@ -67,14 +67,19 @@ class MidiSender extends ChangeNotifier {
     if (_settings.playMode == PlayMode.mpe && preview == false) {
       MPEinitMessage(memberChannels: 0, upperZone: _settings.upperZone).send();
     }
+
+    // for (var element in playMode.touchReleaseBuffer.buffer) {
+    //   if (element.returnAnimation != null) {
+    //     element.returnAnimation!.dispose();
+    //   }
+    // }
+
     _disposed = true;
     super.dispose();
   }
 
   @override
   void notifyListeners() {
-    if (!_disposed) {
-      super.notifyListeners();
-    }
+    if (!_disposed) super.notifyListeners();
   }
 }

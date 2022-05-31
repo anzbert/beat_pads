@@ -6,10 +6,11 @@ class NonLinearSliderTile extends StatelessWidget {
     this.label = "#Label",
     this.subtitle,
     this.resetFunction,
+    this.onChangeEnd,
     required this.readValue,
     required this.setValue,
-    this.actualValue,
-    this.steps = 10,
+    this.displayValue,
+    this.steps = 100,
     this.start = 0,
     Key? key,
   }) : super(key: key);
@@ -17,11 +18,12 @@ class NonLinearSliderTile extends StatelessWidget {
   final int steps;
   final int start;
   final Function? resetFunction;
+  final Function? onChangeEnd;
   final Function setValue;
   final int readValue;
   final String label;
   final String? subtitle;
-  final String? actualValue;
+  final String? displayValue;
 
   @override
   Widget build(BuildContext context) {
@@ -45,8 +47,8 @@ class NonLinearSliderTile extends StatelessWidget {
             ],
           ),
           subtitle: subtitle != null ? Text(subtitle!) : null,
-          trailing: actualValue != null
-              ? Text(actualValue!)
+          trailing: displayValue != null
+              ? Text(displayValue!)
               : Text(readValue.toString()),
         ),
         Builder(
@@ -60,6 +62,9 @@ class NonLinearSliderTile extends StatelessWidget {
                 value: readValue.clamp(start, steps).toDouble(),
                 onChanged: (value) {
                   setValue(value.toInt());
+                },
+                onChangeEnd: (_) {
+                  if (onChangeEnd != null) onChangeEnd!();
                 },
               ),
             );

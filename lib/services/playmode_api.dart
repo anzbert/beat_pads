@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 abstract class PlayModeHandler {
   final Settings settings;
   final Function notifyParent;
+  final VelocityProvider velocityProvider;
 
   final TouchBuffer touchBuffer;
   late TouchReleaseBuffer touchReleaseBuffer;
@@ -12,7 +13,8 @@ abstract class PlayModeHandler {
     this.settings,
     Size screenSize,
     this.notifyParent,
-  ) : touchBuffer = TouchBuffer(settings, screenSize) {
+  )   : touchBuffer = TouchBuffer(settings, screenSize),
+        velocityProvider = VelocityProvider(settings, notifyParent) {
     touchReleaseBuffer = TouchReleaseBuffer(
       settings,
       releaseChannel,
@@ -21,12 +23,13 @@ abstract class PlayModeHandler {
   }
 
   void handleNewTouch(CustomPointer touch, int noteTapped) {
-    if (settings.sustainTimeUsable > 0) {
+    if (settings.modSustainTimeUsable > 0 ||
+        settings.noteSustainTimeUsable > 0) {
       touchReleaseBuffer.removeNoteFromReleaseBuffer(noteTapped);
     }
 
     NoteEvent noteOn =
-        NoteEvent(settings.channel, noteTapped, settings.velocity)
+        NoteEvent(settings.channel, noteTapped, velocityProvider.velocity)
           ..noteOn(cc: settings.sendCC);
 
     touchBuffer.addNoteOn(touch, noteOn);
@@ -39,7 +42,8 @@ abstract class PlayModeHandler {
     TouchEvent? eventInBuffer = touchBuffer.getByID(touch.pointer);
     if (eventInBuffer == null) return;
 
-    if (settings.sustainTimeUsable == 0) {
+    if (settings.modSustainTimeUsable == 0 &&
+        settings.noteSustainTimeUsable == 0) {
       eventInBuffer.noteEvent.noteOff(); // noteOFF
       touchBuffer.remove(eventInBuffer);
       notifyParent();
@@ -52,15 +56,18 @@ abstract class PlayModeHandler {
 
   void dispose() {
     for (TouchEvent touch in touchBuffer.buffer) {
-      touch.noteEvent.noteOff();
+      if (touch.noteEvent.isPlaying) touch.noteEvent.noteOff();
     }
     for (TouchEvent touch in touchReleaseBuffer.buffer) {
-      touch.noteEvent.noteOff();
+      if (touch.noteEvent.isPlaying) touch.noteEvent.noteOff();
     }
   }
 
   void markDirty() {
     for (var event in touchBuffer.buffer) {
+      event.markDirty();
+    }
+    for (var event in touchReleaseBuffer.buffer) {
       event.markDirty();
     }
   }
@@ -69,13 +76,22 @@ abstract class PlayModeHandler {
   /// Checks releasebuffer and active touchbuffer
   bool isNoteOn(int note, [int? channel]) {
     for (TouchEvent touch in touchBuffer.buffer) {
-      if (channel == null && touch.noteEvent.note == note) return true;
-      if (channel == channel && touch.noteEvent.note == note) return true;
+      if (channel == null &&
+          touch.noteEvent.note == note &&
+          touch.noteEvent.isPlaying) return true;
+      if (channel == channel &&
+          touch.noteEvent.note == note &&
+          touch.noteEvent.isPlaying) return true;
     }
-    if (settings.sustainTimeUsable > 0) {
+    if (settings.modSustainTimeUsable > 0 ||
+        settings.noteSustainTimeUsable > 0) {
       for (TouchEvent event in touchReleaseBuffer.buffer) {
-        if (channel == null && event.noteEvent.note == note) return true;
-        if (channel == channel && event.noteEvent.note == note) return true;
+        if (channel == null &&
+            event.noteEvent.note == note &&
+            event.noteEvent.isPlaying) return true;
+        if (channel == channel &&
+            event.noteEvent.note == note &&
+            event.noteEvent.isPlaying) return true;
       }
     }
     return false;

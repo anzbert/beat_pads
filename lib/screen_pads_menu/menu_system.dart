@@ -2,6 +2,7 @@ import 'package:beat_pads/screen_pads_menu/box_credits.dart';
 import 'package:beat_pads/services/services.dart';
 
 import 'package:flutter/material.dart';
+// import 'package:flutter_midi_command/flutter_midi_command.dart';
 import 'package:provider/provider.dart';
 
 import 'package:beat_pads/shared_components/_shared.dart';
@@ -34,7 +35,7 @@ class MenuSystem extends StatelessWidget {
                   Scaffold.of(context).openDrawer();
                 },
                 style: ElevatedButton.styleFrom(
-                    primary: Palette.laserLemon,
+                    primary: Palette.lightPink,
                     textStyle: const TextStyle(fontWeight: FontWeight.bold)),
                 child: const Text(
                   "Select Midi Device",
@@ -47,7 +48,7 @@ class MenuSystem extends StatelessWidget {
               constraints: BoxConstraints(minWidth: buttonMinWidth),
               child: SnackMessageButton(
                 label: "Reset Midi Buffers",
-                message: "Received Midi Buffer cleared",
+                message: "Midi Buffer cleared & Stop all Notes sent",
                 onPressed: () {
                   Provider.of<MidiReceiver>(context, listen: false)
                       .resetRxBuffer();
@@ -61,7 +62,7 @@ class MenuSystem extends StatelessWidget {
               constraints: BoxConstraints(minWidth: buttonMinWidth),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  primary: Palette.lightPink,
+                  primary: Palette.laserLemon,
                 ),
                 child: const Text(
                   "Reset All Settings",

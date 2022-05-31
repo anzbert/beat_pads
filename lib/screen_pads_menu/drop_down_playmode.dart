@@ -19,7 +19,7 @@ class DropdownPlayMode extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: DropdownButton<PlayMode>(
-        value: Provider.of<Settings>(context, listen: true).playMode,
+        value: context.select((Settings settings) => settings.playMode),
         items: items,
         onChanged: (value) {
           if (value != null) {

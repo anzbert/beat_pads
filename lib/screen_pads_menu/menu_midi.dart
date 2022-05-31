@@ -31,6 +31,7 @@ class MenuMidi extends StatelessWidget {
             trailing: Text((settings.channel + 1).toString()),
             setValue: (v) => settings.channel = v - 1,
             readValue: settings.channel + 1,
+            onChangeEnd: settings.prefs.settings.channel.save,
           ),
           IntSliderTile(
             min: 1,
@@ -38,10 +39,11 @@ class MenuMidi extends StatelessWidget {
             label: "MPE Member Channels",
             subtitle: "Number of member channels to allocate in MPE mode",
             trailing: Text(settings.upperZone
-                ? "${15 - settings.mpeMemberChannels} to 15"
-                : "2 to ${settings.mpeMemberChannels + 1}"),
+                ? "${settings.mpeMemberChannels} (${15 - settings.mpeMemberChannels} to 15)"
+                : "${settings.mpeMemberChannels} (2 to ${settings.mpeMemberChannels + 1})"),
             setValue: (v) => settings.mpeMemberChannels = v,
             readValue: settings.mpeMemberChannels,
+            onChangeEnd: settings.prefs.settings.mpeMemberChannels.save,
           ),
           const Divider(),
           ListTile(
@@ -53,12 +55,15 @@ class MenuMidi extends StatelessWidget {
           ),
           if (!settings.randomVelocity)
             IntSliderTile(
+              min: 10,
+              max: 127,
               label: "Fixed Velocity",
               subtitle: "Velocity to send when pressing a Pad",
               trailing: Text(settings.velocity.toString()),
               readValue: settings.velocity,
-              setValue: (v) => settings.velocity = v,
+              setValue: (v) => settings.setVelocity(v),
               resetValue: settings.resetVelocity,
+              onChangeEnd: settings.prefs.settings.velocity.save,
             ),
           if (settings.randomVelocity)
             MidiRangeSelectorTile(
@@ -68,6 +73,7 @@ class MenuMidi extends StatelessWidget {
               setMin: (v) => settings.velocityMin = v,
               setMax: (v) => settings.velocityMax = v,
               resetFunction: settings.resetVelocity,
+              onChangeEnd: settings.saveVelocityMinMax,
             ),
         ],
       );

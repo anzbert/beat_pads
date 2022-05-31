@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class PaintModulation extends StatelessWidget {
-  const PaintModulation({Key? key}) : super(key: key);
+  PaintModulation({Key? key}) : super(key: key);
 
+  final dirtyColor = Palette.dirtyTranslucent;
   @override
   Widget build(BuildContext context) {
     // Get Renderbox for gloabl to local offset conversion:
@@ -18,10 +19,18 @@ class PaintModulation extends StatelessWidget {
             ...[
               ...midiSender.playMode.touchReleaseBuffer.buffer,
               ...midiSender.playMode.touchBuffer.buffer
-            ].map(
+            ]
+                .where(
+              (element) =>
+                  element.isModulating, // filter smaller than deadzone events
+            )
+                .map(
               (touchEvent) {
-                return context.watch<Settings>().modulation2D == false ||
-                        context.watch<Settings>().playMode.oneDimensional
+                return context.select(
+                                (Settings settings) => settings.modulation2D) ==
+                            false ||
+                        context.select((Settings settings) =>
+                            settings.playMode.oneDimensional)
                     // CIRCLE / RADIUS
                     ? CustomPaint(
                         painter: CustomPaintRadius(
@@ -30,14 +39,20 @@ class PaintModulation extends StatelessWidget {
                           deadZone: touchEvent.deadZone,
                           change: touchEvent.radialChange(
                               curve: Curves.linear, deadZone: false),
-                          colorBack: Palette.lightPink.withOpacity(
-                              touchEvent.radialChange(curve: Curves.easeOut) *
+                          colorBack: touchEvent.dirty
+                              ? dirtyColor
+                              : Palette.lightPink.withOpacity(touchEvent
+                                      .radialChange(curve: Curves.easeOut) *
                                   0.6),
-                          colorFront: Palette.laserLemon.withOpacity(
-                              touchEvent.radialChange(curve: Curves.easeOut) *
+                          colorFront: touchEvent.dirty
+                              ? dirtyColor
+                              : Palette.laserLemon.withOpacity(touchEvent
+                                      .radialChange(curve: Curves.easeOut) *
                                   0.8),
-                          colorDeadZone: Palette.laserLemon.withOpacity(
-                              touchEvent.radialChange(curve: Curves.easeOut) *
+                          colorDeadZone: touchEvent.dirty
+                              ? dirtyColor
+                              : Palette.laserLemon.withOpacity(touchEvent
+                                      .radialChange(curve: Curves.easeOut) *
                                   0.4),
                         ),
                       )
@@ -49,14 +64,20 @@ class PaintModulation extends StatelessWidget {
                           deadZone: touchEvent.deadZone,
                           change: touchEvent.directionalChangeFromCenter(
                               curve: Curves.linear, deadZone: false),
-                          colorBack: Palette.lightPink.withOpacity(
-                              touchEvent.radialChange(curve: Curves.easeOut) *
+                          colorBack: touchEvent.dirty
+                              ? dirtyColor
+                              : Palette.lightPink.withOpacity(touchEvent
+                                      .radialChange(curve: Curves.easeOut) *
                                   0.6),
-                          colorFront: Palette.laserLemon.withOpacity(
-                              touchEvent.radialChange(curve: Curves.easeOut) *
+                          colorFront: touchEvent.dirty
+                              ? dirtyColor
+                              : Palette.laserLemon.withOpacity(touchEvent
+                                      .radialChange(curve: Curves.easeOut) *
                                   0.8),
-                          colorDeadZone: Palette.laserLemon.withOpacity(
-                              touchEvent.radialChange(curve: Curves.easeOut) *
+                          colorDeadZone: touchEvent.dirty
+                              ? dirtyColor
+                              : Palette.laserLemon.withOpacity(touchEvent
+                                      .radialChange(curve: Curves.easeOut) *
                                   0.4),
                         ),
                       );

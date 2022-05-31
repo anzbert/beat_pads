@@ -6,7 +6,9 @@ class NoteReleaseBuffer {
   final Function _notifyListenersOfParent;
 
   /// Data Structure that holds released Note Events. Only used by slide playmode!
-  NoteReleaseBuffer(this._settings, this._notifyListenersOfParent);
+  NoteReleaseBuffer(this._settings, this._notifyListenersOfParent) {
+    // Utils.debugLog("note release buffer:", _buffer, 1);
+  }
 
   List<NoteEvent> _buffer = [];
   List<NoteEvent> get buffer => _buffer;
@@ -35,7 +37,7 @@ class NoteReleaseBuffer {
         () {
           for (int i = 0; i < _buffer.length; i++) {
             if (DateTime.now().millisecondsSinceEpoch - _buffer[i].releaseTime >
-                _settings.sustainTimeUsable) {
+                _settings.noteSustainTimeUsable) {
               _buffer[i].noteOff(); // note OFF
               _buffer[i].markKill();
               _notifyListenersOfParent(); // notify to update pads

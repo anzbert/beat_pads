@@ -8,16 +8,28 @@ abstract class Palette {
   static Color laserLemon = const HSLColor.fromAHSL(1, 61, 1, .71).toColor();
   static Color tan = const HSLColor.fromAHSL(1, 28, .59, .63).toColor();
   static Color lightPink = const HSLColor.fromAHSL(1, 0, .95, .80).toColor();
-  static Color darkGrey = const Color.fromRGBO(66, 66, 66, 1);
+  static Color darkPink = const HSLColor.fromAHSL(1, 0, .30, .60).toColor();
+  static Color darkGrey = const Color.fromARGB(255, 66, 66, 66);
   static Color lightGrey = const HSLColor.fromAHSL(1, 0, .0, .33).toColor();
+  static Color splashColor = const HSLColor.fromAHSL(1, 0, .0, .40).toColor();
   static Color whiteLike = const Color.fromRGBO(255, 255, 255, 0.702);
+  static Color dirtyTranslucent =
+      const HSLColor.fromAHSL(0.1, 0, .0, .33).toColor();
+
+  static Color darker(Color color, double factor) {
+    HSLColor hsl = HSLColor.fromColor(color);
+    return hsl
+        .withLightness(hsl.lightness * factor)
+        .withSaturation(hsl.saturation * factor)
+        .toColor();
+  }
 }
 
 enum PadColors {
   colorWheel("Pitch"),
   // halfColorWheel("In Pitch (Halfed Color Range)"),
   circleOfFifth("Circle of Fifths"),
-  highlightRoot("Only Highlight Root");
+  highlightRoot("Highlight Root");
 
   final String title;
   const PadColors(this.title);
@@ -30,7 +42,11 @@ enum PadColors {
   }
 
   Color colorize(
-      Settings settings, int note, bool noteOn, int receivedVelocity) {
+    Settings settings,
+    int note,
+    bool noteOn,
+    int receivedVelocity,
+  ) {
     final double hue;
 
     // out of midi range
@@ -62,11 +78,13 @@ enum PadColors {
             ? 1.0
             : 0.33;
 
+    if (noteOn) return Palette.lightGrey;
+
     return HSLColor.fromAHSL(
       alpha,
       hue,
-      noteOn ? 1 : .95,
-      noteOn ? .95 : .80,
+      .95,
+      .80,
     ).toColor();
   }
 }

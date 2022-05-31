@@ -13,30 +13,32 @@ import 'package:beat_pads/screen_pads_menu/slider_non_linear.dart';
 import 'package:beat_pads/screen_pads_menu/drop_down_layout.dart';
 import 'package:beat_pads/screen_pads_menu/drop_down_notes.dart';
 import 'package:beat_pads/screen_pads_menu/drop_down_scales.dart';
-// import 'package:beat_pads/screen_pads_menu/drop_down_int.dart';
 
 class MenuLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Consumer<Settings>(builder: (context, settings, child) {
-      final bool resizableGrid =
-          settings.layout.props.resizable; // Is the layout fixed or resizable?
-      bool isPortrait =
-          MediaQuery.of(context).orientation.name == "portrait" ? true : false;
-
-      return Flex(
-        direction: isPortrait ? Axis.vertical : Axis.horizontal,
-        crossAxisAlignment:
-            isPortrait ? CrossAxisAlignment.center : CrossAxisAlignment.start,
-        children: [
-          const Flexible(
-            fit: FlexFit.tight,
-            flex: 2,
-            child: FittedBox(child: Preview()),
+    bool isPortrait =
+        MediaQuery.of(context).orientation.name == "portrait" ? true : false;
+    return Flex(
+      direction: isPortrait ? Axis.vertical : Axis.horizontal,
+      crossAxisAlignment:
+          isPortrait ? CrossAxisAlignment.center : CrossAxisAlignment.start,
+      children: [
+        const Flexible(
+          fit: FlexFit.tight,
+          flex: 2,
+          child: FittedBox(
+            child: RepaintBoundary(
+              child: Preview(),
+            ),
           ),
-          Expanded(
-            flex: 3,
-            child: ListView(
+        ),
+        Expanded(
+          flex: 3,
+          child: Consumer<Settings>(builder: (context, settings, child) {
+            final bool resizableGrid = settings
+                .layout.props.resizable; // Is the layout fixed or resizable?
+            return ListView(
               children: <Widget>[
                 ListTile(
                   title: const Divider(),
@@ -64,24 +66,6 @@ class MenuLayout extends StatelessWidget {
                     setValue: (v) => settings.height = v,
                     readValue: settings.height,
                   ),
-                // if (resizableGrid)
-                //   ListTile(
-                //     title: const Text("Width"),
-                //     trailing: DropdownNumbers(
-                //       max: ScreenSize.getSizeEnum(context).maxGrid,
-                // setValue: (v) => settings.width = v,
-                // readValue: settings.width,
-                //     ),
-                //   ),
-                // if (resizableGrid)
-                //   ListTile(
-                //     title: const Text("Height"),
-                //     trailing: DropdownNumbers(
-                //       max: ScreenSize.getSizeEnum(context).maxGrid,
-                // setValue: (v) => settings.height = v,
-                // readValue: settings.height,
-                //     ),
-                //   ),
                 if (resizableGrid) const Divider(),
                 if (resizableGrid)
                   ListTile(
@@ -150,10 +134,13 @@ class MenuLayout extends StatelessWidget {
                         "Set time in Milliseconds for Pitch Bend Slider to ease back to Zero",
                     readValue: settings.pitchBendEase,
                     setValue: (v) => settings.pitchBendEase = v,
-                    resetFunction: () => settings.resetPitchBendEase(),
-                    actualValue: "${settings.pitchBendEaseCalculated} ms",
+                    resetFunction: settings.resetPitchBendEase,
+                    displayValue: settings.pitchBendEaseUsable < 1000
+                        ? "${settings.pitchBendEaseUsable} ms"
+                        : "${settings.pitchBendEaseUsable / 1000} s",
                     start: 0,
-                    steps: 25,
+                    steps: Timing.timingSteps.length - 1,
+                    onChangeEnd: settings.prefs.settings.pitchBendEase.save,
                   ),
                 ListTile(
                   title: const Text("Mod Wheel"),
@@ -162,6 +149,14 @@ class MenuLayout extends StatelessWidget {
                       value: settings.modWheel,
                       onChanged: (value) =>
                           settings.modWheel = !settings.modWheel),
+                ),
+                ListTile(
+                  title: const Text("Velocity"),
+                  subtitle: const Text("Adds Velocity Slider next to Pads"),
+                  trailing: Switch(
+                      value: settings.velocitySlider,
+                      onChanged: (value) =>
+                          settings.velocitySlider = !settings.velocitySlider),
                 ),
                 const Divider(),
                 ListTile(
@@ -184,12 +179,13 @@ class MenuLayout extends StatelessWidget {
                   readValue: settings.baseHue,
                   setValue: (v) => settings.baseHue = v,
                   resetValue: settings.resetBaseHue,
+                  onChangeEnd: settings.prefs.settings.baseHue.save,
                 ),
               ],
-            ),
-          ),
-        ],
-      );
-    });
+            );
+          }),
+        ),
+      ],
+    );
   }
 }

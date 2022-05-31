@@ -14,9 +14,13 @@ class TouchEvent {
   final double deadZone;
   Offset newPosition;
 
+  bool hasReturnAnimation = false;
+
   bool _kill = false;
-  void markKill() => _kill = true;
   bool get kill => _kill;
+  void markKillIfNoteOffAndNoAnimation() {
+    if (!noteEvent.isPlaying && !hasReturnAnimation) _kill = true;
+  }
 
   /// Holds geometry, note and modulation information this.uniqueID, this.origin,
   TouchEvent(
@@ -81,5 +85,18 @@ class TouchEvent {
     }
     if (input < deadZone) return 0;
     return Utils.mapValueToTargetRange(input, deadZone, 1, 0, 1);
+  }
+
+  @override
+  String toString() {
+    return "noteEvent: ${noteEvent.note} / isAnimated: $hasReturnAnimation / noteOn: ${noteEvent.isPlaying}";
+  }
+
+  bool get isModulating {
+    if (directionalChangeFromCenter() != const Offset(0, 0) &&
+        radialChange() != 0) {
+      return true;
+    }
+    return false;
   }
 }

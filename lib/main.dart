@@ -1,13 +1,12 @@
+import './theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import './theme.dart';
-
 import 'package:beat_pads/services/services.dart';
-
 import 'package:beat_pads/screen_splash/_screen_splash.dart';
 
 Future<void> main() async {
+  // debugRepaintRainbowEnabled = true; // for debugging
+
   WidgetsFlutterBinding.ensureInitialized();
 
   DeviceUtils.hideSystemUi()

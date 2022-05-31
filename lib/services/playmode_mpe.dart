@@ -20,7 +20,8 @@ class PlayModeMPE extends PlayModeHandler {
 
   @override
   void handleNewTouch(CustomPointer touch, int noteTapped) {
-    if (settings.sustainTimeUsable > 0) {
+    if (settings.modSustainTimeUsable > 0 ||
+        settings.noteSustainTimeUsable > 0) {
       touchReleaseBuffer.removeNoteFromReleaseBuffer(noteTapped);
     }
 
@@ -34,8 +35,9 @@ class PlayModeMPE extends PlayModeHandler {
       mpeMods.rMod.send(newChannel, noteTapped, 0);
     }
 
-    NoteEvent noteOn = NoteEvent(newChannel, noteTapped, settings.velocity)
-      ..noteOn(cc: false);
+    NoteEvent noteOn =
+        NoteEvent(newChannel, noteTapped, velocityProvider.velocity)
+          ..noteOn(cc: false);
 
     touchBuffer.addNoteOn(touch, noteOn);
     notifyParent();
@@ -75,7 +77,8 @@ class PlayModeMPE extends PlayModeHandler {
     TouchEvent? eventInBuffer = touchBuffer.getByID(touch.pointer);
     if (eventInBuffer == null) return;
 
-    if (settings.sustainTimeUsable == 0) {
+    if (settings.modSustainTimeUsable == 0 &&
+        settings.noteSustainTimeUsable == 0) {
       eventInBuffer.noteEvent.noteOff();
 
       channelProvider.releaseChannel(eventInBuffer.noteEvent.channel);

@@ -5,23 +5,30 @@ import 'package:provider/provider.dart';
 import 'package:beat_pads/services/services.dart';
 
 class SlideBeatPad extends StatelessWidget {
+  final bool preview;
+
   const SlideBeatPad({
     required this.note,
     Key? key,
+    required this.preview,
   }) : super(key: key);
 
   final int note;
 
   @override
   Widget build(BuildContext context) {
-    final Settings settings = Provider.of<Settings>(context, listen: true);
     final double screenWidth = MediaQuery.of(context).size.width;
 
-    final int rxNoteVelocity = note < 127 && note >= 0
-        ? Provider.of<MidiReceiver>(context, listen: true).rxBuffer[note]
-        : 0;
+    final int rxNoteVelocity = preview
+        ? 0
+        : note < 127 && note >= 0
+            ? Provider.of<MidiReceiver>(context, listen: true).rxBuffer[note]
+            : 0;
+
     final bool noteOn =
         Provider.of<MidiSender>(context, listen: true).playMode.isNoteOn(note);
+
+    final Settings settings = Provider.of<Settings>(context, listen: true);
 
     // PAD COLOR:
     final Color color = settings.padColors.colorize(
@@ -31,7 +38,7 @@ class SlideBeatPad extends StatelessWidget {
       rxNoteVelocity,
     );
 
-    final Color splashColor = color.withOpacity(0.3);
+    final Color splashColor = Palette.splashColor;
 
     final BorderRadius padRadius = BorderRadius.all(
         Radius.circular(screenWidth * ThemeConst.padRadiusFactor));

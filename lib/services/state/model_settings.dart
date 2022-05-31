@@ -1,19 +1,25 @@
 import 'package:beat_pads/screen_pads_menu/_screen_pads_menu.dart';
 import 'package:flutter/material.dart';
-import 'dart:math';
 
 import 'package:beat_pads/services/services.dart';
 import 'package:flutter_midi_command/flutter_midi_command.dart';
 
 class Settings extends ChangeNotifier {
-  Settings(this.prefs);
   Prefs prefs;
+  Settings(this.prefs);
 
   resetAll() async {
     await prefs.resetStoredValues();
     prefs = await Prefs.initAsync();
     notifyListeners();
   }
+
+  // bool _virtualDevice = false;
+  // bool get virtualDevice => _virtualDevice;
+  // set virtualDevice(bool newValue) {
+  //   _virtualDevice = newValue;
+  //   notifyListeners();
+  // }
 
   Menu _selectedMenu = Menu.layout;
   Menu get selectedMenu => _selectedMenu;
@@ -47,14 +53,17 @@ class Settings extends ChangeNotifier {
 
   int get mpePitchbendRange => prefs.settings.mpePitchBendRange.value;
   set mpePitchbendRange(int newVal) {
-    if (newVal > 360 || newVal < 0) return;
-    prefs.settings.mpePitchBendRange.value = newVal;
-    prefs.settings.mpePitchBendRange.save();
+    prefs.settings.mpePitchBendRange.value = newVal.clamp(0, 48);
+    // saved by slider
     notifyListeners();
   }
 
-  void resetMPEPitchbendRange() =>
-      mpePitchbendRange = LoadSettings.defaults().mpePitchBendRange.value;
+  void resetMPEPitchbendRange() {
+    prefs.settings.mpePitchBendRange.value =
+        LoadSettings.defaults().mpePitchBendRange.value;
+    notifyListeners();
+    prefs.settings.mpePitchBendRange.save();
+  }
 
   // # for dropdown menu:
   MPEmods get mpe2DX => prefs.settings.mpe2DX.value;
@@ -81,37 +90,48 @@ class Settings extends ChangeNotifier {
 
   int get baseHue => prefs.settings.baseHue.value;
   set baseHue(int newVal) {
-    if (newVal > 360 || newVal < 0) return;
-    prefs.settings.baseHue.value = newVal;
-    prefs.settings.baseHue.save();
+    prefs.settings.baseHue.value = newVal.clamp(0, 360);
+    // saved by slider
     notifyListeners();
   }
 
-  void resetBaseHue() => baseHue = LoadSettings.defaults().baseHue.value;
+  void resetBaseHue() {
+    prefs.settings.baseHue.value = LoadSettings.defaults().baseHue.value;
+    notifyListeners();
+    prefs.settings.baseHue.save();
+  }
 
   double get modulationRadius => prefs.settings.modulationRadius.value / 100;
   double absoluteRadius(BuildContext context) =>
       MediaQuery.of(context).size.longestSide * modulationRadius;
   set modulationRadius(double newVal) {
     prefs.settings.modulationRadius.value = (newVal.clamp(0, 1) * 100).toInt();
-    prefs.settings.modulationRadius.save();
+    // saved by slider
     notifyListeners();
   }
 
-  void resetModulationRadius() =>
-      modulationRadius = LoadSettings.defaults().modulationRadius.value / 100;
+  void resetModulationRadius() {
+    prefs.settings.modulationRadius.value =
+        LoadSettings.defaults().modulationRadius.value;
+    notifyListeners();
+    prefs.settings.modulationRadius.save();
+  }
 
   double get modulationDeadZone =>
       prefs.settings.modulationDeadZone.value / 100;
   set modulationDeadZone(double newVal) {
     prefs.settings.modulationDeadZone.value =
         (newVal.clamp(0, 1) * 100).toInt();
-    prefs.settings.modulationDeadZone.save();
+    // saved by slider
     notifyListeners();
   }
 
-  void resetDeadZone() => modulationDeadZone =
-      LoadSettings.defaults().modulationDeadZone.value / 100;
+  void resetDeadZone() {
+    prefs.settings.modulationDeadZone.value =
+        LoadSettings.defaults().modulationDeadZone.value;
+    notifyListeners();
+    prefs.settings.modulationDeadZone.save();
+  }
 
   bool get modulation2D => prefs.settings.modulation2D.value;
   set modulation2D(bool newVal) {
@@ -123,12 +143,16 @@ class Settings extends ChangeNotifier {
   int get mpeMemberChannels => prefs.settings.mpeMemberChannels.value;
   set mpeMemberChannels(int newVal) {
     prefs.settings.mpeMemberChannels.value = newVal.clamp(1, 15);
-    prefs.settings.mpeMemberChannels.save();
+    //  saved by slider
     notifyListeners();
   }
 
-  void resetMpeMemberChannels() =>
-      mpeMemberChannels = LoadSettings.defaults().mpeMemberChannels.value;
+  void resetMpeMemberChannels() {
+    prefs.settings.mpeMemberChannels.value =
+        LoadSettings.defaults().mpeMemberChannels.value;
+    notifyListeners();
+    prefs.settings.mpeMemberChannels.save();
+  }
 
   // CHANNEL (= Master Channel):
   int get channel {
@@ -139,19 +163,21 @@ class Settings extends ChangeNotifier {
   }
 
   set channel(int newChannel) {
-    if (newChannel < 0 || newChannel > 15) return;
-
     if (playMode == PlayMode.mpe) {
       if (newChannel < 8) prefs.settings.channel.value = 0;
       if (newChannel > 7) prefs.settings.channel.value = 15;
     } else {
-      prefs.settings.channel.value = newChannel;
+      prefs.settings.channel.value = newChannel.clamp(0, 15);
     }
-    prefs.settings.channel.save();
+    // saved by slider
     notifyListeners();
   }
 
-  void resetChannel() => channel = LoadSettings.defaults().channel.value;
+  void resetChannel() {
+    prefs.settings.channel.value = LoadSettings.defaults().channel.value;
+    notifyListeners();
+    prefs.settings.channel.save();
+  }
 
   bool get upperZone => prefs.settings.channel.value > 7 ? true : false;
   set upperZone(bool newZone) => channel = newZone ? 15 : 0;
@@ -203,10 +229,9 @@ class Settings extends ChangeNotifier {
 
   // root note:
   set rootNote(int note) {
-    if (note < 0 || note > 11) return;
-    prefs.settings.rootNote.value = note;
+    prefs.settings.rootNote.value = note.clamp(0, 11);
     prefs.settings.rootNote.save();
-    prefs.settings.base.value = note;
+    prefs.settings.base.value = note.clamp(0, 11);
     prefs.settings.base.save();
     notifyListeners();
   }
@@ -218,8 +243,7 @@ class Settings extends ChangeNotifier {
   int get base => prefs.settings.base.value;
 
   set base(int note) {
-    if (note < 0 || note > 11) return;
-    prefs.settings.base.value = note;
+    prefs.settings.base.value = note.clamp(0, 11);
     prefs.settings.base.save();
     notifyListeners();
   }
@@ -246,8 +270,8 @@ class Settings extends ChangeNotifier {
   }
 
   // pad dimensions
-  int get width => prefs.settings.width.value.clamp(2, 16);
-  int get height => prefs.settings.height.value.clamp(2, 16);
+  int get width => prefs.settings.width.value.clamp(3, 16);
+  int get height => prefs.settings.height.value.clamp(3, 16);
 
   set width(int newValue) {
     if (newValue < 3 || newValue > 16) return;
@@ -284,14 +308,21 @@ class Settings extends ChangeNotifier {
 
   // sustain button:
   bool get sustainButton => prefs.settings.sustainButton.value;
-
   set sustainButton(bool newValue) {
     prefs.settings.sustainButton.value = newValue;
     prefs.settings.sustainButton.save();
     notifyListeners();
   }
 
-  // velocity:
+  // unlink sustain times button:
+  bool get unlinkSustainTimes => prefs.settings.unlinkSustainTimes.value;
+  set unlinkSustainTimes(bool newValue) {
+    prefs.settings.unlinkSustainTimes.value = newValue;
+    prefs.settings.unlinkSustainTimes.save();
+    notifyListeners();
+  }
+
+  // RANDOM VELOCITY:
   bool get randomVelocity => prefs.settings.randomVelocity.value;
   set randomizeVelocity(bool newValue) {
     prefs.settings.randomVelocity.value = newValue;
@@ -301,44 +332,47 @@ class Settings extends ChangeNotifier {
 
   int get velocityMin => prefs.settings.velocityMin.value;
   int get velocityMax => prefs.settings.velocityMax.value;
-
-  final _random = Random();
-  int get velocity {
-    if (!randomVelocity) return prefs.settings.velocity.value;
-    int randVelocity = _random.nextInt(prefs.settings.velocityMax.value -
-            prefs.settings.velocityMin.value) +
-        prefs.settings.velocityMin.value;
-    return randVelocity > 127 ? 127 : randVelocity;
-  }
+  int get velocityRange => velocityMax - velocityMin;
+  double get velocityCenter => (velocityMax + velocityMin) / 2;
 
   set velocityMin(int min) {
-    if (min < 0 || min > prefs.settings.velocityMax.value) return;
     prefs.settings.velocityMin.value = min;
-    prefs.settings.velocityMin.save();
+    // saved by slider
     notifyListeners();
   }
 
   set velocityMax(int max) {
-    if (max < prefs.settings.velocityMin.value || max > 127) return;
     prefs.settings.velocityMax.value = max;
-    prefs.settings.velocityMax.save();
+    // saved by slider
     notifyListeners();
   }
 
-  set velocity(int vel) {
-    if (vel < 0 || vel > 127) return;
-    prefs.settings.velocity.value = vel;
-    prefs.settings.velocity.save();
+  saveVelocityMinMax() {
+    prefs.settings.velocityMin.save();
+    prefs.settings.velocityMax.save();
+  }
+
+  setVelocity(int vel) {
+    prefs.settings.velocity.value = vel.clamp(10, 127);
+    // saved by slider
     notifyListeners();
   }
+
+  int get velocity => prefs.settings.velocity.value;
 
   resetVelocity() {
     if (!randomVelocity) {
-      velocity = LoadSettings.defaults().velocity.value;
+      prefs.settings.velocity.value = LoadSettings.defaults().velocity.value;
+      prefs.settings.velocity.save();
     } else {
-      velocityMax = LoadSettings.defaults().velocityMin.value;
-      velocityMin = LoadSettings.defaults().velocityMax.value;
+      prefs.settings.velocityMax.value =
+          LoadSettings.defaults().velocityMax.value;
+      prefs.settings.velocityMin.value =
+          LoadSettings.defaults().velocityMin.value;
+      prefs.settings.velocityMax.save();
+      prefs.settings.velocityMin.save();
     }
+    notifyListeners();
   }
 
   // send CC:
@@ -350,21 +384,16 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
-  // sustain:
-  int get sustainTimeStep => prefs.settings.sustainTimeStep.value;
+  // velocity slider:
+  bool get velocitySlider => prefs.settings.velocitySlider.value;
 
-  set sustainTimeStep(int timeInMs) {
-    prefs.settings.sustainTimeStep.value = timeInMs;
-    prefs.settings.sustainTimeStep.save();
+  set velocitySlider(bool newValue) {
+    prefs.settings.velocitySlider.value = newValue;
+    prefs.settings.velocitySlider.save();
     notifyListeners();
   }
 
-  int get sustainTimeUsable => (100 * sustainTimeStep).toInt();
-
-  resetSustainTimeStep() =>
-      sustainTimeStep = LoadSettings.defaults().sustainTimeStep.value;
-
-// pitchbend:
+  // pitchbend:
   bool get pitchBend => prefs.settings.pitchBend.value;
 
   set pitchBend(bool newValue) {
@@ -380,26 +409,77 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
-// pitchBendEase
-  int get pitchBendEase => prefs.settings.pitchBendEase.value;
-
-  set pitchBendEase(int timeInMs) {
-    prefs.settings.pitchBendEase.value = timeInMs;
-    prefs.settings.pitchBendEase.save();
-    notifyListeners();
-  }
-
-  int get pitchBendEaseCalculated => (100 * pitchBendEase).toInt();
-
-  resetPitchBendEase() =>
-      pitchBendEase = LoadSettings.defaults().pitchBendEase.value;
-
-// modWheel
+  // modWheel
   bool get modWheel => prefs.settings.modWheel.value;
 
   set modWheel(bool newValue) {
     prefs.settings.modWheel.value = newValue;
     prefs.settings.modWheel.save();
     notifyListeners();
+  }
+
+  // pitchBendEase
+  int get pitchBendEase => prefs.settings.pitchBendEase.value
+      .clamp(0, Timing.timingSteps.length - 1);
+
+  set pitchBendEase(int newValue) {
+    prefs.settings.pitchBendEase.value =
+        newValue.clamp(0, Timing.timingSteps.length - 1);
+    // saved by slider
+    notifyListeners();
+  }
+
+  int get pitchBendEaseUsable =>
+      Timing.timingSteps[pitchBendEase.clamp(0, Timing.timingSteps.length - 1)];
+
+  resetPitchBendEase() {
+    prefs.settings.pitchBendEase.value =
+        LoadSettings.defaults().pitchBendEase.value;
+    notifyListeners();
+    prefs.settings.pitchBendEase.save();
+  }
+
+  // note sustain:
+  int get noteSustainTimeStep => prefs.settings.noteSustainTimeStep.value
+      .clamp(0, Timing.timingSteps.length ~/ 1.5);
+
+  set noteSustainTimeStep(int newValue) {
+    prefs.settings.noteSustainTimeStep.value =
+        newValue.clamp(0, Timing.timingSteps.length ~/ 1.5);
+    // saved by slider
+    notifyListeners();
+  }
+
+  int get noteSustainTimeUsable => Timing.timingSteps[
+      noteSustainTimeStep.clamp(0, Timing.timingSteps.length ~/ 1.5)];
+
+  resetNoteSustainTimeStep() {
+    prefs.settings.noteSustainTimeStep.value =
+        LoadSettings.defaults().noteSustainTimeStep.value;
+    notifyListeners();
+    prefs.settings.noteSustainTimeStep.save();
+  }
+
+  // modulation sustain:
+  int get modSustainTimeStep => prefs.settings.modSustainTimeStep.value
+      .clamp(0, Timing.timingSteps.length ~/ 1.5);
+
+  set modSustainTimeStep(int newValue) {
+    prefs.settings.modSustainTimeStep.value =
+        newValue.clamp(0, Timing.timingSteps.length ~/ 1.5);
+    // saved by slider
+    notifyListeners();
+  }
+
+  int get modSustainTimeUsable => unlinkSustainTimes
+      ? Timing.timingSteps[
+          modSustainTimeStep.clamp(0, Timing.timingSteps.length ~/ 1.5)]
+      : noteSustainTimeUsable;
+
+  resetModSustainTimeStep() {
+    prefs.settings.modSustainTimeStep.value =
+        LoadSettings.defaults().modSustainTimeStep.value;
+    notifyListeners();
+    prefs.settings.modSustainTimeStep.save();
   }
 }

@@ -6,6 +6,14 @@ import 'package:flutter/material.dart';
 abstract class Utils {
 // UTILITY
 
+  static debugLog(String label, dynamic value, int seconds) async {
+    while (true) {
+      await Future.delayed(Duration(seconds: seconds), () {
+        Utils.logd("$label: $value");
+      });
+    }
+  }
+
   static Offset limitToSquare(Offset origin, Offset position, double radius) {
     double vectorX = -origin.dx + position.dx;
     double vectorY = -origin.dy + position.dy;

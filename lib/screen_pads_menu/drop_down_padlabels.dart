@@ -21,7 +21,7 @@ class DropdownPadLabels extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: DropdownButton<PadLabels>(
-        value: Provider.of<Settings>(context, listen: true).padLabels,
+        value: context.select((Settings settings) => settings.padLabels),
         items: items,
         onChanged: (value) {
           if (value != null) {

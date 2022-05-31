@@ -2,7 +2,8 @@ import 'package:beat_pads/screen_beat_pads/buttons_controls.dart';
 import 'package:beat_pads/screen_beat_pads/buttons_menu.dart';
 import 'package:beat_pads/screen_beat_pads/slide_pads.dart';
 import 'package:beat_pads/screen_beat_pads/slider_mod_wheel.dart';
-import 'package:beat_pads/screen_beat_pads/slider_pitch_eased.dart';
+import 'package:beat_pads/screen_beat_pads/slider_pitch.dart';
+import 'package:beat_pads/screen_beat_pads/slider_velocity.dart';
 import 'package:beat_pads/screen_midi_devices/_drawer_devices.dart';
 
 import 'package:flutter/material.dart';
@@ -19,22 +20,22 @@ class BeatPadsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: preview ? _doNothing() : DeviceUtils.landscapeOnly(),
-      builder: ((context, AsyncSnapshot<bool?> done) {
-        if (done.hasData && done.data == true) {
-          return Scaffold(
-            body: SafeArea(
-              child: Consumer<Settings>(builder: (context, settings, _) {
-                Size screenSize = MediaQuery.of(context).size;
-                return MultiProvider(
+        future: preview ? _doNothing() : DeviceUtils.landscapeOnly(),
+        builder: ((context, AsyncSnapshot<bool?> done) {
+          if (done.hasData && done.data == true) {
+            Size screenSize = MediaQuery.of(context).size;
+            return Scaffold(
+              body: SafeArea(
+                child: MultiProvider(
                     providers: [
                       // proxyproviders, to update all other models, when Settings change:
-                      ChangeNotifierProxyProvider<Settings, MidiReceiver>(
-                        create: (context) =>
-                            MidiReceiver(context.read<Settings>()),
-                        update: (_, settings, midiReceiver) =>
-                            midiReceiver!.update(settings),
-                      ),
+                      if (!preview)
+                        ChangeNotifierProxyProvider<Settings, MidiReceiver>(
+                          create: (context) =>
+                              MidiReceiver(context.read<Settings>()),
+                          update: (_, settings, midiReceiver) =>
+                              midiReceiver!.update(settings),
+                        ),
                       ChangeNotifierProxyProvider<Settings, MidiSender>(
                         create: (context) => MidiSender(
                             context.read<Settings>(), screenSize,
@@ -42,6 +43,10 @@ class BeatPadsScreen extends StatelessWidget {
                         update: (_, settings, midiSender) =>
                             midiSender!.update(settings, screenSize),
                       ),
+                      // ChangeNotifierProvider<PadScreenVariables>(
+                      //   create: (context) =>
+                      //       PadScreenVariables(preview: preview),
+                      // ),
                     ],
                     builder: (context, _) {
                       return Stack(
@@ -58,33 +63,60 @@ class BeatPadsScreen extends StatelessWidget {
                                 child: SizedBox(),
                               ),
                               // CONTROL BUTTONS
-                              if (settings.octaveButtons ||
-                                  settings.sustainButton)
+                              if (context.select((Settings settings) =>
+                                      settings.octaveButtons) ||
+                                  context.select((Settings settings) =>
+                                      settings.sustainButton))
                                 const Expanded(
                                   flex: 5,
                                   child: ControlButtonsRect(),
                                 ),
                               // PITCH BEND
-                              if (settings.pitchBend)
+                              if (context.select(
+                                  (Settings settings) => settings.pitchBend))
                                 Expanded(
                                   flex: 7,
                                   child: PitchSliderEased(
-                                    channel: settings.channel,
-                                    resetTime: settings.pitchBendEaseCalculated,
+                                    channel: context.select(
+                                        (Settings settings) =>
+                                            settings.channel),
+                                    resetTime: context.select(
+                                        (Settings settings) =>
+                                            settings.pitchBendEaseUsable),
                                   ),
                                 ),
                               // MOD WHEEL
-                              if (settings.modWheel)
+                              if (context.select(
+                                  (Settings settings) => settings.modWheel))
                                 Expanded(
                                   flex: 7,
                                   child: ModWheel(
-                                    channel: settings.channel,
+                                    preview: preview,
+                                    channel: context.select(
+                                        (Settings settings) =>
+                                            settings.channel),
+                                  ),
+                                ),
+                              // VELOCITY
+                              if (context.select((Settings settings) =>
+                                  settings.velocitySlider))
+                                Expanded(
+                                  flex: 7,
+                                  child: SliderVelocity(
+                                    channel: context.select(
+                                        (Settings settings) =>
+                                            settings.channel),
+                                    randomVelocity: context.select(
+                                        (Settings settings) =>
+                                            settings.randomVelocity),
                                   ),
                                 ),
                               // PADS
-                              const Expanded(
+                              Expanded(
                                 flex: 60,
-                                child: SlidePads(),
+                                child: SlidePads(
+                                  preview: preview,
+                                ),
                               ),
                               const Expanded(
                                 flex: 1,
@@ -93,19 +125,26 @@ class BeatPadsScreen extends StatelessWidget {
                             ],
                           ),
                           if (!preview)
-                            Builder(builder: (context) {
-                              double width = MediaQuery.of(context).size.width;
-                              return Positioned.directional(
-                                top: width * 0.006,
-                                end: width * 0.006,
-                                textDirection: TextDirection.ltr,
-                                child: SizedBox.square(
-                                  dimension: width * 0.06,
-                                  child: const ReturnToMenuButton(),
-                                ),
-                              );
-                            }),
-                          if (settings.connectedDevices.isEmpty && !preview)
+                            if (!context.select((Settings settings) =>
+                                    settings.sustainButton) &&
+                                !context.select((Settings settings) =>
+                                    settings.octaveButtons))
+                              Builder(builder: (context) {
+                                double width =
+                                    MediaQuery.of(context).size.width;
+                                return Positioned.directional(
+                                  top: width * 0.006,
+                                  start: width * 0.006,
+                                  textDirection: TextDirection.ltr,
+                                  child: SizedBox.square(
+                                    dimension: width * 0.06,
+                                    child: const ReturnToMenuButton(),
+                                  ),
+                                );
+                              }),
+                          if (context.select((Settings settings) =>
+                                  settings.connectedDevices.isEmpty) &&
+                              !preview)
                             Positioned(
                               bottom: 15,
                               right: 15,
@@ -114,7 +153,7 @@ class BeatPadsScreen extends StatelessWidget {
                                   Scaffold.of(context).openDrawer();
                                 },
                                 style: ElevatedButton.styleFrom(
-                                    primary: Palette.lightPink.withOpacity(0.9),
+                                    primary: Palette.lightPink,
                                     textStyle: const TextStyle(
                                         fontWeight: FontWeight.bold)),
                                 child: const Text(
@@ -124,16 +163,14 @@ class BeatPadsScreen extends StatelessWidget {
                             ),
                         ],
                       );
-                    });
-              }),
-            ),
-            drawer: const Drawer(
-              child: MidiConfig(),
-            ),
-          );
-        }
-        return const SizedBox.expand();
-      }),
-    );
+                    }),
+              ),
+              drawer: const Drawer(
+                child: MidiConfig(),
+              ),
+            );
+          }
+          return const SizedBox.expand();
+        }));
   }
 }
