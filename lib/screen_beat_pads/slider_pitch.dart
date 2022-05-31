@@ -39,6 +39,7 @@ class PitchSliderEasedState extends State<PitchSliderEased>
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
@@ -89,25 +90,28 @@ class PitchSliderEasedState extends State<PitchSliderEased>
             ),
           ),
         ),
+        Divider(
+          indent: width * ThemeConst.borderFactor,
+          thickness: width * ThemeConst.borderFactor,
+        ),
         Flexible(
           flex: 5,
           child: FractionallySizedBox(
             widthFactor: 0.9,
             child: LayoutBuilder(
               builder: (context, constraints) {
-                double width = MediaQuery.of(context).size.width;
-                double padRadius = width * ThemeConst.padRadiusFactor;
+                // double padRadius = width * ThemeConst.padRadiusFactor;
                 final double padSpacing = width * ThemeConst.padSpacingFactor;
                 return Container(
                   margin: EdgeInsets.symmetric(vertical: padSpacing),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Palette.tan.withAlpha(120),
-                      width: width * ThemeConst.borderFactor,
-                    ),
-                    borderRadius:
-                        BorderRadius.all(Radius.circular(padRadius * 1)),
-                  ),
+                  // decoration: BoxDecoration(
+                  //   border: Border.all(
+                  //     color: Palette.tan.withAlpha(120),
+                  //     width: width * ThemeConst.borderFactor,
+                  //   ),
+                  //   borderRadius:
+                  //       BorderRadius.all(Radius.circular(padRadius * 1)),
+                  // ),
                   padding: EdgeInsets.all(constraints.maxWidth * paddingFactor),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,

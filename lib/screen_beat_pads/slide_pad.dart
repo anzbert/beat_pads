@@ -38,7 +38,7 @@ class SlideBeatPad extends StatelessWidget {
       rxNoteVelocity,
     );
 
-    final Color splashColor = color.withOpacity(0.3);
+    final Color splashColor = Palette.splashColor;
 
     final BorderRadius padRadius = BorderRadius.all(
         Radius.circular(screenWidth * ThemeConst.padRadiusFactor));

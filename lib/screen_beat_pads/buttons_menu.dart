@@ -41,6 +41,7 @@ class ReturnToMenuButton extends StatelessWidget {
             child: Tooltip(
               decoration: BoxDecoration(
                   color: Palette.cadetBlue.withOpacity(0.7),
+                  boxShadow: kElevationToShadow[6],
                   borderRadius: BorderRadius.circular(3)),
               richMessage: const TextSpan(
                 text: "Long-Press for Menu",

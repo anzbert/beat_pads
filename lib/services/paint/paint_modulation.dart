@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 class PaintModulation extends StatelessWidget {
   PaintModulation({Key? key}) : super(key: key);
 
-  final dirtyColor = Palette.dirty;
+  final dirtyColor = Palette.dirtyTranslucent;
   @override
   Widget build(BuildContext context) {
     // Get Renderbox for gloabl to local offset conversion:

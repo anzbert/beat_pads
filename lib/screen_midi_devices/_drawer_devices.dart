@@ -116,7 +116,7 @@ class MidiConfigState extends State<MidiConfig> {
                               margin: const EdgeInsets.symmetric(vertical: 8),
                               color: device.connected
                                   ? Palette.cadetBlue
-                                  : Palette.cadetBlue.withOpacity(0.1),
+                                  : Palette.darker(Palette.cadetBlue, 0.4),
                               child: TextButton(
                                 onPressed: () {
                                   setDevice(device);

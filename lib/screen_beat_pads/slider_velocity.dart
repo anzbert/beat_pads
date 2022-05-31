@@ -23,6 +23,7 @@ class _SliderVelocityState extends State<SliderVelocity> {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
     return Consumer<MidiSender>(
       builder: (context, sender, _) {
         return Column(
@@ -64,26 +65,29 @@ class _SliderVelocityState extends State<SliderVelocity> {
                   ),
                 ),
               ),
+            Divider(
+              indent: width * ThemeConst.borderFactor,
+              thickness: width * ThemeConst.borderFactor,
+            ),
             Flexible(
               flex: 5,
               child: FractionallySizedBox(
                 widthFactor: 0.9,
                 child: LayoutBuilder(
                   builder: (context, constraints) {
-                    double width = MediaQuery.of(context).size.width;
-                    double padRadius = width * ThemeConst.padRadiusFactor;
+                    // double padRadius = width * ThemeConst.padRadiusFactor;
                     final double padSpacing =
                         width * ThemeConst.padSpacingFactor;
                     return Container(
                       margin: EdgeInsets.symmetric(vertical: padSpacing),
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Palette.laserLemon.withAlpha(120),
-                          width: width * ThemeConst.borderFactor,
-                        ),
-                        borderRadius:
-                            BorderRadius.all(Radius.circular(padRadius * 1)),
-                      ),
+                      // decoration: BoxDecoration(
+                      //   border: Border.all(
+                      //     color: Palette.laserLemon.withAlpha(120),
+                      //     width: width * ThemeConst.borderFactor,
+                      //   ),
+                      //   borderRadius:
+                      //       BorderRadius.all(Radius.circular(padRadius * 1)),
+                      // ),
                       padding:
                           EdgeInsets.all(constraints.maxWidth * paddingFactor),
                       child: Align(
@@ -96,7 +100,8 @@ class _SliderVelocityState extends State<SliderVelocity> {
                             style: DefaultTextStyle.of(context).style.copyWith(
                                   fontSize:
                                       constraints.maxWidth * fontSizeFactor,
-                                  color: Palette.laserLemon,
+                                  color:
+                                      Palette.darker(Palette.laserLemon, 0.6),
                                 ),
                             children: <TextSpan>[
                               if (context.select((Settings settings) =>
@@ -109,7 +114,8 @@ class _SliderVelocityState extends State<SliderVelocity> {
                                         fontSizeFactor *
                                         0.6,
                                     fontWeight: FontWeight.w300,
-                                    color: Palette.laserLemon.withAlpha(180),
+                                    color:
+                                        Palette.darker(Palette.laserLemon, 0.5),
                                   ),
                                 ),
                             ],

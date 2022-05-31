@@ -31,7 +31,7 @@ class _ModWheelState extends State<ModWheel> {
       _mod = receivedMidi;
       context.read<MidiReceiver>().modWheelValue = null;
     }
-
+    double width = MediaQuery.of(context).size.width;
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
@@ -54,25 +54,28 @@ class _ModWheelState extends State<ModWheel> {
             ),
           ),
         ),
+        Divider(
+          indent: width * ThemeConst.borderFactor,
+          thickness: width * ThemeConst.borderFactor,
+        ),
         Flexible(
           flex: 5,
           child: FractionallySizedBox(
             widthFactor: 0.9,
             child: LayoutBuilder(
               builder: (context, constraints) {
-                double width = MediaQuery.of(context).size.width;
-                double padRadius = width * ThemeConst.padRadiusFactor;
+                // double padRadius = width * ThemeConst.padRadiusFactor;
                 final double padSpacing = width * ThemeConst.padSpacingFactor;
                 return Container(
                   margin: EdgeInsets.symmetric(vertical: padSpacing),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Palette.cadetBlue.withAlpha(120),
-                      width: width * ThemeConst.borderFactor,
-                    ),
-                    borderRadius:
-                        BorderRadius.all(Radius.circular(padRadius * 1)),
-                  ),
+                  // decoration: BoxDecoration(
+                  //   border: Border.all(
+                  //     color: Palette.cadetBlue.withAlpha(120),
+                  //     width: width * ThemeConst.borderFactor,
+                  //   ),
+                  //   borderRadius:
+                  //       BorderRadius.all(Radius.circular(padRadius * 1)),
+                  // ),
                   padding: EdgeInsets.all(constraints.maxWidth * paddingFactor),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,

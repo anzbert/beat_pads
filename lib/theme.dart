@@ -32,7 +32,7 @@ var appTheme = ThemeData.dark().copyWith(
     }),
     trackColor: MaterialStateProperty.resolveWith((Set<MaterialState> states) {
       if (states.contains(MaterialState.selected)) {
-        return Palette.yellowGreen.withAlpha(150);
+        return Palette.yellowGreen;
       }
       if (states.contains(MaterialState.disabled)) {
         return Palette.darkGrey;
