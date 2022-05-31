@@ -33,6 +33,12 @@ class MenuLayout extends StatelessWidget {
             ),
           ),
         ),
+        RotatedBox(
+            quarterTurns: isPortrait ? 0 : 1,
+            child: const Divider(
+              height: 0,
+              thickness: 3,
+            )),
         Expanded(
           flex: 3,
           child: Consumer<Settings>(builder: (context, settings, child) {
