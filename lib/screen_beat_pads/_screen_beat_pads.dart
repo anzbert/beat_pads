@@ -8,7 +8,7 @@ import 'package:beat_pads/screen_midi_devices/_drawer_devices.dart';
 
 import 'package:flutter/material.dart';
 import 'package:beat_pads/services/services.dart';
-import 'package:provider/provider.dart';
+// import 'package:provider/provider.dart';
 
 Future<bool> _doNothing() async => true;
 
@@ -43,10 +43,6 @@ class BeatPadsScreen extends StatelessWidget {
                         update: (_, settings, midiSender) =>
                             midiSender!.update(settings, screenSize),
                       ),
-                      // ChangeNotifierProvider<PadScreenVariables>(
-                      //   create: (context) =>
-                      //       PadScreenVariables(preview: preview),
-                      // ),
                     ],
                     builder: (context, _) {
                       return Stack(

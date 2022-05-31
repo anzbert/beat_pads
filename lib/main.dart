@@ -1,6 +1,8 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import './theme.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+
 import 'package:beat_pads/services/services.dart';
 import 'package:beat_pads/screen_splash/_screen_splash.dart';
 
@@ -15,6 +17,10 @@ Future<void> main() async {
       .then((Prefs initialPreferences) => runApp(App(initialPreferences)));
 }
 
+final sharedPrefProvider = Provider<Prefs>((ref) {
+  throw UnimplementedError();
+});
+
 class App extends StatelessWidget {
   const App(this.prefs, {Key? key}) : super(key: key);
 
@@ -22,9 +28,9 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (context) => Settings(prefs)),
+    return ProviderScope(
+      overrides: [
+        sharedPrefProvider.overrideWithValue(prefs),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
