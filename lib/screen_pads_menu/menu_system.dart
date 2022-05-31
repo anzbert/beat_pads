@@ -26,21 +26,6 @@ class MenuSystem extends StatelessWidget {
             ),
           ),
           const SwitchWakeLockTile(),
-          // ListTile(
-          //   title: const Text("Virtual Device"),
-          //   // subtitle: const Text("Random Velocity within a given Range"),
-          //   trailing: Switch(
-          //       value: settings.virtualDevice,
-          //       onChanged: (value) {
-          //         settings.virtualDevice = value;
-          //         if (value) {
-          //           MidiCommand().addVirtualDevice(name: "BeatPadsVirtualMidi");
-          //           MidiCommand().devices.then((value) => print(value));
-          //         } else {
-          //           MidiCommand().removeVirtualDevice();
-          //         }
-          //       }),
-          // ),
           const Divider(),
           Center(
             child: ConstrainedBox(

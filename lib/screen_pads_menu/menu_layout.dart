@@ -13,7 +13,6 @@ import 'package:beat_pads/screen_pads_menu/slider_non_linear.dart';
 import 'package:beat_pads/screen_pads_menu/drop_down_layout.dart';
 import 'package:beat_pads/screen_pads_menu/drop_down_notes.dart';
 import 'package:beat_pads/screen_pads_menu/drop_down_scales.dart';
-// import 'package:beat_pads/screen_pads_menu/drop_down_int.dart';
 
 class MenuLayout extends StatelessWidget {
   @override
@@ -64,24 +63,6 @@ class MenuLayout extends StatelessWidget {
                     setValue: (v) => settings.height = v,
                     readValue: settings.height,
                   ),
-                // if (resizableGrid)
-                //   ListTile(
-                //     title: const Text("Width"),
-                //     trailing: DropdownNumbers(
-                //       max: ScreenSize.getSizeEnum(context).maxGrid,
-                // setValue: (v) => settings.width = v,
-                // readValue: settings.width,
-                //     ),
-                //   ),
-                // if (resizableGrid)
-                //   ListTile(
-                //     title: const Text("Height"),
-                //     trailing: DropdownNumbers(
-                //       max: ScreenSize.getSizeEnum(context).maxGrid,
-                // setValue: (v) => settings.height = v,
-                // readValue: settings.height,
-                //     ),
-                //   ),
                 if (resizableGrid) const Divider(),
                 if (resizableGrid)
                   ListTile(
