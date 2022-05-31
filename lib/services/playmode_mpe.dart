@@ -87,7 +87,7 @@ class PlayModeMPE extends PlayModeHandler {
     } else {
       if (settings.modSustainTimeUsable == 0 &&
           settings.noteSustainTimeUsable > 0) {
-        eventInBuffer.markDirty();
+        eventInBuffer.newPosition = eventInBuffer.origin;
       }
       touchReleaseBuffer
           .updateReleasedEvent(eventInBuffer); // event passed to release buffer

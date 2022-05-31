@@ -141,9 +141,11 @@ class MenuLayout extends StatelessWidget {
                     readValue: settings.pitchBendEase,
                     setValue: (v) => settings.pitchBendEase = v,
                     resetFunction: settings.resetPitchBendEase,
-                    displayValue: settings.pitchBendEaseUsable < 1000
-                        ? "${settings.pitchBendEaseUsable} ms"
-                        : "${settings.pitchBendEaseUsable / 1000} s",
+                    displayValue: settings.pitchBendEaseUsable == 0
+                        ? "Off"
+                        : settings.pitchBendEaseUsable < 1000
+                            ? "${settings.pitchBendEaseUsable} ms"
+                            : "${settings.pitchBendEaseUsable / 1000} s",
                     start: 0,
                     steps: Timing.timingSteps.length - 1,
                     onChangeEnd: settings.prefs.settings.pitchBendEase.save,

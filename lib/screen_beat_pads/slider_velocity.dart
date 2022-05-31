@@ -30,7 +30,7 @@ class _SliderVelocityState extends State<SliderVelocity> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Flexible(
-              flex: 3,
+              flex: 5,
               child: LayoutBuilder(builder: (context, constraints) {
                 return Align(
                   alignment: Alignment.bottomCenter,
@@ -95,9 +95,9 @@ class _SliderVelocityState extends State<SliderVelocity> {
               ),
             ),
             Flexible(
-              flex: 4,
+              flex: 5,
               child: FractionallySizedBox(
-                widthFactor: 0.9,
+                widthFactor: 0.95,
                 child: LayoutBuilder(
                   builder: (context, constraints) {
                     final double padSpacing =

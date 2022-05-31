@@ -315,12 +315,12 @@ class Settings extends ChangeNotifier {
   }
 
   // unlink sustain times button:
-  bool get unlinkSustainTimes => prefs.settings.unlinkSustainTimes.value;
-  set unlinkSustainTimes(bool newValue) {
-    prefs.settings.unlinkSustainTimes.value = newValue;
-    prefs.settings.unlinkSustainTimes.save();
-    notifyListeners();
-  }
+  // bool get unlinkSustainTimes => prefs.settings.unlinkSustainTimes.value;
+  // set unlinkSustainTimes(bool newValue) {
+  //   prefs.settings.unlinkSustainTimes.value = newValue;
+  //   prefs.settings.unlinkSustainTimes.save();
+  //   notifyListeners();
+  // }
 
   // RANDOM VELOCITY:
   bool get randomVelocity => prefs.settings.randomVelocity.value;
@@ -471,10 +471,8 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
-  int get modSustainTimeUsable => unlinkSustainTimes
-      ? Timing.timingSteps[
-          modSustainTimeStep.clamp(0, Timing.timingSteps.length ~/ 1.5)]
-      : noteSustainTimeUsable;
+  int get modSustainTimeUsable => Timing.timingSteps[
+      modSustainTimeStep.clamp(0, Timing.timingSteps.length ~/ 1.5)];
 
   resetModSustainTimeStep() {
     prefs.settings.modSustainTimeStep.value =

@@ -50,7 +50,7 @@ abstract class PlayModeHandler {
     } else {
       if (settings.modSustainTimeUsable == 0 &&
           settings.noteSustainTimeUsable > 0) {
-        eventInBuffer.markDirty();
+        eventInBuffer.newPosition = eventInBuffer.origin;
       }
       touchReleaseBuffer.updateReleasedEvent(
           eventInBuffer); // instead of note off, event passed to release buffer
