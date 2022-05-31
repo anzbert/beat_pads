@@ -28,7 +28,7 @@ var appTheme = ThemeData.dark().copyWith(
   switchTheme: SwitchThemeData(
     thumbColor: MaterialStateProperty.resolveWith((Set<MaterialState> states) {
       if (states.contains(MaterialState.selected)) {
-        return Palette.yellowGreen;
+        return Palette.darker(Palette.yellowGreen, 0.9);
       }
       if (states.contains(MaterialState.disabled)) {
         return Palette.darkGrey;
