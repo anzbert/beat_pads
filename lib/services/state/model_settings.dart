@@ -59,7 +59,9 @@ class Settings extends ChangeNotifier {
   }
 
   void resetMPEPitchbendRange() {
-    mpePitchbendRange = LoadSettings.defaults().mpePitchBendRange.value;
+    prefs.settings.mpePitchBendRange.value =
+        LoadSettings.defaults().mpePitchBendRange.value;
+    notifyListeners();
     prefs.settings.mpePitchBendRange.save();
   }
 
@@ -94,7 +96,8 @@ class Settings extends ChangeNotifier {
   }
 
   void resetBaseHue() {
-    baseHue = LoadSettings.defaults().baseHue.value;
+    prefs.settings.baseHue.value = LoadSettings.defaults().baseHue.value;
+    notifyListeners();
     prefs.settings.baseHue.save();
   }
 
@@ -103,13 +106,14 @@ class Settings extends ChangeNotifier {
       MediaQuery.of(context).size.longestSide * modulationRadius;
   set modulationRadius(double newVal) {
     prefs.settings.modulationRadius.value = (newVal.clamp(0, 1) * 100).toInt();
-    // prefs.settings.modulationRadius.save();
+    // saved by slider
     notifyListeners();
   }
 
   void resetModulationRadius() {
     prefs.settings.modulationRadius.value =
         LoadSettings.defaults().modulationRadius.value;
+    notifyListeners();
     prefs.settings.modulationRadius.save();
   }
 
@@ -118,13 +122,14 @@ class Settings extends ChangeNotifier {
   set modulationDeadZone(double newVal) {
     prefs.settings.modulationDeadZone.value =
         (newVal.clamp(0, 1) * 100).toInt();
-    // prefs.settings.modulationDeadZone.save();
+    // saved by slider
     notifyListeners();
   }
 
   void resetDeadZone() {
     prefs.settings.modulationDeadZone.value =
         LoadSettings.defaults().modulationDeadZone.value;
+    notifyListeners();
     prefs.settings.modulationDeadZone.save();
   }
 
@@ -138,12 +143,14 @@ class Settings extends ChangeNotifier {
   int get mpeMemberChannels => prefs.settings.mpeMemberChannels.value;
   set mpeMemberChannels(int newVal) {
     prefs.settings.mpeMemberChannels.value = newVal.clamp(1, 15);
-    // prefs.settings.mpeMemberChannels.save(); // saved by slider
+    //  saved by slider
     notifyListeners();
   }
 
   void resetMpeMemberChannels() {
-    mpeMemberChannels = LoadSettings.defaults().mpeMemberChannels.value;
+    prefs.settings.mpeMemberChannels.value =
+        LoadSettings.defaults().mpeMemberChannels.value;
+    notifyListeners();
     prefs.settings.mpeMemberChannels.save();
   }
 
@@ -162,12 +169,13 @@ class Settings extends ChangeNotifier {
     } else {
       prefs.settings.channel.value = newChannel.clamp(0, 15);
     }
-    // prefs.settings.channel.save(); // saved by slider
+    // saved by slider
     notifyListeners();
   }
 
   void resetChannel() {
-    channel = LoadSettings.defaults().channel.value;
+    prefs.settings.channel.value = LoadSettings.defaults().channel.value;
+    notifyListeners();
     prefs.settings.channel.save();
   }
 
@@ -364,6 +372,7 @@ class Settings extends ChangeNotifier {
       prefs.settings.velocityMax.save();
       prefs.settings.velocityMin.save();
     }
+    notifyListeners();
   }
 
   // send CC:
@@ -426,6 +435,7 @@ class Settings extends ChangeNotifier {
   resetPitchBendEase() {
     prefs.settings.pitchBendEase.value =
         LoadSettings.defaults().pitchBendEase.value;
+    notifyListeners();
     prefs.settings.pitchBendEase.save();
   }
 
@@ -445,7 +455,8 @@ class Settings extends ChangeNotifier {
       noteSustainTimeStep.clamp(0, Timing.timingSteps.length ~/ 1.5)];
 
   resetNoteSustainTimeStep() {
-    noteSustainTimeStep = LoadSettings.defaults().noteSustainTimeStep.value;
+    prefs.settings.noteSustainTimeStep.value =
+        LoadSettings.defaults().noteSustainTimeStep.value;
     prefs.settings.noteSustainTimeStep.save();
   }
 
@@ -467,7 +478,9 @@ class Settings extends ChangeNotifier {
       : noteSustainTimeUsable;
 
   resetModSustainTimeStep() {
-    modSustainTimeStep = LoadSettings.defaults().modSustainTimeStep.value;
+    prefs.settings.modSustainTimeStep.value =
+        LoadSettings.defaults().modSustainTimeStep.value;
+    notifyListeners();
     prefs.settings.modSustainTimeStep.save();
   }
 }
