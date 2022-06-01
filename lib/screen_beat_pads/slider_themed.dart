@@ -9,16 +9,16 @@ class ThemedSlider extends StatelessWidget {
     required this.child,
     this.centerLine = false,
     required this.thumbColor,
-    this.label = "",
-    this.midiVal = false,
+    // this.label = "",
+    // this.midiVal = false,
     this.showTrack = false,
     this.range,
   }) : super(key: key);
 
   final Widget child;
   final bool centerLine;
-  final String label;
-  final bool midiVal;
+  // final String label;
+  // final bool midiVal;
   final bool showTrack;
   final int? range;
 
@@ -38,7 +38,7 @@ class ThemedSlider extends StatelessWidget {
             if (centerLine)
               Container(
                 decoration: BoxDecoration(
-                  color: Palette.darker(_trackColor, 0.75),
+                  color: Palette.darker(_trackColor, 0.8),
                   borderRadius: BorderRadius.all(
                     Radius.circular(width * 0.01),
                   ),
@@ -54,13 +54,13 @@ class ThemedSlider extends StatelessWidget {
                   thumbColor: thumbColor,
                   overlayColor: Colors.transparent,
                   thumbShape: range == null
-                      ? CustomSliderThumbCircle(
-                          thumbRadius: width * 0.04,
-                          label: label,
-                          midiVal: midiVal)
-                      // ? RoundSliderThumbShape(
-                      //     enabledThumbRadius: width * 0.033,
-                      //   )
+                      // ? CustomSliderThumbCircle(
+                      //     thumbRadius: width * 0.04,
+                      //     label: label,
+                      //     midiVal: midiVal)
+                      ? RoundSliderThumbShape(
+                          enabledThumbRadius: width * 0.033,
+                        )
                       : CustomSliderThumbRect(
                           thumbRadius: width * 0.07,
                           thumbHeight: range!.toDouble()),
@@ -135,14 +135,15 @@ class CustomSliderThumbCircle extends SliderComponentShape {
     final Canvas canvas = context.canvas;
 
     final paint = Paint()
-      ..color = sliderTheme.thumbColor! //Thumb Background Color
+      ..color = sliderTheme.thumbColor! // Thumb Background Color
       ..style = PaintingStyle.fill;
 
     TextSpan span = TextSpan(
       style: TextStyle(
         fontSize: thumbRadius * .66,
         fontWeight: FontWeight.w700,
-        color: Palette.darkGrey, //Text Color of Value on Thumb
+        color:
+            Palette.lightGrey.withOpacity(0.5), // Text Color of Value on Thumb
       ),
       text: midiVal ? getMidiValue(value) : label,
     );

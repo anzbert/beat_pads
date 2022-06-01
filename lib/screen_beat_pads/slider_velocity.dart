@@ -27,14 +27,36 @@ class _SliderVelocityState extends State<SliderVelocity> {
     return Consumer<MidiSender>(
       builder: (context, sender, _) {
         return Column(
-          mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Flexible(
+              flex: 5,
+              child: LayoutBuilder(builder: (context, constraints) {
+                return Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Text(
+                    "Vel",
+                    style: TextStyle(
+                      fontSize: constraints.maxWidth * fontSizeFactor,
+                      color: Palette.darker(Palette.cadetBlue, 0.6),
+                    ),
+                  ),
+                );
+              }),
+            ),
+            Center(
+              child: Divider(
+                indent: width * ThemeConst.borderFactor,
+                endIndent: width * ThemeConst.borderFactor,
+                thickness: width * ThemeConst.borderFactor,
+              ),
+            ),
             if (!widget.randomVelocity)
               Flexible(
                 flex: 30,
                 child: ThemedSlider(
-                  label: "V",
-                  thumbColor: Palette.laserLemon,
+                  // label: "",
+                  thumbColor: Palette.cadetBlue,
                   child: Slider(
                     min: 10,
                     max: 127,
@@ -53,7 +75,7 @@ class _SliderVelocityState extends State<SliderVelocity> {
                 flex: 30,
                 child: ThemedSlider(
                   range: sender.playMode.velocityProvider.velocityRange,
-                  thumbColor: Palette.laserLemon,
+                  thumbColor: Palette.cadetBlue,
                   child: Slider(
                     min: 10,
                     max: 127,
@@ -65,62 +87,62 @@ class _SliderVelocityState extends State<SliderVelocity> {
                   ),
                 ),
               ),
-            Divider(
-              indent: width * ThemeConst.borderFactor,
-              thickness: width * ThemeConst.borderFactor,
+            Center(
+              child: Divider(
+                indent: width * ThemeConst.borderFactor,
+                endIndent: width * ThemeConst.borderFactor,
+                thickness: width * ThemeConst.borderFactor,
+              ),
             ),
             Flexible(
               flex: 5,
               child: FractionallySizedBox(
-                widthFactor: 0.9,
+                widthFactor: 0.95,
                 child: LayoutBuilder(
                   builder: (context, constraints) {
-                    // double padRadius = width * ThemeConst.padRadiusFactor;
                     final double padSpacing =
                         width * ThemeConst.padSpacingFactor;
                     return Container(
-                      margin: EdgeInsets.symmetric(vertical: padSpacing),
-                      // decoration: BoxDecoration(
-                      //   border: Border.all(
-                      //     color: Palette.laserLemon.withAlpha(120),
-                      //     width: width * ThemeConst.borderFactor,
-                      //   ),
-                      //   borderRadius:
-                      //       BorderRadius.all(Radius.circular(padRadius * 1)),
-                      // ),
-                      padding:
-                          EdgeInsets.all(constraints.maxWidth * paddingFactor),
-                      child: Align(
-                        alignment: Alignment.center,
-                        child: RichText(
-                          text: TextSpan(
-                            text: context.read<Settings>().randomVelocity
-                                ? "${sender.playMode.velocityProvider.velocityRandomCenter.round()}"
-                                : "${sender.playMode.velocityProvider.velocityFixed}",
-                            style: DefaultTextStyle.of(context).style.copyWith(
-                                  fontSize:
-                                      constraints.maxWidth * fontSizeFactor,
-                                  color:
-                                      Palette.darker(Palette.laserLemon, 0.6),
-                                ),
-                            children: <TextSpan>[
-                              if (context.select((Settings settings) =>
-                                  settings.randomVelocity))
-                                TextSpan(
-                                  text:
-                                      "\n${String.fromCharCode(177)}${sender.playMode.velocityProvider.velocityRange ~/ 2}",
-                                  style: TextStyle(
-                                    fontSize: constraints.maxWidth *
-                                        fontSizeFactor *
-                                        0.6,
-                                    fontWeight: FontWeight.w300,
-                                    color:
-                                        Palette.darker(Palette.laserLemon, 0.5),
-                                  ),
-                                ),
-                            ],
+                      margin: EdgeInsets.only(bottom: padSpacing),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Flexible(
+                            flex: 2,
+                            child: Text(
+                                context.read<Settings>().randomVelocity
+                                    ? "${sender.playMode.velocityProvider.velocityRandomCenter.round()}"
+                                    : "${sender.playMode.velocityProvider.velocityFixed}",
+                                style: DefaultTextStyle.of(context)
+                                    .style
+                                    .copyWith(
+                                      fontSize:
+                                          constraints.maxWidth * fontSizeFactor,
+                                      color: Palette.darker(
+                                          Palette.cadetBlue, 0.6),
+                                    )),
                           ),
-                        ),
+                          Flexible(
+                            flex: 1,
+                            child: context.select((Settings settings) =>
+                                    settings.randomVelocity)
+                                ? Align(
+                                    alignment: Alignment.centerRight,
+                                    child: Text(
+                                      "${String.fromCharCode(177)}${sender.playMode.velocityProvider.velocityRange ~/ 2}",
+                                      style: TextStyle(
+                                        fontSize: constraints.maxWidth *
+                                            fontSizeFactor *
+                                            0.6,
+                                        fontWeight: FontWeight.w300,
+                                        color: Palette.darker(
+                                            Palette.cadetBlue, 0.6),
+                                      ),
+                                    ),
+                                  )
+                                : const SizedBox.expand(),
+                          ),
+                        ],
                       ),
                     );
                   },

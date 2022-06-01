@@ -85,6 +85,10 @@ class PlayModeMPE extends PlayModeHandler {
       touchBuffer.remove(eventInBuffer); // events gets removed
       notifyParent();
     } else {
+      if (settings.modSustainTimeUsable == 0 &&
+          settings.noteSustainTimeUsable > 0) {
+        eventInBuffer.newPosition = eventInBuffer.origin;
+      }
       touchReleaseBuffer
           .updateReleasedEvent(eventInBuffer); // event passed to release buffer
       touchBuffer.remove(eventInBuffer);

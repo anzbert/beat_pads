@@ -48,6 +48,10 @@ abstract class PlayModeHandler {
       touchBuffer.remove(eventInBuffer);
       notifyParent();
     } else {
+      if (settings.modSustainTimeUsable == 0 &&
+          settings.noteSustainTimeUsable > 0) {
+        eventInBuffer.newPosition = eventInBuffer.origin;
+      }
       touchReleaseBuffer.updateReleasedEvent(
           eventInBuffer); // instead of note off, event passed to release buffer
       touchBuffer.remove(eventInBuffer);

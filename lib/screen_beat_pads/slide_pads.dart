@@ -73,9 +73,8 @@ class _SlidePadsState extends State<SlidePads> with TickerProviderStateMixin {
           .read<MidiSender>()
           .handleEndTouch(CustomPointer(touch.pointer, touch.position));
 
-      if (context.read<Settings>().modSustainTimeUsable > 0 ||
-          context.read<Settings>().noteSustainTimeUsable > 0 &&
-              context.read<Settings>().playMode.modulatable) {
+      if (context.read<Settings>().modSustainTimeUsable > 0 &&
+          context.read<Settings>().playMode.modulatable) {
         TouchEvent? event = context
             .read<MidiSender>()
             .playMode

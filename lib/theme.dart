@@ -3,9 +3,14 @@ import 'package:flutter/material.dart';
 import './services/services.dart';
 
 var appTheme = ThemeData.dark().copyWith(
+  dividerTheme: DividerThemeData(
+    thickness: 1,
+    color: Palette.lightGrey,
+  ),
   primaryColor: Palette.cadetBlue,
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
+      elevation: 6,
       primary: Palette.cadetBlue,
       onPrimary: Palette.darkGrey,
       onSurface: Palette.cadetBlue,
@@ -23,7 +28,7 @@ var appTheme = ThemeData.dark().copyWith(
   switchTheme: SwitchThemeData(
     thumbColor: MaterialStateProperty.resolveWith((Set<MaterialState> states) {
       if (states.contains(MaterialState.selected)) {
-        return Palette.yellowGreen;
+        return Palette.darker(Palette.yellowGreen, 0.9);
       }
       if (states.contains(MaterialState.disabled)) {
         return Palette.darkGrey;

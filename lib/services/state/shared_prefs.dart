@@ -56,7 +56,6 @@ class Prefs {
     "velocityMax": 120,
     "noteSustainTimeStep": 0,
     "modSustainTimeStep": 0,
-    "unlinkSustainTimes": false,
     "sendCC": false,
     "velocitySlider": false,
     "pitchBend": false,
@@ -109,7 +108,7 @@ class LoadSettings {
   final Setting<int> noteSustainTimeStep;
   final Setting<int> modSustainTimeStep;
   final Setting<int> pitchBendEase;
-  final Setting<bool> unlinkSustainTimes;
+
   final Setting<bool> modWheel;
   final Setting<bool> sendCC;
   final Setting<bool> pitchBend;
@@ -159,8 +158,6 @@ class LoadSettings {
             'noteSustainTimeStep', loadedMap['noteSustainTimeStep']!),
         modSustainTimeStep = Setting<int>(
             'modSustainTimeStep', loadedMap['modSustainTimeStep']!),
-        unlinkSustainTimes = Setting<bool>(
-            'unlinkSustainTimes', loadedMap['unlinkSustainTimes']!),
         sendCC = Setting<bool>('sendCC', loadedMap['sendCC']!),
         pitchBend = Setting<bool>('pitchBend', loadedMap['pitchBend']!),
         velocitySlider =

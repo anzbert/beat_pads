@@ -72,43 +72,43 @@ class MenuInput extends StatelessWidget {
               ),
             ),
           if (settings.playMode == PlayMode.mpe) const Divider(),
-          if (settings.playMode.modulatable)
-            ListTile(
-              title: const Text("Advanced Delay Controls"),
-              subtitle:
-                  const Text("Control Modulation and Note Delay individually"),
-              trailing: Switch(
-                  value: settings.unlinkSustainTimes,
-                  onChanged: (value) => settings.unlinkSustainTimes =
-                      !settings.unlinkSustainTimes),
-            ),
+          // if (settings.playMode.modulatable)
+          //   ListTile(
+          //     title: const Text("Advanced Delay Controls"),
+          //     subtitle:
+          //         const Text("Control Modulation and Note Delay individually"),
+          //     trailing: Switch(
+          //         value: settings.unlinkSustainTimes,
+          //         onChanged: (value) => settings.unlinkSustainTimes =
+          //             !settings.unlinkSustainTimes),
+          //   ),
           NonLinearSliderTile(
-            label: settings.unlinkSustainTimes
-                ? "Note Release Delay"
-                : "Release Delay",
-            subtitle: settings.unlinkSustainTimes
-                ? "Note Off Delay after Release in Milliseconds"
-                : "Note and Modulation Delay after Release in Milliseconds",
+            label: "Note Release Delay",
+            subtitle: "Note Off Delay after Release in Milliseconds",
             readValue: settings.noteSustainTimeStep,
             setValue: (v) => settings.noteSustainTimeStep = v,
             resetFunction: settings.resetNoteSustainTimeStep,
-            displayValue: settings.noteSustainTimeUsable < 1000
-                ? "${settings.noteSustainTimeUsable} ms"
-                : "${settings.noteSustainTimeUsable / 1000} s",
+            displayValue: settings.noteSustainTimeUsable == 0
+                ? "Off"
+                : settings.noteSustainTimeUsable < 1000
+                    ? "${settings.noteSustainTimeUsable} ms"
+                    : "${settings.noteSustainTimeUsable / 1000} s",
             start: 0,
             steps: Timing.timingSteps.length ~/ 1.5,
             onChangeEnd: settings.prefs.settings.noteSustainTimeStep.save,
           ),
-          if (settings.playMode.modulatable && settings.unlinkSustainTimes)
+          if (settings.playMode.modulatable)
             NonLinearSliderTile(
-              label: "Modulation Release Delay",
+              label: "Modulation Ease Back",
               subtitle: "Modulation ease back after Release in Milliseconds",
               readValue: settings.modSustainTimeStep,
               setValue: (v) => settings.modSustainTimeStep = v,
               resetFunction: settings.resetModSustainTimeStep,
-              displayValue: settings.modSustainTimeUsable < 1000
-                  ? "${settings.modSustainTimeUsable} ms"
-                  : "${settings.modSustainTimeUsable / 1000} s",
+              displayValue: settings.modSustainTimeUsable == 0
+                  ? "Off"
+                  : settings.modSustainTimeUsable < 1000
+                      ? "${settings.modSustainTimeUsable} ms"
+                      : "${settings.modSustainTimeUsable / 1000} s",
               start: 0,
               steps: Timing.timingSteps.length ~/ 1.5,
               onChangeEnd: settings.prefs.settings.modSustainTimeStep.save,

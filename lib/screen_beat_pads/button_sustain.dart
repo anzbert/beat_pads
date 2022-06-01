@@ -33,7 +33,7 @@ class _SustainButtonDoubleTapState extends State<SustainButtonDoubleTap> {
       padding: EdgeInsets.fromLTRB(0, padSpacing, padSpacing, padSpacing),
       child: GestureDetector(
         onDoubleTap: () => setState(() {
-          sustainState = !sustainState;
+          sustainState = true;
           MidiUtils.sendSustainMessage(widget.channel, sustainState);
         }),
         onTapDown: (_) {
@@ -52,18 +52,19 @@ class _SustainButtonDoubleTapState extends State<SustainButtonDoubleTap> {
             });
           }
         },
-        // onTapCancel: () {
-        //   if (sustainState) {
-        //     setState(() {
-        //       sustainState = false;
-        //       MidiUtils.sendSustainMessage(widget.channel, sustainState);
-        //     });
-        //   }
-        // },
+        onPanEnd: (_) {
+          if (sustainState) {
+            setState(() {
+              sustainState = false;
+              MidiUtils.sendSustainMessage(widget.channel, sustainState);
+            });
+          }
+        },
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(padRadius * 1)),
             color: sustainState ? Palette.lightPink : Palette.darkPink,
+            boxShadow: kElevationToShadow[6],
           ),
           child: RotatedBox(
             quarterTurns: 1,

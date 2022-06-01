@@ -41,13 +41,35 @@ class PitchSliderEasedState extends State<PitchSliderEased>
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     return Column(
-      mainAxisAlignment: MainAxisAlignment.end,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
+        Flexible(
+          flex: 5,
+          child: LayoutBuilder(builder: (context, constraints) {
+            return Align(
+              alignment: Alignment.bottomCenter,
+              child: Text(
+                "Pitch",
+                style: TextStyle(
+                  fontSize: constraints.maxWidth * fontSizeFactor,
+                  color: Palette.darker(Palette.laserLemon, 0.6),
+                ),
+              ),
+            );
+          }),
+        ),
+        Center(
+          child: Divider(
+            indent: width * ThemeConst.borderFactor,
+            endIndent: width * ThemeConst.borderFactor,
+            thickness: width * ThemeConst.borderFactor,
+          ),
+        ),
         Flexible(
           flex: 30,
           child: ThemedSlider(
-            label: "P",
-            thumbColor: Palette.tan,
+            // label: "",
+            thumbColor: Palette.laserLemon,
             centerLine: true,
             child: Slider(
               min: -1,
@@ -90,45 +112,42 @@ class PitchSliderEasedState extends State<PitchSliderEased>
             ),
           ),
         ),
-        Divider(
-          indent: width * ThemeConst.borderFactor,
-          thickness: width * ThemeConst.borderFactor,
+        Center(
+          child: Divider(
+            indent: width * ThemeConst.borderFactor,
+            endIndent: width * ThemeConst.borderFactor,
+            thickness: width * ThemeConst.borderFactor,
+          ),
         ),
         Flexible(
           flex: 5,
           child: FractionallySizedBox(
-            widthFactor: 0.9,
+            widthFactor: 0.95,
             child: LayoutBuilder(
               builder: (context, constraints) {
-                // double padRadius = width * ThemeConst.padRadiusFactor;
                 final double padSpacing = width * ThemeConst.padSpacingFactor;
                 return Container(
-                  margin: EdgeInsets.symmetric(vertical: padSpacing),
-                  // decoration: BoxDecoration(
-                  //   border: Border.all(
-                  //     color: Palette.tan.withAlpha(120),
-                  //     width: width * ThemeConst.borderFactor,
-                  //   ),
-                  //   borderRadius:
-                  //       BorderRadius.all(Radius.circular(padRadius * 1)),
-                  // ),
-                  padding: EdgeInsets.all(constraints.maxWidth * paddingFactor),
+                  margin: EdgeInsets.only(bottom: padSpacing),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Expanded(
+                        flex: 2,
                         child: Center(
                           child: Text(
                             "${(_pitch * 12).round()}",
                             style: TextStyle(
                               fontSize: constraints.maxWidth * fontSizeFactor,
-                              // fontWeight: FontWeight.w800,
-                              color: Palette.tan,
+                              color: Palette.darker(Palette.laserLemon, 0.6),
                             ),
                           ),
                         ),
                       ),
+                      const Expanded(
+                        flex: 1,
+                        child: SizedBox.expand(),
+                      )
                     ],
                   ),
                 );

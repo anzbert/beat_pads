@@ -34,6 +34,7 @@ class PaintModulation extends StatelessWidget {
                     // CIRCLE / RADIUS
                     ? CustomPaint(
                         painter: CustomPaintRadius(
+                          dirty: touchEvent.dirty,
                           origin: box.globalToLocal(touchEvent.origin),
                           maxRadius: touchEvent.maxRadius,
                           deadZone: touchEvent.deadZone,
@@ -59,11 +60,14 @@ class PaintModulation extends StatelessWidget {
                     // SQUARE / X AND Y
                     : CustomPaint(
                         painter: CustomPaintXYSquare(
+                          dirty: touchEvent.dirty,
                           origin: box.globalToLocal(touchEvent.origin),
                           maxRadius: touchEvent.maxRadius,
                           deadZone: touchEvent.deadZone,
                           change: touchEvent.directionalChangeFromCenter(
                               curve: Curves.linear, deadZone: false),
+                          radialChange:
+                              touchEvent.radialChange(curve: Curves.linear),
                           colorBack: touchEvent.dirty
                               ? dirtyColor
                               : Palette.lightPink.withOpacity(touchEvent

@@ -6,7 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:beat_pads/services/services.dart';
 
 class ReturnToMenuButton extends StatelessWidget {
-  const ReturnToMenuButton({Key? key}) : super(key: key);
+  const ReturnToMenuButton({Key? key, required this.transparent})
+      : super(key: key);
+
+  final bool transparent;
 
   @override
   Widget build(BuildContext context) {
@@ -29,11 +32,12 @@ class ReturnToMenuButton extends StatelessWidget {
           child: ElevatedButton(
             onPressed: () {},
             style: ElevatedButton.styleFrom(
-              elevation: 10,
               padding: const EdgeInsets.all(0),
               alignment: Alignment.center,
-              primary: Palette.tan.withOpacity(0.6),
-              onPrimary: Palette.darkGrey.withOpacity(0.85),
+              primary: transparent
+                  ? Colors.transparent
+                  : Palette.darker(Palette.cadetBlue, 0.3),
+              onPrimary: Palette.lightGrey.withOpacity(transparent ? 0.5 : 1),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(padRadius),
               ),
@@ -45,7 +49,7 @@ class ReturnToMenuButton extends StatelessWidget {
                   borderRadius: BorderRadius.circular(3)),
               richMessage: const TextSpan(
                 text: "Long-Press for Menu",
-                style: TextStyle(fontWeight: FontWeight.w600),
+                // style: TextStyle(fontWeight: FontWeight.w500),
               ),
               triggerMode: TooltipTriggerMode.tap,
               showDuration: const Duration(milliseconds: 1000),

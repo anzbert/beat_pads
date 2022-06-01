@@ -33,6 +33,12 @@ class MenuLayout extends StatelessWidget {
             ),
           ),
         ),
+        RotatedBox(
+            quarterTurns: isPortrait ? 0 : 1,
+            child: const Divider(
+              height: 0,
+              thickness: 3,
+            )),
         Expanded(
           flex: 3,
           child: Consumer<Settings>(builder: (context, settings, child) {
@@ -113,7 +119,7 @@ class MenuLayout extends StatelessWidget {
                 ListTile(
                   title: const Text("Sustain Button"),
                   subtitle: const Text(
-                      "Adds Sustain Button next to Pads. Lock ON by double-tap or sliding off the Button"),
+                      "Adds Sustain Button next to Pads. Lock ON by double-tapping the Button"),
                   trailing: Switch(
                       value: settings.sustainButton,
                       onChanged: (value) =>
@@ -135,9 +141,11 @@ class MenuLayout extends StatelessWidget {
                     readValue: settings.pitchBendEase,
                     setValue: (v) => settings.pitchBendEase = v,
                     resetFunction: settings.resetPitchBendEase,
-                    displayValue: settings.pitchBendEaseUsable < 1000
-                        ? "${settings.pitchBendEaseUsable} ms"
-                        : "${settings.pitchBendEaseUsable / 1000} s",
+                    displayValue: settings.pitchBendEaseUsable == 0
+                        ? "Off"
+                        : settings.pitchBendEaseUsable < 1000
+                            ? "${settings.pitchBendEaseUsable} ms"
+                            : "${settings.pitchBendEaseUsable / 1000} s",
                     start: 0,
                     steps: Timing.timingSteps.length - 1,
                     onChangeEnd: settings.prefs.settings.pitchBendEase.save,
