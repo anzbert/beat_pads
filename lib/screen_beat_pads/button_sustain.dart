@@ -33,7 +33,7 @@ class _SustainButtonDoubleTapState extends State<SustainButtonDoubleTap> {
       padding: EdgeInsets.fromLTRB(0, padSpacing, padSpacing, padSpacing),
       child: GestureDetector(
         onDoubleTap: () => setState(() {
-          sustainState = !sustainState;
+          sustainState = true;
           MidiUtils.sendSustainMessage(widget.channel, sustainState);
         }),
         onTapDown: (_) {

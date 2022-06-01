@@ -17,19 +17,25 @@ class ModWheel extends StatefulWidget {
 }
 
 class _ModWheelState extends State<ModWheel> {
-  int _mod = 63;
+  int _mod = 0;
+
+  @override
+  void initState() {
+    // TODO kind of pointless because midireceiver is not persisiting :/
+    _mod = context.read<MidiReceiver>().modWheelValue;
+    super.initState();
+  }
 
   final double fontSizeFactor = 0.3;
   final double paddingFactor = 0.1;
 
   @override
   Widget build(BuildContext context) {
-    int? receivedMidi = widget.preview
-        ? null
+    int receivedMidi = widget.preview
+        ? 0
         : context.select((MidiReceiver receiver) => receiver.modWheelValue);
-    if (receivedMidi != null) {
+    if (receivedMidi != _mod) {
       _mod = receivedMidi;
-      context.read<MidiReceiver>().modWheelValue = null;
     }
     double width = MediaQuery.of(context).size.width;
     return Column(

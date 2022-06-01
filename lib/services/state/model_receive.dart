@@ -23,7 +23,7 @@ class MidiReceiver extends ChangeNotifier {
   final List<int> _rxBuffer = List.filled(128, 0);
   List<int> get rxBuffer => _rxBuffer;
 
-  int? modWheelValue;
+  int modWheelValue = 0;
 
   resetRxBuffer() {
     rxBuffer.fillRange(0, 128, 0);
@@ -49,7 +49,7 @@ class MidiReceiver extends ChangeNotifier {
         int value = packet.data[2];
 
         if (controller == 1 && modWheelValue != value) {
-          modWheelValue = 127 - value;
+          modWheelValue = value;
           notifyListeners();
         }
       }
