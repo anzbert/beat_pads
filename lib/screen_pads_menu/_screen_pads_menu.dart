@@ -1,3 +1,4 @@
+import 'package:beat_pads/main.dart';
 import 'package:beat_pads/screen_beat_pads/_screen_beat_pads.dart';
 import 'package:beat_pads/screen_pads_menu/menu_input.dart';
 import 'package:beat_pads/screen_pads_menu/menu_layout.dart';
@@ -33,10 +34,16 @@ enum Menu {
   }
 }
 
-class PadMenuScreen extends ConsumerWidget {
+class PadMenuScreen extends ConsumerStatefulWidget {
   const PadMenuScreen();
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<PadMenuScreen> createState() => _PadMenuScreenState();
+}
+
+class _PadMenuScreenState extends ConsumerState<PadMenuScreen> {
+  @override
+  Widget build(BuildContext context) {
     return FutureBuilder(
       future: DeviceUtils.enableRotation(),
       builder: (context, AsyncSnapshot<bool?> done) {
@@ -77,7 +84,9 @@ class PadMenuScreen extends ConsumerWidget {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        TransitionUtils.fade(const BeatPadsScreen()),
+                        TransitionUtils.fade(const BeatPadsScreen(
+                          preview: false,
+                        )),
                       );
                     },
                   ),

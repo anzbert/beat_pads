@@ -5,18 +5,12 @@ class MidiSender extends ChangeNotifier {
   Settings _settings;
   int _baseOctave;
   bool _disposed = false;
-  bool preview;
+  // bool preview;
   late PlayModeHandler playMode;
 
   /// Handles Touches and Midi Message sending
-  MidiSender(this._settings, Size screenSize, {this.preview = false})
+  MidiSender(this._settings, Size screenSize)
       : _baseOctave = _settings.baseOctave {
-    if (_settings.playMode == PlayMode.mpe && preview == false) {
-      MPEinitMessage(
-              memberChannels: _settings.mpeMemberChannels,
-              upperZone: _settings.upperZone)
-          .send();
-    }
     playMode = _settings.playMode
         .getPlayModeApi(_settings, screenSize, notifyListenersOfMidiSender);
   }
@@ -65,9 +59,9 @@ class MidiSender extends ChangeNotifier {
   @override
   void dispose() {
     playMode.dispose();
-    if (_settings.playMode == PlayMode.mpe && preview == false) {
-      MPEinitMessage(memberChannels: 0, upperZone: _settings.upperZone).send();
-    }
+    // if (_settings.playMode == PlayMode.mpe) {
+    //   MPEinitMessage(memberChannels: 0, upperZone: _settings.upperZone).send();
+    // }
 
     // for (var element in playMode.touchReleaseBuffer.buffer) {
     //   if (element.returnAnimation != null) {

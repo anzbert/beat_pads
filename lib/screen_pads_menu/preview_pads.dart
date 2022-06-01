@@ -3,24 +3,10 @@ import 'package:beat_pads/services/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class Preview extends ConsumerStatefulWidget {
-  const Preview({
-    Key? key,
-  }) : super(key: key);
-
+class Preview extends ConsumerWidget {
+  const Preview();
   @override
-  ConsumerState<Preview> createState() => _PreviewState();
-}
-
-class _PreviewState extends ConsumerState<Preview> {
-  @override
-  void initState() {
-    ref.read(previewState.notifier).state = true;
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return FittedBox(
       fit: BoxFit.scaleDown,
       child: SizedBox(
@@ -34,7 +20,9 @@ class _PreviewState extends ConsumerState<Preview> {
                       aspectRatio: 16 / 9,
                       child: Padding(
                         padding: EdgeInsets.all(4.0),
-                        child: BeatPadsScreen(),
+                        child: BeatPadsScreen(
+                          preview: true,
+                        ),
                       ),
                     ),
                     Container(
@@ -57,7 +45,9 @@ class _PreviewState extends ConsumerState<Preview> {
                       aspectRatio: 16 / 9,
                       child: Padding(
                         padding: EdgeInsets.all(4.0),
-                        child: BeatPadsScreen(),
+                        child: BeatPadsScreen(
+                          preview: true,
+                        ),
                       ),
                     ),
                     const Divider(

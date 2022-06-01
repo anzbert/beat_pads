@@ -19,31 +19,44 @@ final senderProvider = ChangeNotifierProvider.autoDispose<MidiSender>((ref) {
   return MidiSender(
     ref.watch(settingsProvider),
     ref.watch(screenSizeState),
-    preview: ref.watch(previewState),
   );
 });
-final previewState = StateProvider<bool>((ref) => false);
+// final previewState = StateProvider<bool>((ref) => false);
 // //////////////////////
 
 class BeatPadsScreen extends ConsumerStatefulWidget {
-  const BeatPadsScreen({Key? key}) : super(key: key);
+  final bool preview;
+  const BeatPadsScreen({required this.preview});
 
   @override
   ConsumerState<BeatPadsScreen> createState() => _BeatPadsScreenState();
 }
 
 class _BeatPadsScreenState extends ConsumerState<BeatPadsScreen> {
+  PlayMode? playMode;
+  bool? upperZone;
+
   @override
   void initState() {
-    ref.read(previewState.notifier).state = false;
     super.initState();
+    playMode = ref.read(settingsProvider.notifier).playMode;
+    upperZone = ref.read(settingsProvider.notifier).upperZone;
+
+    if (playMode == PlayMode.mpe && !widget.preview) {
+      MPEinitMessage(
+              memberChannels:
+                  ref.read(settingsProvider.notifier).mpeMemberChannels,
+              upperZone: upperZone)
+          .send();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final bool preview = ref.watch(previewState);
     return FutureBuilder(
-        future: preview ? Utils.doNothingAsync() : DeviceUtils.landscapeOnly(),
+        future: widget.preview
+            ? Utils.doNothingAsync()
+            : DeviceUtils.landscapeOnly(),
         builder: ((context, AsyncSnapshot<bool?> done) {
           if (done.hasData && done.data == true) {
             return Scaffold(
@@ -88,7 +101,7 @@ class _BeatPadsScreenState extends ConsumerState<BeatPadsScreen> {
                           Expanded(
                             flex: 7,
                             child: ModWheel(
-                              preview: preview,
+                              preview: widget.preview,
                               channel: ref.watch(settingsProvider
                                   .select((settings) => settings.channel)),
                             ),
@@ -109,7 +122,7 @@ class _BeatPadsScreenState extends ConsumerState<BeatPadsScreen> {
                         Expanded(
                           flex: 60,
                           child: SlidePads(
-                            preview: preview,
+                            preview: widget.preview,
                           ),
                         ),
                         const Expanded(
@@ -118,7 +131,7 @@ class _BeatPadsScreenState extends ConsumerState<BeatPadsScreen> {
                         ),
                       ],
                     ),
-                    if (!preview)
+                    if (!widget.preview)
                       if (!ref.watch(settingsProvider
                               .select((settings) => settings.sustainButton)) &&
                           !ref.watch(settingsProvider
@@ -139,7 +152,7 @@ class _BeatPadsScreenState extends ConsumerState<BeatPadsScreen> {
                         }),
                     if (ref.watch(settingsProvider.select(
                             (settings) => settings.connectedDevices.isEmpty)) &&
-                        !preview)
+                        !widget.preview)
                       Positioned(
                         bottom: 15,
                         right: 15,
@@ -166,5 +179,13 @@ class _BeatPadsScreenState extends ConsumerState<BeatPadsScreen> {
           }
           return const SizedBox.expand();
         }));
+  }
+
+  @override
+  void dispose() {
+    if (playMode == PlayMode.mpe && !widget.preview) {
+      MPEinitMessage(memberChannels: 0, upperZone: upperZone).send();
+    }
+    super.dispose();
   }
 }
