@@ -1,8 +1,9 @@
+import 'package:beat_pads/main.dart';
 import 'package:flutter/material.dart';
 import 'package:beat_pads/services/services.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class DropdownScales extends StatelessWidget {
+class DropdownScales extends ConsumerWidget {
   DropdownScales({Key? key}) : super(key: key);
 
   final items = midiScales.keys
@@ -14,15 +15,15 @@ class DropdownScales extends StatelessWidget {
       .toList();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: DropdownButton<String>(
-        value: context.select((Settings settings) => settings.scaleString),
+        value: ref.watch(settingsProvider.select((value) => value.scaleString)),
         items: items,
         onChanged: (value) {
           if (value != null) {
-            Provider.of<Settings>(context, listen: false).scaleString = value;
+            ref.read(settingsProvider).scaleString = value;
           }
         },
       ),

@@ -17,9 +17,19 @@ Future<void> main() async {
       .then((Prefs initialPreferences) => runApp(App(initialPreferences)));
 }
 
+// PROVIDERS ////////////
 final sharedPrefProvider = Provider<Prefs>((ref) {
   throw UnimplementedError();
 });
+
+final settingsProvider = ChangeNotifierProvider<Settings>((ref) {
+  return Settings(ref.watch(sharedPrefProvider));
+});
+
+final screenSizeState = Provider<Size>(
+  (ref) => throw UnimplementedError(),
+);
+// //////////////////////
 
 class App extends StatelessWidget {
   const App(this.prefs, {Key? key}) : super(key: key);
@@ -31,6 +41,7 @@ class App extends StatelessWidget {
     return ProviderScope(
       overrides: [
         sharedPrefProvider.overrideWithValue(prefs),
+        screenSizeState.overrideWithValue(MediaQuery.of(context).size),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

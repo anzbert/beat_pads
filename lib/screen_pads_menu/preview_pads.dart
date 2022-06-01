@@ -1,11 +1,23 @@
 import 'package:beat_pads/screen_beat_pads/_screen_beat_pads.dart';
 import 'package:beat_pads/services/services.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class Preview extends StatelessWidget {
+class Preview extends ConsumerStatefulWidget {
   const Preview({
     Key? key,
   }) : super(key: key);
+
+  @override
+  ConsumerState<Preview> createState() => _PreviewState();
+}
+
+class _PreviewState extends ConsumerState<Preview> {
+  @override
+  void initState() {
+    ref.read(previewState.notifier).state = true;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +34,7 @@ class Preview extends StatelessWidget {
                       aspectRatio: 16 / 9,
                       child: Padding(
                         padding: EdgeInsets.all(4.0),
-                        child: BeatPadsScreen(preview: true),
+                        child: BeatPadsScreen(),
                       ),
                     ),
                     Container(
@@ -45,7 +57,7 @@ class Preview extends StatelessWidget {
                       aspectRatio: 16 / 9,
                       child: Padding(
                         padding: EdgeInsets.all(4.0),
-                        child: BeatPadsScreen(preview: true),
+                        child: BeatPadsScreen(),
                       ),
                     ),
                     const Divider(

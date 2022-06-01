@@ -1,10 +1,13 @@
+import 'package:beat_pads/main.dart';
+import 'package:beat_pads/screen_beat_pads/_screen_beat_pads.dart';
 import 'package:beat_pads/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+//
 
 import 'package:beat_pads/services/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SlideBeatPad extends StatelessWidget {
+class SlideBeatPad extends ConsumerWidget {
   final bool preview;
 
   const SlideBeatPad({
@@ -16,19 +19,18 @@ class SlideBeatPad extends StatelessWidget {
   final int note;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final double screenWidth = MediaQuery.of(context).size.width;
 
     final int rxNoteVelocity = preview
         ? 0
         : note < 127 && note >= 0
-            ? Provider.of<MidiReceiver>(context, listen: true).rxBuffer[note]
+            ? ref.watch(receiverProvider).rxBuffer[note]
             : 0;
 
-    final bool noteOn =
-        Provider.of<MidiSender>(context, listen: true).playMode.isNoteOn(note);
+    final bool noteOn = ref.watch(senderProvider).playMode.isNoteOn(note);
 
-    final Settings settings = Provider.of<Settings>(context, listen: true);
+    final Settings settings = ref.watch(settingsProvider);
 
     // PAD COLOR:
     final Color color = settings.padColors.colorize(

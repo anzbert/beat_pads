@@ -1,22 +1,25 @@
+import 'package:beat_pads/main.dart';
+import 'package:beat_pads/screen_beat_pads/_screen_beat_pads.dart';
 import 'package:beat_pads/screen_beat_pads/slide_pad.dart';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
-import 'package:provider/provider.dart';
 import 'package:beat_pads/shared_components/_shared.dart';
 import 'package:beat_pads/services/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SlidePads extends StatefulWidget {
+class SlidePads extends ConsumerStatefulWidget {
   final bool preview;
   const SlidePads({Key? key, required this.preview}) : super(key: key);
 
   @override
-  State<SlidePads> createState() => _SlidePadsState();
+  ConsumerState<SlidePads> createState() => _SlidePadsState();
 }
 
-class _SlidePadsState extends State<SlidePads> with TickerProviderStateMixin {
+class _SlidePadsState extends ConsumerState<SlidePads>
+    with TickerProviderStateMixin {
   final GlobalKey _padsWidgetKey = GlobalKey();
 
   final List<ReturnAnimation> _animations = [];
@@ -50,33 +53,35 @@ class _SlidePadsState extends State<SlidePads> with TickerProviderStateMixin {
     int? result = _detectTappedItem(touch);
 
     if (mounted && result != null) {
-      context
-          .read<MidiSender>()
+      ref
+          .read<MidiSender>(senderProvider.notifier)
           .handleNewTouch(CustomPointer(touch.pointer, touch.position), result);
     }
   }
 
   move(PointerEvent touch) {
-    if (context.read<Settings>().playMode == PlayMode.noSlide) return;
+    if (ref.read(settingsProvider.notifier).playMode == PlayMode.noSlide) {
+      return;
+    }
 
     if (mounted) {
       int? result = _detectTappedItem(touch);
-      context
-          .read<MidiSender>()
+      ref
+          .read(senderProvider.notifier)
           .handlePan(CustomPointer(touch.pointer, touch.position), result);
     }
   }
 
   upAndCancel(PointerEvent touch) {
     if (mounted) {
-      context
-          .read<MidiSender>()
+      ref
+          .read(senderProvider.notifier)
           .handleEndTouch(CustomPointer(touch.pointer, touch.position));
 
-      if (context.read<Settings>().modSustainTimeUsable > 0 &&
-          context.read<Settings>().playMode.modulatable) {
-        TouchEvent? event = context
-            .read<MidiSender>()
+      if (ref.read(settingsProvider.notifier).modSustainTimeUsable > 0 &&
+          ref.read(settingsProvider.notifier).playMode.modulatable) {
+        TouchEvent? event = ref
+            .read(senderProvider.notifier)
             .playMode
             .touchReleaseBuffer
             .getByID(touch.pointer);
@@ -84,19 +89,21 @@ class _SlidePadsState extends State<SlidePads> with TickerProviderStateMixin {
 
         ReturnAnimation returnAnim = ReturnAnimation(
           event.uniqueID,
-          context.read<Settings>().modSustainTimeUsable,
+          ref.read(settingsProvider.notifier).modSustainTimeUsable,
           tickerProvider: this,
         );
 
-        Offset constrainedPosition = context.read<Settings>().modulation2D
+        Offset constrainedPosition = ref
+                .read(settingsProvider.notifier)
+                .modulation2D
             ? Utils.limitToSquare(event.origin, touch.position,
-                context.read<Settings>().absoluteRadius(context))
+                ref.read(settingsProvider.notifier).absoluteRadius(context))
             : Utils.limitToCircle(event.origin, touch.position,
-                context.read<Settings>().absoluteRadius(context));
+                ref.read(settingsProvider.notifier).absoluteRadius(context));
 
         returnAnim.animation.addListener(() {
           TouchReleaseBuffer touchReleaseBuffer =
-              context.read<MidiSender>().playMode.touchReleaseBuffer;
+              ref.read(senderProvider.notifier).playMode.touchReleaseBuffer;
           TouchEvent? touchEvent =
               touchReleaseBuffer.getByID(returnAnim.uniqueID);
 
@@ -114,7 +121,7 @@ class _SlidePadsState extends State<SlidePads> with TickerProviderStateMixin {
             killAllMarkedAnimations();
             return;
           } else {
-            context.read<MidiSender>().handlePan(
+            ref.read(senderProvider.notifier).handlePan(
                 CustomPointer(
                     touch.pointer,
                     Offset.lerp(
@@ -133,7 +140,8 @@ class _SlidePadsState extends State<SlidePads> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    final rows = context.select((Settings settings) => settings.rows);
+    final List<List<int>> rows =
+        ref.watch(settingsProvider.select((value) => value.rows));
     return Stack(
       children: [
         Listener(
@@ -179,8 +187,8 @@ class _SlidePadsState extends State<SlidePads> with TickerProviderStateMixin {
             ],
           ),
         ),
-        if (context
-            .select((Settings settings) => settings.playMode)
+        if (ref
+            .watch(settingsProvider.select((value) => value.playMode))
             .modulatable)
           RepaintBoundary(child: PaintModulation()),
       ],

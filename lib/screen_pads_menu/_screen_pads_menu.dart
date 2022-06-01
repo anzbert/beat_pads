@@ -6,22 +6,37 @@ import 'package:beat_pads/screen_pads_menu/menu_system.dart';
 import 'package:flutter/material.dart';
 
 import 'package:beat_pads/shared_components/_shared.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 import 'package:beat_pads/services/services.dart';
+
+final selectedMenuState = StateProvider<Menu>((ref) => Menu.layout);
 
 enum Menu {
   layout,
   midi,
   input,
   system;
+
+  Widget get menuPage {
+    switch (this) {
+      case Menu.layout:
+        return MenuLayout();
+      case Menu.midi:
+        return MenuMidi();
+      case Menu.input:
+        return MenuInput();
+      case Menu.system:
+        return MenuSystem();
+    }
+  }
 }
 
-class PadMenuScreen extends StatelessWidget {
+class PadMenuScreen extends ConsumerWidget {
   const PadMenuScreen();
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return FutureBuilder(
       future: DeviceUtils.enableRotation(),
       builder: (context, AsyncSnapshot<bool?> done) {
@@ -76,10 +91,9 @@ class PadMenuScreen extends StatelessWidget {
               type: BottomNavigationBarType.fixed,
               selectedItemColor: Palette.cadetBlue,
               backgroundColor: Palette.darkGrey,
-              currentIndex: context
-                  .select((Settings settings) => settings.selectedMenu.index),
+              currentIndex: ref.watch(selectedMenuState).index,
               onTap: (int tappedIndex) {
-                context.read<Settings>().selectedMenu =
+                ref.read(selectedMenuState.notifier).state =
                     Menu.values[tappedIndex];
               },
               items: [
@@ -118,14 +132,7 @@ class PadMenuScreen extends StatelessWidget {
               ],
             ),
             body: SafeArea(
-              child: Consumer<Settings>(
-                builder: (context, settings, _) {
-                  if (settings.selectedMenu == Menu.input) return MenuInput();
-                  if (settings.selectedMenu == Menu.midi) return MenuMidi();
-                  if (settings.selectedMenu == Menu.system) return MenuSystem();
-                  return MenuLayout();
-                },
-              ),
+              child: ref.watch(selectedMenuState).menuPage,
             ),
           );
         } else {

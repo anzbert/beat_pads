@@ -1,8 +1,10 @@
+import 'package:beat_pads/main.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:beat_pads/services/services.dart';
 
-class DropdownPlayMode extends StatelessWidget {
+import 'package:beat_pads/services/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+class DropdownPlayMode extends ConsumerWidget {
   DropdownPlayMode({Key? key}) : super(key: key);
 
   final items = PlayMode.values
@@ -15,15 +17,15 @@ class DropdownPlayMode extends StatelessWidget {
       .toList();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: DropdownButton<PlayMode>(
-        value: context.select((Settings settings) => settings.playMode),
+        value: ref.watch(settingsProvider.select((value) => value.playMode)),
         items: items,
         onChanged: (value) {
           if (value != null) {
-            Provider.of<Settings>(context, listen: false).playMode = value;
+            ref.read(settingsProvider).playMode = value;
           }
         },
       ),

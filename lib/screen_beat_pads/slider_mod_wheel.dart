@@ -1,11 +1,12 @@
+import 'package:beat_pads/screen_beat_pads/_screen_beat_pads.dart';
 import 'package:beat_pads/screen_beat_pads/slider_themed.dart';
 import 'package:beat_pads/services/services.dart';
 import 'package:beat_pads/theme.dart';
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ModWheel extends StatefulWidget {
+class ModWheel extends ConsumerStatefulWidget {
   const ModWheel({Key? key, required this.channel, required this.preview})
       : super(key: key);
 
@@ -13,18 +14,18 @@ class ModWheel extends StatefulWidget {
   final int channel;
 
   @override
-  State<ModWheel> createState() => _ModWheelState();
+  ConsumerState<ModWheel> createState() => _ModWheelState();
 }
 
-class _ModWheelState extends State<ModWheel> {
+class _ModWheelState extends ConsumerState<ModWheel> {
   int _mod = 0;
 
-  @override
-  void initState() {
-    // TODO kind of pointless because midireceiver is not persisiting :/
-    _mod = context.read<MidiReceiver>().modWheelValue;
-    super.initState();
-  }
+  // @override
+  // void initState() {
+  //   // TODO kind of pointless because midireceiver is not persisiting :/
+  //   _mod = ref.read().modWheelValue;
+  //   super.initState();
+  // }
 
   final double fontSizeFactor = 0.3;
   final double paddingFactor = 0.1;
@@ -33,7 +34,7 @@ class _ModWheelState extends State<ModWheel> {
   Widget build(BuildContext context) {
     int receivedMidi = widget.preview
         ? 0
-        : context.select((MidiReceiver receiver) => receiver.modWheelValue);
+        : ref.watch(receiverProvider.select((value) => value.modWheelValue));
     if (receivedMidi != _mod) {
       _mod = receivedMidi;
     }

@@ -1,8 +1,10 @@
+import 'package:beat_pads/main.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:beat_pads/services/services.dart';
 
-class DropdownLayout extends StatelessWidget {
+import 'package:beat_pads/services/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+class DropdownLayout extends ConsumerWidget {
   DropdownLayout({Key? key}) : super(key: key);
 
   final items = Layout.values
@@ -17,15 +19,15 @@ class DropdownLayout extends StatelessWidget {
 //
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: DropdownButton<Layout>(
-        value: context.select((Settings settings) => settings.layout),
+        value: ref.watch(settingsProvider.select((value) => value.layout)),
         items: items,
         onChanged: (value) {
           if (value != null) {
-            Provider.of<Settings>(context, listen: false).layout = value;
+            ref.read(settingsProvider).layout = value;
           }
         },
       ),

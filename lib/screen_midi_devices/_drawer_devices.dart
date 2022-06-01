@@ -1,3 +1,4 @@
+import 'package:beat_pads/main.dart';
 import 'package:beat_pads/screen_midi_devices/button_refresh.dart';
 import 'package:beat_pads/services/services.dart';
 import 'package:flutter/material.dart';
@@ -7,9 +8,9 @@ import 'package:beat_pads/shared_components/_shared.dart';
 
 import 'dart:io' show Platform;
 
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class MidiConfigState extends State<MidiConfig> {
+class MidiConfigState extends ConsumerState<MidiConfig> {
   final MidiCommand _midiCommand = MidiCommand();
 
   bool connecting = false;
@@ -36,18 +37,6 @@ class MidiConfigState extends State<MidiConfig> {
           "Devices",
           style: Theme.of(context).textTheme.headline5,
         ),
-        // GradientText(
-        //   'Devices',
-        //   style: Theme.of(context).textTheme.headline4,
-        //   colors: [
-        //     // Palette.lightGrey,
-        //     Palette.whiteLike,
-        //     Palette.whiteLike,
-        //     // Palette.lightPink,
-        //     // Palette.cadetBlue,
-        //     // Palette.laserLemon,
-        //   ],
-        // ),
         leading: Builder(builder: (BuildContext context) {
           return IconButton(
             onPressed: () {
@@ -91,7 +80,7 @@ class MidiConfigState extends State<MidiConfig> {
                 Builder(builder: (context) {
                     WidgetsBinding.instance.addPostFrameCallback(
                       (_) {
-                        context.read<Settings>().connectedDevices = [
+                        ref.read(settingsProvider.notifier).connectedDevices = [
                           ...devices!.where((element) => element.connected)
                         ];
                       },
@@ -205,7 +194,7 @@ class MidiConfigState extends State<MidiConfig> {
   }
 }
 
-class MidiConfig extends StatefulWidget {
+class MidiConfig extends ConsumerStatefulWidget {
   const MidiConfig({Key? key}) : super(key: key);
   @override
   MidiConfigState createState() => MidiConfigState();

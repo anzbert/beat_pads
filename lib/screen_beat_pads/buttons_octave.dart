@@ -1,13 +1,15 @@
+import 'package:beat_pads/main.dart';
 import 'package:beat_pads/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+//
 import 'package:beat_pads/services/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class OctaveButtons extends StatelessWidget {
+class OctaveButtons extends ConsumerWidget {
   const OctaveButtons({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     double width = MediaQuery.of(context).size.width;
     double padSpacing = width * ThemeConst.padSpacingFactor;
     double padRadius = width * ThemeConst.padRadiusFactor;
@@ -19,7 +21,7 @@ class OctaveButtons extends StatelessWidget {
             padding: EdgeInsets.fromLTRB(0, padSpacing, padSpacing, padSpacing),
             child: ElevatedButton(
               onPressed: () {
-                Provider.of<Settings>(context, listen: false).baseOctave++;
+                ref.read(settingsProvider.notifier).baseOctave++;
               },
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.all(0),
@@ -46,7 +48,7 @@ class OctaveButtons extends StatelessWidget {
             padding: EdgeInsets.fromLTRB(0, padSpacing, padSpacing, padSpacing),
             child: ElevatedButton(
               onPressed: () {
-                Provider.of<Settings>(context, listen: false).baseOctave--;
+                ref.read(settingsProvider.notifier).baseOctave--;
               },
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.all(0),

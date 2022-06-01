@@ -1,8 +1,10 @@
+import 'package:beat_pads/main.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:beat_pads/services/services.dart';
 
-class DropdownPadLabels extends StatelessWidget {
+import 'package:beat_pads/services/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+class DropdownPadLabels extends ConsumerWidget {
   DropdownPadLabels({Key? key}) : super(key: key);
 
   final items = PadLabels.values
@@ -17,15 +19,15 @@ class DropdownPadLabels extends StatelessWidget {
 //
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: DropdownButton<PadLabels>(
-        value: context.select((Settings settings) => settings.padLabels),
+        value: ref.watch(settingsProvider.select((value) => value.padLabels)),
         items: items,
         onChanged: (value) {
           if (value != null) {
-            Provider.of<Settings>(context, listen: false).padLabels = value;
+            ref.read(settingsProvider).padLabels = value;
           }
         },
       ),
