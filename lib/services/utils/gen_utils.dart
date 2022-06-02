@@ -1,11 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 
 abstract class Utils {
-// UTILITY
-
   static Future<bool> doNothingAsync() async => true;
 
   static debugLog(String label, dynamic value, int seconds) async {

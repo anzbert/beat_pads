@@ -9,7 +9,6 @@ class PlayModeSlide extends PlayModeHandler {
   /// There is no modulation, hence no tracking of touch required
   PlayModeSlide(
     super.settings,
-    super.screenSize,
     super.notifyParent,
   ) : noteReleaseBuffer = NoteReleaseBuffer(settings, notifyParent);
 

@@ -5,7 +5,7 @@ class PlayModeMPE extends PlayModeHandler {
   final SendMpe mpeMods;
   final MemberChannelProvider channelProvider;
 
-  PlayModeMPE(super.settings, super.screenSize, super.notifyParent)
+  PlayModeMPE(super.settings, super.notifyParent)
       : mpeMods = SendMpe(
           settings.mpe2DX.getMod(settings.mpePitchbendRange),
           settings.mpe2DY.getMod(settings.mpePitchbendRange),

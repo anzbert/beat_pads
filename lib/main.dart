@@ -25,10 +25,6 @@ final sharedPrefProvider = Provider<Prefs>((ref) {
 final settingsProvider = ChangeNotifierProvider<Settings>((ref) {
   return Settings(ref.watch(sharedPrefProvider));
 });
-
-final screenSizeState = StateProvider<Size>(
-  (ref) => Size.zero,
-);
 // //////////////////////
 
 class App extends StatelessWidget {
@@ -41,25 +37,12 @@ class App extends StatelessWidget {
     return ProviderScope(
       overrides: [
         sharedPrefProvider.overrideWithValue(prefs),
-        // screenSizeState.overrideWithValue(MediaQuery.of(context).size),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: appTheme,
-        home: const Init(),
+        home: const SplashScreen(),
       ),
     );
-  }
-}
-
-class Init extends ConsumerWidget {
-  const Init();
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    // only once:
-    if (ref.read(screenSizeState.notifier).state == Size.zero) {
-      ref.read(screenSizeState.notifier).state = MediaQuery.of(context).size;
-    }
-    return const SplashScreen();
   }
 }

@@ -14,7 +14,6 @@ final receiverProvider =
 final senderProvider = ChangeNotifierProvider.autoDispose<MidiSender>((ref) {
   return MidiSender(
     ref.watch(settingsProvider),
-    ref.watch(screenSizeState),
   );
 });
 // //////////////////////

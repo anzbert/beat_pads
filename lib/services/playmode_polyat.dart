@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class PlayModePolyAT extends PlayModeHandler {
   final ModPolyAfterTouch1D polyATMod;
-  PlayModePolyAT(super.settings, super.screenSize, super.notifyParent)
+  PlayModePolyAT(super.screenSize, super.notifyParent)
       : polyATMod = ModPolyAfterTouch1D();
 
   @override

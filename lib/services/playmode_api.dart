@@ -11,7 +11,6 @@ abstract class PlayModeHandler {
 
   PlayModeHandler(
     this.settings,
-    Size screenSize,
     this.notifyParent,
   )   : touchBuffer = TouchBuffer(settings),
         velocityProvider = VelocityProvider(settings, notifyParent) {
@@ -106,6 +105,6 @@ abstract class PlayModeHandler {
 }
 
 class PlayModeNoSlide extends PlayModeHandler {
-  PlayModeNoSlide(super.settings, super.screenSize, super.notifyParent);
+  PlayModeNoSlide(super.settings, super.notifyParent);
   // Uses default PlayModeHandler behaviour
 }

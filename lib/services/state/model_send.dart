@@ -8,10 +8,9 @@ class MidiSender extends ChangeNotifier {
   late PlayModeHandler playMode;
 
   /// Handles Touches and Midi Message sending
-  MidiSender(this._settings, Size screenSize)
-      : _baseOctave = _settings.baseOctave {
+  MidiSender(this._settings) : _baseOctave = _settings.baseOctave {
     playMode = _settings.playMode
-        .getPlayModeApi(_settings, screenSize, notifyListenersOfMidiSender);
+        .getPlayModeApi(_settings, notifyListenersOfMidiSender);
   }
 
   /// Can be passed into sub-Classes
