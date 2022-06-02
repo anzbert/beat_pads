@@ -4,6 +4,8 @@ import 'dart:async';
 
 import '../services.dart';
 
+// TODO REWRITE WITH RIVERPOD
+
 class MidiReceiver extends ChangeNotifier {
   StreamSubscription<MidiPacket>? _rxSubscription;
   final MidiCommand _midiCommand = MidiCommand();

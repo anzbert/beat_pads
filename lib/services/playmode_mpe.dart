@@ -14,8 +14,10 @@ class PlayModeMPE extends PlayModeHandler {
         channelProvider = MemberChannelProvider(
             settings.upperZone, settings.mpeMemberChannels);
 
+  /// Release channel in MPE channel provider
   @override
   void releaseChannel(int channel) {
+    // TODO test this overrride is actually happening
     channelProvider.releaseChannel(channel);
   }
 
@@ -70,29 +72,6 @@ class PlayModeMPE extends PlayModeHandler {
         eventInBuffer.noteEvent.note,
         eventInBuffer.radialChange(),
       );
-    }
-  }
-
-  @override
-  void handleEndTouch(CustomPointer touch) {
-    TouchEvent? eventInBuffer = touchBuffer.getByID(touch.pointer);
-    if (eventInBuffer == null) return;
-
-    if (settings.modSustainTimeUsable == 0 &&
-        settings.noteSustainTimeUsable == 0) {
-      eventInBuffer.noteEvent.noteOff();
-
-      channelProvider.releaseChannel(eventInBuffer.noteEvent.channel);
-      touchBuffer.remove(eventInBuffer); // events gets removed
-      notifyParent();
-    } else {
-      if (settings.modSustainTimeUsable == 0 &&
-          settings.noteSustainTimeUsable > 0) {
-        eventInBuffer.newPosition = eventInBuffer.origin;
-      }
-      touchReleaseBuffer
-          .updateReleasedEvent(eventInBuffer); // event passed to release buffer
-      touchBuffer.remove(eventInBuffer);
     }
   }
 }

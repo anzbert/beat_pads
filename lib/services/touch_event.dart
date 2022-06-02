@@ -10,7 +10,6 @@ class TouchEvent {
   // Geometry parameters:
   final Offset origin;
   final double maxRadius;
-  final double maxDiameter;
   final double deadZone;
   Offset newPosition;
 
@@ -28,7 +27,6 @@ class TouchEvent {
       : origin = touch.position,
         newPosition = touch.position,
         uniqueID = touch.pointer,
-        maxDiameter = screenSize.longestSide * settings.modulationRadius * 2,
         deadZone = settings.modulationDeadZone,
         maxRadius = screenSize.longestSide * settings.modulationRadius;
 

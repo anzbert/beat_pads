@@ -83,9 +83,7 @@ class _PadMenuScreenState extends ConsumerState<PadMenuScreen> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        TransitionUtils.fade(const BeatPadsScreen(
-                          preview: false,
-                        )),
+                        TransitionUtils.fade(const BeatPadsScreen()),
                       );
                     },
                   ),

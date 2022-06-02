@@ -19,8 +19,7 @@ final senderProvider = ChangeNotifierProvider.autoDispose<MidiSender>((ref) {
 // //////////////////////
 
 class BeatPadsScreen extends ConsumerStatefulWidget {
-  final bool preview;
-  const BeatPadsScreen({required this.preview});
+  const BeatPadsScreen();
 
   @override
   ConsumerState<BeatPadsScreen> createState() => _BeatPadsScreenState();
@@ -33,24 +32,25 @@ class _BeatPadsScreenState extends ConsumerState<BeatPadsScreen> {
   @override
   void initState() {
     super.initState();
-    disposePlayMode = ref.read(settingsProvider.notifier).playMode;
-    disposeUpperZone = ref.read(settingsProvider.notifier).upperZone;
 
-    if (disposePlayMode == PlayMode.mpe && !widget.preview) {
+    if (ref.read(settingsProvider.notifier).playMode == PlayMode.mpe) {
       MPEinitMessage(
               memberChannels:
                   ref.read(settingsProvider.notifier).mpeMemberChannels,
-              upperZone: disposeUpperZone)
+              upperZone: ref.read(settingsProvider.notifier).upperZone)
           .send();
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    disposePlayMode =
+        ref.watch(settingsProvider.select((value) => value.playMode));
+    disposeUpperZone =
+        ref.watch(settingsProvider.select((value) => value.upperZone));
+
     return FutureBuilder(
-        future: widget.preview
-            ? Utils.doNothingAsync()
-            : DeviceUtils.landscapeOnly(),
+        future: DeviceUtils.landscapeOnly(),
         builder: ((context, AsyncSnapshot<bool?> done) {
           if (done.hasData && done.data == true) {
             return const Scaffold(
@@ -70,7 +70,7 @@ class _BeatPadsScreenState extends ConsumerState<BeatPadsScreen> {
 
   @override
   void dispose() {
-    if (disposePlayMode == PlayMode.mpe && !widget.preview) {
+    if (disposePlayMode == PlayMode.mpe) {
       MPEinitMessage(memberChannels: 0, upperZone: disposeUpperZone).send();
     }
     super.dispose();

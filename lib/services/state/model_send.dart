@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 
 class MidiSender extends ChangeNotifier {
   final Settings _settings;
-  int _baseOctave;
-  bool _disposed = false;
   late PlayModeHandler playMode;
 
+  bool _disposed = false;
+
   /// Handles Touches and Midi Message sending
-  MidiSender(this._settings) : _baseOctave = _settings.baseOctave {
+  MidiSender(this._settings) {
     playMode = _settings.playMode
         .getPlayModeApi(_settings, notifyListenersOfMidiSender);
   }
@@ -16,17 +16,26 @@ class MidiSender extends ChangeNotifier {
   /// Can be passed into sub-Classes
   void notifyListenersOfMidiSender() => notifyListeners();
 
-  /// Mark active TouchEvents as *dirty*, when the octave was changed
-  /// preventing their position from being updated further in their lifetime.
-  updateBaseOctave(int newBaseOctave) {
-    // TODO this wont work with riverpod ????!!!
-    if (newBaseOctave != _baseOctave) {
-      playMode.markDirty();
-      _baseOctave = newBaseOctave;
-    }
+  @override
+  void notifyListeners() {
+    if (!_disposed) super.notifyListeners();
   }
 
-// ////////////////////////////////////////////////////////////////////////////////////////////////////
+  @override
+  void dispose() {
+    playMode.dispose();
+    _disposed = true;
+    super.dispose();
+  }
+
+  /// Mark active TouchEvents as *dirty*, when the octave was changed
+  /// preventing their position from being updated further in their lifetime.
+  markDirty() {
+    // TODO working with riverpod ????!!!
+    playMode.markDirty();
+  }
+
+// //////////////////////////////////////////////////////////////////////////////////////////
 
   /// Handles a new touch on a pad, creating and sending new noteOn events
   /// in the touch buffer
@@ -43,19 +52,5 @@ class MidiSender extends ChangeNotifier {
   /// Adds released events to a buffer when auto-sustain is being used
   void handleEndTouch(CustomPointer touch) {
     playMode.handleEndTouch(touch);
-  }
-
-  // DISPOSE:
-  @override
-  void dispose() {
-    playMode.dispose();
-
-    _disposed = true;
-    super.dispose();
-  }
-
-  @override
-  void notifyListeners() {
-    if (!_disposed) super.notifyListeners();
   }
 }

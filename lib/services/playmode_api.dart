@@ -43,8 +43,10 @@ abstract class PlayModeHandler {
 
     if (settings.modSustainTimeUsable == 0 &&
         settings.noteSustainTimeUsable == 0) {
-      eventInBuffer.noteEvent.noteOff(); // noteOFF
+      eventInBuffer.noteEvent.noteOff();
+      releaseChannel(eventInBuffer.noteEvent.channel);
       touchBuffer.remove(eventInBuffer);
+
       notifyParent();
     } else {
       if (settings.modSustainTimeUsable == 0 &&
@@ -100,7 +102,7 @@ abstract class PlayModeHandler {
     return false;
   }
 
-  // only useful if overriden in MPE:
+  /// Does nothing, unless overridden in MPE
   void releaseChannel(int channel) {}
 }
 
