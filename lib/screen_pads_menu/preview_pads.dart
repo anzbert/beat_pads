@@ -1,4 +1,4 @@
-import 'package:beat_pads/screen_beat_pads/_screen_beat_pads.dart';
+import 'package:beat_pads/screen_beat_pads/pads_and_controls.dart';
 import 'package:beat_pads/services/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -20,7 +20,7 @@ class Preview extends ConsumerWidget {
                       aspectRatio: 16 / 9,
                       child: Padding(
                         padding: EdgeInsets.all(4.0),
-                        child: BeatPadsScreen(
+                        child: BeatPadsAndControls(
                           preview: true,
                         ),
                       ),
@@ -45,7 +45,7 @@ class Preview extends ConsumerWidget {
                       aspectRatio: 16 / 9,
                       child: Padding(
                         padding: EdgeInsets.all(4.0),
-                        child: BeatPadsScreen(
+                        child: BeatPadsAndControls(
                           preview: true,
                         ),
                       ),

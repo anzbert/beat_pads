@@ -13,7 +13,7 @@ abstract class PlayModeHandler {
     this.settings,
     Size screenSize,
     this.notifyParent,
-  )   : touchBuffer = TouchBuffer(settings, screenSize),
+  )   : touchBuffer = TouchBuffer(settings),
         velocityProvider = VelocityProvider(settings, notifyParent) {
     touchReleaseBuffer = TouchReleaseBuffer(
       settings,
@@ -22,7 +22,7 @@ abstract class PlayModeHandler {
     );
   }
 
-  void handleNewTouch(CustomPointer touch, int noteTapped) {
+  void handleNewTouch(CustomPointer touch, int noteTapped, Size screenSize) {
     if (settings.modSustainTimeUsable > 0 ||
         settings.noteSustainTimeUsable > 0) {
       touchReleaseBuffer.removeNoteFromReleaseBuffer(noteTapped);
@@ -32,7 +32,7 @@ abstract class PlayModeHandler {
         NoteEvent(settings.channel, noteTapped, velocityProvider.velocity)
           ..noteOn(cc: settings.sendCC);
 
-    touchBuffer.addNoteOn(touch, noteOn);
+    touchBuffer.addNoteOn(touch, noteOn, screenSize);
     notifyParent();
   }
 

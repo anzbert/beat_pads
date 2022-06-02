@@ -1,4 +1,5 @@
 import 'package:beat_pads/services/services.dart';
+import 'package:flutter/material.dart';
 
 class PlayModeMPE extends PlayModeHandler {
   final SendMpe mpeMods;
@@ -19,7 +20,7 @@ class PlayModeMPE extends PlayModeHandler {
   }
 
   @override
-  void handleNewTouch(CustomPointer touch, int noteTapped) {
+  void handleNewTouch(CustomPointer touch, int noteTapped, Size screenSize) {
     if (settings.modSustainTimeUsable > 0 ||
         settings.noteSustainTimeUsable > 0) {
       touchReleaseBuffer.removeNoteFromReleaseBuffer(noteTapped);
@@ -39,7 +40,7 @@ class PlayModeMPE extends PlayModeHandler {
         NoteEvent(newChannel, noteTapped, velocityProvider.velocity)
           ..noteOn(cc: false);
 
-    touchBuffer.addNoteOn(touch, noteOn);
+    touchBuffer.addNoteOn(touch, noteOn, screenSize);
     notifyParent();
   }
 

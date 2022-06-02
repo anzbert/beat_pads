@@ -1,4 +1,3 @@
-import 'package:beat_pads/main.dart';
 import 'package:beat_pads/screen_beat_pads/_screen_beat_pads.dart';
 import 'package:beat_pads/screen_pads_menu/menu_input.dart';
 import 'package:beat_pads/screen_pads_menu/menu_layout.dart';

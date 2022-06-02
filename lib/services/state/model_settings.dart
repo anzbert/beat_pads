@@ -1,4 +1,3 @@
-import 'package:beat_pads/screen_pads_menu/_screen_pads_menu.dart';
 import 'package:flutter/material.dart';
 
 import 'package:beat_pads/services/services.dart';
@@ -11,20 +10,6 @@ class Settings extends ChangeNotifier {
   resetAll() async {
     await prefs.resetStoredValues();
     prefs = await Prefs.initAsync();
-    notifyListeners();
-  }
-
-  // bool _virtualDevice = false;
-  // bool get virtualDevice => _virtualDevice;
-  // set virtualDevice(bool newValue) {
-  //   _virtualDevice = newValue;
-  //   notifyListeners();
-  // }
-
-  Menu _selectedMenu = Menu.layout;
-  Menu get selectedMenu => _selectedMenu;
-  set selectedMenu(Menu newMenu) {
-    _selectedMenu = newMenu;
     notifyListeners();
   }
 
@@ -313,14 +298,6 @@ class Settings extends ChangeNotifier {
     prefs.settings.sustainButton.save();
     notifyListeners();
   }
-
-  // unlink sustain times button:
-  // bool get unlinkSustainTimes => prefs.settings.unlinkSustainTimes.value;
-  // set unlinkSustainTimes(bool newValue) {
-  //   prefs.settings.unlinkSustainTimes.value = newValue;
-  //   prefs.settings.unlinkSustainTimes.save();
-  //   notifyListeners();
-  // }
 
   // RANDOM VELOCITY:
   bool get randomVelocity => prefs.settings.randomVelocity.value;

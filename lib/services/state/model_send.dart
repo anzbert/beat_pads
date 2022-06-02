@@ -2,10 +2,9 @@ import 'package:beat_pads/services/services.dart';
 import 'package:flutter/material.dart';
 
 class MidiSender extends ChangeNotifier {
-  Settings _settings;
+  final Settings _settings;
   int _baseOctave;
   bool _disposed = false;
-  // bool preview;
   late PlayModeHandler playMode;
 
   /// Handles Touches and Midi Message sending
@@ -18,21 +17,13 @@ class MidiSender extends ChangeNotifier {
   /// Can be passed into sub-Classes
   void notifyListenersOfMidiSender() => notifyListeners();
 
-  /// Handle all setting changes happening in the lifetime of the pad grid here.
-  /// At the moment, only octave changes affect it directly.
-  MidiSender update(Settings settings, Size size) {
-    _settings = settings;
-    _updateBaseOctave();
-    return this;
-  }
-
   /// Mark active TouchEvents as *dirty*, when the octave was changed
   /// preventing their position from being updated further in their lifetime.
-  _updateBaseOctave() {
-    // TODO this wont work with riverpod
-    if (_settings.baseOctave != _baseOctave) {
+  updateBaseOctave(int newBaseOctave) {
+    // TODO this wont work with riverpod ????!!!
+    if (newBaseOctave != _baseOctave) {
       playMode.markDirty();
-      _baseOctave = _settings.baseOctave;
+      _baseOctave = newBaseOctave;
     }
   }
 
@@ -40,8 +31,8 @@ class MidiSender extends ChangeNotifier {
 
   /// Handles a new touch on a pad, creating and sending new noteOn events
   /// in the touch buffer
-  void handleNewTouch(CustomPointer touch, int noteTapped) {
-    playMode.handleNewTouch(touch, noteTapped);
+  void handleNewTouch(CustomPointer touch, int noteTapped, Size screenSize) {
+    playMode.handleNewTouch(touch, noteTapped, screenSize);
   }
 
   /// Handles sliding across pads in 'slide' mode
@@ -59,15 +50,6 @@ class MidiSender extends ChangeNotifier {
   @override
   void dispose() {
     playMode.dispose();
-    // if (_settings.playMode == PlayMode.mpe) {
-    //   MPEinitMessage(memberChannels: 0, upperZone: _settings.upperZone).send();
-    // }
-
-    // for (var element in playMode.touchReleaseBuffer.buffer) {
-    //   if (element.returnAnimation != null) {
-    //     element.returnAnimation!.dispose();
-    //   }
-    // }
 
     _disposed = true;
     super.dispose();

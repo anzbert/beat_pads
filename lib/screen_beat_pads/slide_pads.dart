@@ -53,9 +53,11 @@ class _SlidePadsState extends ConsumerState<SlidePads>
     int? result = _detectTappedItem(touch);
 
     if (mounted && result != null) {
-      ref
-          .read<MidiSender>(senderProvider.notifier)
-          .handleNewTouch(CustomPointer(touch.pointer, touch.position), result);
+      ref.read<MidiSender>(senderProvider.notifier).handleNewTouch(
+            CustomPointer(touch.pointer, touch.position),
+            result,
+            MediaQuery.of(context).size,
+          );
     }
   }
 

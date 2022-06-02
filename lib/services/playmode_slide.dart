@@ -1,4 +1,5 @@
 import 'package:beat_pads/services/services.dart';
+import 'package:flutter/material.dart';
 
 class PlayModeSlide extends PlayModeHandler {
   final NoteReleaseBuffer noteReleaseBuffer;
@@ -13,7 +14,7 @@ class PlayModeSlide extends PlayModeHandler {
   ) : noteReleaseBuffer = NoteReleaseBuffer(settings, notifyParent);
 
   @override
-  void handleNewTouch(CustomPointer touch, int noteTapped) {
+  void handleNewTouch(CustomPointer touch, int noteTapped, Size screenSize) {
     if (settings.noteSustainTimeUsable > 0) {
       noteReleaseBuffer.removeNoteFromReleaseBuffer(noteTapped);
     }
@@ -22,7 +23,7 @@ class PlayModeSlide extends PlayModeHandler {
         NoteEvent(settings.channel, noteTapped, velocityProvider.velocity)
           ..noteOn(cc: settings.sendCC);
 
-    touchBuffer.addNoteOn(touch, noteOn);
+    touchBuffer.addNoteOn(touch, noteOn, screenSize);
     notifyParent();
   }
 

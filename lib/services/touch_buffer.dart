@@ -3,16 +3,15 @@ import 'package:flutter/material.dart';
 
 class TouchBuffer {
   final Settings settings;
-  final Size screenSize;
 
   /// Data Structure that holds Touch Events, which hold notes and perform geometry operations
-  TouchBuffer(this.settings, this.screenSize);
+  TouchBuffer(this.settings);
 
   List<TouchEvent> _buffer = [];
   List<TouchEvent> get buffer => _buffer;
 
   /// Add touchevent with noteevent to buffer
-  void addNoteOn(CustomPointer touch, NoteEvent noteEvent) {
+  void addNoteOn(CustomPointer touch, NoteEvent noteEvent, Size screenSize) {
     _buffer.add(TouchEvent(touch, noteEvent, settings, screenSize));
   }
 
