@@ -81,9 +81,11 @@ class _PadMenuScreenState extends ConsumerState<PadMenuScreen> {
                       size: 36,
                     ),
                     onPressed: () {
-                      Navigator.push(
+                      Navigator.pushReplacement(
                         context,
-                        TransitionUtils.fade(const BeatPadsScreen()),
+                        MaterialPageRoute(
+                            builder: ((context) => const BeatPadsScreen())),
+                        // TransitionUtils.fade(const BeatPadsScreen()),
                       );
                     },
                   ),
@@ -142,7 +144,7 @@ class _PadMenuScreenState extends ConsumerState<PadMenuScreen> {
             ),
           );
         } else {
-          return const SizedBox.expand();
+          return const Scaffold(body: SizedBox.expand());
         }
       },
     );

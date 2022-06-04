@@ -3,13 +3,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../services.dart';
 
 final rxNoteProvider = StateNotifierProvider<ReceivedState, List<int>>((ref) {
-  //Listen to the stream itself instead of the value hold by the provider
+  // Listen to the stream itself instead of the value hold by the provider
   final midiStream = ref.watch(rxMidiStream.stream);
 
-  //Create the instance of your StateNotifier
+  // Create the instance of your StateNotifier
   final rxNoteProvider = ReceivedState();
 
-  /// subscribe to the stream to change the state accordingly
+  /// Subscribe to the stream to change the state accordingly
   final subscription = midiStream.listen((message) {
     if (message.content.length < 2) return;
 
@@ -21,7 +21,7 @@ final rxNoteProvider = StateNotifierProvider<ReceivedState, List<int>>((ref) {
     }
   });
 
-  ref.onDispose(subscription.cancel); // dispose to avoid memory leaks
+  ref.onDispose(subscription.cancel); // Dispose to avoid memory leaks
 
   return rxNoteProvider;
 });

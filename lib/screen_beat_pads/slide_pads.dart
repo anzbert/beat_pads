@@ -172,11 +172,10 @@ class _SlidePadsState extends ConsumerState<SlidePads>
                               child: HitTestObject(
                                 index: note,
                                 // not sure about this boundary, seems to work though:
-                                child: RepaintBoundary(
-                                    child: SlideBeatPad(
+                                child: SlideBeatPad(
                                   note: note,
                                   preview: widget.preview,
-                                )),
+                                ),
                               ),
                             );
                           },

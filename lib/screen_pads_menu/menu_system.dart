@@ -1,13 +1,8 @@
 import 'package:beat_pads/main.dart';
-import 'package:beat_pads/screen_beat_pads/_screen_beat_pads.dart';
 import 'package:beat_pads/screen_pads_menu/box_credits.dart';
 import 'package:beat_pads/services/services.dart';
-
 import 'package:flutter/material.dart';
-// import 'package:flutter_midi_command/flutter_midi_command.dart';
-
 import 'package:beat_pads/shared_components/_shared.dart';
-
 import 'package:beat_pads/screen_pads_menu/switch_wake_lock.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -52,7 +47,6 @@ class MenuSystem extends ConsumerWidget {
               label: "Reset Midi Buffers",
               message: "Midi Buffer cleared & Stop all Notes sent",
               onPressed: () {
-                // TODO fix this again
                 ref.read(rxNoteProvider.notifier).reset();
                 MidiUtils.sendAllNotesOffMessage(settings.channel);
               },

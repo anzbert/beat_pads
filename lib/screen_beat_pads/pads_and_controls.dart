@@ -20,7 +20,9 @@ class BeatPadsAndControls extends ConsumerWidget {
     ref.listen(settingsProvider.select((value) => value.baseOctave),
         (int? prev, int now) {
       if (prev != null && prev != now) {
-        ref.read(senderProvider.notifier).markDirty();
+        print(ref.read(senderProvider.notifier).playMode.touchBuffer.buffer);
+        // ref.read(senderProvider.notifier).markEventsDirty();
+        // print(ref.read(senderProvider.notifier).playMode.touchBuffer.buffer);
       }
     });
     return Stack(

@@ -17,7 +17,6 @@ class PlayModeMPE extends PlayModeHandler {
   /// Release channel in MPE channel provider
   @override
   void releaseChannel(int channel) {
-    // TODO test this overrride is actually happening
     channelProvider.releaseChannel(channel);
   }
 

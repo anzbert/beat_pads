@@ -64,7 +64,7 @@ class _BeatPadsScreenState extends ConsumerState<BeatPadsScreen> {
               ),
             );
           }
-          return const SizedBox.expand();
+          return const Scaffold(body: SizedBox.expand());
         }));
   }
 

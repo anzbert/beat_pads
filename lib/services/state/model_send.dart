@@ -30,8 +30,8 @@ class MidiSender extends ChangeNotifier {
 
   /// Mark active TouchEvents as *dirty*, when the octave was changed
   /// preventing their position from being updated further in their lifetime.
-  markDirty() {
-    // TODO working with riverpod ????!!!
+  void markEventsDirty() {
+    print("marking");
     playMode.markDirty();
   }
 

@@ -60,6 +60,7 @@ abstract class PlayModeHandler {
   }
 
   void dispose() {
+    print("disposing");
     for (TouchEvent touch in touchBuffer.buffer) {
       if (touch.noteEvent.isPlaying) touch.noteEvent.noteOff();
     }
@@ -69,6 +70,7 @@ abstract class PlayModeHandler {
   }
 
   void markDirty() {
+    // TODO working with riverpod ????!!!
     for (var event in touchBuffer.buffer) {
       event.markDirty();
     }
