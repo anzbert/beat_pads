@@ -52,7 +52,8 @@ class MenuSystem extends ConsumerWidget {
               label: "Reset Midi Buffers",
               message: "Midi Buffer cleared & Stop all Notes sent",
               onPressed: () {
-                // ref.read(receiverProvider.notifier).resetRxBuffer();
+                // TODO fix this again
+                ref.read(rxNoteProvider.notifier).reset();
                 MidiUtils.sendAllNotesOffMessage(settings.channel);
               },
             ),

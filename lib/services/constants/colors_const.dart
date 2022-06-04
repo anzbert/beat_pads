@@ -54,7 +54,7 @@ enum PadColors {
 
     // received Midi
     if (receivedVelocity > 0) {
-      return Palette.cadetBlue.withAlpha(receivedVelocity * 2);
+      return Palette.whiteLike.withAlpha(receivedVelocity * 2);
     }
 
     // Color Schemes
