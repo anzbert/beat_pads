@@ -7,10 +7,10 @@ import 'package:beat_pads/services/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // PROVIDERS ///////////
-final receiverProvider =
-    ChangeNotifierProvider.autoDispose<MidiReceiver>((ref) {
-  return MidiReceiver(ref.watch(settingsProvider));
-});
+// final receiverProvider =
+//     ChangeNotifierProvider.autoDispose<MidiReceiver>((ref) {
+//   return MidiReceiver(ref.watch(settingsProvider));
+// });
 final senderProvider = ChangeNotifierProvider.autoDispose<MidiSender>((ref) {
   return MidiSender(
     ref.watch(settingsProvider),

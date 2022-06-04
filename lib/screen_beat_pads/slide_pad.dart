@@ -22,11 +22,13 @@ class SlideBeatPad extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final double screenWidth = MediaQuery.of(context).size.width;
 
-    final int rxNoteVelocity = preview
-        ? 0
-        : note < 127 && note >= 0
-            ? ref.watch(receiverProvider).rxBuffer[note]
-            : 0;
+    // final int rxNoteVelocity = preview
+    //     ? 0
+    //     : note < 127 && note >= 0
+    //         ? ref.watch(receiverProvider).rxBuffer[note]
+    //         : 0;
+
+    final int rxNoteVelocity = 0;
 
     final bool noteOn = ref.watch(senderProvider).playMode.isNoteOn(note);
 

@@ -1,5 +1,4 @@
 import 'package:beat_pads/services/constants/colors_const.dart';
-
 import 'package:flutter/material.dart';
 
 class SnackMessageButton extends StatelessWidget {
@@ -18,6 +17,7 @@ class SnackMessageButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: () {
+        onPressed();
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text(message)));
       },

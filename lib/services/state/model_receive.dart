@@ -1,85 +1,88 @@
+import 'package:beat_pads/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_midi_command/flutter_midi_command.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:async';
-
 import '../services.dart';
 
 // TODO REWRITE WITH RIVERPOD
+// use streamprovider
 
-class MidiReceiver extends ChangeNotifier {
-  StreamSubscription<MidiPacket>? _rxSubscription;
-  final MidiCommand _midiCommand = MidiCommand();
 
-  Settings _settings;
 
-  MidiReceiver update(Settings settings) {
-    _settings = settings;
-    return this;
-  }
+// class MidiReceiver extends ChangeNotifier {
+//   StreamSubscription<MidiPacket>? _rxSubscription;
+//   final MidiCommand _midiCommand = MidiCommand();
 
-  MidiReceiver(this._settings) {
-    _rxSubscription = registerRxCallback();
-  }
+//   final Settings _settings;
 
-  // Received Notes Buffer:
-  final List<int> _rxBuffer = List.filled(128, 0);
-  List<int> get rxBuffer => _rxBuffer;
+//   // MidiReceiver update(Settings settings) {
+//   //   _settings = settings;
+//   //   return this;
+//   // }
 
-  int modWheelValue = 0;
+//   MidiReceiver(this._settings) {
+//     _rxSubscription = registerRxCallback();
+//   }
 
-  resetRxBuffer() {
-    rxBuffer.fillRange(0, 128, 0);
-    notifyListeners();
-  }
+//   // Received Notes Buffer:
+//   final List<int> _rxBuffer = List.filled(128, 0);
+//   List<int> get rxBuffer => _rxBuffer;
+
+//   int modWheelValue = 0;
+
+//   resetRxBuffer() {
+//     rxBuffer.fillRange(0, 128, 0);
+//     notifyListeners();
+//   }
 
   // Receiver Callback:
-  StreamSubscription<MidiPacket>? registerRxCallback() {
-    return _midiCommand.onMidiDataReceived?.listen((packet) {
-      // print(
-      //     "${packet.data} @ ${packet.timestamp} from ${packet.device.name} / ID:${packet.device.id}");
+//   StreamSubscription<MidiPacket>? registerRxCallback() {
+//     return _midiCommand.onMidiDataReceived?.listen((packet) {
+//       // print(
+//       //     "${packet.data} @ ${packet.timestamp} from ${packet.device.name} / ID:${packet.device.id}");
 
-      int statusByte = packet.data[0];
-      if (statusByte & 0xF0 != 0xF0 && statusByte & 0x0F != _settings.channel) {
-        return;
-      }
+//       int statusByte = packet.data[0];
+//       if (statusByte & 0xF0 == 0xF0) return; // filter: no command messages (F)
+//       if (statusByte & 0x0F != _settings.channel) return;
 
-      MidiMessageType type = MidiUtils.getMidiMessageType(statusByte);
+//       MidiMessageType type = MidiMessageType.fromStatusByte(statusByte);
 
-      // CC receiver for mod wheel:
-      if (type == MidiMessageType.cc) {
-        int controller = packet.data[1];
-        int value = packet.data[2];
+//       // CC receiver for mod wheel:
+//       // if (type == MidiMessageType.cc) {
+//       //   int controller = packet.data[1];
+//       //   int value = packet.data[2];
 
-        if (controller == 1 && modWheelValue != value) {
-          modWheelValue = value;
-          notifyListeners();
-        }
-      }
+//       //   if (controller == 1 && modWheelValue != value) {
+//       //     modWheelValue = value;
+//       //     notifyListeners();
+//       //   }
+//       // }
 
-      // note handling:
-      if (type == MidiMessageType.noteOn || type == MidiMessageType.noteOff) {
-        int note = packet.data[1];
-        int velocity = packet.data[2];
+//       // note handling:
+//       if (type == MidiMessageType.noteOn || type == MidiMessageType.noteOff) {
+//         int note = packet.data[1];
+//         int velocity = packet.data[2];
 
-        switch (type) {
-          case MidiMessageType.noteOn:
-            rxBuffer[note] = velocity;
-            notifyListeners();
-            break;
-          case MidiMessageType.noteOff:
-            rxBuffer[note] = 0;
-            notifyListeners();
-            break;
-          default:
-            return;
-        }
-      }
-    });
-  }
+//         switch (type) {
+//           case MidiMessageType.noteOn:
+//             rxBuffer[note] = velocity;
+//             notifyListeners();
+//             break;
+//           case MidiMessageType.noteOff:
+//             rxBuffer[note] = 0;
+//             notifyListeners();
+//             break;
+//           default:
+//             return;
+//         }
+//       }
+//     });
+//   }
 
-  @override
-  void dispose() {
-    _rxSubscription?.cancel();
-    super.dispose();
-  }
-}
+//   @override
+//   void dispose() {
+//     _rxSubscription?.cancel();
+//     super.dispose();
+//   }
+// }

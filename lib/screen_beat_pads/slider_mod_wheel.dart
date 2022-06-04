@@ -1,10 +1,25 @@
-import 'package:beat_pads/screen_beat_pads/_screen_beat_pads.dart';
+import 'dart:async';
+
+import 'package:beat_pads/main.dart';
 import 'package:beat_pads/screen_beat_pads/slider_themed.dart';
 import 'package:beat_pads/services/services.dart';
 import 'package:beat_pads/theme.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+final _modState = StateProvider<int>(((ref) => 0));
+
+final _modWheelStream = StreamProvider<int>((ref) async* {
+  var midiStream = ref.watch(rxMidiStream.stream);
+  await for (MidiMessagePacket message in midiStream) {
+    if (message.content.length < 2) continue;
+    if (message.type != MidiMessageType.cc) continue;
+    if (message.content[0] != CC.modWheel.value) continue;
+
+    yield message.content[1];
+  }
+});
 
 class ModWheel extends ConsumerStatefulWidget {
   const ModWheel({Key? key, required this.channel, required this.preview})
@@ -18,26 +33,27 @@ class ModWheel extends ConsumerStatefulWidget {
 }
 
 class _ModWheelState extends ConsumerState<ModWheel> {
-  int _mod = 0;
-
-  // @override
-  // void initState() {
-  //   // TODO kind of pointless because midireceiver is not persisiting :/
-  //   _mod = ref.read().modWheelValue;
-  //   super.initState();
-  // }
-
   final double fontSizeFactor = 0.3;
   final double paddingFactor = 0.1;
+  late StreamSubscription<int> sub;
+
+  @override
+  void initState() {
+    super.initState();
+
+    sub = ref.read(_modWheelStream.stream).listen((event) {
+      ref.read(_modState.notifier).state = event;
+    });
+  }
+
+  @override
+  void dispose() {
+    sub.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    int receivedMidi = widget.preview
-        ? 0
-        : ref.watch(receiverProvider.select((value) => value.modWheelValue));
-    if (receivedMidi != _mod) {
-      _mod = receivedMidi;
-    }
     double width = MediaQuery.of(context).size.width;
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -67,16 +83,15 @@ class _ModWheelState extends ConsumerState<ModWheel> {
         Flexible(
           flex: 30,
           child: ThemedSlider(
-            // label: "",
             thumbColor: Palette.tan,
             child: RotatedBox(
               quarterTurns: 0,
               child: Slider(
                 min: 0,
                 max: 127,
-                value: _mod.toDouble(),
+                value: ref.watch(_modState).toDouble(),
                 onChanged: (v) {
-                  setState(() => _mod = v.toInt());
+                  ref.read(_modState.notifier).state = v.toInt();
                   MidiUtils.sendModWheelMessage(widget.channel, v.toInt());
                 },
               ),
@@ -107,7 +122,7 @@ class _ModWheelState extends ConsumerState<ModWheel> {
                         flex: 2,
                         child: Center(
                           child: Text(
-                            "$_mod",
+                            "${ref.watch(_modState)}",
                             style: TextStyle(
                               fontSize: constraints.maxWidth * fontSizeFactor,
                               color: Palette.darker(Palette.tan, 0.6),
@@ -128,11 +143,5 @@ class _ModWheelState extends ConsumerState<ModWheel> {
         ),
       ],
     );
-  }
-
-  @override
-  void dispose() {
-    // MidiUtils.sendModWheelMessage(widget.channel, 0);
-    super.dispose();
   }
 }
