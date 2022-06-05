@@ -15,8 +15,7 @@ class BeatPadsAndControls extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.listen(settingsProvider.select((value) => value.baseOctave),
-        (int? prev, int now) {
+    ref.listen(baseOctaveProv, (int? prev, int now) {
       if (prev != null && prev != now && !preview) {
         ref.read(senderProvider.notifier).markEventsDirty();
       }
@@ -35,47 +34,36 @@ class BeatPadsAndControls extends ConsumerWidget {
               child: SizedBox(),
             ),
             // CONTROL BUTTONS
-            if (ref.watch(settingsProvider
-                    .select((settings) => settings.octaveButtons)) ||
-                ref.watch(settingsProvider
-                    .select((settings) => settings.sustainButton)))
+            if (ref.watch(octaveButtonsProv) || ref.watch(sustainButtonProv))
               const Expanded(
                 flex: 5,
                 child: ControlButtonsRect(),
               ),
             // PITCH BEND
-            if (ref.watch(
-                settingsProvider.select((settings) => settings.pitchBend)))
+            if (ref.watch(pitchBendProv))
               Expanded(
                 flex: 7,
                 child: PitchSliderEased(
-                  channel: ref
-                      .watch(settingsProvider.select((value) => value.channel)),
-                  resetTime: ref.watch(settingsProvider
-                      .select((value) => value.pitchBendEaseUsable)),
+                  channel: ref.watch(channelUsableProv),
+                  resetTime: ref.watch(pitchBendEaseUsable),
                 ),
               ),
             // MOD WHEEL
-            if (ref.watch(
-                settingsProvider.select((settings) => settings.modWheel)))
+            if (ref.watch(modWheelProv))
               Expanded(
                 flex: 7,
                 child: ModWheel(
                   preview: preview,
-                  channel: ref.watch(
-                      settingsProvider.select((settings) => settings.channel)),
+                  channel: ref.watch(channelUsableProv),
                 ),
               ),
             // VELOCITY
-            if (ref.watch(
-                settingsProvider.select((settings) => settings.velocitySlider)))
+            if (ref.watch(velocitySliderProv))
               Expanded(
                 flex: 7,
                 child: SliderVelocity(
-                  channel: ref.watch(
-                      settingsProvider.select((settings) => settings.channel)),
-                  randomVelocity: ref.watch(settingsProvider
-                      .select((settings) => settings.randomVelocity)),
+                  channel: ref.watch(channelUsableProv),
+                  randomVelocity: ref.watch(randomVelocityProv),
                 ),
               ),
             // PADS
@@ -92,10 +80,7 @@ class BeatPadsAndControls extends ConsumerWidget {
           ],
         ),
         if (!preview)
-          if (!ref.watch(settingsProvider
-                  .select((settings) => settings.sustainButton)) &&
-              !ref.watch(settingsProvider
-                  .select((settings) => settings.octaveButtons)))
+          if (!ref.watch(sustainButtonProv) && !ref.watch(octaveButtonsProv))
             Builder(builder: (context) {
               double width = MediaQuery.of(context).size.width;
               return Positioned.directional(
@@ -110,9 +95,7 @@ class BeatPadsAndControls extends ConsumerWidget {
                 ),
               );
             }),
-        if (ref.watch(settingsProvider
-                .select((settings) => settings.connectedDevices.isEmpty)) &&
-            !preview)
+        if (ref.watch(connectedDevicesProv).isEmpty && !preview)
           Positioned(
             bottom: 15,
             right: 15,

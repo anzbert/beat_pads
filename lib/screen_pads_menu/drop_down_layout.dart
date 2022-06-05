@@ -21,11 +21,11 @@ class DropdownLayout extends ConsumerWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: DropdownButton<Layout>(
-        value: ref.watch(settingsProvider.select((value) => value.layout)),
+        value: ref.watch(layoutProv),
         items: items,
         onChanged: (value) {
           if (value != null) {
-            ref.read(settingsProvider).layout = value;
+            ref.read(layoutProv.notifier).setAndSave(value);
           }
         },
       ),

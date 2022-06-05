@@ -1,14 +1,16 @@
 import 'package:flutter_midi_command/flutter_midi_command.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final _connectedDevFuture = FutureProvider<List<MidiDevice>>((ref) async {
-  return await MidiCommand().devices ?? [];
+final _devicesFuture = FutureProvider<List<MidiDevice>?>((ref) async {
+  return await MidiCommand().devices;
 });
 
 final connectedDevicesProv = Provider((ref) {
-  return ref.watch(_connectedDevFuture).when(
+  return ref.watch(_devicesFuture).when(
         loading: () => [],
         error: (err, stack) => [],
-        data: (deviceList) => deviceList,
+        data: (deviceList) => deviceList == null
+            ? []
+            : [...deviceList.where((element) => element.connected)],
       );
 });

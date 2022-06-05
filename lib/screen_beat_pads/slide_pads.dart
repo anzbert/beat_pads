@@ -58,7 +58,7 @@ class _SlidePadsState extends ConsumerState<SlidePads>
   }
 
   move(PointerEvent touch) {
-    if (ref.read(settingsProvider.notifier).playMode == PlayMode.noSlide) {
+    if (ref.read(playModeProv) == PlayMode.noSlide) {
       return;
     }
 
@@ -76,8 +76,8 @@ class _SlidePadsState extends ConsumerState<SlidePads>
           .read(senderProvider.notifier)
           .handleEndTouch(CustomPointer(touch.pointer, touch.position));
 
-      if (ref.read(settingsProvider.notifier).modSustainTimeUsable > 0 &&
-          ref.read(settingsProvider.notifier).playMode.modulatable) {
+      if (ref.read(modReleaseUsable) > 0 &&
+          ref.read(playModeProv).modulatable) {
         TouchEvent? event = ref
             .read(senderProvider.notifier)
             .playMode
@@ -87,17 +87,17 @@ class _SlidePadsState extends ConsumerState<SlidePads>
 
         ReturnAnimation returnAnim = ReturnAnimation(
           event.uniqueID,
-          ref.read(settingsProvider.notifier).modSustainTimeUsable,
+          ref.read(modReleaseUsable),
           tickerProvider: this,
         );
 
-        Offset constrainedPosition = ref
-                .read(settingsProvider.notifier)
-                .modulation2D
-            ? Utils.limitToSquare(event.origin, touch.position,
-                ref.read(settingsProvider.notifier).absoluteRadius(context))
-            : Utils.limitToCircle(event.origin, touch.position,
-                ref.read(settingsProvider.notifier).absoluteRadius(context));
+        double absoluteMaxRadius = MediaQuery.of(context).size.longestSide *
+            ref.read(modulationRadiusProv);
+        Offset constrainedPosition = ref.read(modulation2DProv)
+            ? Utils.limitToSquare(
+                event.origin, touch.position, absoluteMaxRadius)
+            : Utils.limitToCircle(
+                event.origin, touch.position, absoluteMaxRadius);
 
         returnAnim.animation.addListener(() {
           TouchReleaseBuffer touchReleaseBuffer =
@@ -138,8 +138,7 @@ class _SlidePadsState extends ConsumerState<SlidePads>
 
   @override
   Widget build(BuildContext context) {
-    final List<List<int>> rows =
-        ref.watch(settingsProvider.select((value) => value.rows));
+    final List<List<int>> rows = ref.watch(rowProv);
     return Stack(
       children: [
         Listener(
@@ -184,9 +183,7 @@ class _SlidePadsState extends ConsumerState<SlidePads>
             ],
           ),
         ),
-        if (ref
-            .watch(settingsProvider.select((value) => value.playMode))
-            .modulatable)
+        if (ref.watch(playModeProv).modulatable)
           RepaintBoundary(child: PaintModulation()),
       ],
     );

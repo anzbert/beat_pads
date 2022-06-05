@@ -21,11 +21,11 @@ class DropdownPadColors extends ConsumerWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: DropdownButton<PadColors>(
-        value: ref.watch(settingsProvider.select((value) => value.padColors)),
+        value: ref.watch(padColorsProv),
         items: items,
         onChanged: (value) {
           if (value != null) {
-            ref.read(settingsProvider).padColors = value;
+            ref.read(padColorsProv.notifier).setAndSave(value);
           }
         },
       ),

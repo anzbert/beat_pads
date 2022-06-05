@@ -10,7 +10,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class MenuInput extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final settings = ref.watch(settingsProvider);
     return ListView(
       children: <Widget>[
         ListTile(

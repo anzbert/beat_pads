@@ -18,19 +18,15 @@ class SlideBeatPad extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final double screenWidth = MediaQuery.of(context).size.width;
 
-    final int rxVelocity = preview ? 0 : ref.watch(rxNoteProvider)[note];
-
-    final bool noteOn = ref.watch(senderProvider).playMode.isNoteOn(note);
-
-    final Settings settings = ref.watch(settingsProvider);
-
     // PAD COLOR:
-    final Color color = settings.padColors.colorize(
-      settings,
-      note,
-      noteOn,
-      rxVelocity,
-    );
+    final Color color = ref.watch(padColorsProv).colorize(
+          ref.watch(scaleListProv),
+          ref.watch(baseHueProv),
+          ref.watch(rootProv),
+          note,
+          ref.watch(senderProvider).playMode.isNoteOn(note),
+          preview ? 0 : ref.watch(rxNoteProvider)[note],
+        );
 
     final Color splashColor = Palette.splashColor;
 
@@ -38,7 +34,8 @@ class SlideBeatPad extends ConsumerWidget {
         Radius.circular(screenWidth * ThemeConst.padRadiusFactor));
     final double padSpacing = screenWidth * ThemeConst.padSpacingFactor;
 
-    final Label label = PadLabels.getLabel(settings, note);
+    final Label label = PadLabels.getLabel(
+        ref.watch(padLabelsProv), ref.watch(layoutProv), note);
     final double fontSize = screenWidth * 0.021;
     final Color padTextColor = Palette.darkGrey;
 

@@ -18,11 +18,11 @@ class DropdownScales extends ConsumerWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: DropdownButton<String>(
-        value: ref.watch(settingsProvider.select((value) => value.scaleString)),
+        value: ref.watch(scaleStringProv),
         items: items,
         onChanged: (value) {
           if (value != null) {
-            ref.read(settingsProvider).scaleString = value;
+            ref.read(scaleStringProv.notifier).setAndSave(value);
           }
         },
       ),

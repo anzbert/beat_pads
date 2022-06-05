@@ -19,11 +19,11 @@ class DropdownPlayMode extends ConsumerWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: DropdownButton<PlayMode>(
-        value: ref.watch(settingsProvider.select((value) => value.playMode)),
+        value: ref.watch(playModeProv),
         items: items,
         onChanged: (value) {
           if (value != null) {
-            ref.read(settingsProvider).playMode = value;
+            ref.read(playModeProv.notifier).setAndSave(value);
           }
         },
       ),

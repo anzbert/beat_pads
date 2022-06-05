@@ -117,8 +117,7 @@ class _SliderVelocityState extends ConsumerState<SliderVelocity> {
                       Flexible(
                         flex: 2,
                         child: Text(
-                            ref.watch(settingsProvider
-                                    .select((value) => value.randomVelocity))
+                            ref.watch(randomVelocityProv)
                                 ? "${ref.watch(senderProvider.select((value) => value.playMode.velocityProvider.velocityRandomCenter)).round()}"
                                 : "${ref.watch(senderProvider.select((value) => value.playMode.velocityProvider.velocityFixed))}",
                             style: DefaultTextStyle.of(context).style.copyWith(
@@ -129,8 +128,7 @@ class _SliderVelocityState extends ConsumerState<SliderVelocity> {
                       ),
                       Flexible(
                         flex: 1,
-                        child: ref.watch(settingsProvider
-                                .select((value) => value.randomVelocity))
+                        child: ref.watch(randomVelocityProv)
                             ? Align(
                                 alignment: Alignment.centerRight,
                                 child: Text(
