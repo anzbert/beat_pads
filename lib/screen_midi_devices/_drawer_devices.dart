@@ -43,7 +43,6 @@ class MidiConfigState extends ConsumerState<MidiConfig> {
             },
             icon: const Icon(
               Icons.arrow_back,
-              // color: Palette.whiteLike,
               size: 30,
             ),
           );
@@ -79,9 +78,8 @@ class MidiConfigState extends ConsumerState<MidiConfig> {
                 Builder(builder: (context) {
                     WidgetsBinding.instance.addPostFrameCallback(
                       (_) {
-                        ref.read(settingsProvider.notifier).connectedDevices = [
-                          ...devices!.where((element) => element.connected)
-                        ];
+                        ref.refresh(devicesFuture);
+                        print("refreshing deviceList");
                       },
                     );
                     return ListView(

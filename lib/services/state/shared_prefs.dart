@@ -146,11 +146,15 @@ class LoadSettings {
           loadedMap,
           'mpePitchBendRange',
           48,
+          min: 1,
+          max: 48,
         ),
         mpeMemberChannels = SettingInt(
           loadedMap,
           'mpeMemberChannels',
           8,
+          min: 1,
+          max: 15,
         ),
         modulation2D = SettingBool(
           loadedMap,
@@ -161,79 +165,95 @@ class LoadSettings {
           loadedMap,
           'modulationDeadZone',
           20,
+          min: 10,
+          max: 40,
         ),
         modulationRadius = SettingDouble(
           loadedMap,
           'modulationRadius',
           11,
+          min: 5,
+          max: 25,
         ),
         baseHue = SettingInt(
           loadedMap,
           "baseHue",
           240,
+          max: 360,
         ),
         rootNote = SettingInt(
           loadedMap,
           'rootNote',
           0,
+          max: 11,
         ),
         channel = SettingInt(
           loadedMap,
           'channel',
-          1,
+          0,
+          max: 15,
         ),
         width = SettingInt(
           loadedMap,
           'width',
           4,
+          min: 2,
+          max: 16,
         ),
         height = SettingInt(
           loadedMap,
           'height',
           4,
+          min: 2,
+          max: 16,
         ),
         baseOctave = SettingInt(
           loadedMap,
           'baseOctave',
           1,
+          min: -2,
+          max: 7,
         ),
         base = SettingInt(
           loadedMap,
           'base',
           0,
+          max: 11,
         ),
         velocity = SettingInt(
           loadedMap,
           'velocity',
           110,
+          max: 127,
         ),
         velocityMin = SettingInt(
           loadedMap,
           'velocityMin',
           100,
+          max: 126,
         ),
         velocityMax = SettingInt(
           loadedMap,
           'velocityMax',
           110,
+          max: 127,
         ),
         pitchBendEase = SettingInt(
           loadedMap,
           'pitchBendEase',
           0,
+          max: Timing.timingSteps.length - 1,
         ),
         noteSustainTimeStep = SettingInt(
           loadedMap,
           'noteSustainTimeStep',
           0,
-          min: 0,
           max: Timing.timingSteps.length - 1,
         ),
         modSustainTimeStep = SettingInt(
           loadedMap,
           'modSustainTimeStep',
           0,
-          min: 0,
           max: Timing.timingSteps.length - 1,
         ),
         sendCC = SettingBool(
@@ -324,7 +344,7 @@ class SettingInt extends Setting<int> {
   final int max;
 
   SettingInt(Map<String, dynamic>? map, String key, int defaultValue,
-      {required this.min, required this.max})
+      {this.min = 0, required this.max})
       : super(
           key,
           map?[key],
@@ -347,12 +367,21 @@ class SettingInt extends Setting<int> {
 }
 
 class SettingDouble extends Setting<double> {
-  SettingDouble(Map<String, dynamic>? map, String key, double defaultValue)
+  final double min;
+  final double max;
+
+  SettingDouble(Map<String, dynamic>? map, String key, double defaultValue,
+      {this.min = 0, required this.max})
       : super(
           key,
           map?[key] / 100,
           defaultValue / 100,
         );
+
+  @override
+  void set(double newState) {
+    state = newState.clamp(min, max);
+  }
 
   @override
   Future<bool> save() async {

@@ -34,42 +34,43 @@ class MenuMidi extends ConsumerWidget {
           max: 15,
           label: "MPE Member Channels",
           subtitle: "Number of member channels to allocate in MPE mode",
-          trailing: Text(settings.upperZone
-              ? "${settings.mpeMemberChannels} (${15 - settings.mpeMemberChannels} to 15)"
-              : "${settings.mpeMemberChannels} (2 to ${settings.mpeMemberChannels + 1})"),
-          setValue: (v) => settings.mpeMemberChannels = v,
-          readValue: settings.mpeMemberChannels,
-          onChangeEnd: settings.prefs.settings.mpeMemberChannels.save,
+          trailing: Text(ref.watch(zoneProv)
+              ? "${ref.watch(mpeMemberChannelsProv)} (${15 - ref.watch(mpeMemberChannelsProv)} to 15)"
+              : "${ref.watch(mpeMemberChannelsProv)} (2 to ${ref.watch(mpeMemberChannelsProv) + 1})"),
+          setValue: (v) => ref.read(mpeMemberChannelsProv.notifier).set(v),
+          readValue: ref.watch(mpeMemberChannelsProv),
+          onChangeEnd: ref.read(mpeMemberChannelsProv.notifier).save,
         ),
         const Divider(),
         ListTile(
           title: const Text("Random Velocity"),
           subtitle: const Text("Random Velocity within a given Range"),
           trailing: Switch(
-              value: settings.randomVelocity,
-              onChanged: (value) => settings.randomizeVelocity = value),
+              value: ref.watch(randomVelocityProv),
+              onChanged: (v) =>
+                  ref.read(randomVelocityProv.notifier).setAndSave(v)),
         ),
-        if (!settings.randomVelocity)
+        if (!ref.watch(randomVelocityProv))
           IntSliderTile(
             min: 10,
             max: 127,
             label: "Fixed Velocity",
             subtitle: "Velocity to send when pressing a Pad",
-            trailing: Text(settings.velocity.toString()),
-            readValue: settings.velocity,
-            setValue: (v) => settings.setVelocity(v),
-            resetValue: settings.resetVelocity,
-            onChangeEnd: settings.prefs.settings.velocity.save,
+            trailing: Text(ref.watch(velocityProv).toString()),
+            readValue: ref.watch(velocityProv),
+            setValue: (v) => ref.read(velocityProv.notifier).set(v),
+            resetValue: ref.read(velocityProv.notifier).reset,
+            onChangeEnd: ref.read(velocityProv.notifier).save,
           ),
-        if (settings.randomVelocity)
+        if (ref.watch(randomVelocityProv))
           MidiRangeSelectorTile(
             label: "Random Velocity Range",
-            readMin: settings.velocityMin,
-            readMax: settings.velocityMax,
-            setMin: (v) => settings.velocityMin = v,
-            setMax: (v) => settings.velocityMax = v,
-            resetFunction: settings.resetVelocity,
-            onChangeEnd: settings.saveVelocityMinMax,
+            readMin: ref.watch(velocityMinProv),
+            readMax: ref.watch(velocityMaxProv),
+            setMin: (v) => ref.read(velocityMinProv.notifier).set(v),
+            setMax: (v) => ref.read(velocityMaxProv.notifier).set(v),
+            resetFunction: ref.read(velocityMaxProv.notifier).reset,
+            onChangeEnd: ref.read(velocityMaxProv.notifier).save,
           ),
       ],
     );
