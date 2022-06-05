@@ -1,3 +1,4 @@
+import 'package:beat_pads/main.dart';
 import 'package:beat_pads/screen_pads_menu/box_credits.dart';
 import 'package:beat_pads/services/services.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,7 @@ class MenuSystem extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final settings = ref.watch(settingsProvider);
+    // final settings = ref.watch(settingsProvider);
     return ListView(
       children: <Widget>[
         ListTile(
@@ -47,7 +48,7 @@ class MenuSystem extends ConsumerWidget {
               message: "Midi Buffer cleared & Stop all Notes sent",
               onPressed: () {
                 ref.read(rxNoteProvider.notifier).reset();
-                MidiUtils.sendAllNotesOffMessage(settings.channel);
+                MidiUtils.sendAllNotesOffMessage(ref.read(channelUsableProv));
               },
             ),
           ),
@@ -63,7 +64,6 @@ class MenuSystem extends ConsumerWidget {
                 "Reset All Settings",
               ),
               onPressed: () {
-                Function resetAllSettings = settings.resetAll;
                 showDialog<String>(
                   context: context,
                   builder: (BuildContext context) => AlertDialog(
@@ -78,7 +78,7 @@ class MenuSystem extends ConsumerWidget {
                       TextButton(
                         onPressed: () {
                           Navigator.pop(context, 'OK');
-                          resetAllSettings();
+                          ref.read(sharedPrefProvider).reset();
                         },
                         child: const Text('OK'),
                       ),

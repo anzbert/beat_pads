@@ -7,7 +7,7 @@ final rxMidiStream = StreamProvider<MidiMessagePacket>(
     Stream<MidiPacket> rxStream =
         MidiCommand().onMidiDataReceived ?? const Stream.empty();
 
-    int channel = ref.watch(settingsProvider.select((value) => value.channel));
+    int channel = ref.watch(channelUsableProv);
 
     await for (MidiPacket packet in rxStream) {
       int statusByte = packet.data[0];

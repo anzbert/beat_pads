@@ -14,18 +14,16 @@ class DropdownPadLabels extends ConsumerWidget {
       )
       .toList();
 
-//
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: DropdownButton<PadLabels>(
-        value: ref.watch(settingsProvider.select((value) => value.padLabels)),
+        value: ref.watch<PadLabels>(padLabelsProv),
         items: items,
         onChanged: (value) {
           if (value != null) {
-            ref.read(settingsProvider).padLabels = value;
+            ref.read(padLabelsProv.notifier).set(value);
           }
         },
       ),

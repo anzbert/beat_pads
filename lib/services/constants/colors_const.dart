@@ -42,7 +42,9 @@ enum PadColors {
   }
 
   Color colorize(
-    Settings settings,
+    List<int> scaleList,
+    int baseHue,
+    int rootNote,
     int note,
     bool noteOn,
     int receivedVelocity,
@@ -62,17 +64,15 @@ enum PadColors {
 
     // Color Schemes
     if (this == PadColors.colorWheel) {
-      hue = (30 * ((note - settings.rootNote) % 12) + settings.baseHue) % 360;
+      hue = (30 * ((note - rootNote) % 12) + baseHue) % 360;
     } else if (this == PadColors.circleOfFifth) {
       const circleOfFifth = [0, 7, 2, 9, 4, 11, 6, 1, 8, 3, 10, 5];
-      hue = ((30 * circleOfFifth[(note - settings.rootNote) % 12]) +
-              settings.baseHue) %
-          360;
+      hue = ((30 * circleOfFifth[(note - rootNote) % 12]) + baseHue) % 360;
     } else {
-      if (note % 12 == settings.rootNote) {
-        hue = settings.baseHue.toDouble();
+      if (note % 12 == rootNote) {
+        hue = baseHue.toDouble();
       } else {
-        hue = (settings.baseHue + 210) % 360;
+        hue = (baseHue + 210) % 360;
       }
     }
 
@@ -83,7 +83,7 @@ enum PadColors {
       .80,
     ).toColor();
 
-    return MidiUtils.isNoteInScale(note, settings.scaleList, settings.rootNote)
+    return MidiUtils.isNoteInScale(note, scaleList, rootNote)
         ? color
         : Palette.darker(Palette.lightGrey, 1);
   }

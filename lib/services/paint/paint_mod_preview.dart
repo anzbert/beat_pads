@@ -15,18 +15,19 @@ class PaintModPreview extends ConsumerWidget {
     final RenderBox? box = context.findAncestorRenderObjectOfType<RenderBox>();
     if (box == null) return Stack();
 
-    final settings = ref.watch(settingsProvider);
+    // final settings = ref.watch(settingsProvider);
 
     final Size screenSize = MediaQuery.of(context).size;
 
-    if (!settings.modulation2D || settings.playMode.oneDimensional) {
+    if (!ref.watch(modulation2DProv) ||
+        ref.watch(playModeProv).oneDimensional) {
       return CustomPaint(
         painter: CustomPaintRadius(
           dirty: false,
           origin: box.globalToLocal(Offset(screenSize.width / 2,
               screenSize.height / (DeviceUtils.isPortrait(context) ? 2.5 : 2))),
-          maxRadius: settings.modulationRadius * screenSize.longestSide,
-          deadZone: settings.modulationDeadZone,
+          maxRadius: ref.watch(modulationRadiusProv) * screenSize.longestSide,
+          deadZone: ref.watch(modulationDeadZoneProv),
           change: fixedChangeForPreview,
           colorBack: Palette.lightPink.withOpacity(fixedChangeForPreview * 0.6),
           colorFront:
@@ -41,8 +42,8 @@ class PaintModPreview extends ConsumerWidget {
           dirty: false,
           origin: box.globalToLocal(Offset(screenSize.width / 2,
               screenSize.height / (DeviceUtils.isPortrait(context) ? 2.5 : 2))),
-          maxRadius: settings.modulationRadius * screenSize.longestSide,
-          deadZone: settings.modulationDeadZone,
+          maxRadius: ref.watch(modulationRadiusProv) * screenSize.longestSide,
+          deadZone: ref.watch(modulationDeadZoneProv),
           change: const Offset(0, 0),
           radialChange: fixedChangeForPreview,
           colorBack: Palette.lightPink.withOpacity(fixedChangeForPreview * 0.6),

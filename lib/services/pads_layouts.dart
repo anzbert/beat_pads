@@ -57,10 +57,13 @@ enum Layout {
     }
   }
 
-  Grid getGrid(Settings settings) {
+  Grid getGrid(
+      int width, int height, int rootNote, int baseNote, List<int> scaleList) {
+    GridData settings = GridData(width, height, rootNote, baseNote, scaleList);
+
     switch (this) {
       case Layout.continuous:
-        return GridRowInterval(settings, rowInterval: settings.width);
+        return GridRowInterval(settings, rowInterval: width);
       case Layout.minorThird:
         return GridRowInterval(settings, rowInterval: 3);
       case Layout.majorThird:
@@ -83,6 +86,17 @@ enum Layout {
   }
 }
 
+class GridData {
+  final int width;
+  final int height;
+  final int rootNote;
+  final int baseNote;
+  final List<int> scaleList;
+
+  GridData(
+      this.width, this.height, this.rootNote, this.baseNote, this.scaleList);
+}
+
 class LayoutProps {
   LayoutProps({
     required this.resizable,
@@ -97,7 +111,7 @@ abstract class Grid {
   /// Creates a Pad Grid generating class using the current settings
   Grid(this.settings);
 
-  final Settings settings;
+  final GridData settings;
 
   /// Get a List of all notes in the current grid
   List<int> get list;
@@ -116,7 +130,7 @@ abstract class Grid {
 }
 
 class GridRowInterval extends Grid {
-  GridRowInterval(Settings settings, {required this.rowInterval})
+  GridRowInterval(GridData settings, {required this.rowInterval})
       : super(settings);
 
   final int rowInterval;
@@ -134,7 +148,7 @@ class GridRowInterval extends Grid {
 }
 
 class GridMTN extends Grid {
-  GridMTN(Settings settings) : super(settings);
+  GridMTN(GridData settings) : super(settings);
 
   @override
   List<int> get list {
@@ -160,7 +174,7 @@ class GridMTN extends Grid {
 }
 
 class GridScaleOnly extends Grid {
-  GridScaleOnly(Settings settings) : super(settings);
+  GridScaleOnly(GridData settings) : super(settings);
 
   @override
   List<int> get list {
@@ -194,7 +208,7 @@ class GridScaleOnly extends Grid {
 }
 
 class GridXpressPads extends Grid {
-  GridXpressPads(Settings settings, this.xPressPads) : super(settings);
+  GridXpressPads(GridData settings, this.xPressPads) : super(settings);
 
   final XPP xPressPads;
 

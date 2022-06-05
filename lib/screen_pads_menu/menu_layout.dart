@@ -151,9 +151,9 @@ class MenuLayout extends ConsumerWidget {
                 title: const Text("Mod Wheel"),
                 subtitle: const Text("Adds Mod Wheel Slider next to Pads"),
                 trailing: Switch(
-                    value: ref.watch(modWheel2DProvider),
+                    value: ref.watch<bool>(modWheel2DProv),
                     onChanged: (value) =>
-                        ref.read(modWheel2DProvider.notifier).toggle()),
+                        ref.read(modWheel2DProv.notifier).toggle()),
               ),
               ListTile(
                 title: const Text("Velocity"),

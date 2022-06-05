@@ -1,14 +1,12 @@
 import 'package:beat_pads/screen_pads_menu/slider_int.dart';
-import 'package:beat_pads/services/state/model_settings.dart';
+import 'package:beat_pads/services/state/state.dart';
 import 'package:flutter/material.dart';
-import 'package:beat_pads/services/services.dart';
 import 'package:beat_pads/screen_pads_menu/slider_int_range.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class MenuMidi extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final settings = ref.watch(settingsProvider);
     return ListView(
       children: <Widget>[
         ListTile(
@@ -20,16 +18,16 @@ class MenuMidi extends ConsumerWidget {
           ),
         ),
         IntSliderTile(
-          resetValue: settings.resetChannel,
+          resetValue: ref.read(channelSettingProv.notifier).reset,
           min: 1,
           max: 16,
           label: "Master Channel",
           subtitle:
               "Midi Channel to send and receive on. Only 1 or 16 with MPE.",
-          trailing: Text((settings.channel + 1).toString()),
-          setValue: (v) => settings.channel = v - 1,
-          readValue: settings.channel + 1,
-          onChangeEnd: settings.prefs.settings.channel.save,
+          trailing: Text((ref.watch(channelUsableProv) + 1).toString()),
+          setValue: (v) => ref.read(channelSettingProv.notifier).set(v - 1),
+          readValue: ref.watch(channelUsableProv) + 1,
+          onChangeEnd: ref.read(channelSettingProv.notifier).save,
         ),
         IntSliderTile(
           min: 1,

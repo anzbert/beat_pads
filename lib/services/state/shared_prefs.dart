@@ -11,40 +11,23 @@ class Prefs {
   static Future<Prefs> initAsync() async {
     Prefs instance = Prefs._();
 
-    // late inits:
     instance.sharedPrefs = await SharedPreferences.getInstance();
 
-    instance._startUpSettings = Prefs._defaults.map((key, value) {
-      var loadedVal = instance.sharedPrefs.get(key) ?? value;
-      // var loadedVal = value; // debug: set to default
+    instance._startUpSettings = Prefs.defaults.map((key, _) {
+      var loadedVal = instance.sharedPrefs.get(key);
       return MapEntry(key, loadedVal);
     });
 
     instance.settings = LoadSettings(instance._startUpSettings);
-
     return instance;
   }
 
-  Future<void> resetStoredValues() async {
-    for (MapEntry<String, dynamic> entry in Prefs._defaults.entries) {
-      switch (entry.value.runtimeType) {
-        case int:
-          await sharedPrefs.setInt(entry.key, entry.value);
-          break;
-        case bool:
-          await sharedPrefs.setBool(entry.key, entry.value);
-          break;
-        case String:
-          await sharedPrefs.setString(entry.key, entry.value);
-          break;
-        default:
-          throw "type not recognised";
-      }
-    }
+  void reset() {
+    settings = LoadSettings(null);
   }
 
-// DEFAULT VALUES:
-  static const Map<String, dynamic> _defaults = {
+  // currently not using these default values:
+  static const Map<String, dynamic> defaults = {
     "layout": "majorThird",
     "playMode": "slide",
     "rootNote": 0,
@@ -82,16 +65,16 @@ class Prefs {
 }
 
 class LoadSettings {
-  final SettingEnum padColors;
-  final SettingEnum padLabels;
-  final SettingEnum layout;
-  final SettingEnum playMode;
-  final SettingEnum mpe1DRadius;
-  final SettingEnum mpe2DX;
-  final SettingEnum mpe2DY;
+  final SettingEnum<PadColors> padColors;
+  final SettingEnum<PadLabels> padLabels;
+  final SettingEnum<Layout> layout;
+  final SettingEnum<PlayMode> playMode;
+  final SettingEnum<MPEmods> mpe1DRadius;
+  final SettingEnum<MPEmods> mpe2DX;
+  final SettingEnum<MPEmods> mpe2DY;
   final SettingString scaleString;
-  final SettingInt modulationDeadZone;
-  final SettingInt modulationRadius;
+  final SettingDouble modulationDeadZone;
+  final SettingDouble modulationRadius;
   final SettingInt mpeMemberChannels;
   final SettingInt mpePitchBendRange;
   final SettingInt baseHue;
@@ -116,86 +99,210 @@ class LoadSettings {
   final SettingBool randomVelocity;
   final SettingBool velocitySlider;
 
-  LoadSettings(Map<String, dynamic> loadedMap)
-      : padLabels = SettingEnum("padLabels",
-            PadLabels.fromName(loadedMap["padLabels"]) ?? PadLabels.note),
-        padColors = SettingEnum(
-            "padColors",
-            PadColors.fromName(loadedMap["padColors"]) ??
-                PadColors.circleOfFifth),
-        mpe2DX = SettingEnum(
-            'mpe2DX', MPEmods.fromName(loadedMap['mpe2DX']) ?? MPEmods.slide),
-        mpe2DY = SettingEnum('mpe2DY',
-            MPEmods.fromName(loadedMap['mpe2DY']) ?? MPEmods.pitchbend),
-        mpe1DRadius = SettingEnum(
-            'mpe1DRadius',
-            MPEmods.fromName(loadedMap['mpe1DRadius']) ??
-                MPEmods.mpeAftertouch),
-        layout = SettingEnum(
-            'layout', Layout.fromName(loadedMap['layout']) ?? Layout.values[0]),
-        mpePitchBendRange =
-            SettingInt('mpePitchBendRange', loadedMap['mpePitchBendRange']!),
-        mpeMemberChannels =
-            SettingInt('mpeMemberChannels', loadedMap['mpeMemberChannels']!),
-        modulation2D = SettingBool('modulation2D', loadedMap['modulation2D']!),
-        modulationDeadZone =
-            SettingInt("modulationDeadZone", loadedMap['modulationDeadZone']!),
-        modulationRadius =
-            SettingInt("modulationRadius", loadedMap['modulationRadius']!),
-        baseHue = SettingInt("baseHue", loadedMap["baseHue"]!),
-        rootNote = SettingInt("rootnote", loadedMap['rootNote']!),
-        channel = SettingInt('channel', loadedMap['channel']!),
-        width = SettingInt('width', loadedMap['width']!),
-        height = SettingInt('height', loadedMap['height']!),
-        baseOctave = SettingInt('baseOctave', loadedMap['baseOctave']!),
-        base = SettingInt('base', loadedMap['base']!),
-        velocity = SettingInt('velocity', loadedMap['velocity']!),
-        velocityMin = SettingInt('velocityMin', loadedMap['velocityMin']!),
-        velocityMax = SettingInt('velocityMax', loadedMap['velocityMax']!),
+  LoadSettings(Map<String, dynamic>? loadedMap)
+      : padLabels = SettingEnum<PadLabels>(
+          loadedMap,
+          PadLabels.fromName,
+          "padLabels",
+          PadLabels.note,
+        ),
+        padColors = SettingEnum<PadColors>(
+          loadedMap,
+          PadColors.fromName,
+          "padColors",
+          PadColors.highlightRoot,
+        ),
+        mpe2DX = SettingEnum<MPEmods>(
+          loadedMap,
+          MPEmods.fromName,
+          'mpe2DX',
+          MPEmods.slide,
+        ),
+        mpe2DY = SettingEnum<MPEmods>(
+          loadedMap,
+          MPEmods.fromName,
+          'mpe2DY',
+          MPEmods.pitchbend,
+        ),
+        mpe1DRadius = SettingEnum<MPEmods>(
+          loadedMap,
+          MPEmods.fromName,
+          'mpe1DRadius',
+          MPEmods.mpeAftertouch,
+        ),
+        layout = SettingEnum<Layout>(
+          loadedMap,
+          Layout.fromName,
+          'layout',
+          Layout.majorThird,
+        ),
+        playMode = SettingEnum<PlayMode>(
+          loadedMap,
+          PlayMode.fromName,
+          'playMode',
+          PlayMode.slide,
+        ),
+        mpePitchBendRange = SettingInt(
+          loadedMap,
+          'mpePitchBendRange',
+          48,
+        ),
+        mpeMemberChannels = SettingInt(
+          loadedMap,
+          'mpeMemberChannels',
+          8,
+        ),
+        modulation2D = SettingBool(
+          loadedMap,
+          'modulation2D',
+          true,
+        ),
+        modulationDeadZone = SettingDouble(
+          loadedMap,
+          'modulationDeadZone',
+          20,
+        ),
+        modulationRadius = SettingDouble(
+          loadedMap,
+          'modulationRadius',
+          11,
+        ),
+        baseHue = SettingInt(
+          loadedMap,
+          "baseHue",
+          240,
+        ),
+        rootNote = SettingInt(
+          loadedMap,
+          'rootNote',
+          0,
+        ),
+        channel = SettingInt(
+          loadedMap,
+          'channel',
+          1,
+        ),
+        width = SettingInt(
+          loadedMap,
+          'width',
+          4,
+        ),
+        height = SettingInt(
+          loadedMap,
+          'height',
+          4,
+        ),
+        baseOctave = SettingInt(
+          loadedMap,
+          'baseOctave',
+          1,
+        ),
+        base = SettingInt(
+          loadedMap,
+          'base',
+          0,
+        ),
+        velocity = SettingInt(
+          loadedMap,
+          'velocity',
+          110,
+        ),
+        velocityMin = SettingInt(
+          loadedMap,
+          'velocityMin',
+          100,
+        ),
+        velocityMax = SettingInt(
+          loadedMap,
+          'velocityMax',
+          110,
+        ),
+        pitchBendEase = SettingInt(
+          loadedMap,
+          'pitchBendEase',
+          0,
+        ),
         noteSustainTimeStep = SettingInt(
-            'noteSustainTimeStep', loadedMap['noteSustainTimeStep']!),
-        modSustainTimeStep =
-            SettingInt('modSustainTimeStep', loadedMap['modSustainTimeStep']!),
-        sendCC = SettingBool('sendCC', loadedMap['sendCC']!),
-        pitchBend = SettingBool('pitchBend', loadedMap['pitchBend']!),
-        velocitySlider =
-            SettingBool('velocitySlider', loadedMap['velocitySlider']!),
-        pitchBendEase =
-            SettingInt('pitchBendEase', loadedMap['pitchBendEase']!),
-        modWheel = SettingBool('modWheel', loadedMap['modWheel']!),
-        octaveButtons =
-            SettingBool('octaveButtons', loadedMap['octaveButtons']!!),
-        sustainButton =
-            SettingBool('sustainButton', loadedMap['sustainButton']!),
-        randomVelocity =
-            SettingBool('randomVelocity', loadedMap['randomVelocity']!),
+          loadedMap,
+          'noteSustainTimeStep',
+          0,
+        ),
+        modSustainTimeStep = SettingInt(
+          loadedMap,
+          'modSustainTimeStep',
+          0,
+        ),
+        sendCC = SettingBool(
+          loadedMap,
+          'sendCC',
+          false,
+        ),
+        pitchBend = SettingBool(
+          loadedMap,
+          'pitchBend',
+          false,
+        ),
+        velocitySlider = SettingBool(
+          loadedMap,
+          'velocitySlider',
+          false,
+        ),
+        modWheel = SettingBool(
+          loadedMap,
+          'modWheel',
+          false,
+        ),
+        octaveButtons = SettingBool(
+          loadedMap,
+          'octaveButtons',
+          false,
+        ),
+        sustainButton = SettingBool(
+          loadedMap,
+          'sustainButton',
+          false,
+        ),
+        randomVelocity = SettingBool(
+          loadedMap,
+          'randomVelocity',
+          false,
+        ),
         scaleString = SettingString(
-            'scaleString',
-            midiScales.containsKey(loadedMap['scaleString'])
-                ? loadedMap['scaleString']
-                : midiScales.keys.toList()[0]),
-        playMode = SettingEnum('playMode',
-            PlayMode.fromName(loadedMap['playMode']) ?? PlayMode.slide);
-
-  factory LoadSettings.defaults() {
-    return LoadSettings(Prefs._defaults);
-  }
+          loadedMap,
+          'scaleString',
+          "chromatic",
+        );
 }
 
 abstract class Setting<T> extends StateNotifier<T> {
   final String sharedPrefsKey;
+  final T defaultValue;
 
-  Setting(this.sharedPrefsKey, T value) : super(value);
+  Setting(this.sharedPrefsKey, T? value, this.defaultValue)
+      : super(value ?? defaultValue) {
+    if (value == null && state == defaultValue) save();
+  }
 
   void set(T newState) {
     state = newState;
+  }
+
+  void setAndSave(T newState) {
+    state = newState;
+    save();
+  }
+
+  void reset() {
+    state = defaultValue;
+    save();
   }
 
   Future<bool> save();
 }
 
 class SettingBool extends Setting<bool> {
-  SettingBool(String sharedPrefsKey, bool state) : super(sharedPrefsKey, state);
+  SettingBool(Map<String, dynamic>? map, String key, bool defaultValue)
+      : super(key, map?[key], defaultValue);
 
   @override
   Future<bool> save() async {
@@ -209,7 +316,12 @@ class SettingBool extends Setting<bool> {
 }
 
 class SettingInt extends Setting<int> {
-  SettingInt(String sharedPrefsKey, int state) : super(sharedPrefsKey, state);
+  SettingInt(Map<String, dynamic>? map, String key, int defaultValue)
+      : super(
+          key,
+          map?[key],
+          defaultValue,
+        );
 
   @override
   Future<bool> save() async {
@@ -218,9 +330,28 @@ class SettingInt extends Setting<int> {
   }
 }
 
+class SettingDouble extends Setting<double> {
+  SettingDouble(Map<String, dynamic>? map, String key, double defaultValue)
+      : super(
+          key,
+          map?[key] / 100,
+          defaultValue / 100,
+        );
+
+  @override
+  Future<bool> save() async {
+    SharedPreferences sharedPrefs = await SharedPreferences.getInstance();
+    return await sharedPrefs.setInt(sharedPrefsKey, (state * 100).toInt());
+  }
+}
+
 class SettingString extends Setting<String> {
-  SettingString(String sharedPrefsKey, String state)
-      : super(sharedPrefsKey, state);
+  SettingString(Map<String, dynamic>? map, String key, String defaultValue)
+      : super(
+          key,
+          map?[key],
+          defaultValue,
+        );
 
   @override
   Future<bool> save() async {
@@ -229,8 +360,16 @@ class SettingString extends Setting<String> {
   }
 }
 
-class SettingEnum extends Setting<Enum> {
-  SettingEnum(String sharedPrefsKey, Enum state) : super(sharedPrefsKey, state);
+typedef FromName<T> = T? Function(String);
+
+class SettingEnum<T extends Enum> extends Setting<T> {
+  SettingEnum(Map<String, dynamic>? map, FromName<T> fromName, String key,
+      T defaultValue)
+      : super(
+          key,
+          fromName(map?[key] ?? ""),
+          defaultValue,
+        );
 
   @override
   Future<bool> save() async {

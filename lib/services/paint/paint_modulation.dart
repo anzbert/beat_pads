@@ -26,11 +26,8 @@ class PaintModulation extends ConsumerWidget {
         )
             .map(
           (touchEvent) {
-            return ref.watch(settingsProvider.select(
-                            (Settings settings) => settings.modulation2D)) ==
-                        false ||
-                    ref.watch(settingsProvider.select((Settings settings) =>
-                        settings.playMode.oneDimensional))
+            return ref.watch(modulation2DProv) == false ||
+                    ref.watch(playModeProv).oneDimensional
                 // CIRCLE / RADIUS
                 ? CustomPaint(
                     painter: CustomPaintRadius(
