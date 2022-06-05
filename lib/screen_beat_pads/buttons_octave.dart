@@ -19,7 +19,7 @@ class OctaveButtons extends ConsumerWidget {
             padding: EdgeInsets.fromLTRB(0, padSpacing, padSpacing, padSpacing),
             child: ElevatedButton(
               onPressed: () {
-                ref.read(settingsProvider.notifier).baseOctave++;
+                ref.read(baseOctaveProv.notifier).increment();
               },
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.all(0),
@@ -46,7 +46,7 @@ class OctaveButtons extends ConsumerWidget {
             padding: EdgeInsets.fromLTRB(0, padSpacing, padSpacing, padSpacing),
             child: ElevatedButton(
               onPressed: () {
-                ref.read(settingsProvider.notifier).baseOctave--;
+                ref.read(baseOctaveProv.notifier).decrement();
               },
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.all(0),

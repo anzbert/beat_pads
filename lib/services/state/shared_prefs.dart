@@ -226,11 +226,15 @@ class LoadSettings {
           loadedMap,
           'noteSustainTimeStep',
           0,
+          min: 0,
+          max: Timing.timingSteps.length - 1,
         ),
         modSustainTimeStep = SettingInt(
           loadedMap,
           'modSustainTimeStep',
           0,
+          min: 0,
+          max: Timing.timingSteps.length - 1,
         ),
         sendCC = SettingBool(
           loadedMap,
@@ -288,12 +292,12 @@ abstract class Setting<T> extends StateNotifier<T> {
   }
 
   void setAndSave(T newState) {
-    state = newState;
+    set(newState);
     save();
   }
 
   void reset() {
-    state = defaultValue;
+    set(defaultValue);
     save();
   }
 
@@ -316,7 +320,11 @@ class SettingBool extends Setting<bool> {
 }
 
 class SettingInt extends Setting<int> {
-  SettingInt(Map<String, dynamic>? map, String key, int defaultValue)
+  final int min;
+  final int max;
+
+  SettingInt(Map<String, dynamic>? map, String key, int defaultValue,
+      {required this.min, required this.max})
       : super(
           key,
           map?[key],
@@ -327,6 +335,14 @@ class SettingInt extends Setting<int> {
   Future<bool> save() async {
     SharedPreferences sharedPrefs = await SharedPreferences.getInstance();
     return await sharedPrefs.setInt(sharedPrefsKey, state);
+  }
+
+  void increment() => set(state + 1);
+  void decrement() => set(state - 1);
+
+  @override
+  void set(int newState) {
+    state = newState.clamp(min, max);
   }
 }
 
