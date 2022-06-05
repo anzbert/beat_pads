@@ -1,5 +1,12 @@
 import 'package:beat_pads/services/services.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+final senderProvider = ChangeNotifierProvider.autoDispose<MidiSender>(
+  (ref) => MidiSender(
+    ref.read(settingsProvider.notifier), // get settings once on creation
+  ),
+);
 
 class MidiSender extends ChangeNotifier {
   final Settings _settings;

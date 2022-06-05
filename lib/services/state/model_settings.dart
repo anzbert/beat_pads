@@ -1,7 +1,12 @@
+import 'package:beat_pads/main.dart';
 import 'package:flutter/material.dart';
-
 import 'package:beat_pads/services/services.dart';
 import 'package:flutter_midi_command/flutter_midi_command.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+final settingsProvider = ChangeNotifierProvider<Settings>((ref) {
+  return Settings(ref.watch(sharedPrefProvider));
+});
 
 class Settings extends ChangeNotifier {
   Prefs prefs;

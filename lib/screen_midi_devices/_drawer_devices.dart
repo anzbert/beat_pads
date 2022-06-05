@@ -1,4 +1,3 @@
-import 'package:beat_pads/main.dart';
 import 'package:beat_pads/screen_midi_devices/button_refresh.dart';
 import 'package:beat_pads/services/services.dart';
 import 'package:flutter/material.dart';

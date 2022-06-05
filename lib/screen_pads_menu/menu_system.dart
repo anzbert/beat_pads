@@ -1,4 +1,3 @@
-import 'package:beat_pads/main.dart';
 import 'package:beat_pads/screen_pads_menu/box_credits.dart';
 import 'package:beat_pads/services/services.dart';
 import 'package:flutter/material.dart';

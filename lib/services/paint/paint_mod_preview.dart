@@ -1,8 +1,6 @@
-import 'package:beat_pads/main.dart';
 import 'package:beat_pads/services/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-//
 
 class PaintModPreview extends ConsumerWidget {
   const PaintModPreview({

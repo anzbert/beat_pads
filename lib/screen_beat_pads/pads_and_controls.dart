@@ -1,5 +1,3 @@
-import 'package:beat_pads/main.dart';
-
 import 'package:beat_pads/screen_beat_pads/buttons_controls.dart';
 import 'package:beat_pads/screen_beat_pads/buttons_menu.dart';
 import 'package:beat_pads/screen_beat_pads/slide_pads.dart';
@@ -9,14 +7,6 @@ import 'package:beat_pads/screen_beat_pads/slider_velocity.dart';
 import 'package:flutter/material.dart';
 import 'package:beat_pads/services/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-// PROVIDERS ///////////
-final senderProvider = ChangeNotifierProvider.autoDispose<MidiSender>((ref) {
-  return MidiSender(
-    ref.read(settingsProvider.notifier),
-  );
-});
-// //////////////////////
 
 class BeatPadsAndControls extends ConsumerWidget {
   final bool preview;

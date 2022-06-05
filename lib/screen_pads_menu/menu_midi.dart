@@ -1,10 +1,7 @@
-import 'package:beat_pads/main.dart';
 import 'package:beat_pads/screen_pads_menu/slider_int.dart';
-
+import 'package:beat_pads/services/state/model_settings.dart';
 import 'package:flutter/material.dart';
-
-// import 'package:beat_pads/services/services.dart';
-
+import 'package:beat_pads/services/services.dart';
 import 'package:beat_pads/screen_pads_menu/slider_int_range.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

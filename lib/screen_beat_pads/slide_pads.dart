@@ -1,5 +1,3 @@
-import 'package:beat_pads/main.dart';
-import 'package:beat_pads/screen_beat_pads/pads_and_controls.dart';
 import 'package:beat_pads/screen_beat_pads/slide_pad.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';

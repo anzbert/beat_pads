@@ -1,5 +1,3 @@
-import 'package:beat_pads/main.dart';
-import 'package:beat_pads/screen_beat_pads/pads_and_controls.dart';
 import 'package:beat_pads/screen_beat_pads/slider_themed.dart';
 import 'package:beat_pads/services/services.dart';
 import 'package:beat_pads/theme.dart';

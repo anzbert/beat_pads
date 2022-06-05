@@ -1,13 +1,9 @@
-import 'package:beat_pads/main.dart';
 import 'package:beat_pads/screen_pads_menu/drop_down_colors.dart';
 import 'package:beat_pads/screen_pads_menu/drop_down_padlabels.dart';
 import 'package:beat_pads/screen_pads_menu/preview_pads.dart';
 import 'package:beat_pads/screen_pads_menu/slider_int.dart';
-
 import 'package:flutter/material.dart';
-
 import 'package:beat_pads/services/services.dart';
-
 import 'package:beat_pads/screen_pads_menu/counter_int.dart';
 import 'package:beat_pads/screen_pads_menu/slider_non_linear.dart';
 import 'package:beat_pads/screen_pads_menu/drop_down_layout.dart';

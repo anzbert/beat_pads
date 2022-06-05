@@ -1,12 +1,9 @@
-import 'package:beat_pads/main.dart';
 import 'package:beat_pads/screen_pads_menu/drop_down_modulation.dart';
 import 'package:beat_pads/screen_pads_menu/drop_down_playmode.dart';
 import 'package:beat_pads/screen_pads_menu/slider_int.dart';
 import 'package:beat_pads/screen_pads_menu/slider_modulation_size.dart';
 import 'package:beat_pads/screen_pads_menu/slider_non_linear.dart';
-
 import 'package:flutter/material.dart';
-
 import 'package:beat_pads/services/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
