@@ -20,9 +20,8 @@ class BeatPadsAndControls extends ConsumerWidget {
     ref.listen(settingsProvider.select((value) => value.baseOctave),
         (int? prev, int now) {
       if (prev != null && prev != now) {
-        print(ref.read(senderProvider.notifier).playMode.touchBuffer.buffer);
-        // ref.read(senderProvider.notifier).markEventsDirty();
         // print(ref.read(senderProvider.notifier).playMode.touchBuffer.buffer);
+        ref.read(senderProvider.notifier).markEventsDirty();
       }
     });
     return Stack(
@@ -53,8 +52,10 @@ class BeatPadsAndControls extends ConsumerWidget {
               Expanded(
                 flex: 7,
                 child: PitchSliderEased(
-                  channel: ref.watch(settingsProvider).channel,
-                  resetTime: ref.watch(settingsProvider).pitchBendEaseUsable,
+                  channel: ref
+                      .watch(settingsProvider.select((value) => value.channel)),
+                  resetTime: ref.watch(settingsProvider
+                      .select((value) => value.pitchBendEaseUsable)),
                 ),
               ),
             // MOD WHEEL

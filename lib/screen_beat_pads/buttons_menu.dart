@@ -22,10 +22,8 @@ class ReturnToMenuButton extends StatelessWidget {
       child: GestureDetector(
         onLongPress: () {
           // using replacement to trigger dispose on pad screen
-          Navigator.pushReplacement(
-            context,
-            TransitionUtils.fade(const PadMenuScreen()),
-          );
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => const PadMenuScreen()));
         },
         child: AspectRatio(
           aspectRatio: 1,

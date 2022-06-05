@@ -51,6 +51,7 @@ class SlideBeatPad extends ConsumerWidget {
       height: double.infinity,
       width: double.infinity,
       child: Material(
+        elevation: 3,
         color: color,
         borderRadius: padRadius,
         shadowColor: Colors.black,
@@ -76,6 +77,7 @@ class SlideBeatPad extends ConsumerWidget {
             InkWell(
                 onTapDown: (_) {},
                 borderRadius: padRadius,
+                highlightColor: color,
                 splashColor: splashColor,
                 child: Padding(
                   padding: EdgeInsets.all(padSpacing),

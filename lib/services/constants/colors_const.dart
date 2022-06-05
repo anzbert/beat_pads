@@ -11,8 +11,8 @@ abstract class Palette {
   static Color darkPink = const HSLColor.fromAHSL(1, 0, .15, .50).toColor();
   static Color darkGrey = const Color.fromARGB(255, 66, 66, 66);
   static Color lightGrey = const HSLColor.fromAHSL(1, 0, .0, .33).toColor();
-  static Color splashColor = const HSLColor.fromAHSL(1, 0, .0, .35).toColor();
   static Color whiteLike = const Color.fromRGBO(255, 255, 255, 0.702);
+  static Color splashColor = Palette.whiteLike;
   static Color dirtyTranslucent =
       const HSLColor.fromAHSL(0.2, 0, .0, .33).toColor();
 
@@ -20,7 +20,7 @@ abstract class Palette {
     HSLColor hsl = HSLColor.fromColor(color);
     return hsl
         .withLightness(hsl.lightness * factor)
-        .withSaturation(hsl.saturation * factor)
+        .withSaturation(hsl.saturation * (factor * 0.33))
         .toColor();
   }
 }
@@ -49,6 +49,9 @@ enum PadColors {
   ) {
     final double hue;
 
+    // note on
+    if (noteOn) return Palette.whiteLike;
+
     // out of midi range
     if (note > 127 || note < 0) return Palette.darkGrey;
 
@@ -73,18 +76,15 @@ enum PadColors {
       }
     }
 
-    final double alpha =
-        MidiUtils.isNoteInScale(note, settings.scaleList, settings.rootNote)
-            ? 1.0
-            : 0.33;
-
-    if (noteOn) return Palette.lightGrey;
-
-    return HSLColor.fromAHSL(
-      alpha,
+    final color = HSLColor.fromAHSL(
+      1,
       hue,
       .95,
       .80,
     ).toColor();
+
+    return MidiUtils.isNoteInScale(note, settings.scaleList, settings.rootNote)
+        ? color
+        : Palette.darker(Palette.lightGrey, 1);
   }
 }

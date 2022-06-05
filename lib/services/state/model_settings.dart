@@ -208,9 +208,9 @@ class Settings extends ChangeNotifier {
     return prefs.settings.layout.value.getGrid(this).rows;
   }
 
-  List<int> get grid {
-    return prefs.settings.layout.value.getGrid(this).list;
-  }
+  // List<int> get grid {
+  //   return prefs.settings.layout.value.getGrid(this).list;
+  // }
 
   // root note:
   set rootNote(int note) {

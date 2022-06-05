@@ -93,7 +93,7 @@ class PlayModeSlide extends PlayModeHandler {
   }
 
   @override
-  void dispose() {
+  void killAllNotes() {
     for (TouchEvent touch in touchBuffer.buffer) {
       touch.noteEvent.noteOff();
     }

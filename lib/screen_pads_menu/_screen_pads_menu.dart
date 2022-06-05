@@ -3,6 +3,7 @@ import 'package:beat_pads/screen_pads_menu/menu_input.dart';
 import 'package:beat_pads/screen_pads_menu/menu_layout.dart';
 import 'package:beat_pads/screen_pads_menu/menu_midi.dart';
 import 'package:beat_pads/screen_pads_menu/menu_system.dart';
+import 'package:beat_pads/theme.dart';
 import 'package:flutter/material.dart';
 
 import 'package:beat_pads/shared_components/_shared.dart';
@@ -44,7 +45,14 @@ class _PadMenuScreenState extends ConsumerState<PadMenuScreen> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: DeviceUtils.enableRotation(),
+      future: Future.delayed(Duration(milliseconds: ThemeConst.transitionTime),
+          () async {
+        final bool result = await DeviceUtils.enableRotation();
+        await Future.delayed(
+          Duration(milliseconds: ThemeConst.transitionTime),
+        );
+        return result;
+      }),
       builder: (context, AsyncSnapshot<bool?> done) {
         if (done.hasData && done.data == true) {
           return Scaffold(
@@ -85,7 +93,6 @@ class _PadMenuScreenState extends ConsumerState<PadMenuScreen> {
                         context,
                         MaterialPageRoute(
                             builder: ((context) => const BeatPadsScreen())),
-                        // TransitionUtils.fade(const BeatPadsScreen()),
                       );
                     },
                   ),

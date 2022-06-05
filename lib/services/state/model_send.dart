@@ -9,8 +9,16 @@ class MidiSender extends ChangeNotifier {
 
   /// Handles Touches and Midi Message sending
   MidiSender(this._settings) {
+    // print("creating sender");
     playMode = _settings.playMode
         .getPlayModeApi(_settings, notifyListenersOfMidiSender);
+
+    if (_settings.playMode == PlayMode.mpe) {
+      MPEinitMessage(
+              memberChannels: _settings.mpeMemberChannels,
+              upperZone: _settings.upperZone)
+          .send();
+    }
   }
 
   /// Can be passed into sub-Classes
@@ -23,15 +31,18 @@ class MidiSender extends ChangeNotifier {
 
   @override
   void dispose() {
-    playMode.dispose();
-    _disposed = true;
+    // print("disposing sender");
+    if (_settings.playMode == PlayMode.mpe) {
+      MPEinitMessage(memberChannels: 0, upperZone: _settings.upperZone).send();
+      playMode.killAllNotes();
+      _disposed = true;
+    }
     super.dispose();
   }
 
   /// Mark active TouchEvents as *dirty*, when the octave was changed
   /// preventing their position from being updated further in their lifetime.
   void markEventsDirty() {
-    print("marking");
     playMode.markDirty();
   }
 

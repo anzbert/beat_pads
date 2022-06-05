@@ -24,8 +24,8 @@ final rxMidiStream = StreamProvider<MidiMessagePacket>(((ref) async* {
     // print(packet.data);
     int statusByte = packet.data[0];
 
-    if (statusByte & 0xF0 == 0xF0) return; // filter: no command messages
-    if (statusByte & 0x0F != channel) return; // filter: only current channel
+    if (statusByte & 0xF0 == 0xF0) continue; // filter: no command messages
+    if (statusByte & 0x0F != channel) continue; // filter: only current channel
 
     MidiMessageType type = MidiMessageType.fromStatusByte(statusByte);
 
