@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:beat_pads/services/services.dart';
 import 'package:beat_pads/screen_splash/_screen_splash.dart';
 
-// PROVIDERS //////////////////////////////////////////////////////////
+// GLOBAL PROVIDERS /////////////////////////////////////////////////////
 final sharedPrefProvider = Provider<Prefs>((ref) {
-  throw UnimplementedError();
+  throw UnimplementedError(); // overriden in ProviderScope
 });
 
 final settingsProvider = ChangeNotifierProvider<Settings>((ref) {
@@ -21,7 +21,6 @@ final rxMidiStream = StreamProvider<MidiMessagePacket>(((ref) async* {
   int channel = ref.watch(settingsProvider.select((value) => value.channel));
 
   await for (MidiPacket packet in rxStream) {
-    // print(packet.data);
     int statusByte = packet.data[0];
 
     if (statusByte & 0xF0 == 0xF0) continue; // filter: no command messages
@@ -32,8 +31,8 @@ final rxMidiStream = StreamProvider<MidiMessagePacket>(((ref) async* {
     yield MidiMessagePacket(type, packet.data.skip(1).toList());
   }
 }));
-// //////////////////////////////////////////////////////////////////////
 
+// MAIN FUNCTION ////////////////////////////////////////////////////////
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // debugRepaintRainbowEnabled = true; // for debugging
@@ -47,21 +46,12 @@ Future<void> main() async {
             overrides: [
               sharedPrefProvider.overrideWithValue(initialPreferences),
             ],
-            child: const App(),
+            child: MaterialApp(
+              debugShowCheckedModeBanner: false,
+              theme: appTheme,
+              home: const SplashScreen(),
+            ),
           ),
         ),
       );
-}
-
-class App extends StatelessWidget {
-  const App();
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: appTheme,
-      home: const SplashScreen(),
-    );
-  }
 }

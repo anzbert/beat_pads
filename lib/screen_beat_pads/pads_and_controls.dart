@@ -1,5 +1,5 @@
 import 'package:beat_pads/main.dart';
-import 'package:beat_pads/screen_beat_pads/_screen_beat_pads.dart';
+
 import 'package:beat_pads/screen_beat_pads/buttons_controls.dart';
 import 'package:beat_pads/screen_beat_pads/buttons_menu.dart';
 import 'package:beat_pads/screen_beat_pads/slide_pads.dart';
@@ -10,6 +10,14 @@ import 'package:flutter/material.dart';
 import 'package:beat_pads/services/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+// PROVIDERS ///////////
+final senderProvider = ChangeNotifierProvider.autoDispose<MidiSender>((ref) {
+  return MidiSender(
+    ref.read(settingsProvider.notifier),
+  );
+});
+// //////////////////////
+
 class BeatPadsAndControls extends ConsumerWidget {
   final bool preview;
 
@@ -19,8 +27,7 @@ class BeatPadsAndControls extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     ref.listen(settingsProvider.select((value) => value.baseOctave),
         (int? prev, int now) {
-      if (prev != null && prev != now) {
-        // print(ref.read(senderProvider.notifier).playMode.touchBuffer.buffer);
+      if (prev != null && prev != now && !preview) {
         ref.read(senderProvider.notifier).markEventsDirty();
       }
     });

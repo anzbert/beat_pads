@@ -34,16 +34,10 @@ enum Menu {
   }
 }
 
-class PadMenuScreen extends ConsumerStatefulWidget {
+class PadMenuScreen extends ConsumerWidget {
   const PadMenuScreen();
-
   @override
-  ConsumerState<PadMenuScreen> createState() => _PadMenuScreenState();
-}
-
-class _PadMenuScreenState extends ConsumerState<PadMenuScreen> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return FutureBuilder(
       future: Future.delayed(Duration(milliseconds: ThemeConst.transitionTime),
           () async {
