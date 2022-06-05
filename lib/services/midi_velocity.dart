@@ -1,4 +1,3 @@
-import 'package:beat_pads/services/services.dart';
 import 'dart:math';
 
 class VelocityProvider {

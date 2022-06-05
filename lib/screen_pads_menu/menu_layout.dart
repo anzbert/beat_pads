@@ -1,8 +1,8 @@
+import 'package:flutter/material.dart';
 import 'package:beat_pads/screen_pads_menu/drop_down_colors.dart';
 import 'package:beat_pads/screen_pads_menu/drop_down_padlabels.dart';
 import 'package:beat_pads/screen_pads_menu/preview_pads.dart';
 import 'package:beat_pads/screen_pads_menu/slider_int.dart';
-import 'package:flutter/material.dart';
 import 'package:beat_pads/services/services.dart';
 import 'package:beat_pads/screen_pads_menu/counter_int.dart';
 import 'package:beat_pads/screen_pads_menu/slider_non_linear.dart';
@@ -14,8 +14,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class MenuLayout extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final bool resizableGrid =
-        settings.layout.props.resizable; // Is the layout fixed or resizable?
+    final bool resizableGrid = ref
+        .watch(layoutProv)
+        .props
+        .resizable; // Is the layout fixed or resizable?
     final bool isPortrait =
         MediaQuery.of(context).orientation.name == "portrait" ? true : false;
     return Flex(
@@ -59,14 +61,14 @@ class MenuLayout extends ConsumerWidget {
               if (resizableGrid)
                 IntCounterTile(
                   label: "Width",
-                  setValue: (v) => settings.width = v,
-                  readValue: settings.width,
+                  setValue: (v) => ref.read(widthProv.notifier).setAndSave(v),
+                  readValue: ref.watch(widthProv),
                 ),
               if (resizableGrid)
                 IntCounterTile(
                   label: "Height",
-                  setValue: (v) => settings.height = v,
-                  readValue: settings.height,
+                  setValue: (v) => ref.read(heightProv.notifier).setAndSave(v),
+                  readValue: ref.watch(heightProv),
                 ),
               if (resizableGrid) const Divider(),
               if (resizableGrid)
@@ -80,8 +82,9 @@ class MenuLayout extends ConsumerWidget {
                   subtitle:
                       const Text("Higlight selected Scale with this Root Note"),
                   trailing: DropdownRootNote(
-                      setValue: (v) => settings.rootNote = v,
-                      readValue: settings.rootNote),
+                    setValue: (v) => ref.read(rootProv.notifier).setAndSave(v),
+                    readValue: ref.watch(rootProv),
+                  ),
                 ),
               if (resizableGrid) const Divider(),
               if (resizableGrid)
@@ -90,17 +93,17 @@ class MenuLayout extends ConsumerWidget {
                   subtitle: const Text(
                       "The lowest Note in the Grid on the bottom left"),
                   trailing: DropdownRootNote(
-                      setValue: (v) {
-                        settings.base = v;
-                      },
-                      readValue: settings.base),
+                    setValue: (v) => ref.read(baseProv.notifier).setAndSave(v),
+                    readValue: ref.watch(baseProv),
+                  ),
                 ),
               if (resizableGrid)
                 IntCounterTile(
                   label: "Base Octave",
-                  readValue: settings.baseOctave,
-                  setValue: (v) => settings.baseOctave = v,
-                  resetFunction: settings.resetBaseOctave,
+                  readValue: ref.watch(baseOctaveProv),
+                  setValue: (v) =>
+                      ref.read(baseOctaveProv.notifier).setAndSave(v),
+                  resetFunction: ref.read(baseOctaveProv.notifier).reset,
                 ),
               if (resizableGrid)
                 ListTile(
@@ -108,8 +111,9 @@ class MenuLayout extends ConsumerWidget {
                   subtitle:
                       const Text("Adds Base Octave Controls next to Pads"),
                   trailing: Switch(
-                      value: settings.octaveButtons,
-                      onChanged: (value) => settings.octaveButtons = value),
+                      value: ref.watch(octaveButtonsProv),
+                      onChanged: (v) =>
+                          ref.read(octaveButtonsProv.notifier).setAndSave(v)),
                 ),
               if (resizableGrid) const Divider(),
               ListTile(
@@ -117,50 +121,51 @@ class MenuLayout extends ConsumerWidget {
                 subtitle: const Text(
                     "Adds Sustain Button next to Pads. Lock ON by double-tapping the Button"),
                 trailing: Switch(
-                    value: settings.sustainButton,
-                    onChanged: (value) =>
-                        settings.sustainButton = !settings.sustainButton),
+                    value: ref.watch(sustainButtonProv),
+                    onChanged: (v) =>
+                        ref.read(sustainButtonProv.notifier).setAndSave(v)),
               ),
               ListTile(
                 title: const Text("Pitch Bender"),
                 subtitle: const Text("Adds Pitch Bend Slider next to Pads"),
                 trailing: Switch(
-                    value: settings.pitchBend,
-                    onChanged: (value) =>
-                        settings.pitchBend = !settings.pitchBend),
+                    value: ref.watch(pitchBendProv),
+                    onChanged: (v) =>
+                        ref.read(pitchBendProv.notifier).setAndSave(v)),
               ),
-              if (settings.pitchBend)
+              if (ref.watch(pitchBendProv))
                 NonLinearSliderTile(
                   label: "Pitch Bend Easing",
                   subtitle:
                       "Set time in Milliseconds for Pitch Bend Slider to ease back to Zero",
-                  readValue: settings.pitchBendEase,
-                  setValue: (v) => settings.pitchBendEase = v,
-                  resetFunction: settings.resetPitchBendEase,
-                  displayValue: settings.pitchBendEaseUsable == 0
+                  readValue: ref.watch(pitchBendEaseStepProv),
+                  setValue: (v) =>
+                      ref.read(pitchBendEaseStepProv.notifier).set(v),
+                  resetFunction: ref.read(pitchBendEaseStepProv.notifier).reset,
+                  displayValue: ref.watch(pitchBendEaseUsable) == 0
                       ? "Off"
-                      : settings.pitchBendEaseUsable < 1000
-                          ? "${settings.pitchBendEaseUsable} ms"
-                          : "${settings.pitchBendEaseUsable / 1000} s",
+                      : ref.watch(pitchBendEaseUsable) < 1000
+                          ? "${ref.watch(pitchBendEaseUsable)} ms"
+                          : "${ref.watch(pitchBendEaseUsable) / 1000} s",
                   start: 0,
                   steps: Timing.timingSteps.length - 1,
-                  onChangeEnd: settings.prefs.settings.pitchBendEase.save,
+                  onChangeEnd: ref.read(pitchBendEaseStepProv.notifier).save,
                 ),
               ListTile(
                 title: const Text("Mod Wheel"),
                 subtitle: const Text("Adds Mod Wheel Slider next to Pads"),
                 trailing: Switch(
-                    value: ref.watch<bool>(modWheel2DProv),
-                    onChanged: (value) =>
-                        ref.read(modWheel2DProv.notifier).toggle()),
+                    value: ref.watch<bool>(modWheelProv),
+                    onChanged: (v) =>
+                        ref.read(modWheelProv.notifier).setAndSave(v)),
               ),
               ListTile(
                 title: const Text("Velocity"),
                 subtitle: const Text("Adds Velocity Slider next to Pads"),
                 trailing: Switch(
-                    value: settings.velocitySlider,
-                    onChanged: (value) =>
-                        settings.velocitySlider = !settings.velocitySlider),
+                    value: ref.watch(velocitySliderProv),
+                    onChanged: (v) =>
+                        ref.read(velocitySliderProv.notifier).setAndSave(v)),
               ),
               const Divider(),
               ListTile(
@@ -179,11 +184,11 @@ class MenuLayout extends ConsumerWidget {
                 min: 0,
                 max: 360,
                 subtitle: "Root Note Hue on the RGB Color Wheel",
-                trailing: Text(settings.baseHue.toString()),
-                readValue: settings.baseHue,
-                setValue: (v) => settings.baseHue = v,
-                resetValue: settings.resetBaseHue,
-                onChangeEnd: settings.prefs.settings.baseHue.save,
+                trailing: Text(ref.watch(baseHueProv).toString()),
+                readValue: ref.watch(baseHueProv),
+                setValue: (v) => ref.read(baseHueProv.notifier).set(v),
+                resetValue: ref.read(baseHueProv.notifier).reset,
+                onChangeEnd: ref.read(baseHueProv.notifier).save,
               ),
             ],
           ),
