@@ -14,7 +14,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class MenuLayout extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final settings = ref.watch(settingsProvider);
+    // final settings = ref.watch(settingsProvider);
     final bool resizableGrid =
         settings.layout.props.resizable; // Is the layout fixed or resizable?
     final bool isPortrait =
@@ -151,9 +151,9 @@ class MenuLayout extends ConsumerWidget {
                 title: const Text("Mod Wheel"),
                 subtitle: const Text("Adds Mod Wheel Slider next to Pads"),
                 trailing: Switch(
-                    value: settings.modWheel,
+                    value: ref.watch(modWheel2DProvider),
                     onChanged: (value) =>
-                        settings.modWheel = !settings.modWheel),
+                        ref.read(modWheel2DProvider.notifier).toggle()),
               ),
               ListTile(
                 title: const Text("Velocity"),

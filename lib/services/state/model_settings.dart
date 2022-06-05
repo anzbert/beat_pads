@@ -4,8 +4,15 @@ import 'package:beat_pads/services/services.dart';
 import 'package:flutter_midi_command/flutter_midi_command.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final settingsProvider = ChangeNotifierProvider<Settings>((ref) {
-  return Settings(ref.watch(sharedPrefProvider));
+// final settingsProvider = ChangeNotifierProvider<Settings>((ref) {
+//   return Settings(ref.watch(sharedPrefProvider));
+// });
+
+final modulation2DProvider = StateNotifierProvider<SettingBool, bool>((ref) {
+  return ref.watch(sharedPrefProvider).settings.modulation2D;
+});
+final modWheel2DProvider = StateNotifierProvider<SettingBool, bool>((ref) {
+  return ref.watch(sharedPrefProvider).settings.modWheel;
 });
 
 class Settings extends ChangeNotifier {
