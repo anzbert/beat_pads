@@ -1,6 +1,11 @@
 import 'package:beat_pads/services/services.dart';
 import 'package:flutter/material.dart';
 
+class PlayModeNoSlide extends PlayModeHandler {
+  PlayModeNoSlide(super.settings, super.notifyParent);
+  // Uses default PlayModeHandler behaviour
+}
+
 abstract class PlayModeHandler {
   final SendSettings settings;
   final Function notifyParent;
@@ -74,25 +79,19 @@ abstract class PlayModeHandler {
     }
   }
 
-  /// Returns if a given note is ON in any channel, or, if provided, in a specific channel.
+  /// Returns if a given note is ON in any channel.
   /// Checks releasebuffer and active touchbuffer
-  bool isNoteOn(int note, [int? channel]) {
+  bool isNoteOn(int note) {
     for (TouchEvent touch in touchBuffer.buffer) {
-      if (channel == null &&
-          touch.noteEvent.note == note &&
-          touch.noteEvent.isPlaying) return true;
-      if (channel == channel &&
-          touch.noteEvent.note == note &&
-          touch.noteEvent.isPlaying) return true;
+      if (touch.noteEvent.note == note && touch.noteEvent.isPlaying) {
+        return true;
+      }
     }
     if (settings.modReleaseTime > 0 || settings.noteReleaseTime > 0) {
       for (TouchEvent event in touchReleaseBuffer.buffer) {
-        if (channel == null &&
-            event.noteEvent.note == note &&
-            event.noteEvent.isPlaying) return true;
-        if (channel == channel &&
-            event.noteEvent.note == note &&
-            event.noteEvent.isPlaying) return true;
+        if (event.noteEvent.note == note && event.noteEvent.isPlaying) {
+          return true;
+        }
       }
     }
     return false;
@@ -100,9 +99,4 @@ abstract class PlayModeHandler {
 
   /// Does nothing, unless overridden in MPE
   void releaseChannel(int channel) {}
-}
-
-class PlayModeNoSlide extends PlayModeHandler {
-  PlayModeNoSlide(super.settings, super.notifyParent);
-  // Uses default PlayModeHandler behaviour
 }
