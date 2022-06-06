@@ -84,7 +84,7 @@ final scaleStringProv = StateNotifierProvider<SettingString, String>((ref) {
 });
 
 final scaleListProv = Provider<List<int>>(((ref) {
-  return midiScales[ref.watch(sharedPrefProvider).settings.scaleString] ??
+  return midiScales[ref.watch(scaleStringProv)] ??
       const [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
 }));
 

@@ -380,7 +380,7 @@ class SettingDouble extends Setting<double> {
       {this.min = 0, required this.max})
       : super(
           key,
-          map?[key] / 100,
+          map?[key] == null ? null : map![key] / 100,
           defaultValue,
         );
 
