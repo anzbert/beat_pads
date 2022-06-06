@@ -2,7 +2,7 @@ import 'package:beat_pads/services/services.dart';
 import 'package:flutter/material.dart';
 
 abstract class PlayModeHandler {
-  final Settings settings;
+  final SendSettings settings;
   final Function notifyParent;
   final VelocityProvider velocityProvider;
 
@@ -22,8 +22,7 @@ abstract class PlayModeHandler {
   }
 
   void handleNewTouch(CustomPointer touch, int noteTapped, Size screenSize) {
-    if (settings.modSustainTimeUsable > 0 ||
-        settings.noteSustainTimeUsable > 0) {
+    if (settings.modReleaseTime > 0 || settings.noteReleaseTime > 0) {
       touchReleaseBuffer.removeNoteFromReleaseBuffer(noteTapped);
     }
 
@@ -41,16 +40,14 @@ abstract class PlayModeHandler {
     TouchEvent? eventInBuffer = touchBuffer.getByID(touch.pointer);
     if (eventInBuffer == null) return;
 
-    if (settings.modSustainTimeUsable == 0 &&
-        settings.noteSustainTimeUsable == 0) {
+    if (settings.modReleaseTime == 0 && settings.noteReleaseTime == 0) {
       eventInBuffer.noteEvent.noteOff();
       releaseChannel(eventInBuffer.noteEvent.channel);
       touchBuffer.remove(eventInBuffer);
 
       notifyParent();
     } else {
-      if (settings.modSustainTimeUsable == 0 &&
-          settings.noteSustainTimeUsable > 0) {
+      if (settings.modReleaseTime == 0 && settings.noteReleaseTime > 0) {
         eventInBuffer.newPosition = eventInBuffer.origin;
       }
       touchReleaseBuffer.updateReleasedEvent(
@@ -88,8 +85,7 @@ abstract class PlayModeHandler {
           touch.noteEvent.note == note &&
           touch.noteEvent.isPlaying) return true;
     }
-    if (settings.modSustainTimeUsable > 0 ||
-        settings.noteSustainTimeUsable > 0) {
+    if (settings.modReleaseTime > 0 || settings.noteReleaseTime > 0) {
       for (TouchEvent event in touchReleaseBuffer.buffer) {
         if (channel == null &&
             event.noteEvent.note == note &&

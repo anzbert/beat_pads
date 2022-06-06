@@ -2,7 +2,7 @@ import 'package:beat_pads/services/services.dart';
 import 'package:flutter/material.dart';
 
 class TouchBuffer {
-  final Settings settings;
+  final SendSettings settings;
 
   /// Data Structure that holds Touch Events, which hold notes and perform geometry operations
   TouchBuffer(this.settings);

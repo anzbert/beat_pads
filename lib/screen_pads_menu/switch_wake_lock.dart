@@ -1,35 +1,23 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wakelock/wakelock.dart';
 import 'package:flutter/material.dart';
 
-class SwitchWakeLockTile extends StatefulWidget {
-  const SwitchWakeLockTile({Key? key}) : super(key: key);
+final _wakeLockProv = StateProvider<bool>((ref) => false);
+
+class SwitchWakeLockTile extends ConsumerWidget {
+  const SwitchWakeLockTile();
 
   @override
-  State<SwitchWakeLockTile> createState() => _SwitchWakeLockTileState();
-}
-
-class _SwitchWakeLockTileState extends State<SwitchWakeLockTile> {
-  bool wakeLock = false;
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return ListTile(
       title: const Text("Wake Lock"),
-      subtitle: const Text("Keep the Screen on when using the Pads"),
+      subtitle: const Text("Keep the Screen locked on"),
       trailing: Switch(
-          value: wakeLock,
-          onChanged: (value) {
-            setState(() {
-              wakeLock = !wakeLock;
-            });
-            Wakelock.toggle(enable: wakeLock);
+          value: ref.watch(_wakeLockProv),
+          onChanged: (v) {
+            ref.read(_wakeLockProv.notifier).state = v;
+            Wakelock.toggle(enable: v);
           }),
     );
-  }
-
-  @override
-  void dispose() {
-    Wakelock.disable();
-    super.dispose();
   }
 }

@@ -22,8 +22,8 @@ class TouchEvent {
   }
 
   /// Holds geometry, note and modulation information this.uniqueID, this.origin,
-  TouchEvent(
-      CustomPointer touch, this.noteEvent, Settings settings, Size screenSize)
+  TouchEvent(CustomPointer touch, this.noteEvent, SendSettings settings,
+      Size screenSize)
       : origin = touch.position,
         newPosition = touch.position,
         uniqueID = touch.pointer,

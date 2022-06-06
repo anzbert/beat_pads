@@ -11,7 +11,6 @@ class MenuSystem extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // final settings = ref.watch(settingsProvider);
     return ListView(
       children: <Widget>[
         ListTile(

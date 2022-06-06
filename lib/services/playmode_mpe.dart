@@ -11,8 +11,8 @@ class PlayModeMPE extends PlayModeHandler {
           settings.mpe2DY.getMod(settings.mpePitchbendRange),
           settings.mpe1DRadius.getMod(settings.mpePitchbendRange),
         ),
-        channelProvider = MemberChannelProvider(
-            settings.upperZone, settings.mpeMemberChannels);
+        channelProvider =
+            MemberChannelProvider(settings.zone, settings.mpeMemberChannels);
 
   /// Release channel in MPE channel provider
   @override
@@ -22,8 +22,7 @@ class PlayModeMPE extends PlayModeHandler {
 
   @override
   void handleNewTouch(CustomPointer touch, int noteTapped, Size screenSize) {
-    if (settings.modSustainTimeUsable > 0 ||
-        settings.noteSustainTimeUsable > 0) {
+    if (settings.modReleaseTime > 0 || settings.noteReleaseTime > 0) {
       touchReleaseBuffer.removeNoteFromReleaseBuffer(noteTapped);
     }
 

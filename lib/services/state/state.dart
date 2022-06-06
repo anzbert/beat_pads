@@ -1,7 +1,7 @@
 export 'connection.dart';
-export 'input.dart';
-export 'layout.dart';
-export 'midi.dart';
-export 'model_receive.dart';
-export 'model_send.dart';
+export 'settings_input.dart';
+export 'settings_layout.dart';
+export 'settings_midi.dart';
+export 'midi_receive.dart';
+export 'midi_send.dart';
 export 'shared_prefs.dart';

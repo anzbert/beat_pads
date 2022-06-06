@@ -41,7 +41,7 @@ enum PlayMode {
     return true;
   }
 
-  PlayModeHandler getPlayModeApi(Settings settings, Function notifyParent) {
+  PlayModeHandler getPlayModeApi(SendSettings settings, Function notifyParent) {
     switch (this) {
       case PlayMode.mpe:
         return PlayModeMPE(settings, notifyParent);
