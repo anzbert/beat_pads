@@ -30,7 +30,7 @@ class MenuInput extends ConsumerWidget {
           ListTile(
             title: const Text("2-D Modulation"),
             subtitle: const Text(
-                "Modulate 2 values on the X and Y axis or only 1 by radius"),
+                "Modulate 2 values on the X and Y axis or 1 value by radius"),
             trailing: Switch(
                 value: ref.watch(modulation2DProv),
                 onChanged: (v) =>

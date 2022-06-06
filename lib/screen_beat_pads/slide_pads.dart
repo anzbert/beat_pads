@@ -170,7 +170,6 @@ class _SlidePadsState extends ConsumerState<SlidePads>
                                 flex: 1,
                                 child: HitTestObject(
                                   index: note,
-                                  // not sure about this boundary, seems to work though:
                                   child: SlideBeatPad(
                                     note: note,
                                     preview: widget.preview,
