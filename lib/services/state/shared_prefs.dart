@@ -13,10 +13,14 @@ class Prefs {
 
     instance.sharedPrefs = await SharedPreferences.getInstance();
 
-    instance._startUpSettings = Prefs.defaults.map((key, _) {
-      var loadedVal = instance.sharedPrefs.get(key);
-      return MapEntry(key, loadedVal);
-    });
+    // instance._startUpSettings = Prefs.defaults.map((key, _) {
+    //   var loadedVal = instance.sharedPrefs.get(key);
+    //   return MapEntry(key, loadedVal);
+    // });
+
+    instance._startUpSettings = <String, dynamic>{
+      for (String key in Prefs.defaults) key: instance.sharedPrefs.get(key)
+    };
 
     instance.settings = LoadSettings(instance._startUpSettings);
     return instance;
@@ -27,41 +31,43 @@ class Prefs {
   }
 
   // currently not using these default values:
-  static const Map<String, dynamic> defaults = {
-    "layout": "majorThird",
-    "playMode": "slide",
-    "rootNote": 0,
-    "width": 4,
-    "height": 4,
-    "baseOctave": 1,
-    "base": 0,
-    "velocity": 110,
-    "velocityMin": 110,
-    "velocityMax": 120,
-    "noteSustainTimeStep": 0,
-    "modSustainTimeStep": 0,
-    "sendCC": false,
-    "velocitySlider": false,
-    "pitchBend": false,
-    "octaveButtons": false,
-    "sustainButton": false,
-    "randomVelocity": false,
-    "scaleString": "chromatic",
-    "channel": 2,
-    "pitchBendEase": 0,
-    "modWheel": false,
-    "mpeMemberChannels": 8,
-    "modulation2D": true,
-    "modulationRadius": 11,
-    "modulationDeadZone": 20,
-    "mpePitchBendRange": 48,
-    "mpe1DRadius": "mpeAftertouch",
-    "mpe2DX": "slide",
-    "mpe2DY": "pitchbend",
-    "padLabels": "note",
-    "padColors": "highlightRoot",
-    "baseHue": 240,
-  };
+  static const List<String> defaults = [
+    "layout",
+    "playMode",
+    "rootNote",
+    "width",
+    "height",
+    "baseOctave",
+    "base",
+    "velocity",
+    "velocityMin",
+    "velocityMax",
+    "noteSustainTimeStep",
+    "modSustainTimeStep",
+    "sendCC",
+    "velocitySlider",
+    "pitchBend",
+    "octaveButtons",
+    "sustainButton",
+    "randomVelocity",
+    "scaleString",
+    "channel",
+    "pitchBendEase",
+    "modWheel",
+    "mpeMemberChannels",
+    "modulation2D",
+    "modulationRadius",
+    "modulationDeadZone",
+    "mpePitchBendRange",
+    "mpe1DRadius",
+    "mpe2DX",
+    "mpe2DY",
+    "padLabels",
+    "padColors",
+    "baseHue",
+    // "marginHorizontal",
+    // "marginVertical",
+  ];
 }
 
 class LoadSettings {
@@ -164,16 +170,16 @@ class LoadSettings {
         modulationDeadZone = SettingDouble(
           loadedMap,
           'modulationDeadZone',
-          20,
-          min: 10,
-          max: 40,
+          .20,
+          min: .10,
+          max: .40,
         ),
         modulationRadius = SettingDouble(
           loadedMap,
           'modulationRadius',
-          11,
-          min: 5,
-          max: 25,
+          .11,
+          min: .08,
+          max: .50,
         ),
         baseHue = SettingInt(
           loadedMap,
@@ -375,7 +381,7 @@ class SettingDouble extends Setting<double> {
       : super(
           key,
           map?[key] / 100,
-          defaultValue / 100,
+          defaultValue,
         );
 
   @override

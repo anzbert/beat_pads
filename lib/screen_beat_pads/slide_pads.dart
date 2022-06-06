@@ -146,41 +146,46 @@ class _SlidePadsState extends ConsumerState<SlidePads>
           onPointerMove: move,
           onPointerUp: upAndCancel,
           onPointerCancel: upAndCancel,
-          child: Column(
-            // Hit testing happens on this keyed Widget, which contains all the pads:
-            key: _padsWidgetKey,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ...rows.map(
-                (row) {
-                  return Expanded(
-                    flex: 1,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        ...row.map(
-                          (note) {
-                            return Expanded(
-                              flex: 1,
-                              child: HitTestObject(
-                                index: note,
-                                // not sure about this boundary, seems to work though:
-                                child: SlideBeatPad(
-                                  note: note,
-                                  preview: widget.preview,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+                horizontal: 0,
+                vertical: 0), // !for a future for margin setting!
+            child: Column(
+              // Hit testing happens on this keyed Widget, which contains all the pads
+              key: _padsWidgetKey,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ...rows.map(
+                  (row) {
+                    return Expanded(
+                      flex: 1,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          ...row.map(
+                            (note) {
+                              return Expanded(
+                                flex: 1,
+                                child: HitTestObject(
+                                  index: note,
+                                  // not sure about this boundary, seems to work though:
+                                  child: SlideBeatPad(
+                                    note: note,
+                                    preview: widget.preview,
+                                  ),
                                 ),
-                              ),
-                            );
-                          },
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
-            ],
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
         ),
         if (ref.watch(playModeProv).modulatable)

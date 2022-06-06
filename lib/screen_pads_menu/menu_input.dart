@@ -117,31 +117,33 @@ class MenuInput extends ConsumerWidget {
         if (ref.watch(playModeProv).modulatable) const Divider(),
         if (ref.watch(playModeProv).modulatable)
           ModSizeSliderTile(
-            min: 5,
-            max: 25,
+            min: ref.watch(modulationRadiusProv.notifier).min,
+            max: ref.watch(modulationRadiusProv.notifier).max,
             label: "Modulation Size",
             subtitle:
                 "Modulation field radius, relative to the pad screen width",
             trailing:
                 Text("${(ref.watch(modulationRadiusProv) * 100).toInt()}%"),
-            readValue: (ref.watch(modulationRadiusProv) * 100).toInt(),
-            setValue: (v) =>
-                ref.read(modulationRadiusProv.notifier).set(v / 100),
+            readValue: ref.watch(modulationRadiusProv).clamp(
+                ref.watch(modulationRadiusProv.notifier).min,
+                ref.watch(modulationRadiusProv.notifier).max),
+            setValue: (v) => ref.read(modulationRadiusProv.notifier).set(v),
             resetValue: ref.read(modulationRadiusProv.notifier).reset,
             onChangeEnd: ref.read(modulationRadiusProv.notifier).save,
           ),
         if (ref.watch(playModeProv).modulatable)
           ModSizeSliderTile(
-            min: 10,
-            max: 40,
+            min: ref.watch(modulationDeadZoneProv.notifier).min,
+            max: ref.watch(modulationDeadZoneProv.notifier).max,
             label: "Modulation Dead Zone",
             subtitle:
                 "Size of the non-reactive center of the modulation field, relative to the field size",
             trailing:
                 Text("${(ref.watch(modulationDeadZoneProv) * 100).toInt()}%"),
-            readValue: (ref.watch(modulationDeadZoneProv) * 100).toInt(),
-            setValue: (v) =>
-                ref.read(modulationDeadZoneProv.notifier).set(v / 100),
+            readValue: ref.watch(modulationDeadZoneProv).clamp(
+                ref.watch(modulationDeadZoneProv.notifier).min,
+                ref.watch(modulationDeadZoneProv.notifier).max),
+            setValue: (v) => ref.read(modulationDeadZoneProv.notifier).set(v),
             resetValue: ref.read(modulationDeadZoneProv.notifier).reset,
             onChangeEnd: ref.read(modulationDeadZoneProv.notifier).save,
           ),
