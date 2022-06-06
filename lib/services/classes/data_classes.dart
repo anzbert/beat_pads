@@ -1,3 +1,4 @@
+import 'package:beat_pads/services/services.dart';
 import 'package:flutter/material.dart';
 
 class Vector2D {
@@ -21,4 +22,16 @@ class CustomPointer {
   Offset position;
 
   CustomPointer(this.pointer, this.position);
+}
+
+class MidiMessagePacket {
+  final MidiMessageType type;
+  final List<int> content;
+
+  MidiMessagePacket(this.type, this.content);
+
+  @override
+  String toString() {
+    return "Type: $type / Content: $content";
+  }
 }

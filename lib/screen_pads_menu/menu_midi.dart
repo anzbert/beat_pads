@@ -1,82 +1,78 @@
 import 'package:beat_pads/screen_pads_menu/slider_int.dart';
-
+import 'package:beat_pads/services/state/state.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-import 'package:beat_pads/services/services.dart';
-
 import 'package:beat_pads/screen_pads_menu/slider_int_range.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class MenuMidi extends StatelessWidget {
+class MenuMidi extends ConsumerWidget {
   @override
-  Widget build(BuildContext context) {
-    return Consumer<Settings>(builder: (context, settings, child) {
-      return ListView(
-        children: <Widget>[
-          ListTile(
-            title: const Divider(),
-            trailing: Text(
-              "Midi Settings",
-              style: TextStyle(
-                  fontSize: Theme.of(context).textTheme.headline5!.fontSize),
-            ),
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ListView(
+      children: <Widget>[
+        ListTile(
+          title: const Divider(),
+          trailing: Text(
+            "Midi Settings",
+            style: TextStyle(
+                fontSize: Theme.of(context).textTheme.headline5!.fontSize),
           ),
+        ),
+        IntSliderTile(
+          resetValue: ref.read(channelSettingProv.notifier).reset,
+          min: 1,
+          max: 16,
+          label: "Midi Master Channel",
+          subtitle:
+              "Limited to 1 or 16 in MPE Mode (Use 1 for better device compatibility)",
+          trailing: Text((ref.watch(channelUsableProv) + 1).toString()),
+          setValue: (v) => ref.read(channelSettingProv.notifier).set(v - 1),
+          readValue: ref.watch(channelUsableProv) + 1,
+          onChangeEnd: ref.read(channelSettingProv.notifier).save,
+        ),
+        IntSliderTile(
+          min: 1,
+          max: 15,
+          label: "MPE Member Channels",
+          subtitle: "Number of member channels to allocate in MPE mode",
+          trailing: Text(ref.watch(zoneProv)
+              ? "${ref.watch(mpeMemberChannelsProv)} (${15 - ref.watch(mpeMemberChannelsProv)} to 15)"
+              : "${ref.watch(mpeMemberChannelsProv)} (2 to ${ref.watch(mpeMemberChannelsProv) + 1})"),
+          setValue: (v) => ref.read(mpeMemberChannelsProv.notifier).set(v),
+          readValue: ref.watch(mpeMemberChannelsProv),
+          onChangeEnd: ref.read(mpeMemberChannelsProv.notifier).save,
+        ),
+        const Divider(),
+        ListTile(
+          title: const Text("Random Velocity"),
+          subtitle: const Text("Random Velocity within a given range"),
+          trailing: Switch(
+              value: ref.watch(randomVelocityProv),
+              onChanged: (v) =>
+                  ref.read(randomVelocityProv.notifier).setAndSave(v)),
+        ),
+        if (!ref.watch(randomVelocityProv))
           IntSliderTile(
-            resetValue: settings.resetChannel,
-            min: 1,
-            max: 16,
-            label: "Master Channel",
-            subtitle:
-                "Midi Channel to send and receive on. Only 1 or 16 with MPE.",
-            trailing: Text((settings.channel + 1).toString()),
-            setValue: (v) => settings.channel = v - 1,
-            readValue: settings.channel + 1,
-            onChangeEnd: settings.prefs.settings.channel.save,
+            min: 10,
+            max: 127,
+            label: "Fixed Velocity",
+            // subtitle: "Velocity to send when pressing a pad",
+            trailing: Text(ref.watch(velocityProv).toString()),
+            readValue: ref.watch(velocityProv),
+            setValue: (v) => ref.read(velocityProv.notifier).set(v),
+            resetValue: ref.read(velocityProv.notifier).reset,
+            onChangeEnd: ref.read(velocityProv.notifier).save,
           ),
-          IntSliderTile(
-            min: 1,
-            max: 15,
-            label: "MPE Member Channels",
-            subtitle: "Number of member channels to allocate in MPE mode",
-            trailing: Text(settings.upperZone
-                ? "${settings.mpeMemberChannels} (${15 - settings.mpeMemberChannels} to 15)"
-                : "${settings.mpeMemberChannels} (2 to ${settings.mpeMemberChannels + 1})"),
-            setValue: (v) => settings.mpeMemberChannels = v,
-            readValue: settings.mpeMemberChannels,
-            onChangeEnd: settings.prefs.settings.mpeMemberChannels.save,
+        if (ref.watch(randomVelocityProv))
+          MidiRangeSelectorTile(
+            label: "Random Velocity Range",
+            readMin: ref.watch(velocityMinProv),
+            readMax: ref.watch(velocityMaxProv),
+            setMin: (v) => ref.read(velocityMinProv.notifier).set(v),
+            setMax: (v) => ref.read(velocityMaxProv.notifier).set(v),
+            resetFunction: ref.read(velocityMaxProv.notifier).reset,
+            onChangeEnd: ref.read(velocityMaxProv.notifier).save,
           ),
-          const Divider(),
-          ListTile(
-            title: const Text("Random Velocity"),
-            subtitle: const Text("Random Velocity within a given Range"),
-            trailing: Switch(
-                value: settings.randomVelocity,
-                onChanged: (value) => settings.randomizeVelocity = value),
-          ),
-          if (!settings.randomVelocity)
-            IntSliderTile(
-              min: 10,
-              max: 127,
-              label: "Fixed Velocity",
-              subtitle: "Velocity to send when pressing a Pad",
-              trailing: Text(settings.velocity.toString()),
-              readValue: settings.velocity,
-              setValue: (v) => settings.setVelocity(v),
-              resetValue: settings.resetVelocity,
-              onChangeEnd: settings.prefs.settings.velocity.save,
-            ),
-          if (settings.randomVelocity)
-            MidiRangeSelectorTile(
-              label: "Random Velocity Range",
-              readMin: settings.velocityMin,
-              readMax: settings.velocityMax,
-              setMin: (v) => settings.velocityMin = v,
-              setMax: (v) => settings.velocityMax = v,
-              resetFunction: settings.resetVelocity,
-              onChangeEnd: settings.saveVelocityMinMax,
-            ),
-        ],
-      );
-    });
+      ],
+    );
   }
 }

@@ -1,8 +1,13 @@
 import 'package:beat_pads/services/services.dart';
 import 'package:flutter/material.dart';
 
+class PlayModeNoSlide extends PlayModeHandler {
+  PlayModeNoSlide(super.settings, super.notifyParent);
+  // Uses default PlayModeHandler behaviour
+}
+
 abstract class PlayModeHandler {
-  final Settings settings;
+  final SendSettings settings;
   final Function notifyParent;
   final VelocityProvider velocityProvider;
 
@@ -11,9 +16,8 @@ abstract class PlayModeHandler {
 
   PlayModeHandler(
     this.settings,
-    Size screenSize,
     this.notifyParent,
-  )   : touchBuffer = TouchBuffer(settings, screenSize),
+  )   : touchBuffer = TouchBuffer(settings),
         velocityProvider = VelocityProvider(settings, notifyParent) {
     touchReleaseBuffer = TouchReleaseBuffer(
       settings,
@@ -22,9 +26,8 @@ abstract class PlayModeHandler {
     );
   }
 
-  void handleNewTouch(CustomPointer touch, int noteTapped) {
-    if (settings.modSustainTimeUsable > 0 ||
-        settings.noteSustainTimeUsable > 0) {
+  void handleNewTouch(CustomPointer touch, int noteTapped, Size screenSize) {
+    if (settings.modReleaseTime > 0 || settings.noteReleaseTime > 0) {
       touchReleaseBuffer.removeNoteFromReleaseBuffer(noteTapped);
     }
 
@@ -32,7 +35,7 @@ abstract class PlayModeHandler {
         NoteEvent(settings.channel, noteTapped, velocityProvider.velocity)
           ..noteOn(cc: settings.sendCC);
 
-    touchBuffer.addNoteOn(touch, noteOn);
+    touchBuffer.addNoteOn(touch, noteOn, screenSize);
     notifyParent();
   }
 
@@ -42,14 +45,14 @@ abstract class PlayModeHandler {
     TouchEvent? eventInBuffer = touchBuffer.getByID(touch.pointer);
     if (eventInBuffer == null) return;
 
-    if (settings.modSustainTimeUsable == 0 &&
-        settings.noteSustainTimeUsable == 0) {
-      eventInBuffer.noteEvent.noteOff(); // noteOFF
+    if (settings.modReleaseTime == 0 && settings.noteReleaseTime == 0) {
+      eventInBuffer.noteEvent.noteOff();
+      releaseChannel(eventInBuffer.noteEvent.channel);
       touchBuffer.remove(eventInBuffer);
+
       notifyParent();
     } else {
-      if (settings.modSustainTimeUsable == 0 &&
-          settings.noteSustainTimeUsable > 0) {
+      if (settings.modReleaseTime == 0 && settings.noteReleaseTime > 0) {
         eventInBuffer.newPosition = eventInBuffer.origin;
       }
       touchReleaseBuffer.updateReleasedEvent(
@@ -58,7 +61,7 @@ abstract class PlayModeHandler {
     }
   }
 
-  void dispose() {
+  void killAllNotes() {
     for (TouchEvent touch in touchBuffer.buffer) {
       if (touch.noteEvent.isPlaying) touch.noteEvent.noteOff();
     }
@@ -76,36 +79,24 @@ abstract class PlayModeHandler {
     }
   }
 
-  /// Returns if a given note is ON in any channel, or, if provided, in a specific channel.
+  /// Returns if a given note is ON in any channel.
   /// Checks releasebuffer and active touchbuffer
-  bool isNoteOn(int note, [int? channel]) {
+  bool isNoteOn(int note) {
     for (TouchEvent touch in touchBuffer.buffer) {
-      if (channel == null &&
-          touch.noteEvent.note == note &&
-          touch.noteEvent.isPlaying) return true;
-      if (channel == channel &&
-          touch.noteEvent.note == note &&
-          touch.noteEvent.isPlaying) return true;
+      if (touch.noteEvent.note == note && touch.noteEvent.isPlaying) {
+        return true;
+      }
     }
-    if (settings.modSustainTimeUsable > 0 ||
-        settings.noteSustainTimeUsable > 0) {
+    if (settings.modReleaseTime > 0 || settings.noteReleaseTime > 0) {
       for (TouchEvent event in touchReleaseBuffer.buffer) {
-        if (channel == null &&
-            event.noteEvent.note == note &&
-            event.noteEvent.isPlaying) return true;
-        if (channel == channel &&
-            event.noteEvent.note == note &&
-            event.noteEvent.isPlaying) return true;
+        if (event.noteEvent.note == note && event.noteEvent.isPlaying) {
+          return true;
+        }
       }
     }
     return false;
   }
 
-  // only useful if overriden in MPE:
+  /// Does nothing, unless overridden in MPE
   void releaseChannel(int channel) {}
-}
-
-class PlayModeNoSlide extends PlayModeHandler {
-  PlayModeNoSlide(super.settings, super.screenSize, super.notifyParent);
-  // Uses default PlayModeHandler behaviour
 }

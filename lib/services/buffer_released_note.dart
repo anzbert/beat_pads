@@ -1,7 +1,7 @@
 import 'package:beat_pads/services/services.dart';
 
 class NoteReleaseBuffer {
-  final Settings _settings;
+  final SendSettings _settings;
   bool checkerRunning = false;
   final Function _notifyListenersOfParent;
 
@@ -37,7 +37,7 @@ class NoteReleaseBuffer {
         () {
           for (int i = 0; i < _buffer.length; i++) {
             if (DateTime.now().millisecondsSinceEpoch - _buffer[i].releaseTime >
-                _settings.noteSustainTimeUsable) {
+                _settings.noteReleaseTime) {
               _buffer[i].noteOff(); // note OFF
               _buffer[i].markKill();
               _notifyListenersOfParent(); // notify to update pads

@@ -1,11 +1,33 @@
 import 'package:beat_pads/screen_beat_pads/slider_themed.dart';
 import 'package:beat_pads/services/services.dart';
 import 'package:beat_pads/theme.dart';
-
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ModWheel extends StatefulWidget {
+final _rxModWheel = StateNotifierProvider<IntState, int>((ref) {
+  final midiStream = ref.watch(rxMidiStream.stream);
+  final intState = IntState();
+
+  final subscription = midiStream.listen((message) {
+    if (message.content.length < 2) return;
+    if (message.type != MidiMessageType.cc) return;
+    if (message.content[0] != CC.modWheel.value) return;
+
+    intState.set(message.content[1]);
+  });
+  ref.onDispose(subscription.cancel);
+
+  return intState;
+});
+
+class IntState extends StateNotifier<int> {
+  IntState() : super(0);
+  void set(int newVal) {
+    state = newVal;
+  }
+}
+
+class ModWheel extends ConsumerStatefulWidget {
   const ModWheel({Key? key, required this.channel, required this.preview})
       : super(key: key);
 
@@ -13,30 +35,15 @@ class ModWheel extends StatefulWidget {
   final int channel;
 
   @override
-  State<ModWheel> createState() => _ModWheelState();
+  ConsumerState<ModWheel> createState() => _ModWheelState();
 }
 
-class _ModWheelState extends State<ModWheel> {
-  int _mod = 0;
-
-  @override
-  void initState() {
-    // TODO kind of pointless because midireceiver is not persisiting :/
-    _mod = context.read<MidiReceiver>().modWheelValue;
-    super.initState();
-  }
-
+class _ModWheelState extends ConsumerState<ModWheel> {
   final double fontSizeFactor = 0.3;
   final double paddingFactor = 0.1;
 
   @override
   Widget build(BuildContext context) {
-    int receivedMidi = widget.preview
-        ? 0
-        : context.select((MidiReceiver receiver) => receiver.modWheelValue);
-    if (receivedMidi != _mod) {
-      _mod = receivedMidi;
-    }
     double width = MediaQuery.of(context).size.width;
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -66,16 +73,15 @@ class _ModWheelState extends State<ModWheel> {
         Flexible(
           flex: 30,
           child: ThemedSlider(
-            // label: "",
             thumbColor: Palette.tan,
             child: RotatedBox(
               quarterTurns: 0,
               child: Slider(
                 min: 0,
                 max: 127,
-                value: _mod.toDouble(),
+                value: ref.watch(_rxModWheel).toDouble(),
                 onChanged: (v) {
-                  setState(() => _mod = v.toInt());
+                  ref.read(_rxModWheel.notifier).set(v.toInt());
                   MidiUtils.sendModWheelMessage(widget.channel, v.toInt());
                 },
               ),
@@ -106,7 +112,7 @@ class _ModWheelState extends State<ModWheel> {
                         flex: 2,
                         child: Center(
                           child: Text(
-                            "$_mod",
+                            "${ref.watch(_rxModWheel)}",
                             style: TextStyle(
                               fontSize: constraints.maxWidth * fontSizeFactor,
                               color: Palette.darker(Palette.tan, 0.6),
@@ -127,11 +133,5 @@ class _ModWheelState extends State<ModWheel> {
         ),
       ],
     );
-  }
-
-  @override
-  void dispose() {
-    // MidiUtils.sendModWheelMessage(widget.channel, 0);
-    super.dispose();
   }
 }

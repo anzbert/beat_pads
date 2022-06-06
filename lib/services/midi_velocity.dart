@@ -1,8 +1,9 @@
-import 'package:beat_pads/services/services.dart';
 import 'dart:math';
 
+import 'package:beat_pads/services/state/midi_send.dart';
+
 class VelocityProvider {
-  final Settings _settings;
+  final SendSettings _settings;
   final Function _notifyParent;
   final Random _random;
   final int velocityRange;

@@ -1,10 +1,9 @@
 import 'package:beat_pads/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
 import 'package:beat_pads/services/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SlideBeatPad extends StatelessWidget {
+class SlideBeatPad extends ConsumerWidget {
   final bool preview;
 
   const SlideBeatPad({
@@ -16,27 +15,18 @@ class SlideBeatPad extends StatelessWidget {
   final int note;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final double screenWidth = MediaQuery.of(context).size.width;
 
-    final int rxNoteVelocity = preview
-        ? 0
-        : note < 127 && note >= 0
-            ? Provider.of<MidiReceiver>(context, listen: true).rxBuffer[note]
-            : 0;
-
-    final bool noteOn =
-        Provider.of<MidiSender>(context, listen: true).playMode.isNoteOn(note);
-
-    final Settings settings = Provider.of<Settings>(context, listen: true);
-
     // PAD COLOR:
-    final Color color = settings.padColors.colorize(
-      settings,
-      note,
-      noteOn,
-      rxNoteVelocity,
-    );
+    final Color color = ref.watch(padColorsProv).colorize(
+          ref.watch(scaleListProv),
+          ref.watch(baseHueProv),
+          ref.watch(rootProv),
+          note,
+          ref.watch(senderProvider).playMode.isNoteOn(note),
+          preview ? 0 : ref.watch(rxNoteProvider)[note],
+        );
 
     final Color splashColor = Palette.splashColor;
 
@@ -44,7 +34,8 @@ class SlideBeatPad extends StatelessWidget {
         Radius.circular(screenWidth * ThemeConst.padRadiusFactor));
     final double padSpacing = screenWidth * ThemeConst.padSpacingFactor;
 
-    final Label label = PadLabels.getLabel(settings, note);
+    final Label label = PadLabels.getLabel(
+        ref.watch(padLabelsProv), ref.watch(layoutProv), note);
     final double fontSize = screenWidth * 0.021;
     final Color padTextColor = Palette.darkGrey;
 
@@ -53,6 +44,7 @@ class SlideBeatPad extends StatelessWidget {
       height: double.infinity,
       width: double.infinity,
       child: Material(
+        elevation: 3,
         color: color,
         borderRadius: padRadius,
         shadowColor: Colors.black,
@@ -78,6 +70,7 @@ class SlideBeatPad extends StatelessWidget {
             InkWell(
                 onTapDown: (_) {},
                 borderRadius: padRadius,
+                highlightColor: color,
                 splashColor: splashColor,
                 child: Padding(
                   padding: EdgeInsets.all(padSpacing),

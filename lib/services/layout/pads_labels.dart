@@ -15,18 +15,18 @@ enum PadLabels {
     return null;
   }
 
-  static Label getLabel(Settings settings, int note) {
+  static Label getLabel(PadLabels padLabels, Layout layout, int note) {
     Label label = Label();
 
-    if (settings.padLabels == PadLabels.none) return label;
+    if (padLabels == PadLabels.none) return label;
 
-    if (settings.padLabels == PadLabels.note) {
+    if (padLabels == PadLabels.note) {
       label.title = MidiUtils.getNoteName(note);
     }
-    if (settings.padLabels == PadLabels.value) {
+    if (padLabels == PadLabels.value) {
       label.title = note.toString();
     }
-    if (settings.layout.gmPercussion) {
+    if (layout.gmPercussion) {
       label.subtitle = MidiUtils.getNoteName(note, gmPercussionLabels: true);
     }
 

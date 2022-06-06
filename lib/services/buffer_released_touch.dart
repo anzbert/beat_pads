@@ -1,7 +1,7 @@
 import 'package:beat_pads/services/services.dart';
 
 class TouchReleaseBuffer {
-  final Settings _settings;
+  final SendSettings _settings;
   final Function releaseChannel;
   bool checkerRunning = false;
   final Function _notifyListenersOfParent;
@@ -63,7 +63,7 @@ class TouchReleaseBuffer {
           for (int i = 0; i < _buffer.length; i++) {
             if (DateTime.now().millisecondsSinceEpoch -
                     _buffer[i].noteEvent.releaseTime >
-                _settings.noteSustainTimeUsable) {
+                _settings.noteReleaseTime) {
               _buffer[i].noteEvent.noteOff(); // note OFF
 
               releaseChannel(

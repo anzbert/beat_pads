@@ -1,23 +1,24 @@
+import 'package:flutter/material.dart';
 import 'package:beat_pads/screen_pads_menu/drop_down_colors.dart';
 import 'package:beat_pads/screen_pads_menu/drop_down_padlabels.dart';
 import 'package:beat_pads/screen_pads_menu/preview_pads.dart';
 import 'package:beat_pads/screen_pads_menu/slider_int.dart';
-
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
 import 'package:beat_pads/services/services.dart';
-
 import 'package:beat_pads/screen_pads_menu/counter_int.dart';
 import 'package:beat_pads/screen_pads_menu/slider_non_linear.dart';
 import 'package:beat_pads/screen_pads_menu/drop_down_layout.dart';
 import 'package:beat_pads/screen_pads_menu/drop_down_notes.dart';
 import 'package:beat_pads/screen_pads_menu/drop_down_scales.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class MenuLayout extends StatelessWidget {
+class MenuLayout extends ConsumerWidget {
   @override
-  Widget build(BuildContext context) {
-    bool isPortrait =
+  Widget build(BuildContext context, WidgetRef ref) {
+    final bool resizableGrid = ref
+        .watch(layoutProv)
+        .props
+        .resizable; // Is the layout fixed or resizable?
+    final bool isPortrait =
         MediaQuery.of(context).orientation.name == "portrait" ? true : false;
     return Flex(
       direction: isPortrait ? Axis.vertical : Axis.horizontal,
@@ -41,157 +42,156 @@ class MenuLayout extends StatelessWidget {
             )),
         Expanded(
           flex: 3,
-          child: Consumer<Settings>(builder: (context, settings, child) {
-            final bool resizableGrid = settings
-                .layout.props.resizable; // Is the layout fixed or resizable?
-            return ListView(
-              children: <Widget>[
+          child: ListView(
+            children: <Widget>[
+              ListTile(
+                title: const Divider(),
+                trailing: Text(
+                  "Layout Settings",
+                  style: TextStyle(
+                      fontSize:
+                          Theme.of(context).textTheme.headline5!.fontSize),
+                ),
+              ),
+              ListTile(
+                title: const Text("Layout"),
+                trailing: DropdownLayout(),
+              ),
+              const Divider(),
+              if (resizableGrid)
+                IntCounterTile(
+                  label: "Width",
+                  setValue: (v) => ref.read(widthProv.notifier).setAndSave(v),
+                  readValue: ref.watch(widthProv),
+                ),
+              if (resizableGrid)
+                IntCounterTile(
+                  label: "Height",
+                  setValue: (v) => ref.read(heightProv.notifier).setAndSave(v),
+                  readValue: ref.watch(heightProv),
+                ),
+              if (resizableGrid) const Divider(),
+              if (resizableGrid)
                 ListTile(
-                  title: const Divider(),
-                  trailing: Text(
-                    "Layout Settings",
-                    style: TextStyle(
-                        fontSize:
-                            Theme.of(context).textTheme.headline5!.fontSize),
+                  title: const Text("Scale"),
+                  trailing: DropdownScales(),
+                ),
+              if (resizableGrid)
+                ListTile(
+                  title: const Text("Scale Root Note"),
+                  subtitle: const Text("Root Note of the selected scale"),
+                  trailing: DropdownRootNote(
+                    setValue: (v) => ref.read(rootProv.notifier).setAndSave(v),
+                    readValue: ref.watch(rootProv),
                   ),
                 ),
+              if (resizableGrid) const Divider(),
+              if (resizableGrid)
                 ListTile(
-                  title: const Text("Layout"),
-                  trailing: DropdownLayout(),
-                ),
-                const Divider(),
-                if (resizableGrid)
-                  IntCounterTile(
-                    label: "Width",
-                    setValue: (v) => settings.width = v,
-                    readValue: settings.width,
-                  ),
-                if (resizableGrid)
-                  IntCounterTile(
-                    label: "Height",
-                    setValue: (v) => settings.height = v,
-                    readValue: settings.height,
-                  ),
-                if (resizableGrid) const Divider(),
-                if (resizableGrid)
-                  ListTile(
-                    title: const Text("Scale"),
-                    trailing: DropdownScales(),
-                  ),
-                if (resizableGrid)
-                  ListTile(
-                    title: const Text("Scale Root Note"),
-                    subtitle: const Text(
-                        "Higlight selected Scale with this Root Note"),
-                    trailing: DropdownRootNote(
-                        setValue: (v) => settings.rootNote = v,
-                        readValue: settings.rootNote),
-                  ),
-                if (resizableGrid) const Divider(),
-                if (resizableGrid)
-                  ListTile(
-                    title: const Text("Base Note"),
-                    subtitle: const Text(
-                        "The lowest Note in the Grid on the bottom left"),
-                    trailing: DropdownRootNote(
-                        setValue: (v) {
-                          settings.base = v;
-                        },
-                        readValue: settings.base),
-                  ),
-                if (resizableGrid)
-                  IntCounterTile(
-                    label: "Base Octave",
-                    readValue: settings.baseOctave,
-                    setValue: (v) => settings.baseOctave = v,
-                    resetFunction: settings.resetBaseOctave,
-                  ),
-                if (resizableGrid)
-                  ListTile(
-                    title: const Text("Octave Buttons"),
-                    subtitle:
-                        const Text("Adds Base Octave Controls next to Pads"),
-                    trailing: Switch(
-                        value: settings.octaveButtons,
-                        onChanged: (value) => settings.octaveButtons = value),
-                  ),
-                if (resizableGrid) const Divider(),
-                ListTile(
-                  title: const Text("Sustain Button"),
+                  title: const Text("Base Note"),
                   subtitle: const Text(
-                      "Adds Sustain Button next to Pads. Lock ON by double-tapping the Button"),
-                  trailing: Switch(
-                      value: settings.sustainButton,
-                      onChanged: (value) =>
-                          settings.sustainButton = !settings.sustainButton),
-                ),
-                ListTile(
-                  title: const Text("Pitch Bender"),
-                  subtitle: const Text("Adds Pitch Bend Slider next to Pads"),
-                  trailing: Switch(
-                      value: settings.pitchBend,
-                      onChanged: (value) =>
-                          settings.pitchBend = !settings.pitchBend),
-                ),
-                if (settings.pitchBend)
-                  NonLinearSliderTile(
-                    label: "Pitch Bend Easing",
-                    subtitle:
-                        "Set time in Milliseconds for Pitch Bend Slider to ease back to Zero",
-                    readValue: settings.pitchBendEase,
-                    setValue: (v) => settings.pitchBendEase = v,
-                    resetFunction: settings.resetPitchBendEase,
-                    displayValue: settings.pitchBendEaseUsable == 0
-                        ? "Off"
-                        : settings.pitchBendEaseUsable < 1000
-                            ? "${settings.pitchBendEaseUsable} ms"
-                            : "${settings.pitchBendEaseUsable / 1000} s",
-                    start: 0,
-                    steps: Timing.timingSteps.length - 1,
-                    onChangeEnd: settings.prefs.settings.pitchBendEase.save,
+                      "The lowest Note in the Grid, on the bottom left"),
+                  trailing: DropdownRootNote(
+                    setValue: (v) => ref.read(baseProv.notifier).setAndSave(v),
+                    readValue: ref.watch(baseProv),
                   ),
-                ListTile(
-                  title: const Text("Mod Wheel"),
-                  subtitle: const Text("Adds Mod Wheel Slider next to Pads"),
-                  trailing: Switch(
-                      value: settings.modWheel,
-                      onChanged: (value) =>
-                          settings.modWheel = !settings.modWheel),
                 ),
-                ListTile(
-                  title: const Text("Velocity"),
-                  subtitle: const Text("Adds Velocity Slider next to Pads"),
-                  trailing: Switch(
-                      value: settings.velocitySlider,
-                      onChanged: (value) =>
-                          settings.velocitySlider = !settings.velocitySlider),
+              if (resizableGrid)
+                IntCounterTile(
+                  label: "Base Octave",
+                  readValue: ref.watch(baseOctaveProv),
+                  setValue: (v) =>
+                      ref.read(baseOctaveProv.notifier).setAndSave(v),
+                  resetFunction: ref.read(baseOctaveProv.notifier).reset,
                 ),
-                const Divider(),
+              if (resizableGrid)
                 ListTile(
-                  title: const Text("Pad Labels"),
+                  title: const Text("Octave Buttons"),
                   subtitle:
-                      const Text("Choose between Midi Values and Note Names"),
-                  trailing: DropdownPadLabels(),
+                      const Text("Adds Octave control buttons next to pads"),
+                  trailing: Switch(
+                      value: ref.watch(octaveButtonsProv),
+                      onChanged: (v) =>
+                          ref.read(octaveButtonsProv.notifier).setAndSave(v)),
                 ),
-                ListTile(
-                  title: const Text("Pad Colors"),
-                  subtitle: const Text("Colorize Pads by Distance to the Root"),
-                  trailing: DropdownPadColors(),
+              if (resizableGrid) const Divider(),
+              ListTile(
+                title: const Text("Sustain Button"),
+                subtitle: const Text(
+                    "Adds a Sustain button next to pads. Lock ON by double-tapping"),
+                trailing: Switch(
+                    value: ref.watch(sustainButtonProv),
+                    onChanged: (v) =>
+                        ref.read(sustainButtonProv.notifier).setAndSave(v)),
+              ),
+              ListTile(
+                title: const Text("Pitch Bend"),
+                subtitle: const Text("Adds Pitch Bend slider next to pads"),
+                trailing: Switch(
+                    value: ref.watch(pitchBendProv),
+                    onChanged: (v) =>
+                        ref.read(pitchBendProv.notifier).setAndSave(v)),
+              ),
+              if (ref.watch(pitchBendProv))
+                NonLinearSliderTile(
+                  label: "Pitch Bend Return",
+                  subtitle:
+                      "Set time in milliseconds for Pitch Bend Slider to ease back to Zero",
+                  readValue: ref.watch(pitchBendEaseStepProv),
+                  setValue: (v) =>
+                      ref.read(pitchBendEaseStepProv.notifier).set(v),
+                  resetFunction: ref.read(pitchBendEaseStepProv.notifier).reset,
+                  displayValue: ref.watch(pitchBendEaseUsable) == 0
+                      ? "Off"
+                      : ref.watch(pitchBendEaseUsable) < 1000
+                          ? "${ref.watch(pitchBendEaseUsable)} ms"
+                          : "${ref.watch(pitchBendEaseUsable) / 1000} s",
+                  start: 0,
+                  steps: Timing.timingSteps.length - 1,
+                  onChangeEnd: ref.read(pitchBendEaseStepProv.notifier).save,
                 ),
-                IntSliderTile(
-                  label: "Hue",
-                  min: 0,
-                  max: 360,
-                  subtitle: "Root Note Hue on the RGB Color Wheel",
-                  trailing: Text(settings.baseHue.toString()),
-                  readValue: settings.baseHue,
-                  setValue: (v) => settings.baseHue = v,
-                  resetValue: settings.resetBaseHue,
-                  onChangeEnd: settings.prefs.settings.baseHue.save,
-                ),
-              ],
-            );
-          }),
+              ListTile(
+                title: const Text("Mod Wheel"),
+                subtitle: const Text("Adds Mod Wheel Slider next to pads"),
+                trailing: Switch(
+                    value: ref.watch<bool>(modWheelProv),
+                    onChanged: (v) =>
+                        ref.read(modWheelProv.notifier).setAndSave(v)),
+              ),
+              ListTile(
+                title: const Text("Velocity"),
+                subtitle: const Text("Adds Velocity Slider next to pads"),
+                trailing: Switch(
+                    value: ref.watch(velocitySliderProv),
+                    onChanged: (v) =>
+                        ref.read(velocitySliderProv.notifier).setAndSave(v)),
+              ),
+              const Divider(),
+              ListTile(
+                title: const Text("Pad Labels"),
+                subtitle:
+                    const Text("Choose between Midi values and Note names"),
+                trailing: DropdownPadLabels(),
+              ),
+              ListTile(
+                title: const Text("Pad Colors"),
+                subtitle:
+                    const Text("Colorize pads by distance to the root note"),
+                trailing: DropdownPadColors(),
+              ),
+              IntSliderTile(
+                label: "Hue",
+                min: 0,
+                max: 360,
+                subtitle: "Root Note hue on the RGB color wheel",
+                trailing: Text(ref.watch(baseHueProv).toString()),
+                readValue: ref.watch(baseHueProv),
+                setValue: (v) => ref.read(baseHueProv.notifier).set(v),
+                resetValue: ref.read(baseHueProv.notifier).reset,
+                onChangeEnd: ref.read(baseHueProv.notifier).save,
+              ),
+            ],
+          ),
         ),
       ],
     );

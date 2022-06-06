@@ -7,7 +7,7 @@ class ModSizeSliderTile extends StatefulWidget {
       {this.label = "#label",
       this.subtitle,
       this.min = 0,
-      this.max = 128,
+      this.max = 1,
       required this.setValue,
       required this.readValue,
       this.resetValue,
@@ -18,11 +18,11 @@ class ModSizeSliderTile extends StatefulWidget {
 
   final String label;
   final String? subtitle;
-  final int min;
-  final int max;
+  final double min;
+  final double max;
   final Function setValue;
   final Function? onChangeEnd;
-  final int readValue;
+  final double readValue;
   final Function? resetValue;
   final Widget trailing;
 
@@ -77,13 +77,11 @@ class _ModSizeSliderTileState extends State<ModSizeSliderTile> {
                 return SizedBox(
                   width: width * ThemeConst.sliderWidthFactor,
                   child: Slider(
-                    min: widget.min.toDouble(),
-                    max: widget.max.toDouble(),
-                    value: widget.readValue
-                        .clamp(widget.min, widget.max)
-                        .toDouble(),
+                    min: widget.min,
+                    max: widget.max,
+                    value: widget.readValue.clamp(widget.min, widget.max),
                     onChanged: (value) {
-                      widget.setValue(value.toInt());
+                      widget.setValue(value);
                     },
                     onChangeStart: (_) => setState(() {
                       showPreview = true;

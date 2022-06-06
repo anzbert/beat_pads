@@ -3,27 +3,63 @@ import 'package:flutter_midi_command/flutter_midi_command_messages.dart';
 import '../constants/midi_const.dart';
 
 enum MidiMessageType {
-  unknown,
+  unknown(-1), // variable length
+  sysExStart(-1), // variable length
 
-  noteOn,
-  noteOff,
-  aftertouch,
-  cc,
-  programChange,
-  polyphonicAftertouch,
-  pitchBend,
-  sysExStart,
-  midiTimeCode,
-  positionPointer,
-  songSelect,
-  tuneRequest,
-  sysExEnd,
-  timingClock,
-  start,
-  cont,
-  stop,
-  activeSensing,
-  systemReset
+  noteOn(3),
+  noteOff(3),
+  cc(3),
+  polyphonicAftertouch(3),
+  pitchBend(3),
+  positionPointer(3),
+
+  programChange(2),
+  aftertouch(2),
+  midiTimeCode(2),
+  songSelect(2),
+
+  tuneRequest(1),
+  sysExEnd(1),
+  timingClock(1),
+  start(1),
+  cont(1),
+  stop(1),
+  activeSensing(1),
+  systemReset(1);
+
+  const MidiMessageType(this.byteLength);
+  final int byteLength;
+
+  /// Pass in a status Byte and return the Midi Message Type
+  static MidiMessageType fromStatusByte(int type) {
+    if (type == 0xF0) return MidiMessageType.sysExStart;
+    if (type == 0xF1) return MidiMessageType.midiTimeCode;
+    if (type == 0xF2) return MidiMessageType.positionPointer;
+    if (type == 0xF3) return MidiMessageType.songSelect;
+
+    if (type == 0xF6) return MidiMessageType.tuneRequest;
+    if (type == 0xF7) return MidiMessageType.sysExEnd;
+    if (type == 0xF8) return MidiMessageType.timingClock;
+
+    if (type == 0xFA) return MidiMessageType.start;
+    if (type == 0xFB) return MidiMessageType.cont;
+    if (type == 0xFC) return MidiMessageType.stop;
+
+    if (type == 0xFE) return MidiMessageType.activeSensing;
+    if (type == 0xFF) return MidiMessageType.systemReset;
+
+    int midiType = type & 0xF0;
+    if (midiType == 0xA0) return MidiMessageType.polyphonicAftertouch;
+    if (midiType == 0xB0) return MidiMessageType.cc;
+    if (midiType == 0xC0) return MidiMessageType.programChange;
+    if (midiType == 0xD0) return MidiMessageType.aftertouch;
+    if (midiType == 0xE0) return MidiMessageType.pitchBend;
+
+    if (midiType == 0x80) return MidiMessageType.noteOff;
+    if (midiType == 0x90) return MidiMessageType.noteOn;
+
+    return MidiMessageType.unknown;
+  }
 }
 
 abstract class MidiUtils {
@@ -110,7 +146,7 @@ abstract class MidiUtils {
   }
 
   /// Pass in a status Byte and return the expected message length
-  static int lengthOfMessageType(int type) {
+  static int lengthOfMessageByStatusByte(int type) {
     // sysex not included, as it is of variable length
     List<int> commands1Bytes = [0xF6, 0xF8, 0xFA, 0xFB, 0xFC, 0xFF, 0xFE];
     List<int> commands2Bytes = [0xF1, 0xF3];
@@ -126,36 +162,5 @@ abstract class MidiUtils {
     if (midi3Bytes.contains(midiType)) return 3;
 
     return 0;
-  }
-
-  /// Pass in a status Byte and return the Midi Message Type
-  static MidiMessageType getMidiMessageType(int type) {
-    if (type == 0xF0) return MidiMessageType.sysExStart;
-    if (type == 0xF1) return MidiMessageType.midiTimeCode;
-    if (type == 0xF2) return MidiMessageType.positionPointer;
-    if (type == 0xF3) return MidiMessageType.songSelect;
-
-    if (type == 0xF6) return MidiMessageType.tuneRequest;
-    if (type == 0xF7) return MidiMessageType.sysExEnd;
-    if (type == 0xF8) return MidiMessageType.timingClock;
-
-    if (type == 0xFA) return MidiMessageType.start;
-    if (type == 0xFB) return MidiMessageType.cont;
-    if (type == 0xFC) return MidiMessageType.stop;
-
-    if (type == 0xFE) return MidiMessageType.activeSensing;
-    if (type == 0xFF) return MidiMessageType.systemReset;
-
-    int midiType = type & 0xF0;
-    if (midiType == 0xA0) return MidiMessageType.polyphonicAftertouch;
-    if (midiType == 0xB0) return MidiMessageType.cc;
-    if (midiType == 0xC0) return MidiMessageType.programChange;
-    if (midiType == 0xD0) return MidiMessageType.aftertouch;
-    if (midiType == 0xE0) return MidiMessageType.pitchBend;
-
-    if (midiType == 0x80) return MidiMessageType.noteOff;
-    if (midiType == 0x90) return MidiMessageType.noteOn;
-
-    return MidiMessageType.unknown;
   }
 }

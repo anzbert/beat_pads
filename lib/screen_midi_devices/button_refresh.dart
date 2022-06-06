@@ -52,4 +52,10 @@ class RefreshButtonState extends State<RefreshButton>
       ),
     );
   }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
 }

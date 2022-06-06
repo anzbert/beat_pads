@@ -1,22 +1,21 @@
 import 'package:beat_pads/screen_beat_pads/slide_pad.dart';
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-
-import 'package:provider/provider.dart';
 import 'package:beat_pads/shared_components/_shared.dart';
 import 'package:beat_pads/services/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SlidePads extends StatefulWidget {
+class SlidePads extends ConsumerStatefulWidget {
   final bool preview;
   const SlidePads({Key? key, required this.preview}) : super(key: key);
 
   @override
-  State<SlidePads> createState() => _SlidePadsState();
+  ConsumerState<SlidePads> createState() => _SlidePadsState();
 }
 
-class _SlidePadsState extends State<SlidePads> with TickerProviderStateMixin {
+class _SlidePadsState extends ConsumerState<SlidePads>
+    with TickerProviderStateMixin {
   final GlobalKey _padsWidgetKey = GlobalKey();
 
   final List<ReturnAnimation> _animations = [];
@@ -50,33 +49,37 @@ class _SlidePadsState extends State<SlidePads> with TickerProviderStateMixin {
     int? result = _detectTappedItem(touch);
 
     if (mounted && result != null) {
-      context
-          .read<MidiSender>()
-          .handleNewTouch(CustomPointer(touch.pointer, touch.position), result);
+      ref.read<MidiSender>(senderProvider.notifier).handleNewTouch(
+            CustomPointer(touch.pointer, touch.position),
+            result,
+            MediaQuery.of(context).size,
+          );
     }
   }
 
   move(PointerEvent touch) {
-    if (context.read<Settings>().playMode == PlayMode.noSlide) return;
+    if (ref.read(playModeProv) == PlayMode.noSlide) {
+      return;
+    }
 
     if (mounted) {
       int? result = _detectTappedItem(touch);
-      context
-          .read<MidiSender>()
+      ref
+          .read(senderProvider.notifier)
           .handlePan(CustomPointer(touch.pointer, touch.position), result);
     }
   }
 
   upAndCancel(PointerEvent touch) {
     if (mounted) {
-      context
-          .read<MidiSender>()
+      ref
+          .read(senderProvider.notifier)
           .handleEndTouch(CustomPointer(touch.pointer, touch.position));
 
-      if (context.read<Settings>().modSustainTimeUsable > 0 &&
-          context.read<Settings>().playMode.modulatable) {
-        TouchEvent? event = context
-            .read<MidiSender>()
+      if (ref.read(modReleaseUsable) > 0 &&
+          ref.read(playModeProv).modulatable) {
+        TouchEvent? event = ref
+            .read(senderProvider.notifier)
             .playMode
             .touchReleaseBuffer
             .getByID(touch.pointer);
@@ -84,19 +87,21 @@ class _SlidePadsState extends State<SlidePads> with TickerProviderStateMixin {
 
         ReturnAnimation returnAnim = ReturnAnimation(
           event.uniqueID,
-          context.read<Settings>().modSustainTimeUsable,
+          ref.read(modReleaseUsable),
           tickerProvider: this,
         );
 
-        Offset constrainedPosition = context.read<Settings>().modulation2D
-            ? Utils.limitToSquare(event.origin, touch.position,
-                context.read<Settings>().absoluteRadius(context))
-            : Utils.limitToCircle(event.origin, touch.position,
-                context.read<Settings>().absoluteRadius(context));
+        double absoluteMaxRadius = MediaQuery.of(context).size.longestSide *
+            ref.read(modulationRadiusProv);
+        Offset constrainedPosition = ref.read(modulation2DProv)
+            ? Utils.limitToSquare(
+                event.origin, touch.position, absoluteMaxRadius)
+            : Utils.limitToCircle(
+                event.origin, touch.position, absoluteMaxRadius);
 
         returnAnim.animation.addListener(() {
           TouchReleaseBuffer touchReleaseBuffer =
-              context.read<MidiSender>().playMode.touchReleaseBuffer;
+              ref.read(senderProvider.notifier).playMode.touchReleaseBuffer;
           TouchEvent? touchEvent =
               touchReleaseBuffer.getByID(returnAnim.uniqueID);
 
@@ -114,7 +119,7 @@ class _SlidePadsState extends State<SlidePads> with TickerProviderStateMixin {
             killAllMarkedAnimations();
             return;
           } else {
-            context.read<MidiSender>().handlePan(
+            ref.read(senderProvider.notifier).handlePan(
                 CustomPointer(
                     touch.pointer,
                     Offset.lerp(
@@ -133,7 +138,7 @@ class _SlidePadsState extends State<SlidePads> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    final rows = context.select((Settings settings) => settings.rows);
+    final List<List<int>> rows = ref.watch(rowProv);
     return Stack(
       children: [
         Listener(
@@ -141,47 +146,48 @@ class _SlidePadsState extends State<SlidePads> with TickerProviderStateMixin {
           onPointerMove: move,
           onPointerUp: upAndCancel,
           onPointerCancel: upAndCancel,
-          child: Column(
-            // Hit testing happens on this keyed Widget, which contains all the pads:
-            key: _padsWidgetKey,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ...rows.map(
-                (row) {
-                  return Expanded(
-                    flex: 1,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        ...row.map(
-                          (note) {
-                            return Expanded(
-                              flex: 1,
-                              child: HitTestObject(
-                                index: note,
-                                // not sure about this boundary, seems to work though:
-                                child: RepaintBoundary(
-                                    child: SlideBeatPad(
-                                  note: note,
-                                  preview: widget.preview,
-                                )),
-                              ),
-                            );
-                          },
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
-            ],
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+                horizontal: 0,
+                vertical: 0), // !for a future for margin setting!
+            child: Column(
+              // Hit testing happens on this keyed Widget, which contains all the pads
+              key: _padsWidgetKey,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ...rows.map(
+                  (row) {
+                    return Expanded(
+                      flex: 1,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          ...row.map(
+                            (note) {
+                              return Expanded(
+                                flex: 1,
+                                child: HitTestObject(
+                                  index: note,
+                                  child: SlideBeatPad(
+                                    note: note,
+                                    preview: widget.preview,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
         ),
-        if (context
-            .select((Settings settings) => settings.playMode)
-            .modulatable)
+        if (ref.watch(playModeProv).modulatable)
           RepaintBoundary(child: PaintModulation()),
       ],
     );

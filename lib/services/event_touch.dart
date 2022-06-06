@@ -10,7 +10,6 @@ class TouchEvent {
   // Geometry parameters:
   final Offset origin;
   final double maxRadius;
-  final double maxDiameter;
   final double deadZone;
   Offset newPosition;
 
@@ -23,12 +22,11 @@ class TouchEvent {
   }
 
   /// Holds geometry, note and modulation information this.uniqueID, this.origin,
-  TouchEvent(
-      CustomPointer touch, this.noteEvent, Settings settings, Size screenSize)
+  TouchEvent(CustomPointer touch, this.noteEvent, SendSettings settings,
+      Size screenSize)
       : origin = touch.position,
         newPosition = touch.position,
         uniqueID = touch.pointer,
-        maxDiameter = screenSize.longestSide * settings.modulationRadius * 2,
         deadZone = settings.modulationDeadZone,
         maxRadius = screenSize.longestSide * settings.modulationRadius;
 
@@ -89,7 +87,7 @@ class TouchEvent {
 
   @override
   String toString() {
-    return "noteEvent: ${noteEvent.note} / isAnimated: $hasReturnAnimation / noteOn: ${noteEvent.isPlaying}";
+    return "noteEvent: ${noteEvent.note} / isAnimated: $hasReturnAnimation / noteOn: ${noteEvent.isPlaying} / isDirty: $_dirty";
   }
 
   bool get isModulating {

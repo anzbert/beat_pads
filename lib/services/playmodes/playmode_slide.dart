@@ -1,4 +1,5 @@
 import 'package:beat_pads/services/services.dart';
+import 'package:flutter/material.dart';
 
 class PlayModeSlide extends PlayModeHandler {
   final NoteReleaseBuffer noteReleaseBuffer;
@@ -8,13 +9,12 @@ class PlayModeSlide extends PlayModeHandler {
   /// There is no modulation, hence no tracking of touch required
   PlayModeSlide(
     super.settings,
-    super.screenSize,
     super.notifyParent,
   ) : noteReleaseBuffer = NoteReleaseBuffer(settings, notifyParent);
 
   @override
-  void handleNewTouch(CustomPointer touch, int noteTapped) {
-    if (settings.noteSustainTimeUsable > 0) {
+  void handleNewTouch(CustomPointer touch, int noteTapped, Size screenSize) {
+    if (settings.noteReleaseTime > 0) {
       noteReleaseBuffer.removeNoteFromReleaseBuffer(noteTapped);
     }
 
@@ -22,7 +22,7 @@ class PlayModeSlide extends PlayModeHandler {
         NoteEvent(settings.channel, noteTapped, velocityProvider.velocity)
           ..noteOn(cc: settings.sendCC);
 
-    touchBuffer.addNoteOn(touch, noteOn);
+    touchBuffer.addNoteOn(touch, noteOn, screenSize);
     notifyParent();
   }
 
@@ -34,7 +34,7 @@ class PlayModeSlide extends PlayModeHandler {
     // Turn note off:
     if (note != eventInBuffer.noteEvent.note &&
         eventInBuffer.noteEvent.noteOnMessage != null) {
-      if (settings.noteSustainTimeUsable == 0) {
+      if (settings.noteReleaseTime == 0) {
         eventInBuffer.noteEvent.noteOff(); // turn note off immediately
       } else {
         noteReleaseBuffer.updateReleasedNoteEvent(
@@ -64,7 +64,7 @@ class PlayModeSlide extends PlayModeHandler {
     TouchEvent? eventInBuffer = touchBuffer.getByID(touch.pointer);
     if (eventInBuffer == null) return;
 
-    if (settings.noteSustainTimeUsable == 0) {
+    if (settings.noteReleaseTime == 0) {
       eventInBuffer.noteEvent.noteOff(); // noteOFF
       touchBuffer.remove(eventInBuffer);
       notifyParent();
@@ -83,7 +83,7 @@ class PlayModeSlide extends PlayModeHandler {
       if (channel == null && touch.noteEvent.note == note) return true;
       if (channel == channel && touch.noteEvent.note == note) return true;
     }
-    if (settings.noteSustainTimeUsable > 0) {
+    if (settings.noteReleaseTime > 0) {
       for (NoteEvent event in noteReleaseBuffer.buffer) {
         if (channel == null && event.note == note) return true;
         if (channel == channel && event.note == note) return true;
@@ -93,7 +93,7 @@ class PlayModeSlide extends PlayModeHandler {
   }
 
   @override
-  void dispose() {
+  void killAllNotes() {
     for (TouchEvent touch in touchBuffer.buffer) {
       touch.noteEvent.noteOff();
     }

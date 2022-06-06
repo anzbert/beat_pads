@@ -1,27 +1,28 @@
 import 'package:beat_pads/services/services.dart';
+import 'package:flutter/material.dart';
 
 class PlayModeMPE extends PlayModeHandler {
   final SendMpe mpeMods;
   final MemberChannelProvider channelProvider;
 
-  PlayModeMPE(super.settings, super.screenSize, super.notifyParent)
+  PlayModeMPE(super.settings, super.notifyParent)
       : mpeMods = SendMpe(
           settings.mpe2DX.getMod(settings.mpePitchbendRange),
           settings.mpe2DY.getMod(settings.mpePitchbendRange),
           settings.mpe1DRadius.getMod(settings.mpePitchbendRange),
         ),
-        channelProvider = MemberChannelProvider(
-            settings.upperZone, settings.mpeMemberChannels);
+        channelProvider =
+            MemberChannelProvider(settings.zone, settings.mpeMemberChannels);
 
+  /// Release channel in MPE channel provider
   @override
   void releaseChannel(int channel) {
     channelProvider.releaseChannel(channel);
   }
 
   @override
-  void handleNewTouch(CustomPointer touch, int noteTapped) {
-    if (settings.modSustainTimeUsable > 0 ||
-        settings.noteSustainTimeUsable > 0) {
+  void handleNewTouch(CustomPointer touch, int noteTapped, Size screenSize) {
+    if (settings.modReleaseTime > 0 || settings.noteReleaseTime > 0) {
       touchReleaseBuffer.removeNoteFromReleaseBuffer(noteTapped);
     }
 
@@ -39,7 +40,7 @@ class PlayModeMPE extends PlayModeHandler {
         NoteEvent(newChannel, noteTapped, velocityProvider.velocity)
           ..noteOn(cc: false);
 
-    touchBuffer.addNoteOn(touch, noteOn);
+    touchBuffer.addNoteOn(touch, noteOn, screenSize);
     notifyParent();
   }
 
@@ -69,29 +70,6 @@ class PlayModeMPE extends PlayModeHandler {
         eventInBuffer.noteEvent.note,
         eventInBuffer.radialChange(),
       );
-    }
-  }
-
-  @override
-  void handleEndTouch(CustomPointer touch) {
-    TouchEvent? eventInBuffer = touchBuffer.getByID(touch.pointer);
-    if (eventInBuffer == null) return;
-
-    if (settings.modSustainTimeUsable == 0 &&
-        settings.noteSustainTimeUsable == 0) {
-      eventInBuffer.noteEvent.noteOff();
-
-      channelProvider.releaseChannel(eventInBuffer.noteEvent.channel);
-      touchBuffer.remove(eventInBuffer); // events gets removed
-      notifyParent();
-    } else {
-      if (settings.modSustainTimeUsable == 0 &&
-          settings.noteSustainTimeUsable > 0) {
-        eventInBuffer.newPosition = eventInBuffer.origin;
-      }
-      touchReleaseBuffer
-          .updateReleasedEvent(eventInBuffer); // event passed to release buffer
-      touchBuffer.remove(eventInBuffer);
     }
   }
 }

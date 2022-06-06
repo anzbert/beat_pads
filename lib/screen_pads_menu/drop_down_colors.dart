@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:beat_pads/services/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class DropdownPadColors extends StatelessWidget {
+class DropdownPadColors extends ConsumerWidget {
   DropdownPadColors({Key? key}) : super(key: key);
 
   final items = PadColors.values
@@ -17,15 +17,15 @@ class DropdownPadColors extends StatelessWidget {
 //
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: DropdownButton<PadColors>(
-        value: context.select((Settings settings) => settings.padColors),
+        value: ref.watch(padColorsProv),
         items: items,
         onChanged: (value) {
           if (value != null) {
-            Provider.of<Settings>(context, listen: false).padColors = value;
+            ref.read(padColorsProv.notifier).setAndSave(value);
           }
         },
       ),

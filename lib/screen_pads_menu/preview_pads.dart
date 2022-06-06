@@ -1,14 +1,12 @@
-import 'package:beat_pads/screen_beat_pads/_screen_beat_pads.dart';
+import 'package:beat_pads/screen_beat_pads/pads_and_controls.dart';
 import 'package:beat_pads/services/services.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class Preview extends StatelessWidget {
-  const Preview({
-    Key? key,
-  }) : super(key: key);
-
+class Preview extends ConsumerWidget {
+  const Preview();
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return FittedBox(
       fit: BoxFit.scaleDown,
       child: SizedBox(
@@ -22,7 +20,9 @@ class Preview extends StatelessWidget {
                       aspectRatio: 16 / 9,
                       child: Padding(
                         padding: EdgeInsets.all(4.0),
-                        child: BeatPadsScreen(preview: true),
+                        child: BeatPadsAndControls(
+                          preview: true,
+                        ),
                       ),
                     ),
                     Container(
@@ -45,7 +45,9 @@ class Preview extends StatelessWidget {
                       aspectRatio: 16 / 9,
                       child: Padding(
                         padding: EdgeInsets.all(4.0),
-                        child: BeatPadsScreen(preview: true),
+                        child: BeatPadsAndControls(
+                          preview: true,
+                        ),
                       ),
                     ),
                     const Divider(

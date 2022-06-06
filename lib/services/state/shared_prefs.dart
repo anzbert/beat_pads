@@ -1,4 +1,5 @@
 import 'package:beat_pads/services/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Prefs {
@@ -10,214 +11,420 @@ class Prefs {
   static Future<Prefs> initAsync() async {
     Prefs instance = Prefs._();
 
-    // late inits:
     instance.sharedPrefs = await SharedPreferences.getInstance();
 
-    instance._startUpSettings = Prefs._defaults.map((key, value) {
-      var loadedVal = instance.sharedPrefs.get(key) ?? value;
-      // var loadedVal = value; // debug: set to default
-      return MapEntry(key, loadedVal);
-    });
+    // instance._startUpSettings = Prefs.defaults.map((key, _) {
+    //   var loadedVal = instance.sharedPrefs.get(key);
+    //   return MapEntry(key, loadedVal);
+    // });
+
+    instance._startUpSettings = <String, dynamic>{
+      for (String key in Prefs.defaults) key: instance.sharedPrefs.get(key)
+    };
 
     instance.settings = LoadSettings(instance._startUpSettings);
-
     return instance;
   }
 
-  Future<void> resetStoredValues() async {
-    for (MapEntry<String, dynamic> entry in Prefs._defaults.entries) {
-      switch (entry.value.runtimeType) {
-        case int:
-          await sharedPrefs.setInt(entry.key, entry.value);
-          break;
-        case bool:
-          await sharedPrefs.setBool(entry.key, entry.value);
-          break;
-        case String:
-          await sharedPrefs.setString(entry.key, entry.value);
-          break;
-        default:
-          throw "type not recognised";
-      }
-    }
+  void reset() {
+    settings = LoadSettings(null);
   }
 
-// DEFAULT VALUES:
-  static const Map<String, dynamic> _defaults = {
-    "layout": "majorThird",
-    "playMode": "slide",
-    "rootNote": 0,
-    "width": 4,
-    "height": 4,
-    "baseOctave": 1,
-    "base": 0,
-    "velocity": 110,
-    "velocityMin": 110,
-    "velocityMax": 120,
-    "noteSustainTimeStep": 0,
-    "modSustainTimeStep": 0,
-    "sendCC": false,
-    "velocitySlider": false,
-    "pitchBend": false,
-    "octaveButtons": false,
-    "sustainButton": false,
-    "randomVelocity": false,
-    "scaleString": "chromatic",
-    "channel": 2,
-    "pitchBendEase": 0,
-    "modWheel": false,
-    "mpeMemberChannels": 8,
-    "modulation2D": true,
-    "modulationRadius": 11,
-    "modulationDeadZone": 20,
-    "mpePitchBendRange": 48,
-    "mpe1DRadius": "mpeAftertouch",
-    "mpe2DX": "slide",
-    "mpe2DY": "pitchbend",
-    "padLabels": "note",
-    "padColors": "highlightRoot",
-    "baseHue": 240,
-  };
+  // currently not using these default values:
+  static const List<String> defaults = [
+    "layout",
+    "playMode",
+    "rootNote",
+    "width",
+    "height",
+    "baseOctave",
+    "base",
+    "velocity",
+    "velocityMin",
+    "velocityMax",
+    "noteSustainTimeStep",
+    "modSustainTimeStep",
+    "sendCC",
+    "velocitySlider",
+    "pitchBend",
+    "octaveButtons",
+    "sustainButton",
+    "randomVelocity",
+    "scaleString",
+    "channel",
+    "pitchBendEase",
+    "modWheel",
+    "mpeMemberChannels",
+    "modulation2D",
+    "modulationRadius",
+    "modulationDeadZone",
+    "mpePitchBendRange",
+    "mpe1DRadius",
+    "mpe2DX",
+    "mpe2DY",
+    "padLabels",
+    "padColors",
+    "baseHue",
+    // "marginHorizontal",
+    // "marginVertical",
+  ];
 }
 
 class LoadSettings {
-  final Setting<int> modulationDeadZone;
-  final Setting<int> modulationRadius;
-  final Setting<bool> modulation2D;
-  final Setting<int> mpeMemberChannels;
-  final Setting<int> mpePitchBendRange;
-  final Setting<MPEmods> mpe1DRadius;
-  final Setting<int> baseHue;
-  final Setting<PadColors> padColors;
-  final Setting<PadLabels> padLabels;
-  final Setting<MPEmods> mpe2DX;
-  final Setting<MPEmods> mpe2DY;
+  final SettingEnum<PadColors> padColors;
+  final SettingEnum<PadLabels> padLabels;
+  final SettingEnum<Layout> layout;
+  final SettingEnum<PlayMode> playMode;
+  final SettingEnum<MPEmods> mpe1DRadius;
+  final SettingEnum<MPEmods> mpe2DX;
+  final SettingEnum<MPEmods> mpe2DY;
+  final SettingString scaleString;
+  final SettingDouble modulationDeadZone;
+  final SettingDouble modulationRadius;
+  final SettingInt mpeMemberChannels;
+  final SettingInt mpePitchBendRange;
+  final SettingInt baseHue;
+  final SettingInt channel;
+  final SettingInt rootNote;
+  final SettingInt width;
+  final SettingInt height;
+  final SettingInt baseOctave;
+  final SettingInt base;
+  final SettingInt velocity;
+  final SettingInt velocityMin;
+  final SettingInt velocityMax;
+  final SettingInt noteSustainTimeStep;
+  final SettingInt modSustainTimeStep;
+  final SettingInt pitchBendEase;
+  final SettingBool modulation2D;
+  final SettingBool modWheel;
+  final SettingBool sendCC;
+  final SettingBool pitchBend;
+  final SettingBool octaveButtons;
+  final SettingBool sustainButton;
+  final SettingBool randomVelocity;
+  final SettingBool velocitySlider;
 
-  final Setting<Layout> layout;
-  final Setting<PlayMode> playMode;
-  final Setting<String> scaleString;
-  final Setting<int> channel;
-  final Setting<int> rootNote;
-  final Setting<int> width;
-  final Setting<int> height;
-  final Setting<int> baseOctave;
-  final Setting<int> base;
-  final Setting<int> velocity;
-  final Setting<int> velocityMin;
-  final Setting<int> velocityMax;
-  final Setting<int> noteSustainTimeStep;
-  final Setting<int> modSustainTimeStep;
-  final Setting<int> pitchBendEase;
+  LoadSettings(Map<String, dynamic>? loadedMap)
+      : padLabels = SettingEnum<PadLabels>(
+          loadedMap,
+          PadLabels.fromName,
+          "padLabels",
+          PadLabels.note,
+        ),
+        padColors = SettingEnum<PadColors>(
+          loadedMap,
+          PadColors.fromName,
+          "padColors",
+          PadColors.highlightRoot,
+        ),
+        mpe2DX = SettingEnum<MPEmods>(
+          loadedMap,
+          MPEmods.fromName,
+          'mpe2DX',
+          MPEmods.slide,
+        ),
+        mpe2DY = SettingEnum<MPEmods>(
+          loadedMap,
+          MPEmods.fromName,
+          'mpe2DY',
+          MPEmods.pitchbend,
+        ),
+        mpe1DRadius = SettingEnum<MPEmods>(
+          loadedMap,
+          MPEmods.fromName,
+          'mpe1DRadius',
+          MPEmods.mpeAftertouch,
+        ),
+        layout = SettingEnum<Layout>(
+          loadedMap,
+          Layout.fromName,
+          'layout',
+          Layout.majorThird,
+        ),
+        playMode = SettingEnum<PlayMode>(
+          loadedMap,
+          PlayMode.fromName,
+          'playMode',
+          PlayMode.slide,
+        ),
+        mpePitchBendRange = SettingInt(
+          loadedMap,
+          'mpePitchBendRange',
+          48,
+          min: 1,
+          max: 48,
+        ),
+        mpeMemberChannels = SettingInt(
+          loadedMap,
+          'mpeMemberChannels',
+          8,
+          min: 1,
+          max: 15,
+        ),
+        modulation2D = SettingBool(
+          loadedMap,
+          'modulation2D',
+          true,
+        ),
+        modulationDeadZone = SettingDouble(
+          loadedMap,
+          'modulationDeadZone',
+          .20,
+          min: .10,
+          max: .40,
+        ),
+        modulationRadius = SettingDouble(
+          loadedMap,
+          'modulationRadius',
+          .11,
+          min: .08,
+          max: .50,
+        ),
+        baseHue = SettingInt(
+          loadedMap,
+          "baseHue",
+          240,
+          max: 360,
+        ),
+        rootNote = SettingInt(
+          loadedMap,
+          'rootNote',
+          0,
+          max: 11,
+        ),
+        channel = SettingInt(
+          loadedMap,
+          'channel',
+          0,
+          max: 15,
+        ),
+        width = SettingInt(
+          loadedMap,
+          'width',
+          4,
+          min: 2,
+          max: 16,
+        ),
+        height = SettingInt(
+          loadedMap,
+          'height',
+          4,
+          min: 2,
+          max: 16,
+        ),
+        baseOctave = SettingInt(
+          loadedMap,
+          'baseOctave',
+          1,
+          min: -2,
+          max: 7,
+        ),
+        base = SettingInt(
+          loadedMap,
+          'base',
+          0,
+          max: 11,
+        ),
+        velocity = SettingInt(
+          loadedMap,
+          'velocity',
+          110,
+          max: 127,
+        ),
+        velocityMin = SettingInt(
+          loadedMap,
+          'velocityMin',
+          100,
+          max: 126,
+        ),
+        velocityMax = SettingInt(
+          loadedMap,
+          'velocityMax',
+          110,
+          max: 127,
+        ),
+        pitchBendEase = SettingInt(
+          loadedMap,
+          'pitchBendEase',
+          0,
+          max: Timing.timingSteps.length - 1,
+        ),
+        noteSustainTimeStep = SettingInt(
+          loadedMap,
+          'noteSustainTimeStep',
+          0,
+          max: Timing.timingSteps.length - 1,
+        ),
+        modSustainTimeStep = SettingInt(
+          loadedMap,
+          'modSustainTimeStep',
+          0,
+          max: Timing.timingSteps.length - 1,
+        ),
+        sendCC = SettingBool(
+          loadedMap,
+          'sendCC',
+          false,
+        ),
+        pitchBend = SettingBool(
+          loadedMap,
+          'pitchBend',
+          false,
+        ),
+        velocitySlider = SettingBool(
+          loadedMap,
+          'velocitySlider',
+          false,
+        ),
+        modWheel = SettingBool(
+          loadedMap,
+          'modWheel',
+          false,
+        ),
+        octaveButtons = SettingBool(
+          loadedMap,
+          'octaveButtons',
+          false,
+        ),
+        sustainButton = SettingBool(
+          loadedMap,
+          'sustainButton',
+          false,
+        ),
+        randomVelocity = SettingBool(
+          loadedMap,
+          'randomVelocity',
+          false,
+        ),
+        scaleString = SettingString(
+          loadedMap,
+          'scaleString',
+          "chromatic",
+        );
+}
 
-  final Setting<bool> modWheel;
-  final Setting<bool> sendCC;
-  final Setting<bool> pitchBend;
-  final Setting<bool> octaveButtons;
-  final Setting<bool> sustainButton;
-  final Setting<bool> randomVelocity;
-  final Setting<bool> velocitySlider;
+abstract class Setting<T> extends StateNotifier<T> {
+  final String sharedPrefsKey;
+  final T defaultValue;
 
-  LoadSettings(Map<String, dynamic> loadedMap)
-      : padLabels = Setting<PadLabels>("padLabels",
-            PadLabels.fromName(loadedMap["padLabels"]) ?? PadLabels.note),
-        padColors = Setting<PadColors>(
-            "padColors",
-            PadColors.fromName(loadedMap["padColors"]) ??
-                PadColors.circleOfFifth),
-        mpe2DX = Setting<MPEmods>(
-            'mpe2DX', MPEmods.fromName(loadedMap['mpe2DX']) ?? MPEmods.slide),
-        mpe2DY = Setting<MPEmods>('mpe2DY',
-            MPEmods.fromName(loadedMap['mpe2DY']) ?? MPEmods.pitchbend),
-        mpe1DRadius = Setting<MPEmods>(
-            'mpe1DRadius',
-            MPEmods.fromName(loadedMap['mpe1DRadius']) ??
-                MPEmods.mpeAftertouch),
-        layout = Setting<Layout>(
-            'layout', Layout.fromName(loadedMap['layout']) ?? Layout.values[0]),
-        mpePitchBendRange =
-            Setting<int>('mpePitchBendRange', loadedMap['mpePitchBendRange']!),
-        mpeMemberChannels =
-            Setting<int>('mpeMemberChannels', loadedMap['mpeMemberChannels']!),
-        modulation2D =
-            Setting<bool>('modulation2D', loadedMap['modulation2D']!),
-        modulationDeadZone = Setting<int>(
-            "modulationDeadZone", loadedMap['modulationDeadZone']!),
-        modulationRadius =
-            Setting<int>("modulationRadius", loadedMap['modulationRadius']!),
-        baseHue = Setting<int>("baseHue", loadedMap["baseHue"]!),
-        rootNote = Setting<int>("rootnote", loadedMap['rootNote']!),
-        channel = Setting<int>('channel', loadedMap['channel']!),
-        width = Setting<int>('width', loadedMap['width']!),
-        height = Setting<int>('height', loadedMap['height']!),
-        baseOctave = Setting<int>('baseOctave', loadedMap['baseOctave']!),
-        base = Setting<int>('base', loadedMap['base']!),
-        velocity = Setting<int>('velocity', loadedMap['velocity']!),
-        velocityMin = Setting<int>('velocityMin', loadedMap['velocityMin']!),
-        velocityMax = Setting<int>('velocityMax', loadedMap['velocityMax']!),
-        noteSustainTimeStep = Setting<int>(
-            'noteSustainTimeStep', loadedMap['noteSustainTimeStep']!),
-        modSustainTimeStep = Setting<int>(
-            'modSustainTimeStep', loadedMap['modSustainTimeStep']!),
-        sendCC = Setting<bool>('sendCC', loadedMap['sendCC']!),
-        pitchBend = Setting<bool>('pitchBend', loadedMap['pitchBend']!),
-        velocitySlider =
-            Setting<bool>('velocitySlider', loadedMap['velocitySlider']!),
-        pitchBendEase =
-            Setting<int>('pitchBendEase', loadedMap['pitchBendEase']!),
-        modWheel = Setting<bool>('modWheel', loadedMap['modWheel']!),
-        octaveButtons =
-            Setting<bool>('octaveButtons', loadedMap['octaveButtons']!!),
-        sustainButton =
-            Setting<bool>('sustainButton', loadedMap['sustainButton']!),
-        randomVelocity =
-            Setting<bool>('randomVelocity', loadedMap['randomVelocity']!),
-        scaleString = Setting<String>(
-            'scaleString',
-            midiScales.containsKey(loadedMap['scaleString'])
-                ? loadedMap['scaleString']
-                : midiScales.keys.toList()[0]),
-        playMode = Setting<PlayMode>('playMode',
-            PlayMode.fromName(loadedMap['playMode']) ?? PlayMode.slide);
+  Setting(this.sharedPrefsKey, T? value, this.defaultValue)
+      : super(value ?? defaultValue) {
+    if (value == null && state == defaultValue) save();
+  }
 
-  factory LoadSettings.defaults() {
-    return LoadSettings(Prefs._defaults);
+  void set(T newState) {
+    state = newState;
+  }
+
+  void setAndSave(T newState) {
+    set(newState);
+    save();
+  }
+
+  void reset() {
+    set(defaultValue);
+    save();
+  }
+
+  Future<bool> save();
+}
+
+class SettingBool extends Setting<bool> {
+  SettingBool(Map<String, dynamic>? map, String key, bool defaultValue)
+      : super(key, map?[key], defaultValue);
+
+  @override
+  Future<bool> save() async {
+    SharedPreferences sharedPrefs = await SharedPreferences.getInstance();
+    return await sharedPrefs.setBool(sharedPrefsKey, state);
+  }
+
+  void toggle() {
+    state = !state;
   }
 }
 
-class Setting<T> {
-  Setting(this.sharedPrefsKey, this.value);
+class SettingInt extends Setting<int> {
+  final int min;
+  final int max;
 
-  final String sharedPrefsKey;
-  T value;
+  SettingInt(Map<String, dynamic>? map, String key, int defaultValue,
+      {this.min = 0, required this.max})
+      : super(
+          key,
+          map?[key],
+          defaultValue,
+        );
 
+  @override
   Future<bool> save() async {
     SharedPreferences sharedPrefs = await SharedPreferences.getInstance();
-    bool result = true;
+    return await sharedPrefs.setInt(sharedPrefsKey, state);
+  }
 
-    if (value is Layout) {
-      Layout cast = value as Layout;
-      result = await sharedPrefs.setString("layout", cast.name);
-    } else if (value is PadColors) {
-      PadColors cast = value as PadColors;
-      result = await sharedPrefs.setString("padColors", cast.name);
-    } else if (value is PadLabels) {
-      PadLabels cast = value as PadLabels;
-      result = await sharedPrefs.setString("padLabels", cast.name);
-    } else if (value is PlayMode) {
-      PlayMode cast = value as PlayMode;
-      result = await sharedPrefs.setString("playMode", cast.name);
-    } else if (value is MPEmods) {
-      MPEmods cast = value as MPEmods;
-      result = await sharedPrefs.setString("playMode", cast.name);
-    } else if (value is int) {
-      result = await sharedPrefs.setInt(sharedPrefsKey, value as int);
-    } else if (value is String) {
-      result = await sharedPrefs.setString(sharedPrefsKey, value as String);
-    } else if (value is bool) {
-      result = await sharedPrefs.setBool(sharedPrefsKey, value as bool);
-    }
+  void increment() => set(state + 1);
+  void decrement() => set(state - 1);
 
-    if (!result) Utils.logd("Setting<${value.runtimeType}>.save() error");
-    return result;
+  @override
+  void set(int newState) {
+    state = newState.clamp(min, max);
+  }
+}
+
+class SettingDouble extends Setting<double> {
+  final double min;
+  final double max;
+
+  SettingDouble(Map<String, dynamic>? map, String key, double defaultValue,
+      {this.min = 0, required this.max})
+      : super(
+          key,
+          map?[key] / 100,
+          defaultValue,
+        );
+
+  @override
+  void set(double newState) {
+    state = newState.clamp(min, max);
+  }
+
+  @override
+  Future<bool> save() async {
+    SharedPreferences sharedPrefs = await SharedPreferences.getInstance();
+    return await sharedPrefs.setInt(sharedPrefsKey, (state * 100).toInt());
+  }
+}
+
+class SettingString extends Setting<String> {
+  SettingString(Map<String, dynamic>? map, String key, String defaultValue)
+      : super(
+          key,
+          map?[key],
+          defaultValue,
+        );
+
+  @override
+  Future<bool> save() async {
+    SharedPreferences sharedPrefs = await SharedPreferences.getInstance();
+    return await sharedPrefs.setString(sharedPrefsKey, state);
+  }
+}
+
+typedef FromName<T> = T? Function(String);
+
+class SettingEnum<T extends Enum> extends Setting<T> {
+  SettingEnum(Map<String, dynamic>? map, FromName<T> fromName, String key,
+      T defaultValue)
+      : super(
+          key,
+          fromName(map?[key] ?? ""),
+          defaultValue,
+        );
+
+  @override
+  Future<bool> save() async {
+    SharedPreferences sharedPrefs = await SharedPreferences.getInstance();
+    return await sharedPrefs.setString(sharedPrefsKey, state.name);
   }
 }

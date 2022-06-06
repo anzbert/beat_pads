@@ -1,5 +1,4 @@
 import 'package:beat_pads/services/services.dart';
-import 'package:flutter/material.dart';
 
 enum PlayMode {
   slide("Sliding"),
@@ -42,17 +41,16 @@ enum PlayMode {
     return true;
   }
 
-  PlayModeHandler getPlayModeApi(
-      Settings settings, Size screenSize, Function notifyParent) {
+  PlayModeHandler getPlayModeApi(SendSettings settings, Function notifyParent) {
     switch (this) {
       case PlayMode.mpe:
-        return PlayModeMPE(settings, screenSize, notifyParent);
+        return PlayModeMPE(settings, notifyParent);
       case PlayMode.noSlide:
-        return PlayModeNoSlide(settings, screenSize, notifyParent);
+        return PlayModeNoSlide(settings, notifyParent);
       case PlayMode.slide:
-        return PlayModeSlide(settings, screenSize, notifyParent);
+        return PlayModeSlide(settings, notifyParent);
       case PlayMode.polyAT:
-        return PlayModePolyAT(settings, screenSize, notifyParent);
+        return PlayModePolyAT(settings, notifyParent);
     }
   }
 }
