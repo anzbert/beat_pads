@@ -22,16 +22,15 @@ class MenuInput extends ConsumerWidget {
         ),
         ListTile(
           title: const Text("Input Mode"),
-          subtitle:
-              const Text("Slidable Behavious, Polyphonic Aftertouch and MPE"),
+          subtitle: const Text("Slide behavior, Polyphonic Aftertouch and MPE"),
           trailing: DropdownPlayMode(),
         ),
         const Divider(),
         if (ref.watch(playModeProv) == PlayMode.mpe)
           ListTile(
             title: const Text("2-D Modulation"),
-            subtitle:
-                const Text("Modulate 2 Values on X and Y or only 1 by Radius"),
+            subtitle: const Text(
+                "Modulate 2 values on the X and Y axis or only 1 by radius"),
             trailing: Switch(
                 value: ref.watch(modulation2DProv),
                 onChanged: (v) =>
@@ -70,7 +69,7 @@ class MenuInput extends ConsumerWidget {
         if (ref.watch(playModeProv) == PlayMode.mpe) const Divider(),
         NonLinearSliderTile(
           label: "Note Release Delay",
-          subtitle: "Note Off Delay after Release in Milliseconds",
+          subtitle: "NoteOff delay after release in milliseconds",
           readValue: ref.watch(noteReleaseStepProv),
           setValue: (v) => ref.read(noteReleaseStepProv.notifier).set(v),
           resetFunction: ref.read(noteReleaseStepProv.notifier).reset,
@@ -86,7 +85,8 @@ class MenuInput extends ConsumerWidget {
         if (ref.watch(playModeProv).modulatable)
           NonLinearSliderTile(
             label: "Modulation Ease Back",
-            subtitle: "Modulation ease back after Release in Milliseconds",
+            subtitle:
+                "Modulation returning to Zero after release in milliseconds",
             readValue: ref.watch(modReleaseStepProv),
             setValue: (v) => ref.read(modReleaseStepProv.notifier).set(v),
             resetFunction: ref.read(modReleaseStepProv.notifier).reset,
@@ -106,8 +106,8 @@ class MenuInput extends ConsumerWidget {
             IntSliderTile(
               min: 1,
               max: 48,
-              label: "Pitchbend Range",
-              subtitle: "Maximum MPE Pitchbend in Semitones",
+              label: "Pitch Bend Range",
+              subtitle: "Maximum MPE Pitch Bend in semitones",
               trailing: Text("${ref.watch(mpePitchbendRangeProv)} st"),
               readValue: ref.watch(mpePitchbendRangeProv),
               setValue: (v) => ref.read(mpePitchbendRangeProv.notifier).set(v),
@@ -134,9 +134,9 @@ class MenuInput extends ConsumerWidget {
           ModSizeSliderTile(
             min: 10,
             max: 40,
-            label: "Modulation Deadzone",
+            label: "Modulation Dead Zone",
             subtitle:
-                "Size of the non-reactive center of the modulation field, relative to the modulation field size",
+                "Size of the non-reactive center of the modulation field, relative to the field size",
             trailing:
                 Text("${(ref.watch(modulationDeadZoneProv) * 100).toInt()}%"),
             readValue: (ref.watch(modulationDeadZoneProv) * 100).toInt(),
@@ -150,7 +150,7 @@ class MenuInput extends ConsumerWidget {
           ListTile(
             title: const Text("Send CC"),
             subtitle: const Text(
-                "Send CC along with Note one Midi Channel above. Useful for triggering note dependant effects"),
+                "Send Control Change along with Note, one Midi channel above"),
             trailing: Switch(
                 value: ref.watch(sendCCProv),
                 onChanged: (v) => ref.read(sendCCProv.notifier).setAndSave(v)),

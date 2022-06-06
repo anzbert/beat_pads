@@ -79,8 +79,7 @@ class MenuLayout extends ConsumerWidget {
               if (resizableGrid)
                 ListTile(
                   title: const Text("Scale Root Note"),
-                  subtitle:
-                      const Text("Higlight selected Scale with this Root Note"),
+                  subtitle: const Text("Root Note of the selected scale"),
                   trailing: DropdownRootNote(
                     setValue: (v) => ref.read(rootProv.notifier).setAndSave(v),
                     readValue: ref.watch(rootProv),
@@ -91,7 +90,7 @@ class MenuLayout extends ConsumerWidget {
                 ListTile(
                   title: const Text("Base Note"),
                   subtitle: const Text(
-                      "The lowest Note in the Grid on the bottom left"),
+                      "The lowest Note in the Grid, on the bottom left"),
                   trailing: DropdownRootNote(
                     setValue: (v) => ref.read(baseProv.notifier).setAndSave(v),
                     readValue: ref.watch(baseProv),
@@ -109,7 +108,7 @@ class MenuLayout extends ConsumerWidget {
                 ListTile(
                   title: const Text("Octave Buttons"),
                   subtitle:
-                      const Text("Adds Base Octave Controls next to Pads"),
+                      const Text("Adds Octave control buttons next to pads"),
                   trailing: Switch(
                       value: ref.watch(octaveButtonsProv),
                       onChanged: (v) =>
@@ -119,15 +118,15 @@ class MenuLayout extends ConsumerWidget {
               ListTile(
                 title: const Text("Sustain Button"),
                 subtitle: const Text(
-                    "Adds Sustain Button next to Pads. Lock ON by double-tapping the Button"),
+                    "Adds a Sustain button next to pads. Lock ON by double-tapping"),
                 trailing: Switch(
                     value: ref.watch(sustainButtonProv),
                     onChanged: (v) =>
                         ref.read(sustainButtonProv.notifier).setAndSave(v)),
               ),
               ListTile(
-                title: const Text("Pitch Bender"),
-                subtitle: const Text("Adds Pitch Bend Slider next to Pads"),
+                title: const Text("Pitch Bend"),
+                subtitle: const Text("Adds Pitch Bend slider next to pads"),
                 trailing: Switch(
                     value: ref.watch(pitchBendProv),
                     onChanged: (v) =>
@@ -135,9 +134,9 @@ class MenuLayout extends ConsumerWidget {
               ),
               if (ref.watch(pitchBendProv))
                 NonLinearSliderTile(
-                  label: "Pitch Bend Easing",
+                  label: "Pitch Bend Return",
                   subtitle:
-                      "Set time in Milliseconds for Pitch Bend Slider to ease back to Zero",
+                      "Set time in milliseconds for Pitch Bend Slider to ease back to Zero",
                   readValue: ref.watch(pitchBendEaseStepProv),
                   setValue: (v) =>
                       ref.read(pitchBendEaseStepProv.notifier).set(v),
@@ -153,7 +152,7 @@ class MenuLayout extends ConsumerWidget {
                 ),
               ListTile(
                 title: const Text("Mod Wheel"),
-                subtitle: const Text("Adds Mod Wheel Slider next to Pads"),
+                subtitle: const Text("Adds Mod Wheel Slider next to pads"),
                 trailing: Switch(
                     value: ref.watch<bool>(modWheelProv),
                     onChanged: (v) =>
@@ -161,7 +160,7 @@ class MenuLayout extends ConsumerWidget {
               ),
               ListTile(
                 title: const Text("Velocity"),
-                subtitle: const Text("Adds Velocity Slider next to Pads"),
+                subtitle: const Text("Adds Velocity Slider next to pads"),
                 trailing: Switch(
                     value: ref.watch(velocitySliderProv),
                     onChanged: (v) =>
@@ -171,19 +170,20 @@ class MenuLayout extends ConsumerWidget {
               ListTile(
                 title: const Text("Pad Labels"),
                 subtitle:
-                    const Text("Choose between Midi Values and Note Names"),
+                    const Text("Choose between Midi values and Note names"),
                 trailing: DropdownPadLabels(),
               ),
               ListTile(
                 title: const Text("Pad Colors"),
-                subtitle: const Text("Colorize Pads by Distance to the Root"),
+                subtitle:
+                    const Text("Colorize pads by distance to the root note"),
                 trailing: DropdownPadColors(),
               ),
               IntSliderTile(
                 label: "Hue",
                 min: 0,
                 max: 360,
-                subtitle: "Root Note Hue on the RGB Color Wheel",
+                subtitle: "Root Note hue on the RGB color wheel",
                 trailing: Text(ref.watch(baseHueProv).toString()),
                 readValue: ref.watch(baseHueProv),
                 setValue: (v) => ref.read(baseHueProv.notifier).set(v),

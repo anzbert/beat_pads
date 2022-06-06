@@ -44,7 +44,7 @@ class MenuSystem extends ConsumerWidget {
             constraints: BoxConstraints(minWidth: buttonMinWidth),
             child: SnackMessageButton(
               label: "Reset Midi Buffers",
-              message: "Midi Buffer cleared & Stop all Notes sent",
+              message: "Midi buffer cleared & 'Stop All Notes' sent",
               onPressed: () {
                 ref.read(rxNoteProvider.notifier).reset();
                 MidiUtils.sendAllNotesOffMessage(ref.read(channelUsableProv));
@@ -68,7 +68,7 @@ class MenuSystem extends ConsumerWidget {
                   builder: (BuildContext context) => AlertDialog(
                     title: const Text('Reset'),
                     content: const Text(
-                        'Return all Settings to their default values?'),
+                        'Return all settings to their default values?'),
                     actions: <Widget>[
                       TextButton(
                         onPressed: () => Navigator.pop(context, 'Cancel'),

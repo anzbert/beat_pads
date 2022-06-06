@@ -1,17 +1,18 @@
 import 'package:beat_pads/screen_midi_devices/button_refresh.dart';
+import 'package:beat_pads/screen_midi_devices/help_text.dart';
 import 'package:beat_pads/services/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_midi_command/flutter_midi_command.dart';
-
-import 'package:beat_pads/shared_components/_shared.dart';
-
-import 'dart:io' show Platform;
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+class MidiConfig extends ConsumerStatefulWidget {
+  const MidiConfig({Key? key}) : super(key: key);
+  @override
+  MidiConfigState createState() => MidiConfigState();
+}
 
 class MidiConfigState extends ConsumerState<MidiConfig> {
   final MidiCommand _midiCommand = MidiCommand();
-
   bool connecting = false;
 
   void setDevice(MidiDevice device) {
@@ -79,7 +80,6 @@ class MidiConfigState extends ConsumerState<MidiConfig> {
                     WidgetsBinding.instance.addPostFrameCallback(
                       (_) {
                         ref.refresh(devicesFuture);
-                        print("refreshing deviceList");
                       },
                     );
                     return ListView(
@@ -132,43 +132,7 @@ class MidiConfigState extends ConsumerState<MidiConfig> {
                             );
                           },
                         ),
-                        if (Platform.isAndroid)
-                          const TextInfoBox(
-                            header: "USB",
-                            body: [
-                              "Connect USB cable to Host Device",
-                              "Slide down the Notification Menu and set the USB connection mode to 'Midi'",
-                              "If there is no Midi option available, your Android phone may only show this setting in the Developer Menu. Please refer to readily available instructions online on how to access this Menu on your Device",
-                              "Once Midi mode is activated, refresh this Device List",
-                              "Tap USB Device to Connect",
-                              "",
-                              "Note: The Developer menu allows you to set the default USB connection mode to Midi",
-                            ],
-                          ),
-                        if (Platform.isIOS)
-                          const TextInfoBox(
-                            header: "USB",
-                            body: [
-                              "Connect USB cable to Host Device",
-                              "Open 'Audio MIDI Setup' on Mac and click 'Enable' under iPad/iPhone in the 'Audio Devices' Window",
-                              "Refresh this Device List",
-                              "Tap 'IDAM MIDI Host' to Connect",
-                              "",
-                              "Note: USB without third-party adapters works only with MacOS devices, due to Apple's MIDI implementation!",
-                            ],
-                          ),
-                        if (Platform.isIOS)
-                          const TextInfoBox(
-                            header: "WiFi",
-                            body: [
-                              "Connect to same WiFi as Host Device",
-                              "Connect to 'Network Session 1' in this Device List",
-                              "Open 'Audio MIDI Setup' on Mac and open the 'MIDI Studio' window",
-                              "Create a Session in the 'MIDI Network Setup' window and connect to your iPad/iPhone",
-                              "",
-                              "Note: Wireless Protocols add Latency. Connection to Windows Hosts via WiFi requires third-party Software (like 'rtpMIDI')"
-                            ],
-                          ),
+                        ...helpText, // Text Boxes with Connection Information
                       ],
                     );
                   });
@@ -189,10 +153,4 @@ class MidiConfigState extends ConsumerState<MidiConfig> {
     _midiCommand.dispose();
     super.dispose();
   }
-}
-
-class MidiConfig extends ConsumerStatefulWidget {
-  const MidiConfig({Key? key}) : super(key: key);
-  @override
-  MidiConfigState createState() => MidiConfigState();
 }

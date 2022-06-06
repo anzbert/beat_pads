@@ -23,7 +23,7 @@ class MenuMidi extends ConsumerWidget {
           max: 16,
           label: "Master Channel",
           subtitle:
-              "Midi Channel to send and receive on. Only 1 or 16 with MPE.",
+              "Main Midi Channel. [MPE: Channel 1 (better device compatibility) or 16]",
           trailing: Text((ref.watch(channelUsableProv) + 1).toString()),
           setValue: (v) => ref.read(channelSettingProv.notifier).set(v - 1),
           readValue: ref.watch(channelUsableProv) + 1,
@@ -44,7 +44,7 @@ class MenuMidi extends ConsumerWidget {
         const Divider(),
         ListTile(
           title: const Text("Random Velocity"),
-          subtitle: const Text("Random Velocity within a given Range"),
+          subtitle: const Text("Random Velocity within a given range"),
           trailing: Switch(
               value: ref.watch(randomVelocityProv),
               onChanged: (v) =>
@@ -55,7 +55,7 @@ class MenuMidi extends ConsumerWidget {
             min: 10,
             max: 127,
             label: "Fixed Velocity",
-            subtitle: "Velocity to send when pressing a Pad",
+            subtitle: "Velocity to send when pressing a pad",
             trailing: Text(ref.watch(velocityProv).toString()),
             readValue: ref.watch(velocityProv),
             setValue: (v) => ref.read(velocityProv.notifier).set(v),

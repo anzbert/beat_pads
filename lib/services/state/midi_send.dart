@@ -2,6 +2,9 @@ import 'package:beat_pads/services/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+// Sending logic still uses ChangeNotifier. Could be refactored for Riverpod
+// for clarity and expandability.
+
 class SendSettings {
   final PlayMode playMode;
   final int channel;
