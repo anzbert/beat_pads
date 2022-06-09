@@ -80,7 +80,7 @@ class _SlidePadsState extends ConsumerState<SlidePads>
           ref.read(playModeProv).modulatable) {
         TouchEvent? event = ref
             .read(senderProvider.notifier)
-            .playMode
+            .playModeHandler
             .touchReleaseBuffer
             .getByID(touch.pointer);
         if (event == null || event.newPosition == event.origin) return;
@@ -100,8 +100,10 @@ class _SlidePadsState extends ConsumerState<SlidePads>
                 event.origin, touch.position, absoluteMaxRadius);
 
         returnAnim.animation.addListener(() {
-          TouchReleaseBuffer touchReleaseBuffer =
-              ref.read(senderProvider.notifier).playMode.touchReleaseBuffer;
+          TouchReleaseBuffer touchReleaseBuffer = ref
+              .read(senderProvider.notifier)
+              .playModeHandler
+              .touchReleaseBuffer;
           TouchEvent? touchEvent =
               touchReleaseBuffer.getByID(returnAnim.uniqueID);
 

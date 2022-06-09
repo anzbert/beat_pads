@@ -1,4 +1,87 @@
-enum NoteSign { sharp, flat }
+enum Chord {
+  xSus2([0, 2, 7]),
+  xSus4([0, 5, 7]),
+  x6([0, 4, 7, 9]),
+  x7([0, 4, 7, 10]),
+  x7Dim5([0, 4, 6, 10]),
+  x7Add5([0, 4, 8, 10]),
+  x7Sus4([0, 5, 7, 10]),
+  xm6([0, 3, 7, 9]),
+  xm7([0, 3, 7, 10]),
+  xm7Dim5([0, 3, 6, 10]),
+  xDim6([0, 3, 6, 9]),
+  xMaj7([0, 4, 7, 11]),
+  xM7add5([0, 4, 8, 11]),
+  xmM7([0, 3, 7, 11]),
+  xAdd9([0, 4, 7, 14]),
+  xmAdd9([0, 3, 7, 14]),
+  x2([0, 4, 7, 14]),
+  xAdd11([0, 4, 7, 17]),
+  xm69([0, 3, 7, 9, 14]),
+  x69([0, 4, 7, 9, 14]),
+  x9([0, 4, 7, 10, 14]),
+  xm9([0, 3, 7, 10, 14]),
+  xMaj9([0, 4, 7, 11, 14]),
+  x9Sus4([0, 5, 7, 10, 14]),
+  x7Dim9([0, 4, 7, 10, 13]),
+  x7Add11([0, 4, 7, 10, 18]);
+
+  final List<int> intervals;
+  const Chord(this.intervals);
+
+  /// Returns chord notes of a given base note (0-127)
+  List<int> getChord(int baseNote) {
+    return intervals.map((n) => n + baseNote).where((n) => n < 128).toList();
+  }
+
+  /// Returns chord notes of a given root note in a given octave (-2 to 7)
+  List<int> getChordOfOctave(int rootNote, int octave) {
+    return intervals
+        .map((n) => (n + (rootNote % 12) + (octave + 2).clamp(0, 9) * 12))
+        .where((n) => n < 128)
+        .toList();
+  }
+}
+
+enum Note {
+  c("C", 0, Sign.none),
+  cSharp("C#", 1, Sign.sharp),
+  dFlat("Db", 1, Sign.flat),
+  d("D", 2, Sign.none),
+  dSharp("D#", 3, Sign.sharp),
+  eFlat("Eb", 3, Sign.flat),
+  e("E", 4, Sign.none),
+  f("F", 5, Sign.none),
+  fSharp("F#", 6, Sign.sharp),
+  gFlat("Gb", 6, Sign.flat),
+  g("G", 7, Sign.none),
+  gSharp("G#", 8, Sign.sharp),
+  aFlat("Ab", 8, Sign.flat),
+  a("A", 9, Sign.none),
+  aSharp("A#", 10, Sign.sharp),
+  bFlat("Ab", 10, Sign.flat),
+  b("B", 11, Sign.none);
+
+  final int semitone;
+  final String label;
+  final Sign sign;
+  const Note(this.label, this.semitone, this.sign);
+
+  int getInterval(Note other) {
+    return (semitone - other.semitone).abs();
+  }
+
+  static Note? fromSemitone(int note, [Sign sign = Sign.sharp]) {
+    for (var val in Note.values) {
+      if (val.semitone == (note % 12)) {
+        if (val.sign == sign || val.sign == Sign.none) return val;
+      }
+    }
+    return null;
+  }
+}
+
+enum Sign { sharp, flat, none }
 
 const Map<int, String> midiNotes = {
   0: "C",
@@ -9,6 +92,7 @@ const Map<int, String> midiNotes = {
   9: "A",
   11: "B",
 };
+
 const Map<int, String> midiNotesSharps = {
   ...midiNotes,
   1: "C#",
@@ -114,6 +198,95 @@ const Map<String, List<int>> midiScales = {
   'bebop minor': [0, 2, 3, 5, 7, 8, 9, 10],
   'bebop tonic minor': [0, 2, 3, 5, 7, 8, 9, 11]
 };
+
+enum Scale {
+  chromatic([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]),
+  major([0, 2, 4, 5, 7, 9, 11]),
+  minor([0, 2, 3, 5, 7, 8, 10]),
+  harmonicMinor([0, 2, 3, 5, 7, 8, 11]),
+  naturalMinor([0, 2, 3, 5, 7, 8, 10]),
+  melodicMinor([0, 2, 3, 5, 7, 9, 11]),
+  pentatonicMinor([0, 3, 5, 7, 10]),
+  pentatonicMajor([0, 2, 4, 7, 9]),
+  naturalMajor([0, 2, 4, 5, 7, 9, 11]),
+  ionian([0, 2, 4, 5, 7, 9, 11]),
+  dorian([0, 2, 3, 5, 7, 9, 10]),
+  phrygian([0, 1, 3, 5, 7, 8, 10]),
+  lydian([0, 2, 4, 6, 7, 9, 11]),
+  mixolydian([0, 2, 4, 5, 7, 9, 10]),
+  aeolian([0, 2, 3, 5, 7, 8, 10]),
+  locrian([0, 1, 3, 5, 6, 8, 10]),
+  flamenco([0, 1, 3, 4, 5, 7, 8, 10]),
+  spanish8Tone([0, 1, 3, 4, 5, 6, 8, 10]),
+  symmetrical([0, 1, 3, 4, 6, 7, 9, 10]),
+  invertedDiminished([0, 1, 3, 4, 6, 7, 9, 10]),
+  diminished([0, 2, 3, 5, 6, 8, 9, 11]),
+  wholeTone([0, 2, 4, 6, 8, 10]),
+  augmented([0, 3, 4, 7, 8, 11]),
+  threeSemitone([0, 3, 6, 9]),
+  fourSemitone([0, 4, 8]),
+  indian([0, 1, 3, 4, 7, 8, 10]),
+  javanese([0, 1, 3, 5, 7, 9, 10]),
+  neapolitanMinor([0, 1, 3, 5, 7, 8, 11]),
+  neapolitanMajor([0, 1, 3, 5, 7, 9, 11]),
+  todi([0, 1, 3, 6, 7, 8, 11]),
+  persian([0, 1, 4, 5, 6, 8, 11]),
+  oriental([0, 1, 4, 5, 6, 9, 10]),
+  blues([0, 3, 5, 6, 7, 10]),
+  spanish([0, 1, 4, 5, 7, 8, 10]),
+  jewish([0, 1, 4, 5, 7, 8, 10]),
+  gypsy([0, 1, 4, 5, 7, 8, 11]),
+  doubleHarmonic([0, 1, 4, 5, 7, 8, 11]),
+  byzantine([0, 1, 4, 5, 7, 8, 11]),
+  chahargah([0, 1, 4, 5, 7, 8, 11]),
+  marva([0, 1, 4, 6, 7, 9, 11]),
+  enigmatic([0, 1, 4, 6, 8, 10, 11]),
+  hungarianMinor([0, 2, 3, 6, 7, 8, 11]),
+  hungarianMajor([0, 3, 4, 6, 7, 9, 10]),
+  algerian1([0, 2, 3, 6, 7, 8, 11]),
+  algerian2([0, 2, 3, 5, 7, 8, 10]),
+  mohammedan([0, 2, 3, 5, 7, 8, 11]),
+  romanian([0, 2, 3, 6, 7, 9, 10]),
+  arabian([0, 1, 4, 5, 7, 8, 11]),
+  hindu([0, 2, 4, 5, 7, 8, 10]),
+  ethiopian([0, 2, 4, 5, 7, 8, 11]),
+  phrygianMajor([0, 1, 4, 5, 7, 8, 10]),
+  harmonicMajor([0, 2, 4, 5, 8, 9, 11]),
+  mixolydianAugmented([0, 2, 4, 5, 8, 9, 10]),
+  lydianMinor([0, 2, 4, 6, 7, 8, 10]),
+  lydianDominant([0, 2, 4, 6, 7, 9, 10]),
+  lydianAugmented([0, 2, 4, 6, 8, 9, 10]),
+  locrianMajor([0, 2, 4, 5, 6, 8, 10]),
+  locrianNatural([0, 2, 3, 5, 6, 8, 10]),
+  locrianSuper([0, 1, 3, 4, 6, 8, 10]),
+  locrianUltra([0, 1, 3, 4, 6, 8, 9]),
+  overtone([0, 2, 4, 6, 7, 9, 10]),
+  leadingWholeTone([0, 2, 4, 6, 8, 10, 11]),
+  balinese([0, 1, 3, 7, 8]),
+  pelog([0, 1, 3, 7, 10]),
+  japanese([0, 1, 5, 7, 8]),
+  iwato([0, 1, 5, 6, 10]),
+  kumoi([0, 1, 5, 7, 8]),
+  hirajoshi([0, 2, 3, 7, 8]),
+  pa([0, 2, 3, 7, 8]),
+  pb([0, 1, 3, 6, 8]),
+  pd([0, 2, 3, 7, 9]),
+  pe([0, 1, 3, 7, 8]),
+  pfcg([0, 2, 4, 7, 9]),
+  chinese1([0, 2, 4, 7, 9]),
+  chinese2([0, 4, 6, 7, 11]),
+  mongolian([0, 2, 4, 7, 9]),
+  egyptian([0, 2, 3, 6, 7, 8, 11]),
+  altered([0, 1, 3, 4, 6, 8, 10]),
+  bebopDominant([0, 2, 4, 5, 7, 9, 10, 11]),
+  bebopDominantFlatNine([0, 1, 4, 5, 7, 9, 10, 11]),
+  bebopMajor([0, 2, 4, 5, 7, 8, 9, 11]),
+  bebopMinor([0, 2, 3, 5, 7, 8, 9, 10]),
+  bebopTonicMinor([0, 2, 3, 5, 7, 8, 9, 11]);
+
+  final List<int> intervals;
+  const Scale(this.intervals);
+}
 
 /// General Midi Standard Percussion layout
 const Map<int, String> gm2PercStandard = {

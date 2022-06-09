@@ -24,7 +24,7 @@ class SlideBeatPad extends ConsumerWidget {
           ref.watch(baseHueProv),
           ref.watch(rootProv),
           note,
-          ref.watch(senderProvider).playMode.isNoteOn(note),
+          ref.watch(senderProvider).playModeHandler.isNoteOn(note),
           preview ? 0 : ref.watch(rxNoteProvider)[note],
         );
 

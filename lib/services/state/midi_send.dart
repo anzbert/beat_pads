@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Sending logic still uses ChangeNotifier. Could be refactored for Riverpod
 // for improved clarity and expandability.
+// TODO: extract parts into seperate decoupled systems. (channelprovider, velocityprovider, etc...)
 
 class SendSettings {
   final PlayMode playMode;
@@ -75,14 +76,14 @@ final senderProvider = ChangeNotifierProvider.autoDispose<MidiSender>((ref) {
 });
 
 class MidiSender extends ChangeNotifier {
-  late PlayModeHandler playMode;
+  late PlayModeHandler playModeHandler;
   final SendSettings settings;
 
   bool _disposed = false;
 
   /// Handles Touches and Midi Message sending
   MidiSender(this.settings) {
-    playMode = settings.playMode
+    playModeHandler = settings.playMode
         .getPlayModeApi(settings, _notifyListenersOfMidiSender);
 
     if (settings.playMode == PlayMode.mpe) {
@@ -106,16 +107,16 @@ class MidiSender extends ChangeNotifier {
     // print("disposing sender");
     if (settings.playMode == PlayMode.mpe) {
       MPEinitMessage(memberChannels: 0, upperZone: settings.zone).send();
-      playMode.killAllNotes();
-      _disposed = true;
+      playModeHandler.killAllNotes();
     }
+    _disposed = true;
     super.dispose();
   }
 
   /// Mark active TouchEvents as *dirty*, when the octave was changed
   /// preventing their position from being updated further in their lifetime.
   void markEventsDirty() {
-    playMode.markDirty();
+    playModeHandler.markDirty();
   }
 
 // //////////////////////////////////////////////////////////////////////////////////////////
@@ -123,17 +124,17 @@ class MidiSender extends ChangeNotifier {
   /// Handles a new touch on a pad, creating and sending new noteOn events
   /// in the touch buffer
   void handleNewTouch(CustomPointer touch, int noteTapped, Size screenSize) {
-    playMode.handleNewTouch(touch, noteTapped, screenSize);
+    playModeHandler.handleNewTouch(touch, noteTapped, screenSize);
   }
 
   /// Handles sliding across pads in 'slide' mode
   void handlePan(CustomPointer touch, int? note) {
-    playMode.handlePan(touch, note);
+    playModeHandler.handlePan(touch, note);
   }
 
   /// Cleans up Touchevent, when contact with screen ends and the pointer is removed
   /// Adds released events to a buffer when auto-sustain is being used
   void handleEndTouch(CustomPointer touch) {
-    playMode.handleEndTouch(touch);
+    playModeHandler.handleEndTouch(touch);
   }
 }

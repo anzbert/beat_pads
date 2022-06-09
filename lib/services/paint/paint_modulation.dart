@@ -17,8 +17,8 @@ class PaintModulation extends ConsumerWidget {
     return Stack(
       children: [
         ...[
-          ...midiSender.playMode.touchReleaseBuffer.buffer,
-          ...midiSender.playMode.touchBuffer.buffer
+          ...midiSender.playModeHandler.touchReleaseBuffer.buffer,
+          ...midiSender.playModeHandler.touchBuffer.buffer
         ]
             .where(
           (element) =>

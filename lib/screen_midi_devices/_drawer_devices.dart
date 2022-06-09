@@ -79,7 +79,7 @@ class MidiConfigState extends ConsumerState<MidiConfig> {
                 Builder(builder: (context) {
                     WidgetsBinding.instance.addPostFrameCallback(
                       (_) {
-                        ref.refresh(devicesFuture);
+                        ref.refresh(devicesFutureProv);
                       },
                     );
                     return ListView(
