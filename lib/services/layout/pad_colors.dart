@@ -2,10 +2,10 @@ import 'package:beat_pads/services/services.dart';
 import 'package:flutter/material.dart';
 
 enum PadColors {
+  highlightRoot("Highlight Root"),
   colorWheel("Pitch"),
   // halfColorWheel("In Pitch (Halfed Color Range)"),
-  circleOfFifth("Circle of Fifths"),
-  highlightRoot("Highlight Root");
+  circleOfFifth("Circle of Fifths");
 
   final String title;
   const PadColors(this.title);

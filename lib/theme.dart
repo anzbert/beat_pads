@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import './services/services.dart';
+import 'package:beat_pads/services/services.dart';
 
 var appTheme = ThemeData.dark().copyWith(
   dividerTheme: DividerThemeData(

@@ -16,7 +16,7 @@ class Prefs {
 
   /// make sure to refresh provider, containign prefs after resetting
   void reset() {
-    settings = LoadSettings(null);
+    settings = LoadSettings.defaults();
   }
 }
 
@@ -54,6 +54,10 @@ class LoadSettings {
   final SettingBool sustainButton;
   final SettingBool randomVelocity;
   final SettingBool velocitySlider;
+
+  factory LoadSettings.defaults() {
+    return LoadSettings(null);
+  }
 
   LoadSettings(SharedPreferences? sharedprefs)
       : padLabels = SettingEnum<PadLabels>(
@@ -127,7 +131,7 @@ class LoadSettings {
           sharedprefs,
           'modulationDeadZone',
           .20,
-          min: .10,
+          min: .5,
           max: .40,
         ),
         modulationRadius = SettingDouble(
@@ -135,7 +139,7 @@ class LoadSettings {
           'modulationRadius',
           .11,
           min: .08,
-          max: .50,
+          max: .25,
         ),
         baseHue = SettingInt(
           sharedprefs,
