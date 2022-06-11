@@ -5,18 +5,17 @@ final devicesFutureProv = FutureProvider<List<MidiDevice>?>((ref) async {
   return await MidiCommand().devices;
 });
 
-final setupStreamProv = StreamProvider<String>(
-  (ref) async* {
-    Stream<String> stream =
-        MidiCommand().onMidiSetupChanged ?? const Stream.empty();
-
-    await for (String data in stream) {
-      // print(data); // TODO test this
-      ref.refresh(devicesFutureProv);
-      yield data;
-    }
-  },
-);
+// final setupStreamProv = StreamProvider<String>(
+//   (ref) async* {
+//     Stream<String> stream =
+//         MidiCommand().onMidiSetupChanged ?? const Stream.empty();
+//     await for (String data in stream) {
+//       print("connection change: $data");
+//       ref.refresh(devicesFutureProv);
+//       yield data;
+//     }
+//   },
+// );
 
 final connectedDevicesProv = Provider<List<MidiDevice>>((ref) {
   return ref.watch(devicesFutureProv).when(

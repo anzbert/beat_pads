@@ -1,23 +1,25 @@
+import 'package:beat_pads/services/services.dart';
 import 'package:flutter/material.dart';
 
-/// A Card-based Info-Text Box Widget that takes an array of Strings and an optional header
-class TextInfoBox extends StatelessWidget {
-  const TextInfoBox({required this.body, this.header, Key? key})
-      : super(key: key);
+/// A Card-based Info-Text Box Widget that takes an array of Widgets and an optional header
+class WidgetsInfoBox extends StatelessWidget {
+  const WidgetsInfoBox({required this.body, this.header, Key? key}) : super(key: key);
 
   final String? header;
-  final List<String> body;
+  final List<Widget> body;
 
   @override
   Widget build(BuildContext context) {
     return Center(
       child: Card(
+        color: Palette.darkGrey,
         margin: const EdgeInsets.fromLTRB(8, 30, 8, 8),
         elevation: 5,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               if (header != null)
                 Padding(
@@ -28,7 +30,7 @@ class TextInfoBox extends StatelessWidget {
                         child: Divider(),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(left: 16.0),
+                        padding: const EdgeInsets.only(left: 16),
                         child: Text(
                           header!,
                           style: Theme.of(context).textTheme.headline5,
@@ -40,9 +42,9 @@ class TextInfoBox extends StatelessWidget {
               ...body
                   .map(
                     (text) => Column(children: [
-                      Text(text),
+                      text,
                       const SizedBox(
-                        height: 5,
+                        height: 8,
                       )
                     ]),
                   )

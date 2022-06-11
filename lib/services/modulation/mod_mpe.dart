@@ -127,8 +127,7 @@ enum MPEmods {
   gain("Gain", Dims.one, Group.gain),
   gain64("Gain (center 64)", Dims.two, Group.gain),
 
-  none("None", Dims.one, Group.none),
-  ;
+  none("None", Dims.one, Group.none);
 
   @override
   String toString() => title;

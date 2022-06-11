@@ -23,7 +23,7 @@ class CreditsBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InfoBox(
+    return WidgetsInfoBox(
       header: "Credits",
       body: [
         Column(

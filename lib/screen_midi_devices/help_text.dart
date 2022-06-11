@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 List<Widget> helpText = [
   if (Platform.isAndroid)
-    const TextInfoBox(
+    const StringInfoBox(
       header: "USB",
       body: [
         "Connect USB cable to Host Device",
@@ -17,7 +17,7 @@ List<Widget> helpText = [
       ],
     ),
   if (Platform.isIOS)
-    const TextInfoBox(
+    const StringInfoBox(
       header: "USB",
       body: [
         "Connect USB cable to Host Device",
@@ -29,7 +29,7 @@ List<Widget> helpText = [
       ],
     ),
   if (Platform.isIOS)
-    const TextInfoBox(
+    const StringInfoBox(
       header: "WiFi",
       body: [
         "Connect to same WiFi as Host Device",
@@ -40,7 +40,7 @@ List<Widget> helpText = [
         "Note: Wireless Protocols add Latency. Connection to Windows Hosts via WiFi requires third-party Software (like 'rtpMIDI')"
       ],
     ),
-  TextInfoBox(
+  StringInfoBox(
     header: "Virtual",
     body: [
       if (Platform.isIOS)
