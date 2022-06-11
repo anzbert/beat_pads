@@ -120,8 +120,8 @@ final pitchBendEaseUsable = Provider<int>(
   (ref) {
     if (!ref.watch(pitchBendProv)) return 0;
 
-    return Timing.timingSteps[ref
+    return Timing.releaseDelayTimes[ref
         .watch(pitchBendEaseStepProv)
-        .clamp(0, Timing.timingSteps.length - 1)];
+        .clamp(0, Timing.releaseDelayTimes.length - 1)];
   },
 );

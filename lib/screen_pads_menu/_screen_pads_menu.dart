@@ -38,11 +38,11 @@ class PadMenuScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return FutureBuilder(
-      future: Future.delayed(Duration(milliseconds: ThemeConst.transitionTime),
-          () async {
+      future: Future.delayed(
+          Duration(milliseconds: Timing.screenTransitionTime), () async {
         final bool result = await DeviceUtils.enableRotation();
         await Future.delayed(
-          Duration(milliseconds: ThemeConst.transitionTime),
+          Duration(milliseconds: Timing.screenTransitionTime),
         );
         return result;
       }),

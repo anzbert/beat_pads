@@ -1,7 +1,6 @@
 import 'package:beat_pads/screen_pads_menu/drop_down_enum.dart';
 import 'package:flutter/material.dart';
-import 'package:beat_pads/screen_pads_menu/drop_down_colors.dart';
-import 'package:beat_pads/screen_pads_menu/preview_pads.dart';
+import 'package:beat_pads/screen_pads_menu/preview_beat_pads.dart';
 import 'package:beat_pads/screen_pads_menu/slider_int.dart';
 import 'package:beat_pads/services/services.dart';
 import 'package:beat_pads/screen_pads_menu/counter_int.dart';
@@ -153,7 +152,7 @@ class MenuLayout extends ConsumerWidget {
                           ? "${ref.watch(pitchBendEaseUsable)} ms"
                           : "${ref.watch(pitchBendEaseUsable) / 1000} s",
                   start: 0,
-                  steps: Timing.timingSteps.length - 1,
+                  steps: Timing.releaseDelayTimes.length - 1,
                   onChangeEnd: ref.read(pitchBendEaseStepProv.notifier).save,
                 ),
               ListTile(
@@ -188,7 +187,12 @@ class MenuLayout extends ConsumerWidget {
                 title: const Text("Pad Colors"),
                 subtitle:
                     const Text("Colorize pads by distance to the root note"),
-                trailing: DropdownPadColors(),
+                trailing: DropdownEnum<PadColors>(
+                  values: PadColors.values,
+                  readValue: ref.watch(padColorsProv),
+                  setValue: (v) =>
+                      ref.read(padColorsProv.notifier).setAndSave(v),
+                ),
               ),
               IntSliderTile(
                 label: "Hue",

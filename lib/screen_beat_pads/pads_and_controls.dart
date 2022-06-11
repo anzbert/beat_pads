@@ -1,5 +1,5 @@
-import 'package:beat_pads/screen_beat_pads/buttons_controls.dart';
-import 'package:beat_pads/screen_beat_pads/buttons_menu.dart';
+import 'package:beat_pads/screen_beat_pads/buttons_oct_and_sustain.dart';
+import 'package:beat_pads/screen_beat_pads/button_menu.dart';
 import 'package:beat_pads/screen_beat_pads/beat_pad_grid.dart';
 import 'package:beat_pads/screen_beat_pads/slider_mod_wheel.dart';
 import 'package:beat_pads/screen_beat_pads/slider_pitch.dart';

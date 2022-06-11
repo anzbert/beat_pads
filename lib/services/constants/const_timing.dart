@@ -1,5 +1,7 @@
 abstract class Timing {
-  static const List<int> timingSteps = [
+  static int screenTransitionTime = 250;
+
+  static const List<int> releaseDelayTimes = [
     0,
     25,
     50,

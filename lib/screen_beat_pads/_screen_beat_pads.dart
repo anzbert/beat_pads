@@ -9,10 +9,10 @@ class BeatPadsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return FutureBuilder(
         future: Future.delayed(
-            Duration(milliseconds: ThemeConst.transitionTime), () async {
+            Duration(milliseconds: Timing.screenTransitionTime), () async {
           final bool result = await DeviceUtils.landscapeOnly();
           await Future.delayed(
-            Duration(milliseconds: ThemeConst.transitionTime),
+            Duration(milliseconds: Timing.screenTransitionTime),
           );
           return result;
         }),

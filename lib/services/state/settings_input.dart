@@ -48,8 +48,9 @@ final noteReleaseStepProv = StateNotifierProvider<SettingInt, int>((ref) {
 
 final noteReleaseUsable = Provider<int>(
   (ref) {
-    return Timing.timingSteps[
-        ref.watch(noteReleaseStepProv).clamp(0, Timing.timingSteps.length - 1)];
+    return Timing.releaseDelayTimes[ref
+        .watch(noteReleaseStepProv)
+        .clamp(0, Timing.releaseDelayTimes.length - 1)];
   },
 );
 
@@ -59,7 +60,8 @@ final modReleaseStepProv = StateNotifierProvider<SettingInt, int>((ref) {
 
 final modReleaseUsable = Provider<int>(
   (ref) {
-    return Timing.timingSteps[
-        ref.watch(modReleaseStepProv).clamp(0, Timing.timingSteps.length - 1)];
+    return Timing.releaseDelayTimes[ref
+        .watch(modReleaseStepProv)
+        .clamp(0, Timing.releaseDelayTimes.length - 1)];
   },
 );

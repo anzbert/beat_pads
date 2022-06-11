@@ -204,19 +204,19 @@ class LoadSettings {
           sharedprefs,
           'pitchBendEase',
           0,
-          max: Timing.timingSteps.length - 1,
+          max: Timing.releaseDelayTimes.length - 1,
         ),
         noteSustainTimeStep = SettingInt(
           sharedprefs,
           'noteSustainTimeStep',
           0,
-          max: Timing.timingSteps.length - 1,
+          max: Timing.releaseDelayTimes.length - 1,
         ),
         modSustainTimeStep = SettingInt(
           sharedprefs,
           'modSustainTimeStep',
           0,
-          max: Timing.timingSteps.length - 1,
+          max: Timing.releaseDelayTimes.length - 1,
         ),
         sendCC = SettingBool(
           sharedprefs,
