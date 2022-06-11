@@ -1,4 +1,6 @@
 enum Chord {
+  major("major", [0, 4, 7]),
+  minor("minor", [0, 3, 7]),
   xSus2("sus2", [0, 2, 7]),
   xSus4("sus4", [0, 5, 7]),
   x6("6", [0, 4, 7, 9]),
@@ -136,12 +138,12 @@ enum Scale {
   chromatic([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]),
   major([0, 2, 4, 5, 7, 9, 11]),
   minor([0, 2, 3, 5, 7, 8, 10]),
-  harmonicMinor([0, 2, 3, 5, 7, 8, 11]),
-  naturalMinor([0, 2, 3, 5, 7, 8, 10]),
-  melodicMinor([0, 2, 3, 5, 7, 9, 11]),
-  pentatonicMinor([0, 3, 5, 7, 10]),
-  pentatonicMajor([0, 2, 4, 7, 9]),
-  naturalMajor([0, 2, 4, 5, 7, 9, 11]),
+  harmonicMinor([0, 2, 3, 5, 7, 8, 11], "harmonic minor"),
+  naturalMinor([0, 2, 3, 5, 7, 8, 10], "natural minor"),
+  melodicMinor([0, 2, 3, 5, 7, 9, 11], "melodic minor"),
+  pentatonicMinor([0, 3, 5, 7, 10], "pentatonic minor"),
+  pentatonicMajor([0, 2, 4, 7, 9], "pentatonic major"),
+  naturalMajor([0, 2, 4, 5, 7, 9, 11], "natural major"),
   ionian([0, 2, 4, 5, 7, 9, 11]),
   dorian([0, 2, 3, 5, 7, 9, 10]),
   phrygian([0, 1, 3, 5, 7, 8, 10]),
@@ -150,18 +152,18 @@ enum Scale {
   aeolian([0, 2, 3, 5, 7, 8, 10]),
   locrian([0, 1, 3, 5, 6, 8, 10]),
   flamenco([0, 1, 3, 4, 5, 7, 8, 10]),
-  spanish8Tone([0, 1, 3, 4, 5, 6, 8, 10]),
+  spanish8Tone([0, 1, 3, 4, 5, 6, 8, 10], "spanish 8-tone"),
   symmetrical([0, 1, 3, 4, 6, 7, 9, 10]),
-  invertedDiminished([0, 1, 3, 4, 6, 7, 9, 10]),
+  invertedDiminished([0, 1, 3, 4, 6, 7, 9, 10], "inverted diminished"),
   diminished([0, 2, 3, 5, 6, 8, 9, 11]),
   wholeTone([0, 2, 4, 6, 8, 10]),
   augmented([0, 3, 4, 7, 8, 11]),
-  threeSemitone([0, 3, 6, 9]),
-  fourSemitone([0, 4, 8]),
+  threeSemitone([0, 3, 6, 9], "3 semitone"),
+  fourSemitone([0, 4, 8], "4 semitone"),
   indian([0, 1, 3, 4, 7, 8, 10]),
   javanese([0, 1, 3, 5, 7, 9, 10]),
-  neapolitanMinor([0, 1, 3, 5, 7, 8, 11]),
-  neapolitanMajor([0, 1, 3, 5, 7, 9, 11]),
+  neapolitanMinor([0, 1, 3, 5, 7, 8, 11], "neapolitan minor"),
+  neapolitanMajor([0, 1, 3, 5, 7, 9, 11], "neapolitan minor"),
   todi([0, 1, 3, 6, 7, 8, 11]),
   persian([0, 1, 4, 5, 6, 8, 11]),
   oriental([0, 1, 4, 5, 6, 9, 10]),
@@ -169,13 +171,13 @@ enum Scale {
   spanish([0, 1, 4, 5, 7, 8, 10]),
   jewish([0, 1, 4, 5, 7, 8, 10]),
   gypsy([0, 1, 4, 5, 7, 8, 11]),
-  doubleHarmonic([0, 1, 4, 5, 7, 8, 11]),
+  doubleHarmonic([0, 1, 4, 5, 7, 8, 11], "double harmonic"),
   byzantine([0, 1, 4, 5, 7, 8, 11]),
   chahargah([0, 1, 4, 5, 7, 8, 11]),
   marva([0, 1, 4, 6, 7, 9, 11]),
   enigmatic([0, 1, 4, 6, 8, 10, 11]),
-  hungarianMinor([0, 2, 3, 6, 7, 8, 11]),
-  hungarianMajor([0, 3, 4, 6, 7, 9, 10]),
+  hungarianMinor([0, 2, 3, 6, 7, 8, 11], "hungarian minor"),
+  hungarianMajor([0, 3, 4, 6, 7, 9, 10], "hungarian major"),
   algerian1([0, 2, 3, 6, 7, 8, 11]),
   algerian2([0, 2, 3, 5, 7, 8, 10]),
   mohammedan([0, 2, 3, 5, 7, 8, 11]),
@@ -183,18 +185,18 @@ enum Scale {
   arabian([0, 1, 4, 5, 7, 8, 11]),
   hindu([0, 2, 4, 5, 7, 8, 10]),
   ethiopian([0, 2, 4, 5, 7, 8, 11]),
-  phrygianMajor([0, 1, 4, 5, 7, 8, 10]),
-  harmonicMajor([0, 2, 4, 5, 8, 9, 11]),
-  mixolydianAugmented([0, 2, 4, 5, 8, 9, 10]),
-  lydianMinor([0, 2, 4, 6, 7, 8, 10]),
-  lydianDominant([0, 2, 4, 6, 7, 9, 10]),
-  lydianAugmented([0, 2, 4, 6, 8, 9, 10]),
-  locrianMajor([0, 2, 4, 5, 6, 8, 10]),
-  locrianNatural([0, 2, 3, 5, 6, 8, 10]),
-  locrianSuper([0, 1, 3, 4, 6, 8, 10]),
-  locrianUltra([0, 1, 3, 4, 6, 8, 9]),
+  phrygianMajor([0, 1, 4, 5, 7, 8, 10], "phrygian major"),
+  harmonicMajor([0, 2, 4, 5, 8, 9, 11], "harmonic major"),
+  mixolydianAugmented([0, 2, 4, 5, 8, 9, 10], "mixolydian augmented"),
+  lydianMinor([0, 2, 4, 6, 7, 8, 10], "lydian minor"),
+  lydianDominant([0, 2, 4, 6, 7, 9, 10], "lydian dominant"),
+  lydianAugmented([0, 2, 4, 6, 8, 9, 10], "lydian augmented"),
+  locrianMajor([0, 2, 4, 5, 6, 8, 10], "locrian major"),
+  locrianNatural([0, 2, 3, 5, 6, 8, 10], "locrian natural"),
+  locrianSuper([0, 1, 3, 4, 6, 8, 10], "locrian super"),
+  locrianUltra([0, 1, 3, 4, 6, 8, 9], "locrian ultra"),
   overtone([0, 2, 4, 6, 7, 9, 10]),
-  leadingWholeTone([0, 2, 4, 6, 8, 10, 11]),
+  leadingWholeTone([0, 2, 4, 6, 8, 10, 11], "leading whole tone"),
   balinese([0, 1, 3, 7, 8]),
   pelog([0, 1, 3, 7, 10]),
   japanese([0, 1, 5, 7, 8]),
@@ -211,14 +213,15 @@ enum Scale {
   mongolian([0, 2, 4, 7, 9]),
   egyptian([0, 2, 3, 6, 7, 8, 11]),
   altered([0, 1, 3, 4, 6, 8, 10]),
-  bebopDominant([0, 2, 4, 5, 7, 9, 10, 11]),
-  bebopDominantFlatNine([0, 1, 4, 5, 7, 9, 10, 11]),
-  bebopMajor([0, 2, 4, 5, 7, 8, 9, 11]),
-  bebopMinor([0, 2, 3, 5, 7, 8, 9, 10]),
-  bebopTonicMinor([0, 2, 3, 5, 7, 8, 9, 11]);
+  bebopDominant([0, 2, 4, 5, 7, 9, 10, 11], "bebop dominant"),
+  bebopDominantFlatNine([0, 1, 4, 5, 7, 9, 10, 11], "bebop dominant flat9"),
+  bebopMajor([0, 2, 4, 5, 7, 8, 9, 11], "bebop major"),
+  bebopMinor([0, 2, 3, 5, 7, 8, 9, 10], "bebop minor"),
+  bebopTonicMinor([0, 2, 3, 5, 7, 8, 9, 11], "bebop tonic minor");
 
   final List<int> intervals;
-  const Scale(this.intervals);
+  final String? label;
+  const Scale(this.intervals, [this.label]);
 
   static Scale? fromName(String key) {
     for (Scale mode in Scale.values) {
@@ -228,7 +231,7 @@ enum Scale {
   }
 
   @override
-  String toString() => name;
+  String toString() => label == null ? name : label!;
 }
 
 /// General Midi Standard Percussion layout
