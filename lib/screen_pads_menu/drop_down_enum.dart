@@ -28,7 +28,7 @@ class DropdownEnum<T extends Enum> extends StatelessWidget {
       child: DropdownButton<T>(
         value: readValue,
         items: dropList,
-        onChanged: (v) {
+        onChanged: (T? v) {
           if (v != null) setValue(v);
         },
       ),

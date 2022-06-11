@@ -46,7 +46,7 @@ class DropdownModulation extends StatelessWidget {
       child: DropdownButton<MPEmods>(
         value: readValue,
         items: items,
-        onChanged: (value) {
+        onChanged: (MPEmods? value) {
           if (value != null) setValue(value);
         },
       ),

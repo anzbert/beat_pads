@@ -1,4 +1,5 @@
 import 'package:beat_pads/main.dart';
+import 'package:beat_pads/screen_pads_menu/_screen_pads_menu.dart';
 import 'package:beat_pads/screen_pads_menu/box_credits.dart';
 import 'package:beat_pads/services/services.dart';
 import 'package:flutter/material.dart';
@@ -78,6 +79,9 @@ class MenuSystem extends ConsumerWidget {
                         onPressed: () {
                           Navigator.pop(context, 'OK');
                           ref.read(sharedPrefProvider).reset();
+                          ref.refresh(sharedPrefProvider);
+                          ref.read(selectedMenuState.notifier).state =
+                              Menu.layout;
                         },
                         child: const Text('OK'),
                       ),

@@ -1,37 +1,50 @@
 enum Chord {
-  xSus2([0, 2, 7]),
-  xSus4([0, 5, 7]),
-  x6([0, 4, 7, 9]),
-  x7([0, 4, 7, 10]),
-  x7Dim5([0, 4, 6, 10]),
-  x7Add5([0, 4, 8, 10]),
-  x7Sus4([0, 5, 7, 10]),
-  xm6([0, 3, 7, 9]),
-  xm7([0, 3, 7, 10]),
-  xm7Dim5([0, 3, 6, 10]),
-  xDim6([0, 3, 6, 9]),
-  xMaj7([0, 4, 7, 11]),
-  xM7add5([0, 4, 8, 11]),
-  xmM7([0, 3, 7, 11]),
-  xAdd9([0, 4, 7, 14]),
-  xmAdd9([0, 3, 7, 14]),
-  x2([0, 4, 7, 14]),
-  xAdd11([0, 4, 7, 17]),
-  xm69([0, 3, 7, 9, 14]),
-  x69([0, 4, 7, 9, 14]),
-  x9([0, 4, 7, 10, 14]),
-  xm9([0, 3, 7, 10, 14]),
-  xMaj9([0, 4, 7, 11, 14]),
-  x9Sus4([0, 5, 7, 10, 14]),
-  x7Dim9([0, 4, 7, 10, 13]),
-  x7Add11([0, 4, 7, 10, 18]);
+  xSus2("sus2", [0, 2, 7]),
+  xSus4("sus4", [0, 5, 7]),
+  x6("6", [0, 4, 7, 9]),
+  x7("7", [0, 4, 7, 10]),
+  x7Dim5("7 dim5", [0, 4, 6, 10]),
+  x7Add5("7 add5", [0, 4, 8, 10]),
+  x7Sus4("7 sus4", [0, 5, 7, 10]),
+  xm6("m6", [0, 3, 7, 9]),
+  xm7("m7", [0, 3, 7, 10]),
+  xm7Dim5("m7 dim5", [0, 3, 6, 10]),
+  xDim6("dim6", [0, 3, 6, 9]),
+  xMaj7("Maj7", [0, 4, 7, 11]),
+  xM7add5("Maj7 add5", [0, 4, 8, 11]),
+  xmM7("m Maj7", [0, 3, 7, 11]),
+  xAdd9("add9", [0, 4, 7, 14]),
+  xmAdd9("m add9", [0, 3, 7, 14]),
+  x2("2", [0, 4, 7, 14]),
+  xAdd11("add11", [0, 4, 7, 17]),
+  xm69("m6 9", [0, 3, 7, 9, 14]),
+  x69("6 9", [0, 4, 7, 9, 14]),
+  x9("9", [0, 4, 7, 10, 14]),
+  xm9("m9", [0, 3, 7, 10, 14]),
+  xMaj9("Maj7 9", [0, 4, 7, 11, 14]),
+  x9Sus4("9 sus4", [0, 5, 7, 10, 14]),
+  x7Dim9("7 dim9", [0, 4, 7, 10, 13]),
+  x7Add11("7 add11", [0, 4, 7, 10, 18]);
 
   final List<int> intervals;
-  const Chord(this.intervals);
+  final String label;
+  const Chord(this.label, this.intervals);
 
   /// Returns chord notes of a given base note (0-127)
-  List<int> getChord(int baseNote) {
-    return intervals.map((n) => n + baseNote).where((n) => n < 128).toList();
+  List<int> getChord(int baseNote, [Inversion inv = Inversion.first]) {
+    List<int> chord = intervals.map((n) => n + baseNote).toList();
+    switch (inv) {
+      case Inversion.first:
+        break;
+      case Inversion.second:
+        chord[0] = chord[0] + 12;
+        break;
+      case Inversion.third:
+        chord[0] = chord[0] + 12;
+        chord[1] = chord[1] + 12;
+        break;
+    }
+    return chord.where((n) => n < 128).toList();
   }
 
   /// Returns chord notes of a given root note in a given octave (-2 to 7)
@@ -41,6 +54,12 @@ enum Chord {
         .where((n) => n < 128)
         .toList();
   }
+}
+
+enum Inversion {
+  first,
+  second,
+  third;
 }
 
 enum Note {

@@ -14,6 +14,7 @@ class Prefs {
     return instance;
   }
 
+  /// make sure to refresh provider, containign prefs after resetting
   void reset() {
     settings = LoadSettings(null);
   }
