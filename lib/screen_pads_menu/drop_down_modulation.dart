@@ -29,11 +29,10 @@ class DropdownModulation extends StatelessWidget {
                 enabled: modulation.exclusiveGroup == otherValue?.exclusiveGroup
                     ? false
                     : true,
-                child: Text(modulation.title,
-                    style:
-                        modulation.exclusiveGroup == otherValue?.exclusiveGroup
-                            ? TextStyle(color: Palette.lightGrey)
-                            : null),
+                child: modulation.exclusiveGroup == otherValue?.exclusiveGroup
+                    ? Text(modulation.title,
+                        style: TextStyle(color: Palette.lightGrey))
+                    : Text(modulation.title),
               ),
             )
             .toList(),

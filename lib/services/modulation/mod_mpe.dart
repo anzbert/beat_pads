@@ -64,6 +64,18 @@ class ModMPEAftertouch1D extends Mod {
   }
 }
 
+class ModMPEAftertouch642D extends Mod {
+  @override
+  void send(int channel, int note, double distance) {
+    int atChange = ((distance + 1) / 2 * 127).toInt();
+
+    if (!listEquals<num>([channel, atChange], lastSentValues)) {
+      ATMessage(channel: channel, pressure: atChange).send();
+      lastSentValues = [channel, atChange];
+    }
+  }
+}
+
 class ModCC1D extends Mod {
   final CC cc;
   ModCC1D(this.cc);
@@ -103,10 +115,11 @@ class ModNull extends Mod {
 
 // for dropdown menu
 enum MPEmods {
-  pitchbend("Pitch Bend", Dims.two, Group.pitch),
-  pitchbendUp("Pitch Bend Up only", Dims.one, Group.pitch),
-  pitchbendDown("Pitch Bend Down only", Dims.one, Group.pitch),
-  mpeAftertouch("Aftertouch", Dims.one, Group.at),
+  pitchbend("Pitch Bend Up & Down", Dims.two, Group.pitch),
+  pitchbendUp("Pitch Bend Up", Dims.one, Group.pitch),
+  pitchbendDown("Pitch Bend Down", Dims.one, Group.pitch),
+  mpeAftertouch("AT Pressure", Dims.one, Group.at),
+  mpeAftertouch64("AT Pressure (center 64)", Dims.two, Group.at),
   slide("Slide", Dims.one, Group.slide),
   slide64("Slide (center 64)", Dims.two, Group.slide),
   pan("Pan", Dims.one, Group.pan),
@@ -128,6 +141,7 @@ enum MPEmods {
 
   Mod getMod(int pitchBendMax) {
     if (this == MPEmods.mpeAftertouch) return ModMPEAftertouch1D();
+    if (this == MPEmods.mpeAftertouch64) return ModMPEAftertouch642D();
     if (this == MPEmods.slide) return ModCC1D(CC.slide);
     if (this == MPEmods.slide64) return ModCC642D(CC.slide);
     if (this == MPEmods.pan) return ModCC1D(CC.pan);
