@@ -2,13 +2,13 @@ import 'package:beat_pads/services/services.dart';
 
 class TouchReleaseBuffer {
   final SendSettings _settings;
-  final Function releaseChannel;
+  final Function releaseMPEChannel;
   bool checkerRunning = false;
   final Function _notifyListenersOfParent;
 
   /// Data Structure that holds released Touch Events
   TouchReleaseBuffer(
-      this._settings, this.releaseChannel, this._notifyListenersOfParent) {
+      this._settings, this.releaseMPEChannel, this._notifyListenersOfParent) {
     // Utils.debugLog("touch release buffer:", _buffer, 1);
   }
 
@@ -45,6 +45,8 @@ class TouchReleaseBuffer {
 
     if (index >= 0) {
       _buffer[index].noteEvent.updateReleaseTime(); // update time
+      releaseMPEChannel(_buffer[index].noteEvent.channel);
+      _buffer[index].noteEvent.updateMPEchannel(event.noteEvent.channel);
     } else {
       event.noteEvent.updateReleaseTime();
       _buffer.add(event); // or add to buffer
@@ -66,7 +68,7 @@ class TouchReleaseBuffer {
                 _settings.noteReleaseTime) {
               _buffer[i].noteEvent.noteOff(); // note OFF
 
-              releaseChannel(
+              releaseMPEChannel(
                   _buffer[i].noteEvent.channel); // release MPE channel
 
               _buffer[i].markKillIfNoteOffAndNoAnimation();
@@ -81,6 +83,11 @@ class TouchReleaseBuffer {
   }
 
   void removeNoteFromReleaseBuffer(int note) {
+    for (var element in _buffer) {
+      if (element.noteEvent.note == note) {
+        releaseMPEChannel(element.noteEvent.channel);
+      }
+    }
     _buffer.removeWhere((element) => element.noteEvent.note == note);
   }
 

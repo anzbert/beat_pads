@@ -11,7 +11,7 @@ final setupStreamProv = StreamProvider<String>(
         MidiCommand().onMidiSetupChanged ?? const Stream.empty();
 
     await for (String data in stream) {
-      print(data); // TODO test this
+      // print(data); // TODO test this
       ref.refresh(devicesFutureProv);
       yield data;
     }

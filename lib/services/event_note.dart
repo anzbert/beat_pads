@@ -1,7 +1,7 @@
 import 'package:flutter_midi_command/flutter_midi_command_messages.dart';
 
 class NoteEvent {
-  final int channel;
+  int channel;
   final int note;
 
   CCMessage? ccMessage;
@@ -25,6 +25,9 @@ class NoteEvent {
   /// Update to keep track of when the note was last released
   void updateReleaseTime() =>
       releaseTime = DateTime.now().millisecondsSinceEpoch;
+
+  /// Update channel for latest MPE note hit
+  void updateMPEchannel(int newChan) => channel = newChan;
 
   /// Send this noteEvent's NoteOnMessage
   void noteOn({cc = false}) {

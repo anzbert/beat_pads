@@ -9,7 +9,7 @@ export 'layout/layout.dart';
 export 'midi_velocity.dart';
 export 'modulation/modulation.dart';
 export 'mpe_init.dart';
-export 'mpe_member_channels.dart';
+export 'mpe_channels_provider.dart';
 export 'paint/paint.dart';
 export 'playmodes/playmodes.dart';
 export 'state/state.dart';

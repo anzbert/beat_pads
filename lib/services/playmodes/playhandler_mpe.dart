@@ -16,18 +16,21 @@ class PlayModeMPE extends PlayModeHandler {
 
   /// Release channel in MPE channel provider
   @override
-  void releaseChannel(int channel) {
-    channelProvider.releaseChannel(channel);
+  void releaseMPEChannel(int channel) {
+    channelProvider.releaseMPEChannel(channel);
   }
 
   @override
   void handleNewTouch(CustomPointer touch, int noteTapped, Size screenSize) {
+    // remove note if it is still playing
     if (settings.modReleaseTime > 0 || settings.noteReleaseTime > 0) {
       touchReleaseBuffer.removeNoteFromReleaseBuffer(noteTapped);
     }
 
-    int newChannel = channelProvider
-        .provideChannel(touchBuffer.buffer); // get new channel from generator
+    int newChannel = channelProvider.provideChannel([
+      ...touchBuffer.buffer,
+      ...touchReleaseBuffer.buffer
+    ]); // get new channel from generator
 
     if (settings.modulation2D) {
       mpeMods.xMod.send(newChannel, noteTapped, 0);

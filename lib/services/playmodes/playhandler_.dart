@@ -21,7 +21,7 @@ abstract class PlayModeHandler {
         velocityProvider = VelocityProvider(settings, notifyParent) {
     touchReleaseBuffer = TouchReleaseBuffer(
       settings,
-      releaseChannel,
+      releaseMPEChannel,
       notifyParent,
     );
   }
@@ -47,13 +47,13 @@ abstract class PlayModeHandler {
 
     if (settings.modReleaseTime == 0 && settings.noteReleaseTime == 0) {
       eventInBuffer.noteEvent.noteOff();
-      releaseChannel(eventInBuffer.noteEvent.channel);
+      releaseMPEChannel(eventInBuffer.noteEvent.channel);
       touchBuffer.remove(eventInBuffer);
 
       notifyParent();
     } else {
       if (settings.modReleaseTime == 0 && settings.noteReleaseTime > 0) {
-        eventInBuffer.newPosition = eventInBuffer.origin;
+        eventInBuffer.newPosition = eventInBuffer.origin; // mod to zero
       }
       touchReleaseBuffer.updateReleasedEvent(
           eventInBuffer); // instead of note off, event passed to release buffer
@@ -98,5 +98,5 @@ abstract class PlayModeHandler {
   }
 
   /// Does nothing, unless overridden in MPE
-  void releaseChannel(int channel) {}
+  void releaseMPEChannel(int channel) {}
 }
