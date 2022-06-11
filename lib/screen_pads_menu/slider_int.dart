@@ -1,4 +1,4 @@
-import 'package:beat_pads/theme.dart';
+import 'package:beat_pads/services/services.dart';
 import 'package:flutter/material.dart';
 
 class IntSliderTile extends StatelessWidget {

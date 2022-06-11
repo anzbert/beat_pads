@@ -3,7 +3,6 @@ import 'package:beat_pads/screen_pads_menu/menu_input.dart';
 import 'package:beat_pads/screen_pads_menu/menu_layout.dart';
 import 'package:beat_pads/screen_pads_menu/menu_midi.dart';
 import 'package:beat_pads/screen_pads_menu/menu_system.dart';
-import 'package:beat_pads/theme.dart';
 import 'package:flutter/material.dart';
 
 import 'package:beat_pads/shared_components/_shared.dart';

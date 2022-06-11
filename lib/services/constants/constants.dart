@@ -1,4 +1,5 @@
-export 'colors_const.dart';
-export 'device_const.dart';
-export 'midi_const.dart';
-export 'timing_const.dart';
+export 'const_colors.dart';
+export 'const_device.dart';
+export 'const_midi.dart';
+export 'const_sizing.dart';
+export 'const_timing.dart';

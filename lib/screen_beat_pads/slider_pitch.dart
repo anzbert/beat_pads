@@ -1,5 +1,4 @@
 import 'package:beat_pads/screen_beat_pads/slider_themed.dart';
-import 'package:beat_pads/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_midi_command/flutter_midi_command_messages.dart';
 import 'package:beat_pads/services/services.dart';

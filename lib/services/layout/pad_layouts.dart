@@ -42,19 +42,19 @@ enum Layout {
     switch (this) {
       case Layout.magicToneNetwork:
         return LayoutProps(
-            resizable: true, defaultDimensions: const Vector2D(8, 8));
+            resizable: true, defaultDimensions: const Vector2Int(8, 8));
       case Layout.xPressPadsStandard:
         return LayoutProps(
-            resizable: false, defaultDimensions: const Vector2D(4, 4));
+            resizable: false, defaultDimensions: const Vector2Int(4, 4));
       case Layout.xPressPadsLatinJazz:
         return LayoutProps(
-            resizable: false, defaultDimensions: const Vector2D(4, 4));
+            resizable: false, defaultDimensions: const Vector2Int(4, 4));
       case Layout.xPressPadsXO:
         return LayoutProps(
-            resizable: false, defaultDimensions: const Vector2D(4, 4));
+            resizable: false, defaultDimensions: const Vector2Int(4, 4));
       case Layout.xPressPadsXtreme:
         return LayoutProps(
-            resizable: false, defaultDimensions: const Vector2D(8, 4));
+            resizable: false, defaultDimensions: const Vector2Int(8, 4));
       default:
         return LayoutProps(resizable: true);
     }
@@ -107,7 +107,7 @@ class LayoutProps {
   });
 
   final bool resizable;
-  final Vector2D? defaultDimensions;
+  final Vector2Int? defaultDimensions;
 }
 
 abstract class Grid {

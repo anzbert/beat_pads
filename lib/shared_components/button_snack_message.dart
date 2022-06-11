@@ -1,4 +1,4 @@
-import 'package:beat_pads/services/constants/colors_const.dart';
+import 'package:beat_pads/services/constants/const_colors.dart';
 import 'package:flutter/material.dart';
 
 class SnackMessageButton extends StatelessWidget {

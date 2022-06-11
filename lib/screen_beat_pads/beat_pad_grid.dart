@@ -1,4 +1,4 @@
-import 'package:beat_pads/screen_beat_pads/slide_pad.dart';
+import 'package:beat_pads/screen_beat_pads/beat_pad.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';

@@ -1,6 +1,5 @@
 import 'package:beat_pads/screen_beat_pads/pads_and_controls.dart';
 import 'package:beat_pads/screen_midi_devices/_drawer_devices.dart';
-import 'package:beat_pads/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:beat_pads/services/services.dart';
 
