@@ -1,14 +1,12 @@
+import 'package:beat_pads/screen_pads_menu/drop_down_enum.dart';
 import 'package:flutter/material.dart';
 import 'package:beat_pads/screen_pads_menu/drop_down_colors.dart';
-import 'package:beat_pads/screen_pads_menu/drop_down_padlabels.dart';
 import 'package:beat_pads/screen_pads_menu/preview_pads.dart';
 import 'package:beat_pads/screen_pads_menu/slider_int.dart';
 import 'package:beat_pads/services/services.dart';
 import 'package:beat_pads/screen_pads_menu/counter_int.dart';
 import 'package:beat_pads/screen_pads_menu/slider_non_linear.dart';
-import 'package:beat_pads/screen_pads_menu/drop_down_layout.dart';
 import 'package:beat_pads/screen_pads_menu/drop_down_notes.dart';
-import 'package:beat_pads/screen_pads_menu/drop_down_scales.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class MenuLayout extends ConsumerWidget {
@@ -55,7 +53,11 @@ class MenuLayout extends ConsumerWidget {
               ),
               ListTile(
                 title: const Text("Layout"),
-                trailing: DropdownLayout(),
+                trailing: DropdownEnum<Layout>(
+                  values: Layout.values,
+                  readValue: ref.watch<Layout>(layoutProv),
+                  setValue: (v) => ref.read(layoutProv.notifier).setAndSave(v),
+                ),
               ),
               const Divider(),
               if (resizableGrid)
@@ -74,7 +76,11 @@ class MenuLayout extends ConsumerWidget {
               if (resizableGrid)
                 ListTile(
                   title: const Text("Scale"),
-                  trailing: DropdownScales(),
+                  trailing: DropdownEnum<Scale>(
+                    values: Scale.values,
+                    readValue: ref.watch(scaleProv),
+                    setValue: (v) => ref.read(scaleProv.notifier).setAndSave(v),
+                  ),
                 ),
               if (resizableGrid)
                 ListTile(
@@ -171,7 +177,12 @@ class MenuLayout extends ConsumerWidget {
                 title: const Text("Pad Labels"),
                 subtitle:
                     const Text("Choose between Midi values and Note names"),
-                trailing: DropdownPadLabels(),
+                trailing: DropdownEnum<PadLabels>(
+                  values: PadLabels.values,
+                  readValue: ref.watch<PadLabels>(padLabelsProv),
+                  setValue: (v) =>
+                      ref.read(padLabelsProv.notifier).setAndSave(v),
+                ),
               ),
               ListTile(
                 title: const Text("Pad Colors"),

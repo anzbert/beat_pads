@@ -15,6 +15,9 @@ enum Layout {
   const Layout(this.title);
   final String title;
 
+  @override
+  String toString() => title;
+
   static Layout? fromName(String key) {
     for (Layout mode in Layout.values) {
       if (mode.name == key) return mode;

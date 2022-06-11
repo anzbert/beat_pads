@@ -15,6 +15,9 @@ enum PadLabels {
     return null;
   }
 
+  @override
+  String toString() => title;
+
   static Label getLabel(PadLabels padLabels, Layout layout, int note) {
     Label label = Label();
 

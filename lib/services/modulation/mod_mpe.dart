@@ -117,6 +117,9 @@ enum MPEmods {
   none("None", Dims.one, Group.none),
   ;
 
+  @override
+  String toString() => title;
+
   final String title;
   final Dims dimensions;
   final Group exclusiveGroup;

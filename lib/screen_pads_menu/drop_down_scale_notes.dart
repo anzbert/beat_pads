@@ -4,19 +4,19 @@ import 'package:beat_pads/services/services.dart';
 
 class DropdownScaleNotes extends StatelessWidget {
   const DropdownScaleNotes(
-      {this.scale = "chromatic",
+      {this.scale = Scale.chromatic,
       required this.rootNote,
       required this.setValue,
       required this.readValue,
       this.layout = Layout.majorThird,
       Key? key})
-      : usedScale = layout == Layout.scaleNotesOnly ? scale : "chromatic",
+      : usedScale = layout == Layout.scaleNotesOnly ? scale : Scale.chromatic,
         super(key: key);
 
   final Layout layout;
   final int rootNote;
-  final String usedScale;
-  final String scale;
+  final Scale usedScale;
+  final Scale scale;
 
   final Function setValue;
   final int readValue;
@@ -24,7 +24,7 @@ class DropdownScaleNotes extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<int> items =
-        MidiUtils.allAbsoluteScaleNotes(midiScales[usedScale]!, rootNote);
+        MidiUtils.allAbsoluteScaleNotes(usedScale.intervals, rootNote);
     final List<DropdownMenuItem<int>> menuItems;
 
     menuItems = items

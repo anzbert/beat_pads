@@ -9,9 +9,12 @@ final layoutProv = StateNotifierProvider<SettingEnum<Layout>, Layout>((ref) {
 
 // NOTES AND OCTAVES
 final rootProv = StateNotifierProvider<SettingInt, int>((ref) {
-  if (!ref.watch(layoutProv).props.resizable) {
-    ref.read(sharedPrefProvider).settings.rootNote.reset();
-  }
+  ref.listen(layoutProv, (_, Layout next) {
+    if (!next.props.resizable) {
+      ref.read(sharedPrefProvider).settings.rootNote.reset();
+    }
+  });
+
   return ref.watch(sharedPrefProvider).settings.rootNote;
 });
 
@@ -29,23 +32,27 @@ final baseOctaveProv = StateNotifierProvider<SettingInt, int>((ref) {
 
 // GRID SIZE
 final widthProv = StateNotifierProvider<SettingInt, int>((ref) {
-  if (ref.watch(layoutProv).props.defaultDimensions?.x != null) {
-    ref
-        .read(sharedPrefProvider)
-        .settings
-        .width
-        .setAndSave(ref.watch(layoutProv).props.defaultDimensions!.x);
-  }
+  ref.listen(layoutProv, (_, Layout next) {
+    if (next.props.defaultDimensions?.x != null) {
+      ref
+          .read(sharedPrefProvider)
+          .settings
+          .width
+          .setAndSave(next.props.defaultDimensions!.x);
+    }
+  });
   return ref.watch(sharedPrefProvider).settings.width;
 });
 final heightProv = StateNotifierProvider<SettingInt, int>((ref) {
-  if (ref.watch(layoutProv).props.defaultDimensions?.y != null) {
-    ref
-        .read(sharedPrefProvider)
-        .settings
-        .width
-        .setAndSave(ref.watch(layoutProv).props.defaultDimensions!.y);
-  }
+  ref.listen(layoutProv, (_, Layout next) {
+    if (next.props.defaultDimensions?.y != null) {
+      ref
+          .read(sharedPrefProvider)
+          .settings
+          .width
+          .setAndSave(next.props.defaultDimensions!.y);
+    }
+  });
   return ref.watch(sharedPrefProvider).settings.height;
 });
 
@@ -57,7 +64,7 @@ final rowProv = Provider<List<List<int>>>(((ref) {
         ref.watch(heightProv),
         ref.watch(rootProv),
         ref.watch(baseNoteProv),
-        ref.watch(scaleListProv),
+        ref.watch(scaleProv).intervals,
       )
       .rows;
 }));
@@ -76,17 +83,20 @@ final baseHueProv = StateNotifierProvider<SettingInt, int>((ref) {
 });
 
 // SCALES
-final scaleStringProv = StateNotifierProvider<SettingString, String>((ref) {
-  if (!ref.watch(layoutProv).props.resizable) {
-    ref.read(sharedPrefProvider).settings.scaleString.reset();
-  }
-  return ref.watch(sharedPrefProvider).settings.scaleString;
+final scaleProv = StateNotifierProvider<SettingEnum<Scale>, Scale>((ref) {
+  ref.listen(layoutProv, (_, Layout next) {
+    if (!next.props.resizable) {
+      ref.read(sharedPrefProvider).settings.scale.reset();
+    }
+  });
+
+  return ref.watch(sharedPrefProvider).settings.scale;
 });
 
-final scaleListProv = Provider<List<int>>(((ref) {
-  return midiScales[ref.watch(scaleStringProv)] ??
-      const [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
-}));
+// final scaleListProv = Provider<List<int>>(((ref) {
+//   return midiScales[ref.watch(scaleStringProv)] ??
+//       const [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+// }));
 
 // BUTTONS AND SLIDERS
 final octaveButtonsProv = StateNotifierProvider<SettingBool, bool>((ref) {

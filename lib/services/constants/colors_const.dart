@@ -41,6 +41,9 @@ enum PadColors {
     return null;
   }
 
+  @override
+  String toString() => title;
+
   Color colorize(
     List<int> scaleList,
     int baseHue,

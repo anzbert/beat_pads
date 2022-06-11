@@ -9,6 +9,9 @@ enum PlayMode {
   const PlayMode(this.title);
   final String title;
 
+  @override
+  String toString() => title;
+
   static PlayMode? fromName(String key) {
     for (PlayMode mode in PlayMode.values) {
       if (mode.name == key) return mode;

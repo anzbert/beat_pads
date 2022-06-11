@@ -1,5 +1,5 @@
+import 'package:beat_pads/screen_pads_menu/drop_down_enum.dart';
 import 'package:beat_pads/screen_pads_menu/drop_down_modulation.dart';
-import 'package:beat_pads/screen_pads_menu/drop_down_playmode.dart';
 import 'package:beat_pads/screen_pads_menu/slider_int.dart';
 import 'package:beat_pads/screen_pads_menu/slider_modulation_size.dart';
 import 'package:beat_pads/screen_pads_menu/slider_non_linear.dart';
@@ -23,7 +23,11 @@ class MenuInput extends ConsumerWidget {
         ListTile(
           title: const Text("Input Mode"),
           subtitle: const Text("Slide behavior, Polyphonic Aftertouch and MPE"),
-          trailing: DropdownPlayMode(),
+          trailing: DropdownEnum(
+            values: PlayMode.values,
+            readValue: ref.watch(playModeProv),
+            setValue: (v) => ref.read(playModeProv.notifier).setAndSave(v),
+          ),
         ),
         const Divider(),
         if (ref.watch(playModeProv) == PlayMode.mpe)

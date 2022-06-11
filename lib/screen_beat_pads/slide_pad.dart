@@ -20,7 +20,7 @@ class SlideBeatPad extends ConsumerWidget {
 
     // PAD COLOR:
     final Color color = ref.watch(padColorsProv).colorize(
-          ref.watch(scaleListProv),
+          ref.watch(scaleProv).intervals,
           ref.watch(baseHueProv),
           ref.watch(rootProv),
           note,
