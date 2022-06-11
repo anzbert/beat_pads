@@ -49,7 +49,7 @@ final heightProv = StateNotifierProvider<SettingInt, int>((ref) {
       ref
           .read(sharedPrefProvider)
           .settings
-          .width
+          .height
           .setAndSave(next.props.defaultDimensions!.y);
     }
   });
@@ -92,11 +92,6 @@ final scaleProv = StateNotifierProvider<SettingEnum<Scale>, Scale>((ref) {
 
   return ref.watch(sharedPrefProvider).settings.scale;
 });
-
-// final scaleListProv = Provider<List<int>>(((ref) {
-//   return midiScales[ref.watch(scaleStringProv)] ??
-//       const [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
-// }));
 
 // BUTTONS AND SLIDERS
 final octaveButtonsProv = StateNotifierProvider<SettingBool, bool>((ref) {
