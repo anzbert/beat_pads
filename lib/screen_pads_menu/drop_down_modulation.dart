@@ -24,19 +24,21 @@ class DropdownModulation extends StatelessWidget {
               return true;
             })
             .map(
-              (modulation) => DropdownMenuItem(
-                value: modulation,
-                enabled: modulation.exclusiveGroup == otherValue?.exclusiveGroup
-                    ? false
-                    : true,
-                child: modulation.exclusiveGroup == otherValue?.exclusiveGroup
-                    ? Text(modulation.title,
-                        style: TextStyle(color: Palette.lightGrey))
-                    : Text(modulation.title),
-              ),
+              (modulation) =>
+                  otherValue?.exclusiveGroup == modulation.exclusiveGroup &&
+                          otherValue?.exclusiveGroup != Group.none
+                      ? DropdownMenuItem<MPEmods>(
+                          value: modulation,
+                          enabled: false,
+                          child: Text(modulation.title,
+                              style: TextStyle(color: Palette.lightGrey)),
+                        )
+                      : DropdownMenuItem<MPEmods>(
+                          value: modulation,
+                          child: Text(modulation.title),
+                        ),
             )
-            .toList(),
-        super(key: key);
+            .toList();
 
   @override
   Widget build(BuildContext context) {
