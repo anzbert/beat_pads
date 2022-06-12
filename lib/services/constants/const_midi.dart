@@ -92,13 +92,13 @@ enum Note {
     return (semitone - other.semitone).abs();
   }
 
-  static Note? fromSemitone(int note, [Sign sign = Sign.sharp]) {
+  static Note fromSemitone(int note, [Sign sign = Sign.sharp]) {
     for (var val in Note.values) {
       if (val.semitone == (note % 12)) {
         if (val.sign == sign || val.sign == Sign.none) return val;
       }
     }
-    return null;
+    throw ("Note undefined");
   }
 }
 
@@ -320,7 +320,7 @@ enum CC {
   const CC(this.value);
 
   /// A list of all undefined and general purpose CCs (76 in total)
-  static List<int> get available {
+  static List<int> get undefined {
     return [
       3,
       9,

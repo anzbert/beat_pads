@@ -6,7 +6,7 @@ enum Layout {
   quart("Quart"),
   continuous("Continuous"),
   scaleNotesOnly("Scale Notes Only"),
-  magicToneNetwork("Magic Tone Network™"),
+  magicToneNetwork('Magic Tone Network™'),
   xPressPadsStandard("XpressPads™ Standard 4x4"),
   xPressPadsLatinJazz("XpressPads™ Latin/Jazz 4x4"),
   xPressPadsXO("XpressPads™ with XO 4x4"),
