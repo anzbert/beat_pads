@@ -131,14 +131,14 @@ class LoadSettings {
           sharedprefs,
           'modulationDeadZone',
           .20,
-          min: .5,
-          max: .40,
+          min: .10,
+          max: .50,
         ),
         modulationRadius = SettingDouble(
           sharedprefs,
           'modulationRadius',
-          .11,
-          min: .08,
+          .15,
+          min: .05,
           max: .25,
         ),
         baseHue = SettingInt(
