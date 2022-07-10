@@ -137,7 +137,7 @@ class LoadSettings {
         modulationRadius = SettingDouble(
           sharedprefs,
           'modulationRadius',
-          .15,
+          .12,
           min: .05,
           max: .25,
         ),

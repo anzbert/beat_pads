@@ -16,7 +16,7 @@
         <meta-data android:name="flutterEmbedding" android:value="2" />
     </application>
 
-    <!-- <uses-feature android:name="android.software.midi" android:required="true"/> -->
+    <uses-feature android:name="android.software.midi" android:required="true"/>
     <queries>
         <!-- If your app opens https URLs -->
         <intent>
