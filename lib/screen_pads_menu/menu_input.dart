@@ -21,8 +21,8 @@ class MenuInput extends ConsumerWidget {
           ),
         ),
         ListTile(
-          title: const Text("Input Mode"),
-          subtitle: const Text("Slide behavior, Polyphonic Aftertouch and MPE"),
+          title: const Text("Slide Mode"),
+          subtitle: const Text("Finger slide behavior on an activated pad"),
           trailing: DropdownEnum(
             values: PlayMode.values,
             readValue: ref.watch(playModeProv),

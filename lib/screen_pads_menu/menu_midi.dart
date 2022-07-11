@@ -23,7 +23,7 @@ class MenuMidi extends ConsumerWidget {
           max: 16,
           label: "Midi Master Channel",
           subtitle:
-              "Limited to 1 or 16 in MPE Mode (Use 1 for better device compatibility)",
+              "Limited to 1 or 16 in MPE Mode (1 for better device compatibility)",
           trailing: Text((ref.watch(channelUsableProv) + 1).toString()),
           setValue: (v) => ref.read(channelSettingProv.notifier).set(v - 1),
           readValue: ref.watch(channelUsableProv) + 1,

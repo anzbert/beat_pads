@@ -130,32 +130,6 @@ class MenuLayout extends ConsumerWidget {
                         ref.read(sustainButtonProv.notifier).setAndSave(v)),
               ),
               ListTile(
-                title: const Text("Pitch Bend"),
-                subtitle: const Text("Adds Pitch Bend slider next to pads"),
-                trailing: Switch(
-                    value: ref.watch(pitchBendProv),
-                    onChanged: (v) =>
-                        ref.read(pitchBendProv.notifier).setAndSave(v)),
-              ),
-              if (ref.watch(pitchBendProv))
-                NonLinearSliderTile(
-                  label: "Pitch Bend Return",
-                  subtitle:
-                      "Set time in milliseconds for Pitch Bend Slider to ease back to Zero",
-                  readValue: ref.watch(pitchBendEaseStepProv),
-                  setValue: (v) =>
-                      ref.read(pitchBendEaseStepProv.notifier).set(v),
-                  resetFunction: ref.read(pitchBendEaseStepProv.notifier).reset,
-                  displayValue: ref.watch(pitchBendEaseUsable) == 0
-                      ? "Off"
-                      : ref.watch(pitchBendEaseUsable) < 1000
-                          ? "${ref.watch(pitchBendEaseUsable)} ms"
-                          : "${ref.watch(pitchBendEaseUsable) / 1000} s",
-                  start: 0,
-                  steps: Timing.releaseDelayTimes.length - 1,
-                  onChangeEnd: ref.read(pitchBendEaseStepProv.notifier).save,
-                ),
-              ListTile(
                 title: const Text("Mod Wheel"),
                 subtitle: const Text("Adds Mod Wheel Slider next to pads"),
                 trailing: Switch(
@@ -170,6 +144,31 @@ class MenuLayout extends ConsumerWidget {
                     value: ref.watch(velocitySliderProv),
                     onChanged: (v) =>
                         ref.read(velocitySliderProv.notifier).setAndSave(v)),
+              ),
+              ListTile(
+                title: const Text("Pitch Bend"),
+                subtitle: const Text("Adds Pitch Bend slider next to pads"),
+                trailing: Switch(
+                    value: ref.watch(pitchBendProv),
+                    onChanged: (v) =>
+                        ref.read(pitchBendProv.notifier).setAndSave(v)),
+              ),
+              NonLinearSliderTile(
+                label: "Pitch Bend Return",
+                subtitle:
+                    "Set time in milliseconds for Pitch Bend Slider to ease back to Zero",
+                readValue: ref.watch(pitchBendEaseStepProv),
+                setValue: (v) =>
+                    ref.read(pitchBendEaseStepProv.notifier).set(v),
+                resetFunction: ref.read(pitchBendEaseStepProv.notifier).reset,
+                displayValue: ref.watch(pitchBendEaseUsable) == 0
+                    ? "Off"
+                    : ref.watch(pitchBendEaseUsable) < 1000
+                        ? "${ref.watch(pitchBendEaseUsable)} ms"
+                        : "${ref.watch(pitchBendEaseUsable) / 1000} s",
+                start: 0,
+                steps: Timing.releaseDelayTimes.length - 1,
+                onChangeEnd: ref.read(pitchBendEaseStepProv.notifier).save,
               ),
               const Divider(),
               ListTile(
