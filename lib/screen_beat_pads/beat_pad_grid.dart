@@ -140,7 +140,7 @@ class _SlidePadsState extends ConsumerState<SlidePads>
 
   @override
   Widget build(BuildContext context) {
-    final List<List<int>> rows = ref.watch(rowProv);
+    final List<List<CustomPad>> rows = ref.watch(rowProv);
     return Stack(
       children: [
         Listener(
@@ -167,17 +167,26 @@ class _SlidePadsState extends ConsumerState<SlidePads>
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           ...row.map(
-                            (note) {
-                              return Expanded(
-                                flex: 1,
-                                child: HitTestObject(
-                                  index: note,
-                                  child: SlideBeatPad(
-                                    note: note,
-                                    preview: widget.preview,
-                                  ),
-                                ),
-                              );
+                            (customPad) {
+                              switch (customPad.padType) {
+                                case PadType.encoder:
+                                  // TODO: Handle this case.
+                                  return const SizedBox.expand();
+                                case PadType.note:
+                                  return Expanded(
+                                    flex: 1,
+                                    child: HitTestObject(
+                                      index: customPad.padValue,
+                                      child: SlideBeatPad(
+                                        note: customPad.padValue,
+                                        preview: widget.preview,
+                                      ),
+                                    ),
+                                  );
+                                case PadType.chord:
+                                  // TODO: Handle this case.
+                                  return const SizedBox.expand();
+                              }
                             },
                           ),
                         ],

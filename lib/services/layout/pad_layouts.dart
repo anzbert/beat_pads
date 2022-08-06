@@ -117,11 +117,11 @@ abstract class Grid {
   final GridData settings;
 
   /// Get a List of all notes in the current grid
-  List<int> get list;
+  List<CustomPad> get list;
 
   /// Get a List of Rows of all notes in the grid, starting from the top Row
   /// Useful for building the grid with a Column Widget
-  List<List<int>> get rows {
+  List<List<CustomPad>> get rows {
     if (settings.height * settings.width != list.length) return [[]];
     return List.generate(
       settings.height,
@@ -139,11 +139,11 @@ class GridRowInterval extends Grid {
   final int rowInterval;
 
   @override
-  List<int> get list {
-    List<int> grid = [];
+  List<CustomPad> get list {
+    List<CustomPad> grid = [];
     for (int row = 0; row < settings.height; row++) {
       for (int note = 0; note < settings.width; note++) {
-        grid.add(settings.baseNote + row * rowInterval + note);
+        grid.add(CustomPad(settings.baseNote + row * rowInterval + note));
       }
     }
     return grid;
@@ -154,8 +154,8 @@ class GridMTN extends Grid {
   GridMTN(GridData settings) : super(settings);
 
   @override
-  List<int> get list {
-    List<int> grid = [];
+  List<CustomPad> get list {
+    List<CustomPad> grid = [];
 
     bool sameColumn = settings.rootNote % 2 ==
         settings.baseNote % 2; // in the MTN, odd and even columns alternate
@@ -163,7 +163,7 @@ class GridMTN extends Grid {
     for (int row = 0; row < settings.height; row++) {
       int next = settings.baseNote;
       for (int note = 0; note < settings.width; note++) {
-        grid.add(next + row * 4);
+        grid.add(CustomPad(next + row * 4));
         if (note.isEven) {
           next = sameColumn ? next + 7 : next - 5;
         } else {
@@ -180,7 +180,7 @@ class GridScaleOnly extends Grid {
   GridScaleOnly(GridData settings) : super(settings);
 
   @override
-  List<int> get list {
+  List<CustomPad> get list {
     List<int> actualNotes =
         MidiUtils.absoluteScaleNotes(settings.rootNote, settings.scaleList);
 
@@ -195,7 +195,7 @@ class GridScaleOnly extends Grid {
     int octave = 0;
     int lastResult = 0;
 
-    List<int> grid =
+    List<CustomPad> grid =
         List.generate(settings.width * settings.height, (gridIndex) {
       int out = actualNotes[(gridIndex + baseOffset) % actualNotes.length] +
           settings.baseNote ~/ 12 * 12;
@@ -203,7 +203,7 @@ class GridScaleOnly extends Grid {
       if (out < lastResult) octave++;
       lastResult = out;
 
-      return out + 12 * octave;
+      return CustomPad(out + 12 * octave);
     });
 
     return grid;
@@ -216,8 +216,8 @@ class GridXpressPads extends Grid {
   final XPP xPressPads;
 
   @override
-  List<int> get list {
-    return xPressPads.list;
+  List<CustomPad> get list {
+    return xPressPads.list.map((e) => CustomPad(e)).toList();
   }
 }
 

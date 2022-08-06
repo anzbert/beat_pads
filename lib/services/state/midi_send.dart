@@ -73,6 +73,7 @@ final combinedSettings = Provider.autoDispose<SendSettings>((ref) {
   );
 });
 
+/// The usable sender object, which refreshes when any relevant setting changes
 final senderProvider = ChangeNotifierProvider.autoDispose<MidiSender>((ref) {
   return MidiSender(ref.watch(combinedSettings));
 });

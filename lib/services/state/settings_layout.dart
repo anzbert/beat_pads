@@ -56,7 +56,7 @@ final heightProv = StateNotifierProvider<SettingInt, int>((ref) {
   return ref.watch(sharedPrefProvider).settings.height;
 });
 
-final rowProv = Provider<List<List<int>>>(((ref) {
+final rowProv = Provider<List<List<CustomPad>>>(((ref) {
   return ref
       .watch(layoutProv)
       .getGrid(
