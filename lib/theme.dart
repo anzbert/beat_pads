@@ -9,15 +9,16 @@ var appTheme = ThemeData.dark().copyWith(
   primaryColor: Palette.cadetBlue,
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
+      foregroundColor: Palette.darkGrey,
+      backgroundColor: Palette.cadetBlue,
       elevation: 6,
-      primary: Palette.cadetBlue,
-      onPrimary: Palette.darkGrey,
-      onSurface: Palette.cadetBlue,
+      disabledForegroundColor: Palette.cadetBlue.withOpacity(0.38),
+      disabledBackgroundColor: Palette.cadetBlue.withOpacity(0.12),
     ),
   ),
   textButtonTheme: TextButtonThemeData(
     style: TextButton.styleFrom(
-      primary: Palette.cadetBlue,
+      foregroundColor: Palette.cadetBlue,
     ),
   ),
   sliderTheme: SliderThemeData(

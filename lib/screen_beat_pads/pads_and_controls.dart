@@ -104,7 +104,7 @@ class BeatPadsAndControls extends ConsumerWidget {
                 Scaffold.of(context).openDrawer();
               },
               style: ElevatedButton.styleFrom(
-                  primary: Palette.lightPink,
+                  backgroundColor: Palette.lightPink,
                   textStyle: const TextStyle(fontWeight: FontWeight.bold)),
               child: const Text(
                 "Select Midi Device",

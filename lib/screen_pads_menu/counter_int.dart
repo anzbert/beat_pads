@@ -37,9 +37,7 @@ class IntCounterTile extends StatelessWidget {
                 if (readValue - 1 >= 0) setValue(readValue - 1); // no negatives
               },
               style: ElevatedButton.styleFrom(
-                shape: const CircleBorder(),
-                primary: Palette.laserLemon,
-                onPrimary: Palette.darkGrey,
+                foregroundColor: Palette.darkGrey, backgroundColor: Palette.laserLemon, shape: const CircleBorder(),
               ),
               child: const Icon(Icons.remove),
             ),
@@ -52,9 +50,7 @@ class IntCounterTile extends StatelessWidget {
                 setValue(readValue + 1);
               },
               style: ElevatedButton.styleFrom(
-                shape: const CircleBorder(),
-                primary: Palette.cadetBlue,
-                onPrimary: Palette.darkGrey,
+                foregroundColor: Palette.darkGrey, backgroundColor: Palette.cadetBlue, shape: const CircleBorder(),
               ),
               child: const Icon(Icons.add),
             ),

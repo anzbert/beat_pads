@@ -21,10 +21,10 @@ class OctaveButtons extends ConsumerWidget {
                 ref.read(baseOctaveProv.notifier).increment();
               },
               style: ElevatedButton.styleFrom(
+                foregroundColor: Palette.darkGrey,
+                backgroundColor: Palette.cadetBlue,
                 padding: const EdgeInsets.all(0),
                 alignment: Alignment.center,
-                primary: Palette.cadetBlue,
-                onPrimary: Palette.darkGrey,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(padRadius),
                 ),
@@ -48,10 +48,10 @@ class OctaveButtons extends ConsumerWidget {
                 ref.read(baseOctaveProv.notifier).decrement();
               },
               style: ElevatedButton.styleFrom(
+                foregroundColor: Palette.darkGrey,
+                backgroundColor: Palette.laserLemon,
                 padding: const EdgeInsets.all(0),
                 alignment: Alignment.center,
-                primary: Palette.laserLemon,
-                onPrimary: Palette.darkGrey,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(padRadius),
                 ),
