@@ -1,5 +1,12 @@
 # Beat Pads - Android Version
 
+## App Store Links
+
+[Apple Store](https://apps.apple.com/us/app/beat-pads/id1633882803)
+
+[Google Play](https://play.google.com/store/apps/details?id=io.anzio.beat_pads&hl=en_AU&gl=US&pli=1)
+
+
 ## Important Disclaimer
 
 This App is **ONLY** usable as a Midi Controller. It does **NOT** produce any sound on its own as of yet, but requires a host application or second device with Ableton, Fruity Loops, Garage Band, Logic, a Software Synthesizers or any other Music Production Software. It also requires your phone or tablet to support Midi over USB. This should apply to almost all modern Android phones and tablets running Marshmellow (Android 6.0) or newer. If you don't know what any of that that means, then this app is probably not useful to you.
