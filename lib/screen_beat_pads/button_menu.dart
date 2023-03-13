@@ -28,12 +28,13 @@ class ReturnToMenuButton extends StatelessWidget {
           child: ElevatedButton(
             onPressed: () {},
             style: ElevatedButton.styleFrom(
-              padding: const EdgeInsets.all(0),
-              alignment: Alignment.center,
-              primary: transparent
+              foregroundColor:
+                  Palette.lightGrey.withOpacity(transparent ? 0.5 : 1),
+              backgroundColor: transparent
                   ? Colors.transparent
                   : Palette.darker(Palette.cadetBlue, 0.3),
-              onPrimary: Palette.lightGrey.withOpacity(transparent ? 0.5 : 1),
+              padding: const EdgeInsets.all(0),
+              alignment: Alignment.center,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(padRadius),
               ),

@@ -36,7 +36,7 @@ dependencies:
 
   shared_preferences: ^2.0.13
   url_launcher: ^6.0.0
-  flutter_riverpod: ^2.0.0-dev.9
+  flutter_riverpod: ^2.0.0
   wakelock: ^0.6.1
   animated_text_kit: ^4.2.1
   simple_gradient_text: ^1.2.2
@@ -64,7 +64,7 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
-  flutter_launcher_icons: "^0.9.2"
+  flutter_launcher_icons: ^0.10.0
 
 flutter_icons:
   # image_path: "assets/logo/logo.png"

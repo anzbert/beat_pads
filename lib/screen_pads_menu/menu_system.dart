@@ -32,7 +32,7 @@ class MenuSystem extends ConsumerWidget {
                 Scaffold.of(context).openDrawer();
               },
               style: ElevatedButton.styleFrom(
-                  primary: Palette.lightPink,
+                  backgroundColor: Palette.lightPink,
                   textStyle: const TextStyle(fontWeight: FontWeight.bold)),
               child: const Text(
                 "Select Midi Device",
@@ -58,7 +58,7 @@ class MenuSystem extends ConsumerWidget {
             constraints: BoxConstraints(minWidth: buttonMinWidth),
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
-                primary: Palette.laserLemon,
+                backgroundColor: Palette.laserLemon,
               ),
               child: const Text(
                 "Reset All Settings",

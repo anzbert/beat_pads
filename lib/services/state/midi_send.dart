@@ -26,6 +26,7 @@ class SendSettings {
   final double velocityCenter;
   final bool randomVelocity;
 
+  /// A data object which holds all the settings required for sending midi
   SendSettings(
     this.channel,
     this.modulationRadius,
@@ -48,6 +49,7 @@ class SendSettings {
   );
 }
 
+/// Reactive state of the current send-settings to be used in legacy changenotifier
 final combinedSettings = Provider.autoDispose<SendSettings>((ref) {
   return SendSettings(
     ref.watch(channelUsableProv),
@@ -71,6 +73,7 @@ final combinedSettings = Provider.autoDispose<SendSettings>((ref) {
   );
 });
 
+/// The usable sender object, which refreshes when any relevant setting changes
 final senderProvider = ChangeNotifierProvider.autoDispose<MidiSender>((ref) {
   return MidiSender(ref.watch(combinedSettings));
 });

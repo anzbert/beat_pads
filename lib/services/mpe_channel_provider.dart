@@ -83,10 +83,10 @@ class MemberChannelProvider {
     // print(channelQueue);
     // print(touchEvents);
     if (channelQueue.isNotEmpty) return channelQueue.removeLast();
-    return leastNotes(activeAndBufferedTouchEvents);
+    return _leastNotes(activeAndBufferedTouchEvents);
   }
 
-  int leastNotes(List<TouchEvent> touchEvents) {
+  int _leastNotes(List<TouchEvent> touchEvents) {
     if (allMemberChannels.isEmpty) throw ("no member channels available");
 
     Queue<int> usedChans = Queue.from(allMemberChannels);

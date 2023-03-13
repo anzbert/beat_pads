@@ -10,7 +10,7 @@ final sharedPrefProvider = Provider<Prefs>((ref) {
 });
 
 // MAIN FUNCTION ////////////////////////////////////////////////////////
-Future<void> main() async {
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
   // debugRepaintRainbowEnabled = true;
 
