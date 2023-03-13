@@ -1,15 +1,12 @@
-# Beat Pads - Android Version
-
-## App Store Links
+# Beat Pads
 
 [Apple Store](https://apps.apple.com/us/app/beat-pads/id1633882803)
 
 [Google Play](https://play.google.com/store/apps/details?id=io.anzio.beat_pads&hl=en_AU&gl=US&pli=1)
 
-
 ## Important Disclaimer
 
-This App is **ONLY** usable as a Midi Controller. It does **NOT** produce any sound on its own as of yet, but requires a host application or second device with Ableton, Fruity Loops, Garage Band, Logic, a Software Synthesizers or any other Music Production Software. It also requires your phone or tablet to support Midi over USB. This should apply to almost all modern Android phones and tablets running Marshmellow (Android 6.0) or newer. If you don't know what any of that that means, then this app is probably not useful to you.
+This App is **ONLY** usable as a Midi Controller. It does **NOT** produce any sound on its own as of yet, but requires a host application or second device with Ableton, Fruity Loops, Garage Band, Logic, a Software Synthesizers or any other Music Production Software. 
 
 Otherwise, continue reading and I hope you will have a lot of fun with it!
 
@@ -32,15 +29,6 @@ Beat Pads is not trying to be complete DAW controller and Midi swiss army knife.
 - Supports virtual Midi connection to synthesizer apps on your device, such as FluidSynth
 - Built-In support for the popular finger drumming courses from XpressPads.com
 - And more...
-
-## Usage
-
-1. Connect USB cable to Host Device
-2. Slide down the Notification Menu and set the USB connection mode to 'Midi'
-3. If there is no Midi option available, your Android device likely has this setting in the Developer Menu (Search 'Android Developer Menu' on the internet for instructions)
-4. Once USB Midi mode is activated, refresh and tap device to connect
-
-Note: The Developer menu allows you to set the default USB connection mode to Midi, speeding up the process in the future
 
 ## Suggestions
 
