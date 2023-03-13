@@ -17,7 +17,7 @@ class MenuInput extends ConsumerWidget {
           trailing: Text(
             "Input Settings",
             style: TextStyle(
-                fontSize: Theme.of(context).textTheme.headline5!.fontSize),
+                fontSize: Theme.of(context).textTheme.headlineSmall!.fontSize),
           ),
         ),
         ListTile(

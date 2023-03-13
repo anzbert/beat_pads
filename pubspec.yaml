@@ -48,7 +48,7 @@ dependencies:
     #   url: https://github.com/anzbert/FlutterMidiCommand.git
     #   ref: null_checks
 
-  rive: ^0.9.0 # 0.8.4 still produces compiler warnings
+  rive: ^0.10.2
   # rive:
   #   git:
   #     url: https://github.com/rive-app/rive-flutter.git
@@ -64,7 +64,7 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
-  flutter_launcher_icons: ^0.10.0
+  flutter_launcher_icons: ^0.12.0
 
 flutter_icons:
   # image_path: "assets/logo/logo.png"

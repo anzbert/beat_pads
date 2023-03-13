@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 
 /// A Card-based Info-Text Box Widget that takes an array of Widgets and an optional header
 class WidgetsInfoBox extends StatelessWidget {
-  const WidgetsInfoBox({required this.body, this.header, Key? key}) : super(key: key);
+  const WidgetsInfoBox({required this.body, this.header, Key? key})
+      : super(key: key);
 
   final String? header;
   final List<Widget> body;
@@ -33,7 +34,7 @@ class WidgetsInfoBox extends StatelessWidget {
                         padding: const EdgeInsets.only(left: 16),
                         child: Text(
                           header!,
-                          style: Theme.of(context).textTheme.headline5,
+                          style: Theme.of(context).textTheme.headlineSmall,
                         ),
                       ),
                     ],

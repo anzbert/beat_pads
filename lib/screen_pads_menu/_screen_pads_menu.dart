@@ -52,7 +52,7 @@ class PadMenuScreen extends ConsumerWidget {
             appBar: AppBar(
               title: GradientText(
                 'Beat Pads',
-                style: Theme.of(context).textTheme.headline4,
+                style: Theme.of(context).textTheme.headlineMedium,
                 colors: [
                   Palette.lightPink,
                   Palette.cadetBlue,

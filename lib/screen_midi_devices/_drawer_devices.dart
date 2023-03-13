@@ -35,7 +35,7 @@ class MidiConfigState extends ConsumerState<MidiConfig> {
       appBar: AppBar(
         title: Text(
           "Devices",
-          style: Theme.of(context).textTheme.headline5,
+          style: Theme.of(context).textTheme.headlineSmall,
         ),
         leading: Builder(builder: (BuildContext context) {
           return IconButton(
@@ -79,7 +79,7 @@ class MidiConfigState extends ConsumerState<MidiConfig> {
                 Builder(builder: (context) {
                     WidgetsBinding.instance.addPostFrameCallback(
                       (_) {
-                        ref.refresh(devicesFutureProv);
+                        ref.invalidate(devicesFutureProv);
                       },
                     );
                     return ListView(

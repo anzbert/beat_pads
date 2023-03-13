@@ -19,7 +19,7 @@ class MenuSystem extends ConsumerWidget {
           trailing: Text(
             "System Settings",
             style: TextStyle(
-                fontSize: Theme.of(context).textTheme.headline5!.fontSize),
+                fontSize: Theme.of(context).textTheme.headlineSmall!.fontSize),
           ),
         ),
         const SwitchWakeLockTile(),
@@ -79,7 +79,7 @@ class MenuSystem extends ConsumerWidget {
                         onPressed: () {
                           Navigator.pop(context, 'OK');
                           ref.read(sharedPrefProvider).reset();
-                          ref.refresh(sharedPrefProvider);
+                          ref.invalidate(sharedPrefProvider);
                           ref.read(selectedMenuState.notifier).state =
                               Menu.layout;
                         },

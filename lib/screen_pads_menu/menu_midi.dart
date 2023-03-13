@@ -14,7 +14,7 @@ class MenuMidi extends ConsumerWidget {
           trailing: Text(
             "Midi Settings",
             style: TextStyle(
-                fontSize: Theme.of(context).textTheme.headline5!.fontSize),
+                fontSize: Theme.of(context).textTheme.headlineSmall!.fontSize),
           ),
         ),
         IntSliderTile(
