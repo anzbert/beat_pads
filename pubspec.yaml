@@ -34,15 +34,15 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons:
   # cupertino_icons: ^1.0.2
 
-  shared_preferences: ^2.0.13
-  url_launcher: ^6.0.0
-  flutter_riverpod: ^2.0.0
-  wakelock: ^0.6.1
-  animated_text_kit: ^4.2.1
-  simple_gradient_text: ^1.2.2
+  shared_preferences: ^2.0.18
+  url_launcher: ^6.1.10
+  flutter_riverpod: ^2.3.2
+  wakelock: ^0.6.2
+  animated_text_kit: ^4.2.2
+  simple_gradient_text: ^1.2.4
 
   flutter_midi_command:
-    ^0.4.7
+    ^0.4.10
     # path: /Users/anz/localDev/FlutterMidiCommand
     # git:
     #   url: https://github.com/anzbert/FlutterMidiCommand.git
