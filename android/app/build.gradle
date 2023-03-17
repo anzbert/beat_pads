@@ -53,7 +53,7 @@ android {
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "io.anzio.beat_pads"
-        minSdkVersion 25 // 25 = Nougat 7.1 (currently required by FlutterMidiCommand)
+        minSdkVersion 24 // = Nougat 7.0
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName

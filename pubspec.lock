@@ -145,10 +145,11 @@ packages:
   flutter_midi_command:
     dependency: "direct main"
     description:
-      name: flutter_midi_command
-      sha256: bc0319b021e1fb7affeef3e5cdf8203c649d2a8516f5057754d729977ad3e1f4
-      url: "https://pub.dev"
-    source: hosted
+      path: "."
+      ref: master
+      resolved-ref: "22434e102d8f8ec57fc9addbbd87d51bd9306ab4"
+      url: "https://github.com/InvisibleWrench/FlutterMidiCommand.git"
+    source: git
     version: "0.4.10"
   flutter_midi_command_platform_interface:
     dependency: transitive
@@ -316,10 +317,10 @@ packages:
     dependency: transitive
     description:
       name: pointycastle
-      sha256: db7306cf0249f838d1a24af52b5a5887c5bf7f31d8bb4e827d071dc0939ad346
+      sha256: "57b6b78df14175658f09c5dfcfc51a46ad9561a3504fe679913dab404d0cc0f2"
       url: "https://pub.dev"
     source: hosted
-    version: "3.6.2"
+    version: "3.7.0"
   process:
     dependency: transitive
     description:
