@@ -22,37 +22,61 @@ final rxMidiStream = StreamProvider<MidiMessagePacket>(
   }),
 );
 
-final rxNoteProvider =
-    StateNotifierProvider<RxNoteStateNotifier, List<int>>((ref) {
-  // Listen to the stream itself instead of the value hold by the provider
-  final midiStream = ref.watch(rxMidiStream.stream);
+// final rxNoteProvider = NotifierProvider<RxNoteStateNotifier, List<int>>((ref) {
+//   // Listen to the stream itself instead of the value hold by the provider
+//   final midiStream = ref.watch(rxMidiStream.stream);
 
-  // Create the instance of your StateNotifier
-  final rxNoteProvider = RxNoteStateNotifier();
+//   // Create the instance of your StateNotifier
+//   final rxNoteProvider = RxNoteStateNotifier();
 
-  /// Subscribe to the stream to change the state accordingly
-  final subscription = midiStream.listen((message) {
-    if (message.content.length < 2) return;
+//   /// Subscribe to the stream to change the state accordingly
+//   final subscription = midiStream.listen((message) {
+//     if (message.content.length < 2) return;
 
-    if (message.type == MidiMessageType.noteOn) {
-      rxNoteProvider.changeValue(message.content[0], message.content[1]);
-    }
-    if (message.type == MidiMessageType.noteOff) {
-      rxNoteProvider.changeValue(message.content[0], 0);
-    }
-  });
+//     if (message.type == MidiMessageType.noteOn) {
+//       rxNoteProvider.changeValue(message.content[0], message.content[1]);
+//     }
+//     if (message.type == MidiMessageType.noteOff) {
+//       rxNoteProvider.changeValue(message.content[0], 0);
+//     }
+//   });
 
-  ref.onDispose(subscription.cancel); // Dispose to avoid memory leaks
+//   ref.onDispose(subscription.cancel); // Dispose to avoid memory leaks
 
-  return rxNoteProvider;
+//   return rxNoteProvider;
+// });
+
+final rxNoteProvider = NotifierProvider<NoteListNotifier, List<int>>(() {
+  return NoteListNotifier();
 });
 
-class RxNoteStateNotifier extends StateNotifier<List<int>> {
-  RxNoteStateNotifier() : super(List.filled(128, 0, growable: false));
+class NoteListNotifier extends Notifier<List<int>> {
+  @override
+  List<int> build() {
+    ref.listen(rxMidiStream,
+        (AsyncValue<MidiMessagePacket>? _, AsyncValue<MidiMessagePacket> next) {
+      // GUARDS:
+      if (next.hasError || next.hasValue == false || next.value == null) return;
+      if (next.value!.content.length < 2) return; // message too short
+      if (next.value!.type != MidiMessageType.noteOn ||
+          next.value!.type != MidiMessageType.noteOff) return; // not a note msg
+
+      if (next.value!.type == MidiMessageType.noteOn) {
+        changeValue(next.value!.content[0], next.value!.content[1]);
+      }
+      if (next.value!.type == MidiMessageType.noteOff) {
+        changeValue(next.value!.content[0], 0);
+      }
+    });
+
+    return List.filled(128, 0, growable: false);
+  }
 
   void changeValue(int note, int velocity) {
-    state[note] = velocity;
-    state = [...state];
+    if (state[note] != velocity) {
+      state[note] = velocity;
+      state = [...state];
+    }
   }
 
   void reset() {
