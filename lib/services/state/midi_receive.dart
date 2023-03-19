@@ -2,6 +2,7 @@ import 'package:flutter_midi_command/flutter_midi_command.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../services.dart';
 
+/// Wraps the FlutterMidiCommand onMidiDataReceived Stream in a Streamprovider
 final rxMidiStream = StreamProvider<MidiMessagePacket>(
   ((ref) async* {
     Stream<MidiPacket> rxStream =
@@ -22,11 +23,14 @@ final rxMidiStream = StreamProvider<MidiMessagePacket>(
   }),
 );
 
-final rxNoteProvider = NotifierProvider<NoteListNotifier, List<int>>(() {
-  return NoteListNotifier();
+/// This provider holds a list of velocities of all received midi notes in the
+/// currently selected master channel
+final rxNoteProvider =
+    NotifierProvider<_RxNoteVelocitiesNotifier, List<int>>(() {
+  return _RxNoteVelocitiesNotifier();
 });
 
-class NoteListNotifier extends Notifier<List<int>> {
+class _RxNoteVelocitiesNotifier extends Notifier<List<int>> {
   @override
   List<int> build() {
     ref.listen(rxMidiStream,
