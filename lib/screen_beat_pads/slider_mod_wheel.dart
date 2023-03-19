@@ -34,7 +34,7 @@ class _ModWheelState extends ConsumerState<ModWheel> {
         (AsyncValue<MidiMessagePacket>? _, AsyncValue<MidiMessagePacket> next) {
       // GUARDS:
       if (next.hasError || next.hasValue == false || next.value == null) return;
-      if (next.value!.content.length < 2) return; // message too long
+      if (next.value!.content.length < 2) return; // message too short
       if (next.value!.type != MidiMessageType.cc) return; // not a CC
       if (next.value!.content[0] != CC.modWheel.value) return; // not modw. msg
 
