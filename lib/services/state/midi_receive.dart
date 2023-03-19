@@ -52,7 +52,7 @@ class NoteListNotifier extends Notifier<List<int>> {
     }
   }
 
-  // void reset() {
-  //   state = List.filled(128, 0, growable: false);
-  // }
+  void reset() {
+    state = List.filled(128, 0, growable: false);
+  }
 }
