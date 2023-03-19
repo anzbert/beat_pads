@@ -1,3 +1,6 @@
+// ignore: unused_import
+import 'package:flutter/rendering.dart'; // for debug repaint rainbow, if enabled in main()
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import './theme.dart';
 import 'package:flutter/material.dart';

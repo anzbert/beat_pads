@@ -3,28 +3,15 @@ import 'package:beat_pads/services/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final _rxModWheel = StateNotifierProvider<IntState, int>((ref) {
-  final midiStream = ref.watch(rxMidiStream.stream);
-  final intState = IntState();
+class _IntNotifier extends Notifier<int> {
+  @override
+  int build() => 0;
 
-  final subscription = midiStream.listen((message) {
-    if (message.content.length < 2) return;
-    if (message.type != MidiMessageType.cc) return;
-    if (message.content[0] != CC.modWheel.value) return;
-
-    intState.set(message.content[1]);
-  });
-  ref.onDispose(subscription.cancel);
-
-  return intState;
-});
-
-class IntState extends StateNotifier<int> {
-  IntState() : super(0);
-  void set(int newVal) {
-    state = newVal;
-  }
+  void set(int newState) => state = newState;
 }
+
+final _modWheelProvider =
+    NotifierProvider<_IntNotifier, int>(() => _IntNotifier());
 
 class ModWheel extends ConsumerStatefulWidget {
   const ModWheel({Key? key, required this.channel, required this.preview})
@@ -43,6 +30,21 @@ class _ModWheelState extends ConsumerState<ModWheel> {
 
   @override
   Widget build(BuildContext context) {
+    ref.listen(rxMidiStream,
+        (AsyncValue<MidiMessagePacket>? _, AsyncValue<MidiMessagePacket> next) {
+      // GUARDS:
+      if (next.hasError || next.hasValue == false || next.value == null) return;
+      if (next.value!.content.length < 2) return; // message too long
+      if (next.value!.type != MidiMessageType.cc) return; // not a CC
+      if (next.value!.content[0] != CC.modWheel.value) return; // not modw. msg
+
+      // Set slider value in state provider
+      final cc = next.value!.content[1];
+      if (ref.read(_modWheelProvider) != cc) {
+        ref.read(_modWheelProvider.notifier).set(cc);
+      }
+    });
+
     double width = MediaQuery.of(context).size.width;
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -78,9 +80,9 @@ class _ModWheelState extends ConsumerState<ModWheel> {
               child: Slider(
                 min: 0,
                 max: 127,
-                value: ref.watch(_rxModWheel).toDouble(),
+                value: ref.watch(_modWheelProvider).toDouble(),
                 onChanged: (v) {
-                  ref.read(_rxModWheel.notifier).set(v.toInt());
+                  ref.read(_modWheelProvider.notifier).set(v.toInt());
                   MidiUtils.sendModWheelMessage(widget.channel, v.toInt());
                 },
               ),
@@ -111,7 +113,7 @@ class _ModWheelState extends ConsumerState<ModWheel> {
                         flex: 2,
                         child: Center(
                           child: Text(
-                            "${ref.watch(_rxModWheel)}",
+                            "${ref.watch(_modWheelProvider)}",
                             style: TextStyle(
                               fontSize: constraints.maxWidth * fontSizeFactor,
                               color: Palette.darker(Palette.tan, 0.6),
