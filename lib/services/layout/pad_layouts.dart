@@ -5,8 +5,8 @@ enum Layout {
   minorThird("Minor Third"),
   quart("Quart"),
   continuous("Continuous"),
-  scaleNotesOnly("Scale Notes Continous"),
-  scaleNotes4th("Scale Notes 4th"),
+  scaleNotesOnly("Scale - Continuous"),
+  scaleNotes4th("Scale - 4th"),
   magicToneNetwork('Magic Tone Network™'),
   xPressPadsStandard("XpressPads™ Standard 4x4"),
   xPressPadsLatinJazz("XpressPads™ Latin/Jazz 4x4"),
@@ -234,6 +234,7 @@ class GridScale4th extends Grid {
 
     List<CustomPad> grid =
         List.generate(settings.width * settings.height, (gridIndex) {
+
       int out = actualNotes[(gridIndex + baseOffset) % actualNotes.length] +
           settings.baseNote ~/ 12 * 12;
 
@@ -241,6 +242,7 @@ class GridScale4th extends Grid {
       lastResult = out;
 
       return CustomPad(out + 12 * octave);
+      
     });
 
     return grid;
