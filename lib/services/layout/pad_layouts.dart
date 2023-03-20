@@ -5,7 +5,8 @@ enum Layout {
   minorThird("Minor Third"),
   quart("Quart"),
   continuous("Continuous"),
-  scaleNotesOnly("Scale Notes Only"),
+  scaleNotesOnly("Scale Notes Continous"),
+  scaleNotes4th("Scale Notes 4th"),
   magicToneNetwork('Magic Tone Network™'),
   xPressPadsStandard("XpressPads™ Standard 4x4"),
   xPressPadsLatinJazz("XpressPads™ Latin/Jazz 4x4"),
@@ -75,6 +76,8 @@ enum Layout {
         return GridRowInterval(settings, rowInterval: 5);
       case Layout.scaleNotesOnly:
         return GridScaleOnly(settings);
+      case Layout.scaleNotes4th:
+        return GridScale4th(settings);
       case Layout.magicToneNetwork:
         return GridMTN(settings);
       case Layout.xPressPadsStandard:
@@ -178,6 +181,40 @@ class GridMTN extends Grid {
 
 class GridScaleOnly extends Grid {
   GridScaleOnly(GridData settings) : super(settings);
+
+  @override
+  List<CustomPad> get list {
+    List<int> actualNotes =
+        MidiUtils.absoluteScaleNotes(settings.rootNote, settings.scaleList);
+
+    int validatedBase = settings.baseNote;
+    while (!actualNotes.contains(validatedBase % 12)) {
+      validatedBase = (validatedBase + 1) % 127;
+    }
+
+    int baseOffset = actualNotes.indexOf(
+        validatedBase % 12); // check where grid will start within scale
+
+    int octave = 0;
+    int lastResult = 0;
+
+    List<CustomPad> grid =
+        List.generate(settings.width * settings.height, (gridIndex) {
+      int out = actualNotes[(gridIndex + baseOffset) % actualNotes.length] +
+          settings.baseNote ~/ 12 * 12;
+
+      if (out < lastResult) octave++;
+      lastResult = out;
+
+      return CustomPad(out + 12 * octave);
+    });
+
+    return grid;
+  }
+}
+
+class GridScale4th extends Grid {
+  GridScale4th(GridData settings) : super(settings);
 
   @override
   List<CustomPad> get list {
