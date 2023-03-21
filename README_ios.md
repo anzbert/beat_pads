@@ -1,5 +1,7 @@
 # Beat Pads - iOS Version
 
+Now open source: https://github.com/anzbert/beat_pads
+
 ## Important Disclaimer
 
 This App is **ONLY** usable as a Midi Controller. It does **NOT** produce any sound on its own as of yet, but requires a host application or second device with Ableton, Fruity Loops, Garage Band, Logic, a Software Synthesizers or any other Music Production Software.
