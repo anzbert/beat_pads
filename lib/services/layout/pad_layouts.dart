@@ -239,11 +239,11 @@ class GridScaleOffset extends Grid {
     final int baseIndex = actualScaleNotes.indexOf(validatedBase % 12);
 
     // GRID CALCULATION ///////////////////////////
+    List<CustomPad> grid = [];
 
     int nextRowStart = validatedBase;
     int nextBaseIndex = baseIndex;
 
-    List<CustomPad> grid = [];
     for (int row = 0; row < settings.height; row++) {
       final int baseNoteOffset = nextRowStart - actualScaleNotes[nextBaseIndex];
 
@@ -269,7 +269,8 @@ class GridScaleOffset extends Grid {
 
       // CALCULATE NEXT ROW START PAD:
       nextBaseIndex = (nextBaseIndex + interval) % actualScaleNotes.length;
-      nextRowStart = baseNoteOffset + actualScaleNotes[nextBaseIndex];
+      final int next = baseNoteOffset + actualScaleNotes[nextBaseIndex];
+      nextRowStart = next < nextRowStart ? next + 12 : next;
     }
     return grid;
   }
