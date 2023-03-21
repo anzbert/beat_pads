@@ -5,7 +5,9 @@ enum Layout {
   minorThird("Minor Third"),
   quart("Quart"),
   continuous("Continuous"),
-  scaleNotesOnly("Scale Notes Only"),
+  scaleNotesOnly("Scale - Continuous"),
+  scaleNotes3rd("Scale - 3rd"),
+  scaleNotes4th("Scale - 4th"),
   magicToneNetwork('Magic Tone Network™'),
   xPressPadsStandard("XpressPads™ Standard 4x4"),
   xPressPadsLatinJazz("XpressPads™ Latin/Jazz 4x4"),
@@ -74,7 +76,12 @@ enum Layout {
       case Layout.quart:
         return GridRowInterval(settings, rowInterval: 5);
       case Layout.scaleNotesOnly:
+        // return GridScaleOffset(settings, settings.width);
         return GridScaleOnly(settings);
+      case Layout.scaleNotes4th:
+        return GridScaleOffset(settings, 3);
+      case Layout.scaleNotes3rd:
+        return GridScaleOffset(settings, 2);
       case Layout.magicToneNetwork:
         return GridMTN(settings);
       case Layout.xPressPadsStandard:
@@ -208,6 +215,67 @@ class GridScaleOnly extends Grid {
 
     return grid;
   }
+}
+
+class GridScaleOffset extends Grid {
+  GridScaleOffset(GridData settings, this.interval) : super(settings);
+
+  final int interval;
+
+  @override
+  List<CustomPad> get list {
+    /// applied scale pattern to currently selected root note
+    /// root note is a value between 0-11
+    final List<int> actualScaleNotes =
+        MidiUtils.absoluteScaleNotes(settings.rootNote, settings.scaleList);
+
+    /// baseNote that is actually part of the currently selected scale
+    int validatedBase = settings.baseNote; // basenote is a value between 0-127
+    while (!actualScaleNotes.contains(validatedBase % 12)) {
+      validatedBase = (validatedBase + 1) % 127;
+    }
+
+    /// index in actualNotes of the starting note
+    final int baseIndex = actualScaleNotes.indexOf(validatedBase % 12);
+
+    // GRID CALCULATION ///////////////////////////
+    List<CustomPad> grid = [];
+
+    int nextRowStart = validatedBase;
+    int nextBaseIndex = baseIndex;
+
+    for (int row = 0; row < settings.height; row++) {
+      final int baseNoteOffset = nextRowStart - actualScaleNotes[nextBaseIndex];
+
+      // CALCULATE SINGLE ROW:
+      int rowPrevAdd = 0;
+      int rowOctave = 0;
+
+      for (int note = 0; note < settings.width; note++) {
+        final int additiveIndex =
+            (nextBaseIndex + note) % actualScaleNotes.length;
+
+        if (actualScaleNotes[additiveIndex] < rowPrevAdd) {
+          rowOctave++;
+        }
+
+        final int next =
+            baseNoteOffset + actualScaleNotes[additiveIndex] + (rowOctave * 12);
+
+        rowPrevAdd = actualScaleNotes[additiveIndex];
+
+        grid.add(CustomPad(next));
+      }
+
+      // CALCULATE NEXT ROW START PAD:
+      nextBaseIndex = (nextBaseIndex + interval) % actualScaleNotes.length;
+      final int next = baseNoteOffset + actualScaleNotes[nextBaseIndex];
+      nextRowStart = next < nextRowStart ? next + 12 : next;
+    }
+    return grid;
+  }
+
+  // ////////////////////////////////////////////////
 }
 
 class GridXpressPads extends Grid {
