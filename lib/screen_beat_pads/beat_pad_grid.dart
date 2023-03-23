@@ -23,7 +23,8 @@ class _SlidePadsState extends ConsumerState<SlidePads>
     _animations.removeWhere((element) => element.kill);
   }
 
-  int? _detectTappedItem(PointerEvent event) {
+  /// Returns a CustomPointer with the index of the clicked pad and the position Offset within the pad surface
+  CustomPointer? _detectTappedItem(PointerEvent event) {
     final BuildContext? context = _padsWidgetKey.currentContext;
     if (context == null) return null;
 
@@ -31,13 +32,17 @@ class _SlidePadsState extends ConsumerState<SlidePads>
     if (box == null) return null;
 
     final Offset localOffset = box.globalToLocal(event.position);
+
     final BoxHitTestResult results = BoxHitTestResult();
 
     if (box.hitTest(results, position: localOffset)) {
       for (final HitTestEntry<HitTestTarget> hit in results.path) {
         final HitTestTarget target = hit.target;
         if (target is TestProxyBox) {
-          return target.index >= 0 && target.index < 128 ? target.index : null;
+          return target.index >= 0 && target.index < 128
+              ? CustomPointer(
+                  target.index, target.globalToLocal(event.position))
+              : null;
         }
       }
     }
@@ -46,7 +51,7 @@ class _SlidePadsState extends ConsumerState<SlidePads>
   }
 
   down(PointerEvent touch) {
-    int? result = _detectTappedItem(touch);
+    int? result = _detectTappedItem(touch)?.pointer;
 
     if (mounted && result != null) {
       ref.read<MidiSender>(senderProvider.notifier).handleNewTouch(
@@ -63,7 +68,7 @@ class _SlidePadsState extends ConsumerState<SlidePads>
     }
 
     if (mounted) {
-      int? result = _detectTappedItem(touch);
+      int? result = _detectTappedItem(touch)?.pointer;
       ref
           .read(senderProvider.notifier)
           .handlePan(CustomPointer(touch.pointer, touch.position), result);
