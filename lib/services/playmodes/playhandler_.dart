@@ -1,5 +1,4 @@
 import 'package:beat_pads/services/services.dart';
-import 'package:flutter/material.dart';
 
 class PlayModeNoSlide extends PlayModeHandler {
   PlayModeNoSlide(super.settings, super.notifyParent);
@@ -26,16 +25,17 @@ abstract class PlayModeHandler {
     );
   }
 
-  void handleNewTouch(CustomPointer touch, int noteTapped, Size screenSize) {
+  void handleNewTouch(PadTouchAndScreenData data) {
     if (settings.modReleaseTime > 0 || settings.noteReleaseTime > 0) {
-      touchReleaseBuffer.removeNoteFromReleaseBuffer(noteTapped);
+      touchReleaseBuffer.removeNoteFromReleaseBuffer(data.padNote);
     }
 
     NoteEvent noteOn =
-        NoteEvent(settings.channel, noteTapped, velocityProvider.velocity)
+        NoteEvent(settings.channel, data.padNote, velocityProvider.velocity)
           ..noteOn(cc: settings.sendCC);
 
-    touchBuffer.addNoteOn(touch, noteOn, screenSize);
+    touchBuffer.addNoteOn(CustomPointer(data.pointer, data.screenTouchPos),
+        noteOn, data.screenSize);
     notifyParent();
   }
 

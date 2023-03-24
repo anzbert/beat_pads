@@ -1,5 +1,4 @@
 import 'package:beat_pads/services/services.dart';
-import 'package:flutter/material.dart';
 
 class PlayModeMPE extends PlayModeHandler {
   final SendMpe mpeMods;
@@ -21,10 +20,10 @@ class PlayModeMPE extends PlayModeHandler {
   }
 
   @override
-  void handleNewTouch(CustomPointer touch, int noteTapped, Size screenSize) {
+  void handleNewTouch(PadTouchAndScreenData data) {
     // remove note if it is still playing
     if (settings.modReleaseTime > 0 || settings.noteReleaseTime > 0) {
-      touchReleaseBuffer.removeNoteFromReleaseBuffer(noteTapped);
+      touchReleaseBuffer.removeNoteFromReleaseBuffer(data.padNote);
     }
 
     int newChannel = channelProvider.provideChannel([
@@ -33,17 +32,18 @@ class PlayModeMPE extends PlayModeHandler {
     ]); // get new channel from generator
 
     if (settings.modulation2D) {
-      mpeMods.xMod.send(newChannel, noteTapped, 0);
-      mpeMods.yMod.send(newChannel, noteTapped, 0);
+      mpeMods.xMod.send(newChannel, data.padNote, 0);
+      mpeMods.yMod.send(newChannel, data.padNote, 0);
     } else {
-      mpeMods.rMod.send(newChannel, noteTapped, 0);
+      mpeMods.rMod.send(newChannel, data.padNote, 0);
     }
 
     NoteEvent noteOn =
-        NoteEvent(newChannel, noteTapped, velocityProvider.velocity)
+        NoteEvent(newChannel, data.padNote, velocityProvider.velocity)
           ..noteOn(cc: false);
 
-    touchBuffer.addNoteOn(touch, noteOn, screenSize);
+    touchBuffer.addNoteOn(CustomPointer(data.pointer, data.screenTouchPos),
+        noteOn, data.screenSize);
     notifyParent();
   }
 

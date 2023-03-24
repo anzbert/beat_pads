@@ -24,7 +24,7 @@ class _SlidePadsState extends ConsumerState<SlidePads>
   }
 
   /// Returns a CustomPointer with the index of the clicked pad and the position Offset within the pad surface
-  CustomPointer? _detectTappedItem(PointerEvent event) {
+  PadAndTouchData? _detectTappedItem(PointerEvent event) {
     final BuildContext? context = _padsWidgetKey.currentContext;
     if (context == null) return null;
 
@@ -40,8 +40,11 @@ class _SlidePadsState extends ConsumerState<SlidePads>
         final HitTestTarget target = hit.target;
         if (target is TestProxyBox) {
           return target.index >= 0 && target.index < 128
-              ? CustomPointer(
-                  target.index, target.globalToLocal(event.position))
+              ? PadAndTouchData(
+                  padId: target.index,
+                  padTouchPos: target.globalToLocal(event.position),
+                  padDimensions: target.size,
+                )
               : null;
         }
       }
@@ -51,14 +54,19 @@ class _SlidePadsState extends ConsumerState<SlidePads>
   }
 
   down(PointerEvent touch) {
-    int? result = _detectTappedItem(touch)?.pointer;
+    PadAndTouchData? result = _detectTappedItem(touch);
 
     if (mounted && result != null) {
-      ref.read<MidiSender>(senderProvider.notifier).handleNewTouch(
-            CustomPointer(touch.pointer, touch.position),
-            result,
-            MediaQuery.of(context).size,
-          );
+      PadTouchAndScreenData data = PadTouchAndScreenData(
+        pointer: touch.pointer,
+        screenTouchPos: touch.position,
+        screenSize: MediaQuery.of(context).size,
+        padNote: result.padId,
+        padTouchPos: result.padTouchPos,
+        padDimensions: result.padDimensions,
+      );
+
+      ref.read<MidiSender>(senderProvider.notifier).handleNewTouch(data);
     }
   }
 
@@ -68,10 +76,10 @@ class _SlidePadsState extends ConsumerState<SlidePads>
     }
 
     if (mounted) {
-      int? result = _detectTappedItem(touch)?.pointer;
+      int? padId = _detectTappedItem(touch)?.padId;
       ref
           .read(senderProvider.notifier)
-          .handlePan(CustomPointer(touch.pointer, touch.position), result);
+          .handlePan(CustomPointer(touch.pointer, touch.position), padId);
     }
   }
 

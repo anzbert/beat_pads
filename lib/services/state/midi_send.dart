@@ -126,8 +126,8 @@ class MidiSender extends ChangeNotifier {
 
   /// Handles a new touch on a pad, creating and sending new noteOn events
   /// in the touch buffer
-  void handleNewTouch(CustomPointer touch, int noteTapped, Size screenSize) {
-    playModeHandler.handleNewTouch(touch, noteTapped, screenSize);
+  void handleNewTouch(PadTouchAndScreenData data) {
+    playModeHandler.handleNewTouch(data);
   }
 
   /// Handles sliding across pads in 'slide' mode

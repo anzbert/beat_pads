@@ -1,5 +1,4 @@
 import 'package:beat_pads/services/services.dart';
-import 'package:flutter/material.dart';
 
 class PlayModePolyAT extends PlayModeHandler {
   final ModPolyAfterTouch1D polyATMod;
@@ -7,9 +6,9 @@ class PlayModePolyAT extends PlayModeHandler {
       : polyATMod = ModPolyAfterTouch1D();
 
   @override
-  void handleNewTouch(CustomPointer touch, int noteTapped, Size screenSize) {
-    polyATMod.send(settings.channel, noteTapped, 0);
-    super.handleNewTouch(touch, noteTapped, screenSize);
+  void handleNewTouch(PadTouchAndScreenData data) {
+    polyATMod.send(settings.channel, data.padNote, 0);
+    super.handleNewTouch(data);
   }
 
   @override
