@@ -38,30 +38,29 @@ class _SlidePadsState extends ConsumerState<SlidePads>
     if (box.hitTest(results, position: localOffset)) {
       for (final HitTestEntry<HitTestTarget> hit in results.path) {
         final HitTestTarget target = hit.target;
+
         if (target is TestProxyBox) {
-          Offset position = target.globalToLocal(event.position);
+          // final Offset position = target.globalToLocal(event.position);
+
+          double yPos = target.globalToLocal(event.position).dy;
           double ySize = target.size.height;
 
-          // apply deadzone:
-          const double deadZone = 20;
+          const double yDeadZone = 20; // pixels
 
-          if (position.dy < deadZone) {
-            position = Offset(position.dx, 0);
-          } else if (position.dy > ySize - deadZone) {
-            position = Offset(position.dx, ySize);
+          if (yPos < yDeadZone) {
+            yPos = 0;
+          } else if (yPos > ySize - yDeadZone) {
+            yPos = ySize;
           } else {
-            position = Offset(
-                position.dx,
-                Utils.mapValueToTargetRange(position.dy, deadZone,
-                    ySize - deadZone, 0, ySize - deadZone * 2));
-            ySize = ySize - deadZone * 2;
+            yPos = Utils.mapValueToTargetRange(
+                yPos, yDeadZone, ySize - yDeadZone, 0, ySize - yDeadZone * 2);
+            ySize = ySize - yDeadZone * 2;
           }
 
           return target.index >= 0 && target.index < 128
               ? PadAndTouchData(
-                  padId: target.index,
-                  padTouchPos: position,
-                  padDimensions: Size(target.size.width, ySize),
+                  padId: target.index, // = Note
+                  yPercentage: 1 - (yPos / ySize).clamp(0, 1),
                 )
               : null;
         }
@@ -76,13 +75,11 @@ class _SlidePadsState extends ConsumerState<SlidePads>
 
     if (mounted && result != null) {
       PadTouchAndScreenData data = PadTouchAndScreenData(
-        pointer: touch.pointer,
-        screenTouchPos: touch.position,
-        screenSize: MediaQuery.of(context).size,
-        padNote: result.padId,
-        padTouchPos: result.padTouchPos,
-        padDimensions: result.padDimensions,
-      );
+          pointer: touch.pointer,
+          screenTouchPos: touch.position,
+          screenSize: MediaQuery.of(context).size,
+          padNote: result.padId,
+          yPercentage: result.yPercentage);
 
       ref.read<MidiSender>(senderProvider.notifier).handleNewTouch(data);
     }
@@ -97,10 +94,12 @@ class _SlidePadsState extends ConsumerState<SlidePads>
     // PadAndTouchData? result = _detectTappedItem(touch);
 
     if (mounted) {
-      int? padId = _detectTappedItem(touch)?.padId;
-      ref
-          .read(senderProvider.notifier)
-          .handlePan(CustomPointer(touch.pointer, touch.position), padId);
+      PadAndTouchData? data = _detectTappedItem(touch);
+      ref.read(senderProvider.notifier).handlePan(NullableTouchAndScreenData(
+          pointer: touch.pointer,
+          padNote: data?.padId,
+          yPercentage: data?.yPercentage,
+          screenTouchPos: touch.position));
     }
   }
 
@@ -156,11 +155,12 @@ class _SlidePadsState extends ConsumerState<SlidePads>
             return;
           } else {
             ref.read(senderProvider.notifier).handlePan(
-                CustomPointer(
-                    touch.pointer,
-                    Offset.lerp(
-                        constrainedPosition, event.origin, returnAnim.value)!),
-                null);
+                NullableTouchAndScreenData(
+                    pointer: touch.pointer,
+                    padNote: null,
+                    yPercentage: null,
+                    screenTouchPos: Offset.lerp(
+                        constrainedPosition, event.origin, returnAnim.value)!));
             setState(() {});
           }
         });

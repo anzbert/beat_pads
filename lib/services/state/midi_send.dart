@@ -131,8 +131,8 @@ class MidiSender extends ChangeNotifier {
   }
 
   /// Handles sliding across pads in 'slide' mode
-  void handlePan(CustomPointer touch, int? note) {
-    playModeHandler.handlePan(touch, note);
+  void handlePan(NullableTouchAndScreenData data) {
+    playModeHandler.handlePan(data);
   }
 
   /// Cleans up Touchevent, when contact with screen ends and the pointer is removed

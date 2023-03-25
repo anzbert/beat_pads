@@ -30,11 +30,8 @@ abstract class PlayModeHandler {
       touchReleaseBuffer.removeNoteFromReleaseBuffer(data.padNote);
     }
 
-    double percentage =
-        (data.padTouchPos.dy / data.padDimensions.height).clamp(0, 1);
-
-    NoteEvent noteOn = NoteEvent(
-        settings.channel, data.padNote, velocityProvider.velocity(percentage))
+    NoteEvent noteOn = NoteEvent(settings.channel, data.padNote,
+        velocityProvider.velocity(data.yPercentage))
       ..noteOn(cc: settings.sendCC);
 
     touchBuffer.addNoteOn(CustomPointer(data.pointer, data.screenTouchPos),
@@ -42,7 +39,7 @@ abstract class PlayModeHandler {
     notifyParent();
   }
 
-  void handlePan(CustomPointer touch, int? note) {}
+  void handlePan(NullableTouchAndScreenData data) {}
 
   void handleEndTouch(CustomPointer touch) {
     TouchEvent? eventInBuffer = touchBuffer.getByID(touch.pointer);

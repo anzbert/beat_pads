@@ -12,12 +12,12 @@ class PlayModePolyAT extends PlayModeHandler {
   }
 
   @override
-  void handlePan(CustomPointer touch, int? note) {
-    TouchEvent? eventInBuffer = touchBuffer.getByID(touch.pointer) ??
-        touchReleaseBuffer.getByID(touch.pointer);
+  void handlePan(NullableTouchAndScreenData data) {
+    TouchEvent? eventInBuffer = touchBuffer.getByID(data.pointer) ??
+        touchReleaseBuffer.getByID(data.pointer);
     if (eventInBuffer == null) return;
 
-    eventInBuffer.updatePosition(touch.position);
+    eventInBuffer.updatePosition(data.screenTouchPos);
     notifyParent(); // for circle drawing
 
     polyATMod.send(

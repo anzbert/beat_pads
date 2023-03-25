@@ -50,9 +50,7 @@ class VelocityProvider {
         return velocityFixed.clamp(10, 127);
       case VelocityMode.yAxis:
         double min = _settings.velocityCenter - velocityRange / 2;
-        return (min + velocityRange * (1 - percentage.clamp(0, 1)))
-            .round()
-            .clamp(0, 127);
+        return (min + velocityRange * percentage).round().clamp(0, 127);
     }
   }
 

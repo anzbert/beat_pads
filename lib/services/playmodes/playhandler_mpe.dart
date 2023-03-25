@@ -38,11 +38,8 @@ class PlayModeMPE extends PlayModeHandler {
       mpeMods.rMod.send(newChannel, data.padNote, 0);
     }
 
-    double percentage =
-        (data.padTouchPos.dy / data.padDimensions.height).clamp(0, 1);
-
     NoteEvent noteOn = NoteEvent(
-        newChannel, data.padNote, velocityProvider.velocity(percentage))
+        newChannel, data.padNote, velocityProvider.velocity(data.yPercentage))
       ..noteOn(cc: false);
 
     touchBuffer.addNoteOn(CustomPointer(data.pointer, data.screenTouchPos),
@@ -51,12 +48,13 @@ class PlayModeMPE extends PlayModeHandler {
   }
 
   @override
-  void handlePan(CustomPointer touch, int? note) {
-    TouchEvent? eventInBuffer = touchBuffer.getByID(touch.pointer) ??
-        touchReleaseBuffer.getByID(touch.pointer);
+  // void handlePan(CustomPointer touch, int? note) {
+  void handlePan(NullableTouchAndScreenData data) {
+    TouchEvent? eventInBuffer = touchBuffer.getByID(data.pointer) ??
+        touchReleaseBuffer.getByID(data.pointer);
     if (eventInBuffer == null) return;
 
-    eventInBuffer.updatePosition(touch.position);
+    eventInBuffer.updatePosition(data.screenTouchPos);
     notifyParent(); // for circle drawing
 
     if (settings.modulation2D) {

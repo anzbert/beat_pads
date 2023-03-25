@@ -29,25 +29,22 @@ class PlayModeSlide extends PlayModeHandler {
   }
 
   @override
-  void handlePan(CustomPointer touch, int? note) {
-    TouchEvent? eventInBuffer = touchBuffer.getByID(touch.pointer);
+  void handlePan(NullableTouchAndScreenData data) {
+    TouchEvent? eventInBuffer = touchBuffer.getByID(data.pointer);
     if (eventInBuffer == null || eventInBuffer.dirty) return;
 
     // Turn note off:
-    if (note != eventInBuffer.noteEvent.note &&
+    if (data.padNote != eventInBuffer.noteEvent.note &&
         eventInBuffer.noteEvent.noteOnMessage != null) {
       if (settings.noteReleaseTime == 0) {
         eventInBuffer.noteEvent.noteOff(); // turn note off immediately
       } else {
-        // TODO: percentage of yaxis not working in slide mode yet
-        double percentage = 0.5;
-
         noteReleaseBuffer.updateReleasedNoteEvent(
           NoteEvent(
             eventInBuffer.noteEvent.channel,
             eventInBuffer.noteEvent.note,
             eventInBuffer.noteEvent.noteOnMessage?.velocity ??
-                velocityProvider.velocity(percentage),
+                velocityProvider.velocity(data.yPercentage ?? 100),
           ),
         ); // add note event to release buffer
         eventInBuffer.noteEvent.clear();
@@ -56,12 +53,9 @@ class PlayModeSlide extends PlayModeHandler {
       notifyParent();
     }
     // Play new note:
-    if (note != null && eventInBuffer.noteEvent.noteOnMessage == null) {
-      // TODO: percentage of yaxis not working in slide mode yet
-      double percentage = 0.5;
-
-      eventInBuffer.noteEvent = NoteEvent(
-          settings.channel, note, velocityProvider.velocity(percentage))
+    if (data.padNote != null && eventInBuffer.noteEvent.noteOnMessage == null) {
+      eventInBuffer.noteEvent = NoteEvent(settings.channel, data.padNote!,
+          velocityProvider.velocity(data.yPercentage ?? 100))
         ..noteOn(cc: settings.playMode.singleChannel ? settings.sendCC : false);
       notifyParent();
     }
