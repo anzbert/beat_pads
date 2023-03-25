@@ -23,9 +23,8 @@ class MenuMidi extends ConsumerWidget {
           resetValue: ref.read(channelSettingProv.notifier).reset,
           min: 1,
           max: 16,
-          label: "Midi Master Channel",
-          subtitle:
-              "Limited to 1 or 16 in MPE Mode (1 for better device compatibility)",
+          label: "Midi Channel",
+          subtitle: "Info for MPE: Only 1 or 16 (1 for better compatibility)",
           trailing: Text((ref.watch(channelUsableProv) + 1).toString()),
           setValue: (v) => ref.read(channelSettingProv.notifier).set(v - 1),
           readValue: ref.watch(channelUsableProv) + 1,
@@ -44,15 +43,6 @@ class MenuMidi extends ConsumerWidget {
           onChangeEnd: ref.read(mpeMemberChannelsProv.notifier).save,
         ),
         const Divider(),
-        // ListTile(
-        //   title: const Text("Random Velocity"),
-        //   subtitle: const Text("Random Velocity within a given range"),
-        //   trailing: Switch(
-        //       value: ref.watch(randomVelocityProv),
-        //       onChanged: (v) =>
-        //           ref.read(randomVelocityProv.notifier).setAndSave(v)),
-        // ),
-////////////////////////
         ListTile(
           title: const Text("Velocity Mode"),
           subtitle: const Text("Choose how Velocity values are created"),
@@ -62,8 +52,6 @@ class MenuMidi extends ConsumerWidget {
             setValue: (v) => ref.read(velocityModeProv.notifier).setAndSave(v),
           ),
         ),
-///////////////////////
-
         if (ref.watch(velocityModeProv) == VelocityMode.fixed)
           IntSliderTile(
             min: 10,

@@ -90,9 +90,6 @@ class _SlidePadsState extends ConsumerState<SlidePads>
       return;
     }
 
-    // TODO: HANDLE SLIDE for y-axis velocity
-    // PadAndTouchData? result = _detectTappedItem(touch);
-
     if (mounted) {
       PadAndTouchData? data = _detectTappedItem(touch);
       ref.read(senderProvider.notifier).handlePan(NullableTouchAndScreenData(
