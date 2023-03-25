@@ -44,7 +44,7 @@ class PlayModeSlide extends PlayModeHandler {
             eventInBuffer.noteEvent.channel,
             eventInBuffer.noteEvent.note,
             eventInBuffer.noteEvent.noteOnMessage?.velocity ??
-                velocityProvider.velocity(data.yPercentage ?? 100),
+                velocityProvider.velocity(data.yPercentage ?? .5),
           ),
         ); // add note event to release buffer
         eventInBuffer.noteEvent.clear();
@@ -55,7 +55,7 @@ class PlayModeSlide extends PlayModeHandler {
     // Play new note:
     if (data.padNote != null && eventInBuffer.noteEvent.noteOnMessage == null) {
       eventInBuffer.noteEvent = NoteEvent(settings.channel, data.padNote!,
-          velocityProvider.velocity(data.yPercentage ?? 100))
+          velocityProvider.velocity(data.yPercentage ?? .5))
         ..noteOn(cc: settings.playMode.singleChannel ? settings.sendCC : false);
       notifyParent();
     }
