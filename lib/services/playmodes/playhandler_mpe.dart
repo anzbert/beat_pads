@@ -38,7 +38,8 @@ class PlayModeMPE extends PlayModeHandler {
       mpeMods.rMod.send(newChannel, data.padNote, 0);
     }
 
-    double percentage = data.padTouchPos.dy / data.padDimensions.height;
+    double percentage =
+        (data.padTouchPos.dy / data.padDimensions.height).clamp(0, 1);
 
     NoteEvent noteOn = NoteEvent(
         newChannel, data.padNote, velocityProvider.velocity(percentage))

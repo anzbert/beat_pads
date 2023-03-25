@@ -30,7 +30,8 @@ abstract class PlayModeHandler {
       touchReleaseBuffer.removeNoteFromReleaseBuffer(data.padNote);
     }
 
-    double percentage = data.padTouchPos.dy / data.padDimensions.height;
+    double percentage =
+        (data.padTouchPos.dy / data.padDimensions.height).clamp(0, 1);
 
     NoteEvent noteOn = NoteEvent(
         settings.channel, data.padNote, velocityProvider.velocity(percentage))

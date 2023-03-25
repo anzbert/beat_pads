@@ -39,11 +39,29 @@ class _SlidePadsState extends ConsumerState<SlidePads>
       for (final HitTestEntry<HitTestTarget> hit in results.path) {
         final HitTestTarget target = hit.target;
         if (target is TestProxyBox) {
+          Offset position = target.globalToLocal(event.position);
+          double ySize = target.size.height;
+
+          // apply deadzone:
+          const double deadZone = 20;
+
+          if (position.dy < deadZone) {
+            position = Offset(position.dx, 0);
+          } else if (position.dy > ySize - deadZone) {
+            position = Offset(position.dx, ySize);
+          } else {
+            position = Offset(
+                position.dx,
+                Utils.mapValueToTargetRange(position.dy, deadZone,
+                    ySize - deadZone, 0, ySize - deadZone * 2));
+            ySize = ySize - deadZone * 2;
+          }
+
           return target.index >= 0 && target.index < 128
               ? PadAndTouchData(
                   padId: target.index,
-                  padTouchPos: target.globalToLocal(event.position),
-                  padDimensions: target.size,
+                  padTouchPos: position,
+                  padDimensions: Size(target.size.width, ySize),
                 )
               : null;
         }
@@ -74,6 +92,9 @@ class _SlidePadsState extends ConsumerState<SlidePads>
     if (ref.read(playModeProv) == PlayMode.noSlide) {
       return;
     }
+
+    // TODO: HANDLE SLIDE for y-axis velocity
+    // PadAndTouchData? result = _detectTappedItem(touch);
 
     if (mounted) {
       int? padId = _detectTappedItem(touch)?.padId;
