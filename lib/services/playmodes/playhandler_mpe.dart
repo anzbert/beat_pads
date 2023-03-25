@@ -38,9 +38,11 @@ class PlayModeMPE extends PlayModeHandler {
       mpeMods.rMod.send(newChannel, data.padNote, 0);
     }
 
-    NoteEvent noteOn =
-        NoteEvent(newChannel, data.padNote, velocityProvider.velocity)
-          ..noteOn(cc: false);
+    double percentage = data.padTouchPos.dy / data.padDimensions.height;
+
+    NoteEvent noteOn = NoteEvent(
+        newChannel, data.padNote, velocityProvider.velocity(percentage))
+      ..noteOn(cc: false);
 
     touchBuffer.addNoteOn(CustomPointer(data.pointer, data.screenTouchPos),
         noteOn, data.screenSize);

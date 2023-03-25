@@ -25,6 +25,7 @@ class LoadSettings {
   final SettingEnum<PadLabels> padLabels;
   final SettingEnum<Layout> layout;
   final SettingEnum<PlayMode> playMode;
+  final SettingEnum<VelocityMode> velocityMode;
   final SettingEnum<MPEmods> mpe1DRadius;
   final SettingEnum<MPEmods> mpe2DX;
   final SettingEnum<MPEmods> mpe2DY;
@@ -52,7 +53,6 @@ class LoadSettings {
   final SettingBool pitchBend;
   final SettingBool octaveButtons;
   final SettingBool sustainButton;
-  final SettingBool randomVelocity;
   final SettingBool velocitySlider;
 
   factory LoadSettings.defaults() {
@@ -107,6 +107,12 @@ class LoadSettings {
           PlayMode.fromName,
           'playMode',
           PlayMode.slide,
+        ),
+        velocityMode = SettingEnum<VelocityMode>(
+          sharedprefs,
+          VelocityMode.fromName,
+          'velocityMode',
+          VelocityMode.fixed,
         ),
         mpePitchBendRange = SettingInt(
           sharedprefs,
@@ -250,11 +256,6 @@ class LoadSettings {
         sustainButton = SettingBool(
           sharedprefs,
           'sustainButton',
-          false,
-        ),
-        randomVelocity = SettingBool(
-          sharedprefs,
-          'randomVelocity',
           false,
         );
 }

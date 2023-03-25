@@ -17,9 +17,11 @@ class PlayModeSlide extends PlayModeHandler {
       noteReleaseBuffer.removeNoteFromReleaseBuffer(data.padNote);
     }
 
-    NoteEvent noteOn =
-        NoteEvent(settings.channel, data.padNote, velocityProvider.velocity)
-          ..noteOn(cc: settings.sendCC);
+    double percentage = 0.5;
+
+    NoteEvent noteOn = NoteEvent(
+        settings.channel, data.padNote, velocityProvider.velocity(percentage))
+      ..noteOn(cc: settings.sendCC);
 
     touchBuffer.addNoteOn(CustomPointer(data.pointer, data.screenTouchPos),
         noteOn, data.screenSize);
@@ -37,12 +39,15 @@ class PlayModeSlide extends PlayModeHandler {
       if (settings.noteReleaseTime == 0) {
         eventInBuffer.noteEvent.noteOff(); // turn note off immediately
       } else {
+        // TODO: percentage of yaxis not working in slide mode yet
+        double percentage = 0.5;
+
         noteReleaseBuffer.updateReleasedNoteEvent(
           NoteEvent(
             eventInBuffer.noteEvent.channel,
             eventInBuffer.noteEvent.note,
             eventInBuffer.noteEvent.noteOnMessage?.velocity ??
-                velocityProvider.velocity,
+                velocityProvider.velocity(percentage),
           ),
         ); // add note event to release buffer
         eventInBuffer.noteEvent.clear();
@@ -52,8 +57,11 @@ class PlayModeSlide extends PlayModeHandler {
     }
     // Play new note:
     if (note != null && eventInBuffer.noteEvent.noteOnMessage == null) {
+      // TODO: percentage of yaxis not working in slide mode yet
+      double percentage = 0.5;
+
       eventInBuffer.noteEvent = NoteEvent(
-          settings.channel, note, velocityProvider.velocity)
+          settings.channel, note, velocityProvider.velocity(percentage))
         ..noteOn(cc: settings.playMode.singleChannel ? settings.sendCC : false);
       notifyParent();
     }

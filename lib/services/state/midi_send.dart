@@ -24,7 +24,7 @@ class SendSettings {
   final int velocityRange;
   final int velocity;
   final double velocityCenter;
-  final bool randomVelocity;
+  final VelocityMode velocityMode;
 
   /// A data object which holds all the settings required for sending midi
   SendSettings(
@@ -45,7 +45,7 @@ class SendSettings {
     this.velocityRange,
     this.velocity,
     this.velocityCenter,
-    this.randomVelocity,
+    this.velocityMode,
   );
 }
 
@@ -69,7 +69,7 @@ final combinedSettings = Provider.autoDispose<SendSettings>((ref) {
     ref.watch(velocityRangeProv),
     ref.watch(velocityProv),
     ref.watch(velocityCenterProv),
-    ref.watch(randomVelocityProv),
+    ref.watch(velocityModeProv),
   );
 });
 

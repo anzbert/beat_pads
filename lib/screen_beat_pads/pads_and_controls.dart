@@ -63,7 +63,8 @@ class BeatPadsAndControls extends ConsumerWidget {
                 flex: 7,
                 child: SliderVelocity(
                   channel: ref.watch(channelUsableProv),
-                  randomVelocity: ref.watch(randomVelocityProv),
+                  randomVelocity:
+                      ref.watch(velocityModeProv) != VelocityMode.fixed,
                 ),
               ),
             // PADS

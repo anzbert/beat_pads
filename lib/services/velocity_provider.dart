@@ -2,6 +2,25 @@ import 'dart:math';
 
 import 'package:beat_pads/services/state/midi_send.dart';
 
+enum VelocityMode {
+  random("Random"),
+  fixed("Fixed"),
+  yAxis("Y-Axis");
+
+  const VelocityMode(this.title);
+  final String title;
+
+  @override
+  String toString() => title;
+
+  static VelocityMode? fromName(String key) {
+    for (VelocityMode mode in VelocityMode.values) {
+      if (mode.name == key) return mode;
+    }
+    return null;
+  }
+}
+
 class VelocityProvider {
   final SendSettings _settings;
   final Function _notifyParent;
@@ -21,14 +40,20 @@ class VelocityProvider {
 
   /// Use this value to send notes.
   /// Random velocity is based on a center-of-range value, usable with a single-value slider.
-  int get velocity {
-    if (!_settings.randomVelocity) {
-      return velocityFixed.clamp(10, 127); // fixed velocity
+  int velocity(double percentage) {
+    switch (_settings.velocityMode) {
+      case VelocityMode.random:
+        double randVelocity = _random.nextInt(velocityRange) +
+            (_velocityRandomCenter - velocityRange / 2);
+        return randVelocity.round().clamp(10, 127);
+      case VelocityMode.fixed:
+        return velocityFixed.clamp(10, 127);
+      case VelocityMode.yAxis:
+        double min = _settings.velocityCenter - velocityRange / 2;
+        return (min + velocityRange * (1 - percentage.clamp(0, 1)))
+            .round()
+            .clamp(0, 127);
     }
-
-    double randVelocity = _random.nextInt(velocityRange) +
-        (_velocityRandomCenter - velocityRange / 2);
-    return randVelocity.round().clamp(10, 127);
   }
 
   /// For Velocity Slider on pads screen:

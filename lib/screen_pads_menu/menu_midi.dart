@@ -1,8 +1,10 @@
 import 'package:beat_pads/screen_pads_menu/slider_int.dart';
-import 'package:beat_pads/services/state/state.dart';
 import 'package:flutter/material.dart';
 import 'package:beat_pads/screen_pads_menu/slider_int_range.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'drop_down_enum.dart';
+import 'package:beat_pads/services/services.dart';
 
 class MenuMidi extends ConsumerWidget {
   @override
@@ -42,15 +44,27 @@ class MenuMidi extends ConsumerWidget {
           onChangeEnd: ref.read(mpeMemberChannelsProv.notifier).save,
         ),
         const Divider(),
+        // ListTile(
+        //   title: const Text("Random Velocity"),
+        //   subtitle: const Text("Random Velocity within a given range"),
+        //   trailing: Switch(
+        //       value: ref.watch(randomVelocityProv),
+        //       onChanged: (v) =>
+        //           ref.read(randomVelocityProv.notifier).setAndSave(v)),
+        // ),
+////////////////////////
         ListTile(
-          title: const Text("Random Velocity"),
-          subtitle: const Text("Random Velocity within a given range"),
-          trailing: Switch(
-              value: ref.watch(randomVelocityProv),
-              onChanged: (v) =>
-                  ref.read(randomVelocityProv.notifier).setAndSave(v)),
+          title: const Text("Velocity Mode"),
+          subtitle: const Text("Choose how Velocity values are created"),
+          trailing: DropdownEnum(
+            values: VelocityMode.values,
+            readValue: ref.watch(velocityModeProv),
+            setValue: (v) => ref.read(velocityModeProv.notifier).setAndSave(v),
+          ),
         ),
-        if (!ref.watch(randomVelocityProv))
+///////////////////////
+
+        if (ref.watch(velocityModeProv) == VelocityMode.fixed)
           IntSliderTile(
             min: 10,
             max: 127,
@@ -62,9 +76,9 @@ class MenuMidi extends ConsumerWidget {
             resetValue: ref.read(velocityProv.notifier).reset,
             onChangeEnd: ref.read(velocityProv.notifier).save,
           ),
-        if (ref.watch(randomVelocityProv))
+        if (ref.watch(velocityModeProv) != VelocityMode.fixed)
           MidiRangeSelectorTile(
-            label: "Random Velocity Range",
+            label: "Velocity Range",
             readMin: ref.watch(velocityMinProv),
             readMax: ref.watch(velocityMaxProv),
             setMin: (v) => ref.read(velocityMinProv.notifier).set(v),
