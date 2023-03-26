@@ -18,19 +18,17 @@ class SlideBeatPad extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final double screenWidth = MediaQuery.of(context).size.width;
 
+    final int velocity =
+        ref.watch(senderProvider).playModeHandler.isNoteOn(note);
+
     final Color color = ref.watch(padColorsProv).colorize(
           ref.watch(scaleProv).intervals,
           ref.watch(baseHueProv),
           ref.watch(rootProv),
           note,
-          ref.watch(senderProvider).playModeHandler.isNoteOn(note) != 0
-              ? true
-              : false,
+          velocity != 0 ? true : false,
           preview ? 0 : ref.watch(rxNoteProvider)[note],
         );
-
-    final double velocityPercentage =
-        1 - ref.watch(senderProvider).playModeHandler.isNoteOn(note) / 127;
 
     final Color splashColor = Palette.splashColor;
 
@@ -116,8 +114,8 @@ class SlideBeatPad extends ConsumerWidget {
                   ),
           ),
           VelocityOverlay(
-            percentage: velocityPercentage,
-            radius: padRadius,
+            velocity: velocity,
+            padRadius: padRadius,
           ),
         ],
       ),

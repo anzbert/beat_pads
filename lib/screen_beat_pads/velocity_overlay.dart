@@ -2,11 +2,15 @@ import 'package:beat_pads/services/services.dart';
 import 'package:flutter/material.dart';
 
 class VelocityOverlay extends StatelessWidget {
-  const VelocityOverlay(
-      {required this.percentage, required this.radius, super.key});
+  const VelocityOverlay({
+    required this.velocity,
+    required this.padRadius,
+    super.key,
+  });
 
-  final double percentage;
-  final BorderRadius radius;
+  final int velocity;
+
+  final BorderRadius padRadius;
 
   @override
   Widget build(BuildContext context) {
@@ -18,12 +22,14 @@ class VelocityOverlay extends StatelessWidget {
       size = temp.size;
     }
 
+    final double percentage = 1 - velocity / 127;
+
     return Container(
       margin: EdgeInsets.only(
         top: size.height * percentage,
       ),
       decoration: BoxDecoration(
-        borderRadius: radius,
+        borderRadius: padRadius,
         color: Palette.dirtyTranslucent,
       ),
       alignment: Alignment.bottomCenter,
