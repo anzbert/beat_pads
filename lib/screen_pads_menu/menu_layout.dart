@@ -86,7 +86,10 @@ class MenuLayout extends ConsumerWidget {
                   title: const Text("Scale Root Note"),
                   subtitle: const Text("Root Note of the selected scale"),
                   trailing: DropdownRootNote(
-                    setValue: (v) => ref.read(rootProv.notifier).setAndSave(v),
+                    setValue: (v) {
+                      ref.read(rootProv.notifier).setAndSave(v);
+                      ref.read(baseProv.notifier).setAndSave(v);
+                    },
                     readValue: ref.watch(rootProv),
                   ),
                 ),
