@@ -7,6 +7,8 @@ import 'package:beat_pads/shared_components/_shared.dart';
 import 'package:beat_pads/screen_pads_menu/switch_wake_lock.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'divider_title.dart';
+
 class MenuSystem extends ConsumerWidget {
   final double buttonMinWidth = 300;
 
@@ -14,14 +16,7 @@ class MenuSystem extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return ListView(
       children: <Widget>[
-        ListTile(
-          title: const Divider(),
-          trailing: Text(
-            "System Settings",
-            style: TextStyle(
-                fontSize: Theme.of(context).textTheme.headlineSmall!.fontSize),
-          ),
-        ),
+        const DividerTitle("System"),
         const SwitchWakeLockTile(),
         const Divider(),
         Center(

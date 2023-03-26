@@ -8,6 +8,8 @@ import 'package:beat_pads/screen_pads_menu/slider_non_linear.dart';
 import 'package:beat_pads/screen_pads_menu/drop_down_notes.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'divider_title.dart';
+
 class MenuLayout extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -41,15 +43,7 @@ class MenuLayout extends ConsumerWidget {
           flex: 3,
           child: ListView(
             children: <Widget>[
-              ListTile(
-                title: const Divider(),
-                trailing: Text(
-                  "Layout Settings",
-                  style: TextStyle(
-                      fontSize:
-                          Theme.of(context).textTheme.headlineSmall!.fontSize),
-                ),
-              ),
+              const DividerTitle("Layout"),
               ListTile(
                 title: const Text("Layout"),
                 trailing: DropdownEnum<Layout>(
@@ -58,7 +52,6 @@ class MenuLayout extends ConsumerWidget {
                   setValue: (v) => ref.read(layoutProv.notifier).setAndSave(v),
                 ),
               ),
-              const Divider(),
               if (resizableGrid)
                 IntCounterTile(
                   label: "Width",
@@ -71,7 +64,7 @@ class MenuLayout extends ConsumerWidget {
                   setValue: (v) => ref.read(heightProv.notifier).setAndSave(v),
                   readValue: ref.watch(heightProv),
                 ),
-              if (resizableGrid) const Divider(),
+              if (resizableGrid) const DividerTitle("Scales"),
               if (resizableGrid)
                 ListTile(
                   title: const Text("Scale"),
@@ -93,7 +86,6 @@ class MenuLayout extends ConsumerWidget {
                     readValue: ref.watch(rootProv),
                   ),
                 ),
-              // if (resizableGrid) const Divider(),
               if (resizableGrid)
                 ListTile(
                   title: const Text("Base Note"),
@@ -112,7 +104,7 @@ class MenuLayout extends ConsumerWidget {
                       ref.read(baseOctaveProv.notifier).setAndSave(v),
                   resetFunction: ref.read(baseOctaveProv.notifier).reset,
                 ),
-              if (resizableGrid) const Divider(),
+              const DividerTitle("Controls"),
               if (resizableGrid)
                 ListTile(
                   title: const Text("Octave Buttons"),
@@ -173,7 +165,7 @@ class MenuLayout extends ConsumerWidget {
                 steps: Timing.releaseDelayTimes.length - 1,
                 onChangeEnd: ref.read(pitchBendEaseStepProv.notifier).save,
               ),
-              const Divider(),
+              const DividerTitle("Display"),
               ListTile(
                 title: const Text("Pad Labels"),
                 subtitle:

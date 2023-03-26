@@ -1,3 +1,4 @@
+import 'package:beat_pads/screen_pads_menu/divider_title.dart';
 import 'package:beat_pads/screen_pads_menu/drop_down_enum.dart';
 import 'package:beat_pads/screen_pads_menu/drop_down_modulation.dart';
 import 'package:beat_pads/screen_pads_menu/slider_int.dart';
@@ -12,24 +13,17 @@ class MenuInput extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return ListView(
       children: <Widget>[
-        ListTile(
-          title: const Divider(),
-          trailing: Text(
-            "Input Settings",
-            style: TextStyle(
-                fontSize: Theme.of(context).textTheme.headlineSmall!.fontSize),
-          ),
-        ),
+        const DividerTitle("Input"),
         ListTile(
           title: const Text("Slide Mode"),
-          subtitle: const Text("Finger slide behavior on an activated pad"),
+          subtitle: const Text("Finger slide behavior on the grid"),
           trailing: DropdownEnum(
             values: PlayMode.values,
             readValue: ref.watch(playModeProv),
             setValue: (v) => ref.read(playModeProv.notifier).setAndSave(v),
           ),
         ),
-        const Divider(),
+        if (ref.watch(playModeProv) == PlayMode.mpe) const DividerTitle("MPE"),
         if (ref.watch(playModeProv) == PlayMode.mpe)
           ListTile(
             title: const Text("2-D Modulation"),
@@ -70,39 +64,6 @@ class MenuInput extends ConsumerWidget {
               setValue: (v) => ref.read(mpe1DRadiusProv.notifier).setAndSave(v),
             ),
           ),
-        if (ref.watch(playModeProv) == PlayMode.mpe) const Divider(),
-        NonLinearSliderTile(
-          label: "Note Release Delay",
-          subtitle: "NoteOff delay after release in milliseconds",
-          readValue: ref.watch(noteReleaseStepProv),
-          setValue: (v) => ref.read(noteReleaseStepProv.notifier).set(v),
-          resetFunction: ref.read(noteReleaseStepProv.notifier).reset,
-          displayValue: ref.watch(noteReleaseUsable) == 0
-              ? "Off"
-              : ref.watch(noteReleaseUsable) < 1000
-                  ? "${ref.watch(noteReleaseUsable)} ms"
-                  : "${ref.watch(noteReleaseUsable) / 1000} s",
-          start: 0,
-          steps: Timing.releaseDelayTimes.length ~/ 1.5,
-          onChangeEnd: ref.read(noteReleaseStepProv.notifier).save,
-        ),
-        if (ref.watch(playModeProv).modulatable)
-          NonLinearSliderTile(
-            label: "Modulation Ease Back",
-            subtitle:
-                "Modulation returning to Zero after release in milliseconds",
-            readValue: ref.watch(modReleaseStepProv),
-            setValue: (v) => ref.read(modReleaseStepProv.notifier).set(v),
-            resetFunction: ref.read(modReleaseStepProv.notifier).reset,
-            displayValue: ref.watch(modReleaseUsable) == 0
-                ? "Off"
-                : ref.watch(modReleaseUsable) < 1000
-                    ? "${ref.watch(modReleaseUsable)} ms"
-                    : "${ref.watch(modReleaseUsable) / 1000} s",
-            start: 0,
-            steps: Timing.releaseDelayTimes.length ~/ 1.5,
-            onChangeEnd: ref.read(modReleaseStepProv.notifier).save,
-          ),
         if (ref.watch(playModeProv) == PlayMode.mpe)
           if (ref.watch(mpe1DRadiusProv).exclusiveGroup == Group.pitch ||
               ref.watch(mpe2DXProv).exclusiveGroup == Group.pitch ||
@@ -118,7 +79,8 @@ class MenuInput extends ConsumerWidget {
               resetValue: ref.read(mpePitchbendRangeProv.notifier).reset,
               onChangeEnd: ref.read(mpePitchbendRangeProv.notifier).save,
             ),
-        if (ref.watch(playModeProv).modulatable) const Divider(),
+        if (ref.watch(playModeProv).modulatable)
+          const DividerTitle("Modulation"),
         if (ref.watch(playModeProv).modulatable)
           ModSizeSliderTile(
             min: ref.watch(modulationRadiusProv.notifier).min,
@@ -151,7 +113,40 @@ class MenuInput extends ConsumerWidget {
             resetValue: ref.read(modulationDeadZoneProv.notifier).reset,
             onChangeEnd: ref.read(modulationDeadZoneProv.notifier).save,
           ),
-        if (ref.watch(playModeProv).singleChannel) const Divider(),
+        const DividerTitle("Release"),
+        NonLinearSliderTile(
+          label: "Note Release Delay",
+          subtitle: "NoteOff delay after release in milliseconds",
+          readValue: ref.watch(noteReleaseStepProv),
+          setValue: (v) => ref.read(noteReleaseStepProv.notifier).set(v),
+          resetFunction: ref.read(noteReleaseStepProv.notifier).reset,
+          displayValue: ref.watch(noteReleaseUsable) == 0
+              ? "Off"
+              : ref.watch(noteReleaseUsable) < 1000
+                  ? "${ref.watch(noteReleaseUsable)} ms"
+                  : "${ref.watch(noteReleaseUsable) / 1000} s",
+          start: 0,
+          steps: Timing.releaseDelayTimes.length ~/ 1.5,
+          onChangeEnd: ref.read(noteReleaseStepProv.notifier).save,
+        ),
+        if (ref.watch(playModeProv).modulatable)
+          NonLinearSliderTile(
+            label: "Modulation Ease Back",
+            subtitle:
+                "Modulation returning to Zero after release in milliseconds",
+            readValue: ref.watch(modReleaseStepProv),
+            setValue: (v) => ref.read(modReleaseStepProv.notifier).set(v),
+            resetFunction: ref.read(modReleaseStepProv.notifier).reset,
+            displayValue: ref.watch(modReleaseUsable) == 0
+                ? "Off"
+                : ref.watch(modReleaseUsable) < 1000
+                    ? "${ref.watch(modReleaseUsable)} ms"
+                    : "${ref.watch(modReleaseUsable) / 1000} s",
+            start: 0,
+            steps: Timing.releaseDelayTimes.length ~/ 1.5,
+            onChangeEnd: ref.read(modReleaseStepProv.notifier).save,
+          ),
+        if (ref.watch(playModeProv).singleChannel) const DividerTitle("CC"),
         if (ref.watch(playModeProv).singleChannel)
           ListTile(
             title: const Text("Send CC"),

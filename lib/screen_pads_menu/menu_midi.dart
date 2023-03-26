@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:beat_pads/screen_pads_menu/slider_int_range.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'divider_title.dart';
 import 'drop_down_enum.dart';
 import 'package:beat_pads/services/services.dart';
 
@@ -11,20 +12,13 @@ class MenuMidi extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return ListView(
       children: <Widget>[
-        ListTile(
-          title: const Divider(),
-          trailing: Text(
-            "Midi Settings",
-            style: TextStyle(
-                fontSize: Theme.of(context).textTheme.headlineSmall!.fontSize),
-          ),
-        ),
+        const DividerTitle("Channel"),
         IntSliderTile(
           resetValue: ref.read(channelSettingProv.notifier).reset,
           min: 1,
           max: 16,
           label: "Midi Channel",
-          subtitle: "Info for MPE: Only 1 or 16 (1 for better compatibility)",
+          subtitle: "In MPE Mode only 1 or 16",
           trailing: Text((ref.watch(channelUsableProv) + 1).toString()),
           setValue: (v) => ref.read(channelSettingProv.notifier).set(v - 1),
           readValue: ref.watch(channelUsableProv) + 1,
@@ -42,7 +36,7 @@ class MenuMidi extends ConsumerWidget {
           readValue: ref.watch(mpeMemberChannelsProv),
           onChangeEnd: ref.read(mpeMemberChannelsProv.notifier).save,
         ),
-        const Divider(),
+        const DividerTitle("Velocity"),
         ListTile(
           title: const Text("Velocity Mode"),
           subtitle: const Text("Choose how Velocity values are created"),
