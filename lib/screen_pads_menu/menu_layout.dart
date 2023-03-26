@@ -93,7 +93,7 @@ class MenuLayout extends ConsumerWidget {
                     readValue: ref.watch(rootProv),
                   ),
                 ),
-              if (resizableGrid) const Divider(),
+              // if (resizableGrid) const Divider(),
               if (resizableGrid)
                 ListTile(
                   title: const Text("Base Note"),
@@ -112,6 +112,7 @@ class MenuLayout extends ConsumerWidget {
                       ref.read(baseOctaveProv.notifier).setAndSave(v),
                   resetFunction: ref.read(baseOctaveProv.notifier).reset,
                 ),
+              if (resizableGrid) const Divider(),
               if (resizableGrid)
                 ListTile(
                   title: const Text("Octave Buttons"),
@@ -122,7 +123,6 @@ class MenuLayout extends ConsumerWidget {
                       onChanged: (v) =>
                           ref.read(octaveButtonsProv.notifier).setAndSave(v)),
                 ),
-              if (resizableGrid) const Divider(),
               ListTile(
                 title: const Text("Sustain Button"),
                 subtitle: const Text(
