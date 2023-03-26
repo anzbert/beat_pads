@@ -35,9 +35,15 @@ final velocityProv = StateNotifierProvider<SettingInt, int>((ref) {
   return ref.watch(sharedPrefProvider).settings.velocity;
 });
 
-final randomVelocityProv = StateNotifierProvider<SettingBool, bool>((ref) {
-  return ref.watch(sharedPrefProvider).settings.randomVelocity;
+// final randomVelocityProv = StateNotifierProvider<SettingBool, bool>((ref) {
+//   return ref.watch(sharedPrefProvider).settings.randomVelocity;
+// });
+
+final velocityModeProv =
+    StateNotifierProvider<SettingEnum<VelocityMode>, VelocityMode>((ref) {
+  return ref.watch(sharedPrefProvider).settings.velocityMode;
 });
+
 final velocityMinProv = StateNotifierProvider<SettingInt, int>((ref) {
   return ref.watch(sharedPrefProvider).settings.velocityMin;
 });

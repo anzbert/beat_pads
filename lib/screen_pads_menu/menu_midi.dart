@@ -1,29 +1,50 @@
 import 'package:beat_pads/screen_pads_menu/slider_int.dart';
-import 'package:beat_pads/services/state/state.dart';
 import 'package:flutter/material.dart';
 import 'package:beat_pads/screen_pads_menu/slider_int_range.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../shared_components/divider_title.dart';
+import 'drop_down_enum.dart';
+import 'package:beat_pads/services/services.dart';
 
 class MenuMidi extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ListView(
       children: <Widget>[
-        ListTile(
-          title: const Divider(),
-          trailing: Text(
-            "Midi Settings",
-            style: TextStyle(
-                fontSize: Theme.of(context).textTheme.headlineSmall!.fontSize),
+        const DividerTitle("Connect"),
+        Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(minWidth: 300),
+            child: ElevatedButton(
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: Palette.lightPink,
+                  textStyle: const TextStyle(fontWeight: FontWeight.bold)),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: const [
+                  Icon(
+                    Icons.cable,
+                  ),
+                  Text(
+                    "Select Midi Device",
+                  ),
+                ],
+              ),
+            ),
           ),
         ),
+        const DividerTitle("Channel"),
         IntSliderTile(
           resetValue: ref.read(channelSettingProv.notifier).reset,
           min: 1,
           max: 16,
-          label: "Midi Master Channel",
-          subtitle:
-              "Limited to 1 or 16 in MPE Mode (1 for better device compatibility)",
+          label: "Midi Channel",
+          subtitle: "In MPE Mode only 1 or 16",
           trailing: Text((ref.watch(channelUsableProv) + 1).toString()),
           setValue: (v) => ref.read(channelSettingProv.notifier).set(v - 1),
           readValue: ref.watch(channelUsableProv) + 1,
@@ -41,16 +62,17 @@ class MenuMidi extends ConsumerWidget {
           readValue: ref.watch(mpeMemberChannelsProv),
           onChangeEnd: ref.read(mpeMemberChannelsProv.notifier).save,
         ),
-        const Divider(),
+        const DividerTitle("Velocity"),
         ListTile(
-          title: const Text("Random Velocity"),
-          subtitle: const Text("Random Velocity within a given range"),
-          trailing: Switch(
-              value: ref.watch(randomVelocityProv),
-              onChanged: (v) =>
-                  ref.read(randomVelocityProv.notifier).setAndSave(v)),
+          title: const Text("Velocity Mode"),
+          subtitle: const Text("Choose how Velocity values are created"),
+          trailing: DropdownEnum(
+            values: VelocityMode.values,
+            readValue: ref.watch(velocityModeProv),
+            setValue: (v) => ref.read(velocityModeProv.notifier).setAndSave(v),
+          ),
         ),
-        if (!ref.watch(randomVelocityProv))
+        if (ref.watch(velocityModeProv) == VelocityMode.fixed)
           IntSliderTile(
             min: 10,
             max: 127,
@@ -62,9 +84,9 @@ class MenuMidi extends ConsumerWidget {
             resetValue: ref.read(velocityProv.notifier).reset,
             onChangeEnd: ref.read(velocityProv.notifier).save,
           ),
-        if (ref.watch(randomVelocityProv))
+        if (ref.watch(velocityModeProv) != VelocityMode.fixed)
           MidiRangeSelectorTile(
-            label: "Random Velocity Range",
+            label: "Velocity Range",
             readMin: ref.watch(velocityMinProv),
             readMax: ref.watch(velocityMaxProv),
             setMin: (v) => ref.read(velocityMinProv.notifier).set(v),

@@ -23,7 +23,8 @@ class _SlidePadsState extends ConsumerState<SlidePads>
     _animations.removeWhere((element) => element.kill);
   }
 
-  int? _detectTappedItem(PointerEvent event) {
+  /// Returns a CustomPointer with the index of the clicked pad and the position Offset within the pad surface
+  PadAndTouchData? _detectTappedItem(PointerEvent event) {
     final BuildContext? context = _padsWidgetKey.currentContext;
     if (context == null) return null;
 
@@ -31,13 +32,37 @@ class _SlidePadsState extends ConsumerState<SlidePads>
     if (box == null) return null;
 
     final Offset localOffset = box.globalToLocal(event.position);
+
     final BoxHitTestResult results = BoxHitTestResult();
 
     if (box.hitTest(results, position: localOffset)) {
       for (final HitTestEntry<HitTestTarget> hit in results.path) {
         final HitTestTarget target = hit.target;
+
         if (target is TestProxyBox) {
-          return target.index >= 0 && target.index < 128 ? target.index : null;
+          // final Offset position = target.globalToLocal(event.position);
+
+          double yPos = target.globalToLocal(event.position).dy;
+          double ySize = target.size.height;
+
+          const double yDeadZone = 20; // pixels
+
+          if (yPos < yDeadZone) {
+            yPos = 0;
+          } else if (yPos > ySize - yDeadZone) {
+            yPos = ySize;
+          } else {
+            yPos = Utils.mapValueToTargetRange(
+                yPos, yDeadZone, ySize - yDeadZone, 0, ySize - yDeadZone * 2);
+            ySize = ySize - yDeadZone * 2;
+          }
+
+          return target.index >= 0 && target.index < 128
+              ? PadAndTouchData(
+                  padId: target.index, // = Note
+                  yPercentage: 1 - (yPos / ySize).clamp(0, 1),
+                )
+              : null;
         }
       }
     }
@@ -46,14 +71,17 @@ class _SlidePadsState extends ConsumerState<SlidePads>
   }
 
   down(PointerEvent touch) {
-    int? result = _detectTappedItem(touch);
+    PadAndTouchData? result = _detectTappedItem(touch);
 
     if (mounted && result != null) {
-      ref.read<MidiSender>(senderProvider.notifier).handleNewTouch(
-            CustomPointer(touch.pointer, touch.position),
-            result,
-            MediaQuery.of(context).size,
-          );
+      PadTouchAndScreenData data = PadTouchAndScreenData(
+          pointer: touch.pointer,
+          screenTouchPos: touch.position,
+          screenSize: MediaQuery.of(context).size,
+          padNote: result.padId,
+          yPercentage: result.yPercentage);
+
+      ref.read<MidiSender>(senderProvider.notifier).handleNewTouch(data);
     }
   }
 
@@ -63,10 +91,12 @@ class _SlidePadsState extends ConsumerState<SlidePads>
     }
 
     if (mounted) {
-      int? result = _detectTappedItem(touch);
-      ref
-          .read(senderProvider.notifier)
-          .handlePan(CustomPointer(touch.pointer, touch.position), result);
+      PadAndTouchData? data = _detectTappedItem(touch);
+      ref.read(senderProvider.notifier).handlePan(NullableTouchAndScreenData(
+          pointer: touch.pointer,
+          padNote: data?.padId,
+          yPercentage: data?.yPercentage,
+          screenTouchPos: touch.position));
     }
   }
 
@@ -122,11 +152,12 @@ class _SlidePadsState extends ConsumerState<SlidePads>
             return;
           } else {
             ref.read(senderProvider.notifier).handlePan(
-                CustomPointer(
-                    touch.pointer,
-                    Offset.lerp(
-                        constrainedPosition, event.origin, returnAnim.value)!),
-                null);
+                NullableTouchAndScreenData(
+                    pointer: touch.pointer,
+                    padNote: null,
+                    yPercentage: null,
+                    screenTouchPos: Offset.lerp(
+                        constrainedPosition, event.origin, returnAnim.value)!));
             setState(() {});
           }
         });
@@ -170,7 +201,10 @@ class _SlidePadsState extends ConsumerState<SlidePads>
                             (customPad) {
                               switch (customPad.padType) {
                                 case PadType.encoder:
-                                  // TODO: Handle this case.
+                                  // Case not implemented...
+                                  return const SizedBox.expand();
+                                case PadType.chord:
+                                  // Case not implemented...
                                   return const SizedBox.expand();
                                 case PadType.note:
                                   return Expanded(
@@ -183,9 +217,6 @@ class _SlidePadsState extends ConsumerState<SlidePads>
                                       ),
                                     ),
                                   );
-                                case PadType.chord:
-                                  // TODO: Handle this case.
-                                  return const SizedBox.expand();
                               }
                             },
                           ),

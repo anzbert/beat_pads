@@ -1,5 +1,4 @@
 import 'package:beat_pads/services/services.dart';
-import 'package:flutter/material.dart';
 
 class PlayModeMPE extends PlayModeHandler {
   final SendMpe mpeMods;
@@ -21,10 +20,10 @@ class PlayModeMPE extends PlayModeHandler {
   }
 
   @override
-  void handleNewTouch(CustomPointer touch, int noteTapped, Size screenSize) {
+  void handleNewTouch(PadTouchAndScreenData data) {
     // remove note if it is still playing
     if (settings.modReleaseTime > 0 || settings.noteReleaseTime > 0) {
-      touchReleaseBuffer.removeNoteFromReleaseBuffer(noteTapped);
+      touchReleaseBuffer.removeNoteFromReleaseBuffer(data.padNote);
     }
 
     int newChannel = channelProvider.provideChannel([
@@ -33,27 +32,29 @@ class PlayModeMPE extends PlayModeHandler {
     ]); // get new channel from generator
 
     if (settings.modulation2D) {
-      mpeMods.xMod.send(newChannel, noteTapped, 0);
-      mpeMods.yMod.send(newChannel, noteTapped, 0);
+      mpeMods.xMod.send(newChannel, data.padNote, 0);
+      mpeMods.yMod.send(newChannel, data.padNote, 0);
     } else {
-      mpeMods.rMod.send(newChannel, noteTapped, 0);
+      mpeMods.rMod.send(newChannel, data.padNote, 0);
     }
 
-    NoteEvent noteOn =
-        NoteEvent(newChannel, noteTapped, velocityProvider.velocity)
-          ..noteOn(cc: false);
+    NoteEvent noteOn = NoteEvent(
+        newChannel, data.padNote, velocityProvider.velocity(data.yPercentage))
+      ..noteOn(cc: false);
 
-    touchBuffer.addNoteOn(touch, noteOn, screenSize);
+    touchBuffer.addNoteOn(CustomPointer(data.pointer, data.screenTouchPos),
+        noteOn, data.screenSize);
     notifyParent();
   }
 
   @override
-  void handlePan(CustomPointer touch, int? note) {
-    TouchEvent? eventInBuffer = touchBuffer.getByID(touch.pointer) ??
-        touchReleaseBuffer.getByID(touch.pointer);
+  // void handlePan(CustomPointer touch, int? note) {
+  void handlePan(NullableTouchAndScreenData data) {
+    TouchEvent? eventInBuffer = touchBuffer.getByID(data.pointer) ??
+        touchReleaseBuffer.getByID(data.pointer);
     if (eventInBuffer == null) return;
 
-    eventInBuffer.updatePosition(touch.position);
+    eventInBuffer.updatePosition(data.screenTouchPos);
     notifyParent(); // for circle drawing
 
     if (settings.modulation2D) {

@@ -1,8 +1,8 @@
 import 'package:beat_pads/services/services.dart';
 
 enum PlayMode {
-  slide("Sliding"),
-  noSlide("No Sliding"),
+  slide("Trigger Notes"),
+  noSlide("Disabled"),
   polyAT("Poly Aftertouch"),
   mpe("MPE");
 

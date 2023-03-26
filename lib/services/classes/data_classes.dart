@@ -25,6 +25,50 @@ class CustomPointer {
   CustomPointer(this.pointer, this.position);
 }
 
+class PadAndTouchData {
+  final double yPercentage;
+  final int padId;
+
+  /// Contains a pointer ID with information about the touch location
+  /// , as well as information about the touched pad widget size
+  PadAndTouchData({
+    required this.yPercentage,
+    required this.padId,
+  });
+}
+
+class PadTouchAndScreenData {
+  final int pointer;
+  final double yPercentage;
+  final int padNote;
+  final Offset screenTouchPos;
+  final Size screenSize;
+
+  /// Contains a pointer ID with information about the touch location
+  /// , as well as information about the touched pad widget size
+  PadTouchAndScreenData(
+      {required this.screenSize,
+      required this.pointer,
+      required this.padNote,
+      required this.yPercentage,
+      required this.screenTouchPos});
+}
+
+class NullableTouchAndScreenData {
+  final int pointer;
+  final double? yPercentage;
+  final int? padNote;
+  final Offset screenTouchPos;
+
+  /// Contains a pointer ID with information about the touch location
+  /// , as well as information about the touched pad widget size
+  NullableTouchAndScreenData(
+      {required this.pointer,
+      required this.padNote,
+      required this.yPercentage,
+      required this.screenTouchPos});
+}
+
 class MidiMessagePacket {
   final MidiMessageType type;
   final List<int> content;

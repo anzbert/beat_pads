@@ -66,7 +66,7 @@ class PadMenuScreen extends ConsumerWidget {
                     Scaffold.of(context).openDrawer();
                   },
                   icon: Icon(
-                    Icons.menu,
+                    Icons.cable,
                     color: Palette.lightPink,
                     size: 36,
                   ),
@@ -127,7 +127,7 @@ class PadMenuScreen extends ConsumerWidget {
                     Icons.touch_app,
                     color: Palette.cadetBlue,
                   ),
-                  label: "Input",
+                  label: "Advanced",
                 ),
                 BottomNavigationBarItem(
                   activeIcon: Icon(

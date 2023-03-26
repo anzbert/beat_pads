@@ -7,42 +7,21 @@ import 'package:beat_pads/shared_components/_shared.dart';
 import 'package:beat_pads/screen_pads_menu/switch_wake_lock.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../shared_components/divider_title.dart';
+
 class MenuSystem extends ConsumerWidget {
-  final double buttonMinWidth = 300;
+  static const double buttonMinWidth = 300;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ListView(
       children: <Widget>[
-        ListTile(
-          title: const Divider(),
-          trailing: Text(
-            "System Settings",
-            style: TextStyle(
-                fontSize: Theme.of(context).textTheme.headlineSmall!.fontSize),
-          ),
-        ),
+        const DividerTitle("System"),
         const SwitchWakeLockTile(),
-        const Divider(),
+        const DividerTitle("Reset"),
         Center(
           child: ConstrainedBox(
-            constraints: BoxConstraints(minWidth: buttonMinWidth),
-            child: ElevatedButton(
-              onPressed: () {
-                Scaffold.of(context).openDrawer();
-              },
-              style: ElevatedButton.styleFrom(
-                  backgroundColor: Palette.lightPink,
-                  textStyle: const TextStyle(fontWeight: FontWeight.bold)),
-              child: const Text(
-                "Select Midi Device",
-              ),
-            ),
-          ),
-        ),
-        Center(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(minWidth: buttonMinWidth),
+            constraints: const BoxConstraints(minWidth: buttonMinWidth),
             child: SnackMessageButton(
               label: "Reset Midi Buffers",
               message: "Midi buffer cleared & 'Stop All Notes' sent",
@@ -55,7 +34,7 @@ class MenuSystem extends ConsumerWidget {
         ),
         Center(
           child: ConstrainedBox(
-            constraints: BoxConstraints(minWidth: buttonMinWidth),
+            constraints: const BoxConstraints(minWidth: buttonMinWidth),
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: Palette.laserLemon,
@@ -92,7 +71,6 @@ class MenuSystem extends ConsumerWidget {
             ),
           ),
         ),
-        const Divider(),
         const CreditsBox(),
       ],
     );

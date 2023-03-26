@@ -28,6 +28,19 @@ List<Widget> helpText = [
         "Note: USB without third-party adapters works only with MacOS devices, due to Apple's MIDI implementation!",
       ],
     ),
+  StringInfoBox(
+    header: "Virtual",
+    body: [
+      if (Platform.isIOS)
+        "Some third-Party apps, like 'AudioKit Synth One', make a Virtual Midi Device available on your Phone or Tablet, which you can connect to in Beat Pads through CoreMidi",
+      if (Platform.isAndroid)
+        "Some third-Party apps, like 'FluidSynth', make a Virtual Midi Device available on your Phone or Tablet, which you can connect to in Beat Pads",
+      "When such an App has been installed it will appear in this Device List",
+      "After connection, Beat Pads can send Midi Data to the App, for example, to play a Synthesizer on your Device with Beat Pads",
+      "",
+      "Note: If the receiving App has a Setting to allow it to run in the background, make sure to enable it"
+    ],
+  ),
   if (Platform.isIOS)
     const StringInfoBox(
       header: "WiFi",
@@ -40,17 +53,4 @@ List<Widget> helpText = [
         "Note: Wireless Protocols add Latency. Connection to Windows Hosts via WiFi requires third-party Software (like 'rtpMIDI')"
       ],
     ),
-  StringInfoBox(
-    header: "Virtual",
-    body: [
-      if (Platform.isIOS)
-        "Some third-Party apps, like 'AudioKit Synth One', make a Virtual Midi Device available on your Phone or Tablet, which you can connect to in Beat Pads",
-      if (Platform.isAndroid)
-        "Some third-Party apps, like 'FluidSynth', make a Virtual Midi Device available on your Phone or Tablet, which you can connect to in Beat Pads",
-      "When such an App has been installed it will appear in this Device List",
-      "After connection, Beat Pads can send Midi Data to the App, for example, to play a Synthesizer on your Device with Beat Pads",
-      "",
-      "Note: If the receiving App has a Setting to allow it to run in the background, make sure to enable it"
-    ],
-  ),
 ];

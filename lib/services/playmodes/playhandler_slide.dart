@@ -1,5 +1,4 @@
 import 'package:beat_pads/services/services.dart';
-import 'package:flutter/material.dart';
 
 class PlayModeSlide extends PlayModeHandler {
   final NoteReleaseBuffer noteReleaseBuffer;
@@ -13,26 +12,27 @@ class PlayModeSlide extends PlayModeHandler {
   ) : noteReleaseBuffer = NoteReleaseBuffer(settings, notifyParent);
 
   @override
-  void handleNewTouch(CustomPointer touch, int noteTapped, Size screenSize) {
+  void handleNewTouch(PadTouchAndScreenData data) {
     if (settings.noteReleaseTime > 0) {
-      noteReleaseBuffer.removeNoteFromReleaseBuffer(noteTapped);
+      noteReleaseBuffer.removeNoteFromReleaseBuffer(data.padNote);
     }
 
-    NoteEvent noteOn =
-        NoteEvent(settings.channel, noteTapped, velocityProvider.velocity)
-          ..noteOn(cc: settings.sendCC);
+    NoteEvent noteOn = NoteEvent(settings.channel, data.padNote,
+        velocityProvider.velocity(data.yPercentage))
+      ..noteOn(cc: settings.sendCC);
 
-    touchBuffer.addNoteOn(touch, noteOn, screenSize);
+    touchBuffer.addNoteOn(CustomPointer(data.pointer, data.screenTouchPos),
+        noteOn, data.screenSize);
     notifyParent();
   }
 
   @override
-  void handlePan(CustomPointer touch, int? note) {
-    TouchEvent? eventInBuffer = touchBuffer.getByID(touch.pointer);
+  void handlePan(NullableTouchAndScreenData data) {
+    TouchEvent? eventInBuffer = touchBuffer.getByID(data.pointer);
     if (eventInBuffer == null || eventInBuffer.dirty) return;
 
     // Turn note off:
-    if (note != eventInBuffer.noteEvent.note &&
+    if (data.padNote != eventInBuffer.noteEvent.note &&
         eventInBuffer.noteEvent.noteOnMessage != null) {
       if (settings.noteReleaseTime == 0) {
         eventInBuffer.noteEvent.noteOff(); // turn note off immediately
@@ -42,7 +42,7 @@ class PlayModeSlide extends PlayModeHandler {
             eventInBuffer.noteEvent.channel,
             eventInBuffer.noteEvent.note,
             eventInBuffer.noteEvent.noteOnMessage?.velocity ??
-                velocityProvider.velocity,
+                velocityProvider.velocity(data.yPercentage ?? .5),
           ),
         ); // add note event to release buffer
         eventInBuffer.noteEvent.clear();
@@ -51,9 +51,9 @@ class PlayModeSlide extends PlayModeHandler {
       notifyParent();
     }
     // Play new note:
-    if (note != null && eventInBuffer.noteEvent.noteOnMessage == null) {
-      eventInBuffer.noteEvent = NoteEvent(
-          settings.channel, note, velocityProvider.velocity)
+    if (data.padNote != null && eventInBuffer.noteEvent.noteOnMessage == null) {
+      eventInBuffer.noteEvent = NoteEvent(settings.channel, data.padNote!,
+          velocityProvider.velocity(data.yPercentage ?? .5))
         ..noteOn(cc: settings.playMode.singleChannel ? settings.sendCC : false);
       notifyParent();
     }
@@ -75,21 +75,26 @@ class PlayModeSlide extends PlayModeHandler {
     }
   }
 
-  /// Returns if a given note is ON in any channel, or, if provided, in a specific channel.
+  /// Returns the velocity if a given note is ON in any channel, or, if provided, in a specific channel.
   /// Checks releasebuffer and active touchbuffer
   @override
-  bool isNoteOn(int note, [int? channel]) {
+  int isNoteOn(int note, [int? channel]) {
     for (TouchEvent touch in touchBuffer.buffer) {
-      if (channel == null && touch.noteEvent.note == note) return true;
-      if (channel == channel && touch.noteEvent.note == note) return true;
+      if (channel == null && touch.noteEvent.note == note) {
+        return touch.noteEvent.velocity;
+      }
+      if (channel == channel && touch.noteEvent.note == note) {
+        return touch.noteEvent.velocity;
+      }
     }
     if (settings.noteReleaseTime > 0) {
       for (NoteEvent event in noteReleaseBuffer.buffer) {
-        if (channel == null && event.note == note) return true;
-        if (channel == channel && event.note == note) return true;
+        if (channel == null && event.note == note) return event.velocity;
+        if (channel == channel && event.note == note) return event.velocity;
       }
     }
-    return false;
+    return 0;
+    // return false;
   }
 
   @override

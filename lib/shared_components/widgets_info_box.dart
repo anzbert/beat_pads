@@ -1,3 +1,4 @@
+import 'package:beat_pads/shared_components/divider_title.dart';
 import 'package:beat_pads/services/services.dart';
 import 'package:flutter/material.dart';
 
@@ -24,22 +25,8 @@ class WidgetsInfoBox extends StatelessWidget {
             children: [
               if (header != null)
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 12),
-                  child: Row(
-                    children: [
-                      const Expanded(
-                        child: Divider(),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 16),
-                        child: Text(
-                          header!,
-                          style: Theme.of(context).textTheme.headlineSmall,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                    padding: const EdgeInsets.only(bottom: 12),
+                    child: DividerTitle(header!)),
               ...body
                   .map(
                     (text) => Column(children: [

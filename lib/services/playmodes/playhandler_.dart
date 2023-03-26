@@ -1,5 +1,4 @@
 import 'package:beat_pads/services/services.dart';
-import 'package:flutter/material.dart';
 
 class PlayModeNoSlide extends PlayModeHandler {
   PlayModeNoSlide(super.settings, super.notifyParent);
@@ -26,20 +25,21 @@ abstract class PlayModeHandler {
     );
   }
 
-  void handleNewTouch(CustomPointer touch, int noteTapped, Size screenSize) {
+  void handleNewTouch(PadTouchAndScreenData data) {
     if (settings.modReleaseTime > 0 || settings.noteReleaseTime > 0) {
-      touchReleaseBuffer.removeNoteFromReleaseBuffer(noteTapped);
+      touchReleaseBuffer.removeNoteFromReleaseBuffer(data.padNote);
     }
 
-    NoteEvent noteOn =
-        NoteEvent(settings.channel, noteTapped, velocityProvider.velocity)
-          ..noteOn(cc: settings.sendCC);
+    NoteEvent noteOn = NoteEvent(settings.channel, data.padNote,
+        velocityProvider.velocity(data.yPercentage))
+      ..noteOn(cc: settings.sendCC);
 
-    touchBuffer.addNoteOn(touch, noteOn, screenSize);
+    touchBuffer.addNoteOn(CustomPointer(data.pointer, data.screenTouchPos),
+        noteOn, data.screenSize);
     notifyParent();
   }
 
-  void handlePan(CustomPointer touch, int? note) {}
+  void handlePan(NullableTouchAndScreenData data) {}
 
   void handleEndTouch(CustomPointer touch) {
     TouchEvent? eventInBuffer = touchBuffer.getByID(touch.pointer);
@@ -79,22 +79,25 @@ abstract class PlayModeHandler {
     }
   }
 
-  /// Returns if a given note is ON in any channel.
+  /// Returns the velocity if a given note is ON in any channel.
   /// Checks releasebuffer and active touchbuffer
-  bool isNoteOn(int note) {
+  int isNoteOn(int note) {
     for (TouchEvent touch in touchBuffer.buffer) {
       if (touch.noteEvent.note == note && touch.noteEvent.isPlaying) {
-        return true;
+        return touch.noteEvent.velocity;
+        // return true;
       }
     }
     if (settings.modReleaseTime > 0 || settings.noteReleaseTime > 0) {
       for (TouchEvent event in touchReleaseBuffer.buffer) {
         if (event.noteEvent.note == note && event.noteEvent.isPlaying) {
-          return true;
+          return event.noteEvent.velocity;
+          // return true;
         }
       }
     }
-    return false;
+    return 0;
+    // return false;
   }
 
   /// Does nothing, unless overridden in MPE

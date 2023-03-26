@@ -63,7 +63,8 @@ class BeatPadsAndControls extends ConsumerWidget {
                 flex: 7,
                 child: SliderVelocity(
                   channel: ref.watch(channelUsableProv),
-                  randomVelocity: ref.watch(randomVelocityProv),
+                  randomVelocity:
+                      ref.watch(velocityModeProv) != VelocityMode.fixed,
                 ),
               ),
             // PADS
@@ -106,8 +107,17 @@ class BeatPadsAndControls extends ConsumerWidget {
               style: ElevatedButton.styleFrom(
                   backgroundColor: Palette.lightPink,
                   textStyle: const TextStyle(fontWeight: FontWeight.bold)),
-              child: const Text(
-                "Select Midi Device",
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: const [
+                  Icon(
+                    Icons.cable,
+                  ),
+                  Text(
+                    "Select Midi Device",
+                  ),
+                ],
               ),
             ),
           ),

@@ -3,6 +3,7 @@ import 'package:flutter_midi_command/flutter_midi_command_messages.dart';
 class NoteEvent {
   int channel;
   final int note;
+  final int velocity;
 
   CCMessage? ccMessage;
   NoteOnMessage? noteOnMessage;
@@ -15,7 +16,7 @@ class NoteEvent {
   bool get kill => _kill;
 
   /// Create and store a NoteOn event for its lifetime as well as its release time
-  NoteEvent(this.channel, this.note, int velocity)
+  NoteEvent(this.channel, this.note, this.velocity)
       : noteOnMessage = NoteOnMessage(
           channel: channel,
           note: note,

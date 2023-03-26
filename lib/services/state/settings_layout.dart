@@ -125,3 +125,8 @@ final pitchBendEaseUsable = Provider<int>(
         .clamp(0, Timing.releaseDelayTimes.length - 1)];
   },
 );
+
+// VELOCITY
+final velocityVisualProv = StateNotifierProvider<SettingBool, bool>((ref) {
+  return ref.watch(sharedPrefProvider).settings.velocityVisual;
+});

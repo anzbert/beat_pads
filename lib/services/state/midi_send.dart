@@ -24,7 +24,7 @@ class SendSettings {
   final int velocityRange;
   final int velocity;
   final double velocityCenter;
-  final bool randomVelocity;
+  final VelocityMode velocityMode;
 
   /// A data object which holds all the settings required for sending midi
   SendSettings(
@@ -45,7 +45,7 @@ class SendSettings {
     this.velocityRange,
     this.velocity,
     this.velocityCenter,
-    this.randomVelocity,
+    this.velocityMode,
   );
 }
 
@@ -69,7 +69,7 @@ final combinedSettings = Provider.autoDispose<SendSettings>((ref) {
     ref.watch(velocityRangeProv),
     ref.watch(velocityProv),
     ref.watch(velocityCenterProv),
-    ref.watch(randomVelocityProv),
+    ref.watch(velocityModeProv),
   );
 });
 
@@ -126,13 +126,13 @@ class MidiSender extends ChangeNotifier {
 
   /// Handles a new touch on a pad, creating and sending new noteOn events
   /// in the touch buffer
-  void handleNewTouch(CustomPointer touch, int noteTapped, Size screenSize) {
-    playModeHandler.handleNewTouch(touch, noteTapped, screenSize);
+  void handleNewTouch(PadTouchAndScreenData data) {
+    playModeHandler.handleNewTouch(data);
   }
 
   /// Handles sliding across pads in 'slide' mode
-  void handlePan(CustomPointer touch, int? note) {
-    playModeHandler.handlePan(touch, note);
+  void handlePan(NullableTouchAndScreenData data) {
+    playModeHandler.handlePan(data);
   }
 
   /// Cleans up Touchevent, when contact with screen ends and the pointer is removed

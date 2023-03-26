@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:beat_pads/services/services.dart';
 
 var appTheme = ThemeData.dark().copyWith(
+  // useMaterial3: true,
   dividerTheme: DividerThemeData(
     thickness: 1,
     color: Palette.lightGrey,
