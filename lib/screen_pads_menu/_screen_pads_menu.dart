@@ -66,7 +66,7 @@ class PadMenuScreen extends ConsumerWidget {
                     Scaffold.of(context).openDrawer();
                   },
                   icon: Icon(
-                    Icons.menu,
+                    Icons.cable,
                     color: Palette.lightPink,
                     size: 36,
                   ),
