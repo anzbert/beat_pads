@@ -17,10 +17,8 @@ class PlayModeSlide extends PlayModeHandler {
       noteReleaseBuffer.removeNoteFromReleaseBuffer(data.padNote);
     }
 
-    double percentage = 0.5;
-
-    NoteEvent noteOn = NoteEvent(
-        settings.channel, data.padNote, velocityProvider.velocity(percentage))
+    NoteEvent noteOn = NoteEvent(settings.channel, data.padNote,
+        velocityProvider.velocity(data.yPercentage))
       ..noteOn(cc: settings.sendCC);
 
     touchBuffer.addNoteOn(CustomPointer(data.pointer, data.screenTouchPos),
