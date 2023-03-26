@@ -35,15 +35,19 @@ class MidiConfigState extends ConsumerState<MidiConfig> {
       appBar: AppBar(
         title: Text(
           "Devices",
-          style: Theme.of(context).textTheme.headlineSmall,
+          style: Theme.of(context)
+              .textTheme
+              .headlineSmall!
+              .copyWith(color: Palette.lightPink),
         ),
         leading: Builder(builder: (BuildContext context) {
           return IconButton(
             onPressed: () {
               Navigator.pop(context);
             },
-            icon: const Icon(
+            icon: Icon(
               Icons.arrow_back,
+              color: Palette.lightPink,
               size: 30,
             ),
           );
@@ -54,7 +58,7 @@ class MidiConfigState extends ConsumerState<MidiConfig> {
               icon: Icon(
                 Icons.refresh,
                 size: 30,
-                color: Palette.laserLemon,
+                color: Palette.lightPink,
               )),
         ],
       ),

@@ -9,24 +9,17 @@ class VelocityOverlay extends StatelessWidget {
   });
 
   final int velocity;
-
   final BorderRadius padRadius;
 
   @override
   Widget build(BuildContext context) {
     Size size = Size.infinite;
-
-    final box = context.findRenderObject();
-    if (box != null) {
-      final temp = box as RenderBox;
-      size = temp.size;
-    }
-
-    final double percentage = 1 - velocity / 127;
+    final RenderBox? box = context.findRenderObject() as RenderBox?;
+    if (box != null) size = box.size;
 
     return Container(
       margin: EdgeInsets.only(
-        top: size.height * percentage,
+        top: size.height * (1 - velocity / 127),
       ),
       decoration: BoxDecoration(
         borderRadius: padRadius,
