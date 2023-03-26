@@ -30,7 +30,7 @@ class VelocityProvider {
   int _velocityFixed;
 
   /// Provides and stores working velocity values for sending midi
-  /// notes in random and fixed velocity mode
+  /// notes in random, y-axis and fixed velocity mode
   VelocityProvider(this._settings, this._notifyParent)
       : _random = Random(),
         velocityRange = _settings.velocityRange,
@@ -49,7 +49,7 @@ class VelocityProvider {
       case VelocityMode.fixed:
         return velocityFixed.clamp(10, 127);
       case VelocityMode.yAxis:
-        double min = _settings.velocityCenter - velocityRange / 2;
+        double min = _velocityRandomCenter - velocityRange / 2;
         return (min + velocityRange * percentage).round().clamp(0, 127);
     }
   }
