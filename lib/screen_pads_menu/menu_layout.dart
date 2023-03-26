@@ -8,7 +8,7 @@ import 'package:beat_pads/screen_pads_menu/slider_non_linear.dart';
 import 'package:beat_pads/screen_pads_menu/drop_down_notes.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'divider_title.dart';
+import '../shared_components/divider_title.dart';
 
 class MenuLayout extends ConsumerWidget {
   @override
@@ -198,6 +198,15 @@ class MenuLayout extends ConsumerWidget {
                 setValue: (v) => ref.read(baseHueProv.notifier).set(v),
                 resetValue: ref.read(baseHueProv.notifier).reset,
                 onChangeEnd: ref.read(baseHueProv.notifier).save,
+              ),
+              ListTile(
+                title: const Text("Show Velocity"),
+                subtitle: const Text(
+                    "Show visual feedback on the pad indicating the sent Velocity"),
+                trailing: Switch(
+                    value: ref.watch(velocityVisualProv),
+                    onChanged: (v) =>
+                        ref.read(velocityVisualProv.notifier).setAndSave(v)),
               ),
             ],
           ),

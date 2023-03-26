@@ -127,7 +127,7 @@ class PadMenuScreen extends ConsumerWidget {
                     Icons.touch_app,
                     color: Palette.cadetBlue,
                   ),
-                  label: "Input",
+                  label: "Advanced",
                 ),
                 BottomNavigationBarItem(
                   activeIcon: Icon(

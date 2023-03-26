@@ -113,10 +113,11 @@ class SlideBeatPad extends ConsumerWidget {
                     ),
                   ),
           ),
-          VelocityOverlay(
-            velocity: velocity,
-            padRadius: padRadius,
-          ),
+          if (ref.watch(velocityVisualProv))
+            VelocityOverlay(
+              velocity: velocity,
+              padRadius: padRadius,
+            ),
         ],
       ),
     );

@@ -54,6 +54,7 @@ class LoadSettings {
   final SettingBool octaveButtons;
   final SettingBool sustainButton;
   final SettingBool velocitySlider;
+  final SettingBool velocityVisual;
 
   factory LoadSettings.defaults() {
     return LoadSettings(null);
@@ -241,6 +242,11 @@ class LoadSettings {
         velocitySlider = SettingBool(
           sharedprefs,
           'velocitySlider',
+          false,
+        ),
+        velocityVisual = SettingBool(
+          sharedprefs,
+          'velocityVisual',
           false,
         ),
         modWheel = SettingBool(

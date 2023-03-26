@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:beat_pads/screen_pads_menu/slider_int_range.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'divider_title.dart';
+import '../shared_components/divider_title.dart';
 import 'drop_down_enum.dart';
 import 'package:beat_pads/services/services.dart';
 
@@ -12,6 +12,32 @@ class MenuMidi extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return ListView(
       children: <Widget>[
+        const DividerTitle("Connect"),
+        Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(minWidth: 300),
+            child: ElevatedButton(
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: Palette.lightPink,
+                  textStyle: const TextStyle(fontWeight: FontWeight.bold)),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: const [
+                  Icon(
+                    Icons.cable,
+                  ),
+                  Text(
+                    "Select Midi Device",
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
         const DividerTitle("Channel"),
         IntSliderTile(
           resetValue: ref.read(channelSettingProv.notifier).reset,
