@@ -201,7 +201,10 @@ class _SlidePadsState extends ConsumerState<SlidePads>
                             (customPad) {
                               switch (customPad.padType) {
                                 case PadType.encoder:
-                                  // TODO: Handle this case.
+                                  // Case not implemented...
+                                  return const SizedBox.expand();
+                                case PadType.chord:
+                                  // Case not implemented...
                                   return const SizedBox.expand();
                                 case PadType.note:
                                   return Expanded(
@@ -214,9 +217,6 @@ class _SlidePadsState extends ConsumerState<SlidePads>
                                       ),
                                     ),
                                   );
-                                case PadType.chord:
-                                  // TODO: Handle this case.
-                                  return const SizedBox.expand();
                               }
                             },
                           ),

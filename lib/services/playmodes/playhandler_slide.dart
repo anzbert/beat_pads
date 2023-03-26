@@ -75,21 +75,26 @@ class PlayModeSlide extends PlayModeHandler {
     }
   }
 
-  /// Returns if a given note is ON in any channel, or, if provided, in a specific channel.
+  /// Returns the velocity if a given note is ON in any channel, or, if provided, in a specific channel.
   /// Checks releasebuffer and active touchbuffer
   @override
-  bool isNoteOn(int note, [int? channel]) {
+  int isNoteOn(int note, [int? channel]) {
     for (TouchEvent touch in touchBuffer.buffer) {
-      if (channel == null && touch.noteEvent.note == note) return true;
-      if (channel == channel && touch.noteEvent.note == note) return true;
+      if (channel == null && touch.noteEvent.note == note) {
+        return touch.noteEvent.velocity;
+      }
+      if (channel == channel && touch.noteEvent.note == note) {
+        return touch.noteEvent.velocity;
+      }
     }
     if (settings.noteReleaseTime > 0) {
       for (NoteEvent event in noteReleaseBuffer.buffer) {
-        if (channel == null && event.note == note) return true;
-        if (channel == channel && event.note == note) return true;
+        if (channel == null && event.note == note) return event.velocity;
+        if (channel == channel && event.note == note) return event.velocity;
       }
     }
-    return false;
+    return 0;
+    // return false;
   }
 
   @override

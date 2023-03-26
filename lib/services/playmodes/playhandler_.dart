@@ -79,22 +79,25 @@ abstract class PlayModeHandler {
     }
   }
 
-  /// Returns if a given note is ON in any channel.
+  /// Returns the velocity if a given note is ON in any channel.
   /// Checks releasebuffer and active touchbuffer
-  bool isNoteOn(int note) {
+  int isNoteOn(int note) {
     for (TouchEvent touch in touchBuffer.buffer) {
       if (touch.noteEvent.note == note && touch.noteEvent.isPlaying) {
-        return true;
+        return touch.noteEvent.velocity;
+        // return true;
       }
     }
     if (settings.modReleaseTime > 0 || settings.noteReleaseTime > 0) {
       for (TouchEvent event in touchReleaseBuffer.buffer) {
         if (event.noteEvent.note == note && event.noteEvent.isPlaying) {
-          return true;
+          return event.noteEvent.velocity;
+          // return true;
         }
       }
     }
-    return false;
+    return 0;
+    // return false;
   }
 
   /// Does nothing, unless overridden in MPE
