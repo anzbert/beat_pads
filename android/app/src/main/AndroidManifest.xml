@@ -21,14 +21,19 @@
         <meta-data android:name="flutterEmbedding" android:value="2" />
     </application>
 
+    <!-- Make sure only devices with Midi support can get the app from the Play Store-->
     <uses-feature android:name="android.software.midi" android:required="true" />
+
+    <!-- Internet Permission to open Links from the app with url_launcher -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <queries>
-        <!-- If your app opens https URLs -->
+        <!-- Allow app to open https URLs with url_launcher-->
         <intent>
             <action android:name="android.intent.action.VIEW" />
             <data android:scheme="https" />
         </intent>
-        <!-- If your app sends emails -->
+        <!-- Allow App to open Email links with url_launcher -->
         <intent>
             <action android:name="android.intent.action.SEND" />
             <data android:mimeType="*/*" />
