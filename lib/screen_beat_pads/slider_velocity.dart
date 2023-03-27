@@ -21,7 +21,7 @@ class _SliderVelocityState extends ConsumerState<SliderVelocity> {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.longestSide;
+    double width = MediaQuery.of(context).size.width;
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
