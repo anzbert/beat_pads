@@ -15,8 +15,9 @@ class MenuInput extends ConsumerWidget {
       children: <Widget>[
         const DividerTitle("Input"),
         ListTile(
-          title: const Text("Slide Input"),
-          subtitle: const Text("Handling of Touch and Slide input"),
+          title: const Text("Pan Mode"),
+          subtitle: const Text(
+              "Choose how the pads reacts to finger X and Y movement"),
           trailing: DropdownEnum(
             values: PlayMode.values,
             readValue: ref.watch(playModeProv),
@@ -58,7 +59,7 @@ class MenuInput extends ConsumerWidget {
           ListTile(
             title: const Text("2-D Modulation"),
             subtitle: const Text(
-                "Modulate 2 values on the X and Y axis, or just 1 value by Radius"),
+                "Modulate 2 controls on the X and Y axis, or just 1 by Radius [CC in brackets]"),
             trailing: Switch(
                 value: ref.watch(modulation2DProv),
                 onChanged: (v) =>

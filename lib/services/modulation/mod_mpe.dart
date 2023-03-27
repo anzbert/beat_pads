@@ -119,13 +119,13 @@ enum MPEmods {
   pitchbendUp("Pitch Bend Up", Dims.one, Group.pitch),
   pitchbendDown("Pitch Bend Down", Dims.one, Group.pitch),
   mpeAftertouch("AT Pressure", Dims.one, Group.at),
-  mpeAftertouch64("AT Pressure (center 64)", Dims.two, Group.at),
-  slide("Slide", Dims.one, Group.slide),
-  slide64("Slide (center 64)", Dims.two, Group.slide),
-  pan("Pan", Dims.one, Group.pan),
-  pan64("Pan (center 64)", Dims.two, Group.pan),
-  gain("Gain", Dims.one, Group.gain),
-  gain64("Gain (center 64)", Dims.two, Group.gain),
+  mpeAftertouch64("AT Pressure Center 64", Dims.two, Group.at),
+  slide("Slide [74]", Dims.one, Group.slide),
+  slide64("Slide [74] Center 64", Dims.two, Group.slide),
+  pan("Pan [10]", Dims.one, Group.pan),
+  pan64("Pan [10] Center 64", Dims.two, Group.pan),
+  gain("Gain [7]", Dims.one, Group.gain),
+  gain64("Gain [7] Center 64", Dims.two, Group.gain),
 
   none("None", Dims.one, Group.none);
 
