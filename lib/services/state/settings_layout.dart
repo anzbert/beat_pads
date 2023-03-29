@@ -3,8 +3,8 @@ import 'package:beat_pads/services/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // LAYOUT
-final layoutProv = NotifierProvider<SettingEnum<Layout>, Layout>(() {
-  return SettingEnum<Layout>(
+final layoutProv = NotifierProvider<SettingEnumNotifier<Layout>, Layout>(() {
+  return SettingEnumNotifier<Layout>(
     fromName: Layout.fromName,
     key: 'layout',
     defaultValue: Layout.majorThird,
@@ -12,7 +12,7 @@ final layoutProv = NotifierProvider<SettingEnum<Layout>, Layout>(() {
 });
 
 // NOTES AND OCTAVES
-final rootProv = StateNotifierProvider<SettingInt, int>((ref) {
+final rootProv = StateNotifierProvider<SettingIntNotifier, int>((ref) {
   ref.listen(layoutProv, (_, Layout next) {
     if (!next.props.resizable) {
       ref.read(sharedPrefProvider).settings.rootNote.reset();
@@ -22,20 +22,29 @@ final rootProv = StateNotifierProvider<SettingInt, int>((ref) {
   return ref.watch(sharedPrefProvider).settings.rootNote;
 });
 
-final baseProv = StateNotifierProvider<SettingInt, int>((ref) {
-  return ref.watch(sharedPrefProvider).settings.base;
+final baseProv = NotifierProvider<SettingIntNotifier, int>(() {
+  return SettingIntNotifier(
+    key: 'base',
+    defaultValue: 0,
+    max: 11,
+  );
 });
 
 final baseNoteProv = Provider<int>(((ref) {
   return (ref.watch(baseOctaveProv) + 2) * 12 + ref.watch(baseProv);
 }));
 
-final baseOctaveProv = StateNotifierProvider<SettingInt, int>((ref) {
-  return ref.watch(sharedPrefProvider).settings.baseOctave;
+final baseOctaveProv = NotifierProvider<SettingIntNotifier, int>(() {
+  return SettingIntNotifier(
+    key: 'baseOctave',
+    defaultValue: 1,
+    min: -2,
+    max: 7,
+  );
 });
 
 // GRID SIZE
-final widthProv = StateNotifierProvider<SettingInt, int>((ref) {
+final widthProv = StateNotifierProvider<SettingIntNotifier, int>((ref) {
   ref.listen(layoutProv, (_, Layout next) {
     if (next.props.defaultDimensions?.x != null) {
       ref
@@ -47,7 +56,7 @@ final widthProv = StateNotifierProvider<SettingInt, int>((ref) {
   });
   return ref.watch(sharedPrefProvider).settings.width;
 });
-final heightProv = StateNotifierProvider<SettingInt, int>((ref) {
+final heightProv = StateNotifierProvider<SettingIntNotifier, int>((ref) {
   ref.listen(layoutProv, (_, Layout next) {
     if (next.props.defaultDimensions?.y != null) {
       ref
@@ -74,28 +83,34 @@ final rowProv = Provider<List<List<CustomPad>>>(((ref) {
 }));
 
 // LABELS AND COLOR
-final padLabelsProv = NotifierProvider<SettingEnum<PadLabels>, PadLabels>(() {
-  return SettingEnum<PadLabels>(
+final padLabelsProv =
+    NotifierProvider<SettingEnumNotifier<PadLabels>, PadLabels>(() {
+  return SettingEnumNotifier<PadLabels>(
     fromName: PadLabels.fromName,
     key: "padLabels",
     defaultValue: PadLabels.note,
   );
 });
 
-final padColorsProv = NotifierProvider<SettingEnum<PadColors>, PadColors>(() {
-  return SettingEnum<PadColors>(
+final padColorsProv =
+    NotifierProvider<SettingEnumNotifier<PadColors>, PadColors>(() {
+  return SettingEnumNotifier<PadColors>(
     fromName: PadColors.fromName,
     key: "padColors",
     defaultValue: PadColors.highlightRoot,
   );
 });
 
-final baseHueProv = StateNotifierProvider<SettingInt, int>((ref) {
-  return ref.watch(sharedPrefProvider).settings.baseHue;
+final baseHueProv = NotifierProvider<SettingIntNotifier, int>(() {
+  return SettingIntNotifier(
+    key: "baseHue",
+    defaultValue: 240,
+    max: 360,
+  );
 });
 
 // SCALES
-final scaleProv = NotifierProvider<SettingEnum<Scale>, Scale>((ref) {
+final scaleProv = NotifierProvider<SettingEnumNotifier<Scale>, Scale>((ref) {
   ref.listen(layoutProv, (_, Layout next) {
     if (!next.props.resizable) {
       ref.read(sharedPrefProvider).settings.scale.reset();
@@ -106,26 +121,48 @@ final scaleProv = NotifierProvider<SettingEnum<Scale>, Scale>((ref) {
 });
 
 // BUTTONS AND SLIDERS
-final octaveButtonsProv = StateNotifierProvider<SettingBool, bool>((ref) {
-  return ref.watch(sharedPrefProvider).settings.octaveButtons;
+final octaveButtonsProv = NotifierProvider<SettingBoolNotifier, bool>(() {
+  return SettingBoolNotifier(
+    key: 'octaveButtons',
+    defaultValue: false,
+  );
 });
-final sustainButtonProv = StateNotifierProvider<SettingBool, bool>((ref) {
-  return ref.watch(sharedPrefProvider).settings.sustainButton;
+
+final sustainButtonProv = NotifierProvider<SettingBoolNotifier, bool>(() {
+  return SettingBoolNotifier(
+    key: 'sustainButton',
+    defaultValue: false,
+  );
 });
-final velocitySliderProv = StateNotifierProvider<SettingBool, bool>((ref) {
-  return ref.watch(sharedPrefProvider).settings.velocitySlider;
+
+final velocitySliderProv = NotifierProvider<SettingBoolNotifier, bool>(() {
+  return SettingBoolNotifier(
+    key: 'velocitySlider',
+    defaultValue: false,
+  );
 });
-final modWheelProv = StateNotifierProvider<SettingBool, bool>((ref) {
-  return ref.watch(sharedPrefProvider).settings.modWheel;
+
+final modWheelProv = NotifierProvider<SettingBoolNotifier, bool>(() {
+  return SettingBoolNotifier(
+    key: 'modWheel',
+    defaultValue: false,
+  );
 });
 
 // PITCHBEND
-final pitchBendProv = StateNotifierProvider<SettingBool, bool>((ref) {
-  return ref.watch(sharedPrefProvider).settings.pitchBend;
+final pitchBendProv = NotifierProvider<SettingBoolNotifier, bool>(() {
+  return SettingBoolNotifier(
+    key: 'pitchBend',
+    defaultValue: false,
+  );
 });
 
-final pitchBendEaseStepProv = StateNotifierProvider<SettingInt, int>((ref) {
-  return ref.watch(sharedPrefProvider).settings.pitchBendEase;
+final pitchBendEaseStepProv = NotifierProvider<SettingIntNotifier, int>(() {
+  return SettingIntNotifier(
+    key: 'pitchBendEase',
+    defaultValue: 0,
+    max: Timing.releaseDelayTimes.length - 1,
+  );
 });
 
 final pitchBendEaseUsable = Provider<int>(
@@ -139,6 +176,9 @@ final pitchBendEaseUsable = Provider<int>(
 );
 
 // VELOCITY
-final velocityVisualProv = StateNotifierProvider<SettingBool, bool>((ref) {
-  return ref.watch(sharedPrefProvider).settings.velocityVisual;
+final velocityVisualProv = NotifierProvider<SettingBoolNotifier, bool>(() {
+  return SettingBoolNotifier(
+    key: 'velocityVisual',
+    defaultValue: false,
+  );
 });

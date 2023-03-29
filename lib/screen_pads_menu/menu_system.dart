@@ -57,7 +57,9 @@ class MenuSystem extends ConsumerWidget {
                       TextButton(
                         onPressed: () {
                           Navigator.pop(context, 'OK');
-                          ref.read(sharedPrefProvider).reset();
+                          ref
+                              .read(sharedPrefProvider)
+                              .reset(); // TODO: RESET ALL
                           ref.invalidate(sharedPrefProvider);
                           ref.read(selectedMenuState.notifier).state =
                               Menu.layout;

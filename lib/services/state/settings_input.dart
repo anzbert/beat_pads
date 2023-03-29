@@ -3,45 +3,62 @@ import 'package:beat_pads/services/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // PLAYMODE
-final playModeProv = NotifierProvider<SettingEnum<PlayMode>, PlayMode>(() {
-  return SettingEnum<PlayMode>(
+final playModeProv =
+    NotifierProvider<SettingEnumNotifier<PlayMode>, PlayMode>(() {
+  return SettingEnumNotifier<PlayMode>(
       key: 'playMode',
       defaultValue: PlayMode.slide,
       fromName: PlayMode.fromName);
 });
 
 // MOD VISUALISATION
-final modulationRadiusProv = NotifierProvider<SettingDouble, double>(() {
-  return ref.watch(sharedPrefProvider).settings.modulationRadius;
+final modulationRadiusProv =
+    NotifierProvider<SettingDoubleNotifier, double>(() {
+  return SettingDoubleNotifier(
+    key: 'modulationRadius',
+    defaultValue: .12,
+    min: .05,
+    max: .25,
+  );
 });
+
 final modulationDeadZoneProv =
-    StateNotifierProvider<SettingDouble, double>((ref) {
-  return ref.watch(sharedPrefProvider).settings.modulationDeadZone;
+    NotifierProvider<SettingDoubleNotifier, double>(() {
+  return SettingDoubleNotifier(
+    key: 'modulationDeadZone',
+    defaultValue: .20,
+    min: .10,
+    max: .50,
+  );
 });
 
 // MODULATION SELECTION
-final modulation2DProv = StateNotifierProvider<SettingBool, bool>((ref) {
-  return ref.watch(sharedPrefProvider).settings.modulation2D;
+final modulation2DProv = NotifierProvider<SettingBoolNotifier, bool>(() {
+  return SettingBoolNotifier(
+    key: 'modulation2D',
+    defaultValue: true,
+  );
 });
 
-final mpe2DXProv = NotifierProvider<SettingEnum<MPEmods>, MPEmods>(() {
-  return SettingEnum<MPEmods>(
+final mpe2DXProv = NotifierProvider<SettingEnumNotifier<MPEmods>, MPEmods>(() {
+  return SettingEnumNotifier<MPEmods>(
     fromName: MPEmods.fromName,
     key: 'mpe2DX',
     defaultValue: MPEmods.slide,
   );
 });
 
-final mpe2DYProv = NotifierProvider<SettingEnum<MPEmods>, MPEmods>(() {
-  return SettingEnum<MPEmods>(
+final mpe2DYProv = NotifierProvider<SettingEnumNotifier<MPEmods>, MPEmods>(() {
+  return SettingEnumNotifier<MPEmods>(
     fromName: MPEmods.fromName,
     key: 'mpe2DY',
     defaultValue: MPEmods.pitchbend,
   );
 });
 
-final mpe1DRadiusProv = NotifierProvider<SettingEnum<MPEmods>, MPEmods>(() {
-  return SettingEnum<MPEmods>(
+final mpe1DRadiusProv =
+    NotifierProvider<SettingEnumNotifier<MPEmods>, MPEmods>(() {
+  return SettingEnumNotifier<MPEmods>(
     fromName: MPEmods.fromName,
     key: 'mpe1DRadius',
     defaultValue: MPEmods.mpeAftertouch,
@@ -49,16 +66,29 @@ final mpe1DRadiusProv = NotifierProvider<SettingEnum<MPEmods>, MPEmods>(() {
 });
 
 // OTHER SETTINGS
-final mpePitchbendRangeProv = StateNotifierProvider<SettingInt, int>((ref) {
-  return ref.watch(sharedPrefProvider).settings.mpePitchBendRange;
+final mpePitchbendRangeProv = NotifierProvider<SettingIntNotifier, int>(() {
+  return SettingIntNotifier(
+    key: 'mpePitchBendRange',
+    defaultValue: 48,
+    min: 1,
+    max: 48,
+  );
 });
-final sendCCProv = StateNotifierProvider<SettingBool, bool>((ref) {
-  return ref.watch(sharedPrefProvider).settings.sendCC;
+
+final sendCCProv = NotifierProvider<SettingBoolNotifier, bool>(() {
+  return SettingBoolNotifier(
+    key: 'sendCC',
+    defaultValue: false,
+  );
 });
 
 // RELEASE TIMES
-final noteReleaseStepProv = StateNotifierProvider<SettingInt, int>((ref) {
-  return ref.watch(sharedPrefProvider).settings.noteSustainTimeStep;
+final noteReleaseStepProv = NotifierProvider<SettingIntNotifier, int>(() {
+  return SettingIntNotifier(
+    key: 'noteReleaseTimeStep',
+    defaultValue: 0,
+    max: Timing.releaseDelayTimes.length - 1,
+  );
 });
 
 final noteReleaseUsable = Provider<int>(
@@ -69,8 +99,12 @@ final noteReleaseUsable = Provider<int>(
   },
 );
 
-final modReleaseStepProv = StateNotifierProvider<SettingInt, int>((ref) {
-  return ref.watch(sharedPrefProvider).settings.modSustainTimeStep;
+final modReleaseStepProv = NotifierProvider<SettingIntNotifier, int>(() {
+  return SettingIntNotifier(
+    key: 'modReleaseTimeStep',
+    defaultValue: 0,
+    max: Timing.releaseDelayTimes.length - 1,
+  );
 });
 
 final modReleaseUsable = Provider<int>(
