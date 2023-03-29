@@ -3,8 +3,12 @@ import 'package:beat_pads/services/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // LAYOUT
-final layoutProv = StateNotifierProvider<SettingEnum<Layout>, Layout>((ref) {
-  return ref.watch(sharedPrefProvider).settings.layout;
+final layoutProv = NotifierProvider<SettingEnum<Layout>, Layout>(() {
+  return SettingEnum<Layout>(
+    fromName: Layout.fromName,
+    key: 'layout',
+    defaultValue: Layout.majorThird,
+  );
 });
 
 // NOTES AND OCTAVES
@@ -70,20 +74,28 @@ final rowProv = Provider<List<List<CustomPad>>>(((ref) {
 }));
 
 // LABELS AND COLOR
-final padLabelsProv =
-    StateNotifierProvider<SettingEnum<PadLabels>, PadLabels>((ref) {
-  return ref.watch(sharedPrefProvider).settings.padLabels;
+final padLabelsProv = NotifierProvider<SettingEnum<PadLabels>, PadLabels>(() {
+  return SettingEnum<PadLabels>(
+    fromName: PadLabels.fromName,
+    key: "padLabels",
+    defaultValue: PadLabels.note,
+  );
 });
-final padColorsProv =
-    StateNotifierProvider<SettingEnum<PadColors>, PadColors>((ref) {
-  return ref.watch(sharedPrefProvider).settings.padColors;
+
+final padColorsProv = NotifierProvider<SettingEnum<PadColors>, PadColors>(() {
+  return SettingEnum<PadColors>(
+    fromName: PadColors.fromName,
+    key: "padColors",
+    defaultValue: PadColors.highlightRoot,
+  );
 });
+
 final baseHueProv = StateNotifierProvider<SettingInt, int>((ref) {
   return ref.watch(sharedPrefProvider).settings.baseHue;
 });
 
 // SCALES
-final scaleProv = StateNotifierProvider<SettingEnum<Scale>, Scale>((ref) {
+final scaleProv = NotifierProvider<SettingEnum<Scale>, Scale>((ref) {
   ref.listen(layoutProv, (_, Layout next) {
     if (!next.props.resizable) {
       ref.read(sharedPrefProvider).settings.scale.reset();

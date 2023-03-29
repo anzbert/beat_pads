@@ -2,290 +2,190 @@ import 'package:beat_pads/services/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../main.dart';
+
 class Prefs {
   Prefs._();
   late SharedPreferences sharedPrefs;
-  late LoadSettings settings;
 
   static Future<Prefs> initAsync() async {
     Prefs instance = Prefs._();
     instance.sharedPrefs = await SharedPreferences.getInstance();
-    instance.settings = LoadSettings(instance.sharedPrefs);
     return instance;
   }
 
-  /// Make sure to refresh provider, containign prefs after resetting
-  void reset() {
-    settings = LoadSettings.defaults();
-  }
+  // void reset() {
+  //   settings = LoadSettings.defaults();
+  // }
 }
 
-class LoadSettings {
-  final SettingEnum<PadColors> padColors;
-  final SettingEnum<PadLabels> padLabels;
-  final SettingEnum<Layout> layout;
-  final SettingEnum<PlayMode> playMode;
-  final SettingEnum<VelocityMode> velocityMode;
-  final SettingEnum<MPEmods> mpe1DRadius;
-  final SettingEnum<MPEmods> mpe2DX;
-  final SettingEnum<MPEmods> mpe2DY;
-  final SettingEnum<Scale> scale;
-  final SettingDouble modulationDeadZone;
-  final SettingDouble modulationRadius;
-  final SettingInt mpeMemberChannels;
-  final SettingInt mpePitchBendRange;
-  final SettingInt baseHue;
-  final SettingInt channel;
-  final SettingInt rootNote;
-  final SettingInt width;
-  final SettingInt height;
-  final SettingInt baseOctave;
-  final SettingInt base;
-  final SettingInt velocity;
-  final SettingInt velocityMin;
-  final SettingInt velocityMax;
-  final SettingInt noteSustainTimeStep;
-  final SettingInt modSustainTimeStep;
-  final SettingInt pitchBendEase;
-  final SettingBool modulation2D;
-  final SettingBool modWheel;
-  final SettingBool sendCC;
-  final SettingBool pitchBend;
-  final SettingBool octaveButtons;
-  final SettingBool sustainButton;
-  final SettingBool velocitySlider;
-  final SettingBool velocityVisual;
 
-  factory LoadSettings.defaults() {
-    return LoadSettings(null);
-  }
-
-  LoadSettings(SharedPreferences? sharedprefs)
-      : padLabels = SettingEnum<PadLabels>(
-          sharedprefs,
-          PadLabels.fromName,
-          "padLabels",
-          PadLabels.note,
-        ),
-        scale = SettingEnum<Scale>(
-          sharedprefs,
-          Scale.fromName,
-          'scaleString',
-          Scale.chromatic,
-        ),
-        padColors = SettingEnum<PadColors>(
-          sharedprefs,
-          PadColors.fromName,
-          "padColors",
-          PadColors.highlightRoot,
-        ),
-        mpe2DX = SettingEnum<MPEmods>(
-          sharedprefs,
-          MPEmods.fromName,
-          'mpe2DX',
-          MPEmods.slide,
-        ),
-        mpe2DY = SettingEnum<MPEmods>(
-          sharedprefs,
-          MPEmods.fromName,
-          'mpe2DY',
-          MPEmods.pitchbend,
-        ),
-        mpe1DRadius = SettingEnum<MPEmods>(
-          sharedprefs,
-          MPEmods.fromName,
-          'mpe1DRadius',
-          MPEmods.mpeAftertouch,
-        ),
-        layout = SettingEnum<Layout>(
-          sharedprefs,
-          Layout.fromName,
-          'layout',
-          Layout.majorThird,
-        ),
-        playMode = SettingEnum<PlayMode>(
-          sharedprefs,
-          PlayMode.fromName,
-          'playMode',
-          PlayMode.slide,
-        ),
+  
+        // scale = SettingEnum<Scale>(
+          
+        //   fromName: Scale.fromName,
+        //   key: 'scaleString',
+        //   defaultValue: Scale.chromatic,
+        // ),
+        
         velocityMode = SettingEnum<VelocityMode>(
-          sharedprefs,
-          VelocityMode.fromName,
-          'velocityMode',
-          VelocityMode.fixed,
+          
+          fromName: VelocityMode.fromName,
+          key: 'velocityMode',
+          defaultValue: VelocityMode.fixed,
         ),
         mpePitchBendRange = SettingInt(
-          sharedprefs,
-          'mpePitchBendRange',
-          48,
+          
+          key: 'mpePitchBendRange',
+        defaultValue:   48,
           min: 1,
           max: 48,
         ),
         mpeMemberChannels = SettingInt(
-          sharedprefs,
-          'mpeMemberChannels',
-          8,
+          
+          key: 'mpeMemberChannels',
+       defaultValue:    8,
           min: 1,
           max: 15,
         ),
         modulation2D = SettingBool(
-          sharedprefs,
-          'modulation2D',
-          true,
+          
+          key: 'modulation2D',
+          defaultValue: true,
         ),
         modulationDeadZone = SettingDouble(
-          sharedprefs,
-          'modulationDeadZone',
-          .20,
+          
+          key: 'modulationDeadZone',
+         defaultValue:  .20,
           min: .10,
           max: .50,
         ),
         modulationRadius = SettingDouble(
-          sharedprefs,
-          'modulationRadius',
-          .12,
+          
+          key: 'modulationRadius',
+         defaultValue:  .12,
           min: .05,
           max: .25,
         ),
         baseHue = SettingInt(
-          sharedprefs,
-          "baseHue",
-          240,
+          
+          key: "baseHue",
+         defaultValue:  240,
           max: 360,
         ),
         rootNote = SettingInt(
-          sharedprefs,
-          'rootNote',
-          0,
+          
+          key: 'rootNote',
+       defaultValue:    0,
           max: 11,
         ),
         channel = SettingInt(
-          sharedprefs,
-          'channel',
-          0,
+          
+          key: 'channel',
+       defaultValue:    0,
           max: 15,
         ),
         width = SettingInt(
-          sharedprefs,
-          'width',
-          4,
+          
+          key: 'width',
+       defaultValue:    4,
           min: 2,
           max: 16,
         ),
         height = SettingInt(
-          sharedprefs,
-          'height',
-          4,
+          
+          key: 'height',
+       defaultValue:    4,
           min: 2,
           max: 16,
         ),
         baseOctave = SettingInt(
-          sharedprefs,
-          'baseOctave',
-          1,
+          
+          key: 'baseOctave',
+       defaultValue:    1,
           min: -2,
           max: 7,
         ),
         base = SettingInt(
-          sharedprefs,
-          'base',
-          0,
+          
+          key: 'base',
+       defaultValue:    0,
           max: 11,
         ),
         velocity = SettingInt(
-          sharedprefs,
-          'velocity',
-          110,
+          
+          key: 'velocity',
+         defaultValue:  110,
           max: 127,
         ),
         velocityMin = SettingInt(
-          sharedprefs,
-          'velocityMin',
-          100,
+          
+          key: 'velocityMin',
+         defaultValue:  100,
           max: 126,
         ),
         velocityMax = SettingInt(
-          sharedprefs,
-          'velocityMax',
-          110,
+          
+          key: 'velocityMax',
+         defaultValue:  110,
           max: 127,
         ),
         pitchBendEase = SettingInt(
-          sharedprefs,
-          'pitchBendEase',
-          0,
+          
+          key: 'pitchBendEase',
+       defaultValue:    0,
           max: Timing.releaseDelayTimes.length - 1,
         ),
         noteSustainTimeStep = SettingInt(
-          sharedprefs,
-          'noteSustainTimeStep',
-          0,
+          
+          key: 'noteSustainTimeStep',
+       defaultValue:    0,
           max: Timing.releaseDelayTimes.length - 1,
         ),
         modSustainTimeStep = SettingInt(
-          sharedprefs,
-          'modSustainTimeStep',
-          0,
+          
+          key: 'modSustainTimeStep',
+       defaultValue:    0,
           max: Timing.releaseDelayTimes.length - 1,
         ),
         sendCC = SettingBool(
-          sharedprefs,
-          'sendCC',
-          false,
+          
+          key: 'sendCC',
+          defaultValue: false,
         ),
         pitchBend = SettingBool(
-          sharedprefs,
-          'pitchBend',
-          false,
+          
+          key: 'pitchBend',
+          defaultValue: false,
         ),
         velocitySlider = SettingBool(
-          sharedprefs,
-          'velocitySlider',
-          false,
+          
+          key: 'velocitySlider',
+          defaultValue: false,
         ),
         velocityVisual = SettingBool(
-          sharedprefs,
-          'velocityVisual',
-          false,
+          
+          key: 'velocityVisual',
+          defaultValue: false,
         ),
         modWheel = SettingBool(
-          sharedprefs,
-          'modWheel',
-          false,
+          
+          key: 'modWheel',
+          defaultValue: false,
         ),
         octaveButtons = SettingBool(
-          sharedprefs,
-          'octaveButtons',
-          false,
+          
+          key: 'octaveButtons',
+          defaultValue: false,
         ),
         sustainButton = SettingBool(
-          sharedprefs,
-          'sustainButton',
-          false,
+          
+          key: 'sustainButton',
+          defaultValue: false,
         );
-}
+
 
 abstract class Setting<T> extends Notifier<T> {
-  final String sharedPrefsKey;
-  final T defaultValue;
-  final T? value;
-
-  Setting(
-    this.sharedPrefsKey,
-    this.value,
-    this.defaultValue,
-  );
-
-  @override
-  T build() {
-    if (value != null) {
-      return value!;
-    } else {
-      return defaultValue;
-    }
-  }
-
   void set(T newState) {
     state = newState;
   }
@@ -295,48 +195,63 @@ abstract class Setting<T> extends Notifier<T> {
     save();
   }
 
-  void reset() {
-    set(defaultValue);
-    save();
-  }
+  void reset();
 
   Future<bool> save();
 }
 
 class SettingBool extends Setting<bool> {
-  SettingBool(
-    SharedPreferences? sharedPreferences,
-    String key,
-    bool defaultValue,
-  ) : super(key, sharedPreferences?.getBool(key), defaultValue);
+  SettingBool({
+    required this.key,
+    required this.defaultValue,
+  });
+
+  final String key;
+  final bool defaultValue;
+
+  @override
+  bool build() {
+    bool? value = ref.read(sharedPrefProvider).sharedPrefs.getBool(key);
+    if (value != null) {
+      return value;
+    } else {
+      return defaultValue;
+    }
+  }
 
   @override
   Future<bool> save() async {
-    SharedPreferences sharedPrefs = await SharedPreferences.getInstance();
-    return await sharedPrefs.setBool(sharedPrefsKey, state);
+    return await ref.read(sharedPrefProvider).sharedPrefs.setBool(key, state);
   }
 
-  void toggle() {
+  void toggleAndSave() {
     state = !state;
+    save();
+  }
+
+  @override
+  void reset() {
+    state = defaultValue;
+    save();
   }
 }
 
 class SettingInt extends Setting<int> {
+  final String key;
+  final int defaultValue;
   final int min;
   final int max;
 
-  SettingInt(SharedPreferences? sharedPreferences, String key, int defaultValue,
-      {this.min = 0, required this.max})
-      : super(
-          key,
-          sharedPreferences?.getInt(key),
-          defaultValue,
-        );
+  SettingInt({
+    required this.key,
+    required this.defaultValue,
+    required this.max,
+    this.min = 0,
+  });
 
   @override
   Future<bool> save() async {
-    SharedPreferences sharedPrefs = await SharedPreferences.getInstance();
-    return await sharedPrefs.setInt(sharedPrefsKey, state);
+    return await ref.read(sharedPrefProvider).sharedPrefs.setInt(key, state);
   }
 
   void increment() => set(state + 1);
@@ -346,24 +261,35 @@ class SettingInt extends Setting<int> {
   void set(int newState) {
     state = newState.clamp(min, max);
   }
+
+  @override
+  int build() {
+    int? value = ref.read(sharedPrefProvider).sharedPrefs.getInt(key);
+    if (value != null) {
+      return value;
+    } else {
+      return defaultValue;
+    }
+  }
+
+  @override
+  void reset() {
+    state = defaultValue;
+    save();
+  }
 }
 
 class SettingDouble extends Setting<double> {
+  final String key;
+  final double defaultValue;
   final double min;
   final double max;
 
   SettingDouble(
-      SharedPreferences? sharedPreferences, String key, double defaultValue,
-      {this.min = 0, required this.max})
-      : super(
-          key,
-          sharedPreferences?.getInt(key) == null
-              ? null
-              : sharedPreferences!.getInt(key) == null
-                  ? null
-                  : sharedPreferences.getInt(key)! / 100,
-          defaultValue,
-        );
+      {required this.key,
+      required this.defaultValue,
+      this.min = 0,
+      required this.max});
 
   @override
   void set(double newState) {
@@ -372,41 +298,94 @@ class SettingDouble extends Setting<double> {
 
   @override
   Future<bool> save() async {
-    SharedPreferences sharedPrefs = await SharedPreferences.getInstance();
-    return await sharedPrefs.setInt(sharedPrefsKey, (state * 100).toInt());
+    return await ref
+        .read(sharedPrefProvider)
+        .sharedPrefs
+        .setInt(key, (state * 100).toInt());
+  }
+
+  @override
+  double build() {
+    int? value = ref.read(sharedPrefProvider).sharedPrefs.getInt(key);
+    if (value != null) {
+      return value / 100;
+    } else {
+      return defaultValue;
+    }
+  }
+
+  @override
+  void reset() {
+    state = defaultValue;
+    save();
   }
 }
 
 class SettingString extends Setting<String> {
-  SettingString(
-      SharedPreferences? sharedPreferences, String key, String defaultValue)
-      : super(
-          key,
-          sharedPreferences?.getString(key),
-          defaultValue,
-        );
+  final String key;
+  final String defaultValue;
+
+  SettingString({
+    required this.key,
+    required this.defaultValue,
+  });
 
   @override
   Future<bool> save() async {
-    SharedPreferences sharedPrefs = await SharedPreferences.getInstance();
-    return await sharedPrefs.setString(sharedPrefsKey, state);
+    return await ref.read(sharedPrefProvider).sharedPrefs.setString(key, state);
+  }
+
+  @override
+  String build() {
+    String? value = ref.read(sharedPrefProvider).sharedPrefs.getString(key);
+    if (value != null) {
+      return value;
+    } else {
+      return defaultValue;
+    }
+  }
+
+  @override
+  void reset() {
+    state = defaultValue;
+    save();
   }
 }
 
 typedef FromName<T> = T? Function(String);
 
 class SettingEnum<T extends Enum> extends Setting<T> {
-  SettingEnum(SharedPreferences? sharedPreferences, FromName<T> fromName,
-      String key, T defaultValue)
-      : super(
-          key,
-          fromName(sharedPreferences?.getString(key) ?? ""),
-          defaultValue,
-        );
+  final FromName<T> fromName;
+  final String key;
+  final T defaultValue;
+
+  SettingEnum({
+    required this.fromName,
+    required this.key,
+    required this.defaultValue,
+  });
 
   @override
   Future<bool> save() async {
-    SharedPreferences sharedPrefs = await SharedPreferences.getInstance();
-    return await sharedPrefs.setString(sharedPrefsKey, state.name);
+    return await ref
+        .read(sharedPrefProvider)
+        .sharedPrefs
+        .setString(key, state.name);
+  }
+
+  @override
+  T build() {
+    String? name = ref.read(sharedPrefProvider).sharedPrefs.getString(key);
+    if (name != null) {
+      T? value = fromName(name);
+      if (value != null) return value;
+    }
+    return defaultValue;
+  }
+
+  @override
+  void reset() {
+    state = defaultValue;
+    save();
   }
 }

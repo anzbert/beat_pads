@@ -3,14 +3,15 @@ import 'package:beat_pads/services/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // PLAYMODE
-final playModeProv =
-    StateNotifierProvider<SettingEnum<PlayMode>, PlayMode>((ref) {
-  return ref.watch(sharedPrefProvider).settings.playMode;
+final playModeProv = NotifierProvider<SettingEnum<PlayMode>, PlayMode>(() {
+  return SettingEnum<PlayMode>(
+      key: 'playMode',
+      defaultValue: PlayMode.slide,
+      fromName: PlayMode.fromName);
 });
 
 // MOD VISUALISATION
-final modulationRadiusProv =
-    StateNotifierProvider<SettingDouble, double>((ref) {
+final modulationRadiusProv = NotifierProvider<SettingDouble, double>(() {
   return ref.watch(sharedPrefProvider).settings.modulationRadius;
 });
 final modulationDeadZoneProv =
@@ -22,15 +23,29 @@ final modulationDeadZoneProv =
 final modulation2DProv = StateNotifierProvider<SettingBool, bool>((ref) {
   return ref.watch(sharedPrefProvider).settings.modulation2D;
 });
-final mpe2DXProv = StateNotifierProvider<SettingEnum<MPEmods>, MPEmods>((ref) {
-  return ref.watch(sharedPrefProvider).settings.mpe2DX;
+
+final mpe2DXProv = NotifierProvider<SettingEnum<MPEmods>, MPEmods>(() {
+  return SettingEnum<MPEmods>(
+    fromName: MPEmods.fromName,
+    key: 'mpe2DX',
+    defaultValue: MPEmods.slide,
+  );
 });
-final mpe2DYProv = StateNotifierProvider<SettingEnum<MPEmods>, MPEmods>((ref) {
-  return ref.watch(sharedPrefProvider).settings.mpe2DY;
+
+final mpe2DYProv = NotifierProvider<SettingEnum<MPEmods>, MPEmods>(() {
+  return SettingEnum<MPEmods>(
+    fromName: MPEmods.fromName,
+    key: 'mpe2DY',
+    defaultValue: MPEmods.pitchbend,
+  );
 });
-final mpe1DRadiusProv =
-    StateNotifierProvider<SettingEnum<MPEmods>, MPEmods>((ref) {
-  return ref.watch(sharedPrefProvider).settings.mpe1DRadius;
+
+final mpe1DRadiusProv = NotifierProvider<SettingEnum<MPEmods>, MPEmods>(() {
+  return SettingEnum<MPEmods>(
+    fromName: MPEmods.fromName,
+    key: 'mpe1DRadius',
+    defaultValue: MPEmods.mpeAftertouch,
+  );
 });
 
 // OTHER SETTINGS
