@@ -1,4 +1,3 @@
-import 'package:beat_pads/services/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../main.dart';
@@ -14,32 +13,12 @@ class Prefs {
   }
 }
 
-// scale = SettingEnumNotifier<Scale>(
-//   fromName: Scale.fromName,
-//   key: 'scaleString',
-//   defaultValue: Scale.chromatic,
-// ),
-
-//   rootNote = SettingIntNotifier(
-//     key: 'rootNote',
-//  defaultValue:    0,
-//     max: 11,
-//   ),
-
-//   width = SettingIntNotifier(
-//     key: 'width',
-//  defaultValue:    4,
-//     min: 2,
-//     max: 16,
-//   ),
-//   height = SettingIntNotifier(
-//     key: 'height',
-//  defaultValue:    4,
-//     min: 2,
-//     max: 16,
-//   ),
-
 abstract class Setting<T> extends Notifier<T> {
+  Setting({required this.key, required this.defaultValue});
+
+  final T defaultValue;
+  final String key;
+
   void set(T newState) {
     state = newState;
   }
@@ -49,19 +28,19 @@ abstract class Setting<T> extends Notifier<T> {
     save();
   }
 
-  void reset();
+  void reset() {
+    set(defaultValue);
+    save();
+  }
 
   Future<bool> save();
 }
 
 class SettingBoolNotifier extends Setting<bool> {
   SettingBoolNotifier({
-    required this.key,
-    required this.defaultValue,
-  });
-
-  final String key;
-  final bool defaultValue;
+    required key,
+    required defaultValue,
+  }) : super(defaultValue: defaultValue, key: key);
 
   @override
   bool build() {
@@ -82,26 +61,18 @@ class SettingBoolNotifier extends Setting<bool> {
     state = !state;
     save();
   }
-
-  @override
-  void reset() {
-    state = defaultValue;
-    save();
-  }
 }
 
 class SettingIntNotifier extends Setting<int> {
-  final String key;
-  final int defaultValue;
   final int min;
   final int max;
 
   SettingIntNotifier({
-    required this.key,
-    required this.defaultValue,
+    required key,
+    required defaultValue,
     required this.max,
     this.min = 0,
-  });
+  }) : super(defaultValue: defaultValue, key: key);
 
   @override
   Future<bool> save() async {
@@ -125,25 +96,18 @@ class SettingIntNotifier extends Setting<int> {
       return defaultValue;
     }
   }
-
-  @override
-  void reset() {
-    state = defaultValue;
-    save();
-  }
 }
 
 class SettingDoubleNotifier extends Setting<double> {
-  final String key;
-  final double defaultValue;
   final double min;
   final double max;
 
-  SettingDoubleNotifier(
-      {required this.key,
-      required this.defaultValue,
-      this.min = 0,
-      required this.max});
+  SettingDoubleNotifier({
+    required key,
+    required defaultValue,
+    this.min = 0,
+    required this.max,
+  }) : super(defaultValue: defaultValue, key: key);
 
   @override
   void set(double newState) {
@@ -167,22 +131,13 @@ class SettingDoubleNotifier extends Setting<double> {
       return defaultValue;
     }
   }
-
-  @override
-  void reset() {
-    state = defaultValue;
-    save();
-  }
 }
 
 class SettingStringNotifier extends Setting<String> {
-  final String key;
-  final String defaultValue;
-
   SettingStringNotifier({
-    required this.key,
-    required this.defaultValue,
-  });
+    required key,
+    required defaultValue,
+  }) : super(defaultValue: defaultValue, key: key);
 
   @override
   Future<bool> save() async {
@@ -198,26 +153,18 @@ class SettingStringNotifier extends Setting<String> {
       return defaultValue;
     }
   }
-
-  @override
-  void reset() {
-    state = defaultValue;
-    save();
-  }
 }
 
 typedef FromName<T> = T? Function(String);
 
 class SettingEnumNotifier<T extends Enum> extends Setting<T> {
   final FromName<T> fromName;
-  final String key;
-  final T defaultValue;
 
   SettingEnumNotifier({
     required this.fromName,
-    required this.key,
-    required this.defaultValue,
-  });
+    required key,
+    required defaultValue,
+  }) : super(defaultValue: defaultValue, key: key);
 
   @override
   Future<bool> save() async {
@@ -235,11 +182,5 @@ class SettingEnumNotifier<T extends Enum> extends Setting<T> {
       if (value != null) return value;
     }
     return defaultValue;
-  }
-
-  @override
-  void reset() {
-    state = defaultValue;
-    save();
   }
 }

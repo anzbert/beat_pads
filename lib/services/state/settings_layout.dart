@@ -1,25 +1,53 @@
-import 'package:beat_pads/main.dart';
 import 'package:beat_pads/services/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // LAYOUT
 final layoutProv = NotifierProvider<SettingEnumNotifier<Layout>, Layout>(() {
-  return SettingEnumNotifier<Layout>(
+  return LayoutSettingNotifier(
     fromName: Layout.fromName,
     key: 'layout',
     defaultValue: Layout.majorThird,
   );
 });
 
-// NOTES AND OCTAVES
-final rootProv = StateNotifierProvider<SettingIntNotifier, int>((ref) {
-  ref.listen(layoutProv, (_, Layout next) {
-    if (!next.props.resizable) {
-      ref.read(sharedPrefProvider).settings.rootNote.reset();
-    }
-  });
+class LayoutSettingNotifier extends SettingEnumNotifier<Layout> {
+  LayoutSettingNotifier(
+      {required super.fromName,
+      required super.key,
+      required super.defaultValue});
 
-  return ref.watch(sharedPrefProvider).settings.rootNote;
+  @override
+  void set(Layout newState) {
+    if (!newState.props.resizable) {
+      ref.read(rootProv.notifier).reset();
+    }
+
+    if (!newState.props.resizable) {
+      ref.read(scaleProv.notifier).reset();
+    }
+
+    if (newState.props.defaultDimensions?.x != null) {
+      ref
+          .read(widthProv.notifier)
+          .setAndSave(newState.props.defaultDimensions!.x);
+    }
+
+    if (newState.props.defaultDimensions?.y != null) {
+      ref
+          .read(heightProv.notifier)
+          .setAndSave(newState.props.defaultDimensions!.y);
+    }
+    super.set(newState);
+  }
+}
+
+// NOTES AND OCTAVES
+final rootProv = NotifierProvider<SettingIntNotifier, int>(() {
+  return SettingIntNotifier(
+    key: 'rootNote',
+    defaultValue: 0,
+    max: 11,
+  );
 });
 
 final baseProv = NotifierProvider<SettingIntNotifier, int>(() {
@@ -44,29 +72,21 @@ final baseOctaveProv = NotifierProvider<SettingIntNotifier, int>(() {
 });
 
 // GRID SIZE
-final widthProv = StateNotifierProvider<SettingIntNotifier, int>((ref) {
-  ref.listen(layoutProv, (_, Layout next) {
-    if (next.props.defaultDimensions?.x != null) {
-      ref
-          .read(sharedPrefProvider)
-          .settings
-          .width
-          .setAndSave(next.props.defaultDimensions!.x);
-    }
-  });
-  return ref.watch(sharedPrefProvider).settings.width;
+final widthProv = NotifierProvider<SettingIntNotifier, int>(() {
+  return SettingIntNotifier(
+    key: 'width',
+    defaultValue: 4,
+    min: 2,
+    max: 16,
+  );
 });
-final heightProv = StateNotifierProvider<SettingIntNotifier, int>((ref) {
-  ref.listen(layoutProv, (_, Layout next) {
-    if (next.props.defaultDimensions?.y != null) {
-      ref
-          .read(sharedPrefProvider)
-          .settings
-          .height
-          .setAndSave(next.props.defaultDimensions!.y);
-    }
-  });
-  return ref.watch(sharedPrefProvider).settings.height;
+final heightProv = NotifierProvider<SettingIntNotifier, int>(() {
+  return SettingIntNotifier(
+    key: 'height',
+    defaultValue: 4,
+    min: 2,
+    max: 16,
+  );
 });
 
 final rowProv = Provider<List<List<CustomPad>>>(((ref) {
@@ -110,14 +130,12 @@ final baseHueProv = NotifierProvider<SettingIntNotifier, int>(() {
 });
 
 // SCALES
-final scaleProv = NotifierProvider<SettingEnumNotifier<Scale>, Scale>((ref) {
-  ref.listen(layoutProv, (_, Layout next) {
-    if (!next.props.resizable) {
-      ref.read(sharedPrefProvider).settings.scale.reset();
-    }
-  });
-
-  return ref.watch(sharedPrefProvider).settings.scale;
+final scaleProv = NotifierProvider<SettingEnumNotifier<Scale>, Scale>(() {
+  return SettingEnumNotifier<Scale>(
+    fromName: Scale.fromName,
+    key: 'scaleString',
+    defaultValue: Scale.chromatic,
+  );
 });
 
 // BUTTONS AND SLIDERS
