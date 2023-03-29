@@ -14,7 +14,7 @@ class Prefs {
     return instance;
   }
 
-  /// make sure to refresh provider, containign prefs after resetting
+  /// Make sure to refresh provider, containign prefs after resetting
   void reset() {
     settings = LoadSettings.defaults();
   }
@@ -266,16 +266,24 @@ class LoadSettings {
         );
 }
 
-abstract class Setting<T> extends StateNotifier<T> {
+abstract class Setting<T> extends Notifier<T> {
   final String sharedPrefsKey;
   final T defaultValue;
+  final T? value;
 
   Setting(
     this.sharedPrefsKey,
-    T? value,
+    this.value,
     this.defaultValue,
-  ) : super(value ?? defaultValue) {
-    if (value == null && state == defaultValue) save();
+  );
+
+  @override
+  T build() {
+    if (value != null) {
+      return value!;
+    } else {
+      return defaultValue;
+    }
   }
 
   void set(T newState) {
