@@ -29,7 +29,25 @@ class CreditsBox extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Wrap(children: const [Text("Made by A. Mueller")]),
+            Wrap(children: const [
+              Text("Get the Source, contribute and report issues:"),
+            ]),
+            TextButton(
+              child: Text(
+                "GitHub",
+                style: TextStyle(
+                    decoration: TextDecoration.underline,
+                    fontSize: _linkFontSize),
+              ),
+              onPressed: () async =>
+                  await webView("github.com/anzbert/beat_pads"),
+            )
+          ],
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Wrap(children: const [Text("My website:")]),
             TextButton(
               child: Text(
                 "Anzio.dev",
@@ -44,9 +62,7 @@ class CreditsBox extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Wrap(children: const [
-              Text("Magic Tone Network / XpressPads by A. Samek")
-            ]),
+            Wrap(children: const [Text("Magic Tone Network & XpressPads:")]),
             TextButton(
               child: Text(
                 "XpressPads.com",
@@ -61,7 +77,7 @@ class CreditsBox extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Wrap(children: const [Text("Dog Icon by 'catalyststuff'")]),
+            Wrap(children: const [Text("Dog Logo by 'catalyststuff' from:")]),
             TextButton(
               child: Text(
                 "FreePik.com",
@@ -76,7 +92,7 @@ class CreditsBox extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Wrap(children: const [Text("Logo Animated with Rive")]),
+            Wrap(children: const [Text("Splash Screen animated with Rive:")]),
             TextButton(
               child: Text("Rive.app",
                   style: TextStyle(
@@ -90,7 +106,7 @@ class CreditsBox extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Wrap(
-              children: const [Text("Please send improvement suggestions to")],
+              children: const [Text("Contact me:")],
             ),
             TextButton(
               child: Text(
