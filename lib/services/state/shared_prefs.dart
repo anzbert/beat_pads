@@ -2,22 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../main.dart';
 
-final resetAllProv = NotifierProvider<_ResetAllNotifier, bool>(
-  () => _ResetAllNotifier(),
-);
-
-class _ResetAllNotifier extends Notifier<bool> {
-  @override
-  bool build() {
-    return false;
-  }
-
-  /// Causes a change in state, which triggers all listeners.
-  void resetAll() {
-    state = !state;
-  }
-}
-
+/// Holds an instance of the loaded [SharedPreferences]
 class Prefs {
   Prefs._();
   late SharedPreferences sharedPrefs;
@@ -29,17 +14,28 @@ class Prefs {
   }
 }
 
-abstract class SettingNotifier<T> extends Notifier<T> {
-  SettingNotifier({required this.key, required this.defaultValue});
+/// Call ``resetAll()`` on this [Notifier] to alert all [SettingNotifier]s to reset themselves
+final resetAllProv = NotifierProvider<_ResetAllNotifier, bool>(
+  () => _ResetAllNotifier(),
+);
 
-  _registerResetAllListener() {
-    ref.listen(resetAllProv, (prev, next) {
-      if (prev != next) reset();
-    });
+class _ResetAllNotifier extends Notifier<bool> {
+  @override
+  bool build() {
+    return false;
   }
 
+  /// Causes a change in state, which alerts all listeners of this [Notifier].
+  void resetAll() {
+    state = !state;
+  }
+}
+
+abstract class SettingNotifier<T> extends Notifier<T> {
   final T defaultValue;
   final String key;
+
+  SettingNotifier({required this.key, required this.defaultValue});
 
   void set(T newState) {
     state = newState;
@@ -48,6 +44,12 @@ abstract class SettingNotifier<T> extends Notifier<T> {
   void setAndSave(T newState) {
     set(newState);
     save();
+  }
+
+  void _registerResetAllListener() {
+    ref.listen(resetAllProv, (prev, next) {
+      if (prev != next) reset();
+    });
   }
 
   void reset() {
