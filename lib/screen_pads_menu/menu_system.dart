@@ -1,4 +1,3 @@
-import 'package:beat_pads/main.dart';
 import 'package:beat_pads/screen_pads_menu/_screen_pads_menu.dart';
 import 'package:beat_pads/screen_pads_menu/box_credits.dart';
 import 'package:beat_pads/services/services.dart';
@@ -57,10 +56,7 @@ class MenuSystem extends ConsumerWidget {
                       TextButton(
                         onPressed: () {
                           Navigator.pop(context, 'OK');
-                          ref
-                              .read(sharedPrefProvider)
-                              .reset(); // TODO: RESET ALL
-                          ref.invalidate(sharedPrefProvider);
+                          ref.read(resetAllProv.notifier).resetAll();
                           ref.read(selectedMenuState.notifier).state =
                               Menu.layout;
                         },

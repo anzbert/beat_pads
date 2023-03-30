@@ -2,6 +2,21 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../main.dart';
 
+final resetAllProv = NotifierProvider<_ResetAllNotifier, bool>(
+  () => _ResetAllNotifier(),
+);
+
+class _ResetAllNotifier extends Notifier<bool> {
+  @override
+  bool build() {
+    return false;
+  }
+
+  void resetAll() {
+    state = !state;
+  }
+}
+
 class Prefs {
   Prefs._();
   late SharedPreferences sharedPrefs;
@@ -14,7 +29,11 @@ class Prefs {
 }
 
 abstract class Setting<T> extends Notifier<T> {
-  Setting({required this.key, required this.defaultValue});
+  Setting({required this.key, required this.defaultValue}) {
+    ref.listen(resetAllProv, (_, next) {
+      reset();
+    });
+  }
 
   final T defaultValue;
   final String key;
