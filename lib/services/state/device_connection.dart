@@ -5,6 +5,7 @@ final devicesFutureProv = FutureProvider<List<MidiDevice>?>((ref) async {
   return await MidiCommand().devices;
 });
 
+// This didnt seem to work ?!
 // final setupStreamProv = StreamProvider<String>(
 //   (ref) async* {
 //     Stream<String> stream =

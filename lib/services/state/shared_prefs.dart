@@ -37,26 +37,31 @@ abstract class SettingNotifier<T> extends Notifier<T> {
 
   SettingNotifier({required this.key, required this.defaultValue});
 
+  /// Set this Settings state to a new value
   void set(T newState) {
     state = newState;
   }
 
+  /// Set this Settings state to a new value and save it to the [SharedPreferences]
   void setAndSave(T newState) {
     set(newState);
     save();
   }
 
+  /// Register a Listener to the [resetAllProv] and reset this Setting when alerted by this provider.
   void _registerResetAllListener() {
     ref.listen(resetAllProv, (prev, next) {
       if (prev != next) reset();
     });
   }
 
+  /// Permanently reset this Setting to the default value.
   void reset() {
     set(defaultValue);
     save();
   }
 
+  /// Save the current State of this Setting to the [SharedPreferences]
   void save();
 }
 
