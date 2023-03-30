@@ -12,6 +12,7 @@ class _ResetAllNotifier extends Notifier<bool> {
     return false;
   }
 
+  /// Causes a change in state, which triggers all listeners.
   void resetAll() {
     state = !state;
   }
@@ -28,8 +29,10 @@ class Prefs {
   }
 }
 
-abstract class Setting<T> extends Notifier<T> {
-  Setting({required this.key, required this.defaultValue}) {
+abstract class SettingNotifier<T> extends Notifier<T> {
+  SettingNotifier({required this.key, required this.defaultValue});
+
+  _registerResetAllListener() {
     ref.listen(resetAllProv, (prev, next) {
       if (prev != next) reset();
     });
@@ -52,37 +55,10 @@ abstract class Setting<T> extends Notifier<T> {
     save();
   }
 
-  Future<bool> save();
+  void save();
 }
 
-class SettingBoolNotifier extends Setting<bool> {
-  SettingBoolNotifier({
-    required key,
-    required defaultValue,
-  }) : super(defaultValue: defaultValue, key: key);
-
-  @override
-  bool build() {
-    bool? value = ref.read(sharedPrefProvider).sharedPrefs.getBool(key);
-    if (value != null) {
-      return value;
-    } else {
-      return defaultValue;
-    }
-  }
-
-  @override
-  Future<bool> save() async {
-    return await ref.read(sharedPrefProvider).sharedPrefs.setBool(key, state);
-  }
-
-  void toggleAndSave() {
-    state = !state;
-    save();
-  }
-}
-
-class SettingIntNotifier extends Setting<int> {
+class SettingIntNotifier extends SettingNotifier<int> {
   final int min;
   final int max;
 
@@ -94,8 +70,8 @@ class SettingIntNotifier extends Setting<int> {
   }) : super(defaultValue: defaultValue, key: key);
 
   @override
-  Future<bool> save() async {
-    return await ref.read(sharedPrefProvider).sharedPrefs.setInt(key, state);
+  void save() async {
+    await ref.read(sharedPrefProvider).sharedPrefs.setInt(key, state);
   }
 
   void increment() => set(state + 1);
@@ -108,6 +84,8 @@ class SettingIntNotifier extends Setting<int> {
 
   @override
   int build() {
+    _registerResetAllListener();
+
     int? value = ref.read(sharedPrefProvider).sharedPrefs.getInt(key);
     if (value != null) {
       return value;
@@ -117,7 +95,36 @@ class SettingIntNotifier extends Setting<int> {
   }
 }
 
-class SettingDoubleNotifier extends Setting<double> {
+class SettingBoolNotifier extends SettingNotifier<bool> {
+  SettingBoolNotifier({
+    required key,
+    required defaultValue,
+  }) : super(defaultValue: defaultValue, key: key);
+
+  @override
+  bool build() {
+    _registerResetAllListener();
+
+    bool? value = ref.read(sharedPrefProvider).sharedPrefs.getBool(key);
+    if (value != null) {
+      return value;
+    } else {
+      return defaultValue;
+    }
+  }
+
+  @override
+  void save() async {
+    await ref.read(sharedPrefProvider).sharedPrefs.setBool(key, state);
+  }
+
+  void toggleAndSave() {
+    state = !state;
+    save();
+  }
+}
+
+class SettingDoubleNotifier extends SettingNotifier<double> {
   final double min;
   final double max;
 
@@ -134,8 +141,8 @@ class SettingDoubleNotifier extends Setting<double> {
   }
 
   @override
-  Future<bool> save() async {
-    return await ref
+  void save() async {
+    await ref
         .read(sharedPrefProvider)
         .sharedPrefs
         .setInt(key, (state * 100).toInt());
@@ -143,6 +150,8 @@ class SettingDoubleNotifier extends Setting<double> {
 
   @override
   double build() {
+    _registerResetAllListener();
+
     int? value = ref.read(sharedPrefProvider).sharedPrefs.getInt(key);
     if (value != null) {
       return value / 100;
@@ -152,19 +161,21 @@ class SettingDoubleNotifier extends Setting<double> {
   }
 }
 
-class SettingStringNotifier extends Setting<String> {
+class SettingStringNotifier extends SettingNotifier<String> {
   SettingStringNotifier({
     required key,
     required defaultValue,
   }) : super(defaultValue: defaultValue, key: key);
 
   @override
-  Future<bool> save() async {
-    return await ref.read(sharedPrefProvider).sharedPrefs.setString(key, state);
+  void save() async {
+    await ref.read(sharedPrefProvider).sharedPrefs.setString(key, state);
   }
 
   @override
   String build() {
+    _registerResetAllListener();
+
     String? value = ref.read(sharedPrefProvider).sharedPrefs.getString(key);
     if (value != null) {
       return value;
@@ -176,7 +187,7 @@ class SettingStringNotifier extends Setting<String> {
 
 typedef FromName<T> = T? Function(String);
 
-class SettingEnumNotifier<T extends Enum> extends Setting<T> {
+class SettingEnumNotifier<T extends Enum> extends SettingNotifier<T> {
   final FromName<T> fromName;
 
   SettingEnumNotifier({
@@ -186,15 +197,14 @@ class SettingEnumNotifier<T extends Enum> extends Setting<T> {
   }) : super(defaultValue: defaultValue, key: key);
 
   @override
-  Future<bool> save() async {
-    return await ref
-        .read(sharedPrefProvider)
-        .sharedPrefs
-        .setString(key, state.name);
+  void save() async {
+    await ref.read(sharedPrefProvider).sharedPrefs.setString(key, state.name);
   }
 
   @override
   T build() {
+    _registerResetAllListener();
+
     String? name = ref.read(sharedPrefProvider).sharedPrefs.getString(key);
     if (name != null) {
       T? value = fromName(name);

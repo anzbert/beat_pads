@@ -3,12 +3,27 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // CHANNEL
 final channelSettingProv = NotifierProvider<SettingIntNotifier, int>(() {
+  // return Yo();
   return SettingIntNotifier(
     key: 'channel',
     defaultValue: 0,
     max: 15,
   );
 });
+
+// abstract class Bla<T> extends Notifier<T> {
+//   void set(int yo) {}
+//   void reset() {}
+//   void setAndSave() {}
+//   void save() {}
+// }
+
+// class Yo extends Bla<int> {
+//   @override
+//   int build() {
+//     return 1;
+//   }
+// }
 
 final channelUsableProv = Provider<int>(
   ((ref) {
