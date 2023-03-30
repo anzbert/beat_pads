@@ -30,8 +30,8 @@ class Prefs {
 
 abstract class Setting<T> extends Notifier<T> {
   Setting({required this.key, required this.defaultValue}) {
-    ref.listen(resetAllProv, (_, next) {
-      reset();
+    ref.listen(resetAllProv, (prev, next) {
+      if (prev != next) reset();
     });
   }
 
