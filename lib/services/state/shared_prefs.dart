@@ -1,3 +1,4 @@
+import 'package:beat_pads/services/state/settings_presets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../main.dart';
@@ -29,13 +30,26 @@ class _ResetAllNotifier extends Notifier<bool> {
   void resetAll() {
     state = !state;
   }
+
+  void resetAllPresets() {
+    for (int i = PresetNotfier.number; i >= 1; i--) {
+      ref.read(presetNotifierProvider.notifier).set(i);
+      resetAll();
+    }
+  }
 }
 
 abstract class SettingNotifier<T> extends Notifier<T> {
   final T defaultValue;
   final String key;
+  String presetKey;
+  final bool usesPresets;
 
-  SettingNotifier({required this.key, required this.defaultValue});
+  SettingNotifier({
+    required this.key,
+    required this.defaultValue,
+    this.usesPresets = true,
+  }) : presetKey = "{$key}-0";
 
   /// Set this Settings state to a new value
   void set(T newState) {
@@ -49,9 +63,14 @@ abstract class SettingNotifier<T> extends Notifier<T> {
   }
 
   /// Register a Listener to the [resetAllProv] and reset this Setting when alerted by this provider.
-  void _registerResetAllListener() {
+  void _registerListeners() {
     ref.listen(resetAllProv, (prev, next) {
       if (prev != next) reset();
+    });
+
+    ref.listen(presetNotifierProvider, (_, next) {
+      presetKey = "{$key}-$next";
+      state = _load();
     });
   }
 
@@ -60,6 +79,9 @@ abstract class SettingNotifier<T> extends Notifier<T> {
     set(defaultValue);
     save();
   }
+
+  /// Fetch value from [SharedPreferences]
+  T _load();
 
   /// Save the current State of this Setting to the [SharedPreferences]
   void save();
@@ -78,7 +100,7 @@ class SettingIntNotifier extends SettingNotifier<int> {
 
   @override
   void save() async {
-    await ref.read(sharedPrefProvider).sharedPrefs.setInt(key, state);
+    await ref.read(sharedPrefProvider).sharedPrefs.setInt(presetKey, state);
   }
 
   void increment() => set(state + 1);
@@ -90,15 +112,15 @@ class SettingIntNotifier extends SettingNotifier<int> {
   }
 
   @override
-  int build() {
-    _registerResetAllListener();
+  int _load() =>
+      ref.read(sharedPrefProvider).sharedPrefs.getInt(presetKey) ??
+      defaultValue;
 
-    int? value = ref.read(sharedPrefProvider).sharedPrefs.getInt(key);
-    if (value != null) {
-      return value;
-    } else {
-      return defaultValue;
-    }
+  @override
+  int build() {
+    _registerListeners();
+
+    return _load();
   }
 }
 
@@ -110,25 +132,25 @@ class SettingBoolNotifier extends SettingNotifier<bool> {
 
   @override
   bool build() {
-    _registerResetAllListener();
+    _registerListeners();
 
-    bool? value = ref.read(sharedPrefProvider).sharedPrefs.getBool(key);
-    if (value != null) {
-      return value;
-    } else {
-      return defaultValue;
-    }
+    return _load();
   }
 
   @override
   void save() async {
-    await ref.read(sharedPrefProvider).sharedPrefs.setBool(key, state);
+    await ref.read(sharedPrefProvider).sharedPrefs.setBool(presetKey, state);
   }
 
   void toggleAndSave() {
     state = !state;
     save();
   }
+
+  @override
+  bool _load() =>
+      ref.read(sharedPrefProvider).sharedPrefs.getBool(presetKey) ??
+      defaultValue;
 }
 
 class SettingDoubleNotifier extends SettingNotifier<double> {
@@ -152,19 +174,19 @@ class SettingDoubleNotifier extends SettingNotifier<double> {
     await ref
         .read(sharedPrefProvider)
         .sharedPrefs
-        .setInt(key, (state * 100).toInt());
+        .setInt(presetKey, (state * 100).toInt());
   }
 
   @override
   double build() {
-    _registerResetAllListener();
+    _registerListeners();
+    return _load();
+  }
 
-    int? value = ref.read(sharedPrefProvider).sharedPrefs.getInt(key);
-    if (value != null) {
-      return value / 100;
-    } else {
-      return defaultValue;
-    }
+  @override
+  double _load() {
+    int? value = ref.read(sharedPrefProvider).sharedPrefs.getInt(presetKey);
+    return value != null ? value / 100 : defaultValue;
   }
 }
 
@@ -176,20 +198,19 @@ class SettingStringNotifier extends SettingNotifier<String> {
 
   @override
   void save() async {
-    await ref.read(sharedPrefProvider).sharedPrefs.setString(key, state);
+    await ref.read(sharedPrefProvider).sharedPrefs.setString(presetKey, state);
   }
 
   @override
   String build() {
-    _registerResetAllListener();
-
-    String? value = ref.read(sharedPrefProvider).sharedPrefs.getString(key);
-    if (value != null) {
-      return value;
-    } else {
-      return defaultValue;
-    }
+    _registerListeners();
+    return _load();
   }
+
+  @override
+  String _load() =>
+      ref.read(sharedPrefProvider).sharedPrefs.getString(presetKey) ??
+      defaultValue;
 }
 
 typedef FromName<T> = T? Function(String);
@@ -205,14 +226,23 @@ class SettingEnumNotifier<T extends Enum> extends SettingNotifier<T> {
 
   @override
   void save() async {
-    await ref.read(sharedPrefProvider).sharedPrefs.setString(key, state.name);
+    await ref
+        .read(sharedPrefProvider)
+        .sharedPrefs
+        .setString(presetKey, state.name);
   }
 
   @override
   T build() {
-    _registerResetAllListener();
+    _registerListeners();
 
-    String? name = ref.read(sharedPrefProvider).sharedPrefs.getString(key);
+    return _load();
+  }
+
+  @override
+  T _load() {
+    String? name =
+        ref.read(sharedPrefProvider).sharedPrefs.getString(presetKey);
     if (name != null) {
       T? value = fromName(name);
       if (value != null) return value;

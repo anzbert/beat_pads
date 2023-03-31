@@ -44,6 +44,12 @@ class MenuLayout extends ConsumerWidget {
           child: ListView(
             children: <Widget>[
               const DividerTitle("Layout"),
+              IntCounterTile(
+                label: "Preset",
+                setValue: (v) =>
+                    ref.read(presetNotifierProvider.notifier).set(v),
+                readValue: ref.watch(presetNotifierProvider),
+              ),
               ListTile(
                 title: const Text("Layout"),
                 trailing: DropdownEnum<Layout>(

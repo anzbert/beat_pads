@@ -39,7 +39,7 @@ class MenuSystem extends ConsumerWidget {
                 backgroundColor: Palette.laserLemon,
               ),
               child: const Text(
-                "Reset All Settings",
+                "Reset Preset",
               ),
               onPressed: () {
                 showDialog<String>(
@@ -47,7 +47,7 @@ class MenuSystem extends ConsumerWidget {
                   builder: (BuildContext context) => AlertDialog(
                     title: const Text('Reset'),
                     content: const Text(
-                        'Return all settings to their default values?'),
+                        'Return current Preset to the default values?'),
                     actions: <Widget>[
                       TextButton(
                         onPressed: () => Navigator.pop(context, 'Cancel'),
@@ -57,6 +57,44 @@ class MenuSystem extends ConsumerWidget {
                         onPressed: () {
                           Navigator.pop(context, 'OK');
                           ref.read(resetAllProv.notifier).resetAll();
+                          ref.read(selectedMenuState.notifier).state =
+                              Menu.layout;
+                        },
+                        child: const Text('OK'),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ),
+        ),
+        Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(minWidth: buttonMinWidth),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Palette.lightPink,
+              ),
+              child: const Text(
+                "Reset All Presets",
+              ),
+              onPressed: () {
+                showDialog<String>(
+                  context: context,
+                  builder: (BuildContext context) => AlertDialog(
+                    title: const Text('Reset'),
+                    content:
+                        const Text('Return All Presets to the default values?'),
+                    actions: <Widget>[
+                      TextButton(
+                        onPressed: () => Navigator.pop(context, 'Cancel'),
+                        child: const Text('Cancel'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context, 'OK');
+                          ref.read(resetAllProv.notifier).resetAllPresets();
                           ref.read(selectedMenuState.notifier).state =
                               Menu.layout;
                         },
