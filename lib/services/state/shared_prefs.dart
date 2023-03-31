@@ -44,11 +44,13 @@ abstract class SettingNotifier<T> extends Notifier<T> {
   final String key;
   String presetKey;
   final bool usesPresets;
+  final bool resettable;
 
   SettingNotifier({
     required this.key,
     required this.defaultValue,
     this.usesPresets = true,
+    this.resettable = true,
   }) : presetKey = "{$key}-0";
 
   /// Set this Settings state to a new value
@@ -64,14 +66,17 @@ abstract class SettingNotifier<T> extends Notifier<T> {
 
   /// Register a Listener to the [resetAllProv] and reset this Setting when alerted by this provider.
   void _registerListeners() {
-    ref.listen(resetAllProv, (prev, next) {
-      if (prev != next) reset();
-    });
-
-    ref.listen(presetNotifierProvider, (_, next) {
-      presetKey = "{$key}-$next";
-      state = _load();
-    });
+    if (resettable) {
+      ref.listen(resetAllProv, (prev, next) {
+        if (prev != next) reset();
+      });
+    }
+    if (usesPresets) {
+      ref.listen(presetNotifierProvider, (_, next) {
+        presetKey = "{$key}-$next";
+        state = _load();
+      });
+    }
   }
 
   /// Permanently reset this Setting to the default value.
@@ -92,11 +97,13 @@ class SettingIntNotifier extends SettingNotifier<int> {
   final int max;
 
   SettingIntNotifier({
-    required key,
-    required defaultValue,
     required this.max,
     this.min = 0,
-  }) : super(defaultValue: defaultValue, key: key);
+    required super.key,
+    required super.defaultValue,
+    super.resettable,
+    super.usesPresets,
+  });
 
   @override
   void save() async {
@@ -119,21 +126,21 @@ class SettingIntNotifier extends SettingNotifier<int> {
   @override
   int build() {
     _registerListeners();
-
     return _load();
   }
 }
 
 class SettingBoolNotifier extends SettingNotifier<bool> {
   SettingBoolNotifier({
-    required key,
-    required defaultValue,
-  }) : super(defaultValue: defaultValue, key: key);
+    required super.key,
+    required super.defaultValue,
+    super.resettable,
+    super.usesPresets,
+  });
 
   @override
   bool build() {
     _registerListeners();
-
     return _load();
   }
 
@@ -158,11 +165,13 @@ class SettingDoubleNotifier extends SettingNotifier<double> {
   final double max;
 
   SettingDoubleNotifier({
-    required key,
-    required defaultValue,
     this.min = 0,
     required this.max,
-  }) : super(defaultValue: defaultValue, key: key);
+    required super.key,
+    required super.defaultValue,
+    super.resettable,
+    super.usesPresets,
+  });
 
   @override
   void set(double newState) {
@@ -192,9 +201,11 @@ class SettingDoubleNotifier extends SettingNotifier<double> {
 
 class SettingStringNotifier extends SettingNotifier<String> {
   SettingStringNotifier({
-    required key,
-    required defaultValue,
-  }) : super(defaultValue: defaultValue, key: key);
+    required super.key,
+    required super.defaultValue,
+    super.resettable,
+    super.usesPresets,
+  });
 
   @override
   void save() async {
@@ -220,9 +231,11 @@ class SettingEnumNotifier<T extends Enum> extends SettingNotifier<T> {
 
   SettingEnumNotifier({
     required this.fromName,
-    required key,
-    required defaultValue,
-  }) : super(defaultValue: defaultValue, key: key);
+    required super.key,
+    required super.defaultValue,
+    super.resettable,
+    super.usesPresets,
+  });
 
   @override
   void save() async {
@@ -235,7 +248,6 @@ class SettingEnumNotifier<T extends Enum> extends SettingNotifier<T> {
   @override
   T build() {
     _registerListeners();
-
     return _load();
   }
 

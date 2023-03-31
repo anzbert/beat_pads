@@ -200,3 +200,13 @@ final velocityVisualProv = NotifierProvider<SettingBoolNotifier, bool>(() {
     defaultValue: false,
   );
 });
+
+// PRESETS
+final presetButtonsProv = NotifierProvider<SettingBoolNotifier, bool>(() {
+  return SettingBoolNotifier(
+    key: 'presetButtons',
+    defaultValue: false,
+    resettable: false,
+    usesPresets: false,
+  );
+});
