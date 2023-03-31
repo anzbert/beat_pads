@@ -1,3 +1,5 @@
+import 'package:beat_pads/screen_beat_pads/button_octave.dart';
+import 'package:beat_pads/screen_beat_pads/button_presets.dart';
 import 'package:beat_pads/screen_beat_pads/buttons_oct_and_sustain.dart';
 import 'package:beat_pads/screen_beat_pads/button_menu.dart';
 import 'package:beat_pads/screen_beat_pads/beat_pad_grid.dart';
@@ -74,6 +76,12 @@ class BeatPadsAndControls extends ConsumerWidget {
                 preview: preview,
               ),
             ),
+            // PRESETS
+            if (ref.watch(presetButtonsProv))
+              const Expanded(
+                flex: 5,
+                child: PresetButtons(),
+              ),
             const Expanded(
               flex: 1,
               child: SizedBox(),
