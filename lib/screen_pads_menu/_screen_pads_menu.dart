@@ -1,4 +1,5 @@
 import 'package:beat_pads/screen_beat_pads/_screen_beat_pads.dart';
+import 'package:beat_pads/screen_beat_pads/button_presets.dart';
 import 'package:beat_pads/screen_pads_menu/menu_input.dart';
 import 'package:beat_pads/screen_pads_menu/menu_layout.dart';
 import 'package:beat_pads/screen_pads_menu/menu_midi.dart';
@@ -61,7 +62,7 @@ class PadMenuScreen extends ConsumerWidget {
               ),
               leading: Builder(builder: (BuildContext context) {
                 return IconButton(
-                  color: Palette.cadetBlue,
+                  // color: Palette.cadetBlue,
                   onPressed: () {
                     Scaffold.of(context).openDrawer();
                   },
@@ -138,6 +139,25 @@ class PadMenuScreen extends ConsumerWidget {
                   label: "System",
                 ),
               ],
+            ),
+            floatingActionButton: FloatingActionButton(
+              onPressed: () {
+                ref.read(selectedMenuState.notifier).state = Menu.layout;
+                // scrollController.animateTo(
+                //     //go to top of scroll
+                //     0, //scroll offset to go
+                //     duration: Duration(milliseconds: 500), //duration of scroll
+                //     curve: Curves.fastOutSlowIn //scroll type
+                //     );
+              },
+              backgroundColor: PresetButtons
+                  .backgoundColors[ref.watch(presetNotifierProvider) - 1],
+              child: Text("P${ref.watch(presetNotifierProvider)}",
+                  style: TextStyle(
+                      color: Palette.darkGrey,
+                      fontSize:
+                          Theme.of(context).textTheme.headlineSmall?.fontSize ??
+                              32)),
             ),
             body: SafeArea(
               child: ref.watch(selectedMenuState).menuPage,

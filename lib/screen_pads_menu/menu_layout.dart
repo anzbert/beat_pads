@@ -1,3 +1,4 @@
+import 'package:beat_pads/screen_beat_pads/button_presets.dart';
 import 'package:beat_pads/screen_pads_menu/drop_down_enum.dart';
 import 'package:beat_pads/theme.dart';
 import 'package:flutter/material.dart';
@@ -44,16 +45,22 @@ class MenuLayout extends ConsumerWidget {
           child: ListView(
             children: <Widget>[
               const DividerTitle("Presets"),
-              IntCounterTile(
-                label: "Preset",
-                setValue: (v) =>
-                    ref.read(presetNotifierProvider.notifier).set(v),
-                readValue: ref.watch(presetNotifierProvider),
+              // IntCounterTile(
+              //   label: "Preset",
+              //   setValue: (v) =>
+              //       ref.read(presetNotifierProvider.notifier).set(v),
+              //   readValue: ref.watch(presetNotifierProvider),
+              // ),
+              ConstrainedBox(
+                constraints: BoxConstraints.loose(Size(200, 200)),
+                child: const PresetButtons(
+                  doubleClick: false,
+                  row: true,
+                ),
               ),
               ListTile(
-                title: const Text("Show Preset Controls"),
-                // subtitle:
-                //     const Text("Adds Preset control buttons to the pad screen"),
+                title: const Text("Show Preset Buttons"),
+                subtitle: const Text("Double tap Buttons to choose Preset"),
                 trailing: Switch(
                     value: ref.watch(presetButtonsProv),
                     onChanged: (v) =>

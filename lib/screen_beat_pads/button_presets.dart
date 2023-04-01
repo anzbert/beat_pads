@@ -4,20 +4,27 @@ import 'package:beat_pads/services/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class PresetButtons extends ConsumerWidget {
-  const PresetButtons({Key? key}) : super(key: key);
+  static final backgoundColors = [
+    Palette.laserLemon,
+    Palette.lightPink,
+    Palette.cadetBlue,
+    Palette.yellowGreen,
+    Palette.tan
+  ];
+
+  const PresetButtons({this.doubleClick = true, this.row = false, Key? key})
+      : super(key: key);
+
+  final bool row;
+  final bool doubleClick;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // double width = MediaQuery.of(context).size.width;
-    // double padSpacing = width * ThemeConst.padSpacingFactor;
-    // double padRadius = width * ThemeConst.padRadiusFactor;
-    return Column(
+    return Flex(
+      direction: row ? Axis.horizontal : Axis.vertical,
       children: [
-        _PresetButton(1, Palette.laserLemon),
-        _PresetButton(2, Palette.darkGrey),
-        _PresetButton(3, Palette.darkGrey),
-        _PresetButton(4, Palette.darkGrey),
-        _PresetButton(5, Palette.darkGrey),
+        for (int i = 1; i <= backgoundColors.length; i++)
+          _PresetButton(i, backgoundColors[i - 1], doubleClick: doubleClick)
       ],
     );
   }
@@ -26,9 +33,11 @@ class PresetButtons extends ConsumerWidget {
 class _PresetButton extends ConsumerWidget {
   const _PresetButton(
     this.preset,
-    this.color,
-  );
+    this.color, {
+    this.doubleClick = true,
+  });
 
+  final bool doubleClick;
   final int preset;
   final Color color;
 
@@ -41,24 +50,36 @@ class _PresetButton extends ConsumerWidget {
       flex: 1,
       child: Padding(
         padding: EdgeInsets.fromLTRB(padSpacing, padSpacing, 0, padSpacing),
-        child: ElevatedButton(
-          onPressed: () {
-            // ref.read(baseOctaveProv.notifier).decrement();
+        child: GestureDetector(
+          onDoubleTap: () {
+            if (doubleClick) {
+              ref.read(presetNotifierProvider.notifier).set(preset);
+            }
           },
-          style: ElevatedButton.styleFrom(
-            foregroundColor: Palette.darkGrey,
-            backgroundColor: color,
-            padding: const EdgeInsets.all(0),
-            alignment: Alignment.center,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(padRadius),
+          child: ElevatedButton(
+            onPressed: () {
+              if (!doubleClick) {
+                ref.read(presetNotifierProvider.notifier).set(preset);
+              }
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: color,
+              padding: const EdgeInsets.all(0),
+              alignment: Alignment.center,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(padRadius),
+              ),
             ),
-          ),
-          child: const FittedBox(
-            fit: BoxFit.contain,
-            child: Icon(
-              Icons.remove,
-              size: 100,
+            child: FittedBox(
+              fit: BoxFit.contain,
+              child: Text(
+                preset.toString(),
+                style: TextStyle(
+                    fontSize: 50,
+                    color: ref.watch(presetNotifierProvider) == preset
+                        ? Palette.darkGrey
+                        : Palette.darkGrey.withOpacity(0.1)),
+              ),
             ),
           ),
         ),
