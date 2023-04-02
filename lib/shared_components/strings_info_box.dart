@@ -12,7 +12,7 @@ class StringInfoBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Card(
-        margin: const EdgeInsets.fromLTRB(8, 30, 8, 8),
+        margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
         elevation: 5,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 16),
