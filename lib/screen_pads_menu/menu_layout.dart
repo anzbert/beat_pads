@@ -56,9 +56,8 @@ class MenuLayout extends ConsumerWidget {
                 minimumSize: true,
               ),
               ListTile(
-                title: const Text("Preset Buttons"),
-                subtitle: const Text(
-                    "Show Preset Buttons on Pad Screen. Double Tap them to switch between Presets"),
+                title: const Text("Show Preset Buttons"),
+                subtitle: const Text("DOUBLE TAP buttons to switch Presets"),
                 trailing: Switch(
                     value: ref.watch(presetButtonsProv),
                     onChanged: (v) =>

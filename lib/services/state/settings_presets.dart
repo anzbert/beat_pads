@@ -1,3 +1,4 @@
+import 'package:beat_pads/services/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final presetNotifierProvider = NotifierProvider<PresetNotfier, int>(() {
@@ -13,5 +14,8 @@ class PresetNotfier extends Notifier<int> {
   }
 
   /// Set to a Preset between 1 and 5
-  void set(int newPreset) => state = newPreset.clamp(1, number);
+  void set(int newPreset) {
+    ref.read(senderProvider.notifier).playModeHandler.killAllNotes();
+    state = newPreset.clamp(1, number);
+  }
 }

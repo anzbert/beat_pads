@@ -103,7 +103,7 @@ class PadMenuScreen extends ConsumerWidget {
                                 ref.watch(presetNotifierProvider) - 1],
                             fontSize: Theme.of(context)
                                     .textTheme
-                                    .headlineSmall
+                                    .headlineMedium
                                     ?.fontSize ??
                                 16)),
                   ),
