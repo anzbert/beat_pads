@@ -47,6 +47,8 @@ class MenuLayout extends ConsumerWidget {
         Expanded(
           flex: 3,
           child: ListView(
+            padding:
+                const EdgeInsets.only(bottom: ThemeConst.listViewBottomPadding),
             controller: _scrollController,
             children: <Widget>[
               const DividerTitle("Presets"),

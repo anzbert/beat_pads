@@ -2,8 +2,8 @@ import 'package:beat_pads/screen_pads_menu/slider_int.dart';
 import 'package:flutter/material.dart';
 import 'package:beat_pads/screen_pads_menu/slider_int_range.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../shared_components/divider_title.dart';
+import '../theme.dart';
 import 'drop_down_enum.dart';
 import 'package:beat_pads/services/services.dart';
 
@@ -11,6 +11,7 @@ class MenuMidi extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ListView(
+      padding: const EdgeInsets.only(bottom: ThemeConst.listViewBottomPadding),
       children: <Widget>[
         const DividerTitle("Connect"),
         Center(

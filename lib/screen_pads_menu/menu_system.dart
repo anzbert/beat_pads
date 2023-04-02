@@ -6,13 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:beat_pads/shared_components/_shared.dart';
 import 'package:beat_pads/screen_pads_menu/switch_wake_lock.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../shared_components/divider_title.dart';
 
 class MenuSystem extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ListView(
+      padding: const EdgeInsets.only(bottom: ThemeConst.listViewBottomPadding),
       children: <Widget>[
         const DividerTitle("System"),
         const SwitchWakeLockTile(),
