@@ -2,5 +2,24 @@
     <!-- Flutter needs it to communicate with the running application
          to allow setting breakpoints, to provide hot reload, etc.
     -->
+
+
+    <!-- Make sure only devices with Midi support can get the app from the Play Store-->
+    <uses-feature android:name="android.software.midi" android:required="true" />
+
+    <!-- Internet Permission to open Links from the app with url_launcher -->
     <uses-permission android:name="android.permission.INTERNET" />
+
+    <queries>
+        <!-- Allow app to open https URLs with url_launcher-->
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="https" />
+        </intent>
+        <!-- Allow App to open Email links with url_launcher -->
+        <intent>
+            <action android:name="android.intent.action.SEND" />
+            <data android:mimeType="*/*" />
+        </intent>
+    </queries>
 </manifest>

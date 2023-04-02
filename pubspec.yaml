@@ -1,13 +1,13 @@
 name: beat_pads
 description: USB Midi Pad Controller for Music Production
+publish_to: "none"
 version: 0.9.0+64
+
 # Read more about Android versioning:
 # https://developer.android.com/studio/publish/versioning
 # Read more about iOS versioning:
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
-
-publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 environment:
   sdk: ">=2.19.6 <3.0.0"

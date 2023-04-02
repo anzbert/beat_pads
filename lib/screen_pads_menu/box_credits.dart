@@ -6,10 +6,11 @@ import 'package:beat_pads/services/services.dart';
 class CreditsBox extends StatelessWidget {
   const CreditsBox({Key? key}) : super(key: key);
 
-  Future<bool> webView(String host) async {
+  Future<bool> webView(String host, [String? path]) async {
     final httpUri = Uri(
-      scheme: 'http',
+      scheme: 'https',
       host: host,
+      path: path,
     );
     if (await canLaunchUrl(httpUri)) {
       return await launchUrl(httpUri);
@@ -40,7 +41,7 @@ class CreditsBox extends StatelessWidget {
                     fontSize: _linkFontSize),
               ),
               onPressed: () async =>
-                  await webView("github.com/anzbert/beat_pads"),
+                  await webView("github.com", "anzbert/beat_pads"),
             )
           ],
         ),
