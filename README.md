@@ -2,15 +2,16 @@
 
 ## Installation
 
-### Get it from the App Store...
+### Get it from the App Store and support this project...
 
 - [Apple Store](https://apps.apple.com/us/app/beat-pads/id1633882803)
 - [Google Play](https://play.google.com/store/apps/details?id=io.anzio.beat_pads&hl=en_AU&gl=US&pli=1)
 
 ### ...or compile it yourself
 
-- Install the [Flutter](https://flutter.dev/) toolchain as per [the instructions](https://docs.flutter.dev/get-started/install)
-- Compile it with [VScode](https://code.visualstudio.com/)
+- Install the [Flutter](https://flutter.dev/) toolchain as per [these instructions](https://docs.flutter.dev/get-started/install)
+- Clone or download this repository
+- Compile with [VScode](https://code.visualstudio.com/)
 
 ## Information
 
@@ -22,7 +23,7 @@ This App is **ONLY** usable as a Midi Controller. It does **NOT** produce any so
 
 AUv3 is unfortunately not supported at this time, as it is [currently impossible with Flutter](https://github.com/flutter/flutter/issues/16092).
 
-Wifi and Bluetooth support is limited at this stage.
+Wifi works on iOS, but Wifi and Bluetooth support is otherwise limited due to platform restrictions.
 
 ## Feature Bullet Points
 
