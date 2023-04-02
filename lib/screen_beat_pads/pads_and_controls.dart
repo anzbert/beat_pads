@@ -79,7 +79,9 @@ class BeatPadsAndControls extends ConsumerWidget {
             if (ref.watch(presetButtonsProv))
               const Expanded(
                 flex: 5,
-                child: PresetButtons(),
+                child: PresetButtons(
+                  clickType: ClickType.double,
+                ),
               ),
             const Expanded(
               flex: 1,

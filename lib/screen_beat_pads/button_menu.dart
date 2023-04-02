@@ -22,13 +22,14 @@ class ReturnToMenuButton extends StatelessWidget {
         onLongPress: () {
           // using replacement to trigger dispose on pad screen
           Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) => const PadMenuScreen()));
+              MaterialPageRoute(builder: (context) => PadMenuScreen()));
         },
         child: AspectRatio(
           aspectRatio: 1,
           child: ElevatedButton(
             onPressed: () {},
             style: ElevatedButton.styleFrom(
+              shadowColor: Palette.lightGrey.withOpacity(transparent ? 0.2 : 1),
               foregroundColor:
                   Palette.lightGrey.withOpacity(transparent ? 0.5 : 1),
               backgroundColor: transparent

@@ -12,6 +12,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../shared_components/divider_title.dart';
 
 class MenuLayout extends ConsumerWidget {
+  const MenuLayout(this._scrollController);
+
+  final ScrollController _scrollController;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final bool resizableGrid = ref
@@ -43,24 +47,17 @@ class MenuLayout extends ConsumerWidget {
         Expanded(
           flex: 3,
           child: ListView(
+            controller: _scrollController,
             children: <Widget>[
               const DividerTitle("Presets"),
-              // IntCounterTile(
-              //   label: "Preset",
-              //   setValue: (v) =>
-              //       ref.read(presetNotifierProvider.notifier).set(v),
-              //   readValue: ref.watch(presetNotifierProvider),
-              // ),
-              ConstrainedBox(
-                constraints: BoxConstraints.loose(Size(200, 200)),
-                child: const PresetButtons(
-                  doubleClick: false,
-                  row: true,
-                ),
+              const PresetButtons(
+                clickType: ClickType.tap,
+                row: true,
               ),
               ListTile(
-                title: const Text("Show Preset Buttons"),
-                subtitle: const Text("Double tap Buttons to choose Preset"),
+                title: const Text("Preset Buttons"),
+                subtitle: const Text(
+                    "Show Preset Buttons on Pad Screen. Double Tap them to switch between Presets"),
                 trailing: Switch(
                     value: ref.watch(presetButtonsProv),
                     onChanged: (v) =>
@@ -93,8 +90,6 @@ class MenuLayout extends ConsumerWidget {
                               onPressed: () {
                                 Navigator.pop(context, 'OK');
                                 ref.read(resetAllProv.notifier).resetAll();
-                                // ref.read(selectedMenuState.notifier).state =
-                                //     Menu.layout;
                               },
                               child: const Text('OK'),
                             ),

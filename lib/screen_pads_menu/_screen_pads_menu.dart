@@ -19,11 +19,15 @@ enum Menu {
   midi,
   input,
   system;
+}
 
-  Widget get menuPage {
-    switch (this) {
+class PadMenuScreen extends ConsumerWidget {
+  final ScrollController _layoutPageScrollController = ScrollController();
+
+  Widget getMenu(Menu menu, ScrollController sc) {
+    switch (menu) {
       case Menu.layout:
-        return MenuLayout();
+        return MenuLayout(sc);
       case Menu.midi:
         return MenuMidi();
       case Menu.input:
@@ -32,10 +36,26 @@ enum Menu {
         return MenuSystem();
     }
   }
-}
 
-class PadMenuScreen extends ConsumerWidget {
-  const PadMenuScreen();
+  void goToPadsScreen(BuildContext context) {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: ((context) => const BeatPadsScreen())),
+    );
+  }
+
+  void goToPresetSelection(WidgetRef ref) {
+    if (ref.read(selectedMenuState) == Menu.layout) {
+      _layoutPageScrollController.animateTo(
+        0,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.fastOutSlowIn,
+      );
+    }
+    ref.read(selectedMenuState.notifier).state = Menu.layout;
+  }
+
+  PadMenuScreen();
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return FutureBuilder(
@@ -62,7 +82,6 @@ class PadMenuScreen extends ConsumerWidget {
               ),
               leading: Builder(builder: (BuildContext context) {
                 return IconButton(
-                  // color: Palette.cadetBlue,
                   onPressed: () {
                     Scaffold.of(context).openDrawer();
                   },
@@ -76,19 +95,17 @@ class PadMenuScreen extends ConsumerWidget {
               actions: [
                 Padding(
                   padding: const EdgeInsets.only(right: 8),
-                  child: IconButton(
-                    icon: Icon(
-                      Icons.play_circle_fill_rounded,
-                      color: Palette.laserLemon,
-                      size: 36,
-                    ),
-                    onPressed: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: ((context) => const BeatPadsScreen())),
-                      );
-                    },
+                  child: TextButton(
+                    onPressed: (() => goToPresetSelection(ref)),
+                    child: Text("P${ref.watch(presetNotifierProvider)}",
+                        style: TextStyle(
+                            color: PresetButtons.backgoundColors[
+                                ref.watch(presetNotifierProvider) - 1],
+                            fontSize: Theme.of(context)
+                                    .textTheme
+                                    .headlineSmall
+                                    ?.fontSize ??
+                                16)),
                   ),
                 )
               ],
@@ -141,26 +158,18 @@ class PadMenuScreen extends ConsumerWidget {
               ],
             ),
             floatingActionButton: FloatingActionButton(
-              onPressed: () {
-                ref.read(selectedMenuState.notifier).state = Menu.layout;
-                // scrollController.animateTo(
-                //     //go to top of scroll
-                //     0, //scroll offset to go
-                //     duration: Duration(milliseconds: 500), //duration of scroll
-                //     curve: Curves.fastOutSlowIn //scroll type
-                //     );
-              },
+              onPressed: (() => goToPadsScreen(context)),
               backgroundColor: PresetButtons
                   .backgoundColors[ref.watch(presetNotifierProvider) - 1],
-              child: Text("P${ref.watch(presetNotifierProvider)}",
-                  style: TextStyle(
-                      color: Palette.darkGrey,
-                      fontSize:
-                          Theme.of(context).textTheme.headlineSmall?.fontSize ??
-                              32)),
+              child: Icon(
+                Icons.play_arrow,
+                color: Palette.darkGrey,
+                size: 36,
+              ),
             ),
             body: SafeArea(
-              child: ref.watch(selectedMenuState).menuPage,
+              child: getMenu(
+                  ref.watch(selectedMenuState), _layoutPageScrollController),
             ),
           );
         } else {
