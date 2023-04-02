@@ -40,10 +40,14 @@ Wifi works on iOS, but Wifi and Bluetooth support is otherwise limited due to pl
 - Built-In support for the popular finger drumming courses from XpressPads.com
 - And more...
 
-## Licence
-
-Licenced under GPL3. The code in this project is freely usable in any other open source project. Enjoy 👍
-
 ## Feedback and Contributions
 
 Anyone is most welcome to contribute, report an issue or start a discussion in this repository. Thanks!
+
+## Known issues to be fixed
+
+- Screen Rotation in the menu should be unlocked, but gets sometimes stuck
+
+## Licence
+
+Licenced under GPL3. The code in this project is freely usable in any other open source project. Enjoy 👍
