@@ -2,19 +2,19 @@
 
 ## Installation
 
-### Compile it yourself...
-
-- Install the [Flutter](https://flutter.dev/) toolchain as per [the instructions](https://docs.flutter.dev/get-started/install)
-- Compile it with [VScode](https://code.visualstudio.com/)
-
-### ...or get it from the app store
+### Get it from the App Store...
 
 - [Apple Store](https://apps.apple.com/us/app/beat-pads/id1633882803)
 - [Google Play](https://play.google.com/store/apps/details?id=io.anzio.beat_pads&hl=en_AU&gl=US&pli=1)
 
+### ...or compile it yourself
+
+- Install the [Flutter](https://flutter.dev/) toolchain as per [the instructions](https://docs.flutter.dev/get-started/install)
+- Compile it with [VScode](https://code.visualstudio.com/)
+
 ## Information
 
-Beat Pads is a lightweight Midi Controller app for mobile phones and tablets for finger drumming and producing beats at home and on the go. Connections can be made virtually to other apps via platform midi channels or via USB to other devices.
+Beat Pads is a lightweight Midi Controller app for mobile phones and tablets for melodies and finger drumming at home and on the go. Connections can be made virtually to other apps via platform midi channels or via USB to other devices.
 
 Beat Pads is not trying to be complete DAW controller and Midi swiss army knife. Its aim is to be an easy to use pad input device featuring a variety of layouts, intuitive playability and modern modulation options, such as MPE and Polyphonic Aftertouch. It was designed for people that prefer pads to pianos!
 
@@ -38,6 +38,10 @@ Wifi and Bluetooth support is limited at this stage.
 - Supports virtual Midi connection to other apps on your device
 - Built-In support for the popular finger drumming courses from XpressPads.com
 - And more...
+
+## Licence
+
+Licenced under GPL3. The code in this project is freely usable in any other open source project. Enjoy 👍
 
 ## Feedback and Contributions
 
