@@ -53,6 +53,7 @@ class MenuLayout extends ConsumerWidget {
               const PresetButtons(
                 clickType: ClickType.tap,
                 row: true,
+                minimumSize: true,
               ),
               ListTile(
                 title: const Text("Preset Buttons"),

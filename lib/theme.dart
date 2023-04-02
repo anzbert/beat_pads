@@ -10,7 +10,7 @@ abstract class ThemeConst {
 }
 
 var appTheme = ThemeData.dark().copyWith(
-  // useMaterial3: true,
+  useMaterial3: true,
   dividerTheme: DividerThemeData(
     thickness: 1,
     color: Palette.lightGrey,

@@ -29,7 +29,8 @@ class ReturnToMenuButton extends StatelessWidget {
           child: ElevatedButton(
             onPressed: () {},
             style: ElevatedButton.styleFrom(
-              shadowColor: Palette.lightGrey.withOpacity(transparent ? 0.2 : 1),
+              shadowColor:
+                  Palette.lightGrey.withOpacity(transparent ? 0.15 : 1),
               foregroundColor:
                   Palette.lightGrey.withOpacity(transparent ? 0.5 : 1),
               backgroundColor: transparent
