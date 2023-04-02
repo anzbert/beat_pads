@@ -1,4 +1,5 @@
 import 'package:beat_pads/screen_pads_menu/_screen_pads_menu.dart';
+import 'package:beat_pads/theme.dart';
 import 'package:flutter/material.dart';
 
 import 'package:beat_pads/services/services.dart';
@@ -21,13 +22,15 @@ class ReturnToMenuButton extends StatelessWidget {
         onLongPress: () {
           // using replacement to trigger dispose on pad screen
           Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) => const PadMenuScreen()));
+              MaterialPageRoute(builder: (context) => PadMenuScreen()));
         },
         child: AspectRatio(
           aspectRatio: 1,
           child: ElevatedButton(
             onPressed: () {},
             style: ElevatedButton.styleFrom(
+              shadowColor:
+                  Palette.lightGrey.withOpacity(transparent ? 0.15 : 1),
               foregroundColor:
                   Palette.lightGrey.withOpacity(transparent ? 0.5 : 1),
               backgroundColor: transparent

@@ -1,3 +1,4 @@
+import 'package:beat_pads/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:beat_pads/services/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

@@ -1,4 +1,6 @@
+import 'package:beat_pads/screen_beat_pads/button_presets.dart';
 import 'package:beat_pads/screen_pads_menu/drop_down_enum.dart';
+import 'package:beat_pads/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:beat_pads/screen_pads_menu/preview_beat_pads.dart';
 import 'package:beat_pads/screen_pads_menu/slider_int.dart';
@@ -7,10 +9,13 @@ import 'package:beat_pads/screen_pads_menu/counter_int.dart';
 import 'package:beat_pads/screen_pads_menu/slider_non_linear.dart';
 import 'package:beat_pads/screen_pads_menu/drop_down_notes.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../shared_components/divider_title.dart';
 
 class MenuLayout extends ConsumerWidget {
+  const MenuLayout(this._scrollController);
+
+  final ScrollController _scrollController;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final bool resizableGrid = ref
@@ -42,7 +47,61 @@ class MenuLayout extends ConsumerWidget {
         Expanded(
           flex: 3,
           child: ListView(
+            padding:
+                const EdgeInsets.only(bottom: ThemeConst.listViewBottomPadding),
+            controller: _scrollController,
             children: <Widget>[
+              const DividerTitle("Presets"),
+              const PresetButtons(
+                clickType: ClickType.tap,
+                row: true,
+                minimumSize: true,
+              ),
+              ListTile(
+                title: const Text("Show Preset Buttons"),
+                subtitle: const Text("DOUBLE TAP buttons to switch Presets"),
+                trailing: Switch(
+                    value: ref.watch(presetButtonsProv),
+                    onChanged: (v) =>
+                        ref.read(presetButtonsProv.notifier).setAndSave(v)),
+              ),
+              Center(
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(
+                      minWidth: ThemeConst.menuButtonMinWidth),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Palette.laserLemon,
+                    ),
+                    child: const Text(
+                      "Reset Preset",
+                    ),
+                    onPressed: () {
+                      showDialog<String>(
+                        context: context,
+                        builder: (BuildContext context) => AlertDialog(
+                          title: const Text('Reset'),
+                          content: const Text(
+                              'Return current Preset to the default values?'),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () => Navigator.pop(context, 'Cancel'),
+                              child: const Text('Cancel'),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context, 'OK');
+                                ref.read(resetAllProv.notifier).resetAll();
+                              },
+                              child: const Text('OK'),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ),
               const DividerTitle("Layout"),
               ListTile(
                 title: const Text("Layout"),

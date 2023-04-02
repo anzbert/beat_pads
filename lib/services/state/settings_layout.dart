@@ -1,59 +1,92 @@
-import 'package:beat_pads/main.dart';
 import 'package:beat_pads/services/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // LAYOUT
-final layoutProv = StateNotifierProvider<SettingEnum<Layout>, Layout>((ref) {
-  return ref.watch(sharedPrefProvider).settings.layout;
+final layoutProv = NotifierProvider<SettingEnumNotifier<Layout>, Layout>(() {
+  return LayoutSettingNotifier(
+    fromName: Layout.fromName,
+    key: 'layout',
+    defaultValue: Layout.majorThird,
+  );
 });
+
+class LayoutSettingNotifier extends SettingEnumNotifier<Layout> {
+  LayoutSettingNotifier(
+      {required super.fromName,
+      required super.key,
+      required super.defaultValue});
+
+  @override
+  void set(Layout newState) {
+    if (!newState.props.resizable) {
+      ref.read(rootProv.notifier).reset();
+    }
+
+    if (!newState.props.resizable) {
+      ref.read(scaleProv.notifier).reset();
+    }
+
+    if (newState.props.defaultDimensions?.x != null) {
+      ref
+          .read(widthProv.notifier)
+          .setAndSave(newState.props.defaultDimensions!.x);
+    }
+
+    if (newState.props.defaultDimensions?.y != null) {
+      ref
+          .read(heightProv.notifier)
+          .setAndSave(newState.props.defaultDimensions!.y);
+    }
+    super.set(newState);
+  }
+}
 
 // NOTES AND OCTAVES
-final rootProv = StateNotifierProvider<SettingInt, int>((ref) {
-  ref.listen(layoutProv, (_, Layout next) {
-    if (!next.props.resizable) {
-      ref.read(sharedPrefProvider).settings.rootNote.reset();
-    }
-  });
-
-  return ref.watch(sharedPrefProvider).settings.rootNote;
+final rootProv = NotifierProvider<SettingIntNotifier, int>(() {
+  return SettingIntNotifier(
+    key: 'rootNote',
+    defaultValue: 0,
+    max: 11,
+  );
 });
 
-final baseProv = StateNotifierProvider<SettingInt, int>((ref) {
-  return ref.watch(sharedPrefProvider).settings.base;
+final baseProv = NotifierProvider<SettingIntNotifier, int>(() {
+  return SettingIntNotifier(
+    key: 'base',
+    defaultValue: 0,
+    max: 11,
+  );
 });
 
 final baseNoteProv = Provider<int>(((ref) {
   return (ref.watch(baseOctaveProv) + 2) * 12 + ref.watch(baseProv);
 }));
 
-final baseOctaveProv = StateNotifierProvider<SettingInt, int>((ref) {
-  return ref.watch(sharedPrefProvider).settings.baseOctave;
+final baseOctaveProv = NotifierProvider<SettingIntNotifier, int>(() {
+  return SettingIntNotifier(
+    key: 'baseOctave',
+    defaultValue: 1,
+    min: -2,
+    max: 7,
+  );
 });
 
 // GRID SIZE
-final widthProv = StateNotifierProvider<SettingInt, int>((ref) {
-  ref.listen(layoutProv, (_, Layout next) {
-    if (next.props.defaultDimensions?.x != null) {
-      ref
-          .read(sharedPrefProvider)
-          .settings
-          .width
-          .setAndSave(next.props.defaultDimensions!.x);
-    }
-  });
-  return ref.watch(sharedPrefProvider).settings.width;
+final widthProv = NotifierProvider<SettingIntNotifier, int>(() {
+  return SettingIntNotifier(
+    key: 'width',
+    defaultValue: 4,
+    min: 2,
+    max: 16,
+  );
 });
-final heightProv = StateNotifierProvider<SettingInt, int>((ref) {
-  ref.listen(layoutProv, (_, Layout next) {
-    if (next.props.defaultDimensions?.y != null) {
-      ref
-          .read(sharedPrefProvider)
-          .settings
-          .height
-          .setAndSave(next.props.defaultDimensions!.y);
-    }
-  });
-  return ref.watch(sharedPrefProvider).settings.height;
+final heightProv = NotifierProvider<SettingIntNotifier, int>(() {
+  return SettingIntNotifier(
+    key: 'height',
+    defaultValue: 4,
+    min: 2,
+    max: 16,
+  );
 });
 
 final rowProv = Provider<List<List<CustomPad>>>(((ref) {
@@ -71,49 +104,83 @@ final rowProv = Provider<List<List<CustomPad>>>(((ref) {
 
 // LABELS AND COLOR
 final padLabelsProv =
-    StateNotifierProvider<SettingEnum<PadLabels>, PadLabels>((ref) {
-  return ref.watch(sharedPrefProvider).settings.padLabels;
+    NotifierProvider<SettingEnumNotifier<PadLabels>, PadLabels>(() {
+  return SettingEnumNotifier<PadLabels>(
+    fromName: PadLabels.fromName,
+    key: "padLabels",
+    defaultValue: PadLabels.note,
+  );
 });
+
 final padColorsProv =
-    StateNotifierProvider<SettingEnum<PadColors>, PadColors>((ref) {
-  return ref.watch(sharedPrefProvider).settings.padColors;
+    NotifierProvider<SettingEnumNotifier<PadColors>, PadColors>(() {
+  return SettingEnumNotifier<PadColors>(
+    fromName: PadColors.fromName,
+    key: "padColors",
+    defaultValue: PadColors.highlightRoot,
+  );
 });
-final baseHueProv = StateNotifierProvider<SettingInt, int>((ref) {
-  return ref.watch(sharedPrefProvider).settings.baseHue;
+
+final baseHueProv = NotifierProvider<SettingIntNotifier, int>(() {
+  return SettingIntNotifier(
+    key: "baseHue",
+    defaultValue: 240,
+    max: 360,
+  );
 });
 
 // SCALES
-final scaleProv = StateNotifierProvider<SettingEnum<Scale>, Scale>((ref) {
-  ref.listen(layoutProv, (_, Layout next) {
-    if (!next.props.resizable) {
-      ref.read(sharedPrefProvider).settings.scale.reset();
-    }
-  });
-
-  return ref.watch(sharedPrefProvider).settings.scale;
+final scaleProv = NotifierProvider<SettingEnumNotifier<Scale>, Scale>(() {
+  return SettingEnumNotifier<Scale>(
+    fromName: Scale.fromName,
+    key: 'scaleString',
+    defaultValue: Scale.chromatic,
+  );
 });
 
 // BUTTONS AND SLIDERS
-final octaveButtonsProv = StateNotifierProvider<SettingBool, bool>((ref) {
-  return ref.watch(sharedPrefProvider).settings.octaveButtons;
+final octaveButtonsProv = NotifierProvider<SettingBoolNotifier, bool>(() {
+  return SettingBoolNotifier(
+    key: 'octaveButtons',
+    defaultValue: false,
+  );
 });
-final sustainButtonProv = StateNotifierProvider<SettingBool, bool>((ref) {
-  return ref.watch(sharedPrefProvider).settings.sustainButton;
+
+final sustainButtonProv = NotifierProvider<SettingBoolNotifier, bool>(() {
+  return SettingBoolNotifier(
+    key: 'sustainButton',
+    defaultValue: false,
+  );
 });
-final velocitySliderProv = StateNotifierProvider<SettingBool, bool>((ref) {
-  return ref.watch(sharedPrefProvider).settings.velocitySlider;
+
+final velocitySliderProv = NotifierProvider<SettingBoolNotifier, bool>(() {
+  return SettingBoolNotifier(
+    key: 'velocitySlider',
+    defaultValue: false,
+  );
 });
-final modWheelProv = StateNotifierProvider<SettingBool, bool>((ref) {
-  return ref.watch(sharedPrefProvider).settings.modWheel;
+
+final modWheelProv = NotifierProvider<SettingBoolNotifier, bool>(() {
+  return SettingBoolNotifier(
+    key: 'modWheel',
+    defaultValue: false,
+  );
 });
 
 // PITCHBEND
-final pitchBendProv = StateNotifierProvider<SettingBool, bool>((ref) {
-  return ref.watch(sharedPrefProvider).settings.pitchBend;
+final pitchBendProv = NotifierProvider<SettingBoolNotifier, bool>(() {
+  return SettingBoolNotifier(
+    key: 'pitchBend',
+    defaultValue: false,
+  );
 });
 
-final pitchBendEaseStepProv = StateNotifierProvider<SettingInt, int>((ref) {
-  return ref.watch(sharedPrefProvider).settings.pitchBendEase;
+final pitchBendEaseStepProv = NotifierProvider<SettingIntNotifier, int>(() {
+  return SettingIntNotifier(
+    key: 'pitchBendEase',
+    defaultValue: 0,
+    max: Timing.releaseDelayTimes.length - 1,
+  );
 });
 
 final pitchBendEaseUsable = Provider<int>(
@@ -127,6 +194,19 @@ final pitchBendEaseUsable = Provider<int>(
 );
 
 // VELOCITY
-final velocityVisualProv = StateNotifierProvider<SettingBool, bool>((ref) {
-  return ref.watch(sharedPrefProvider).settings.velocityVisual;
+final velocityVisualProv = NotifierProvider<SettingBoolNotifier, bool>(() {
+  return SettingBoolNotifier(
+    key: 'velocityVisual',
+    defaultValue: false,
+  );
+});
+
+// PRESETS
+final presetButtonsProv = NotifierProvider<SettingBoolNotifier, bool>(() {
+  return SettingBoolNotifier(
+    key: 'presetButtons',
+    defaultValue: false,
+    resettable: false,
+    usesPresets: false,
+  );
 });

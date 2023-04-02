@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:beat_pads/services/services.dart';
 import 'package:beat_pads/screen_splash/_screen_splash.dart';
 
-// PREFERENCES PROVIDER /////////////////////////////////////////////////
+// SHARED PREFERENCES PROVIDER //////////////////////////////////////////
 final sharedPrefProvider = Provider<Prefs>((ref) {
   throw UnimplementedError(); // overriden in ProviderScope
 });

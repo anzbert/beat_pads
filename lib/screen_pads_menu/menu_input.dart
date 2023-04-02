@@ -7,11 +7,13 @@ import 'package:beat_pads/screen_pads_menu/slider_non_linear.dart';
 import 'package:flutter/material.dart';
 import 'package:beat_pads/services/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../theme.dart';
 
 class MenuInput extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ListView(
+      padding: const EdgeInsets.only(bottom: ThemeConst.listViewBottomPadding),
       children: <Widget>[
         const DividerTitle("Input"),
         ListTile(

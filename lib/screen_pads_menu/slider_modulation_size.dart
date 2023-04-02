@@ -1,4 +1,5 @@
 import 'package:beat_pads/services/services.dart';
+import 'package:beat_pads/theme.dart';
 import 'package:flutter/material.dart';
 
 class ModSizeSliderTile extends StatefulWidget {

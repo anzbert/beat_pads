@@ -62,90 +62,98 @@ class MidiConfigState extends ConsumerState<MidiConfig> {
               )),
         ],
       ),
-      body: FutureBuilder(
-        future: _midiCommand.devices,
-        builder:
-            ((BuildContext context, AsyncSnapshot<List<MidiDevice>?> snapshot) {
-          if (snapshot.hasData && snapshot.data!.isNotEmpty) {
-            List<MidiDevice>? devices = snapshot.data;
-            return connecting
-                // WHILE CONNECTING SHOW CIRCULAR PROGRESS INDICATOR:
-                ? Center(
-                    child: SizedBox(
-                    width: 50,
-                    height: 50,
-                    child: CircularProgressIndicator(
-                      color: Palette.cadetBlue,
-                    ),
-                  ))
-                :
-                // OTHERWISE, SHOW LIST:
-                Builder(builder: (context) {
-                    WidgetsBinding.instance.addPostFrameCallback(
-                      (_) {
-                        ref.invalidate(devicesFutureProv);
-                      },
-                    );
-                    return ListView(
-                      children: [
-                        if (devices!.isEmpty)
-                          Container(
-                            margin: const EdgeInsets.symmetric(vertical: 8),
-                            color: Palette.lightPink,
-                            height: 50,
-                            child: Center(
-                              child: Text(
-                                "No Midi Adapter found...",
-                                style: TextStyle(color: Palette.darkGrey),
-                              ),
-                            ),
+      body: ListView(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            child: FutureBuilder(
+              future: _midiCommand.devices,
+              builder: ((BuildContext context,
+                  AsyncSnapshot<List<MidiDevice>?> snapshot) {
+                if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+                  List<MidiDevice>? devices = snapshot.data;
+                  return connecting
+                      // WHILE CONNECTING SHOW CIRCULAR PROGRESS INDICATOR:
+                      ? Center(
+                          child: SizedBox(
+                          width: 40,
+                          height: 40,
+                          child: CircularProgressIndicator(
+                            color: Palette.cadetBlue,
                           ),
-                        ...devices.map(
-                          (device) {
-                            return Container(
-                              margin: const EdgeInsets.symmetric(vertical: 8),
-                              color: device.connected
-                                  ? Palette.cadetBlue
-                                  : Palette.darker(Palette.cadetBlue, 0.4),
-                              child: TextButton(
-                                onPressed: () {
-                                  setDevice(device);
-                                },
-                                child: SizedBox(
-                                  height: 40,
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        device.name,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .titleMedium!,
-                                      ),
-                                      if (device.connected)
-                                        const Icon(
-                                          Icons.check,
-                                          size: 24,
-                                          color: Colors.white,
-                                        )
-                                    ],
+                        ))
+                      :
+                      // OTHERWISE, SHOW LIST:
+                      Builder(builder: (context) {
+                          WidgetsBinding.instance.addPostFrameCallback(
+                            (_) {
+                              ref.invalidate(devicesFutureProv);
+                            },
+                          );
+                          return Column(children: [
+                            if (devices!.isEmpty)
+                              Container(
+                                margin:
+                                    const EdgeInsets.symmetric(vertical: 12),
+                                color: Palette.lightPink,
+                                height: 40,
+                                child: Center(
+                                  child: Text(
+                                    "No Midi Adapter found...",
+                                    style: TextStyle(color: Palette.darkGrey),
                                   ),
                                 ),
                               ),
-                            );
-                          },
-                        ),
-                        ...helpText, // Text Boxes with Connection Information
-                      ],
-                    );
-                  });
-          } else if (snapshot.hasError) {
-            return Center(child: Text(snapshot.error.toString()));
-          } else {
-            return const Center(child: Text("No Midi Devices Detected"));
-          }
-        }),
+                            ...devices.map(
+                              (device) {
+                                return Container(
+                                  margin:
+                                      const EdgeInsets.symmetric(vertical: 12),
+                                  color: device.connected
+                                      ? Palette.cadetBlue
+                                      : Palette.darker(Palette.cadetBlue, 0.4),
+                                  child: TextButton(
+                                    onPressed: () {
+                                      setDevice(device);
+                                    },
+                                    child: SizedBox(
+                                      height: 40,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            device.name,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .titleMedium!,
+                                          ),
+                                          if (device.connected)
+                                            const Icon(
+                                              Icons.check,
+                                              size: 24,
+                                              color: Colors.white,
+                                            )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ]);
+                        });
+                } else if (snapshot.hasError) {
+                  return Center(child: Text(snapshot.error.toString()));
+                } else {
+                  return const Center(
+                      child: Text("- No Midi Devices Detected -"));
+                }
+              }),
+            ),
+          ),
+          ...helpText
+        ],
       ),
     );
   }

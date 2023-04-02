@@ -1,10 +1,13 @@
-import 'package:beat_pads/main.dart';
 import 'package:beat_pads/services/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // CHANNEL
-final channelSettingProv = StateNotifierProvider<SettingInt, int>((ref) {
-  return ref.watch(sharedPrefProvider).settings.channel;
+final channelSettingProv = NotifierProvider<SettingIntNotifier, int>(() {
+  return SettingIntNotifier(
+    key: 'channel',
+    defaultValue: 0,
+    max: 15,
+  );
 });
 
 final channelUsableProv = Provider<int>(
@@ -21,8 +24,13 @@ final channelUsableProv = Provider<int>(
   }),
 );
 
-final mpeMemberChannelsProv = StateNotifierProvider<SettingInt, int>((ref) {
-  return ref.watch(sharedPrefProvider).settings.mpeMemberChannels;
+final mpeMemberChannelsProv = NotifierProvider<SettingIntNotifier, int>(() {
+  return SettingIntNotifier(
+    key: 'mpeMemberChannels',
+    defaultValue: 8,
+    min: 1,
+    max: 15,
+  );
 });
 
 final zoneProv = Provider<bool>((ref) {
@@ -31,25 +39,39 @@ final zoneProv = Provider<bool>((ref) {
 });
 
 // VELOCITY
-final velocityProv = StateNotifierProvider<SettingInt, int>((ref) {
-  return ref.watch(sharedPrefProvider).settings.velocity;
+final velocityProv = NotifierProvider<SettingIntNotifier, int>(() {
+  return SettingIntNotifier(
+    key: 'velocity',
+    defaultValue: 110,
+    max: 127,
+  );
 });
-
-// final randomVelocityProv = StateNotifierProvider<SettingBool, bool>((ref) {
-//   return ref.watch(sharedPrefProvider).settings.randomVelocity;
-// });
 
 final velocityModeProv =
-    StateNotifierProvider<SettingEnum<VelocityMode>, VelocityMode>((ref) {
-  return ref.watch(sharedPrefProvider).settings.velocityMode;
+    NotifierProvider<SettingEnumNotifier<VelocityMode>, VelocityMode>(() {
+  return SettingEnumNotifier<VelocityMode>(
+    fromName: VelocityMode.fromName,
+    key: 'velocityMode',
+    defaultValue: VelocityMode.fixed,
+  );
 });
 
-final velocityMinProv = StateNotifierProvider<SettingInt, int>((ref) {
-  return ref.watch(sharedPrefProvider).settings.velocityMin;
+final velocityMinProv = NotifierProvider<SettingIntNotifier, int>(() {
+  return SettingIntNotifier(
+    key: 'velocityMin',
+    defaultValue: 100,
+    max: 126,
+  );
 });
-final velocityMaxProv = StateNotifierProvider<SettingInt, int>((ref) {
-  return ref.watch(sharedPrefProvider).settings.velocityMax;
+
+final velocityMaxProv = NotifierProvider<SettingIntNotifier, int>(() {
+  return SettingIntNotifier(
+    key: 'velocityMax',
+    defaultValue: 110,
+    max: 127,
+  );
 });
+
 final velocityRangeProv = Provider<int>(((ref) {
   return ref.watch(velocityMaxProv) - ref.watch(velocityMinProv);
 }));

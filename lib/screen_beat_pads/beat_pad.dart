@@ -1,4 +1,5 @@
 import 'package:beat_pads/screen_beat_pads/velocity_overlay.dart';
+import 'package:beat_pads/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:beat_pads/services/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -113,7 +114,7 @@ class SlideBeatPad extends ConsumerWidget {
                     ),
                   ),
           ),
-          if (ref.watch(velocityVisualProv))
+          if (ref.watch(velocityVisualProv) && preview == false)
             VelocityOverlay(
               velocity: velocity,
               padRadius: padRadius,

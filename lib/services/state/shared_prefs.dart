@@ -1,334 +1,113 @@
-import 'package:beat_pads/services/services.dart';
+import 'package:beat_pads/services/state/settings_presets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../main.dart';
 
+/// Holds an instance of the loaded [SharedPreferences]
 class Prefs {
   Prefs._();
   late SharedPreferences sharedPrefs;
-  late LoadSettings settings;
 
   static Future<Prefs> initAsync() async {
     Prefs instance = Prefs._();
     instance.sharedPrefs = await SharedPreferences.getInstance();
-    instance.settings = LoadSettings(instance.sharedPrefs);
     return instance;
   }
+}
 
-  /// make sure to refresh provider, containign prefs after resetting
-  void reset() {
-    settings = LoadSettings.defaults();
+/// Call ``resetAll()`` on this [Notifier] to alert all [SettingNotifier]s to reset themselves
+final resetAllProv = NotifierProvider<_ResetAllNotifier, bool>(
+  () => _ResetAllNotifier(),
+);
+
+class _ResetAllNotifier extends Notifier<bool> {
+  @override
+  bool build() {
+    return false;
+  }
+
+  /// Causes a change in state, which alerts all listeners of this [Notifier].
+  void resetAll() {
+    state = !state;
+  }
+
+  void resetAllPresets() {
+    for (int i = PresetNotfier.number; i >= 1; i--) {
+      ref.read(presetNotifierProvider.notifier).set(i);
+      resetAll();
+    }
   }
 }
 
-class LoadSettings {
-  final SettingEnum<PadColors> padColors;
-  final SettingEnum<PadLabels> padLabels;
-  final SettingEnum<Layout> layout;
-  final SettingEnum<PlayMode> playMode;
-  final SettingEnum<VelocityMode> velocityMode;
-  final SettingEnum<MPEmods> mpe1DRadius;
-  final SettingEnum<MPEmods> mpe2DX;
-  final SettingEnum<MPEmods> mpe2DY;
-  final SettingEnum<Scale> scale;
-  final SettingDouble modulationDeadZone;
-  final SettingDouble modulationRadius;
-  final SettingInt mpeMemberChannels;
-  final SettingInt mpePitchBendRange;
-  final SettingInt baseHue;
-  final SettingInt channel;
-  final SettingInt rootNote;
-  final SettingInt width;
-  final SettingInt height;
-  final SettingInt baseOctave;
-  final SettingInt base;
-  final SettingInt velocity;
-  final SettingInt velocityMin;
-  final SettingInt velocityMax;
-  final SettingInt noteSustainTimeStep;
-  final SettingInt modSustainTimeStep;
-  final SettingInt pitchBendEase;
-  final SettingBool modulation2D;
-  final SettingBool modWheel;
-  final SettingBool sendCC;
-  final SettingBool pitchBend;
-  final SettingBool octaveButtons;
-  final SettingBool sustainButton;
-  final SettingBool velocitySlider;
-  final SettingBool velocityVisual;
-
-  factory LoadSettings.defaults() {
-    return LoadSettings(null);
-  }
-
-  LoadSettings(SharedPreferences? sharedprefs)
-      : padLabels = SettingEnum<PadLabels>(
-          sharedprefs,
-          PadLabels.fromName,
-          "padLabels",
-          PadLabels.note,
-        ),
-        scale = SettingEnum<Scale>(
-          sharedprefs,
-          Scale.fromName,
-          'scaleString',
-          Scale.chromatic,
-        ),
-        padColors = SettingEnum<PadColors>(
-          sharedprefs,
-          PadColors.fromName,
-          "padColors",
-          PadColors.highlightRoot,
-        ),
-        mpe2DX = SettingEnum<MPEmods>(
-          sharedprefs,
-          MPEmods.fromName,
-          'mpe2DX',
-          MPEmods.slide,
-        ),
-        mpe2DY = SettingEnum<MPEmods>(
-          sharedprefs,
-          MPEmods.fromName,
-          'mpe2DY',
-          MPEmods.pitchbend,
-        ),
-        mpe1DRadius = SettingEnum<MPEmods>(
-          sharedprefs,
-          MPEmods.fromName,
-          'mpe1DRadius',
-          MPEmods.mpeAftertouch,
-        ),
-        layout = SettingEnum<Layout>(
-          sharedprefs,
-          Layout.fromName,
-          'layout',
-          Layout.majorThird,
-        ),
-        playMode = SettingEnum<PlayMode>(
-          sharedprefs,
-          PlayMode.fromName,
-          'playMode',
-          PlayMode.slide,
-        ),
-        velocityMode = SettingEnum<VelocityMode>(
-          sharedprefs,
-          VelocityMode.fromName,
-          'velocityMode',
-          VelocityMode.fixed,
-        ),
-        mpePitchBendRange = SettingInt(
-          sharedprefs,
-          'mpePitchBendRange',
-          48,
-          min: 1,
-          max: 48,
-        ),
-        mpeMemberChannels = SettingInt(
-          sharedprefs,
-          'mpeMemberChannels',
-          8,
-          min: 1,
-          max: 15,
-        ),
-        modulation2D = SettingBool(
-          sharedprefs,
-          'modulation2D',
-          true,
-        ),
-        modulationDeadZone = SettingDouble(
-          sharedprefs,
-          'modulationDeadZone',
-          .20,
-          min: .10,
-          max: .50,
-        ),
-        modulationRadius = SettingDouble(
-          sharedprefs,
-          'modulationRadius',
-          .12,
-          min: .05,
-          max: .25,
-        ),
-        baseHue = SettingInt(
-          sharedprefs,
-          "baseHue",
-          240,
-          max: 360,
-        ),
-        rootNote = SettingInt(
-          sharedprefs,
-          'rootNote',
-          0,
-          max: 11,
-        ),
-        channel = SettingInt(
-          sharedprefs,
-          'channel',
-          0,
-          max: 15,
-        ),
-        width = SettingInt(
-          sharedprefs,
-          'width',
-          4,
-          min: 2,
-          max: 16,
-        ),
-        height = SettingInt(
-          sharedprefs,
-          'height',
-          4,
-          min: 2,
-          max: 16,
-        ),
-        baseOctave = SettingInt(
-          sharedprefs,
-          'baseOctave',
-          1,
-          min: -2,
-          max: 7,
-        ),
-        base = SettingInt(
-          sharedprefs,
-          'base',
-          0,
-          max: 11,
-        ),
-        velocity = SettingInt(
-          sharedprefs,
-          'velocity',
-          110,
-          max: 127,
-        ),
-        velocityMin = SettingInt(
-          sharedprefs,
-          'velocityMin',
-          100,
-          max: 126,
-        ),
-        velocityMax = SettingInt(
-          sharedprefs,
-          'velocityMax',
-          110,
-          max: 127,
-        ),
-        pitchBendEase = SettingInt(
-          sharedprefs,
-          'pitchBendEase',
-          0,
-          max: Timing.releaseDelayTimes.length - 1,
-        ),
-        noteSustainTimeStep = SettingInt(
-          sharedprefs,
-          'noteSustainTimeStep',
-          0,
-          max: Timing.releaseDelayTimes.length - 1,
-        ),
-        modSustainTimeStep = SettingInt(
-          sharedprefs,
-          'modSustainTimeStep',
-          0,
-          max: Timing.releaseDelayTimes.length - 1,
-        ),
-        sendCC = SettingBool(
-          sharedprefs,
-          'sendCC',
-          false,
-        ),
-        pitchBend = SettingBool(
-          sharedprefs,
-          'pitchBend',
-          false,
-        ),
-        velocitySlider = SettingBool(
-          sharedprefs,
-          'velocitySlider',
-          false,
-        ),
-        velocityVisual = SettingBool(
-          sharedprefs,
-          'velocityVisual',
-          false,
-        ),
-        modWheel = SettingBool(
-          sharedprefs,
-          'modWheel',
-          false,
-        ),
-        octaveButtons = SettingBool(
-          sharedprefs,
-          'octaveButtons',
-          false,
-        ),
-        sustainButton = SettingBool(
-          sharedprefs,
-          'sustainButton',
-          false,
-        );
-}
-
-abstract class Setting<T> extends StateNotifier<T> {
-  final String sharedPrefsKey;
+abstract class SettingNotifier<T> extends Notifier<T> {
   final T defaultValue;
+  final String key;
+  String presetKey;
+  final bool usesPresets;
+  final bool resettable;
 
-  Setting(
-    this.sharedPrefsKey,
-    T? value,
-    this.defaultValue,
-  ) : super(value ?? defaultValue) {
-    if (value == null && state == defaultValue) save();
-  }
+  SettingNotifier({
+    required this.key,
+    required this.defaultValue,
+    this.usesPresets = true,
+    this.resettable = true,
+  }) : presetKey = "{$key}-0";
 
+  /// Set this Settings state to a new value
   void set(T newState) {
     state = newState;
   }
 
+  /// Set this Settings state to a new value and save it to the [SharedPreferences]
   void setAndSave(T newState) {
     set(newState);
     save();
   }
 
+  /// Register a Listener to the [resetAllProv] and reset this Setting when alerted by this provider.
+  void _registerListeners() {
+    if (resettable) {
+      ref.listen(resetAllProv, (prev, next) {
+        if (prev != next) reset();
+      });
+    }
+    if (usesPresets) {
+      ref.listen(presetNotifierProvider, (_, next) {
+        presetKey = "{$key}-$next";
+        state = _load();
+      });
+    }
+  }
+
+  /// Permanently reset this Setting to the default value.
   void reset() {
     set(defaultValue);
     save();
   }
 
-  Future<bool> save();
+  /// Fetch value from [SharedPreferences]
+  T _load();
+
+  /// Save the current State of this Setting to the [SharedPreferences]
+  void save();
 }
 
-class SettingBool extends Setting<bool> {
-  SettingBool(
-    SharedPreferences? sharedPreferences,
-    String key,
-    bool defaultValue,
-  ) : super(key, sharedPreferences?.getBool(key), defaultValue);
-
-  @override
-  Future<bool> save() async {
-    SharedPreferences sharedPrefs = await SharedPreferences.getInstance();
-    return await sharedPrefs.setBool(sharedPrefsKey, state);
-  }
-
-  void toggle() {
-    state = !state;
-  }
-}
-
-class SettingInt extends Setting<int> {
+class SettingIntNotifier extends SettingNotifier<int> {
   final int min;
   final int max;
 
-  SettingInt(SharedPreferences? sharedPreferences, String key, int defaultValue,
-      {this.min = 0, required this.max})
-      : super(
-          key,
-          sharedPreferences?.getInt(key),
-          defaultValue,
-        );
+  SettingIntNotifier({
+    required this.max,
+    this.min = 0,
+    required super.key,
+    required super.defaultValue,
+    super.resettable,
+    super.usesPresets,
+  });
 
   @override
-  Future<bool> save() async {
-    SharedPreferences sharedPrefs = await SharedPreferences.getInstance();
-    return await sharedPrefs.setInt(sharedPrefsKey, state);
+  void save() async {
+    await ref.read(sharedPrefProvider).sharedPrefs.setInt(presetKey, state);
   }
 
   void increment() => set(state + 1);
@@ -338,24 +117,61 @@ class SettingInt extends Setting<int> {
   void set(int newState) {
     state = newState.clamp(min, max);
   }
+
+  @override
+  int _load() =>
+      ref.read(sharedPrefProvider).sharedPrefs.getInt(presetKey) ??
+      defaultValue;
+
+  @override
+  int build() {
+    _registerListeners();
+    return _load();
+  }
 }
 
-class SettingDouble extends Setting<double> {
+class SettingBoolNotifier extends SettingNotifier<bool> {
+  SettingBoolNotifier({
+    required super.key,
+    required super.defaultValue,
+    super.resettable,
+    super.usesPresets,
+  });
+
+  @override
+  bool build() {
+    _registerListeners();
+    return _load();
+  }
+
+  @override
+  void save() async {
+    await ref.read(sharedPrefProvider).sharedPrefs.setBool(presetKey, state);
+  }
+
+  void toggleAndSave() {
+    state = !state;
+    save();
+  }
+
+  @override
+  bool _load() =>
+      ref.read(sharedPrefProvider).sharedPrefs.getBool(presetKey) ??
+      defaultValue;
+}
+
+class SettingDoubleNotifier extends SettingNotifier<double> {
   final double min;
   final double max;
 
-  SettingDouble(
-      SharedPreferences? sharedPreferences, String key, double defaultValue,
-      {this.min = 0, required this.max})
-      : super(
-          key,
-          sharedPreferences?.getInt(key) == null
-              ? null
-              : sharedPreferences!.getInt(key) == null
-                  ? null
-                  : sharedPreferences.getInt(key)! / 100,
-          defaultValue,
-        );
+  SettingDoubleNotifier({
+    this.min = 0,
+    required this.max,
+    required super.key,
+    required super.defaultValue,
+    super.resettable,
+    super.usesPresets,
+  });
 
   @override
   void set(double newState) {
@@ -363,42 +179,86 @@ class SettingDouble extends Setting<double> {
   }
 
   @override
-  Future<bool> save() async {
-    SharedPreferences sharedPrefs = await SharedPreferences.getInstance();
-    return await sharedPrefs.setInt(sharedPrefsKey, (state * 100).toInt());
+  void save() async {
+    await ref
+        .read(sharedPrefProvider)
+        .sharedPrefs
+        .setInt(presetKey, (state * 100).toInt());
+  }
+
+  @override
+  double build() {
+    _registerListeners();
+    return _load();
+  }
+
+  @override
+  double _load() {
+    int? value = ref.read(sharedPrefProvider).sharedPrefs.getInt(presetKey);
+    return value != null ? value / 100 : defaultValue;
   }
 }
 
-class SettingString extends Setting<String> {
-  SettingString(
-      SharedPreferences? sharedPreferences, String key, String defaultValue)
-      : super(
-          key,
-          sharedPreferences?.getString(key),
-          defaultValue,
-        );
+class SettingStringNotifier extends SettingNotifier<String> {
+  SettingStringNotifier({
+    required super.key,
+    required super.defaultValue,
+    super.resettable,
+    super.usesPresets,
+  });
 
   @override
-  Future<bool> save() async {
-    SharedPreferences sharedPrefs = await SharedPreferences.getInstance();
-    return await sharedPrefs.setString(sharedPrefsKey, state);
+  void save() async {
+    await ref.read(sharedPrefProvider).sharedPrefs.setString(presetKey, state);
   }
+
+  @override
+  String build() {
+    _registerListeners();
+    return _load();
+  }
+
+  @override
+  String _load() =>
+      ref.read(sharedPrefProvider).sharedPrefs.getString(presetKey) ??
+      defaultValue;
 }
 
 typedef FromName<T> = T? Function(String);
 
-class SettingEnum<T extends Enum> extends Setting<T> {
-  SettingEnum(SharedPreferences? sharedPreferences, FromName<T> fromName,
-      String key, T defaultValue)
-      : super(
-          key,
-          fromName(sharedPreferences?.getString(key) ?? ""),
-          defaultValue,
-        );
+class SettingEnumNotifier<T extends Enum> extends SettingNotifier<T> {
+  final FromName<T> fromName;
+
+  SettingEnumNotifier({
+    required this.fromName,
+    required super.key,
+    required super.defaultValue,
+    super.resettable,
+    super.usesPresets,
+  });
 
   @override
-  Future<bool> save() async {
-    SharedPreferences sharedPrefs = await SharedPreferences.getInstance();
-    return await sharedPrefs.setString(sharedPrefsKey, state.name);
+  void save() async {
+    await ref
+        .read(sharedPrefProvider)
+        .sharedPrefs
+        .setString(presetKey, state.name);
+  }
+
+  @override
+  T build() {
+    _registerListeners();
+    return _load();
+  }
+
+  @override
+  T _load() {
+    String? name =
+        ref.read(sharedPrefProvider).sharedPrefs.getString(presetKey);
+    if (name != null) {
+      T? value = fromName(name);
+      if (value != null) return value;
+    }
+    return defaultValue;
   }
 }

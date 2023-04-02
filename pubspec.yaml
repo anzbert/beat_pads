@@ -1,45 +1,28 @@
 name: beat_pads
 description: USB Midi Pad Controller for Music Production
+publish_to: "none"
+version: 0.9.0+64
 
-# The following line prevents the package from being accidentally published to
-# pub.dev using `flutter pub publish`. This is preferred for private packages.
-publish_to: "none" # Remove this line if you wish to publish to pub.dev
-
-# The following defines the version and build number for your application.
-# A version number is three numbers separated by dots, like 1.2.43
-# followed by an optional build number separated by a +.
-# Both the version and the builder number may be overridden in flutter
-# build by specifying --build-name and --build-number, respectively.
-# In Android, build-name is used as versionName while build-number used as versionCode.
-# Read more about Android versioning at https://developer.android.com/studio/publish/versioning
-# In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
-# Read more about iOS versioning at
+# Read more about Android versioning:
+# https://developer.android.com/studio/publish/versioning
+# Read more about iOS versioning:
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 0.8.3+64
+# In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 
 environment:
-  sdk: ">=2.17.0-0 <3.0.0" # 2.17 allows using enhanced enums
+  sdk: ">=2.19.6 <3.0.0"
 
-# Dependencies specify other packages that your package needs in order to work.
-# To automatically upgrade your package dependencies to the latest versions
-# consider running `flutter pub upgrade --major-versions`. Alternatively,
-# dependencies can be manually updated by changing the version numbers below to
-# the latest version available on pub.dev. To see which dependencies have newer
-# versions available, run `flutter pub outdated`.
 dependencies:
   flutter:
     sdk: flutter
 
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons:
-  # cupertino_icons: ^1.0.2
-
-  shared_preferences: ^2.0.18
-  url_launcher: ^6.1.10
-  flutter_riverpod: ^2.3.2
-  wakelock: ^0.6.2
   animated_text_kit: ^4.2.2
+  flutter_riverpod: ^2.3.2
+  rive: ^0.10.2
+  shared_preferences: ^2.0.20
   simple_gradient_text: ^1.2.4
+  url_launcher: ^6.1.10
+  wakelock: ^0.6.2
 
   flutter_midi_command:
     ^0.4.11
@@ -48,43 +31,30 @@ dependencies:
     #   ref: master
     # path: /Users/anz/localDev/FlutterMidiCommand
 
-  rive: ^0.10.2
-  # rive:
-  #   git:
-  #     url: https://github.com/rive-app/rive-flutter.git
-  #     ref: master
+  # Use with the CupertinoIcons class for iOS style icons:
+  # cupertino_icons: ^1.0.2
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  # The "flutter_lints" package below contains a set of recommended lints to
-  # encourage good coding practices. The lint set provided by the package is
-  # activated in the `analysis_options.yaml` file located at the root of your
-  # package. See that file for information about deactivating specific lint
-  # rules and activating additional ones.
   flutter_lints: ^2.0.0
   flutter_launcher_icons: ^0.12.0
 
 flutter_icons:
-  # image_path: "assets/logo/logo.png"
+  # Recompile icons with:
+  #   flutter pub run flutter_launcher_icons:main
 
+  #  - Icons Settings -
+  # image_path: "assets/logo/logo.png"
   ios: true
   image_path_ios: "assets/logo/logo_ios.png"
   remove_alpha_ios: true
-
   android: true
   image_path_android: "assets/logo/logo.png"
-  adaptive_icon_foreground: "assets/logo/logo_foreground.png" # this adaptive style omehow doesnt work
+  adaptive_icon_foreground: "assets/logo/logo_foreground.png"
   adaptive_icon_background: "assets/logo/logo_back.png"
 
-# Recompile icons with:
-#   flutter pub run flutter_launcher_icons:main
-
-# For information on the generic Dart part of this file, see the
-# following page: https://dart.dev/tools/pub/pubspec
-
-# The following section is specific to Flutter.
 flutter:
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
