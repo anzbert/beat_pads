@@ -52,6 +52,13 @@ class MenuLayout extends ConsumerWidget {
             controller: _scrollController,
             children: <Widget>[
               const DividerTitle("Presets"),
+              // IconButton(
+              //     onPressed: () async {
+              //       final bla = await DeviceUtils.enableRotation();
+              //       print(bla);
+              //     },
+              //     icon: const Icon(Icons.place_rounded),
+              //     iconSize: 100),
               const PresetButtons(
                 clickType: ClickType.tap,
                 row: true,
