@@ -11,14 +11,22 @@ abstract class ThemeConst {
 }
 
 var appTheme = ThemeData.dark().copyWith(
-  // useMaterial3: true,
+  useMaterial3: true,
   dividerTheme: DividerThemeData(
     thickness: 1,
     color: Palette.lightGrey,
   ),
   primaryColor: Palette.cadetBlue,
+  floatingActionButtonTheme: const FloatingActionButtonThemeData(
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.all(Radius.circular(5)),
+    ),
+  ),
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(5)),
+      ),
       foregroundColor: Palette.darkGrey,
       backgroundColor: Palette.cadetBlue,
       elevation: 6,
@@ -55,11 +63,4 @@ var appTheme = ThemeData.dark().copyWith(
       return Palette.lightGrey;
     }),
   ),
-  // textTheme: TextTheme(
-  //   bodyText1: TextStyle(),
-  //   bodyText2: TextStyle(),
-  // ).apply(
-  //   bodyColor: Colors.orange,
-  //   displayColor: Colors.blue,
-  // ),
 );
