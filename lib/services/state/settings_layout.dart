@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 // LAYOUT
 final layoutProv = NotifierProvider<SettingEnumNotifier<Layout>, Layout>(() {
   return LayoutSettingNotifier(
-    fromName: Layout.fromName,
+    nameMap: Layout.values.asNameMap(),
     key: 'layout',
     defaultValue: Layout.majorThird,
   );
@@ -12,7 +12,7 @@ final layoutProv = NotifierProvider<SettingEnumNotifier<Layout>, Layout>(() {
 
 class LayoutSettingNotifier extends SettingEnumNotifier<Layout> {
   LayoutSettingNotifier(
-      {required super.fromName,
+      {required super.nameMap,
       required super.key,
       required super.defaultValue});
 
@@ -106,7 +106,7 @@ final rowProv = Provider<List<List<CustomPad>>>(((ref) {
 final padLabelsProv =
     NotifierProvider<SettingEnumNotifier<PadLabels>, PadLabels>(() {
   return SettingEnumNotifier<PadLabels>(
-    fromName: PadLabels.fromName,
+    nameMap: PadLabels.values.asNameMap(),
     key: "padLabels",
     defaultValue: PadLabels.note,
   );
@@ -115,7 +115,7 @@ final padLabelsProv =
 final padColorsProv =
     NotifierProvider<SettingEnumNotifier<PadColors>, PadColors>(() {
   return SettingEnumNotifier<PadColors>(
-    fromName: PadColors.fromName,
+    nameMap: PadColors.values.asNameMap(),
     key: "padColors",
     defaultValue: PadColors.highlightRoot,
   );
@@ -132,7 +132,7 @@ final baseHueProv = NotifierProvider<SettingIntNotifier, int>(() {
 // SCALES
 final scaleProv = NotifierProvider<SettingEnumNotifier<Scale>, Scale>(() {
   return SettingEnumNotifier<Scale>(
-    fromName: Scale.fromName,
+    nameMap: Scale.values.asNameMap(),
     key: 'scaleString',
     defaultValue: Scale.chromatic,
   );

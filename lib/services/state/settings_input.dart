@@ -7,7 +7,7 @@ final playModeProv =
   return SettingEnumNotifier<PlayMode>(
       key: 'playMode',
       defaultValue: PlayMode.slide,
-      fromName: PlayMode.fromName);
+      nameMap: PlayMode.values.asNameMap());
 });
 
 // MOD VISUALISATION
@@ -41,7 +41,7 @@ final modulation2DProv = NotifierProvider<SettingBoolNotifier, bool>(() {
 
 final mpe2DXProv = NotifierProvider<SettingEnumNotifier<MPEmods>, MPEmods>(() {
   return SettingEnumNotifier<MPEmods>(
-    fromName: MPEmods.fromName,
+    nameMap: MPEmods.values.asNameMap(),
     key: 'mpe2DX',
     defaultValue: MPEmods.slide,
   );
@@ -49,7 +49,7 @@ final mpe2DXProv = NotifierProvider<SettingEnumNotifier<MPEmods>, MPEmods>(() {
 
 final mpe2DYProv = NotifierProvider<SettingEnumNotifier<MPEmods>, MPEmods>(() {
   return SettingEnumNotifier<MPEmods>(
-    fromName: MPEmods.fromName,
+    nameMap: MPEmods.values.asNameMap(),
     key: 'mpe2DY',
     defaultValue: MPEmods.pitchbend,
   );
@@ -58,7 +58,7 @@ final mpe2DYProv = NotifierProvider<SettingEnumNotifier<MPEmods>, MPEmods>(() {
 final mpe1DRadiusProv =
     NotifierProvider<SettingEnumNotifier<MPEmods>, MPEmods>(() {
   return SettingEnumNotifier<MPEmods>(
-    fromName: MPEmods.fromName,
+    nameMap: MPEmods.values.asNameMap(),
     key: 'mpe1DRadius',
     defaultValue: MPEmods.mpeAftertouch,
   );

@@ -12,13 +12,6 @@ enum PlayMode {
   @override
   String toString() => title;
 
-  static PlayMode? fromName(String key) {
-    for (PlayMode mode in PlayMode.values) {
-      if (mode.name == key) return mode;
-    }
-    return null;
-  }
-
   bool get modulatable {
     switch (this) {
       case PlayMode.polyAT:

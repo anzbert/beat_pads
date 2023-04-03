@@ -12,13 +12,6 @@ enum VelocityMode {
 
   @override
   String toString() => title;
-
-  static VelocityMode? fromName(String key) {
-    for (VelocityMode mode in VelocityMode.values) {
-      if (mode.name == key) return mode;
-    }
-    return null;
-  }
 }
 
 class VelocityProvider {

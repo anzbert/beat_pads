@@ -169,13 +169,6 @@ enum MPEmods {
 
     return ModNull();
   }
-
-  static MPEmods? fromName(String key) {
-    for (MPEmods mod in MPEmods.values) {
-      if (mod.name == key) return mod;
-    }
-    return null;
-  }
 }
 
 /// Exclusive modulation groups. Only one of each is allowed at a time on X and Y.

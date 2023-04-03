@@ -20,13 +20,6 @@ enum Layout {
   @override
   String toString() => title;
 
-  static Layout? fromName(String key) {
-    for (Layout mode in Layout.values) {
-      if (mode.name == key) return mode;
-    }
-    return null;
-  }
-
   bool get gmPercussion {
     switch (this) {
       case Layout.xPressPadsStandard:

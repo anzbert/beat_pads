@@ -50,7 +50,7 @@ final velocityProv = NotifierProvider<SettingIntNotifier, int>(() {
 final velocityModeProv =
     NotifierProvider<SettingEnumNotifier<VelocityMode>, VelocityMode>(() {
   return SettingEnumNotifier<VelocityMode>(
-    fromName: VelocityMode.fromName,
+    nameMap: VelocityMode.values.asNameMap(),
     key: 'velocityMode',
     defaultValue: VelocityMode.fixed,
   );

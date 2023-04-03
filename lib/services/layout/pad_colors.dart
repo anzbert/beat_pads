@@ -10,13 +10,6 @@ enum PadColors {
   final String title;
   const PadColors(this.title);
 
-  static PadColors? fromName(String key) {
-    for (PadColors mode in PadColors.values) {
-      if (mode.name == key) return mode;
-    }
-    return null;
-  }
-
   @override
   String toString() => title;
 

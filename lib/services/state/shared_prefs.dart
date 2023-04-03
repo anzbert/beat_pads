@@ -224,13 +224,11 @@ class SettingStringNotifier extends SettingNotifier<String> {
       defaultValue;
 }
 
-typedef FromName<T> = T? Function(String);
-
 class SettingEnumNotifier<T extends Enum> extends SettingNotifier<T> {
-  final FromName<T> fromName;
+  final Map<String, T> nameMap;
 
   SettingEnumNotifier({
-    required this.fromName,
+    required this.nameMap,
     required super.key,
     required super.defaultValue,
     super.resettable,
@@ -256,7 +254,7 @@ class SettingEnumNotifier<T extends Enum> extends SettingNotifier<T> {
     String? name =
         ref.read(sharedPrefProvider).sharedPrefs.getString(presetKey);
     if (name != null) {
-      T? value = fromName(name);
+      T? value = nameMap[name];
       if (value != null) return value;
     }
     return defaultValue;

@@ -8,13 +8,6 @@ enum PadLabels {
   final String title;
   const PadLabels(this.title);
 
-  static PadLabels? fromName(String key) {
-    for (PadLabels mode in PadLabels.values) {
-      if (mode.name == key) return mode;
-    }
-    return null;
-  }
-
   @override
   String toString() => title;
 

@@ -223,13 +223,6 @@ enum Scale {
   final String? label;
   const Scale(this.intervals, [this.label]);
 
-  static Scale? fromName(String key) {
-    for (Scale mode in Scale.values) {
-      if (mode.name == key) return mode;
-    }
-    return null;
-  }
-
   @override
   String toString() => label == null ? name : label!;
 }
