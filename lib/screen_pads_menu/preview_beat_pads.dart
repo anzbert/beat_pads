@@ -29,11 +29,26 @@ class Preview extends ConsumerWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 50),
                       width: double.infinity,
                       child: FittedBox(
-                        child: Text(
-                          "Preview",
-                          style: TextStyle(
-                            color: Palette.lightGrey.withOpacity(0.4),
-                          ),
+                        child: Stack(
+                          children: [
+                            // Text Fill
+                            Text(
+                              "Preview",
+                              style: TextStyle(
+                                color: Palette.lightGrey.withOpacity(0.4),
+                              ),
+                            ),
+                            // Text Outline
+                            Text(
+                              "Preview",
+                              style: TextStyle(
+                                foreground: Paint()
+                                  ..style = PaintingStyle.stroke
+                                  ..strokeWidth = 0.15
+                                  ..color = Palette.darkGrey,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
