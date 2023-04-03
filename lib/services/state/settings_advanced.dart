@@ -6,7 +6,7 @@ final playModeProv =
     NotifierProvider<SettingEnumNotifier<PlayMode>, PlayMode>(() {
   return SettingEnumNotifier<PlayMode>(
       key: 'playMode',
-      defaultValue: PlayMode.slide,
+      defaultValue: PlayMode.noSlide,
       nameMap: PlayMode.values.asNameMap());
 });
 
