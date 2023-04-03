@@ -44,7 +44,7 @@ Wifi works on iOS, but Wifi and Bluetooth support is otherwise limited due to pl
 
 Anyone is most welcome to contribute, report an issue or start a discussion in this repository. Thanks!
 
-## Known issues to be fixed
+## Known issues
 
 - Screen Rotation is sometimes unpredictable on iOS. This is currently a known issue in Flutter, and the fix will be pushed soon.
 
