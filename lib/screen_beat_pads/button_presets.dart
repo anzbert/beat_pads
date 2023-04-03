@@ -125,8 +125,7 @@ class _ElevatedPresetButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // final RenderBox? box = context.findRenderObject() as RenderBox?;
-    // final double? buttonBoxHeight = box?.size.height;
+    final screenSize = MediaQuery.of(context).size.shortestSide;
 
     return ElevatedButton(
       onPressed: () {
@@ -145,7 +144,8 @@ class _ElevatedPresetButton extends ConsumerWidget {
       child: Text(
         preset.toString(),
         style: TextStyle(
-            fontSize: Theme.of(context).textTheme.displaySmall?.fontSize ?? 64,
+            // fontSize: Theme.of(context).textTheme.displaySmall?.fontSize ?? 64,
+            fontSize: screenSize * 0.08,
             color: ref.watch(presetNotifierProvider) == preset
                 ? Palette.darkGrey
                 : Palette.darkGrey.withOpacity(0.1)),
