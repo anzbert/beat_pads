@@ -97,15 +97,14 @@ class PadMenuScreen extends ConsumerWidget {
                   padding: const EdgeInsets.only(right: 8),
                   child: TextButton(
                     onPressed: (() => goToPresetSelection(ref)),
-                    child: Text("P${ref.watch(presetNotifierProvider)}",
-                        style: TextStyle(
-                            color: PresetButtons.backgoundColors[
-                                ref.watch(presetNotifierProvider) - 1],
-                            fontSize: Theme.of(context)
-                                    .textTheme
-                                    .headlineMedium
-                                    ?.fontSize ??
-                                16)),
+                    child: Text(
+                      "P${ref.watch(presetNotifierProvider)}",
+                      style: TextStyle(
+                          color: PresetButtons.backgoundColors[
+                              ref.watch(presetNotifierProvider) - 1],
+                          // font size 30 makes it the same height as the connection icon on the left (h = 36 pixels):
+                          fontSize: 30),
+                    ),
                   ),
                 )
               ],
