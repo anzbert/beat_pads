@@ -1,8 +1,6 @@
 import 'package:beat_pads/theme.dart';
 import 'package:flutter/material.dart';
 
-// TODO: some uncaught exception here??
-
 class MidiRangeSelectorTile extends StatelessWidget {
   const MidiRangeSelectorTile({
     Key? key,

@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Sending logic still uses ChangeNotifier. Could be refactored for Riverpod
 // for improved clarity and expandability.
-// TODO: extract parts into seperate decoupled systems. (channelprovider, velocityprovider, etc...)
+// TODO Refactor! Replace outdated ChangeNotifier with new Riverpod Notifiers. Extract parts into seperate providers.
 
 class SendSettings {
   final PlayMode playMode;
