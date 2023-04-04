@@ -8,7 +8,6 @@ export 'event_touch.dart';
 export 'layout/layout.dart';
 export 'velocity_provider.dart';
 export 'modulation/modulation.dart';
-export 'mpe_config_message.dart';
 export 'mpe_channel_provider.dart';
 export 'paint/paint.dart';
 export 'playmodes/playmodes.dart';
