@@ -51,7 +51,7 @@ abstract class SettingNotifier<T> extends Notifier<T> {
     required this.defaultValue,
     this.usesPresets = true,
     this.resettable = true,
-  }) : presetKey = "{$key}-0";
+  }) : presetKey = "{$key}-1"; // Default Preset is 1 on startup
 
   /// Set this Settings state to a new value
   void set(T newState) {
