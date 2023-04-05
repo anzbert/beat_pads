@@ -32,7 +32,7 @@ class _ResetAllNotifier extends Notifier<bool> {
   }
 
   void resetAllPresets() {
-    for (int i = PresetNotfier.number; i >= 1; i--) {
+    for (int i = PresetNotfier.numberOfPresets; i >= 1; i--) {
       ref.read(presetNotifierProvider.notifier).set(i);
       resetAll();
     }
@@ -51,7 +51,7 @@ abstract class SettingNotifier<T> extends Notifier<T> {
     required this.defaultValue,
     this.usesPresets = true,
     this.resettable = true,
-  }) : presetKey = "{$key}-1"; // Default Preset is 1 on startup
+  }) : presetKey = "{$key}-${PresetNotfier.basePreset}";
 
   /// Set this Settings state to a new value
   void set(T newState) {

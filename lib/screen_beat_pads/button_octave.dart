@@ -20,6 +20,7 @@ class OctaveButtons extends ConsumerWidget {
             child: ElevatedButton(
               onPressed: () {
                 ref.read(baseOctaveProv.notifier).increment();
+                ref.read(baseOctaveProv.notifier).save();
               },
               style: ElevatedButton.styleFrom(
                 foregroundColor: Palette.darkGrey,
@@ -47,6 +48,7 @@ class OctaveButtons extends ConsumerWidget {
             child: ElevatedButton(
               onPressed: () {
                 ref.read(baseOctaveProv.notifier).decrement();
+                ref.read(baseOctaveProv.notifier).save();
               },
               style: ElevatedButton.styleFrom(
                 foregroundColor: Palette.darkGrey,

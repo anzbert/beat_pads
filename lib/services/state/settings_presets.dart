@@ -6,16 +6,17 @@ final presetNotifierProvider = NotifierProvider<PresetNotfier, int>(() {
 });
 
 class PresetNotfier extends Notifier<int> {
-  static const int number = 5;
+  static const int numberOfPresets = 5;
+  static const int basePreset = 1;
 
   @override
   int build() {
-    return 1;
+    return basePreset;
   }
 
-  /// Set to a Preset between 1 and 5
+  /// Set to a Preset between [basePreset] and [numberOfPresets]
   void set(int newPreset) {
     ref.read(senderProvider.notifier).playModeHandler.killAllNotes();
-    state = newPreset.clamp(1, number);
+    state = newPreset.clamp(basePreset, numberOfPresets);
   }
 }
