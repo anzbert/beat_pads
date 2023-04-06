@@ -19,7 +19,7 @@ class MenuInput extends ConsumerWidget {
         ListTile(
           title: const Text("Pan Mode"),
           subtitle: const Text(
-              "Choose how the pads reacts to finger X and Y movement"),
+              "Choose how the grid reacts to finger X and Y movement"),
           trailing: DropdownEnum(
             values: PlayMode.values,
             readValue: ref.watch(playModeProv),

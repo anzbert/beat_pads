@@ -103,6 +103,14 @@ class MenuLayout extends ConsumerWidget {
                 ),
               ),
               const DividerTitle("Layout"),
+              ListTile(
+                title: const Text("Layout"),
+                trailing: DropdownEnum<Layout>(
+                  values: Layout.values,
+                  readValue: ref.watch<Layout>(layoutProv),
+                  setValue: (v) => ref.read(layoutProv.notifier).setAndSave(v),
+                ),
+              ),
               if (resizableGrid)
                 IntCounterTile(
                   label: "Width",
@@ -115,14 +123,6 @@ class MenuLayout extends ConsumerWidget {
                   setValue: (v) => ref.read(heightProv.notifier).setAndSave(v),
                   readValue: ref.watch(heightProv),
                 ),
-              ListTile(
-                title: const Text("Layout"),
-                trailing: DropdownEnum<Layout>(
-                  values: Layout.values,
-                  readValue: ref.watch<Layout>(layoutProv),
-                  setValue: (v) => ref.read(layoutProv.notifier).setAndSave(v),
-                ),
-              ),
               if (resizableGrid) const DividerTitle("Scales"),
               if (resizableGrid)
                 ListTile(
