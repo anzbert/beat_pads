@@ -86,14 +86,16 @@ class MenuMidi extends ConsumerWidget {
           ),
         if (ref.watch(velocityModeProv) != VelocityMode.fixed)
           MidiRangeSelectorTile(
-            label: "Velocity Range",
-            readMin: ref.watch(velocityMinProv),
-            readMax: ref.watch(velocityMaxProv),
-            setMin: (v) => ref.read(velocityMinProv.notifier).set(v),
-            setMax: (v) => ref.read(velocityMaxProv.notifier).set(v),
-            resetFunction: ref.read(velocityMaxProv.notifier).reset,
-            onChangeEnd: ref.read(velocityMaxProv.notifier).save,
-          ),
+              label: "Velocity Range",
+              readMin: ref.watch(velocityMinProv),
+              readMax: ref.watch(velocityMaxProv),
+              setMin: (v) => ref.read(velocityMinProv.notifier).set(v),
+              setMax: (v) => ref.read(velocityMaxProv.notifier).set(v),
+              resetFunction: ref.read(velocityMaxProv.notifier).reset,
+              onChangeEnd: () {
+                ref.read(velocityMaxProv.notifier).save();
+                ref.read(velocityMinProv.notifier).save();
+              }),
       ],
     );
   }
