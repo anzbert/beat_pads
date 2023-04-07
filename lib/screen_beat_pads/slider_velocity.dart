@@ -5,9 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class SliderVelocity extends ConsumerStatefulWidget {
-  const SliderVelocity(
-      {Key? key, required this.channel, required this.randomVelocity})
-      : super(key: key);
+  const SliderVelocity({
+    Key? key,
+    required this.channel,
+    required this.randomVelocity,
+  }) : super(key: key);
 
   final int channel;
   final bool randomVelocity;
@@ -68,6 +70,7 @@ class _SliderVelocityState extends ConsumerState<SliderVelocity> {
                       .velocityProvider
                       .velocityFixed = v.toInt();
                 },
+                onChangeEnd: (_) {},
               ),
             ),
           ),

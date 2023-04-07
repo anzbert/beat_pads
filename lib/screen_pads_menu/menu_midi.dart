@@ -78,7 +78,6 @@ class MenuMidi extends ConsumerWidget {
             min: 10,
             max: 127,
             label: "Fixed Velocity",
-            // subtitle: "Velocity to send when pressing a pad",
             trailing: Text(ref.watch(velocityProv).toString()),
             readValue: ref.watch(velocityProv),
             setValue: (v) => ref.read(velocityProv.notifier).set(v),
