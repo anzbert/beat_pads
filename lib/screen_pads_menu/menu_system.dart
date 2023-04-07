@@ -9,6 +9,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../shared_components/divider_title.dart';
 
 class MenuSystem extends ConsumerWidget {
+  const MenuSystem();
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ListView(

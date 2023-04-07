@@ -22,7 +22,7 @@ class ReturnToMenuButton extends StatelessWidget {
         onDoubleTap: () {
           // using pushReplacement to trigger dispose on pad screen
           Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) => PadMenuScreen()));
+              MaterialPageRoute(builder: (context) => const PadMenuScreen()));
         },
         child: AspectRatio(
           aspectRatio: 1,

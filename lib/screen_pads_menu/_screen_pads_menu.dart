@@ -22,18 +22,18 @@ enum Menu {
 }
 
 class PadMenuScreen extends ConsumerWidget {
-  final ScrollController _layoutPageScrollController = ScrollController();
+  const PadMenuScreen();
 
-  Widget getMenu(Menu menu, ScrollController sc) {
+  Widget getMenu(Menu menu) {
     switch (menu) {
       case Menu.layout:
-        return MenuLayout(sc);
+        return const MenuLayout();
       case Menu.midi:
-        return MenuMidi();
+        return const MenuMidi();
       case Menu.input:
-        return MenuInput();
+        return const MenuInput();
       case Menu.system:
-        return MenuSystem();
+        return const MenuSystem();
     }
   }
 
@@ -44,18 +44,6 @@ class PadMenuScreen extends ConsumerWidget {
     );
   }
 
-  void goToPresetSelection(WidgetRef ref) {
-    if (ref.read(selectedMenuState) == Menu.layout) {
-      _layoutPageScrollController.animateTo(
-        0,
-        duration: const Duration(milliseconds: 500),
-        curve: Curves.fastOutSlowIn,
-      );
-    }
-    ref.read(selectedMenuState.notifier).state = Menu.layout;
-  }
-
-  PadMenuScreen();
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return FutureBuilder(
@@ -95,16 +83,31 @@ class PadMenuScreen extends ConsumerWidget {
               actions: [
                 Padding(
                   padding: const EdgeInsets.only(right: 8),
-                  child: TextButton(
-                    onPressed: (() => goToPresetSelection(ref)),
-                    child: Text(
-                      "P${ref.watch(presetNotifierProvider)}",
-                      style: TextStyle(
-                          color: PresetButtons.backgoundColors[
-                              ref.watch(presetNotifierProvider) - 1],
-                          // font size 30 makes it the same height as the connection icon on the left (h = 36 pixels):
-                          fontSize: 30),
-                    ),
+                  child: DropdownButton(
+                    value: ref.watch(presetNotifierProvider),
+                    iconSize: 0,
+                    // iconEnabledColor: PresetButtons
+                    //     .backgoundColors[ref.watch(presetNotifierProvider) - 1],
+                    underline: const SizedBox.shrink(),
+                    onChanged: (int? newValue) {
+                      if (newValue != null) {
+                        ref.read(presetNotifierProvider.notifier).set(newValue);
+                      }
+                    },
+                    items: [
+                      for (int i = 1;
+                          i <= PresetButtons.backgoundColors.length;
+                          i++)
+                        DropdownMenuItem(
+                          value: i,
+                          child: Text(
+                            "P$i",
+                            style: TextStyle(
+                                color: PresetButtons.backgoundColors[i - 1],
+                                fontSize: 31),
+                          ),
+                        )
+                    ],
                   ),
                 )
               ],
@@ -167,8 +170,7 @@ class PadMenuScreen extends ConsumerWidget {
               ),
             ),
             body: SafeArea(
-              child: getMenu(
-                  ref.watch(selectedMenuState), _layoutPageScrollController),
+              child: getMenu(ref.watch(selectedMenuState)),
             ),
           );
         } else {

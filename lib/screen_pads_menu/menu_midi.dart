@@ -8,6 +8,8 @@ import 'drop_down_enum.dart';
 import 'package:beat_pads/services/services.dart';
 
 class MenuMidi extends ConsumerWidget {
+  const MenuMidi();
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ListView(

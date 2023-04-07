@@ -12,9 +12,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../shared_components/divider_title.dart';
 
 class MenuLayout extends ConsumerWidget {
-  const MenuLayout(this._scrollController);
-
-  final ScrollController _scrollController;
+  const MenuLayout();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -49,7 +47,6 @@ class MenuLayout extends ConsumerWidget {
           child: ListView(
             padding:
                 const EdgeInsets.only(bottom: ThemeConst.listViewBottomPadding),
-            controller: _scrollController,
             children: <Widget>[
               const DividerTitle("Presets"),
               const PresetButtons(

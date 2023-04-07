@@ -10,6 +10,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../theme.dart';
 
 class MenuInput extends ConsumerWidget {
+  const MenuInput();
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ListView(
