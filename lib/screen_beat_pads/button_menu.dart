@@ -19,8 +19,8 @@ class ReturnToMenuButton extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.fromLTRB(0, padSpacing, padSpacing, padSpacing),
       child: GestureDetector(
-        onLongPress: () {
-          // using replacement to trigger dispose on pad screen
+        onDoubleTap: () {
+          // using pushReplacement to trigger dispose on pad screen
           Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (context) => PadMenuScreen()));
         },
@@ -48,8 +48,7 @@ class ReturnToMenuButton extends StatelessWidget {
                   boxShadow: kElevationToShadow[6],
                   borderRadius: BorderRadius.circular(3)),
               richMessage: const TextSpan(
-                text: "Long-Press for Menu",
-                // style: TextStyle(fontWeight: FontWeight.w500),
+                text: "Double-Tap for Menu",
               ),
               triggerMode: TooltipTriggerMode.tap,
               showDuration: const Duration(milliseconds: 1000),
