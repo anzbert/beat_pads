@@ -1,8 +1,9 @@
-import 'package:beat_pads/services/services.dart';
+import 'package:beat_pads/screen_pads_menu/menu_advanced.dart';
 import 'package:beat_pads/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ModSizeSliderTile extends StatefulWidget {
+class ModSizeSliderTile extends ConsumerWidget {
   const ModSizeSliderTile(
       {this.label = "#label",
       this.subtitle,
@@ -27,78 +28,59 @@ class ModSizeSliderTile extends StatefulWidget {
   final Widget trailing;
 
   @override
-  State<ModSizeSliderTile> createState() => _ModSizeSliderTileState();
-}
-
-class _ModSizeSliderTileState extends State<ModSizeSliderTile> {
-  bool showPreview = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
-        Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ListTile(
-              title: Row(
-                children: [
-                  Text(widget.label),
-                  if (widget.resetValue != null)
-                    TextButton(
-                      onPressed: () {
-                        widget.resetValue!();
-                        setState(() {
-                          showPreview = true;
-                        });
-                        Future.delayed(const Duration(milliseconds: 800), () {
-                          if (mounted) {
-                            setState(() {
-                              showPreview = false;
-                            });
-                          }
-                        });
-                      },
-                      style: TextButton.styleFrom(
-                        minimumSize: Size.zero,
-                        padding: const EdgeInsets.symmetric(horizontal: 12),
-                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      ),
-                      child: const Text("Reset"),
-                    )
-                ],
-              ),
-              subtitle: widget.subtitle != null ? Text(widget.subtitle!) : null,
-              trailing: widget.trailing,
-            ),
-            Builder(
-              builder: (context) {
-                double width = MediaQuery.of(context).size.width;
-                return SizedBox(
-                  width: width * ThemeConst.sliderWidthFactor,
-                  child: Slider(
-                    min: widget.min,
-                    max: widget.max,
-                    value: widget.readValue.clamp(widget.min, widget.max),
-                    onChanged: (value) {
-                      widget.setValue(value);
-                    },
-                    onChangeStart: (_) => setState(() {
-                      showPreview = true;
-                    }),
-                    onChangeEnd: (_) {
-                      setState(() {
-                        showPreview = false;
-                      });
-                      if (widget.onChangeEnd != null) widget.onChangeEnd!();
-                    },
+        ListTile(
+          title: Row(
+            children: [
+              Text(label),
+              if (resetValue != null)
+                TextButton(
+                  onPressed: () {
+                    resetValue!();
+                    ref.read(showModPreview.notifier).state = true;
+                    Future.delayed(const Duration(milliseconds: 800), () {
+                      if (context.mounted) {
+                        ref.read(showModPreview.notifier).state = false;
+                      }
+                    });
+                  },
+                  style: TextButton.styleFrom(
+                    minimumSize: Size.zero,
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   ),
-                );
-              },
-            ),
-          ],
+                  child: const Text("Reset"),
+                )
+            ],
+          ),
+          subtitle: subtitle != null ? Text(subtitle!) : null,
+          trailing: trailing,
         ),
-        if (showPreview) const PaintModPreview(),
+        Builder(
+          builder: (context) {
+            double width = MediaQuery.of(context).size.width;
+            return SizedBox(
+              width: width * ThemeConst.sliderWidthFactor,
+              child: Slider(
+                min: min,
+                max: max,
+                value: readValue.clamp(min, max),
+                onChanged: (value) {
+                  setValue(value);
+                },
+                onChangeStart: (_) =>
+                    ref.read(showModPreview.notifier).state = true,
+                onChangeEnd: (_) {
+                  ref.read(showModPreview.notifier).state = false;
+                  if (onChangeEnd != null) onChangeEnd!();
+                },
+              ),
+            );
+          },
+        ),
       ],
     );
   }

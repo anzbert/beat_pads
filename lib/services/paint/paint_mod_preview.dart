@@ -15,14 +15,12 @@ class PaintModPreview extends ConsumerWidget {
     final RenderBox? box = context.findAncestorRenderObjectOfType<RenderBox>();
     if (box == null) return Stack();
 
-    // final settings = ref.watch(settingsProvider);
-
     final Size screenSize = MediaQuery.of(context).size;
 
     if (!ref.watch(modulation2DProv) ||
         ref.watch(playModeProv).oneDimensional) {
       return CustomPaint(
-        painter: CustomPaintRadius(
+        foregroundPainter: CustomPaintRadius(
           dirty: false,
           origin: box.globalToLocal(Offset(screenSize.width / 2,
               screenSize.height / (DeviceUtils.isPortrait(context) ? 2.5 : 2))),
@@ -38,7 +36,7 @@ class PaintModPreview extends ConsumerWidget {
       );
     } else {
       return CustomPaint(
-        painter: CustomPaintXYSquare(
+        foregroundPainter: CustomPaintXYSquare(
           dirty: false,
           origin: box.globalToLocal(Offset(screenSize.width / 2,
               screenSize.height / (DeviceUtils.isPortrait(context) ? 2.5 : 2))),

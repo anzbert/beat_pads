@@ -142,7 +142,7 @@ class _SliderVelocityState extends ConsumerState<SliderVelocity> {
                                         0.6,
                                     fontWeight: FontWeight.w300,
                                     color:
-                                        Palette.darker(Palette.cadetBlue, 0.6),
+                                        Palette.darker(Palette.cadetBlue, 0.7),
                                   ),
                                 ),
                               )

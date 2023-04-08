@@ -181,20 +181,20 @@ class MenuLayout extends ConsumerWidget {
                         ref.read(sustainButtonProv.notifier).setAndSave(v)),
               ),
               ListTile(
-                title: const Text("Mod Wheel"),
-                subtitle: const Text("Adds Mod Wheel Slider next to pads"),
-                trailing: Switch(
-                    value: ref.watch<bool>(modWheelProv),
-                    onChanged: (v) =>
-                        ref.read(modWheelProv.notifier).setAndSave(v)),
-              ),
-              ListTile(
                 title: const Text("Velocity"),
                 subtitle: const Text("Adds Velocity Slider next to pads"),
                 trailing: Switch(
                     value: ref.watch(velocitySliderProv),
                     onChanged: (v) =>
                         ref.read(velocitySliderProv.notifier).setAndSave(v)),
+              ),
+              ListTile(
+                title: const Text("Mod Wheel"),
+                subtitle: const Text("Adds Mod Wheel Slider next to pads"),
+                trailing: Switch(
+                    value: ref.watch<bool>(modWheelProv),
+                    onChanged: (v) =>
+                        ref.read(modWheelProv.notifier).setAndSave(v)),
               ),
               ListTile(
                 title: const Text("Pitch Bend"),
