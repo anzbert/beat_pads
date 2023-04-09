@@ -26,7 +26,7 @@ final modulationDeadZoneProv =
   return SettingDoubleNotifier(
     key: 'modulationDeadZone',
     defaultValue: .20,
-    min: .10,
+    min: .0,
     max: .50,
   );
 });
