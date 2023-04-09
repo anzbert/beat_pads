@@ -1,7 +1,7 @@
 name: beat_pads
 description: USB Midi Pad Controller for Music Production
 publish_to: "none"
-version: 0.9.1+68
+version: 0.9.1+69
 
 # Read more about Android versioning:
 # https://developer.android.com/studio/publish/versioning
@@ -39,7 +39,7 @@ dev_dependencies:
     sdk: flutter
 
   flutter_lints: ^2.0.0
-  flutter_launcher_icons: ^0.12.0
+  flutter_launcher_icons: ^0.13.0
 
 flutter_icons:
   # Recompile icons with:
