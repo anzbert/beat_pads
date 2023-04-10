@@ -22,13 +22,12 @@ class TouchEvent {
   }
 
   /// Holds geometry, note and modulation information this.uniqueID, this.origin,
-  TouchEvent(CustomPointer touch, this.noteEvent, SendSettings settings,
-      Size screenSize)
+  TouchEvent(CustomPointer touch, this.noteEvent, this.deadZone,
+      double modulationRadius, Size screenSize)
       : origin = touch.position,
         newPosition = touch.position,
         uniqueID = touch.pointer,
-        deadZone = settings.modulationDeadZone,
-        maxRadius = screenSize.longestSide * settings.modulationRadius;
+        maxRadius = screenSize.longestSide * modulationRadius;
 
   /// Prevents touchevent from receiving further position updates in move(). Irreversible!
   void markDirty() => _dirty = true;

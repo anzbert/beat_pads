@@ -1,49 +1,46 @@
 import 'package:beat_pads/services/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class NoteReleaseBuffer {
-  final SendSettings _settings;
+class NoteReleaseBuffer extends Notifier<List<NoteEvent>> {
   bool checkerRunning = false;
-  final Function _notifyListenersOfParent;
 
-  /// Data Structure that holds released Note Events. Only used by slide playmode!
-  NoteReleaseBuffer(this._settings, this._notifyListenersOfParent) {
-    // Utils.debugLog("note release buffer:", _buffer, 1);
+  @override
+  List<NoteEvent> build() {
+    return [];
   }
-
-  List<NoteEvent> _buffer = [];
-  List<NoteEvent> get buffer => _buffer;
 
   /// Update note in the released events buffer, by adding it or updating
   /// the timer of the corresponding note
   void updateReleasedNoteEvent(NoteEvent event) {
-    int index = _buffer.indexWhere((element) => element.note == event.note);
+    int index = state.indexWhere((element) => element.note == event.note);
 
     if (index >= 0) {
-      _buffer[index].updateReleaseTime(); // update time
+      state[index].updateReleaseTime(); // update time
+      state = [...state];
     } else {
       event.updateReleaseTime();
-      _buffer.add(event); // or add to buffer
+      state = [...state, event];
     }
-    if (_buffer.isNotEmpty) checkReleasedNoteEvents();
+    if (state.isNotEmpty) checkReleasedNoteEvents();
   }
 
   void checkReleasedNoteEvents() async {
     if (checkerRunning) return; // only one running instance possible!
     checkerRunning = true;
 
-    while (_buffer.isNotEmpty) {
+    while (state.isNotEmpty) {
       await Future.delayed(
         const Duration(milliseconds: 5),
         () {
-          for (int i = 0; i < _buffer.length; i++) {
-            if (DateTime.now().millisecondsSinceEpoch - _buffer[i].releaseTime >
-                _settings.noteReleaseTime) {
-              _buffer[i].noteOff(); // note OFF
-              _buffer[i].markKill();
-              _notifyListenersOfParent(); // notify to update pads
+          for (int i = 0; i < state.length; i++) {
+            if (DateTime.now().millisecondsSinceEpoch - state[i].releaseTime >
+                ref.read(noteReleaseUsable)) {
+              state[i].noteOff(); // note OFF
+              state[i].markKill();
             }
           }
-          _buffer.removeWhere((element) => element.kill);
+          state.removeWhere((element) => element.kill);
+          state = [...state];
         },
       );
     }
@@ -51,6 +48,6 @@ class NoteReleaseBuffer {
   }
 
   void removeNoteFromReleaseBuffer(int note) {
-    _buffer = _buffer.where((element) => element.note != note).toList();
+    state = state.where((element) => element.note != note).toList();
   }
 }

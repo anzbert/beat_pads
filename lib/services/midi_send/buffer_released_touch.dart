@@ -1,23 +1,21 @@
 import 'package:beat_pads/services/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class TouchReleaseBuffer {
-  final SendSettings _settings;
+/// Data Structure that holds released Touch Events
+class TouchReleaseBuffer extends Notifier<List<TouchEvent>> {
   final Function releaseMPEChannel;
   bool checkerRunning = false;
-  final Function _notifyListenersOfParent;
 
-  /// Data Structure that holds released Touch Events
-  TouchReleaseBuffer(
-      this._settings, this.releaseMPEChannel, this._notifyListenersOfParent) {
-    // Utils.debugLog("touch release buffer:", _buffer, 1);
+  TouchReleaseBuffer(this.releaseMPEChannel);
+
+  @override
+  List<TouchEvent> build() {
+    return [];
   }
-
-  final List<TouchEvent> _buffer = [];
-  List<TouchEvent> get buffer => _buffer;
 
   /// Find and return a TouchEvent from the buffer by its uniqueID, if possible
   TouchEvent? getByID(int id) {
-    for (TouchEvent event in _buffer) {
+    for (TouchEvent event in state) {
       if (event.uniqueID == id) {
         return event;
       }
@@ -27,31 +25,32 @@ class TouchReleaseBuffer {
 
   bool isNoteInBuffer(int? note) {
     if (note == null) return false;
-    for (var event in _buffer) {
+    for (var event in state) {
       if (event.noteEvent.note == note) return true;
     }
     return false;
   }
 
   bool get hasActiveNotes {
-    return _buffer.any((element) => element.noteEvent.noteOnMessage != null);
+    return state.any((element) => element.noteEvent.noteOnMessage != null);
   }
 
   /// Update note in the released events buffer, by adding it or updating
   /// the timer of the corresponding note
   void updateReleasedEvent(TouchEvent event) {
-    int index = _buffer.indexWhere(
+    int index = state.indexWhere(
         (element) => element.noteEvent.note == event.noteEvent.note);
 
     if (index >= 0) {
-      _buffer[index].noteEvent.updateReleaseTime(); // update time
-      releaseMPEChannel(_buffer[index].noteEvent.channel);
-      _buffer[index].noteEvent.updateMPEchannel(event.noteEvent.channel);
+      state[index].noteEvent.updateReleaseTime(); // update time
+      releaseMPEChannel(state[index].noteEvent.channel);
+      state[index].noteEvent.updateMPEchannel(event.noteEvent.channel);
+      state = [...state];
     } else {
       event.noteEvent.updateReleaseTime();
-      _buffer.add(event); // or add to buffer
+      state = [...state, event];
     }
-    if (_buffer.isNotEmpty) checkReleasedEvents();
+    if (state.isNotEmpty) checkReleasedEvents();
   }
 
   void checkReleasedEvents() async {
@@ -62,17 +61,18 @@ class TouchReleaseBuffer {
       await Future.delayed(
         const Duration(milliseconds: 5),
         () {
-          for (int i = 0; i < _buffer.length; i++) {
+          for (int i = 0; i < state.length; i++) {
             if (DateTime.now().millisecondsSinceEpoch -
-                    _buffer[i].noteEvent.releaseTime >
-                _settings.noteReleaseTime) {
-              _buffer[i].noteEvent.noteOff(); // note OFF
+                    state[i].noteEvent.releaseTime >
+                ref.read(noteReleaseUsable)) {
+              state[i].noteEvent.noteOff(); // note OFF
 
               releaseMPEChannel(
-                  _buffer[i].noteEvent.channel); // release MPE channel
+                  state[i].noteEvent.channel); // release MPE channel
 
-              _buffer[i].markKillIfNoteOffAndNoAnimation();
-              _notifyListenersOfParent(); // notify to update pads
+              state[i]
+                  .markKillIfNoteOffAndNoAnimation(); // mark to remove from buffer
+              state = [...state];
             }
           }
           killAllMarkedReleasedTouchEvents();
@@ -83,16 +83,20 @@ class TouchReleaseBuffer {
   }
 
   void removeNoteFromReleaseBuffer(int note) {
-    for (var element in _buffer) {
+    for (var element in state) {
       if (element.noteEvent.note == note) {
         releaseMPEChannel(element.noteEvent.channel);
       }
     }
-    _buffer.removeWhere((element) => element.noteEvent.note == note);
+    if (state.any((element) => element.noteEvent.note == note)) {
+      state = state.where((element) => element.noteEvent.note != note).toList();
+    }
   }
 
   void killAllMarkedReleasedTouchEvents() {
-    _buffer.removeWhere((element) => element.kill);
-    _notifyListenersOfParent();
+    // state.removeWhere((element) => element.kill);
+    if (state.any((element) => element.kill)) {
+      state = state.where((element) => !element.kill).toList();
+    }
   }
 }
