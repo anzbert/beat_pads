@@ -1,33 +1,32 @@
 import 'package:beat_pads/services/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class PlayModeNoSlide extends PlayModeHandler {
-  PlayModeNoSlide(super.settings, super.notifyParent);
+  // PlayModeNoSlide(super.settings);
+
+  @override
+  build() {
+    // TODO: implement build
+    throw UnimplementedError();
+  }
   // Uses default PlayModeHandler behaviour
 }
 
-abstract class PlayModeHandler {
-  final SendSettings settings;
-  final Function notifyParent;
-  final VelocityProvider velocityProvider;
-
-  final TouchBuffer touchBuffer;
-  late TouchReleaseBuffer touchReleaseBuffer;
-
-  PlayModeHandler(
-    this.settings,
-    this.notifyParent,
-  )   : touchBuffer = TouchBuffer(settings),
-        velocityProvider = VelocityProvider(settings, notifyParent) {
-    touchReleaseBuffer = TouchReleaseBuffer(
-      settings,
-      releaseMPEChannel,
-      notifyParent,
-    );
-  }
+abstract class PlayModeHandler extends Notifier {
+  // PlayModeHandler(
+  //   this.settings,
+  // )   : touchBuffer = TouchBuffer(),
+  //       velocityProvider = VelocityProvider(settings) {
+  //   touchReleaseBuffer = TouchReleaseBuffer(
+  //     releaseMPEChannel,
+  //   );
+  // }
 
   void handleNewTouch(PadTouchAndScreenData data) {
-    if (settings.modReleaseTime > 0 || settings.noteReleaseTime > 0) {
-      touchReleaseBuffer.removeNoteFromReleaseBuffer(data.padNote);
+    if (ref.read(modReleaseUsable) > 0 || ref.read(noteReleaseUsable) > 0) {
+      ref
+          .read(touchReleaseBuffer.notifier)
+          .removeNoteFromReleaseBuffer(data.padNote);
     }
 
     NoteEvent noteOn = NoteEvent(settings.channel, data.padNote,
@@ -36,7 +35,6 @@ abstract class PlayModeHandler {
 
     touchBuffer.addNoteOn(CustomPointer(data.pointer, data.screenTouchPos),
         noteOn, data.screenSize);
-    notifyParent();
   }
 
   void handlePan(NullableTouchAndScreenData data) {}
@@ -49,8 +47,6 @@ abstract class PlayModeHandler {
       eventInBuffer.noteEvent.noteOff();
       releaseMPEChannel(eventInBuffer.noteEvent.channel);
       touchBuffer.remove(eventInBuffer);
-
-      notifyParent();
     } else {
       if (settings.modReleaseTime == 0 && settings.noteReleaseTime > 0) {
         eventInBuffer.newPosition = eventInBuffer.origin; // mod to zero
@@ -62,7 +58,7 @@ abstract class PlayModeHandler {
   }
 
   void killAllNotes() {
-    for (TouchEvent touch in touchBuffer.buffer) {
+    for (TouchEvent touch in touchBufsfer.buffer) {
       if (touch.noteEvent.isPlaying) touch.noteEvent.noteOff();
     }
     for (TouchEvent touch in touchReleaseBuffer.buffer) {

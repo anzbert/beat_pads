@@ -37,16 +37,16 @@ enum PlayMode {
     return true;
   }
 
-  PlayModeHandler getPlayModeApi(SendSettings settings, Function notifyParent) {
+  PlayModeHandler getPlayModeApi(SendSettings settings) {
     switch (this) {
       case PlayMode.mpe:
-        return PlayModeMPE(settings, notifyParent);
+        return PlayModeMPE(settings);
       case PlayMode.noSlide:
-        return PlayModeNoSlide(settings, notifyParent);
+        return PlayModeNoSlide(settings);
       case PlayMode.slide:
-        return PlayModeSlide(settings, notifyParent);
+        return PlayModeSlide(settings);
       case PlayMode.polyAT:
-        return PlayModePolyAT(settings, notifyParent);
+        return PlayModePolyAT(settings);
     }
   }
 }

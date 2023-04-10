@@ -74,70 +74,66 @@ final combinedSettings = Provider.autoDispose<SendSettings>((ref) {
 });
 
 /// The usable sender object, which refreshes when any relevant setting changes
-final senderProvider = ChangeNotifierProvider.autoDispose<MidiSender>((ref) {
-  return MidiSender(ref.watch(combinedSettings));
+final senderProvider = Provider.autoDispose<PlayModeHandler>((ref) {
+  return ref.watch(playModeProv).getPlayModeApi(ref.watch(combinedSettings));
 });
 
-class MidiSender extends ChangeNotifier {
-  late PlayModeHandler playModeHandler;
-  final SendSettings settings;
+// class MidiSender extends Notifier {
+//   late PlayModeHandler playModeHandler;
 
-  bool _disposed = false;
+//   bool _disposed = false;
 
-  /// Handles Touches and Midi Message sending
-  MidiSender(this.settings) {
-    playModeHandler = settings.playMode
-        .getPlayModeApi(settings, _notifyListenersOfMidiSender);
+//   @override
+//   build() {
+//    return ref.read(provider)
+//   }
 
-    if (settings.playMode == PlayMode.mpe) {
-      MPEinitMessage(
-              memberChannels: settings.mpeMemberChannels,
-              upperZone: settings.zone)
-          .send();
-    }
-  }
+//   /// Handles Touches and Midi Message sending
+//   // MidiSender(this.settings) {
+//   //   playModeHandler = settings.playMode
+//   //       .getPlayModeApi(settings, _notifyListenersOfMidiSender);
 
-  /// Can be passed into sub-Classes
-  void _notifyListenersOfMidiSender() => notifyListeners();
+//   //   if (settings.playMode == PlayMode.mpe) {
+//   //     MPEinitMessage(
+//   //             memberChannels: settings.mpeMemberChannels,
+//   //             upperZone: settings.zone)
+//   //         .send();
+//   //   }
+//   // }
 
-  @override
-  void notifyListeners() {
-    if (!_disposed) super.notifyListeners();
-  }
+//   // @override
+//   // void dispose() {
+//   //   // print("disposing sender");
+//   //   if (settings.playMode == PlayMode.mpe) {
+//   //     MPEinitMessage(memberChannels: 0, upperZone: settings.zone).send();
+//   //     playModeHandler.killAllNotes();
+//   //   }
+//   //   _disposed = true;
+//   //   super.dispose();
+//   // }
 
-  @override
-  void dispose() {
-    // print("disposing sender");
-    if (settings.playMode == PlayMode.mpe) {
-      MPEinitMessage(memberChannels: 0, upperZone: settings.zone).send();
-      playModeHandler.killAllNotes();
-    }
-    _disposed = true;
-    super.dispose();
-  }
+//   /// Mark active TouchEvents as *dirty*, when the octave was changed
+//   /// preventing their position from being updated further in their lifetime.
+//   void markEventsDirty() {
+//     playModeHandler.markDirty();
+//   }
 
-  /// Mark active TouchEvents as *dirty*, when the octave was changed
-  /// preventing their position from being updated further in their lifetime.
-  void markEventsDirty() {
-    playModeHandler.markDirty();
-  }
+// // //////////////////////////////////////////////////////////////////////////////////////////
 
-// //////////////////////////////////////////////////////////////////////////////////////////
+//   /// Handles a new touch on a pad, creating and sending new noteOn events
+//   /// in the touch buffer
+//   void handleNewTouch(PadTouchAndScreenData data) {
+//     playModeHandler.handleNewTouch(data);
+//   }
 
-  /// Handles a new touch on a pad, creating and sending new noteOn events
-  /// in the touch buffer
-  void handleNewTouch(PadTouchAndScreenData data) {
-    playModeHandler.handleNewTouch(data);
-  }
+//   /// Handles sliding across pads in 'slide' mode
+//   void handlePan(NullableTouchAndScreenData data) {
+//     playModeHandler.handlePan(data);
+//   }
 
-  /// Handles sliding across pads in 'slide' mode
-  void handlePan(NullableTouchAndScreenData data) {
-    playModeHandler.handlePan(data);
-  }
-
-  /// Cleans up Touchevent, when contact with screen ends and the pointer is removed
-  /// Adds released events to a buffer when auto-sustain is being used
-  void handleEndTouch(CustomPointer touch) {
-    playModeHandler.handleEndTouch(touch);
-  }
-}
+//   /// Cleans up Touchevent, when contact with screen ends and the pointer is removed
+//   /// Adds released events to a buffer when auto-sustain is being used
+//   void handleEndTouch(CustomPointer touch) {
+//     playModeHandler.handleEndTouch(touch);
+//   }
+// }

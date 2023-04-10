@@ -1,6 +1,10 @@
 import 'package:beat_pads/services/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+final noteReleaseBuffer =
+    NotifierProvider.autoDispose<NoteReleaseBuffer, List<NoteEvent>>(
+        () => NoteReleaseBuffer());
+
 class NoteReleaseBuffer extends Notifier<List<NoteEvent>> {
   bool checkerRunning = false;
 

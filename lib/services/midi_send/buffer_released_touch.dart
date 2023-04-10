@@ -1,6 +1,10 @@
 import 'package:beat_pads/services/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+final touchReleaseBuffer =
+    NotifierProvider.autoDispose<TouchReleaseBuffer, List<TouchEvent>>(
+        () => TouchReleaseBuffer(releaseMPEChannel));
+
 /// Data Structure that holds released Touch Events
 class TouchReleaseBuffer extends Notifier<List<TouchEvent>> {
   final Function releaseMPEChannel;
