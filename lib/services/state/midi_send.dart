@@ -74,8 +74,11 @@ final combinedSettings = Provider.autoDispose<SendSettings>((ref) {
 });
 
 /// The usable sender object, which refreshes when any relevant setting changes
-final senderProvider = Provider.autoDispose<PlayModeHandler>((ref) {
-  return ref.watch(playModeProv).getPlayModeApi(ref.watch(combinedSettings));
+// final senderProvider = Provider.autoDispose<PlayModeHandler>((ref) {
+//   return ref.watch(playModeProv).getPlayModeApi());
+// });
+final senderProvider = NotifierProvider.autoDispose<PlayModeHandler>((ref) {
+  return ref.watch(playModeProv).getPlayModeApi());
 });
 
 // class MidiSender extends Notifier {

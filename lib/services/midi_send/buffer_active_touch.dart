@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 final touchBuffer = NotifierProvider.autoDispose<TouchBuffer, List<TouchEvent>>(
     () => TouchBuffer());
 
-class TouchBuffer extends Notifier<List<TouchEvent>> {
+class TouchBuffer extends AutoDisposeNotifier<List<TouchEvent>> {
   @override
   List<TouchEvent> build() {
     return [];
@@ -24,6 +24,15 @@ class TouchBuffer extends Notifier<List<TouchEvent>> {
   void remove(TouchEvent event) {
     state =
         state.where((element) => element.uniqueID != event.uniqueID).toList();
+  }
+
+  void allNotesOff() {
+    bool refresh = false;
+    for (var touch in state) {
+      if (touch.noteEvent.isPlaying) touch.noteEvent.noteOff();
+      refresh = true;
+    }
+    if (refresh) state = [...state];
   }
 
   /// Find and return a TouchEvent from the state by its uniqueID, if possible

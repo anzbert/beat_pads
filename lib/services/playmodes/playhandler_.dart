@@ -1,27 +1,15 @@
 import 'package:beat_pads/services/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+// Uses default PlayModeHandler behaviour
 class PlayModeNoSlide extends PlayModeHandler {
-  // PlayModeNoSlide(super.settings);
-
   @override
   build() {
-    // TODO: implement build
-    throw UnimplementedError();
+    return this;
   }
-  // Uses default PlayModeHandler behaviour
 }
 
 abstract class PlayModeHandler extends Notifier {
-  // PlayModeHandler(
-  //   this.settings,
-  // )   : touchBuffer = TouchBuffer(),
-  //       velocityProvider = VelocityProvider(settings) {
-  //   touchReleaseBuffer = TouchReleaseBuffer(
-  //     releaseMPEChannel,
-  //   );
-  // }
-
   void handleNewTouch(PadTouchAndScreenData data) {
     if (ref.read(modReleaseUsable) > 0 || ref.read(noteReleaseUsable) > 0) {
       ref
@@ -29,41 +17,40 @@ abstract class PlayModeHandler extends Notifier {
           .removeNoteFromReleaseBuffer(data.padNote);
     }
 
-    NoteEvent noteOn = NoteEvent(settings.channel, data.padNote,
+    NoteEvent noteOn = NoteEvent(ref.read(channelUsableProv), data.padNote,
         velocityProvider.velocity(data.yPercentage))
-      ..noteOn(cc: settings.sendCC);
+      ..noteOn(cc: ref.read(sendCCProv));
 
-    touchBuffer.addNoteOn(CustomPointer(data.pointer, data.screenTouchPos),
-        noteOn, data.screenSize);
+    ref.read(touchBuffer.notifier).addNoteOn(
+        CustomPointer(data.pointer, data.screenTouchPos),
+        noteOn,
+        data.screenSize);
   }
 
   void handlePan(NullableTouchAndScreenData data) {}
 
   void handleEndTouch(CustomPointer touch) {
-    TouchEvent? eventInBuffer = touchBuffer.getByID(touch.pointer);
+    TouchEvent? eventInBuffer =
+        ref.read(touchBuffer.notifier).getByID(touch.pointer);
     if (eventInBuffer == null) return;
 
-    if (settings.modReleaseTime == 0 && settings.noteReleaseTime == 0) {
+    if (ref.read(modReleaseUsable) == 0 && ref.read(noteReleaseUsable) == 0) {
       eventInBuffer.noteEvent.noteOff();
       releaseMPEChannel(eventInBuffer.noteEvent.channel);
-      touchBuffer.remove(eventInBuffer);
+      ref.read(touchBuffer.notifier).remove(eventInBuffer);
     } else {
-      if (settings.modReleaseTime == 0 && settings.noteReleaseTime > 0) {
+      if (ref.read(modReleaseUsable) == 0 && ref.read(noteReleaseUsable) > 0) {
         eventInBuffer.newPosition = eventInBuffer.origin; // mod to zero
       }
-      touchReleaseBuffer.updateReleasedEvent(
+      ref.read(touchReleaseBuffer.notifier).updateReleasedEvent(
           eventInBuffer); // instead of note off, event passed to release buffer
-      touchBuffer.remove(eventInBuffer);
+      ref.read(touchBuffer.notifier).remove(eventInBuffer);
     }
   }
 
   void killAllNotes() {
-    for (TouchEvent touch in touchBufsfer.buffer) {
-      if (touch.noteEvent.isPlaying) touch.noteEvent.noteOff();
-    }
-    for (TouchEvent touch in touchReleaseBuffer.buffer) {
-      if (touch.noteEvent.isPlaying) touch.noteEvent.noteOff();
-    }
+    ref.read(touchBuffer.notifier).allNotesOff();
+    ref.read(touchReleaseBuffer.notifier).allNotesOff();
   }
 
   void markDirty() {

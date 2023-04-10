@@ -5,7 +5,7 @@ final noteReleaseBuffer =
     NotifierProvider.autoDispose<NoteReleaseBuffer, List<NoteEvent>>(
         () => NoteReleaseBuffer());
 
-class NoteReleaseBuffer extends Notifier<List<NoteEvent>> {
+class NoteReleaseBuffer extends AutoDisposeNotifier<List<NoteEvent>> {
   bool checkerRunning = false;
 
   @override

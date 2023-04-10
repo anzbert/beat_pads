@@ -6,7 +6,7 @@ final touchReleaseBuffer =
         () => TouchReleaseBuffer(releaseMPEChannel));
 
 /// Data Structure that holds released Touch Events
-class TouchReleaseBuffer extends Notifier<List<TouchEvent>> {
+class TouchReleaseBuffer extends AutoDisposeNotifier<List<TouchEvent>> {
   final Function releaseMPEChannel;
   bool checkerRunning = false;
 
@@ -37,6 +37,15 @@ class TouchReleaseBuffer extends Notifier<List<TouchEvent>> {
 
   bool get hasActiveNotes {
     return state.any((element) => element.noteEvent.noteOnMessage != null);
+  }
+
+  void allNotesOff() {
+    bool refresh = false;
+    for (var touch in state) {
+      if (touch.noteEvent.isPlaying) touch.noteEvent.noteOff();
+      refresh = true;
+    }
+    if (refresh) state = [...state];
   }
 
   /// Update note in the released events buffer, by adding it or updating
