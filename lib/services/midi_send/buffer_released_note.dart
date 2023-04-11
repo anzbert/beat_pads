@@ -5,6 +5,7 @@ final noteReleaseBuffer =
     NotifierProvider.autoDispose<NoteReleaseBuffer, List<NoteEvent>>(
         () => NoteReleaseBuffer());
 
+/// Buffer for Notes that are no longer associated with a [TouchEvent]
 class NoteReleaseBuffer extends AutoDisposeNotifier<List<NoteEvent>> {
   bool checkerRunning = false;
 

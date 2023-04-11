@@ -153,8 +153,12 @@ class _SlidePadsState extends ConsumerState<SlidePads>
             return;
           }
           if (returnAnim.isCompleted) {
-            touchEvent.hasReturnAnimation = false;
-            touchEvent.markKillIfNoteOffAndNoAnimation();
+            ref
+                .read(touchReleaseBuffer.notifier)
+                .modifyEvent(returnAnim.uniqueID, (releasedTouchEvent) {
+              releasedTouchEvent.hasReturnAnimation = false;
+              releasedTouchEvent.markKillIfNoteOffAndNoAnimation();
+            });
             ref
                 .read(touchReleaseBuffer.notifier)
                 .killAllMarkedReleasedTouchEvents();
@@ -173,7 +177,10 @@ class _SlidePadsState extends ConsumerState<SlidePads>
           }
         });
 
-        event.hasReturnAnimation = true;
+        ref.read(touchReleaseBuffer.notifier).modifyEvent(touch.pointer,
+            (activeEvent) {
+          activeEvent.hasReturnAnimation = true;
+        });
         returnAnim.forward();
         _animations.add(returnAnim);
       }

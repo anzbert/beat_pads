@@ -71,11 +71,11 @@ class PlayModeSlide extends PlayModeHandler {
     ref.read(touchBuffer.notifier).modifyEvent(touch.pointer, (eventInBuffer) {
       if (ref.read(noteReleaseUsable) == 0) {
         eventInBuffer.noteEvent.noteOff(); // noteOFF
-        ref.read(touchBuffer.notifier).remove(eventInBuffer);
+        ref.read(touchBuffer.notifier).removeById(eventInBuffer.uniqueID);
       } else {
         ref.read(noteReleaseBuffer.notifier).updateReleasedNoteEvent(eventInBuffer
             .noteEvent); // instead of note off, event passed to release buffer
-        ref.read(touchBuffer.notifier).remove(eventInBuffer);
+        ref.read(touchBuffer.notifier).removeById(eventInBuffer.uniqueID);
       }
     });
   }

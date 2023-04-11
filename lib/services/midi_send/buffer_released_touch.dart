@@ -22,7 +22,7 @@ class TouchReleaseBuffer extends TouchBufferBase {
     return false;
   }
 
-  bool get hasActiveNotes {
+  bool get _hasActiveNotes {
     return state.any((element) => element.noteEvent.noteOnMessage != null);
   }
 
@@ -50,7 +50,7 @@ class TouchReleaseBuffer extends TouchBufferBase {
     if (checkerRunning) return; // only one running instance possible!
     checkerRunning = true;
 
-    while (hasActiveNotes) {
+    while (_hasActiveNotes) {
       await Future.delayed(
         const Duration(milliseconds: 5),
         () {

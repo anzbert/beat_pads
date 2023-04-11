@@ -11,7 +11,7 @@ class TouchBuffer extends TouchBufferBase {
     return [];
   }
 
-  /// Add touchevent with noteevent to state
+  /// Add [TouchEvent] with a [NoteEvent] to the buffers state
   void addNoteOn(CustomPointer touch, NoteEvent noteEvent, Size screenSize) {
     state = [
       ...state,
@@ -20,12 +20,7 @@ class TouchBuffer extends TouchBufferBase {
     ];
   }
 
-  /// Remove touchevent from state
-  void remove(TouchEvent event) {
-    state =
-        state.where((element) => element.uniqueID != event.uniqueID).toList();
-  }
-
+  /// Remove a [TouchEvent] from the state, by its id number
   void removeById(int id) {
     state = state.where((element) => element.uniqueID != id).toList();
   }

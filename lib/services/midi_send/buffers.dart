@@ -1,8 +1,19 @@
-import 'package:beat_pads/services/classes/event_touch.dart';
 import 'package:beat_pads/services/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+/// Base Class used for the active and released touch buffer
 abstract class TouchBufferBase extends AutoDisposeNotifier<List<TouchEvent>> {
+  /// Use to find and read an event in the buffer, don't use it to modify this event, but
+  /// use [modifyEvent] instead.
+  TouchEvent? getByID(int id) {
+    for (TouchEvent event in state) {
+      if (event.uniqueID == id) {
+        return event;
+      }
+    }
+    return null;
+  }
+
   // Find and return a TouchEvent from the buffer by its uniqueID, if possible
   bool eventInBuffer(int id) {
     for (TouchEvent event in state) {
@@ -13,7 +24,7 @@ abstract class TouchBufferBase extends AutoDisposeNotifier<List<TouchEvent>> {
     return false;
   }
 
-  /// Find and return a TouchEvent from the state by its uniqueID, if possible
+  /// Get an event and modify it, if it is available in the buffer
   bool modifyEvent(int id, void Function(TouchEvent eventInBuffer) modify) {
     for (TouchEvent event in state) {
       if (event.uniqueID == id) {
@@ -25,6 +36,7 @@ abstract class TouchBufferBase extends AutoDisposeNotifier<List<TouchEvent>> {
     return false;
   }
 
+  /// Get the Velocity of a note in the buffer. Returns 0 if the note is off
   int isNoteOn(int note) {
     for (TouchEvent touch in state) {
       if (touch.noteEvent.note == note && touch.noteEvent.isPlaying) {
@@ -34,12 +46,15 @@ abstract class TouchBufferBase extends AutoDisposeNotifier<List<TouchEvent>> {
     return 0;
   }
 
+  /// Prevents all touchevents in the buffer from receiving further position
+  /// updates in [handlePan]. Irreversible!
   void markDirty() {
     for (var touch in state) {
       touch.markDirty();
     }
   }
 
+  /// Send a NoteOff to all playing notes in the buffer
   void allNotesOff() {
     bool refresh = false;
     for (var touch in state) {
