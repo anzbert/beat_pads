@@ -5,3 +5,4 @@ export '../classes/event_note.dart';
 export '../classes/event_touch.dart';
 export 'mpe_channel_provider.dart';
 export 'velocity_provider.dart';
+export './buffers.dart';

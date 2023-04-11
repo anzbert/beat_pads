@@ -51,31 +51,55 @@ class PlayModeMPE extends PlayModeHandler {
   @override
   // void handlePan(CustomPointer touch, int? note) {
   void handlePan(NullableTouchAndScreenData data) {
-    TouchEvent? eventInBuffer =
-        ref.read(touchBuffer.notifier).getByID(data.pointer) ??
-            ref.read(touchReleaseBuffer.notifier).getByID(data.pointer);
-    if (eventInBuffer == null) return;
+    if (ref.read(touchBuffer.notifier).eventInBuffer(data.pointer)) {
+      ref.read(touchBuffer.notifier).modifyEvent(data.pointer, (eventInBuffer) {
+        eventInBuffer.updatePosition(data.screenTouchPos);
 
-    eventInBuffer.updatePosition(data.screenTouchPos);
-    // notifyParent(); // for circle drawing
+        if (ref.read(modulation2DProv)) {
+          mpeMods.xMod.send(
+            eventInBuffer.noteEvent.channel,
+            eventInBuffer.noteEvent.note,
+            eventInBuffer.directionalChangeFromCenter().dx,
+          );
+          mpeMods.yMod.send(
+            eventInBuffer.noteEvent.channel,
+            eventInBuffer.noteEvent.note,
+            eventInBuffer.directionalChangeFromCenter().dy,
+          );
+        } else {
+          mpeMods.rMod.send(
+            eventInBuffer.noteEvent.channel,
+            eventInBuffer.noteEvent.note,
+            eventInBuffer.radialChange(),
+          );
+        }
+      });
+    } else if (ref
+        .read(touchReleaseBuffer.notifier)
+        .eventInBuffer(data.pointer)) {
+      ref.read(touchReleaseBuffer.notifier).modifyEvent(data.pointer,
+          (eventInBuffer) {
+        eventInBuffer.updatePosition(data.screenTouchPos);
 
-    if (ref.read(modulation2DProv)) {
-      mpeMods.xMod.send(
-        eventInBuffer.noteEvent.channel,
-        eventInBuffer.noteEvent.note,
-        eventInBuffer.directionalChangeFromCenter().dx,
-      );
-      mpeMods.yMod.send(
-        eventInBuffer.noteEvent.channel,
-        eventInBuffer.noteEvent.note,
-        eventInBuffer.directionalChangeFromCenter().dy,
-      );
-    } else {
-      mpeMods.rMod.send(
-        eventInBuffer.noteEvent.channel,
-        eventInBuffer.noteEvent.note,
-        eventInBuffer.radialChange(),
-      );
+        if (ref.read(modulation2DProv)) {
+          mpeMods.xMod.send(
+            eventInBuffer.noteEvent.channel,
+            eventInBuffer.noteEvent.note,
+            eventInBuffer.directionalChangeFromCenter().dx,
+          );
+          mpeMods.yMod.send(
+            eventInBuffer.noteEvent.channel,
+            eventInBuffer.noteEvent.note,
+            eventInBuffer.directionalChangeFromCenter().dy,
+          );
+        } else {
+          mpeMods.rMod.send(
+            eventInBuffer.noteEvent.channel,
+            eventInBuffer.noteEvent.note,
+            eventInBuffer.radialChange(),
+          );
+        }
+      });
     }
   }
 }

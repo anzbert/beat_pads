@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 final touchBuffer = NotifierProvider.autoDispose<TouchBuffer, List<TouchEvent>>(
     () => TouchBuffer());
 
-class TouchBuffer extends AutoDisposeNotifier<List<TouchEvent>> {
+class TouchBuffer extends TouchBufferBase {
   @override
   List<TouchEvent> build() {
     return [];
@@ -26,40 +26,9 @@ class TouchBuffer extends AutoDisposeNotifier<List<TouchEvent>> {
         state.where((element) => element.uniqueID != event.uniqueID).toList();
   }
 
-  void allNotesOff() {
-    bool refresh = false;
-    for (var touch in state) {
-      if (touch.noteEvent.isPlaying) touch.noteEvent.noteOff();
-      refresh = true;
-    }
-    if (refresh) state = [...state];
+  void removeById(int id) {
+    state = state.where((element) => element.uniqueID != id).toList();
   }
-
-  void markDirty() {
-    for (var touch in state) {
-      touch.markDirty();
-    }
-  }
-
-  int isNoteOn(int note) {
-    for (TouchEvent touch in state) {
-      if (touch.noteEvent.note == note && touch.noteEvent.isPlaying) {
-        return touch.noteEvent.velocity;
-      }
-    }
-    return 0;
-  }
-
-  /// Find and return a TouchEvent from the state by its uniqueID, if possible
-
-  // TouchEvent? getByID(int id) {
-  //   for (TouchEvent event in state) {
-  //     if (event.uniqueID == id) {
-  //       return event;
-  //     }
-  //   }
-  //   return null;
-  // }
 
   /// Get an average radial change from all currently active notes.
   /// This is a common method to determine Channel Pressure

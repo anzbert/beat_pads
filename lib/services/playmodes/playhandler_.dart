@@ -38,21 +38,27 @@ abstract class PlayModeHandler {
   void handlePan(NullableTouchAndScreenData data) {}
 
   void handleEndTouch(CustomPointer touch) {
-    TouchEvent? eventInBuffer =
-        ref.read(touchBuffer.notifier).getByID(touch.pointer);
-    if (eventInBuffer == null) return;
+    bool eventInBuffer =
+        ref.read(touchBuffer.notifier).eventInBuffer(touch.pointer);
+    if (!eventInBuffer) return;
 
     if (ref.read(modReleaseUsable) == 0 && ref.read(noteReleaseUsable) == 0) {
-      eventInBuffer.noteEvent.noteOff();
-      releaseMPEChannel(eventInBuffer.noteEvent.channel);
-      ref.read(touchBuffer.notifier).remove(eventInBuffer);
+      ref.read(touchBuffer.notifier).modifyEvent(touch.pointer, (event) {
+        event.noteEvent.noteOff();
+        releaseMPEChannel(event.noteEvent.channel);
+      });
+
+      ref.read(touchBuffer.notifier).removeById(touch.pointer);
     } else {
       if (ref.read(modReleaseUsable) == 0 && ref.read(noteReleaseUsable) > 0) {
-        eventInBuffer.newPosition = eventInBuffer.origin; // mod to zero
+        ref.read(touchBuffer.notifier).modifyEvent(touch.pointer,
+            (eventInBuffer) {
+          eventInBuffer.newPosition = eventInBuffer.origin; // mod to zero
+          ref.read(touchReleaseBuffer.notifier).updateReleasedEvent(
+              eventInBuffer); // instead of note off, event passed to release buffer
+        });
       }
-      ref.read(touchReleaseBuffer.notifier).updateReleasedEvent(
-          eventInBuffer); // instead of note off, event passed to release buffer
-      ref.read(touchBuffer.notifier).remove(eventInBuffer);
+      ref.read(touchBuffer.notifier).removeById(touch.pointer);
     }
   }
 

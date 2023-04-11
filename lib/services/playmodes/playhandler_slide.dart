@@ -26,58 +26,58 @@ class PlayModeSlide extends PlayModeHandler {
 
   @override
   void handlePan(NullableTouchAndScreenData data) {
-    TouchEvent? eventInBuffer =
-        ref.read(touchBuffer.notifier).getByID(data.pointer);
-    if (eventInBuffer == null || eventInBuffer.dirty) return;
-
     // Turn note off:
-    if (data.padNote != eventInBuffer.noteEvent.note &&
-        eventInBuffer.noteEvent.noteOnMessage != null) {
-      if (ref.read(noteReleaseUsable) == 0) {
-        eventInBuffer.noteEvent.noteOff(); // turn note off immediately
-      } else {
-        ref.read(noteReleaseBuffer.notifier).updateReleasedNoteEvent(
-              NoteEvent(
-                eventInBuffer.noteEvent.channel,
-                eventInBuffer.noteEvent.note,
-                eventInBuffer.noteEvent.noteOnMessage?.velocity ??
-                    ref
-                        .read(velocitySliderValueProv.notifier)
-                        .velocity(data.yPercentage ?? .5),
-              ),
-            ); // add note event to release buffer
-        eventInBuffer.noteEvent.clear();
+    ref.read(touchBuffer.notifier).modifyEvent(data.pointer, (eventInBuffer) {
+      if (eventInBuffer.dirty) return;
+
+      if (data.padNote != eventInBuffer.noteEvent.note &&
+          eventInBuffer.noteEvent.noteOnMessage != null) {
+        if (ref.read(noteReleaseUsable) == 0) {
+          eventInBuffer.noteEvent.noteOff(); // turn note off immediately
+        } else {
+          ref.read(noteReleaseBuffer.notifier).updateReleasedNoteEvent(
+                NoteEvent(
+                  eventInBuffer.noteEvent.channel,
+                  eventInBuffer.noteEvent.note,
+                  eventInBuffer.noteEvent.noteOnMessage?.velocity ??
+                      ref
+                          .read(velocitySliderValueProv.notifier)
+                          .velocity(data.yPercentage ?? .5),
+                ),
+              ); // add note event to release buffer
+          eventInBuffer.noteEvent.clear();
+        }
+
+        // Play new note:
+        if (data.padNote != null &&
+            eventInBuffer.noteEvent.noteOnMessage == null) {
+          eventInBuffer.noteEvent = NoteEvent(
+              ref.read(channelUsableProv),
+              data.padNote!,
+              ref
+                  .read(velocitySliderValueProv.notifier)
+                  .velocity(data.yPercentage ?? .5))
+            ..noteOn(
+                cc: ref.read(playModeProv).singleChannel
+                    ? ref.read(sendCCProv)
+                    : false);
+        }
       }
-    }
-    // Play new note:
-    if (data.padNote != null && eventInBuffer.noteEvent.noteOnMessage == null) {
-      eventInBuffer.noteEvent = NoteEvent(
-          ref.read(channelUsableProv),
-          data.padNote!,
-          ref
-              .read(velocitySliderValueProv.notifier)
-              .velocity(data.yPercentage ?? .5))
-        ..noteOn(
-            cc: ref.read(playModeProv).singleChannel
-                ? ref.read(sendCCProv)
-                : false);
-    }
+    });
   }
 
   @override
   void handleEndTouch(CustomPointer touch) {
-    TouchEvent? eventInBuffer =
-        ref.read(touchBuffer.notifier).getByID(touch.pointer);
-    if (eventInBuffer == null) return;
-
-    if (ref.read(noteReleaseUsable) == 0) {
-      eventInBuffer.noteEvent.noteOff(); // noteOFF
-      ref.read(touchBuffer.notifier).remove(eventInBuffer);
-    } else {
-      ref.read(noteReleaseBuffer.notifier).updateReleasedNoteEvent(eventInBuffer
-          .noteEvent); // instead of note off, event passed to release buffer
-      ref.read(touchBuffer.notifier).remove(eventInBuffer);
-    }
+    ref.read(touchBuffer.notifier).modifyEvent(touch.pointer, (eventInBuffer) {
+      if (ref.read(noteReleaseUsable) == 0) {
+        eventInBuffer.noteEvent.noteOff(); // noteOFF
+        ref.read(touchBuffer.notifier).remove(eventInBuffer);
+      } else {
+        ref.read(noteReleaseBuffer.notifier).updateReleasedNoteEvent(eventInBuffer
+            .noteEvent); // instead of note off, event passed to release buffer
+        ref.read(touchBuffer.notifier).remove(eventInBuffer);
+      }
+    });
   }
 
   /// Returns the velocity if a given note is ON in any channel, or, if provided, in a specific channel.

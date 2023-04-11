@@ -6,25 +6,13 @@ final touchReleaseBuffer =
         () => TouchReleaseBuffer());
 
 /// Data Structure that holds released Touch Events
-class TouchReleaseBuffer extends AutoDisposeNotifier<List<TouchEvent>> {
+class TouchReleaseBuffer extends TouchBufferBase {
   bool checkerRunning = false;
-
-  TouchReleaseBuffer();
 
   @override
   List<TouchEvent> build() {
     return [];
   }
-
-  /// Find and return a TouchEvent from the buffer by its uniqueID, if possible
-  // TouchEvent? getByID(int id) {
-  //   for (TouchEvent event in state) {
-  //     if (event.uniqueID == id) {
-  //       return event;
-  //     }
-  //   }
-  //   return null;
-  // }
 
   bool isNoteInBuffer(int? note) {
     if (note == null) return false;
@@ -36,30 +24,6 @@ class TouchReleaseBuffer extends AutoDisposeNotifier<List<TouchEvent>> {
 
   bool get hasActiveNotes {
     return state.any((element) => element.noteEvent.noteOnMessage != null);
-  }
-
-  void allNotesOff() {
-    bool refresh = false;
-    for (var touch in state) {
-      if (touch.noteEvent.isPlaying) touch.noteEvent.noteOff();
-      refresh = true;
-    }
-    if (refresh) state = [...state];
-  }
-
-  int isNoteOn(int note) {
-    for (TouchEvent touch in state) {
-      if (touch.noteEvent.note == note && touch.noteEvent.isPlaying) {
-        return touch.noteEvent.velocity;
-      }
-    }
-    return 0;
-  }
-
-  void markDirty() {
-    for (var touch in state) {
-      touch.markDirty();
-    }
   }
 
   /// Update note in the released events buffer, by adding it or updating
