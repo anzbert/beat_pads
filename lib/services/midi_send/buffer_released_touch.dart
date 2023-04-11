@@ -3,14 +3,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final touchReleaseBuffer =
     NotifierProvider.autoDispose<TouchReleaseBuffer, List<TouchEvent>>(
-        () => TouchReleaseBuffer(releaseMPEChannel));
+        () => TouchReleaseBuffer());
 
 /// Data Structure that holds released Touch Events
 class TouchReleaseBuffer extends AutoDisposeNotifier<List<TouchEvent>> {
-  final Function releaseMPEChannel;
   bool checkerRunning = false;
 
-  TouchReleaseBuffer(this.releaseMPEChannel);
+  TouchReleaseBuffer();
 
   @override
   List<TouchEvent> build() {
@@ -71,7 +70,9 @@ class TouchReleaseBuffer extends AutoDisposeNotifier<List<TouchEvent>> {
 
     if (index >= 0) {
       state[index].noteEvent.updateReleaseTime(); // update time
-      releaseMPEChannel(state[index].noteEvent.channel);
+      ref
+          .read(mpeChannelProv.notifier)
+          .releaseMPEChannel(state[index].noteEvent.channel);
       state[index].noteEvent.updateMPEchannel(event.noteEvent.channel);
       state = [...state];
     } else {
@@ -95,7 +96,7 @@ class TouchReleaseBuffer extends AutoDisposeNotifier<List<TouchEvent>> {
                 ref.read(noteReleaseUsable)) {
               state[i].noteEvent.noteOff(); // note OFF
 
-              releaseMPEChannel(
+              ref.read(mpeChannelProv.notifier).releaseMPEChannel(
                   state[i].noteEvent.channel); // release MPE channel
 
               state[i]
@@ -113,7 +114,9 @@ class TouchReleaseBuffer extends AutoDisposeNotifier<List<TouchEvent>> {
   void removeNoteFromReleaseBuffer(int note) {
     for (var element in state) {
       if (element.noteEvent.note == note) {
-        releaseMPEChannel(element.noteEvent.channel);
+        ref
+            .read(mpeChannelProv.notifier)
+            .releaseMPEChannel(element.noteEvent.channel);
       }
     }
     if (state.any((element) => element.noteEvent.note == note)) {

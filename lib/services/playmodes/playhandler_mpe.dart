@@ -2,21 +2,18 @@ import 'package:beat_pads/services/services.dart';
 
 class PlayModeMPE extends PlayModeHandler {
   final SendMpe mpeMods;
-  final MemberChannelProvider channelProvider;
 
   PlayModeMPE(super.ref)
       : mpeMods = SendMpe(
           ref.read(mpe2DXProv).getMod(ref.read(mpePitchbendRangeProv)),
           ref.read(mpe2DYProv).getMod(ref.read(mpePitchbendRangeProv)),
           ref.read(mpe1DRadiusProv).getMod(ref.read(mpePitchbendRangeProv)),
-        ),
-        channelProvider =
-            MemberChannelProvider(settings.zone, settings.mpeMemberChannels);
+        );
 
   /// Release channel in MPE channel provider
   @override
   void releaseMPEChannel(int channel) {
-    channelProvider.releaseMPEChannel(channel);
+    ref.read(mpeChannelProv.notifier).releaseMPEChannel(channel);
   }
 
   @override
@@ -28,7 +25,7 @@ class PlayModeMPE extends PlayModeHandler {
           .removeNoteFromReleaseBuffer(data.padNote);
     }
 
-    int newChannel = channelProvider.provideChannel([
+    int newChannel = ref.read(mpeChannelProv.notifier).provideChannel([
       ...ref.read(touchBuffer),
       ...ref.read(touchReleaseBuffer)
     ]); // get new channel from generator

@@ -1,5 +1,6 @@
 import 'dart:collection';
 import 'package:beat_pads/services/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 // import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /*
@@ -7,19 +8,27 @@ FROM SPECS:
 In the simplest workable implementation, a new note will be assigned to the Channel with the lowest count of active notes. Then, all else being equal, the Channel with the oldest last Note Off would be preferred. This set of rules has at least one working real-world implementation.
 */
 
-class MemberChannelProvider {
-  final bool upperZone;
-  final int members;
+final mpeChannelProv =
+    NotifierProvider<MemberChannelProvider, int>(() => MemberChannelProvider());
 
-  final List<int> allMemberChannels;
-  final Queue<int> channelQueue;
+class MemberChannelProvider extends Notifier<int> {
+  Queue<int> channelQueue = Queue();
+  List<int> allMemberChannels = [];
 
-  MemberChannelProvider(this.upperZone, this.members)
-      : allMemberChannels = List.generate(
-            members, (i) => i + (upperZone ? 15 - members : 1),
-            growable: false),
-        channelQueue = Queue.from(
-            List.generate(members, (i) => i + (upperZone ? 15 - members : 1)));
+  MemberChannelProvider();
+
+  @override
+  int build() {
+    allMemberChannels = List.generate(
+        ref.read(mpeMemberChannelsProv),
+        (i) =>
+            i +
+            (ref.watch(zoneProv) ? 15 - ref.watch(mpeMemberChannelsProv) : 1),
+        growable: false);
+    channelQueue = Queue.from(allMemberChannels);
+
+    return 0;
+  }
 
   void releaseMPEChannel(int channel) {
     if (!channelQueue.contains(channel)) {
