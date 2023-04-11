@@ -5,7 +5,7 @@ final noteReleaseBuffer =
     NotifierProvider.autoDispose<NoteReleaseBuffer, List<NoteEvent>>(
         () => NoteReleaseBuffer());
 
-/// Buffer for Notes that are no longer associated with a [TouchEvent]
+/// Buffer for [NoteEvent]s that are no longer associated with a [TouchEvent]
 class NoteReleaseBuffer extends AutoDisposeNotifier<List<NoteEvent>> {
   bool checkerRunning = false;
 
@@ -26,10 +26,10 @@ class NoteReleaseBuffer extends AutoDisposeNotifier<List<NoteEvent>> {
       event.updateReleaseTime();
       state = [...state, event];
     }
-    if (state.isNotEmpty) checkReleasedNoteEvents();
+    if (state.isNotEmpty) _checkReleasedNoteEvents();
   }
 
-  void checkReleasedNoteEvents() async {
+  void _checkReleasedNoteEvents() async {
     if (checkerRunning) return; // only one running instance possible!
     checkerRunning = true;
 

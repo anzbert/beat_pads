@@ -7,21 +7,14 @@ final touchReleaseBuffer =
 
 /// Data Structure that holds released Touch Events
 class TouchReleaseBuffer extends TouchBufferBase {
-  bool checkerRunning = false;
+  bool _checkerRunning = false;
 
   @override
   List<TouchEvent> build() {
     return [];
   }
 
-  bool isNoteInBuffer(int? note) {
-    if (note == null) return false;
-    for (var event in state) {
-      if (event.noteEvent.note == note) return true;
-    }
-    return false;
-  }
-
+  /// Check if any of the [TouchEvent]s currently contain an active note
   bool get _hasActiveNotes {
     return state.any((element) => element.noteEvent.noteOnMessage != null);
   }
@@ -43,12 +36,12 @@ class TouchReleaseBuffer extends TouchBufferBase {
       event.noteEvent.updateReleaseTime();
       state = [...state, event];
     }
-    if (state.isNotEmpty) checkReleasedEvents();
+    if (state.isNotEmpty) _checkReleasedEvents();
   }
 
-  void checkReleasedEvents() async {
-    if (checkerRunning) return; // only one running instance possible!
-    checkerRunning = true;
+  void _checkReleasedEvents() async {
+    if (_checkerRunning) return; // only one running instance possible!
+    _checkerRunning = true;
 
     while (_hasActiveNotes) {
       await Future.delayed(
@@ -72,9 +65,10 @@ class TouchReleaseBuffer extends TouchBufferBase {
         },
       );
     }
-    checkerRunning = false;
+    _checkerRunning = false;
   }
 
+  /// Removes a Note by its midi value from this buffer
   void removeNoteFromReleaseBuffer(int note) {
     for (var element in state) {
       if (element.noteEvent.note == note) {
@@ -88,9 +82,18 @@ class TouchReleaseBuffer extends TouchBufferBase {
     }
   }
 
+  /// Remove all [TouchEvent]s that have been marked to be discarded from the buffer
   void killAllMarkedReleasedTouchEvents() {
-    if (state.any((element) => element.kill)) {
+    if (state.any((TouchEvent element) => element.kill)) {
       state = state.where((element) => !element.kill).toList();
     }
   }
+
+  // bool isNoteInBuffer(int? note) {
+  //   if (note == null) return false;
+  //   for (var event in state) {
+  //     if (event.noteEvent.note == note) return true;
+  //   }
+  //   return false;
+  // }
 }
