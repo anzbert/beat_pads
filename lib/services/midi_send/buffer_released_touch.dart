@@ -88,12 +88,4 @@ class TouchReleaseBuffer extends TouchBufferBase {
       state = state.where((element) => !element.kill).toList();
     }
   }
-
-  // bool isNoteInBuffer(int? note) {
-  //   if (note == null) return false;
-  //   for (var event in state) {
-  //     if (event.noteEvent.note == note) return true;
-  //   }
-  //   return false;
-  // }
 }

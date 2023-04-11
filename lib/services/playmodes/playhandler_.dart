@@ -67,6 +67,7 @@ abstract class PlayModeHandler {
     ref.read(touchReleaseBuffer.notifier).allNotesOff();
   }
 
+  /// Prevent further input to all currently touched notes
   void markDirty() {
     ref.read(touchBuffer.notifier).markDirty();
     ref.read(touchReleaseBuffer.notifier).markDirty();
