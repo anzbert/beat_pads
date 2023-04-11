@@ -58,17 +58,9 @@ class _SliderVelocityState extends ConsumerState<SliderVelocity> {
               child: Slider(
                 min: 10,
                 max: 127,
-                value: ref
-                    .watch(senderProvider.select((value) =>
-                        value.playModeHandler.velocityProvider.velocityFixed))
-                    .clamp(10, 127)
-                    .toDouble(),
-                onChanged: (v) {
-                  ref
-                      .read(senderProvider.notifier)
-                      .playModeHandler
-                      .velocityProvider
-                      .velocityFixed = v.toInt();
+                value: ref.watch(velocitySliderValueProv).clamp(10, 127),
+                onChanged: (double v) {
+                  ref.read(velocitySliderValueProv.notifier).set(v);
                 },
                 onChangeEnd: (_) {},
               ),
@@ -78,24 +70,15 @@ class _SliderVelocityState extends ConsumerState<SliderVelocity> {
           Flexible(
             flex: 30,
             child: ThemedSlider(
-              range: ref.watch(senderProvider.select((value) =>
-                  value.playModeHandler.velocityProvider.velocityRange)),
+              range: ref.watch(velocityRangeProv),
               thumbColor: Palette.cadetBlue,
               child: Slider(
-                min: 10,
-                max: 127,
-                value: ref
-                    .watch(senderProvider.select((value) => value
-                        .playModeHandler.velocityProvider.velocityRandomCenter))
-                    .clamp(10, 127),
-                onChanged: (v) {
-                  ref
-                      .read(senderProvider.notifier)
-                      .playModeHandler
-                      .velocityProvider
-                      .velocityRandomCenter = v;
-                },
-              ),
+                  min: 10,
+                  max: 127,
+                  value: ref.watch(velocitySliderValueProv).clamp(10, 127),
+                  onChanged: (double v) {
+                    ref.read(velocitySliderValueProv.notifier).set(v);
+                  }),
             ),
           ),
         Center(
@@ -120,9 +103,10 @@ class _SliderVelocityState extends ConsumerState<SliderVelocity> {
                       Flexible(
                         flex: 2,
                         child: Text(
-                            ref.watch(velocityModeProv) != VelocityMode.fixed
-                                ? "${ref.watch(senderProvider.select((value) => value.playModeHandler.velocityProvider.velocityRandomCenter)).round()}"
-                                : "${ref.watch(senderProvider.select((value) => value.playModeHandler.velocityProvider.velocityFixed))}",
+                            ref
+                                .watch(velocitySliderValueProv.notifier)
+                                .asInt
+                                .toString(),
                             style: DefaultTextStyle.of(context).style.copyWith(
                                   fontSize:
                                       constraints.maxWidth * fontSizeFactor,
@@ -135,7 +119,7 @@ class _SliderVelocityState extends ConsumerState<SliderVelocity> {
                             ? Align(
                                 alignment: Alignment.centerRight,
                                 child: Text(
-                                  "${String.fromCharCode(177)}${ref.watch(senderProvider.select((value) => value.playModeHandler.velocityProvider.velocityRange)) ~/ 2}",
+                                  "${String.fromCharCode(177)}${ref.watch(velocityRangeProv) ~/ 2}",
                                   style: TextStyle(
                                     fontSize: constraints.maxWidth *
                                         fontSizeFactor *

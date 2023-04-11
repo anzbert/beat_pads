@@ -81,7 +81,7 @@ class _SlidePadsState extends ConsumerState<SlidePads>
           padNote: result.padId,
           yPercentage: result.yPercentage);
 
-      ref.read<MidiSender>(senderProvider.notifier).handleNewTouch(data);
+      ref.read(senderProvider).handleNewTouch(data);
     }
   }
 
@@ -92,7 +92,7 @@ class _SlidePadsState extends ConsumerState<SlidePads>
 
     if (mounted) {
       PadAndTouchData? data = _detectTappedItem(touch);
-      ref.read(senderProvider.notifier).handlePan(NullableTouchAndScreenData(
+      ref.read(senderProvider).handlePan(NullableTouchAndScreenData(
           pointer: touch.pointer,
           padNote: data?.padId,
           yPercentage: data?.yPercentage,
@@ -103,16 +103,13 @@ class _SlidePadsState extends ConsumerState<SlidePads>
   upAndCancel(PointerEvent touch) {
     if (mounted) {
       ref
-          .read(senderProvider.notifier)
+          .read(senderProvider)
           .handleEndTouch(CustomPointer(touch.pointer, touch.position));
 
       if (ref.read(modReleaseUsable) > 0 &&
           ref.read(playModeProv).modulatable) {
-        TouchEvent? event = ref
-            .read(senderProvider.notifier)
-            .playModeHandler
-            .touchReleaseBuffer
-            .getByID(touch.pointer);
+        TouchEvent? event =
+            ref.read(touchReleaseBuffer.notifier).getByID(touch.pointer);
         if (event == null || event.newPosition == event.origin) return;
 
         ReturnAnimation returnAnim = ReturnAnimation(
@@ -130,12 +127,9 @@ class _SlidePadsState extends ConsumerState<SlidePads>
                 event.origin, touch.position, absoluteMaxRadius);
 
         returnAnim.animation.addListener(() {
-          TouchReleaseBuffer touchReleaseBuffer = ref
-              .read(senderProvider.notifier)
-              .playModeHandler
-              .touchReleaseBuffer;
-          TouchEvent? touchEvent =
-              touchReleaseBuffer.getByID(returnAnim.uniqueID);
+          TouchEvent? touchEvent = ref
+              .read(touchReleaseBuffer.notifier)
+              .getByID(returnAnim.uniqueID);
 
           if (!mounted || touchEvent == null) {
             returnAnim.markKillAndDisposeController();
@@ -145,19 +139,20 @@ class _SlidePadsState extends ConsumerState<SlidePads>
           if (returnAnim.isCompleted) {
             touchEvent.hasReturnAnimation = false;
             touchEvent.markKillIfNoteOffAndNoAnimation();
-            touchReleaseBuffer.killAllMarkedReleasedTouchEvents();
+            ref
+                .read(touchReleaseBuffer.notifier)
+                .killAllMarkedReleasedTouchEvents();
 
             returnAnim.markKillAndDisposeController();
             killAllMarkedAnimations();
             return;
           } else {
-            ref.read(senderProvider.notifier).handlePan(
-                NullableTouchAndScreenData(
-                    pointer: touch.pointer,
-                    padNote: null,
-                    yPercentage: null,
-                    screenTouchPos: Offset.lerp(
-                        constrainedPosition, event.origin, returnAnim.value)!));
+            ref.read(senderProvider).handlePan(NullableTouchAndScreenData(
+                pointer: touch.pointer,
+                padNote: null,
+                yPercentage: null,
+                screenTouchPos: Offset.lerp(
+                    constrainedPosition, event.origin, returnAnim.value)!));
             setState(() {});
           }
         });

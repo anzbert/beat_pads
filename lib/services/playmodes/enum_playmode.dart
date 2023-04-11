@@ -1,4 +1,5 @@
 import 'package:beat_pads/services/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 enum PlayMode {
   slide("Trigger Notes"),
@@ -37,16 +38,16 @@ enum PlayMode {
     return true;
   }
 
-  PlayModeHandler getPlayModeApi(SendSettings settings) {
+  PlayModeHandler getPlayModeApi(ProviderRef<PlayModeHandler> ref) {
     switch (this) {
       case PlayMode.mpe:
-        return PlayModeMPE(settings);
+        return PlayModeMPE(ref);
       case PlayMode.noSlide:
-        return PlayModeNoSlide(settings);
+        return PlayModeNoSlide(ref);
       case PlayMode.slide:
-        return PlayModeSlide(settings);
+        return PlayModeSlide(ref);
       case PlayMode.polyAT:
-        return PlayModePolyAT(settings);
+        return PlayModePolyAT(ref);
     }
   }
 }

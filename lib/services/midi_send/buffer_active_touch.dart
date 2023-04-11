@@ -35,6 +35,21 @@ class TouchBuffer extends AutoDisposeNotifier<List<TouchEvent>> {
     if (refresh) state = [...state];
   }
 
+  void markDirty() {
+    for (var touch in state) {
+      touch.markDirty();
+    }
+  }
+
+  int isNoteOn(int note) {
+    for (TouchEvent touch in state) {
+      if (touch.noteEvent.note == note && touch.noteEvent.isPlaying) {
+        return touch.noteEvent.velocity;
+      }
+    }
+    return 0;
+  }
+
   /// Find and return a TouchEvent from the state by its uniqueID, if possible
   TouchEvent? getByID(int id) {
     for (TouchEvent event in state) {

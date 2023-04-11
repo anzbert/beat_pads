@@ -19,8 +19,7 @@ class SlideBeatPad extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final double screenWidth = MediaQuery.of(context).size.width;
 
-    final int velocity =
-        ref.watch(senderProvider).playModeHandler.isNoteOn(note);
+    final int velocity = ref.watch(senderProvider).isNoteOn(note);
 
     final Color color = ref.watch(padColorsProv).colorize(
           ref.watch(scaleProv).intervals,

@@ -6,79 +6,81 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 // for improved clarity and expandability.
 // TODO Refactor! Replace outdated ChangeNotifier with new Riverpod Notifiers. Extract parts into seperate providers.
 
-class SendSettings {
-  final PlayMode playMode;
-  final int channel;
-  final double modulationRadius;
-  final double modulationDeadZone;
-  final int mpeMemberChannels;
-  final bool zone;
-  final bool sendCC;
-  final int noteReleaseTime;
-  final int modReleaseTime;
-  final MPEmods mpe1DRadius;
-  final MPEmods mpe2DX;
-  final MPEmods mpe2DY;
-  final int mpePitchbendRange;
-  final bool modulation2D;
-  final int velocityRange;
-  final int velocity;
-  final double velocityCenter;
-  final VelocityMode velocityMode;
+// class SendSettings {
+//   final PlayMode playMode;
+//   final int channel;
+//   final double modulationRadius;
+//   final double modulationDeadZone;
+//   final int mpeMemberChannels;
+//   final bool zone;
+//   final bool sendCC;
+//   final int noteReleaseTime;
+//   final int modReleaseTime;
+//   final MPEmods mpe1DRadius;
+//   final MPEmods mpe2DX;
+//   final MPEmods mpe2DY;
+//   final int mpePitchbendRange;
+//   final bool modulation2D;
+//   final int velocityRange;
+//   final int velocity;
+//   final double velocityCenter;
+//   final VelocityMode velocityMode;
 
-  /// A data object which holds all the settings required for sending midi
-  SendSettings(
-    this.channel,
-    this.modulationRadius,
-    this.modulationDeadZone,
-    this.mpeMemberChannels,
-    this.playMode,
-    this.zone,
-    this.sendCC,
-    this.noteReleaseTime,
-    this.modReleaseTime,
-    this.mpe1DRadius,
-    this.mpe2DX,
-    this.mpe2DY,
-    this.mpePitchbendRange,
-    this.modulation2D,
-    this.velocityRange,
-    this.velocity,
-    this.velocityCenter,
-    this.velocityMode,
-  );
-}
+//   /// A data object which holds all the settings required for sending midi
+//   SendSettings(
+//     this.channel,
+//     this.modulationRadius,
+//     this.modulationDeadZone,
+//     this.mpeMemberChannels,
+//     this.playMode,
+//     this.zone,
+//     this.sendCC,
+//     this.noteReleaseTime,
+//     this.modReleaseTime,
+//     this.mpe1DRadius,
+//     this.mpe2DX,
+//     this.mpe2DY,
+//     this.mpePitchbendRange,
+//     this.modulation2D,
+//     this.velocityRange,
+//     this.velocity,
+//     this.velocityCenter,
+//     this.velocityMode,
+//   );
+// }
 
-/// Reactive state of the current send-settings to be used in legacy changenotifier
-final combinedSettings = Provider.autoDispose<SendSettings>((ref) {
-  return SendSettings(
-    ref.watch(channelUsableProv),
-    ref.watch(modulationRadiusProv),
-    ref.watch(modulationDeadZoneProv),
-    ref.watch(mpeMemberChannelsProv),
-    ref.watch(playModeProv),
-    ref.watch(zoneProv),
-    ref.watch(sendCCProv),
-    ref.watch(noteReleaseUsable),
-    ref.watch(modReleaseUsable),
-    ref.watch(mpe1DRadiusProv),
-    ref.watch(mpe2DXProv),
-    ref.watch(mpe2DYProv),
-    ref.watch(mpePitchbendRangeProv),
-    ref.watch(modulation2DProv),
-    ref.watch(velocityRangeProv),
-    ref.watch(velocityProv),
-    ref.watch(velocityCenterProv),
-    ref.watch(velocityModeProv),
-  );
-});
+// /// Reactive state of the current send-settings to be used in legacy changenotifier
+// final combinedSettings = Provider.autoDispose<SendSettings>((ref) {
+//   return SendSettings(
+//     ref.watch(channelUsableProv),
+//     ref.watch(modulationRadiusProv),
+//     ref.watch(modulationDeadZoneProv),
+//     ref.watch(mpeMemberChannelsProv),
+//     ref.watch(playModeProv),
+//     ref.watch(zoneProv),
+//     ref.watch(sendCCProv),
+//     ref.watch(noteReleaseUsable),
+//     ref.watch(modReleaseUsable),
+//     ref.watch(mpe1DRadiusProv),
+//     ref.watch(mpe2DXProv),
+//     ref.watch(mpe2DYProv),
+//     ref.watch(mpePitchbendRangeProv),
+//     ref.watch(modulation2DProv),
+//     ref.watch(velocityRangeProv),
+//     ref.watch(velocityProv),
+//     ref.watch(velocityCenterProv),
+//     ref.watch(velocityModeProv),
+//   );
+// });
 
 /// The usable sender object, which refreshes when any relevant setting changes
 // final senderProvider = Provider.autoDispose<PlayModeHandler>((ref) {
 //   return ref.watch(playModeProv).getPlayModeApi());
 // });
-final senderProvider = NotifierProvider.autoDispose<PlayModeHandler>((ref) {
-  return ref.watch(playModeProv).getPlayModeApi());
+final senderProvider = Provider<PlayModeHandler>((ref) {
+  final playMode = ref.watch(playModeProv);
+
+  return playMode.getPlayModeApi(ref);
 });
 
 // class MidiSender extends Notifier {

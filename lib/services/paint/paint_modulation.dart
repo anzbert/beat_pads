@@ -12,13 +12,13 @@ class PaintModulation extends ConsumerWidget {
     final RenderBox? box = context.findAncestorRenderObjectOfType<RenderBox>();
     if (box == null) return Stack();
 
-    final midiSender = ref.watch(senderProvider);
+    // final midiSender = ref.watch(senderProvider);
 
     return Stack(
       children: [
         ...[
-          ...midiSender.playModeHandler.touchReleaseBuffer.buffer,
-          ...midiSender.playModeHandler.touchBuffer.buffer
+          ...ref.watch(touchReleaseBuffer),
+          ...ref.watch(touchBuffer),
         ]
             .where(
           (element) =>

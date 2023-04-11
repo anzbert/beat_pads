@@ -1,17 +1,18 @@
 import 'package:beat_pads/services/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class PlayModeMPE extends PlayModeHandler {
   final SendMpe mpeMods;
   final MemberChannelProvider channelProvider;
+  final ProviderRef<PlayModeHandler> ref;
 
-  PlayModeMPE(super.settings, super.notifyParent)
-      : mpeMods = SendMpe(
+  PlayModeMPE(this.ref): mpeMods = SendMpe(
           settings.mpe2DX.getMod(settings.mpePitchbendRange),
           settings.mpe2DY.getMod(settings.mpePitchbendRange),
           settings.mpe1DRadius.getMod(settings.mpePitchbendRange),
         ),
         channelProvider =
-            MemberChannelProvider(settings.zone, settings.mpeMemberChannels);
+            MemberChannelProvider(settings.zone, settings.mpeMemberChannels);;
 
   /// Release channel in MPE channel provider
   @override

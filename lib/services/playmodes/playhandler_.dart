@@ -3,13 +3,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Uses default PlayModeHandler behaviour
 class PlayModeNoSlide extends PlayModeHandler {
-  @override
-  build() {
-    return this;
-  }
+  PlayModeNoSlide(super.ref);
 }
 
-abstract class PlayModeHandler extends Notifier {
+abstract class PlayModeHandler {
+  final ProviderRef<PlayModeHandler> ref;
+
+  PlayModeHandler(this.ref);
+
   void handleNewTouch(PadTouchAndScreenData data) {
     if (ref.read(modReleaseUsable) > 0 || ref.read(noteReleaseUsable) > 0) {
       ref
@@ -18,7 +19,7 @@ abstract class PlayModeHandler extends Notifier {
     }
 
     NoteEvent noteOn = NoteEvent(ref.read(channelUsableProv), data.padNote,
-        velocityProvider.velocity(data.yPercentage))
+        ref.read(velocitySliderValueProv.notifier).velocity(data.yPercentage))
       ..noteOn(cc: ref.read(sendCCProv));
 
     ref.read(touchBuffer.notifier).addNoteOn(
@@ -54,33 +55,22 @@ abstract class PlayModeHandler extends Notifier {
   }
 
   void markDirty() {
-    for (var event in touchBuffer.buffer) {
-      event.markDirty();
-    }
-    for (var event in touchReleaseBuffer.buffer) {
-      event.markDirty();
-    }
+    ref.read(touchBuffer.notifier).markDirty();
+    ref.read(touchReleaseBuffer.notifier).markDirty();
   }
 
   /// Returns the velocity if a given note is ON in any channel.
   /// Checks releasebuffer and active touchbuffer
   int isNoteOn(int note) {
-    for (TouchEvent touch in touchBuffer.buffer) {
-      if (touch.noteEvent.note == note && touch.noteEvent.isPlaying) {
-        return touch.noteEvent.velocity;
-        // return true;
+    int result = ref.read(touchBuffer.notifier).isNoteOn(note);
+
+    if (ref.read(modReleaseUsable) > 0 || ref.read(noteReleaseUsable) > 0) {
+      if (result == 0) {
+        result = ref.read(touchReleaseBuffer.notifier).isNoteOn(note);
       }
     }
-    if (settings.modReleaseTime > 0 || settings.noteReleaseTime > 0) {
-      for (TouchEvent event in touchReleaseBuffer.buffer) {
-        if (event.noteEvent.note == note && event.noteEvent.isPlaying) {
-          return event.noteEvent.velocity;
-          // return true;
-        }
-      }
-    }
-    return 0;
-    // return false;
+
+    return result;
   }
 
   /// Does nothing, unless overridden in MPE

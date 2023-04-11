@@ -18,7 +18,7 @@ class BeatPadsAndControls extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     ref.listen(baseOctaveProv, (int? prev, int now) {
       if (prev != null && prev != now && !preview) {
-        ref.read(senderProvider.notifier).markEventsDirty();
+        ref.read(senderProvider).markDirty();
       }
     });
     return Stack(

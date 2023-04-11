@@ -1,6 +1,6 @@
 import 'dart:math';
-
-import 'package:beat_pads/services/state/midi_send.dart';
+import 'package:beat_pads/services/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 enum VelocityMode {
   random("Random"),
@@ -14,51 +14,64 @@ enum VelocityMode {
   String toString() => title;
 }
 
-class VelocityProvider {
-  final SendSettings _settings;
-  final Function _notifyParent;
-  final Random _random;
-  final int velocityRange;
-  double _velocityRandomCenter;
-  int _velocityFixed;
+final velocityRangeProv = Provider<int>(((ref) {
+  return ref.watch(velocityMaxProv) - ref.watch(velocityMinProv);
+}));
 
-  /// Provides and stores working velocity values for sending midi
-  /// notes in random, y-axis and fixed velocity mode
-  VelocityProvider(this._settings, this._notifyParent)
-      : _random = Random(),
-        velocityRange = _settings.velocityRange,
-        _velocityFixed = _settings.velocity,
-        _velocityRandomCenter = _settings.velocityCenter.clamp(
-            9 + _settings.velocityRange / 2, 128 - _settings.velocityRange / 2);
+final velocitySliderValueProv = NotifierProvider<VelocityProvider, double>(
+  () => VelocityProvider(),
+);
+
+class VelocityProvider extends Notifier<double> {
+  final Random _randomGenerator;
+
+  /// Provides working velocity values for sending midi
+  /// notes in random, y-axis and fixed velocity mode and stores values
+  /// for the slider on the pad screen in its state
+  VelocityProvider() : _randomGenerator = Random();
+
+  @override
+  build() {
+    if (ref.read(velocityModeProv) == VelocityMode.fixed) {
+      return ref.read(velocityProv).toDouble();
+    } else {
+      return (ref.watch(velocityMaxProv) + ref.watch(velocityMinProv)) / 2;
+    }
+  }
 
   /// Use this value to send notes.
   /// Random velocity is based on a center-of-range value, usable with a single-value slider.
   int velocity(double percentage) {
-    switch (_settings.velocityMode) {
+    switch (ref.read(velocityModeProv)) {
       case VelocityMode.random:
-        double randVelocity = _random.nextInt(velocityRange) +
-            (_velocityRandomCenter - velocityRange / 2);
+        double randVelocity =
+            _randomGenerator.nextInt(ref.read(velocityRangeProv)) +
+                (state - ref.read(velocityRangeProv) / 2);
         return randVelocity.round().clamp(10, 127);
+
       case VelocityMode.fixed:
-        return velocityFixed.clamp(10, 127);
+        return state.round().clamp(10, 127);
+
       case VelocityMode.yAxis:
-        double min = _velocityRandomCenter - velocityRange / 2;
-        return (min + velocityRange * percentage).round().clamp(0, 127);
+        double min = state - ref.read(velocityRangeProv) / 2;
+        return (min + ref.read(velocityRangeProv) * percentage)
+            .round()
+            .clamp(0, 127);
     }
   }
 
   /// For Velocity Slider on pads screen:
-  int get velocityFixed => _velocityFixed;
-  set velocityFixed(int vel) {
-    _velocityFixed = vel;
-    _notifyParent();
+  set(double vel) {
+    if (ref.read(velocityModeProv) == VelocityMode.fixed) {
+      state = vel;
+    } else {
+      // set to velocity center
+      state = vel.clamp(9 + ref.read(velocityRangeProv) / 2,
+          128 - ref.read(velocityRangeProv) / 2);
+    }
   }
 
-  /// For Random Velocity Slider on pads screen:
-  double get velocityRandomCenter => _velocityRandomCenter;
-  set velocityRandomCenter(double velDouble) {
-    _velocityRandomCenter =
-        velDouble.clamp(9 + velocityRange / 2, 128 - velocityRange / 2);
-    _notifyParent();
+  int get asInt {
+    return state.round().clamp(0, 127);
   }
 }

@@ -16,7 +16,7 @@ class PresetNotfier extends Notifier<int> {
 
   /// Set to a Preset between [basePreset] and [numberOfPresets]
   void set(int newPreset) {
-    ref.read(senderProvider.notifier).playModeHandler.killAllNotes();
+    ref.read(senderProvider).killAllNotes();
     state = newPreset.clamp(basePreset, numberOfPresets);
   }
 }

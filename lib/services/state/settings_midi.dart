@@ -71,10 +71,3 @@ final velocityMaxProv = NotifierProvider<SettingIntNotifier, int>(() {
     max: 127,
   );
 });
-
-final velocityRangeProv = Provider<int>(((ref) {
-  return ref.watch(velocityMaxProv) - ref.watch(velocityMinProv);
-}));
-final velocityCenterProv = Provider<double>(((ref) {
-  return (ref.watch(velocityMaxProv) + ref.watch(velocityMinProv)) / 2;
-}));

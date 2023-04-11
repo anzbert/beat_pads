@@ -48,6 +48,21 @@ class TouchReleaseBuffer extends AutoDisposeNotifier<List<TouchEvent>> {
     if (refresh) state = [...state];
   }
 
+  void markDirty() {
+    for (var touch in state) {
+      touch.markDirty();
+    }
+  }
+
+  int isNoteOn(int note) {
+    for (TouchEvent touch in state) {
+      if (touch.noteEvent.note == note && touch.noteEvent.isPlaying) {
+        return touch.noteEvent.velocity;
+      }
+    }
+    return 0;
+  }
+
   /// Update note in the released events buffer, by adding it or updating
   /// the timer of the corresponding note
   void updateReleasedEvent(TouchEvent event) {
