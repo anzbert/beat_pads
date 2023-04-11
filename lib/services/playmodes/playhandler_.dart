@@ -1,6 +1,13 @@
 import 'package:beat_pads/services/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+/// The usable sender object, which refreshes when the playmode changes
+final senderProvider = Provider<PlayModeHandler>((ref) {
+  final playMode = ref.watch(playModeProv);
+
+  return playMode.getPlayModeApi(ref);
+});
+
 // Uses default PlayModeHandler behaviour
 class PlayModeNoSlide extends PlayModeHandler {
   PlayModeNoSlide(super.ref);

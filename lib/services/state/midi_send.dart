@@ -1,10 +1,10 @@
-import 'package:beat_pads/services/services.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+// import 'package:beat_pads/services/services.dart';
+// import 'package:flutter/material.dart';
+// import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Sending logic still uses ChangeNotifier. Could be refactored for Riverpod
 // for improved clarity and expandability.
-// TODO Refactor! Replace outdated ChangeNotifier with new Riverpod Notifiers. Extract parts into seperate providers.
+// TODO : delete this when done
 
 // class SendSettings {
 //   final PlayMode playMode;
@@ -77,11 +77,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 // final senderProvider = Provider.autoDispose<PlayModeHandler>((ref) {
 //   return ref.watch(playModeProv).getPlayModeApi());
 // });
-final senderProvider = Provider<PlayModeHandler>((ref) {
-  final playMode = ref.watch(playModeProv);
 
-  return playMode.getPlayModeApi(ref);
-});
 
 // class MidiSender extends Notifier {
 //   late PlayModeHandler playModeHandler;
