@@ -4,12 +4,15 @@ class PlayModePolyAT extends PlayModeHandler {
   final ModPolyAfterTouch1D polyATMod;
   PlayModePolyAT(super.ref) : polyATMod = ModPolyAfterTouch1D();
 
+  /// Adds a poly AT message to the regular note handling
   @override
   void handleNewTouch(PadTouchAndScreenData data) {
     polyATMod.send(ref.read(channelUsableProv), data.padNote, 0);
     super.handleNewTouch(data);
   }
 
+  /// Modify the touchposition in the touchbuffers, either moved by pan or by animation.
+  /// Send Poly AT message after the pos update
   @override
   void handlePan(NullableTouchAndScreenData data) {
     TouchEvent? event;
