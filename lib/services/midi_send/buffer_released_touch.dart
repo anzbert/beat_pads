@@ -48,12 +48,6 @@ class TouchReleaseBuffer extends AutoDisposeNotifier<List<TouchEvent>> {
     if (refresh) state = [...state];
   }
 
-  void markDirty() {
-    for (var touch in state) {
-      touch.markDirty();
-    }
-  }
-
   int isNoteOn(int note) {
     for (TouchEvent touch in state) {
       if (touch.noteEvent.note == note && touch.noteEvent.isPlaying) {
@@ -61,6 +55,12 @@ class TouchReleaseBuffer extends AutoDisposeNotifier<List<TouchEvent>> {
       }
     }
     return 0;
+  }
+
+  void markDirty() {
+    for (var touch in state) {
+      touch.markDirty();
+    }
   }
 
   /// Update note in the released events buffer, by adding it or updating
@@ -122,7 +122,6 @@ class TouchReleaseBuffer extends AutoDisposeNotifier<List<TouchEvent>> {
   }
 
   void killAllMarkedReleasedTouchEvents() {
-    // state.removeWhere((element) => element.kill);
     if (state.any((element) => element.kill)) {
       state = state.where((element) => !element.kill).toList();
     }

@@ -54,4 +54,22 @@ class NoteReleaseBuffer extends AutoDisposeNotifier<List<NoteEvent>> {
   void removeNoteFromReleaseBuffer(int note) {
     state = state.where((element) => element.note != note).toList();
   }
+
+  void allNotesOff() {
+    bool refresh = false;
+    for (var note in state) {
+      if (note.isPlaying) note.noteOff();
+      refresh = true;
+    }
+    if (refresh) state = [...state];
+  }
+
+  int isNoteOn(int note) {
+    for (NoteEvent noteEvent in state) {
+      if (noteEvent.note == note && noteEvent.isPlaying) {
+        return noteEvent.velocity;
+      }
+    }
+    return 0;
+  }
 }
