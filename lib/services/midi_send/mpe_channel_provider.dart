@@ -8,14 +8,12 @@ FROM SPECS:
 In the simplest workable implementation, a new note will be assigned to the Channel with the lowest count of active notes. Then, all else being equal, the Channel with the oldest last Note Off would be preferred. This set of rules has at least one working real-world implementation.
 */
 
-final mpeChannelProv =
-    NotifierProvider<MemberChannelProvider, int>(() => MemberChannelProvider());
+final mpeChannelProv = AutoDisposeNotifierProvider<MemberChannelProvider, int>(
+    () => MemberChannelProvider());
 
-class MemberChannelProvider extends Notifier<int> {
+class MemberChannelProvider extends AutoDisposeNotifier<int> {
   Queue<int> channelQueue = Queue();
   List<int> allMemberChannels = [];
-
-  MemberChannelProvider();
 
   @override
   int build() {

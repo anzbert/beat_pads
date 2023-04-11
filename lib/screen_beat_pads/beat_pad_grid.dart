@@ -16,6 +16,22 @@ class SlidePads extends ConsumerStatefulWidget {
 
 class _SlidePadsState extends ConsumerState<SlidePads>
     with TickerProviderStateMixin {
+  late PlayMode playmode;
+  late bool upperzone;
+
+  @override
+  void initState() {
+    super.initState();
+    playmode = ref.read(playModeProv);
+    upperzone = ref.read(zoneProv);
+    if (playmode == PlayMode.mpe && !widget.preview) {
+      MPEinitMessage(
+              memberChannels: ref.read(mpeMemberChannelsProv),
+              upperZone: upperzone)
+          .send();
+    }
+  }
+
   final GlobalKey _padsWidgetKey = GlobalKey();
 
   final List<ReturnAnimation> _animations = [];
@@ -232,10 +248,15 @@ class _SlidePadsState extends ConsumerState<SlidePads>
 
   @override
   void dispose() {
+    if (playmode == PlayMode.mpe && !widget.preview) {
+      MPEinitMessage(memberChannels: 0, upperZone: upperzone).send();
+    }
+
     for (ReturnAnimation anim in _animations) {
       anim.controller.dispose();
     }
     _animations.clear();
+
     super.dispose();
   }
 }

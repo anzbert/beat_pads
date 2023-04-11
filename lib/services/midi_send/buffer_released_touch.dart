@@ -17,14 +17,14 @@ class TouchReleaseBuffer extends AutoDisposeNotifier<List<TouchEvent>> {
   }
 
   /// Find and return a TouchEvent from the buffer by its uniqueID, if possible
-  TouchEvent? getByID(int id) {
-    for (TouchEvent event in state) {
-      if (event.uniqueID == id) {
-        return event;
-      }
-    }
-    return null;
-  }
+  // TouchEvent? getByID(int id) {
+  //   for (TouchEvent event in state) {
+  //     if (event.uniqueID == id) {
+  //       return event;
+  //     }
+  //   }
+  //   return null;
+  // }
 
   bool isNoteInBuffer(int? note) {
     if (note == null) return false;

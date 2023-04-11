@@ -51,14 +51,15 @@ class TouchBuffer extends AutoDisposeNotifier<List<TouchEvent>> {
   }
 
   /// Find and return a TouchEvent from the state by its uniqueID, if possible
-  TouchEvent? getByID(int id) {
-    for (TouchEvent event in state) {
-      if (event.uniqueID == id) {
-        return event;
-      }
-    }
-    return null;
-  }
+
+  // TouchEvent? getByID(int id) {
+  //   for (TouchEvent event in state) {
+  //     if (event.uniqueID == id) {
+  //       return event;
+  //     }
+  //   }
+  //   return null;
+  // }
 
   /// Get an average radial change from all currently active notes.
   /// This is a common method to determine Channel Pressure
