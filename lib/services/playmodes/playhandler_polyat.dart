@@ -12,27 +12,33 @@ class PlayModePolyAT extends PlayModeHandler {
 
   @override
   void handlePan(NullableTouchAndScreenData data) {
-    if (ref.read(touchBuffer.notifier).eventInBuffer(data.pointer)) {
-      ref.read(touchBuffer.notifier).modifyEvent(data.pointer, (eventInBuffer) {
-        eventInBuffer.updatePosition(data.screenTouchPos);
-        polyATMod.send(
-          ref.read(channelUsableProv),
-          eventInBuffer.noteEvent.note,
-          eventInBuffer.radialChange(),
-        );
-      });
+    TouchEvent? event;
+
+    void modify(TouchEvent eventInBuffer) {
+      eventInBuffer.updatePosition(data.screenTouchPos);
+      event = eventInBuffer;
+    }
+
+    if (ref
+        .read(
+          touchBuffer.notifier,
+        )
+        .modifyEvent(data.pointer, modify)) {
     } else if (ref
-        .read(touchReleaseBuffer.notifier)
-        .eventInBuffer(data.pointer)) {
-      ref.read(touchReleaseBuffer.notifier).modifyEvent(data.pointer,
-          (eventInBuffer) {
-        eventInBuffer.updatePosition(data.screenTouchPos);
-        polyATMod.send(
-          ref.read(channelUsableProv),
-          eventInBuffer.noteEvent.note,
-          eventInBuffer.radialChange(),
-        );
-      });
+        .read(
+          touchReleaseBuffer.notifier,
+        )
+        .modifyEvent(data.pointer, modify)) {
+    } else {
+      return;
+    }
+
+    if (event != null) {
+      polyATMod.send(
+        ref.read(channelUsableProv),
+        event!.noteEvent.note,
+        event!.radialChange(),
+      );
     }
   }
 }
