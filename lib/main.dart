@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart'; // for debug repaint rainbow, if enabled in main()
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-// SHARED PREFERENCES PROVIDER //////////////////////////////////////////
+/// Holds the shared_preferences Object, which can load and save persistent data
 final sharedPrefProvider = Provider<Prefs>((ref) {
   throw UnimplementedError(); // overriden in ProviderScope
 });

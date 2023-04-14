@@ -70,7 +70,7 @@ class BeatPadsAndControls extends ConsumerWidget {
             // PADS
             Expanded(
               flex: 60,
-              child: SlidePads(
+              child: BeatPadGrid(
                 preview: preview,
               ),
             ),

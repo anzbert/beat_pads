@@ -6,18 +6,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SlidePads extends ConsumerStatefulWidget {
-  const SlidePads({
+class BeatPadGrid extends ConsumerStatefulWidget {
+  const BeatPadGrid({
     required this.preview,
     super.key,
   });
   final bool preview;
 
   @override
-  ConsumerState<SlidePads> createState() => _SlidePadsState();
+  ConsumerState<BeatPadGrid> createState() => _SlidePadsState();
 }
 
-class _SlidePadsState extends ConsumerState<SlidePads>
+class _SlidePadsState extends ConsumerState<BeatPadGrid>
     with TickerProviderStateMixin {
   late PlayMode playmode;
   late bool upperzone;
