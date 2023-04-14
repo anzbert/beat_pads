@@ -46,7 +46,7 @@ Anyone is most welcome to contribute, report an issue or start a discussion in t
 
 ## Known issues
 
-- Screen Rotation is sometimes unpredictable on iOS. This is currently a known issue in Flutter, and the fix is already being worked on.
+- Project still using outdated ChangeNotifier in Riverpod state management -> Refactor
 
 ## Licence
 
