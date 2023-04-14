@@ -1,7 +1,7 @@
 import 'package:beat_pads/screen_beat_pads/button_sustain.dart';
 import 'package:beat_pads/screen_beat_pads/button_menu.dart';
 import 'package:beat_pads/screen_beat_pads/button_octave.dart';
-import 'package:beat_pads/services/state/state.dart';
+import 'package:beat_pads/services/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
