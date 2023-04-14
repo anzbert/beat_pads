@@ -1,7 +1,7 @@
 name: beat_pads
 description: USB Midi Pad Controller for Music Production
 publish_to: "none"
-version: 0.9.1+69
+version: 0.9.2+70
 
 # Read more about Android versioning:
 # https://developer.android.com/studio/publish/versioning
