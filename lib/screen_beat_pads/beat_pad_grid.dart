@@ -14,10 +14,10 @@ class BeatPadGrid extends ConsumerStatefulWidget {
   final bool preview;
 
   @override
-  ConsumerState<BeatPadGrid> createState() => _SlidePadsState();
+  ConsumerState<BeatPadGrid> createState() => _BeatPadGridState();
 }
 
-class _SlidePadsState extends ConsumerState<BeatPadGrid>
+class _BeatPadGridState extends ConsumerState<BeatPadGrid>
     with TickerProviderStateMixin {
   late PlayMode playmode;
   late bool upperzone;
