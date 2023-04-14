@@ -1,10 +1,10 @@
+import 'package:beat_pads/services/services.dart';
 import 'package:beat_pads/shared_components/_shared.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:beat_pads/services/services.dart';
 
 class CreditsBox extends StatelessWidget {
-  const CreditsBox({Key? key}) : super(key: key);
+  const CreditsBox({super.key});
 
   Future<bool> webView(String host, [String? path]) async {
     final httpUri = Uri(

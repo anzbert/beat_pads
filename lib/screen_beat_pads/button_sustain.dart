@@ -3,8 +3,10 @@ import 'package:beat_pads/theme.dart';
 import 'package:flutter/material.dart';
 
 class SustainButtonDoubleTap extends StatefulWidget {
-  const SustainButtonDoubleTap({Key? key, required this.channel})
-      : super(key: key);
+  const SustainButtonDoubleTap({
+    required this.channel,
+    super.key,
+  });
 
   final int channel;
 
@@ -25,9 +27,9 @@ class _SustainButtonDoubleTapState extends State<SustainButtonDoubleTap> {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double padRadius = width * ThemeConst.padRadiusFactor;
-    double padSpacing = width * ThemeConst.padSpacingFactor;
+    final double width = MediaQuery.of(context).size.width;
+    final double padRadius = width * ThemeConst.padRadiusFactor;
+    final double padSpacing = width * ThemeConst.padSpacingFactor;
     return Padding(
       padding: EdgeInsets.fromLTRB(0, padSpacing, padSpacing, padSpacing),
       child: GestureDetector(
@@ -59,7 +61,7 @@ class _SustainButtonDoubleTapState extends State<SustainButtonDoubleTap> {
             });
           }
         },
-        child: Container(
+        child: DecoratedBox(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(padRadius * 1)),
             color: sustainState ? Palette.lightPink : Palette.darkPink,
@@ -68,7 +70,6 @@ class _SustainButtonDoubleTapState extends State<SustainButtonDoubleTap> {
           child: RotatedBox(
             quarterTurns: 1,
             child: FittedBox(
-              fit: BoxFit.contain,
               child: Text(
                 'Sustain',
                 style: TextStyle(

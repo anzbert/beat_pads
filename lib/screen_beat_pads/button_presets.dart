@@ -1,6 +1,6 @@
+import 'package:beat_pads/services/services.dart';
 import 'package:beat_pads/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:beat_pads/services/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 enum ClickType {
@@ -10,6 +10,12 @@ enum ClickType {
 }
 
 class PresetButtons extends ConsumerWidget {
+  const PresetButtons({
+    required this.clickType,
+    this.row = false,
+    this.minimumSize = false,
+    super.key,
+  });
   static final backgoundColors = [
     Palette.laserLemon,
     Palette.lightPink,
@@ -17,13 +23,6 @@ class PresetButtons extends ConsumerWidget {
     Palette.yellowGreen,
     Palette.tan
   ];
-
-  const PresetButtons(
-      {required this.clickType,
-      this.row = false,
-      this.minimumSize = false,
-      Key? key})
-      : super(key: key);
 
   final bool row;
   final bool minimumSize;
@@ -53,8 +52,8 @@ class _PresetButton extends ConsumerWidget {
   const _PresetButton(
     this.preset,
     this.color, {
-    this.minimumSize = false,
     required this.clickType,
+    this.minimumSize = false,
   });
 
   final bool minimumSize;
@@ -67,46 +66,46 @@ class _PresetButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    double width = MediaQuery.of(context).size.width;
-    double padSpacing = width * ThemeConst.padSpacingFactor;
-    double padRadius = width * ThemeConst.padRadiusFactor;
+    final double width = MediaQuery.of(context).size.width;
+    final double padSpacing = width * ThemeConst.padSpacingFactor;
+    final double padRadius = width * ThemeConst.padRadiusFactor;
     return minimumSize
         ? Flexible(
-            fit: FlexFit.loose,
-            flex: 1,
             child: Padding(
-                padding:
-                    EdgeInsets.fromLTRB(padSpacing, padSpacing, 0, padSpacing),
-                child: GestureDetector(
-                  onDoubleTap: clickType == ClickType.double
-                      ? () => setPreset(ref)
-                      : null,
-                  onLongPress:
-                      clickType == ClickType.long ? () => setPreset(ref) : null,
-                  child: _ElevatedPresetButton(
-                      clickType: clickType,
-                      preset: preset,
-                      color: color,
-                      padRadius: padRadius),
-                )),
+              padding:
+                  EdgeInsets.fromLTRB(padSpacing, padSpacing, 0, padSpacing),
+              child: GestureDetector(
+                onDoubleTap:
+                    clickType == ClickType.double ? () => setPreset(ref) : null,
+                onLongPress:
+                    clickType == ClickType.long ? () => setPreset(ref) : null,
+                child: _ElevatedPresetButton(
+                  clickType: clickType,
+                  preset: preset,
+                  color: color,
+                  padRadius: padRadius,
+                ),
+              ),
+            ),
           )
         : Expanded(
-            flex: 1,
             child: Padding(
-                padding:
-                    EdgeInsets.fromLTRB(padSpacing, padSpacing, 0, padSpacing),
-                child: GestureDetector(
-                  onDoubleTap: clickType == ClickType.double
-                      ? () => setPreset(ref)
-                      : null,
-                  onLongPress:
-                      clickType == ClickType.long ? () => setPreset(ref) : null,
-                  child: _ElevatedPresetButton(
-                      clickType: clickType,
-                      preset: preset,
-                      color: color,
-                      padRadius: padRadius),
-                )));
+              padding:
+                  EdgeInsets.fromLTRB(padSpacing, padSpacing, 0, padSpacing),
+              child: GestureDetector(
+                onDoubleTap:
+                    clickType == ClickType.double ? () => setPreset(ref) : null,
+                onLongPress:
+                    clickType == ClickType.long ? () => setPreset(ref) : null,
+                child: _ElevatedPresetButton(
+                  clickType: clickType,
+                  preset: preset,
+                  color: color,
+                  padRadius: padRadius,
+                ),
+              ),
+            ),
+          );
   }
 }
 
@@ -135,7 +134,7 @@ class _ElevatedPresetButton extends ConsumerWidget {
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: color,
-        padding: const EdgeInsets.all(0),
+        padding: EdgeInsets.zero,
         alignment: Alignment.center,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(padRadius),
@@ -144,10 +143,11 @@ class _ElevatedPresetButton extends ConsumerWidget {
       child: Text(
         preset.toString(),
         style: TextStyle(
-            fontSize: screenSize * 0.066,
-            color: ref.watch(presetNotifierProvider) == preset
-                ? Palette.darkGrey
-                : Palette.darkGrey.withOpacity(0.1)),
+          fontSize: screenSize * 0.066,
+          color: ref.watch(presetNotifierProvider) == preset
+              ? Palette.darkGrey
+              : Palette.darkGrey.withOpacity(0.1),
+        ),
       ),
     );
   }

@@ -6,10 +6,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class SliderVelocity extends ConsumerStatefulWidget {
   const SliderVelocity({
-    Key? key,
     required this.channel,
     required this.randomVelocity,
-  }) : super(key: key);
+    super.key,
+  });
 
   final int channel;
   final bool randomVelocity;
@@ -24,24 +24,26 @@ class _SliderVelocityState extends ConsumerState<SliderVelocity> {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
+    final double width = MediaQuery.of(context).size.width;
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Flexible(
           flex: 5,
-          child: LayoutBuilder(builder: (context, constraints) {
-            return Align(
-              alignment: Alignment.bottomCenter,
-              child: Text(
-                "Vel",
-                style: TextStyle(
-                  fontSize: constraints.maxWidth * fontSizeFactor,
-                  color: Palette.darker(Palette.cadetBlue, 0.6),
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              return Align(
+                alignment: Alignment.bottomCenter,
+                child: Text(
+                  "Vel",
+                  style: TextStyle(
+                    fontSize: constraints.maxWidth * fontSizeFactor,
+                    color: Palette.darker(Palette.cadetBlue, 0.6),
+                  ),
                 ),
-              ),
-            );
-          }),
+              );
+            },
+          ),
         ),
         Center(
           child: Divider(
@@ -73,12 +75,13 @@ class _SliderVelocityState extends ConsumerState<SliderVelocity> {
               range: ref.watch(velocityRangeProv),
               thumbColor: Palette.cadetBlue,
               child: Slider(
-                  min: 10,
-                  max: 127,
-                  value: ref.watch(velocitySliderValueProv).clamp(10, 127),
-                  onChanged: (double v) {
-                    ref.read(velocitySliderValueProv.notifier).set(v);
-                  }),
+                min: 10,
+                max: 127,
+                value: ref.watch(velocitySliderValueProv).clamp(10, 127),
+                onChanged: (double v) {
+                  ref.read(velocitySliderValueProv.notifier).set(v);
+                },
+              ),
             ),
           ),
         Center(
@@ -103,18 +106,17 @@ class _SliderVelocityState extends ConsumerState<SliderVelocity> {
                       Flexible(
                         flex: 2,
                         child: Text(
-                            ref
-                                .watch(velocitySliderValueProv.notifier)
-                                .asInt
-                                .toString(),
-                            style: DefaultTextStyle.of(context).style.copyWith(
-                                  fontSize:
-                                      constraints.maxWidth * fontSizeFactor,
-                                  color: Palette.darker(Palette.cadetBlue, 0.6),
-                                )),
+                          ref
+                              .watch(velocitySliderValueProv.notifier)
+                              .asInt
+                              .toString(),
+                          style: DefaultTextStyle.of(context).style.copyWith(
+                                fontSize: constraints.maxWidth * fontSizeFactor,
+                                color: Palette.darker(Palette.cadetBlue, 0.6),
+                              ),
+                        ),
                       ),
                       Flexible(
-                        flex: 1,
                         child: ref.watch(velocityModeProv) != VelocityMode.fixed
                             ? Align(
                                 alignment: Alignment.centerRight,

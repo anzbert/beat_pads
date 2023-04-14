@@ -1,17 +1,16 @@
 import 'package:beat_pads/screen_beat_pads/velocity_overlay.dart';
+import 'package:beat_pads/services/services.dart';
 import 'package:beat_pads/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:beat_pads/services/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class SlideBeatPad extends ConsumerWidget {
-  final bool preview;
-
   const SlideBeatPad({
     required this.note,
-    Key? key,
     required this.preview,
-  }) : super(key: key);
+    super.key,
+  });
+  final bool preview;
 
   final int note;
 
@@ -33,11 +32,15 @@ class SlideBeatPad extends ConsumerWidget {
     final Color splashColor = Palette.splashColor;
 
     final BorderRadius padRadius = BorderRadius.all(
-        Radius.circular(screenWidth * ThemeConst.padRadiusFactor));
+      Radius.circular(screenWidth * ThemeConst.padRadiusFactor),
+    );
     final double padSpacing = screenWidth * ThemeConst.padSpacingFactor;
 
     final Label label = PadLabels.getLabel(
-        ref.watch(padLabelsProv), ref.watch(layoutProv), note);
+      ref.watch(padLabelsProv),
+      ref.watch(layoutProv),
+      note,
+    );
     final double fontSize = screenWidth * 0.021;
     final Color padTextColor = Palette.darkGrey;
 
@@ -81,13 +84,10 @@ class SlideBeatPad extends ConsumerWidget {
                       padding: EdgeInsets.all(padSpacing),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           if (label.subtitle != null)
                             Flexible(
-                              fit: FlexFit.loose,
-                              flex: 1,
                               child: Text(
                                 label.subtitle!,
                                 style: TextStyle(
@@ -98,8 +98,6 @@ class SlideBeatPad extends ConsumerWidget {
                             ),
                           if (label.title != null)
                             Flexible(
-                              fit: FlexFit.loose,
-                              flex: 1,
                               child: Text(
                                 label.title!,
                                 style: TextStyle(

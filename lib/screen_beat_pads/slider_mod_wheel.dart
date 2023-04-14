@@ -11,12 +11,14 @@ class _IntNotifier extends Notifier<int> {
   void set(int newState) => state = newState;
 }
 
-final _modWheelProvider =
-    NotifierProvider<_IntNotifier, int>(() => _IntNotifier());
+final _modWheelProvider = NotifierProvider<_IntNotifier, int>(_IntNotifier.new);
 
 class ModWheel extends ConsumerStatefulWidget {
-  const ModWheel({Key? key, required this.channel, required this.preview})
-      : super(key: key);
+  const ModWheel({
+    required this.channel,
+    required this.preview,
+    super.key,
+  });
 
   final bool preview;
   final int channel;
@@ -46,24 +48,26 @@ class _ModWheelState extends ConsumerState<ModWheel> {
       }
     });
 
-    double width = MediaQuery.of(context).size.width;
+    final double width = MediaQuery.of(context).size.width;
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Flexible(
           flex: 5,
-          child: LayoutBuilder(builder: (context, constraints) {
-            return Align(
-              alignment: Alignment.bottomCenter,
-              child: Text(
-                "Mod",
-                style: TextStyle(
-                  fontSize: constraints.maxWidth * fontSizeFactor,
-                  color: Palette.darker(Palette.tan, 0.6),
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              return Align(
+                alignment: Alignment.bottomCenter,
+                child: Text(
+                  "Mod",
+                  style: TextStyle(
+                    fontSize: constraints.maxWidth * fontSizeFactor,
+                    color: Palette.darker(Palette.tan, 0.6),
+                  ),
                 ),
-              ),
-            );
-          }),
+              );
+            },
+          ),
         ),
         Center(
           child: Divider(
@@ -79,7 +83,6 @@ class _ModWheelState extends ConsumerState<ModWheel> {
             child: RotatedBox(
               quarterTurns: 0,
               child: Slider(
-                min: 0,
                 max: 127,
                 value: ref.watch(_modWheelProvider).toDouble(),
                 onChanged: (v) {
@@ -108,7 +111,6 @@ class _ModWheelState extends ConsumerState<ModWheel> {
                   margin: EdgeInsets.only(bottom: padSpacing),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Expanded(
                         flex: 2,
@@ -123,7 +125,6 @@ class _ModWheelState extends ConsumerState<ModWheel> {
                         ),
                       ),
                       const Expanded(
-                        flex: 1,
                         child: SizedBox.expand(),
                       )
                     ],

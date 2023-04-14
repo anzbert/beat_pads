@@ -4,13 +4,11 @@ import 'package:beat_pads/screen_pads_menu/menu_advanced.dart';
 import 'package:beat_pads/screen_pads_menu/menu_layout.dart';
 import 'package:beat_pads/screen_pads_menu/menu_midi.dart';
 import 'package:beat_pads/screen_pads_menu/menu_system.dart';
-import 'package:flutter/material.dart';
-
-import 'package:beat_pads/shared_components/_shared.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import 'package:simple_gradient_text/simple_gradient_text.dart';
 import 'package:beat_pads/services/services.dart';
+import 'package:beat_pads/shared_components/_shared.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:simple_gradient_text/simple_gradient_text.dart';
 
 final selectedMenuState = StateProvider<Menu>((ref) => Menu.layout);
 
@@ -40,7 +38,9 @@ class PadMenuScreen extends ConsumerWidget {
   void goToPadsScreen(BuildContext context) {
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: ((context) => const BeatPadsScreen())),
+      MaterialPageRoute<BeatPadsScreen>(
+        builder: (context) => const BeatPadsScreen(),
+      ),
     );
   }
 
@@ -50,7 +50,7 @@ class PadMenuScreen extends ConsumerWidget {
       future: Future.delayed(
           Duration(milliseconds: Timing.screenTransitionTime), () async {
         final bool result = await DeviceUtils.enableRotation();
-        await Future.delayed(
+        await Future<void>.delayed(
           Duration(milliseconds: Timing.screenTransitionTime),
         );
         return result;
@@ -68,18 +68,20 @@ class PadMenuScreen extends ConsumerWidget {
                   Palette.laserLemon,
                 ],
               ),
-              leading: Builder(builder: (BuildContext context) {
-                return IconButton(
-                  onPressed: () {
-                    Scaffold.of(context).openDrawer();
-                  },
-                  icon: Icon(
-                    Icons.cable,
-                    color: Palette.lightPink,
-                    size: 36,
-                  ),
-                );
-              }),
+              leading: Builder(
+                builder: (BuildContext context) {
+                  return IconButton(
+                    onPressed: () {
+                      Scaffold.of(context).openDrawer();
+                    },
+                    icon: Icon(
+                      Icons.cable,
+                      color: Palette.lightPink,
+                      size: 36,
+                    ),
+                  );
+                },
+              ),
               actions: [
                 Padding(
                   padding: const EdgeInsets.only(right: 8),
@@ -103,8 +105,9 @@ class PadMenuScreen extends ConsumerWidget {
                           child: Text(
                             "P$i",
                             style: TextStyle(
-                                color: PresetButtons.backgoundColors[i - 1],
-                                fontSize: 31),
+                              color: PresetButtons.backgoundColors[i - 1],
+                              fontSize: 31,
+                            ),
                           ),
                         )
                     ],
@@ -160,7 +163,7 @@ class PadMenuScreen extends ConsumerWidget {
               ],
             ),
             floatingActionButton: FloatingActionButton(
-              onPressed: (() => goToPadsScreen(context)),
+              onPressed: () => goToPadsScreen(context),
               backgroundColor: PresetButtons
                   .backgoundColors[ref.watch(presetNotifierProvider) - 1],
               child: Icon(

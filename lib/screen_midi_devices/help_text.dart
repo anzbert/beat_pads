@@ -1,5 +1,7 @@
-import 'package:beat_pads/shared_components/_shared.dart';
+// ignore_for_file: lines_longer_than_80_chars
+
 import 'dart:io' show Platform;
+import 'package:beat_pads/shared_components/_shared.dart';
 import 'package:flutter/material.dart';
 
 List<Widget> helpText = [
