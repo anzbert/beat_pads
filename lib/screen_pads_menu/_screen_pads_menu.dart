@@ -20,7 +20,7 @@ enum Menu {
 }
 
 class PadMenuScreen extends ConsumerWidget {
-  const PadMenuScreen();
+  const PadMenuScreen({super.key});
 
   Widget getMenu(Menu menu) {
     switch (menu) {

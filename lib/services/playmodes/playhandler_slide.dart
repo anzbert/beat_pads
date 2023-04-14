@@ -61,9 +61,7 @@ class PlayModeSlide extends PlayModeHandler {
                 .read(velocitySliderValueProv.notifier)
                 .velocity(data.yPercentage ?? .5),
           )..noteOn(
-              cc: ref.read(playModeProv).singleChannel
-                  ? ref.read(sendCCProv)
-                  : false,
+              cc: ref.read(playModeProv).singleChannel && ref.read(sendCCProv),
             );
         }
       }

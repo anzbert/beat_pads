@@ -4,7 +4,7 @@ import 'package:beat_pads/services/services.dart';
 import 'package:flutter/material.dart';
 
 class BeatPadsScreen extends StatelessWidget {
-  const BeatPadsScreen();
+  const BeatPadsScreen({super.key});
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(

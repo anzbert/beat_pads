@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class MenuSystem extends ConsumerWidget {
-  const MenuSystem();
+  const MenuSystem({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

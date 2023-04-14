@@ -5,7 +5,7 @@ import 'package:wakelock/wakelock.dart';
 final _wakeLockProv = StateProvider<bool>((ref) => false);
 
 class SwitchWakeLockTile extends ConsumerWidget {
-  const SwitchWakeLockTile();
+  const SwitchWakeLockTile({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class MenuMidi extends ConsumerWidget {
-  const MenuMidi();
+  const MenuMidi({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

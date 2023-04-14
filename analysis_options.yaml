@@ -33,9 +33,10 @@ linter:
     prefer_single_quotes: false # Uncomment to enable the `prefer_single_quotes` rule
 
     # while developing:
-    use_key_in_widget_constructors: false
+    # use_key_in_widget_constructors: false
     public_member_api_docs: false
     omit_local_variable_types: false
+    lines_longer_than_80_chars: false
     # prefer_const_constructors: false
     # prefer_const_literals_to_create_immutables: false
 # Additional information about this file can be found at

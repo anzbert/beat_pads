@@ -7,6 +7,7 @@ class DropdownModulation extends StatelessWidget {
     required this.setValue,
     this.otherValue,
     this.dimensions,
+    super.key,
   }) : items = MPEmods.values
             .where((modulation) {
               if (dimensions != null) {

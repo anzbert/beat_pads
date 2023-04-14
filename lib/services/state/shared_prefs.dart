@@ -9,8 +9,8 @@ class Prefs {
   late SharedPreferences sharedPrefs;
 
   static Future<Prefs> initAsync() async {
-    final Prefs instance = Prefs._();
-    instance.sharedPrefs = await SharedPreferences.getInstance();
+    final Prefs instance = Prefs._()
+      ..sharedPrefs = await SharedPreferences.getInstance();
     return instance;
   }
 }

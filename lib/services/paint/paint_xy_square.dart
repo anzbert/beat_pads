@@ -29,12 +29,12 @@ class CustomPaintXYSquare extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     // BACK:
-    final Paint brushRect = Paint()
+    final brushRect = Paint()
       ..color = colorBack
       ..strokeWidth = 8
       ..strokeCap = StrokeCap.round;
 
-    final RRect roundedRect = RRect.fromRectAndRadius(
+    final roundedRect = RRect.fromRectAndRadius(
       Rect.fromCircle(
         center: origin,
         radius: maxRadius,
@@ -55,25 +55,24 @@ class CustomPaintXYSquare extends CustomPainter {
     // canvas.drawRRect(roundedRect, brushRect); // background
 
     // FRONT:
-    final Paint brush = Paint()
+    final brush = Paint()
       ..color = colorFront
       ..style = PaintingStyle.stroke
       ..strokeWidth = 6
       ..strokeCap = StrokeCap.round;
 
-    final Offset originY = origin.translate(changeAbsolute.dx, -maxRadius);
-    final Offset pointY = ((Offset.fromDirection(pi / 2)) + origin)
+    final originY = origin.translate(changeAbsolute.dx, -maxRadius);
+    final pointY = ((Offset.fromDirection(pi / 2)) + origin)
         .translate(changeAbsolute.dx, maxRadius);
     canvas.drawLine(originY, pointY, brush); // vertical Y line
 
-    final Offset originX = origin.translate(-maxRadius, -changeAbsolute.dy);
-    final Offset pointX = ((Offset.fromDirection(2 * pi)) + origin)
+    final originX = origin.translate(-maxRadius, -changeAbsolute.dy);
+    final pointX = ((Offset.fromDirection(2 * pi)) + origin)
         .translate(maxRadius, -changeAbsolute.dy);
     canvas.drawLine(originX, pointX, brush); // horizontal X line
 
     brush.style = PaintingStyle.fill;
-    final Offset touch =
-        origin.translate(changeAbsolute.dx, -changeAbsolute.dy);
+    final touch = origin.translate(changeAbsolute.dx, -changeAbsolute.dy);
     canvas.drawCircle(touch, 12, brush); // touch tracker
 
     brush.color = colorDeadZone;

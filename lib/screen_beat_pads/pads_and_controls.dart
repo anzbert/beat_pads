@@ -10,7 +10,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class BeatPadsAndControls extends ConsumerWidget {
-  const BeatPadsAndControls({required this.preview});
+  const BeatPadsAndControls({
+    required this.preview,
+    super.key,
+  });
   final bool preview;
 
   @override
