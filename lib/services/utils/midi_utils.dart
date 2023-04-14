@@ -95,9 +95,9 @@ abstract class MidiUtils {
   static String getNoteName(
     int value, {
     Sign sign = Sign.sharp,
-    showOctaveIndex = true,
-    showNoteValue = false,
-    gmPercussionLabels = false,
+    bool showOctaveIndex = true,
+    bool showNoteValue = false,
+    bool gmPercussionLabels = false,
   }) {
     if (value < 0 || value > 127) {
       return "#Range";
@@ -173,7 +173,7 @@ class MPEinitMessage extends MidiMessage {
   /// Uses lower zone by default, enable upperZone to switch.
   ///
   /// Set memberChannels to 0 to send turn zone off message.
-  MPEinitMessage({this.memberChannels = 7, upperZone = false})
+  MPEinitMessage({this.memberChannels = 7, bool upperZone = false})
       : zone = upperZone ? 0x0F : 0x00;
 
   @override

@@ -49,7 +49,7 @@ class MenuMidi extends ConsumerWidget {
           label: "Midi Channel",
           subtitle: "In MPE Mode only 1 or 16",
           trailing: Text((ref.watch(channelUsableProv) + 1).toString()),
-          setValue: (v) => ref.read(channelSettingProv.notifier).set(v - 1),
+          setValue: (int v) => ref.read(channelSettingProv.notifier).set(v - 1),
           readValue: ref.watch(channelUsableProv) + 1,
           onChangeEnd: ref.read(channelSettingProv.notifier).save,
         ),
@@ -61,7 +61,7 @@ class MenuMidi extends ConsumerWidget {
           trailing: Text(ref.watch(zoneProv)
               ? "${ref.watch(mpeMemberChannelsProv)} (${15 - ref.watch(mpeMemberChannelsProv)} to 15)"
               : "${ref.watch(mpeMemberChannelsProv)} (2 to ${ref.watch(mpeMemberChannelsProv) + 1})"),
-          setValue: (v) => ref.read(mpeMemberChannelsProv.notifier).set(v),
+          setValue: (int v) => ref.read(mpeMemberChannelsProv.notifier).set(v),
           readValue: ref.watch(mpeMemberChannelsProv),
           onChangeEnd: ref.read(mpeMemberChannelsProv.notifier).save,
         ),
@@ -72,7 +72,8 @@ class MenuMidi extends ConsumerWidget {
           trailing: DropdownEnum(
             values: VelocityMode.values,
             readValue: ref.watch(velocityModeProv),
-            setValue: (v) => ref.read(velocityModeProv.notifier).setAndSave(v),
+            setValue: (VelocityMode v) =>
+                ref.read(velocityModeProv.notifier).setAndSave(v),
           ),
         ),
         if (ref.watch(velocityModeProv) == VelocityMode.fixed)
@@ -82,7 +83,7 @@ class MenuMidi extends ConsumerWidget {
             label: "Fixed Velocity",
             trailing: Text(ref.watch(velocityProv).toString()),
             readValue: ref.watch(velocityProv),
-            setValue: (v) => ref.read(velocityProv.notifier).set(v),
+            setValue: (int v) => ref.read(velocityProv.notifier).set(v),
             resetValue: ref.read(velocityProv.notifier).reset,
             onChangeEnd: ref.read(velocityProv.notifier).save,
           ),
@@ -91,8 +92,8 @@ class MenuMidi extends ConsumerWidget {
               label: "Velocity Range",
               readMin: ref.watch(velocityMinProv),
               readMax: ref.watch(velocityMaxProv),
-              setMin: (v) => ref.read(velocityMinProv.notifier).set(v),
-              setMax: (v) => ref.read(velocityMaxProv.notifier).set(v),
+              setMin: (int v) => ref.read(velocityMinProv.notifier).set(v),
+              setMax: (int v) => ref.read(velocityMaxProv.notifier).set(v),
               resetFunction: ref.read(velocityMaxProv.notifier).reset,
               onChangeEnd: () {
                 ref.read(velocityMaxProv.notifier).save();

@@ -38,8 +38,9 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_lints: ^2.0.0
+  # flutter_lints: ^2.0.0
   flutter_launcher_icons: ^0.13.0
+  very_good_analysis: ^4.0.0
 
 flutter_icons:
   # Recompile icons with:

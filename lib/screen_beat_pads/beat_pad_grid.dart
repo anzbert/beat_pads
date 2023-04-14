@@ -1,14 +1,17 @@
 import 'package:beat_pads/screen_beat_pads/beat_pad.dart';
+import 'package:beat_pads/services/services.dart';
+import 'package:beat_pads/shared_components/_shared.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:beat_pads/shared_components/_shared.dart';
-import 'package:beat_pads/services/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class SlidePads extends ConsumerStatefulWidget {
+  const SlidePads({
+    required this.preview,
+    super.key,
+  });
   final bool preview;
-  const SlidePads({Key? key, required this.preview}) : super(key: key);
 
   @override
   ConsumerState<SlidePads> createState() => _SlidePadsState();
@@ -26,9 +29,9 @@ class _SlidePadsState extends ConsumerState<SlidePads>
     upperzone = ref.read(zoneProv);
     if (playmode == PlayMode.mpe && !widget.preview) {
       MPEinitMessage(
-              memberChannels: ref.read(mpeMemberChannelsProv),
-              upperZone: upperzone)
-          .send();
+        memberChannels: ref.read(mpeMemberChannelsProv),
+        upperZone: upperzone,
+      ).send();
     }
   }
 
@@ -39,7 +42,8 @@ class _SlidePadsState extends ConsumerState<SlidePads>
     _animations.removeWhere((element) => element.kill);
   }
 
-  /// Returns a CustomPointer with the index of the clicked pad and the position Offset within the pad surface
+  /// Returns a CustomPointer with the index of the clicked pad and the position
+  /// Offset within the pad surface
   PadAndTouchData? _detectTappedItem(PointerEvent event) {
     final BuildContext? context = _padsWidgetKey.currentContext;
     if (context == null) return null;
@@ -69,7 +73,12 @@ class _SlidePadsState extends ConsumerState<SlidePads>
             yPos = ySize;
           } else {
             yPos = Utils.mapValueToTargetRange(
-                yPos, yDeadZone, ySize - yDeadZone, 0, ySize - yDeadZone * 2);
+              yPos,
+              yDeadZone,
+              ySize - yDeadZone,
+              0,
+              ySize - yDeadZone * 2,
+            );
             ySize = ySize - yDeadZone * 2;
           }
 
@@ -86,37 +95,41 @@ class _SlidePadsState extends ConsumerState<SlidePads>
     return null;
   }
 
-  down(PointerEvent touch) {
-    PadAndTouchData? result = _detectTappedItem(touch);
+  void down(PointerEvent touch) {
+    final PadAndTouchData? result = _detectTappedItem(touch);
 
     if (mounted && result != null) {
-      PadTouchAndScreenData data = PadTouchAndScreenData(
-          pointer: touch.pointer,
-          screenTouchPos: touch.position,
-          screenSize: MediaQuery.of(context).size,
-          padNote: result.padId,
-          yPercentage: result.yPercentage);
+      final PadTouchAndScreenData data = PadTouchAndScreenData(
+        pointer: touch.pointer,
+        screenTouchPos: touch.position,
+        screenSize: MediaQuery.of(context).size,
+        padNote: result.padId,
+        yPercentage: result.yPercentage,
+      );
 
       ref.read(senderProvider).handleNewTouch(data);
     }
   }
 
-  move(PointerEvent touch) {
+  void move(PointerEvent touch) {
     if (ref.read(playModeProv) == PlayMode.noSlide) {
       return;
     }
 
     if (mounted) {
-      PadAndTouchData? data = _detectTappedItem(touch);
-      ref.read(senderProvider).handlePan(NullableTouchAndScreenData(
-          pointer: touch.pointer,
-          padNote: data?.padId,
-          yPercentage: data?.yPercentage,
-          screenTouchPos: touch.position));
+      final PadAndTouchData? data = _detectTappedItem(touch);
+      ref.read(senderProvider).handlePan(
+            NullableTouchAndScreenData(
+              pointer: touch.pointer,
+              padNote: data?.padId,
+              yPercentage: data?.yPercentage,
+              screenTouchPos: touch.position,
+            ),
+          );
     }
   }
 
-  upAndCancel(PointerEvent touch) {
+  void upAndCancel(PointerEvent touch) {
     if (mounted) {
       ref
           .read(senderProvider)
@@ -124,26 +137,33 @@ class _SlidePadsState extends ConsumerState<SlidePads>
 
       if (ref.read(modReleaseUsable) > 0 &&
           ref.read(playModeProv).modulatable) {
-        TouchEvent? event =
+        final TouchEvent? event =
             ref.read(touchReleaseBuffer.notifier).getByID(touch.pointer);
         if (event == null || event.newPosition == event.origin) return;
 
-        ReturnAnimation returnAnim = ReturnAnimation(
+        final ReturnAnimation returnAnim = ReturnAnimation(
           event.uniqueID,
           ref.read(modReleaseUsable),
           tickerProvider: this,
         );
 
-        double absoluteMaxRadius = MediaQuery.of(context).size.longestSide *
-            ref.read(modulationRadiusProv);
-        Offset constrainedPosition = ref.read(modulation2DProv)
+        final double absoluteMaxRadius =
+            MediaQuery.of(context).size.longestSide *
+                ref.read(modulationRadiusProv);
+        final Offset constrainedPosition = ref.read(modulation2DProv)
             ? Utils.limitToSquare(
-                event.origin, touch.position, absoluteMaxRadius)
+                event.origin,
+                touch.position,
+                absoluteMaxRadius,
+              )
             : Utils.limitToCircle(
-                event.origin, touch.position, absoluteMaxRadius);
+                event.origin,
+                touch.position,
+                absoluteMaxRadius,
+              );
 
         returnAnim.animation.addListener(() {
-          TouchEvent? touchEvent = ref
+          final TouchEvent? touchEvent = ref
               .read(touchReleaseBuffer.notifier)
               .getByID(returnAnim.uniqueID);
 
@@ -167,12 +187,18 @@ class _SlidePadsState extends ConsumerState<SlidePads>
             killAllMarkedAnimations();
             return;
           } else {
-            ref.read(senderProvider).handlePan(NullableTouchAndScreenData(
-                pointer: touch.pointer,
-                padNote: null,
-                yPercentage: null,
-                screenTouchPos: Offset.lerp(
-                    constrainedPosition, event.origin, returnAnim.value)!));
+            ref.read(senderProvider).handlePan(
+                  NullableTouchAndScreenData(
+                    pointer: touch.pointer,
+                    padNote: null,
+                    yPercentage: null,
+                    screenTouchPos: Offset.lerp(
+                      constrainedPosition,
+                      event.origin,
+                      returnAnim.value,
+                    )!,
+                  ),
+                );
             setState(() {});
           }
         });
@@ -197,54 +223,50 @@ class _SlidePadsState extends ConsumerState<SlidePads>
           onPointerMove: move,
           onPointerUp: upAndCancel,
           onPointerCancel: upAndCancel,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-                horizontal: 0,
-                vertical: 0), // !for a future for margin setting!
-            child: Column(
-              // Hit testing happens on this keyed Widget, which contains all the pads
-              key: _padsWidgetKey,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ...rows.map(
-                  (row) {
-                    return Expanded(
-                      flex: 1,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          ...row.map(
-                            (customPad) {
-                              switch (customPad.padType) {
-                                case PadType.encoder:
-                                  // Case not implemented...
-                                  return const SizedBox.expand();
-                                case PadType.chord:
-                                  // Case not implemented...
-                                  return const SizedBox.expand();
-                                case PadType.note:
-                                  return Expanded(
-                                    flex: 1,
-                                    child: HitTestObject(
-                                      index: customPad.padValue,
-                                      child: SlideBeatPad(
-                                        note: customPad.padValue,
-                                        preview: widget.preview,
-                                      ),
+          child: Column(
+            // Hit testing happens on this keyed Widget, which contains
+            // all the pads
+            key: _padsWidgetKey,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ...rows.map(
+                (row) {
+                  return Expanded(
+                    flex: 1,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        ...row.map(
+                          (customPad) {
+                            switch (customPad.padType) {
+                              case PadType.encoder:
+                                // Case not implemented...
+                                return const SizedBox.expand();
+                              case PadType.chord:
+                                // Case not implemented...
+                                return const SizedBox.expand();
+                              case PadType.note:
+                                return Expanded(
+                                  flex: 1,
+                                  child: HitTestObject(
+                                    index: customPad.padValue,
+                                    child: SlideBeatPad(
+                                      note: customPad.padValue,
+                                      preview: widget.preview,
                                     ),
-                                  );
-                              }
-                            },
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
-              ],
-            ),
+                                  ),
+                                );
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ],
           ),
         ),
         if (ref.watch(playModeProv).modulatable)

@@ -105,19 +105,22 @@ class MenuLayout extends ConsumerWidget {
                 trailing: DropdownEnum<Layout>(
                   values: Layout.values,
                   readValue: ref.watch<Layout>(layoutProv),
-                  setValue: (v) => ref.read(layoutProv.notifier).setAndSave(v),
+                  setValue: (Layout v) =>
+                      ref.read(layoutProv.notifier).setAndSave(v),
                 ),
               ),
               if (resizableGrid)
                 IntCounterTile(
                   label: "Width",
-                  setValue: (v) => ref.read(widthProv.notifier).setAndSave(v),
+                  setValue: (int v) =>
+                      ref.read(widthProv.notifier).setAndSave(v),
                   readValue: ref.watch(widthProv),
                 ),
               if (resizableGrid)
                 IntCounterTile(
                   label: "Height",
-                  setValue: (v) => ref.read(heightProv.notifier).setAndSave(v),
+                  setValue: (int v) =>
+                      ref.read(heightProv.notifier).setAndSave(v),
                   readValue: ref.watch(heightProv),
                 ),
               if (resizableGrid) const DividerTitle("Scales"),
@@ -127,7 +130,8 @@ class MenuLayout extends ConsumerWidget {
                   trailing: DropdownEnum<Scale>(
                     values: Scale.values,
                     readValue: ref.watch(scaleProv),
-                    setValue: (v) => ref.read(scaleProv.notifier).setAndSave(v),
+                    setValue: (Scale v) =>
+                        ref.read(scaleProv.notifier).setAndSave(v),
                   ),
                 ),
               if (resizableGrid)
@@ -135,7 +139,7 @@ class MenuLayout extends ConsumerWidget {
                   title: const Text("Scale Root Note"),
                   subtitle: const Text("Root Note of the selected scale"),
                   trailing: DropdownRootNote(
-                    setValue: (v) {
+                    setValue: (int v) {
                       ref.read(rootProv.notifier).setAndSave(v);
                       ref.read(baseProv.notifier).setAndSave(v);
                     },
@@ -148,7 +152,8 @@ class MenuLayout extends ConsumerWidget {
                   subtitle: const Text(
                       "The lowest Note in the Grid, on the bottom left"),
                   trailing: DropdownRootNote(
-                    setValue: (v) => ref.read(baseProv.notifier).setAndSave(v),
+                    setValue: (int v) =>
+                        ref.read(baseProv.notifier).setAndSave(v),
                     readValue: ref.watch(baseProv),
                   ),
                 ),
@@ -156,7 +161,7 @@ class MenuLayout extends ConsumerWidget {
                 IntCounterTile(
                   label: "Base Octave",
                   readValue: ref.watch(baseOctaveProv),
-                  setValue: (v) =>
+                  setValue: (int v) =>
                       ref.read(baseOctaveProv.notifier).setAndSave(v),
                   resetFunction: ref.read(baseOctaveProv.notifier).reset,
                 ),
@@ -209,7 +214,7 @@ class MenuLayout extends ConsumerWidget {
                 subtitle:
                     "Set time in milliseconds for Pitch Bend Slider to ease back to Zero",
                 readValue: ref.watch(pitchBendEaseStepProv),
-                setValue: (v) =>
+                setValue: (int v) =>
                     ref.read(pitchBendEaseStepProv.notifier).set(v),
                 resetFunction: ref.read(pitchBendEaseStepProv.notifier).reset,
                 displayValue: ref.watch(pitchBendEaseUsable) == 0
@@ -229,7 +234,7 @@ class MenuLayout extends ConsumerWidget {
                 trailing: DropdownEnum<PadLabels>(
                   values: PadLabels.values,
                   readValue: ref.watch<PadLabels>(padLabelsProv),
-                  setValue: (v) =>
+                  setValue: (PadLabels v) =>
                       ref.read(padLabelsProv.notifier).setAndSave(v),
                 ),
               ),
@@ -240,7 +245,7 @@ class MenuLayout extends ConsumerWidget {
                 trailing: DropdownEnum<PadColors>(
                   values: PadColors.values,
                   readValue: ref.watch(padColorsProv),
-                  setValue: (v) =>
+                  setValue: (PadColors v) =>
                       ref.read(padColorsProv.notifier).setAndSave(v),
                 ),
               ),
@@ -251,7 +256,7 @@ class MenuLayout extends ConsumerWidget {
                 subtitle: "Root Note hue on the RGB color wheel",
                 trailing: Text(ref.watch(baseHueProv).toString()),
                 readValue: ref.watch(baseHueProv),
-                setValue: (v) => ref.read(baseHueProv.notifier).set(v),
+                setValue: (int v) => ref.read(baseHueProv.notifier).set(v),
                 resetValue: ref.read(baseHueProv.notifier).reset,
                 onChangeEnd: ref.read(baseHueProv.notifier).save,
               ),

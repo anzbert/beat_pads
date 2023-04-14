@@ -31,7 +31,7 @@ class NoteEvent {
   void updateMPEchannel(int newChan) => channel = newChan;
 
   /// Send this noteEvent's NoteOnMessage
-  void noteOn({cc = false}) {
+  void noteOn({bool cc = false}) {
     noteOnMessage?.send();
     if (cc) {
       ccMessage =
