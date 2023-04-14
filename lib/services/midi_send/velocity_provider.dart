@@ -3,9 +3,9 @@ import 'package:beat_pads/services/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 enum VelocityMode {
-  random("Random"),
-  fixed("Fixed"),
-  yAxis("Y-Axis");
+  random('Random'),
+  fixed('Fixed'),
+  yAxis('Y-Axis');
 
   const VelocityMode(this.title);
   final String title;

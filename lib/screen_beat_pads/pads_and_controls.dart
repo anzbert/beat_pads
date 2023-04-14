@@ -125,7 +125,7 @@ class BeatPadsAndControls extends ConsumerWidget {
                     Icons.cable,
                   ),
                   Text(
-                    "Select Midi Device",
+                    'Select Midi Device',
                   ),
                 ],
               ),

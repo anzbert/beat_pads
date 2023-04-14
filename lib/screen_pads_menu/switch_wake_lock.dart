@@ -10,8 +10,8 @@ class SwitchWakeLockTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ListTile(
-      title: const Text("Wake Lock"),
-      subtitle: const Text("Keep the screen locked on"),
+      title: const Text('Wake Lock'),
+      subtitle: const Text('Keep the screen locked on'),
       trailing: Switch(
         value: ref.watch(_wakeLockProv),
         onChanged: (v) {

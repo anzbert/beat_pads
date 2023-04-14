@@ -53,7 +53,7 @@ class ReturnToMenuButton extends StatelessWidget {
                 borderRadius: BorderRadius.circular(3),
               ),
               richMessage: const TextSpan(
-                text: "Double-Tap for Menu",
+                text: 'Double-Tap for Menu',
               ),
               triggerMode: TooltipTriggerMode.tap,
               showDuration: const Duration(milliseconds: 1000),

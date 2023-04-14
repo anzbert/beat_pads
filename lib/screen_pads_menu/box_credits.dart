@@ -15,7 +15,7 @@ class CreditsBox extends StatelessWidget {
     if (await canLaunchUrl(httpUri)) {
       return launchUrl(httpUri);
     } else {
-      Utils.logd("Failure to launch webview with:\n$httpUri");
+      Utils.logd('Failure to launch webview with:\n$httpUri');
       return false;
     }
   }
@@ -25,57 +25,57 @@ class CreditsBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return WidgetsInfoBox(
-      header: "Credits",
+      header: 'Credits',
       body: [
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Wrap(
               children: const [
-                Text("Get the Source, contribute and report issues:"),
+                Text('Get the Source, contribute and report issues:'),
               ],
             ),
             TextButton(
               child: const Text(
-                "GitHub",
+                'GitHub',
                 style: TextStyle(
                   decoration: TextDecoration.underline,
                   fontSize: _linkFontSize,
                 ),
               ),
-              onPressed: () async => webView("github.com", "anzbert/beat_pads"),
+              onPressed: () async => webView('github.com', 'anzbert/beat_pads'),
             )
           ],
         ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Wrap(children: const [Text("My website:")]),
+            Wrap(children: const [Text('My website:')]),
             TextButton(
               child: const Text(
-                "Anzio.dev",
+                'Anzio.dev',
                 style: TextStyle(
                   decoration: TextDecoration.underline,
                   fontSize: _linkFontSize,
                 ),
               ),
-              onPressed: () async => webView("anzio.dev"),
+              onPressed: () async => webView('anzio.dev'),
             )
           ],
         ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Wrap(children: const [Text("Magic Tone Network & XpressPads:")]),
+            Wrap(children: const [Text('Magic Tone Network & XpressPads:')]),
             TextButton(
               child: const Text(
-                "XpressPads.com",
+                'XpressPads.com',
                 style: TextStyle(
                   decoration: TextDecoration.underline,
                   fontSize: _linkFontSize,
                 ),
               ),
-              onPressed: () async => webView("xpresspads.com"),
+              onPressed: () async => webView('xpresspads.com'),
             )
           ],
         ),
@@ -85,29 +85,29 @@ class CreditsBox extends StatelessWidget {
             Wrap(children: const [Text("Dog Logo by 'catalyststuff' from:")]),
             TextButton(
               child: const Text(
-                "FreePik.com",
+                'FreePik.com',
                 style: TextStyle(
                   decoration: TextDecoration.underline,
                   fontSize: _linkFontSize,
                 ),
               ),
-              onPressed: () async => webView("freepik.com"),
+              onPressed: () async => webView('freepik.com'),
             )
           ],
         ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Wrap(children: const [Text("Splash Screen animated with Rive:")]),
+            Wrap(children: const [Text('Splash Screen animated with Rive:')]),
             TextButton(
               child: const Text(
-                "Rive.app",
+                'Rive.app',
                 style: TextStyle(
                   decoration: TextDecoration.underline,
                   fontSize: _linkFontSize,
                 ),
               ),
-              onPressed: () async => webView("rive.app"),
+              onPressed: () async => webView('rive.app'),
             )
           ],
         ),
@@ -115,11 +115,11 @@ class CreditsBox extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Wrap(
-              children: const [Text("Contact me:")],
+              children: const [Text('Contact me:')],
             ),
             TextButton(
               child: const Text(
-                "anzbert@gmail.com",
+                'anzbert@gmail.com',
                 style: TextStyle(
                   decoration: TextDecoration.underline,
                   fontSize: _linkFontSize,
@@ -134,7 +134,7 @@ class CreditsBox extends StatelessWidget {
                 if (await canLaunchUrl(encoded)) {
                   await launchUrl(encoded);
                 } else {
-                  Utils.logd("Failure to launch webview with:\n$encoded");
+                  Utils.logd('Failure to launch webview with:\n$encoded');
                 }
               },
             )

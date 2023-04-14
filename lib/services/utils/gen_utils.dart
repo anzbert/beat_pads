@@ -9,7 +9,7 @@ abstract class Utils {
   static Future<void> debugLog(String label, dynamic value, int seconds) async {
     while (true) {
       await Future.delayed(Duration(seconds: seconds), () {
-        Utils.logd("$label: $value");
+        Utils.logd('$label: $value');
       });
     }
   }

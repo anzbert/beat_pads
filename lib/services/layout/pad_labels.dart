@@ -1,9 +1,9 @@
 import 'package:beat_pads/services/services.dart';
 
 enum PadLabels {
-  note("Note Names"),
-  value("Midi Value"),
-  none("None");
+  note('Note Names'),
+  value('Midi Value'),
+  none('None');
 
   const PadLabels(this.title);
   final String title;

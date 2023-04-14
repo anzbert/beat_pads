@@ -5,7 +5,7 @@ class NonLinearSliderTile extends StatelessWidget {
   const NonLinearSliderTile({
     required this.readValue,
     required this.setValue,
-    this.label = "#Label",
+    this.label = '#Label',
     this.subtitle,
     this.resetFunction,
     this.onChangeEnd,
@@ -42,7 +42,7 @@ class NonLinearSliderTile extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 12),
                     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   ),
-                  child: const Text("Reset"),
+                  child: const Text('Reset'),
                 )
             ],
           ),

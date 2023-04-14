@@ -7,7 +7,7 @@ class MidiRangeSelectorTile extends StatelessWidget {
     required this.readMax,
     required this.setMin,
     required this.setMax,
-    this.label = "#Label",
+    this.label = '#Label',
     this.resetFunction,
     this.onChangeEnd,
     this.note = false,
@@ -41,11 +41,11 @@ class MidiRangeSelectorTile extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 12),
                     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   ),
-                  child: const Text("Reset"),
+                  child: const Text('Reset'),
                 ),
             ],
           ),
-          trailing: Text("$readMin - $readMax"),
+          trailing: Text('$readMin - $readMax'),
         ),
         Builder(
           builder: (context) {
@@ -57,8 +57,8 @@ class MidiRangeSelectorTile extends StatelessWidget {
                 min: 10,
                 max: 127,
                 labels: const RangeLabels(
-                  "Min",
-                  "Max",
+                  'Min',
+                  'Max',
                 ),
                 onChanged: (RangeValues values) {
                   setMin(values.start.toInt());

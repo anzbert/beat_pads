@@ -22,11 +22,11 @@ class MenuInput extends ConsumerWidget {
           padding:
               const EdgeInsets.only(bottom: ThemeConst.listViewBottomPadding),
           children: <Widget>[
-            const DividerTitle("Input"),
+            const DividerTitle('Input'),
             ListTile(
-              title: const Text("Pan Mode"),
+              title: const Text('Pan Mode'),
               subtitle: const Text(
-                "Choose how the grid reacts to finger X and Y movement",
+                'Choose how the grid reacts to finger X and Y movement',
               ),
               trailing: DropdownEnum(
                 values: PlayMode.values,
@@ -39,8 +39,8 @@ class MenuInput extends ConsumerWidget {
               ModSizeSliderTile(
                 min: ref.watch(modulationRadiusProv.notifier).min,
                 max: ref.watch(modulationRadiusProv.notifier).max,
-                label: "Input Size",
-                subtitle: "Modulation field width, relative to the pad screen",
+                label: 'Input Size',
+                subtitle: 'Modulation field width, relative to the pad screen',
                 trailing:
                     Text('${(ref.watch(modulationRadiusProv) * 100).toInt()}%'),
                 readValue: ref.watch(modulationRadiusProv).clamp(
@@ -56,11 +56,11 @@ class MenuInput extends ConsumerWidget {
               ModSizeSliderTile(
                 min: ref.watch(modulationDeadZoneProv.notifier).min,
                 max: ref.watch(modulationDeadZoneProv.notifier).max,
-                label: "Dead Zone",
+                label: 'Dead Zone',
                 subtitle:
-                    "Size of the non-reactive center of the modulation field",
+                    'Size of the non-reactive center of the modulation field',
                 trailing: Text(
-                  "${(ref.watch(modulationDeadZoneProv) * 100).toInt()}%",
+                  '${(ref.watch(modulationDeadZoneProv) * 100).toInt()}%',
                 ),
                 readValue: ref.watch(modulationDeadZoneProv).clamp(
                       ref.watch(modulationDeadZoneProv.notifier).min,
@@ -72,12 +72,12 @@ class MenuInput extends ConsumerWidget {
                 onChangeEnd: ref.read(modulationDeadZoneProv.notifier).save,
               ),
             if (ref.watch(playModeProv) == PlayMode.mpe)
-              const DividerTitle("MPE"),
+              const DividerTitle('MPE'),
             if (ref.watch(playModeProv) == PlayMode.mpe)
               ListTile(
-                title: const Text("2-D Modulation"),
+                title: const Text('2-D Modulation'),
                 subtitle: const Text(
-                  "Modulate 2 controls on the X and Y axis, or just 1 by Radius [CC in brackets]",
+                  'Modulate 2 controls on the X and Y axis, or just 1 by Radius [CC in brackets]',
                 ),
                 trailing: Switch(
                   value: ref.watch(modulation2DProv),
@@ -88,7 +88,7 @@ class MenuInput extends ConsumerWidget {
             if (ref.watch(playModeProv) == PlayMode.mpe &&
                 ref.watch(modulation2DProv))
               ListTile(
-                title: const Text("X-Axis"),
+                title: const Text('X-Axis'),
                 trailing: DropdownModulation(
                   readValue: ref.watch(mpe2DXProv),
                   setValue: (MPEmods v) =>
@@ -99,7 +99,7 @@ class MenuInput extends ConsumerWidget {
             if (ref.watch(playModeProv) == PlayMode.mpe &&
                 ref.watch(modulation2DProv))
               ListTile(
-                title: const Text("Y-Axis"),
+                title: const Text('Y-Axis'),
                 trailing: DropdownModulation(
                   readValue: ref.watch(mpe2DYProv),
                   setValue: (MPEmods v) =>
@@ -110,7 +110,7 @@ class MenuInput extends ConsumerWidget {
             if (ref.watch(playModeProv) == PlayMode.mpe &&
                 ref.watch(modulation2DProv) == false)
               ListTile(
-                title: const Text("Radius"),
+                title: const Text('Radius'),
                 trailing: DropdownModulation(
                   dimensions: Dims.one,
                   readValue: ref.watch(mpe1DRadiusProv),
@@ -125,55 +125,55 @@ class MenuInput extends ConsumerWidget {
                 IntSliderTile(
                   min: 1,
                   max: 48,
-                  label: "Pitch Bend Range",
-                  subtitle: "Maximum MPE Pitch Bend in semitones",
-                  trailing: Text("${ref.watch(mpePitchbendRangeProv)} st"),
+                  label: 'Pitch Bend Range',
+                  subtitle: 'Maximum MPE Pitch Bend in semitones',
+                  trailing: Text('${ref.watch(mpePitchbendRangeProv)} st'),
                   readValue: ref.watch(mpePitchbendRangeProv),
                   setValue: (int v) =>
                       ref.read(mpePitchbendRangeProv.notifier).set(v),
                   resetValue: ref.read(mpePitchbendRangeProv.notifier).reset,
                   onChangeEnd: ref.read(mpePitchbendRangeProv.notifier).save,
                 ),
-            const DividerTitle("Release"),
+            const DividerTitle('Release'),
             NonLinearSliderTile(
-              label: "Note Release Delay",
-              subtitle: "NoteOff delay after pad release in milliseconds",
+              label: 'Note Release Delay',
+              subtitle: 'NoteOff delay after pad release in milliseconds',
               readValue: ref.watch(noteReleaseStepProv),
               setValue: (int v) =>
                   ref.read(noteReleaseStepProv.notifier).set(v),
               resetFunction: ref.read(noteReleaseStepProv.notifier).reset,
               displayValue: ref.watch(noteReleaseUsable) == 0
-                  ? "Off"
+                  ? 'Off'
                   : ref.watch(noteReleaseUsable) < 1000
-                      ? "${ref.watch(noteReleaseUsable)} ms"
-                      : "${ref.watch(noteReleaseUsable) / 1000} s",
+                      ? '${ref.watch(noteReleaseUsable)} ms'
+                      : '${ref.watch(noteReleaseUsable) / 1000} s',
               steps: Timing.releaseDelayTimes.length ~/ 1.5,
               onChangeEnd: ref.read(noteReleaseStepProv.notifier).save,
             ),
             if (ref.watch(playModeProv).modulatable)
               NonLinearSliderTile(
-                label: "Modulation Ease Back",
+                label: 'Modulation Ease Back',
                 subtitle:
-                    "Modulation returning to Zero after pad release in milliseconds",
+                    'Modulation returning to Zero after pad release in milliseconds',
                 readValue: ref.watch(modReleaseStepProv),
                 setValue: (int v) =>
                     ref.read(modReleaseStepProv.notifier).set(v),
                 resetFunction: ref.read(modReleaseStepProv.notifier).reset,
                 displayValue: ref.watch(modReleaseUsable) == 0
-                    ? "Off"
+                    ? 'Off'
                     : ref.watch(modReleaseUsable) < 1000
-                        ? "${ref.watch(modReleaseUsable)} ms"
-                        : "${ref.watch(modReleaseUsable) / 1000} s",
+                        ? '${ref.watch(modReleaseUsable)} ms'
+                        : '${ref.watch(modReleaseUsable) / 1000} s',
                 steps: Timing.releaseDelayTimes.length ~/ 1.5,
                 onChangeEnd: ref.read(modReleaseStepProv.notifier).save,
               ),
             if (ref.watch(playModeProv).singleChannel)
-              const DividerTitle("Output"),
+              const DividerTitle('Output'),
             if (ref.watch(playModeProv).singleChannel)
               ListTile(
-                title: const Text("Control Change"),
+                title: const Text('Control Change'),
                 subtitle: const Text(
-                  "Send CC Message along with Note, one Midi channel higher",
+                  'Send CC Message along with Note, one Midi channel higher',
                 ),
                 trailing: Switch(
                   value: ref.watch(sendCCProv),

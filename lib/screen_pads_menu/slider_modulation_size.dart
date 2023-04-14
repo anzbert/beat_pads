@@ -8,7 +8,7 @@ class ModSizeSliderTile extends ConsumerWidget {
     required this.setValue,
     required this.readValue,
     required this.trailing,
-    this.label = "#label",
+    this.label = '#label',
     this.subtitle,
     this.min = 0,
     this.max = 1,
@@ -52,7 +52,7 @@ class ModSizeSliderTile extends ConsumerWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 12),
                     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   ),
-                  child: const Text("Reset"),
+                  child: const Text('Reset'),
                 )
             ],
           ),

@@ -107,7 +107,7 @@ abstract class MidiUtils {
     bool gmPercussionLabels = false,
   }) {
     if (value < 0 || value > 127) {
-      return "#Range";
+      return '#Range';
     }
 
     if (gmPercussionLabels) {
@@ -116,11 +116,11 @@ abstract class MidiUtils {
 
     final int octave = value ~/ 12;
     final int note = value % 12;
-    final String octaveString = showOctaveIndex ? "${octave - 2}" : "";
-    final String noteString = showNoteValue ? " ($value)" : "";
+    final String octaveString = showOctaveIndex ? '${octave - 2}' : '';
+    final String noteString = showNoteValue ? ' ($value)' : '';
 
     final String output =
-        "${sign == Sign.sharp ? midiNotesSharps[note] : midiNotesFlats[note]}$octaveString$noteString";
+        '${sign == Sign.sharp ? midiNotesSharps[note] : midiNotesFlats[note]}$octaveString$noteString';
 
     return output;
   }

@@ -3,18 +3,18 @@
 import 'package:beat_pads/services/services.dart';
 
 enum Layout {
-  majorThird("Major Third"),
-  minorThird("Minor Third"),
-  quart("Quart"),
-  continuous("Continuous"),
-  scaleNotesOnly("Scale - Continuous"),
-  scaleNotes3rd("Scale - 3rd"),
-  scaleNotes4th("Scale - 4th"),
+  majorThird('Major Third'),
+  minorThird('Minor Third'),
+  quart('Quart'),
+  continuous('Continuous'),
+  scaleNotesOnly('Scale - Continuous'),
+  scaleNotes3rd('Scale - 3rd'),
+  scaleNotes4th('Scale - 4th'),
   magicToneNetwork('Magic Tone Network™'),
-  xPressPadsStandard("XpressPads™ Standard 4x4"),
-  xPressPadsLatinJazz("XpressPads™ Latin/Jazz 4x4"),
-  xPressPadsXO("XpressPads™ with XO 4x4"),
-  xPressPadsXtreme("XpressPads™ Xtreme 8x4");
+  xPressPadsStandard('XpressPads™ Standard 4x4'),
+  xPressPadsLatinJazz('XpressPads™ Latin/Jazz 4x4'),
+  xPressPadsXO('XpressPads™ with XO 4x4'),
+  xPressPadsXtreme('XpressPads™ Xtreme 8x4');
 
   const Layout(this.title);
   final String title;

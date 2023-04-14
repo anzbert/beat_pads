@@ -49,7 +49,7 @@ class MemberChannelProvider extends AutoDisposeNotifier<int> {
 
   int _leastNotes(List<TouchEvent> touchEvents) {
     if (allMemberChannels.isEmpty) {
-      throw ArgumentError("no member channels available");
+      throw ArgumentError('no member channels available');
     }
 
     final Queue<int> usedChans = Queue.from(allMemberChannels);
@@ -57,7 +57,7 @@ class MemberChannelProvider extends AutoDisposeNotifier<int> {
     for (final TouchEvent event in touchEvents) {
       final bool removed = usedChans.remove(event.noteEvent.channel);
       if (!removed) {
-        Utils.logd("touchbuffer channel not part of memberlist!");
+        Utils.logd('touchbuffer channel not part of memberlist!');
       }
       usedChans.addFirst(event.noteEvent.channel);
     }

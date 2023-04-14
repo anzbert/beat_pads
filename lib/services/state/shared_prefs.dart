@@ -46,7 +46,7 @@ abstract class SettingNotifier<T> extends Notifier<T> {
     required this.defaultValue,
     this.usesPresets = true,
     this.resettable = true,
-  }) : presetKey = "{$key}-${PresetNotfier.basePreset}";
+  }) : presetKey = '{$key}-${PresetNotfier.basePreset}';
   final T defaultValue;
   final String key;
   String presetKey;
@@ -76,7 +76,7 @@ abstract class SettingNotifier<T> extends Notifier<T> {
     }
     if (usesPresets) {
       ref.listen(presetNotifierProvider, (_, next) {
-        presetKey = "{$key}-$next";
+        presetKey = '{$key}-$next';
         state = _load();
       });
     }

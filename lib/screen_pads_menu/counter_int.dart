@@ -5,7 +5,7 @@ class IntCounterTile extends StatelessWidget {
   const IntCounterTile({
     required this.readValue,
     required this.setValue,
-    this.label = "#label",
+    this.label = '#label',
     this.resetFunction,
     super.key,
   });
@@ -24,7 +24,7 @@ class IntCounterTile extends StatelessWidget {
           if (resetFunction != null)
             TextButton(
               onPressed: () => resetFunction!(),
-              child: const Text("Reset"),
+              child: const Text('Reset'),
             ),
         ],
       ),

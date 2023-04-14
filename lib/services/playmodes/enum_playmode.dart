@@ -2,10 +2,10 @@ import 'package:beat_pads/services/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 enum PlayMode {
-  slide("Trigger Notes"),
-  noSlide("Disabled"),
-  polyAT("Poly Aftertouch"),
-  mpe("MPE");
+  slide('Trigger Notes'),
+  noSlide('Disabled'),
+  polyAT('Poly Aftertouch'),
+  mpe('MPE');
 
   const PlayMode(this.title);
   final String title;

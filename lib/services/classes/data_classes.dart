@@ -74,6 +74,6 @@ class MidiMessagePacket {
 
   @override
   String toString() {
-    return "Type: $type / Content: $content";
+    return 'Type: $type / Content: $content';
   }
 }

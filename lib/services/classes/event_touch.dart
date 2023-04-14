@@ -95,7 +95,7 @@ class TouchEvent {
 
   @override
   String toString() {
-    return "noteEvent: ${noteEvent.note} / isAnimated: $hasReturnAnimation / noteOn: ${noteEvent.isPlaying} / isDirty: $_dirty";
+    return 'noteEvent: ${noteEvent.note} / isAnimated: $hasReturnAnimation / noteOn: ${noteEvent.isPlaying} / isDirty: $_dirty';
   }
 
   bool get isModulating {

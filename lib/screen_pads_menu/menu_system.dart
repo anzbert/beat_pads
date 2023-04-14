@@ -16,15 +16,15 @@ class MenuSystem extends ConsumerWidget {
     return ListView(
       padding: const EdgeInsets.only(bottom: ThemeConst.listViewBottomPadding),
       children: <Widget>[
-        const DividerTitle("System"),
+        const DividerTitle('System'),
         const SwitchWakeLockTile(),
-        const DividerTitle("Reset"),
+        const DividerTitle('Reset'),
         Center(
           child: ConstrainedBox(
             constraints:
                 const BoxConstraints(minWidth: ThemeConst.menuButtonMinWidth),
             child: SnackMessageButton(
-              label: "Reset Midi Buffers",
+              label: 'Reset Midi Buffers',
               message: "Midi buffer cleared & 'Stop All Notes' sent",
               onPressed: () {
                 ref.read(rxNoteProvider.notifier).reset();
@@ -42,7 +42,7 @@ class MenuSystem extends ConsumerWidget {
                 backgroundColor: Palette.lightPink,
               ),
               child: const Text(
-                "Reset All Presets",
+                'Reset All Presets',
               ),
               onPressed: () {
                 showDialog<String>(

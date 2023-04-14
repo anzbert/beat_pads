@@ -60,7 +60,7 @@ class _ModWheelState extends ConsumerState<ModWheel> {
               return Align(
                 alignment: Alignment.bottomCenter,
                 child: Text(
-                  "Mod",
+                  'Mod',
                   style: TextStyle(
                     fontSize: constraints.maxWidth * fontSizeFactor,
                     color: Palette.darker(Palette.tan, 0.6),
@@ -117,7 +117,7 @@ class _ModWheelState extends ConsumerState<ModWheel> {
                         flex: 2,
                         child: Center(
                           child: Text(
-                            "${ref.watch(_modWheelProvider)}",
+                            '${ref.watch(_modWheelProvider)}',
                             style: TextStyle(
                               fontSize: constraints.maxWidth * fontSizeFactor,
                               color: Palette.darker(Palette.tan, 0.6),

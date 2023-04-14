@@ -80,7 +80,7 @@ class _SplashScreenState extends State<SplashScreen> {
                           ),
                         ],
                       )
-                    : const Text(""),
+                    : const Text(''),
               ),
             ],
           ),

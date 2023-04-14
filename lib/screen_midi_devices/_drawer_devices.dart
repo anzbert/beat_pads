@@ -36,7 +36,7 @@ class MidiConfigState extends ConsumerState<MidiConfig> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Devices",
+          'Devices',
           style: Theme.of(context)
               .textTheme
               .headlineSmall!
@@ -110,7 +110,7 @@ class MidiConfigState extends ConsumerState<MidiConfig> {
                                     height: 40,
                                     child: Center(
                                       child: Text(
-                                        "No Midi Adapter found...",
+                                        'No Midi Adapter found...',
                                         style:
                                             TextStyle(color: Palette.darkGrey),
                                       ),
@@ -165,7 +165,7 @@ class MidiConfigState extends ConsumerState<MidiConfig> {
                   return Center(child: Text(snapshot.error.toString()));
                 } else {
                   return const Center(
-                    child: Text("- No Midi Devices Detected -"),
+                    child: Text('- No Midi Devices Detected -'),
                   );
                 }
               },

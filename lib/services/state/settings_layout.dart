@@ -112,7 +112,7 @@ final padLabelsProv =
     NotifierProvider<SettingEnumNotifier<PadLabels>, PadLabels>(() {
   return SettingEnumNotifier<PadLabels>(
     nameMap: PadLabels.values.asNameMap(),
-    key: "padLabels",
+    key: 'padLabels',
     defaultValue: PadLabels.note,
   );
 });
@@ -121,14 +121,14 @@ final padColorsProv =
     NotifierProvider<SettingEnumNotifier<PadColors>, PadColors>(() {
   return SettingEnumNotifier<PadColors>(
     nameMap: PadColors.values.asNameMap(),
-    key: "padColors",
+    key: 'padColors',
     defaultValue: PadColors.highlightRoot,
   );
 });
 
 final baseHueProv = NotifierProvider<SettingIntNotifier, int>(() {
   return SettingIntNotifier(
-    key: "baseHue",
+    key: 'baseHue',
     defaultValue: 240,
     max: 360,
   );

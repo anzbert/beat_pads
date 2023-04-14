@@ -106,7 +106,7 @@ class PadMenuScreen extends ConsumerWidget {
                       DropdownMenuItem(
                         value: i,
                         child: Text(
-                          "P$i",
+                          'P$i',
                           style: TextStyle(
                             color: PresetButtons.backgoundColors[i - 1],
                             fontSize: 31,
@@ -137,7 +137,7 @@ class PadMenuScreen extends ConsumerWidget {
                   Icons.apps,
                   color: Palette.cadetBlue,
                 ),
-                label: "Layout",
+                label: 'Layout',
               ),
               BottomNavigationBarItem(
                 activeIcon: Icon(
@@ -145,7 +145,7 @@ class PadMenuScreen extends ConsumerWidget {
                   color: Palette.cadetBlue,
                 ),
                 icon: const Icon(Icons.music_note),
-                label: "Midi",
+                label: 'Midi',
               ),
               BottomNavigationBarItem(
                 icon: const Icon(Icons.touch_app),
@@ -153,7 +153,7 @@ class PadMenuScreen extends ConsumerWidget {
                   Icons.touch_app,
                   color: Palette.cadetBlue,
                 ),
-                label: "Advanced",
+                label: 'Advanced',
               ),
               BottomNavigationBarItem(
                 activeIcon: Icon(
@@ -161,7 +161,7 @@ class PadMenuScreen extends ConsumerWidget {
                   color: Palette.cadetBlue,
                 ),
                 icon: const Icon(Icons.settings),
-                label: "System",
+                label: 'System',
               ),
             ],
           ),

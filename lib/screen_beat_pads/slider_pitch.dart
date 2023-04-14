@@ -52,7 +52,7 @@ class PitchSliderEasedState extends State<PitchSliderEased>
               return Align(
                 alignment: Alignment.bottomCenter,
                 child: Text(
-                  "Pitch",
+                  'Pitch',
                   style: TextStyle(
                     fontSize: constraints.maxWidth * fontSizeFactor,
                     color: Palette.darker(Palette.laserLemon, 0.6),
@@ -138,7 +138,7 @@ class PitchSliderEasedState extends State<PitchSliderEased>
                         flex: 2,
                         child: Center(
                           child: Text(
-                            "${(_pitch * 12).round()}",
+                            '${(_pitch * 12).round()}',
                             style: TextStyle(
                               fontSize: constraints.maxWidth * fontSizeFactor,
                               color: Palette.darker(Palette.laserLemon, 0.6),

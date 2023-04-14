@@ -33,14 +33,14 @@ class Preview extends ConsumerWidget {
                           children: [
                             // Text Fill
                             Text(
-                              "Preview",
+                              'Preview',
                               style: TextStyle(
                                 color: Palette.lightGrey.withOpacity(0.4),
                               ),
                             ),
                             // Text Outline
                             Text(
-                              "Preview",
+                              'Preview',
                               style: TextStyle(
                                 foreground: Paint()
                                   ..style = PaintingStyle.stroke
@@ -73,7 +73,7 @@ class Preview extends ConsumerWidget {
                       width: double.infinity,
                       child: FittedBox(
                         child: Text(
-                          "Preview",
+                          'Preview',
                           style: TextStyle(
                             color: Palette.lightGrey,
                           ),

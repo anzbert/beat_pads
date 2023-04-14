@@ -35,7 +35,7 @@ class _SliderVelocityState extends ConsumerState<SliderVelocity> {
               return Align(
                 alignment: Alignment.bottomCenter,
                 child: Text(
-                  "Vel",
+                  'Vel',
                   style: TextStyle(
                     fontSize: constraints.maxWidth * fontSizeFactor,
                     color: Palette.darker(Palette.cadetBlue, 0.6),
@@ -121,6 +121,7 @@ class _SliderVelocityState extends ConsumerState<SliderVelocity> {
                             ? Align(
                                 alignment: Alignment.centerRight,
                                 child: Text(
+                                  // ignore: prefer_single_quotes
                                   "${String.fromCharCode(177)}${ref.watch(velocityRangeProv) ~/ 2}",
                                   style: TextStyle(
                                     fontSize: constraints.maxWidth *
