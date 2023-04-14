@@ -1,15 +1,15 @@
 import 'package:beat_pads/screen_beat_pads/button_presets.dart';
+import 'package:beat_pads/screen_pads_menu/counter_int.dart';
 import 'package:beat_pads/screen_pads_menu/drop_down_enum.dart';
-import 'package:beat_pads/theme.dart';
-import 'package:flutter/material.dart';
+import 'package:beat_pads/screen_pads_menu/drop_down_notes.dart';
 import 'package:beat_pads/screen_pads_menu/preview_beat_pads.dart';
 import 'package:beat_pads/screen_pads_menu/slider_int.dart';
-import 'package:beat_pads/services/services.dart';
-import 'package:beat_pads/screen_pads_menu/counter_int.dart';
 import 'package:beat_pads/screen_pads_menu/slider_non_linear.dart';
-import 'package:beat_pads/screen_pads_menu/drop_down_notes.dart';
+import 'package:beat_pads/services/services.dart';
+import 'package:beat_pads/shared_components/divider_title.dart';
+import 'package:beat_pads/theme.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../shared_components/divider_title.dart';
 
 class MenuLayout extends ConsumerWidget {
   const MenuLayout();
@@ -21,7 +21,7 @@ class MenuLayout extends ConsumerWidget {
         .props
         .resizable; // Is the layout fixed or resizable?
     final bool isPortrait =
-        MediaQuery.of(context).orientation.name == "portrait" ? true : false;
+        MediaQuery.of(context).orientation.name == "portrait";
     return Flex(
       direction: isPortrait ? Axis.vertical : Axis.horizontal,
       crossAxisAlignment:
@@ -37,11 +37,12 @@ class MenuLayout extends ConsumerWidget {
           ),
         ),
         RotatedBox(
-            quarterTurns: isPortrait ? 0 : 1,
-            child: const Divider(
-              height: 0,
-              thickness: 3,
-            )),
+          quarterTurns: isPortrait ? 0 : 1,
+          child: const Divider(
+            height: 0,
+            thickness: 3,
+          ),
+        ),
         Expanded(
           flex: 3,
           child: ListView(
@@ -58,14 +59,16 @@ class MenuLayout extends ConsumerWidget {
                 title: const Text("Show Preset Buttons"),
                 subtitle: const Text("DOUBLE TAP buttons to switch Presets"),
                 trailing: Switch(
-                    value: ref.watch(presetButtonsProv),
-                    onChanged: (v) =>
-                        ref.read(presetButtonsProv.notifier).setAndSave(v)),
+                  value: ref.watch(presetButtonsProv),
+                  onChanged: (v) =>
+                      ref.read(presetButtonsProv.notifier).setAndSave(v),
+                ),
               ),
               Center(
                 child: ConstrainedBox(
                   constraints: const BoxConstraints(
-                      minWidth: ThemeConst.menuButtonMinWidth),
+                    minWidth: ThemeConst.menuButtonMinWidth,
+                  ),
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Palette.laserLemon,
@@ -79,7 +82,8 @@ class MenuLayout extends ConsumerWidget {
                         builder: (BuildContext context) => AlertDialog(
                           title: const Text('Reset'),
                           content: const Text(
-                              'Return current Preset to the default values?'),
+                            'Return current Preset to the default values?',
+                          ),
                           actions: <Widget>[
                             TextButton(
                               onPressed: () => Navigator.pop(context, 'Cancel'),
@@ -150,7 +154,8 @@ class MenuLayout extends ConsumerWidget {
                 ListTile(
                   title: const Text("Base Note"),
                   subtitle: const Text(
-                      "The lowest Note in the Grid, on the bottom left"),
+                    "The lowest Note in the Grid, on the bottom left",
+                  ),
                   trailing: DropdownRootNote(
                     setValue: (int v) =>
                         ref.read(baseProv.notifier).setAndSave(v),
@@ -172,42 +177,48 @@ class MenuLayout extends ConsumerWidget {
                   subtitle:
                       const Text("Adds Octave control buttons next to pads"),
                   trailing: Switch(
-                      value: ref.watch(octaveButtonsProv),
-                      onChanged: (v) =>
-                          ref.read(octaveButtonsProv.notifier).setAndSave(v)),
+                    value: ref.watch(octaveButtonsProv),
+                    onChanged: (v) =>
+                        ref.read(octaveButtonsProv.notifier).setAndSave(v),
+                  ),
                 ),
               ListTile(
                 title: const Text("Sustain Button"),
                 subtitle: const Text(
-                    "Adds a Sustain button next to pads. Lock ON by double-tapping"),
+                  "Adds a Sustain button next to pads. Lock ON by double-tapping",
+                ),
                 trailing: Switch(
-                    value: ref.watch(sustainButtonProv),
-                    onChanged: (v) =>
-                        ref.read(sustainButtonProv.notifier).setAndSave(v)),
+                  value: ref.watch(sustainButtonProv),
+                  onChanged: (v) =>
+                      ref.read(sustainButtonProv.notifier).setAndSave(v),
+                ),
               ),
               ListTile(
                 title: const Text("Velocity"),
                 subtitle: const Text("Adds Velocity Slider next to pads"),
                 trailing: Switch(
-                    value: ref.watch(velocitySliderProv),
-                    onChanged: (v) =>
-                        ref.read(velocitySliderProv.notifier).setAndSave(v)),
+                  value: ref.watch(velocitySliderProv),
+                  onChanged: (v) =>
+                      ref.read(velocitySliderProv.notifier).setAndSave(v),
+                ),
               ),
               ListTile(
                 title: const Text("Mod Wheel"),
                 subtitle: const Text("Adds Mod Wheel Slider next to pads"),
                 trailing: Switch(
-                    value: ref.watch<bool>(modWheelProv),
-                    onChanged: (v) =>
-                        ref.read(modWheelProv.notifier).setAndSave(v)),
+                  value: ref.watch<bool>(modWheelProv),
+                  onChanged: (v) =>
+                      ref.read(modWheelProv.notifier).setAndSave(v),
+                ),
               ),
               ListTile(
                 title: const Text("Pitch Bend"),
                 subtitle: const Text("Adds Pitch Bend slider next to pads"),
                 trailing: Switch(
-                    value: ref.watch(pitchBendProv),
-                    onChanged: (v) =>
-                        ref.read(pitchBendProv.notifier).setAndSave(v)),
+                  value: ref.watch(pitchBendProv),
+                  onChanged: (v) =>
+                      ref.read(pitchBendProv.notifier).setAndSave(v),
+                ),
               ),
               NonLinearSliderTile(
                 label: "Pitch Bend Return",
@@ -222,7 +233,6 @@ class MenuLayout extends ConsumerWidget {
                     : ref.watch(pitchBendEaseUsable) < 1000
                         ? "${ref.watch(pitchBendEaseUsable)} ms"
                         : "${ref.watch(pitchBendEaseUsable) / 1000} s",
-                start: 0,
                 steps: Timing.releaseDelayTimes.length - 1,
                 onChangeEnd: ref.read(pitchBendEaseStepProv.notifier).save,
               ),
@@ -251,7 +261,6 @@ class MenuLayout extends ConsumerWidget {
               ),
               IntSliderTile(
                 label: "Hue",
-                min: 0,
                 max: 360,
                 subtitle: "Root Note hue on the RGB color wheel",
                 trailing: Text(ref.watch(baseHueProv).toString()),
@@ -263,11 +272,13 @@ class MenuLayout extends ConsumerWidget {
               ListTile(
                 title: const Text("Show Velocity"),
                 subtitle: const Text(
-                    "Show visual feedback on the pad indicating the sent Velocity"),
+                  "Show visual feedback on the pad indicating the sent Velocity",
+                ),
                 trailing: Switch(
-                    value: ref.watch(velocityVisualProv),
-                    onChanged: (v) =>
-                        ref.read(velocityVisualProv.notifier).setAndSave(v)),
+                  value: ref.watch(velocityVisualProv),
+                  onChanged: (v) =>
+                      ref.read(velocityVisualProv.notifier).setAndSave(v),
+                ),
               ),
             ],
           ),

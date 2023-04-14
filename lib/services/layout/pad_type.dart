@@ -7,13 +7,13 @@ enum PadType {
 }
 
 class CustomPad {
-  final int padValue;
-  final PadType padType;
-  final Chord chord;
-
   CustomPad(
     this.padValue, {
     this.padType = PadType.note,
     this.chord = Chord.major,
   });
+
+  final int padValue;
+  final PadType padType;
+  final Chord chord;
 }

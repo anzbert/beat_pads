@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final touchBuffer = NotifierProvider.autoDispose<TouchBuffer, List<TouchEvent>>(
-    () => TouchBuffer());
+  TouchBuffer.new,
+);
 
 class TouchBuffer extends TouchBufferBase {
   @override
@@ -15,8 +16,13 @@ class TouchBuffer extends TouchBufferBase {
   void addNoteOn(CustomPointer touch, NoteEvent noteEvent, Size screenSize) {
     state = [
       ...state,
-      TouchEvent(touch, noteEvent, ref.read(modulationDeadZoneProv),
-          ref.read(modulationRadiusProv), screenSize)
+      TouchEvent(
+        touch,
+        noteEvent,
+        ref.read(modulationDeadZoneProv),
+        ref.read(modulationRadiusProv),
+        screenSize,
+      )
     ];
   }
 
@@ -30,10 +36,10 @@ class TouchBuffer extends TouchBufferBase {
   double averageRadialChangeOfActiveNotes() {
     if (state.isEmpty) return 0;
 
-    double total = state
+    final double total = state
         .where((element) => element.noteEvent.noteOnMessage != null)
         .map((e) => e.radialChange())
-        .reduce(((value, element) => value + element));
+        .reduce((value, element) => value + element);
 
     return total / state.length;
   }
@@ -41,14 +47,16 @@ class TouchBuffer extends TouchBufferBase {
   /// Get an average directional change from all currently active notes.
   /// This is a common method to determine Channel Pressure
   Offset averageDirectionalChangeOfActiveNotes({bool absolute = false}) {
-    if (state.isEmpty) return const Offset(0, 0);
+    if (state.isEmpty) return Offset.zero;
 
-    Offset total = state
+    final Offset total = state
         .where((element) => element.noteEvent.noteOnMessage != null)
         .map((e) => e.directionalChangeFromCenter())
-        .reduce(((value, element) => absolute
-            ? value + Offset(element.dx.abs(), element.dy.abs())
-            : value + element));
+        .reduce(
+          (value, element) => absolute
+              ? value + Offset(element.dx.abs(), element.dy.abs())
+              : value + element,
+        );
 
     return Offset(total.dx / state.length, total.dy / state.length);
   }

@@ -28,13 +28,14 @@ enum Chord {
   x7Dim9("7 dim9", [0, 4, 7, 10, 13]),
   x7Add11("7 add11", [0, 4, 7, 10, 18]);
 
+  const Chord(this.label, this.intervals);
+
   final List<int> intervals;
   final String label;
-  const Chord(this.label, this.intervals);
 
   /// Returns chord notes of a given base note (0-127)
   List<int> getChord(int baseNote, [Inversion inv = Inversion.first]) {
-    List<int> chord = intervals.map((n) => n + baseNote).toList();
+    final List<int> chord = intervals.map((n) => n + baseNote).toList();
     switch (inv) {
       case Inversion.first:
         break;
@@ -52,7 +53,7 @@ enum Chord {
   /// Returns chord notes of a given root note in a given octave (-2 to 7)
   List<int> getChordOfOctave(int rootNote, int octave) {
     return intervals
-        .map((n) => (n + (rootNote % 12) + (octave + 2).clamp(0, 9) * 12))
+        .map((n) => n + (rootNote % 12) + (octave + 2).clamp(0, 9) * 12)
         .where((n) => n < 128)
         .toList();
   }
@@ -83,22 +84,23 @@ enum Note {
   bFlat("Ab", 10, Sign.flat),
   b("B", 11, Sign.none);
 
+  const Note(this.label, this.semitone, this.sign);
   final int semitone;
   final String label;
   final Sign sign;
-  const Note(this.label, this.semitone, this.sign);
 
   int getInterval(Note other) {
     return (semitone - other.semitone).abs();
   }
 
   static Note fromSemitone(int note, [Sign sign = Sign.sharp]) {
-    for (var val in Note.values) {
+    for (final val in Note.values) {
       if (val.semitone == (note % 12)) {
         if (val.sign == sign || val.sign == Sign.none) return val;
       }
     }
-    throw ("Note undefined");
+
+    throw ArgumentError('Note undefined');
   }
 }
 
@@ -219,9 +221,9 @@ enum Scale {
   bebopMinor([0, 2, 3, 5, 7, 8, 9, 10], "bebop minor"),
   bebopTonicMinor([0, 2, 3, 5, 7, 8, 9, 11], "bebop tonic minor");
 
+  const Scale(this.intervals, [this.label]);
   final List<int> intervals;
   final String? label;
-  const Scale(this.intervals, [this.label]);
 
   @override
   String toString() => label == null ? name : label!;
@@ -309,8 +311,8 @@ enum CC {
   allNotesOff(123),
   ;
 
-  final int value;
   const CC(this.value);
+  final int value;
 
   /// A list of all undefined and general purpose CCs (76 in total)
   static List<int> get undefined {

@@ -19,7 +19,7 @@ class Preview extends ConsumerWidget {
                     const AspectRatio(
                       aspectRatio: 16 / 9,
                       child: Padding(
-                        padding: EdgeInsets.all(4.0),
+                        padding: EdgeInsets.all(4),
                         child: BeatPadsAndControls(
                           preview: true,
                         ),
@@ -59,7 +59,7 @@ class Preview extends ConsumerWidget {
                     const AspectRatio(
                       aspectRatio: 16 / 9,
                       child: Padding(
-                        padding: EdgeInsets.all(4.0),
+                        padding: EdgeInsets.all(4),
                         child: BeatPadsAndControls(
                           preview: true,
                         ),

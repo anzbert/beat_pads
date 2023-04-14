@@ -1,6 +1,9 @@
-import 'package:flutter_midi_command/flutter_midi_command_messages.dart';
+// ignore_for_file: unnecessary_parenthesis
+
 import 'dart:typed_data';
-import '../constants/const_midi.dart';
+
+import 'package:beat_pads/services/constants/const_midi.dart';
+import 'package:flutter_midi_command/flutter_midi_command_messages.dart';
 
 enum MidiMessageType {
   unknown(-1), // variable length
@@ -48,7 +51,7 @@ enum MidiMessageType {
     if (type == 0xFE) return MidiMessageType.activeSensing;
     if (type == 0xFF) return MidiMessageType.systemReset;
 
-    int midiType = type & 0xF0;
+    final int midiType = type & 0xF0;
     if (midiType == 0xA0) return MidiMessageType.polyphonicAftertouch;
     if (midiType == 0xB0) return MidiMessageType.cc;
     if (midiType == 0xC0) return MidiMessageType.programChange;
@@ -65,11 +68,11 @@ enum MidiMessageType {
 abstract class MidiUtils {
   /// Kill all notes on a channel
   static void sendAllNotesOffMessage(int channel) {
-    CCMessage(channel: channel, controller: 123, value: 0).send();
+    CCMessage(channel: channel, controller: 123).send();
   }
 
   /// Sends a Sustain-pedal midi message
-  static void sendSustainMessage(int channel, bool state) {
+  static void sendSustainMessage(int channel, {required bool state}) {
     CCMessage(channel: channel, controller: 64, value: state ? 127 : 0).send();
   }
 
@@ -79,10 +82,14 @@ abstract class MidiUtils {
     double value, {
     bool initial64 = false,
   }) {
-    double finalValue = initial64 ? (value + 1) / 2 * 127 : value.abs() * 127;
+    final double finalValue =
+        initial64 ? (value + 1) / 2 * 127 : value.abs() * 127;
 
     return CCMessage(
-        channel: channel, controller: 74, value: finalValue.toInt());
+      channel: channel,
+      controller: 74,
+      value: finalValue.toInt(),
+    );
   }
 
   /// Sends a Mod Wheel midi message. Takes a value from 0 - 127
@@ -107,25 +114,26 @@ abstract class MidiUtils {
       return gm2PercStandard[value] ?? value.toString();
     }
 
-    int octave = value ~/ 12;
-    int note = value % 12;
-    String octaveString = showOctaveIndex ? "${octave - 2}" : "";
-    String noteString = showNoteValue ? " ($value)" : "";
+    final int octave = value ~/ 12;
+    final int note = value % 12;
+    final String octaveString = showOctaveIndex ? "${octave - 2}" : "";
+    final String noteString = showNoteValue ? " ($value)" : "";
 
-    String output =
+    final String output =
         "${sign == Sign.sharp ? midiNotesSharps[note] : midiNotesFlats[note]}$octaveString$noteString";
 
     return output;
   }
 
-  /// Transpose generic scale interval pattern to absolute scale notes of the given root
+  /// Transpose generic scale interval pattern to absolute scale notes of
+  /// the given root
   static List<int> absoluteScaleNotes(int root, List<int> scale) {
     return scale.map((e) => ((e + (root % 12))) % 12).toList();
   }
 
   /// Test if a given note is part of a specific scale
   static bool isNoteInScale(int note, List<int> scale, int root) {
-    List<int> actualNotes = absoluteScaleNotes(root, scale);
+    final List<int> actualNotes = absoluteScaleNotes(root, scale);
     if (actualNotes.contains(note % 12)) {
       return true;
     }
@@ -134,9 +142,9 @@ abstract class MidiUtils {
 
   /// Get all notes that are part of a given scale between 0 - 127.
   static List<int> allAbsoluteScaleNotes(List<int> scale, int root) {
-    List<int> actualNotes = absoluteScaleNotes(root, scale);
+    final List<int> actualNotes = absoluteScaleNotes(root, scale);
 
-    List<int> list = [];
+    final List<int> list = [];
     for (int n = 0; n <= 127; n++) {
       if (actualNotes.contains(n % 12)) {
         list.add(n);
@@ -148,16 +156,16 @@ abstract class MidiUtils {
   /// Pass in a status Byte and return the expected message length
   static int lengthOfMessageByStatusByte(int type) {
     // sysex not included, as it is of variable length
-    List<int> commands1Bytes = [0xF6, 0xF8, 0xFA, 0xFB, 0xFC, 0xFF, 0xFE];
-    List<int> commands2Bytes = [0xF1, 0xF3];
-    List<int> commands3Bytes = [0xF2];
+    final List<int> commands1Bytes = [0xF6, 0xF8, 0xFA, 0xFB, 0xFC, 0xFF, 0xFE];
+    final List<int> commands2Bytes = [0xF1, 0xF3];
+    final List<int> commands3Bytes = [0xF2];
     if (commands1Bytes.contains(type)) return 1;
     if (commands2Bytes.contains(type)) return 2;
     if (commands3Bytes.contains(type)) return 3;
 
-    int midiType = type & 0xF0;
-    List<int> midi2Bytes = [0xC0, 0xD0];
-    List<int> midi3Bytes = [0x80, 0x90, 0xA0, 0xB0, 0xE0];
+    final int midiType = type & 0xF0;
+    final List<int> midi2Bytes = [0xC0, 0xD0];
+    final List<int> midi3Bytes = [0x80, 0x90, 0xA0, 0xB0, 0xE0];
     if (midi2Bytes.contains(midiType)) return 2;
     if (midi3Bytes.contains(midiType)) return 3;
 
@@ -166,15 +174,14 @@ abstract class MidiUtils {
 }
 
 class MPEinitMessage extends MidiMessage {
-  int zone;
-  int memberChannels;
-
   /// ## Initialize MPE
   /// Uses lower zone by default, enable upperZone to switch.
   ///
   /// Set memberChannels to 0 to send turn zone off message.
   MPEinitMessage({this.memberChannels = 7, bool upperZone = false})
       : zone = upperZone ? 0x0F : 0x00;
+  int zone;
+  int memberChannels;
 
   @override
   void send() {

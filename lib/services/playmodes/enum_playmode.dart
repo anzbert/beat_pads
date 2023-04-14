@@ -19,6 +19,7 @@ enum PlayMode {
         return true;
       case PlayMode.mpe:
         return true;
+      // ignore: no_default_cases
       default:
         return false;
     }
@@ -28,6 +29,7 @@ enum PlayMode {
     switch (this) {
       case PlayMode.mpe:
         return false;
+      // ignore: no_default_cases
       default:
         return true;
     }

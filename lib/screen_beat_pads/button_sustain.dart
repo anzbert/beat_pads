@@ -20,7 +20,7 @@ class _SustainButtonDoubleTapState extends State<SustainButtonDoubleTap> {
   @override
   void dispose() {
     if (sustainState == true) {
-      MidiUtils.sendSustainMessage(widget.channel, false);
+      MidiUtils.sendSustainMessage(widget.channel, state: false);
     }
     super.dispose();
   }
@@ -35,13 +35,13 @@ class _SustainButtonDoubleTapState extends State<SustainButtonDoubleTap> {
       child: GestureDetector(
         onDoubleTap: () => setState(() {
           sustainState = true;
-          MidiUtils.sendSustainMessage(widget.channel, sustainState);
+          MidiUtils.sendSustainMessage(widget.channel, state: sustainState);
         }),
         onTapDown: (_) {
           if (!sustainState) {
             setState(() {
               sustainState = true;
-              MidiUtils.sendSustainMessage(widget.channel, sustainState);
+              MidiUtils.sendSustainMessage(widget.channel, state: sustainState);
             });
           }
         },
@@ -49,7 +49,7 @@ class _SustainButtonDoubleTapState extends State<SustainButtonDoubleTap> {
           if (sustainState) {
             setState(() {
               sustainState = false;
-              MidiUtils.sendSustainMessage(widget.channel, sustainState);
+              MidiUtils.sendSustainMessage(widget.channel, state: sustainState);
             });
           }
         },
@@ -57,7 +57,7 @@ class _SustainButtonDoubleTapState extends State<SustainButtonDoubleTap> {
           if (sustainState) {
             setState(() {
               sustainState = false;
-              MidiUtils.sendSustainMessage(widget.channel, sustainState);
+              MidiUtils.sendSustainMessage(widget.channel, state: sustainState);
             });
           }
         },

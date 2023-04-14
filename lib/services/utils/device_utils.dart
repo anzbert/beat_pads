@@ -57,13 +57,17 @@ abstract class DeviceUtils {
 
   /// Show Top Menu Bar only
   static Future<void> showSystemUiTop() {
-    return SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
-        overlays: [SystemUiOverlay.top]);
+    return SystemChrome.setEnabledSystemUIMode(
+      SystemUiMode.manual,
+      overlays: [SystemUiOverlay.top],
+    );
   }
 
   /// Show Bottom Menu Bar only
   static Future<void> showSystemUiBottom() {
-    return SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
-        overlays: [SystemUiOverlay.bottom]);
+    return SystemChrome.setEnabledSystemUIMode(
+      SystemUiMode.manual,
+      overlays: [SystemUiOverlay.bottom],
+    );
   }
 }

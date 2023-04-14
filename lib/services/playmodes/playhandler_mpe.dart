@@ -1,14 +1,13 @@
 import 'package:beat_pads/services/services.dart';
 
 class PlayModeMPE extends PlayModeHandler {
-  final SendMpe mpeMods;
-
   PlayModeMPE(super.ref)
       : mpeMods = SendMpe(
           ref.read(mpe2DXProv).getMod(ref.read(mpePitchbendRangeProv)),
           ref.read(mpe2DYProv).getMod(ref.read(mpePitchbendRangeProv)),
           ref.read(mpe1DRadiusProv).getMod(ref.read(mpePitchbendRangeProv)),
         );
+  final SendMpe mpeMods;
 
   /// Release channel in MPE channel provider
   @override
@@ -25,7 +24,7 @@ class PlayModeMPE extends PlayModeHandler {
           .removeNoteFromReleaseBuffer(data.padNote);
     }
 
-    int newChannel = ref.read(mpeChannelProv.notifier).provideChannel([
+    final int newChannel = ref.read(mpeChannelProv.notifier).provideChannel([
       ...ref.read(touchBuffer),
       ...ref.read(touchReleaseBuffer)
     ]); // get new channel from generator
@@ -37,14 +36,17 @@ class PlayModeMPE extends PlayModeHandler {
       mpeMods.rMod.send(newChannel, data.padNote, 0);
     }
 
-    NoteEvent noteOn = NoteEvent(newChannel, data.padNote,
-        ref.read(velocitySliderValueProv.notifier).velocity(data.yPercentage))
-      ..noteOn(cc: false);
+    final NoteEvent noteOn = NoteEvent(
+      newChannel,
+      data.padNote,
+      ref.read(velocitySliderValueProv.notifier).velocity(data.yPercentage),
+    )..noteOn();
 
     ref.read(touchBuffer.notifier).addNoteOn(
-        CustomPointer(data.pointer, data.screenTouchPos),
-        noteOn,
-        data.screenSize);
+          CustomPointer(data.pointer, data.screenTouchPos),
+          noteOn,
+          data.screenSize,
+        );
   }
 
   @override

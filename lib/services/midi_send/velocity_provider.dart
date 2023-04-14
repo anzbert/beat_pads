@@ -14,24 +14,25 @@ enum VelocityMode {
   String toString() => title;
 }
 
-final velocityRangeProv = Provider<int>(((ref) {
-  return ref.watch(velocityMaxProv) - ref.watch(velocityMinProv);
-}));
+final velocityRangeProv = Provider<int>(
+  (ref) {
+    return ref.watch(velocityMaxProv) - ref.watch(velocityMinProv);
+  },
+);
 
 final velocitySliderValueProv = NotifierProvider<VelocityProvider, double>(
-  () => VelocityProvider(),
+  VelocityProvider.new,
 );
 
 class VelocityProvider extends Notifier<double> {
-  final Random _randomGenerator;
-
   /// Provides working velocity values for sending midi
   /// notes in random, y-axis and fixed velocity mode and stores values
   /// for the slider on the pad screen in its state
   VelocityProvider() : _randomGenerator = Random();
+  final Random _randomGenerator;
 
   @override
-  build() {
+  double build() {
     if (ref.read(velocityModeProv) == VelocityMode.fixed) {
       return ref.read(velocityProv).toDouble();
     } else {
@@ -40,11 +41,12 @@ class VelocityProvider extends Notifier<double> {
   }
 
   /// Use this value to send notes.
-  /// Random velocity is based on a center-of-range value, usable with a single-value slider.
+  /// Random velocity is based on a center-of-range value, usable with a
+  /// single-value slider.
   int velocity(double percentage) {
     switch (ref.read(velocityModeProv)) {
       case VelocityMode.random:
-        double randVelocity =
+        final double randVelocity =
             _randomGenerator.nextInt(ref.read(velocityRangeProv)) +
                 (state - ref.read(velocityRangeProv) / 2);
         return randVelocity.round().clamp(10, 127);
@@ -53,7 +55,7 @@ class VelocityProvider extends Notifier<double> {
         return state.round().clamp(10, 127);
 
       case VelocityMode.yAxis:
-        double min = state - ref.read(velocityRangeProv) / 2;
+        final double min = state - ref.read(velocityRangeProv) / 2;
         return (min + ref.read(velocityRangeProv) * percentage)
             .round()
             .clamp(0, 127);
@@ -61,13 +63,15 @@ class VelocityProvider extends Notifier<double> {
   }
 
   /// For Velocity Slider on pads screen:
-  set(double vel) {
+  void set(double vel) {
     if (ref.read(velocityModeProv) == VelocityMode.fixed) {
       state = vel;
     } else {
       // set to velocity center
-      state = vel.clamp(9 + ref.read(velocityRangeProv) / 2,
-          128 - ref.read(velocityRangeProv) / 2);
+      state = vel.clamp(
+        9 + ref.read(velocityRangeProv) / 2,
+        128 - ref.read(velocityRangeProv) / 2,
+      );
     }
   }
 

@@ -1,11 +1,12 @@
-import 'package:flutter/foundation.dart';
 import 'dart:math';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 abstract class Utils {
   static Future<bool> doNothingAsync() async => true;
 
-  static debugLog(String label, dynamic value, int seconds) async {
+  static Future<void> debugLog(String label, dynamic value, int seconds) async {
     while (true) {
       await Future.delayed(Duration(seconds: seconds), () {
         Utils.logd("$label: $value");
@@ -29,13 +30,13 @@ abstract class Utils {
   }
 
   static Offset limitToCircle(Offset origin, Offset position, double radius) {
-    double vectorX = -origin.dx + position.dx;
-    double vectorY = -origin.dy + position.dy;
+    final double vectorX = -origin.dx + position.dx;
+    final double vectorY = -origin.dy + position.dy;
 
-    double distance = Utils.offsetDistance(origin, position);
+    final double distance = Utils.offsetDistance(origin, position);
 
     if (distance > radius) {
-      Offset unitVector = Offset(vectorX, vectorY) / distance;
+      final Offset unitVector = Offset(vectorX, vectorY) / distance;
       return unitVector * radius + origin;
     }
 
@@ -46,17 +47,22 @@ abstract class Utils {
   /// Input range is 0 to 1.0
   static double curveTransform(double input, Curve curve) {
     if (input.isNegative) {
-      double temp = input.abs();
+      final double temp = input.abs();
       return -curve.transform(temp.clamp(0, 1));
     }
     return curve.transform(input.clamp(0, 1));
   }
 
   /// Map input value from one range to another
-  static double mapValueToTargetRange(double inputValue, double inputRangeStart,
-      double inputRangeEnd, double outputRangeStart, double outputRangeEnd) {
-    double inputRange = inputRangeEnd - inputRangeStart;
-    double outputRange = outputRangeEnd - outputRangeStart;
+  static double mapValueToTargetRange(
+    double inputValue,
+    double inputRangeStart,
+    double inputRangeEnd,
+    double outputRangeStart,
+    double outputRangeEnd,
+  ) {
+    final double inputRange = inputRangeEnd - inputRangeStart;
+    final double outputRange = outputRangeEnd - outputRangeStart;
 
     return (inputValue - inputRangeStart) * outputRange / inputRange +
         outputRangeStart;
@@ -65,7 +71,7 @@ abstract class Utils {
   /// Rotate a list by a given int value (positive = forward / negative = backwards)
   static List<T> rotateList<T>(List<T> list, int rotateBy) {
     if (list.isEmpty || rotateBy == 0) return list;
-    int i = -rotateBy % list.length;
+    final int i = -rotateBy % list.length;
     return list.sublist(i)..addAll(list.sublist(0, i));
   }
 
@@ -86,39 +92,39 @@ abstract class Utils {
 
   /// get Offset of a Widget
   static Offset? getOffset(GlobalKey key) {
-    RenderBox? box = key.currentContext?.findRenderObject() as RenderBox?;
-    Offset? position = box?.localToGlobal(Offset.zero);
+    final RenderBox? box = key.currentContext?.findRenderObject() as RenderBox?;
+    final Offset? position = box?.localToGlobal(Offset.zero);
     return position;
   }
 
   /// get Size of a Widget
   static Size? getSize(GlobalKey key) {
-    RenderBox? box = key.currentContext?.findRenderObject() as RenderBox?;
-    Size? size = box?.size;
+    final RenderBox? box = key.currentContext?.findRenderObject() as RenderBox?;
+    final Size? size = box?.size;
     return size;
   }
 
   /// get the center Offset of a Widget
   static Offset? getCenterOffset(GlobalKey key) {
-    var pos = getOffset(key);
-    var size = getSize(key);
+    final pos = getOffset(key);
+    final size = getSize(key);
     if (pos == null || size == null) return null;
 
-    var x = pos.dx + size.width / 2;
-    var y = pos.dy + size.height / 2;
+    final x = pos.dx + size.width / 2;
+    final y = pos.dy + size.height / 2;
     return Offset(x, y);
   }
 
   /// Print ONLY in debug mode
-  static logd(dynamic text) {
-    if (kDebugMode) print(text.toString());
+  static void logd(dynamic text) {
+    if (kDebugMode) print(text);
   }
 
   /// Print array of values ONLY in debug mode
-  static logdAll(List<dynamic> textList) {
+  static void logdAll(List<dynamic> textList) {
     if (kDebugMode) {
-      for (var text in textList) {
-        print(text.toString());
+      for (final text in textList) {
+        print(text);
       }
     }
   }

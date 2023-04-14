@@ -1,24 +1,22 @@
+import 'package:beat_pads/services/services.dart';
 import 'package:flutter/material.dart';
 
-import 'package:beat_pads/services/services.dart';
-
 class DropdownScaleNotes extends StatelessWidget {
-  const DropdownScaleNotes(
-      {this.scale = Scale.chromatic,
-      required this.rootNote,
-      required this.setValue,
-      required this.readValue,
-      this.layout = Layout.majorThird,
-      Key? key})
-      : usedScale = layout == Layout.scaleNotesOnly ? scale : Scale.chromatic,
-        super(key: key);
+  const DropdownScaleNotes({
+    required this.rootNote,
+    required this.setValue,
+    required this.readValue,
+    this.scale = Scale.chromatic,
+    this.layout = Layout.majorThird,
+    super.key,
+  }) : usedScale = layout == Layout.scaleNotesOnly ? scale : Scale.chromatic;
 
   final Layout layout;
   final int rootNote;
   final Scale usedScale;
   final Scale scale;
 
-  final Function setValue;
+  final void Function(int) setValue;
   final int readValue;
 
   @override
@@ -28,23 +26,26 @@ class DropdownScaleNotes extends StatelessWidget {
     final List<DropdownMenuItem<int>> menuItems;
 
     menuItems = items
-        .map((note) => DropdownMenuItem<int>(
-              value: note,
-              child: Text(MidiUtils.getNoteName(
+        .map(
+          (note) => DropdownMenuItem<int>(
+            value: note,
+            child: Text(
+              MidiUtils.getNoteName(
                 note,
-                showOctaveIndex: true,
                 showNoteValue: true,
-              )),
-            ))
+              ),
+            ),
+          ),
+        )
         .toList();
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: DropdownButton<int>(
         value: readValue,
         items: menuItems.reversed.toList(),
         onChanged: (newBase) {
-          setValue(newBase);
+          if (newBase != null) setValue(newBase);
         },
       ),
     );

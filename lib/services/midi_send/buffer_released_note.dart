@@ -3,7 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final noteReleaseBuffer =
     NotifierProvider.autoDispose<NoteReleaseBuffer, List<NoteEvent>>(
-        () => NoteReleaseBuffer());
+  NoteReleaseBuffer.new,
+);
 
 /// Buffer for [NoteEvent]s that are no longer associated with a [TouchEvent]
 class NoteReleaseBuffer extends AutoDisposeNotifier<List<NoteEvent>> {
@@ -17,7 +18,7 @@ class NoteReleaseBuffer extends AutoDisposeNotifier<List<NoteEvent>> {
   /// Update note in the released events buffer, by adding it or updating
   /// the timer of the corresponding note
   void updateReleasedNoteEvent(NoteEvent event) {
-    int index = state.indexWhere((element) => element.note == event.note);
+    final int index = state.indexWhere((element) => element.note == event.note);
 
     if (index >= 0) {
       state[index].updateReleaseTime(); // update time
@@ -29,7 +30,7 @@ class NoteReleaseBuffer extends AutoDisposeNotifier<List<NoteEvent>> {
     if (state.isNotEmpty) _checkReleasedNoteEvents();
   }
 
-  void _checkReleasedNoteEvents() async {
+  Future<void> _checkReleasedNoteEvents() async {
     if (checkerRunning) return; // only one running instance possible!
     checkerRunning = true;
 
@@ -58,7 +59,7 @@ class NoteReleaseBuffer extends AutoDisposeNotifier<List<NoteEvent>> {
 
   void allNotesOff() {
     bool refresh = false;
-    for (var note in state) {
+    for (final note in state) {
       if (note.isPlaying) note.noteOff();
       refresh = true;
     }
@@ -66,7 +67,7 @@ class NoteReleaseBuffer extends AutoDisposeNotifier<List<NoteEvent>> {
   }
 
   int isNoteOn(int note) {
-    for (NoteEvent noteEvent in state) {
+    for (final NoteEvent noteEvent in state) {
       if (noteEvent.note == note && noteEvent.isPlaying) {
         return noteEvent.velocity;
       }

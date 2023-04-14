@@ -8,6 +8,7 @@ class _IntNotifier extends Notifier<int> {
   @override
   int build() => 0;
 
+  // ignore: use_setters_to_change_properties
   void set(int newState) => state = newState;
 }
 

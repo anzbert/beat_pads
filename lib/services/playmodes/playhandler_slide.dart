@@ -14,14 +14,17 @@ class PlayModeSlide extends PlayModeHandler {
           .removeNoteFromReleaseBuffer(data.padNote);
     }
 
-    NoteEvent noteOn = NoteEvent(ref.read(channelUsableProv), data.padNote,
-        ref.read(velocitySliderValueProv.notifier).velocity(data.yPercentage))
-      ..noteOn(cc: ref.read(sendCCProv));
+    final NoteEvent noteOn = NoteEvent(
+      ref.read(channelUsableProv),
+      data.padNote,
+      ref.read(velocitySliderValueProv.notifier).velocity(data.yPercentage),
+    )..noteOn(cc: ref.read(sendCCProv));
 
     ref.read(touchBuffer.notifier).addNoteOn(
-        CustomPointer(data.pointer, data.screenTouchPos),
-        noteOn,
-        data.screenSize);
+          CustomPointer(data.pointer, data.screenTouchPos),
+          noteOn,
+          data.screenSize,
+        );
   }
 
   @override
@@ -52,15 +55,16 @@ class PlayModeSlide extends PlayModeHandler {
         if (data.padNote != null &&
             eventInBuffer.noteEvent.noteOnMessage == null) {
           eventInBuffer.noteEvent = NoteEvent(
-              ref.read(channelUsableProv),
-              data.padNote!,
-              ref
-                  .read(velocitySliderValueProv.notifier)
-                  .velocity(data.yPercentage ?? .5))
-            ..noteOn(
-                cc: ref.read(playModeProv).singleChannel
-                    ? ref.read(sendCCProv)
-                    : false);
+            ref.read(channelUsableProv),
+            data.padNote!,
+            ref
+                .read(velocitySliderValueProv.notifier)
+                .velocity(data.yPercentage ?? .5),
+          )..noteOn(
+              cc: ref.read(playModeProv).singleChannel
+                  ? ref.read(sendCCProv)
+                  : false,
+            );
         }
       }
     });
@@ -73,14 +77,16 @@ class PlayModeSlide extends PlayModeHandler {
         eventInBuffer.noteEvent.noteOff(); // noteOFF
         ref.read(touchBuffer.notifier).removeById(eventInBuffer.uniqueID);
       } else {
-        ref.read(noteReleaseBuffer.notifier).updateReleasedNoteEvent(eventInBuffer
-            .noteEvent); // instead of note off, event passed to release buffer
+        ref.read(noteReleaseBuffer.notifier).updateReleasedNoteEvent(
+              eventInBuffer.noteEvent,
+            ); // instead of note off, event passed to release buffer
         ref.read(touchBuffer.notifier).removeById(eventInBuffer.uniqueID);
       }
     });
   }
 
-  /// Returns the velocity if a given note is ON in any channel, or, if provided, in a specific channel.
+  /// Returns the velocity if a given note is ON in any channel, or,
+  ///  if provided, in a specific channel.
   /// Checks releasebuffer and active touchbuffer
   @override
   int isNoteOn(int note) {

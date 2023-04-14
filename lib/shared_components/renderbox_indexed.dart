@@ -1,11 +1,13 @@
-import 'package:flutter/rendering.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 class HitTestObject extends SingleChildRenderObjectWidget {
+  const HitTestObject({
+    required Widget super.child,
+    required this.index,
+    super.key,
+  });
   final int index;
-
-  const HitTestObject({required Widget child, required this.index, Key? key})
-      : super(child: child, key: key);
 
   @override
   TestProxyBox createRenderObject(BuildContext context) {
@@ -21,6 +23,6 @@ class HitTestObject extends SingleChildRenderObjectWidget {
 // should have get size function here or just layoutbuilder instead?
 // https://www.woolha.com/tutorials/flutter-get-widget-size-and-position
 class TestProxyBox extends RenderProxyBox {
-  int index;
   TestProxyBox(this.index);
+  int index;
 }

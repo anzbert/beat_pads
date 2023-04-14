@@ -1,7 +1,8 @@
 // NOTES
 /*
  the x and y menu have to be aware of each other,
- only one of each ModGroup can be used at a time, or else the midi signals would mess with each other.
+ only one of each ModGroup can be used at a time, or else the midi signals
+  would mess with each other.
  
  some modulation is only available in one dimension, some in both
  
@@ -19,17 +20,16 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_midi_command/flutter_midi_command_messages.dart';
 
 class SendMpe {
+  SendMpe(this.xMod, this.yMod, this.rMod);
   final Mod xMod;
   final Mod yMod;
   final Mod rMod;
-
-  SendMpe(this.xMod, this.yMod, this.rMod);
 }
 
 class ModPitchBend extends Mod {
+  ModPitchBend(this.pitchBendMax, this.range);
   final int pitchBendMax;
   final Range range;
-  ModPitchBend(this.pitchBendMax, this.range);
 
   double dist(double input) {
     if (range == Range.up) return input.abs();
@@ -39,7 +39,7 @@ class ModPitchBend extends Mod {
 
   @override
   void send(int channel, int note, double distance) {
-    int pitchChange = (distance * 0x3FFF).toInt();
+    final int pitchChange = (distance * 0x3FFF).toInt();
 
     if (!listEquals<num>([channel, pitchChange], lastSentValues)) {
       PitchBendMessage(
@@ -55,7 +55,7 @@ class ModPitchBend extends Mod {
 class ModMPEAftertouch1D extends Mod {
   @override
   void send(int channel, int note, double distance) {
-    int atChange = (distance.abs() * 127).toInt();
+    final int atChange = (distance.abs() * 127).toInt();
 
     if (!listEquals<num>([channel, atChange], lastSentValues)) {
       ATMessage(channel: channel, pressure: atChange).send();
@@ -67,7 +67,7 @@ class ModMPEAftertouch1D extends Mod {
 class ModMPEAftertouch642D extends Mod {
   @override
   void send(int channel, int note, double distance) {
-    int atChange = ((distance + 1) / 2 * 127).toInt();
+    final int atChange = ((distance + 1) / 2 * 127).toInt();
 
     if (!listEquals<num>([channel, atChange], lastSentValues)) {
       ATMessage(channel: channel, pressure: atChange).send();
@@ -77,12 +77,12 @@ class ModMPEAftertouch642D extends Mod {
 }
 
 class ModCC1D extends Mod {
-  final CC cc;
   ModCC1D(this.cc);
+  final CC cc;
 
   @override
   void send(int channel, int note, double distance) {
-    int ccChange = (distance.abs() * 127).toInt();
+    final int ccChange = (distance.abs() * 127).toInt();
 
     if (!listEquals<num>([channel, note, ccChange], lastSentValues)) {
       CCMessage(channel: channel, controller: cc.value, value: ccChange).send();
@@ -92,12 +92,12 @@ class ModCC1D extends Mod {
 }
 
 class ModCC642D extends Mod {
-  final CC cc;
   ModCC642D(this.cc);
+  final CC cc;
 
   @override
   void send(int channel, int note, double distance) {
-    int ccChange = ((distance + 1) / 2 * 127).toInt();
+    final int ccChange = ((distance + 1) / 2 * 127).toInt();
 
     if (!listEquals<num>([channel, note, ccChange], lastSentValues)) {
       CCMessage(channel: channel, controller: cc.value, value: ccChange).send();
@@ -129,14 +129,14 @@ enum MPEmods {
 
   none("None", Dims.one, Group.none);
 
+  const MPEmods(this.title, this.dimensions, this.exclusiveGroup);
+
   @override
   String toString() => title;
 
   final String title;
   final Dims dimensions;
   final Group exclusiveGroup;
-
-  const MPEmods(this.title, this.dimensions, this.exclusiveGroup);
 
   Mod getMod(int pitchBendMax) {
     if (this == MPEmods.mpeAftertouch) return ModMPEAftertouch1D();
@@ -171,7 +171,8 @@ enum MPEmods {
   }
 }
 
-/// Exclusive modulation groups. Only one of each is allowed at a time on X and Y.
+/// Exclusive modulation groups. Only one of each is allowed at
+/// a time on X and Y.
 enum Group {
   pitch,
   slide,

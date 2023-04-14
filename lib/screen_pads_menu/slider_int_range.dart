@@ -3,21 +3,21 @@ import 'package:flutter/material.dart';
 
 class MidiRangeSelectorTile extends StatelessWidget {
   const MidiRangeSelectorTile({
-    Key? key,
-    this.label = "#Label",
-    this.resetFunction,
-    this.onChangeEnd,
     required this.readMin,
     required this.readMax,
     required this.setMin,
     required this.setMax,
+    this.label = "#Label",
+    this.resetFunction,
+    this.onChangeEnd,
     this.note = false,
-  }) : super(key: key);
+    super.key,
+  });
 
-  final Function? resetFunction;
-  final Function setMin;
-  final Function setMax;
-  final Function? onChangeEnd;
+  final void Function()? resetFunction;
+  final void Function(int) setMin;
+  final void Function(int) setMax;
+  final void Function()? onChangeEnd;
 
   final int readMin;
   final int readMax;
@@ -48,8 +48,8 @@ class MidiRangeSelectorTile extends StatelessWidget {
           trailing: Text("$readMin - $readMax"),
         ),
         Builder(
-          builder: ((context) {
-            double width = MediaQuery.of(context).size.width;
+          builder: (context) {
+            final double width = MediaQuery.of(context).size.width;
             return SizedBox(
               width: width * ThemeConst.sliderWidthFactor,
               child: RangeSlider(
@@ -65,11 +65,11 @@ class MidiRangeSelectorTile extends StatelessWidget {
                   setMax(values.end.toInt());
                 },
                 onChangeEnd: (_) {
-                  if (onChangeEnd != null) onChangeEnd!();
+                  onChangeEnd?.call();
                 },
               ),
             );
-          }),
+          },
         ),
       ],
     );

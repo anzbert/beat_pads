@@ -6,7 +6,8 @@ void main() {
     test("Print ASCII codes:", () {
       for (int i = 0x00; i <= 0xFF; i++) {
         Utils.logd(
-            "Hex: ${i.toRadixString(16).toUpperCase()} / Dec: $i --->  ${String.fromCharCode(i)}");
+          "Hex: ${i.toRadixString(16).toUpperCase()} / Dec: $i --->  ${String.fromCharCode(i)}",
+        );
       }
       expect(true, true);
     });

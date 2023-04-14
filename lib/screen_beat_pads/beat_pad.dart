@@ -25,8 +25,8 @@ class SlideBeatPad extends ConsumerWidget {
           ref.watch(baseHueProv),
           ref.watch(rootProv),
           note,
-          velocity != 0 ? true : false,
           preview ? 0 : ref.watch(rxNoteProvider)[note],
+          noteOn: velocity != 0,
         );
 
     final Color splashColor = Palette.splashColor;

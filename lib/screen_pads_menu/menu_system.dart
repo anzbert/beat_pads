@@ -1,12 +1,12 @@
 import 'package:beat_pads/screen_pads_menu/_screen_pads_menu.dart';
 import 'package:beat_pads/screen_pads_menu/box_credits.dart';
+import 'package:beat_pads/screen_pads_menu/switch_wake_lock.dart';
 import 'package:beat_pads/services/services.dart';
+import 'package:beat_pads/shared_components/_shared.dart';
+import 'package:beat_pads/shared_components/divider_title.dart';
 import 'package:beat_pads/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:beat_pads/shared_components/_shared.dart';
-import 'package:beat_pads/screen_pads_menu/switch_wake_lock.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../shared_components/divider_title.dart';
 
 class MenuSystem extends ConsumerWidget {
   const MenuSystem();

@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 
 class DropdownEnum<T extends Enum> extends StatelessWidget {
+  const DropdownEnum({
+    required this.values,
+    required this.readValue,
+    required this.setValue,
+    super.key,
+  });
   final T readValue;
-  final Function setValue;
+  final void Function(T) setValue;
   final List<T> values;
-
-  const DropdownEnum(
-      {Key? key,
-      required this.values,
-      required this.readValue,
-      required this.setValue})
-      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +23,7 @@ class DropdownEnum<T extends Enum> extends StatelessWidget {
         .toList();
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: DropdownButton<T>(
         value: readValue,
         items: dropList,

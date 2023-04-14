@@ -1,11 +1,11 @@
+import 'package:beat_pads/screen_pads_menu/drop_down_enum.dart';
 import 'package:beat_pads/screen_pads_menu/slider_int.dart';
-import 'package:flutter/material.dart';
 import 'package:beat_pads/screen_pads_menu/slider_int_range.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../shared_components/divider_title.dart';
-import '../theme.dart';
-import 'drop_down_enum.dart';
 import 'package:beat_pads/services/services.dart';
+import 'package:beat_pads/shared_components/divider_title.dart';
+import 'package:beat_pads/theme.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class MenuMidi extends ConsumerWidget {
   const MenuMidi();
@@ -24,8 +24,9 @@ class MenuMidi extends ConsumerWidget {
                 Scaffold.of(context).openDrawer();
               },
               style: ElevatedButton.styleFrom(
-                  backgroundColor: Palette.lightPink,
-                  textStyle: const TextStyle(fontWeight: FontWeight.bold)),
+                backgroundColor: Palette.lightPink,
+                textStyle: const TextStyle(fontWeight: FontWeight.bold),
+              ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -58,9 +59,13 @@ class MenuMidi extends ConsumerWidget {
           max: 15,
           label: "MPE Member Channels",
           subtitle: "Number of member channels to allocate in MPE mode",
-          trailing: Text(ref.watch(zoneProv)
-              ? "${ref.watch(mpeMemberChannelsProv)} (${15 - ref.watch(mpeMemberChannelsProv)} to 15)"
-              : "${ref.watch(mpeMemberChannelsProv)} (2 to ${ref.watch(mpeMemberChannelsProv) + 1})"),
+          trailing: Text(
+            ref.watch(zoneProv)
+                ? "${ref.watch(mpeMemberChannelsProv)} (${15 - ref.watch(
+                      mpeMemberChannelsProv,
+                    )} to 15)"
+                : "${ref.watch(mpeMemberChannelsProv)} (2 to ${ref.watch(mpeMemberChannelsProv) + 1})",
+          ),
           setValue: (int v) => ref.read(mpeMemberChannelsProv.notifier).set(v),
           readValue: ref.watch(mpeMemberChannelsProv),
           onChangeEnd: ref.read(mpeMemberChannelsProv.notifier).save,
@@ -89,16 +94,17 @@ class MenuMidi extends ConsumerWidget {
           ),
         if (ref.watch(velocityModeProv) != VelocityMode.fixed)
           MidiRangeSelectorTile(
-              label: "Velocity Range",
-              readMin: ref.watch(velocityMinProv),
-              readMax: ref.watch(velocityMaxProv),
-              setMin: (int v) => ref.read(velocityMinProv.notifier).set(v),
-              setMax: (int v) => ref.read(velocityMaxProv.notifier).set(v),
-              resetFunction: ref.read(velocityMaxProv.notifier).reset,
-              onChangeEnd: () {
-                ref.read(velocityMaxProv.notifier).save();
-                ref.read(velocityMinProv.notifier).save();
-              }),
+            label: "Velocity Range",
+            readMin: ref.watch(velocityMinProv),
+            readMax: ref.watch(velocityMaxProv),
+            setMin: (int v) => ref.read(velocityMinProv.notifier).set(v),
+            setMax: (int v) => ref.read(velocityMaxProv.notifier).set(v),
+            resetFunction: ref.read(velocityMaxProv.notifier).reset,
+            onChangeEnd: () {
+              ref.read(velocityMaxProv.notifier).save();
+              ref.read(velocityMinProv.notifier).save();
+            },
+          ),
       ],
     );
   }

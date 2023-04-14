@@ -4,10 +4,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class PaintModPreview extends ConsumerWidget {
   const PaintModPreview({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
-  final double fixedChangeForPreview = 1;
+  static const double fixedChangeForPreview = 1;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -22,8 +22,12 @@ class PaintModPreview extends ConsumerWidget {
       return CustomPaint(
         foregroundPainter: CustomPaintRadius(
           dirty: false,
-          origin: box.globalToLocal(Offset(screenSize.width / 2,
-              screenSize.height / (DeviceUtils.isPortrait(context) ? 2.5 : 2))),
+          origin: box.globalToLocal(
+            Offset(
+              screenSize.width / 2,
+              screenSize.height / (DeviceUtils.isPortrait(context) ? 2.5 : 2),
+            ),
+          ),
           maxRadius: ref.watch(modulationRadiusProv) * screenSize.longestSide,
           deadZone: ref.watch(modulationDeadZoneProv),
           change: fixedChangeForPreview,
@@ -38,11 +42,15 @@ class PaintModPreview extends ConsumerWidget {
       return CustomPaint(
         foregroundPainter: CustomPaintXYSquare(
           dirty: false,
-          origin: box.globalToLocal(Offset(screenSize.width / 2,
-              screenSize.height / (DeviceUtils.isPortrait(context) ? 2.5 : 2))),
+          origin: box.globalToLocal(
+            Offset(
+              screenSize.width / 2,
+              screenSize.height / (DeviceUtils.isPortrait(context) ? 2.5 : 2),
+            ),
+          ),
           maxRadius: ref.watch(modulationRadiusProv) * screenSize.longestSide,
           deadZone: ref.watch(modulationDeadZoneProv),
-          change: const Offset(0, 0),
+          change: Offset.zero,
           radialChange: fixedChangeForPreview,
           colorBack: Palette.lightPink.withOpacity(fixedChangeForPreview * 0.6),
           colorFront:

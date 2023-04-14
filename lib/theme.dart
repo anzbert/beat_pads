@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:beat_pads/services/services.dart';
+import 'package:flutter/material.dart';
 
 abstract class ThemeConst {
   static const double sliderWidthFactor = 0.8;
@@ -10,7 +10,7 @@ abstract class ThemeConst {
   static const double listViewBottomPadding = 100;
 }
 
-var appTheme = ThemeData.dark().copyWith(
+ThemeData appTheme = ThemeData.dark().copyWith(
   useMaterial3: true,
   dividerTheme: DividerThemeData(
     thickness: 1,

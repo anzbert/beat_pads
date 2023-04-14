@@ -7,8 +7,8 @@ enum PadColors {
   // halfColorWheel("In Pitch (Halfed Color Range)"),
   circleOfFifth("Circle of Fifths");
 
-  final String title;
   const PadColors(this.title);
+  final String title;
 
   @override
   String toString() => title;
@@ -18,9 +18,9 @@ enum PadColors {
     int baseHue,
     int rootNote,
     int note,
-    bool noteOn,
-    int receivedVelocity,
-  ) {
+    int receivedVelocity, {
+    required bool noteOn,
+  }) {
     final double hue;
 
     // note on

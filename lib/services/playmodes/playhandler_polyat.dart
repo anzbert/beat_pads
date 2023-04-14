@@ -1,8 +1,8 @@
 import 'package:beat_pads/services/services.dart';
 
 class PlayModePolyAT extends PlayModeHandler {
-  final ModPolyAfterTouch1D polyATMod;
   PlayModePolyAT(super.ref) : polyATMod = ModPolyAfterTouch1D();
+  final ModPolyAfterTouch1D polyATMod;
 
   /// Adds a poly AT message to the regular note handling
   @override
@@ -11,7 +11,8 @@ class PlayModePolyAT extends PlayModeHandler {
     super.handleNewTouch(data);
   }
 
-  /// Modify the touchposition in the touchbuffers, either moved by pan or by animation.
+  /// Modify the touchposition in the touchbuffers, either moved by pan
+  /// or by animation.
   /// Send Poly AT message after the pos update
   @override
   void handlePan(NullableTouchAndScreenData data) {

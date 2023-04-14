@@ -12,7 +12,8 @@ class DividerTitle extends StatelessWidget {
       trailing: Text(
         title,
         style: TextStyle(
-            fontSize: Theme.of(context).textTheme.headlineSmall!.fontSize),
+          fontSize: Theme.of(context).textTheme.headlineSmall!.fontSize,
+        ),
       ),
     );
   }

@@ -3,7 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final touchReleaseBuffer =
     NotifierProvider.autoDispose<TouchReleaseBuffer, List<TouchEvent>>(
-        () => TouchReleaseBuffer());
+  TouchReleaseBuffer.new,
+);
 
 /// Data Structure that holds released Touch Events
 class TouchReleaseBuffer extends TouchBufferBase {
@@ -22,15 +23,16 @@ class TouchReleaseBuffer extends TouchBufferBase {
   /// Update note in the released events buffer, by adding it or updating
   /// the timer of the corresponding note
   void updateReleasedEvent(TouchEvent event) {
-    int index = state.indexWhere(
-        (element) => element.noteEvent.note == event.noteEvent.note);
+    final int index = state.indexWhere(
+      (element) => element.noteEvent.note == event.noteEvent.note,
+    );
 
     if (index >= 0) {
       state[index].noteEvent.updateReleaseTime(); // update time
       ref
           .read(mpeChannelProv.notifier)
           .releaseMPEChannel(state[index].noteEvent.channel);
-      state[index].noteEvent.updateMPEchannel(event.noteEvent.channel);
+      state[index].noteEvent.channel = event.noteEvent.channel;
       state = [...state];
     } else {
       event.noteEvent.updateReleaseTime();
@@ -39,7 +41,7 @@ class TouchReleaseBuffer extends TouchBufferBase {
     if (state.isNotEmpty) _checkReleasedEvents();
   }
 
-  void _checkReleasedEvents() async {
+  Future<void> _checkReleasedEvents() async {
     if (_checkerRunning) return; // only one running instance possible!
     _checkerRunning = true;
 
@@ -54,10 +56,11 @@ class TouchReleaseBuffer extends TouchBufferBase {
               state[i].noteEvent.noteOff(); // note OFF
 
               ref.read(mpeChannelProv.notifier).releaseMPEChannel(
-                  state[i].noteEvent.channel); // release MPE channel
+                    state[i].noteEvent.channel,
+                  ); // release MPE channel
 
-              state[i]
-                  .markKillIfNoteOffAndNoAnimation(); // mark to remove from buffer
+              // mark to remove from buffer
+              state[i].markKillIfNoteOffAndNoAnimation();
               state = [...state];
             }
           }
@@ -70,7 +73,7 @@ class TouchReleaseBuffer extends TouchBufferBase {
 
   /// Removes a Note by its midi value from this buffer
   void removeNoteFromReleaseBuffer(int note) {
-    for (var element in state) {
+    for (final element in state) {
       if (element.noteEvent.note == note) {
         ref
             .read(mpeChannelProv.notifier)
@@ -82,7 +85,8 @@ class TouchReleaseBuffer extends TouchBufferBase {
     }
   }
 
-  /// Remove all [TouchEvent]s that have been marked to be discarded from the buffer
+  /// Remove all [TouchEvent]s that have been marked to be discarded
+  /// from the buffer
   void killAllMarkedReleasedTouchEvents() {
     if (state.any((TouchEvent element) => element.kill)) {
       state = state.where((element) => !element.kill).toList();

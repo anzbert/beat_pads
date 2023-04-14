@@ -14,9 +14,8 @@ class PlayModeNoSlide extends PlayModeHandler {
 }
 
 abstract class PlayModeHandler {
-  final ProviderRef<PlayModeHandler> ref;
-
   PlayModeHandler(this.ref);
+  final ProviderRef<PlayModeHandler> ref;
 
   void handleNewTouch(PadTouchAndScreenData data) {
     if (ref.read(modReleaseUsable) > 0 || ref.read(noteReleaseUsable) > 0) {
@@ -25,20 +24,23 @@ abstract class PlayModeHandler {
           .removeNoteFromReleaseBuffer(data.padNote);
     }
 
-    NoteEvent noteOn = NoteEvent(ref.read(channelUsableProv), data.padNote,
-        ref.read(velocitySliderValueProv.notifier).velocity(data.yPercentage))
-      ..noteOn(cc: ref.read(sendCCProv));
+    final NoteEvent noteOn = NoteEvent(
+      ref.read(channelUsableProv),
+      data.padNote,
+      ref.read(velocitySliderValueProv.notifier).velocity(data.yPercentage),
+    )..noteOn(cc: ref.read(sendCCProv));
 
     ref.read(touchBuffer.notifier).addNoteOn(
-        CustomPointer(data.pointer, data.screenTouchPos),
-        noteOn,
-        data.screenSize);
+          CustomPointer(data.pointer, data.screenTouchPos),
+          noteOn,
+          data.screenSize,
+        );
   }
 
   void handlePan(NullableTouchAndScreenData data) {}
 
   void handleEndTouch(CustomPointer touch) {
-    bool eventInBuffer =
+    final bool eventInBuffer =
         ref.read(touchBuffer.notifier).eventInBuffer(touch.pointer);
     if (!eventInBuffer) return;
 
@@ -55,7 +57,8 @@ abstract class PlayModeHandler {
             (eventInBuffer) {
           eventInBuffer.newPosition = eventInBuffer.origin; // mod to zero
           ref.read(touchReleaseBuffer.notifier).updateReleasedEvent(
-              eventInBuffer); // instead of note off, event passed to release buffer
+                eventInBuffer,
+              ); // instead of note off, event passed to release buffer
         });
       }
       ref.read(touchBuffer.notifier).removeById(touch.pointer);

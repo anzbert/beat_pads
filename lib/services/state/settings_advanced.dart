@@ -5,9 +5,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 final playModeProv =
     NotifierProvider<SettingEnumNotifier<PlayMode>, PlayMode>(() {
   return SettingEnumNotifier<PlayMode>(
-      key: 'playMode',
-      defaultValue: PlayMode.noSlide,
-      nameMap: PlayMode.values.asNameMap());
+    key: 'playMode',
+    defaultValue: PlayMode.noSlide,
+    nameMap: PlayMode.values.asNameMap(),
+  );
 });
 
 // MOD VISUALISATION
@@ -26,7 +27,6 @@ final modulationDeadZoneProv =
   return SettingDoubleNotifier(
     key: 'modulationDeadZone',
     defaultValue: .20,
-    min: .0,
     max: .50,
   );
 });

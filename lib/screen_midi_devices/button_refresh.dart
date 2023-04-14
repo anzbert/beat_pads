@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class RefreshButton extends StatefulWidget {
   const RefreshButton({required this.onPressed, required this.icon, super.key});
 
-  final Function onPressed;
+  final void Function() onPressed;
   final Icon icon;
 
   @override

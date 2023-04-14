@@ -2,6 +2,17 @@ import 'package:beat_pads/services/services.dart';
 import 'package:flutter/material.dart';
 
 class TouchEvent {
+  /// Holds geometry, note and modulation information
+  TouchEvent(
+    CustomPointer touch,
+    this.noteEvent,
+    this.deadZone,
+    double modulationRadius,
+    Size screenSize,
+  )   : origin = touch.position,
+        newPosition = touch.position,
+        uniqueID = touch.pointer,
+        maxRadius = screenSize.longestSide * modulationRadius;
   final int uniqueID;
 
   // Note and modulation parameters:
@@ -21,20 +32,14 @@ class TouchEvent {
     if (!noteEvent.isPlaying && !hasReturnAnimation) _kill = true;
   }
 
-  /// Holds geometry, note and modulation information this.uniqueID, this.origin,
-  TouchEvent(CustomPointer touch, this.noteEvent, this.deadZone,
-      double modulationRadius, Size screenSize)
-      : origin = touch.position,
-        newPosition = touch.position,
-        uniqueID = touch.pointer,
-        maxRadius = screenSize.longestSide * modulationRadius;
-
-  /// Prevents touchevent from receiving further position updates in move(). Irreversible!
+  /// Prevents touchevent from receiving further position updates
+  ///  in move(). Irreversible!
   void markDirty() => _dirty = true;
   bool _dirty = false;
   bool get dirty => _dirty;
 
   /// Updates stored touch event with latest touch position. Used for geometry
+  // ignore: use_setters_to_change_properties
   void updatePosition(Offset updatedPosition) {
     newPosition = updatedPosition;
   }
@@ -43,7 +48,7 @@ class TouchEvent {
   /// touch to the current position in the context of the maximum Radius.
   /// Produces values from 0 to 1 from center to maxium Radius.
   double radialChange({Curve curve = Curves.easeIn, bool deadZone = true}) {
-    double distanceFactor =
+    final double distanceFactor =
         (Utils.offsetDistance(origin, newPosition) / maxRadius).clamp(0, 1);
 
     return Utils.curveTransform(
@@ -55,10 +60,14 @@ class TouchEvent {
   /// Get the directional change factor from the origin of the
   /// touch to the current position in the context of the maximum Radius.
   /// Produced values from -1 to 1 on X and Y Axis within the maximum Diameter.
-  Offset directionalChangeFromCenter(
-      {Curve curve = Curves.easeIn, bool deadZone = true}) {
-    double factorX = ((newPosition.dx - origin.dx) / maxRadius).clamp(-1, 1);
-    double factorY = ((-newPosition.dy + origin.dy) / maxRadius).clamp(-1, 1);
+  Offset directionalChangeFromCenter({
+    Curve curve = Curves.easeIn,
+    bool deadZone = true,
+  }) {
+    final double factorX =
+        ((newPosition.dx - origin.dx) / maxRadius).clamp(-1, 1);
+    final double factorY =
+        ((-newPosition.dy + origin.dy) / maxRadius).clamp(-1, 1);
 
     return Offset(
       Utils.curveTransform(
@@ -90,8 +99,7 @@ class TouchEvent {
   }
 
   bool get isModulating {
-    if (directionalChangeFromCenter() != const Offset(0, 0) &&
-        radialChange() != 0) {
+    if (directionalChangeFromCenter() != Offset.zero && radialChange() != 0) {
       return true;
     }
     return false;

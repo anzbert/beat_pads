@@ -8,7 +8,7 @@ class BeatPadsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: Future.delayed(
+      future: Future<bool>.delayed(
           Duration(milliseconds: Timing.screenTransitionTime), () async {
         final bool result = await DeviceUtils.landscapeOnly();
         await Future<void>.delayed(
@@ -17,19 +17,19 @@ class BeatPadsScreen extends StatelessWidget {
         return result;
       }),
       builder: (context, AsyncSnapshot<bool?> done) {
-        if (done.hasData && done.data == true) {
-          return const Scaffold(
-            body: SafeArea(
-              child: BeatPadsAndControls(
-                preview: false,
-              ),
-            ),
-            drawer: Drawer(
-              child: MidiConfig(),
-            ),
-          );
+        if (done.data == false || done.data == null) {
+          return const Scaffold(body: SizedBox.expand());
         }
-        return const Scaffold(body: SizedBox.expand());
+        return const Scaffold(
+          body: SafeArea(
+            child: BeatPadsAndControls(
+              preview: false,
+            ),
+          ),
+          drawer: Drawer(
+            child: MidiConfig(),
+          ),
+        );
       },
     );
   }
