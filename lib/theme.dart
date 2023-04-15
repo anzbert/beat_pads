@@ -1,6 +1,8 @@
 import 'package:beat_pads/services/services.dart';
 import 'package:flutter/material.dart';
 
+/// Various constants used for relative and absolute sizing
+/// in different parts of the app.
 abstract class ThemeConst {
   static const double sliderWidthFactor = 0.8;
   static const double padSpacingFactor = 0.003;
@@ -10,6 +12,8 @@ abstract class ThemeConst {
   static const double listViewBottomPadding = 100;
 }
 
+/// The main theme data used for this app.
+/// Loaded in [MaterialApp] at startup.
 ThemeData appTheme = ThemeData.dark().copyWith(
   useMaterial3: true,
   dividerTheme: DividerThemeData(
