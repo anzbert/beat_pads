@@ -275,6 +275,7 @@ class _BeatPadGridState extends ConsumerState<BeatPadGrid>
   @override
   void dispose() {
     if (playmode == PlayMode.mpe && !widget.preview) {
+      // MPE De-Init Message (memberChannels = 0)
       MPEinitMessage(memberChannels: 0, upperZone: upperzone).send();
     }
 
