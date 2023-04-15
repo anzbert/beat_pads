@@ -8,10 +8,10 @@ class RefreshButton extends StatefulWidget {
   final Icon icon;
 
   @override
-  RefreshButtonState createState() => RefreshButtonState();
+  State<RefreshButton> createState() => _RefreshButtonState();
 }
 
-class RefreshButtonState extends State<RefreshButton>
+class _RefreshButtonState extends State<RefreshButton>
     with SingleTickerProviderStateMixin {
   late Animation<double> animation;
   late AnimationController controller;
