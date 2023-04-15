@@ -4,28 +4,29 @@ import 'package:beat_pads/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SlideBeatPad extends ConsumerWidget {
-  const SlideBeatPad({
-    required this.note,
-    required this.preview,
+class BeatPad extends ConsumerWidget {
+  const BeatPad({
+    required int note,
+    required bool preview,
     super.key,
-  });
-  final bool preview;
+  })  : _note = note,
+        _preview = preview;
 
-  final int note;
+  final bool _preview;
+  final int _note;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final double screenWidth = MediaQuery.of(context).size.width;
 
-    final int velocity = ref.watch(senderProvider).isNoteOn(note);
+    final int velocity = ref.watch(senderProvider).isNoteOn(_note);
 
     final Color color = ref.watch(padColorsProv).colorize(
           ref.watch(scaleProv).intervals,
           ref.watch(baseHueProv),
           ref.watch(rootProv),
-          note,
-          preview ? 0 : ref.watch(rxNoteProvider)[note],
+          _note,
+          _preview ? 0 : ref.watch(rxNoteProvider)[_note],
           noteOn: velocity != 0,
         );
 
@@ -39,7 +40,7 @@ class SlideBeatPad extends ConsumerWidget {
     final Label label = PadLabels.getLabel(
       ref.watch(padLabelsProv),
       ref.watch(layoutProv),
-      note,
+      _note,
     );
     final double fontSize = screenWidth * 0.021;
     final Color padTextColor = Palette.darkGrey;
@@ -56,7 +57,7 @@ class SlideBeatPad extends ConsumerWidget {
             color: color,
             borderRadius: padRadius,
             shadowColor: Colors.black,
-            child: note > 127 || note < 0
+            child: _note > 127 || _note < 0
                 ?
                 // OUT OF MIDI RANGE
                 InkWell(
@@ -64,7 +65,7 @@ class SlideBeatPad extends ConsumerWidget {
                     child: Padding(
                       padding: EdgeInsets.all(padSpacing),
                       child: Text(
-                        note.toString(),
+                        _note.toString(),
                         style: TextStyle(
                           fontStyle: FontStyle.italic,
                           color: Palette.lightGrey,
@@ -111,7 +112,7 @@ class SlideBeatPad extends ConsumerWidget {
                     ),
                   ),
           ),
-          if (ref.watch(velocityVisualProv) && preview == false)
+          if (ref.watch(velocityVisualProv) && _preview == false)
             VelocityOverlay(
               velocity: velocity,
               padRadius: padRadius,

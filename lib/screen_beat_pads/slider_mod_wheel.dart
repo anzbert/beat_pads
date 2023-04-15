@@ -15,6 +15,7 @@ class _IntNotifier extends Notifier<int> {
 final _modWheelProvider = NotifierProvider<_IntNotifier, int>(_IntNotifier.new);
 
 class ModWheel extends ConsumerStatefulWidget {
+  /// Create a Modwheel control slider
   const ModWheel({
     required this.channel,
     required this.preview,

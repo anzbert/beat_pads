@@ -4,7 +4,7 @@ import 'package:beat_pads/services/services.dart';
 import 'package:flutter/material.dart';
 
 class BeatPadsScreen extends StatelessWidget {
-  /// This is the main playing screen with grids and additional Controls
+  /// This is the main playing screen with a pad grid and additional Controls
   const BeatPadsScreen({super.key});
   @override
   Widget build(BuildContext context) {
@@ -23,9 +23,7 @@ class BeatPadsScreen extends StatelessWidget {
         }
         return const Scaffold(
           body: SafeArea(
-            child: BeatPadsAndControls(
-              preview: false,
-            ),
+            child: BeatPadsAndControls(),
           ),
           drawer: Drawer(
             child: MidiConfig(),

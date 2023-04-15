@@ -7,10 +7,13 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class BeatPadGrid extends ConsumerStatefulWidget {
+  /// Create a grid of pad controls,
   const BeatPadGrid({
-    required this.preview,
+    this.preview = false,
     super.key,
   });
+
+  /// Set [preview] to true to make the pad grid non-interactive
   final bool preview;
 
   @override
@@ -249,7 +252,7 @@ class _BeatPadGridState extends ConsumerState<BeatPadGrid>
                                 return Expanded(
                                   child: HitTestObject(
                                     index: customPad.padValue,
-                                    child: SlideBeatPad(
+                                    child: BeatPad(
                                       note: customPad.padValue,
                                       preview: widget.preview,
                                     ),

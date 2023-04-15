@@ -10,10 +10,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class BeatPadsAndControls extends ConsumerWidget {
+  /// Create a screen with a pad grid and additional controls
   const BeatPadsAndControls({
-    required this.preview,
+    this.preview = false,
     super.key,
   });
+
+  /// Set [preview] to true to make the pad grid and controls non-interactive
   final bool preview;
 
   @override

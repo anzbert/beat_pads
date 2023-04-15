@@ -2,14 +2,17 @@ import 'package:beat_pads/services/services.dart';
 import 'package:flutter/material.dart';
 
 class VelocityOverlay extends StatelessWidget {
+  /// Shows the velocity as a colored proportional overlay
+  /// over a pad
   const VelocityOverlay({
-    required this.velocity,
-    required this.padRadius,
+    required int velocity,
+    required BorderRadius padRadius,
     super.key,
-  });
+  })  : _velocity = velocity,
+        _padRadius = padRadius;
 
-  final int velocity;
-  final BorderRadius padRadius;
+  final int _velocity;
+  final BorderRadius _padRadius;
 
   @override
   Widget build(BuildContext context) {
@@ -19,10 +22,10 @@ class VelocityOverlay extends StatelessWidget {
 
     return Container(
       margin: EdgeInsets.only(
-        top: size.height * (1 - velocity / 127),
+        top: size.height * (1 - _velocity / 127),
       ),
       decoration: BoxDecoration(
-        borderRadius: padRadius,
+        borderRadius: _padRadius,
         color: Palette.dirtyTranslucent,
       ),
       alignment: Alignment.bottomCenter,

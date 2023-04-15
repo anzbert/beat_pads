@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 
 class ReturnToMenuButton extends StatelessWidget {
   const ReturnToMenuButton({
-    required this.transparent,
+    required bool transparent,
     super.key,
-  });
+  }) : _transparent = transparent;
 
-  final bool transparent;
+  final bool _transparent;
 
   @override
   Widget build(BuildContext context) {
@@ -34,10 +34,10 @@ class ReturnToMenuButton extends StatelessWidget {
             onPressed: () {},
             style: ElevatedButton.styleFrom(
               shadowColor:
-                  Palette.lightGrey.withOpacity(transparent ? 0.15 : 1),
+                  Palette.lightGrey.withOpacity(_transparent ? 0.15 : 1),
               foregroundColor:
-                  Palette.lightGrey.withOpacity(transparent ? 0.5 : 1),
-              backgroundColor: transparent
+                  Palette.lightGrey.withOpacity(_transparent ? 0.5 : 1),
+              backgroundColor: _transparent
                   ? Colors.transparent
                   : Palette.darker(Palette.cadetBlue, 0.3),
               padding: EdgeInsets.zero,

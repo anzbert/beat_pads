@@ -8,10 +8,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class MidiConfig extends ConsumerStatefulWidget {
   const MidiConfig({super.key});
   @override
-  MidiConfigState createState() => MidiConfigState();
+  ConsumerState<MidiConfig> createState() => _MidiConfigState();
 }
 
-class MidiConfigState extends ConsumerState<MidiConfig> {
+class _MidiConfigState extends ConsumerState<MidiConfig> {
   final MidiCommand _midiCommand = MidiCommand();
   bool connecting = false;
 

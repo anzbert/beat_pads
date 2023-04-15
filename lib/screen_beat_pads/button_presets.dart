@@ -16,6 +16,7 @@ class PresetButtons extends ConsumerWidget {
     this.minimumSize = false,
     super.key,
   });
+
   static final backgoundColors = [
     Palette.laserLemon,
     Palette.lightPink,
