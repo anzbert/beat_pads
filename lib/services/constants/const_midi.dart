@@ -35,7 +35,7 @@ enum Chord {
 
   /// Returns chord notes of a given base note (0-127)
   List<int> getChord(int baseNote, [Inversion inv = Inversion.first]) {
-    final List<int> chord = intervals.map((n) => n + baseNote).toList();
+    final chord = intervals.map((n) => n + baseNote).toList();
     switch (inv) {
       case Inversion.first:
         break;
@@ -51,12 +51,10 @@ enum Chord {
   }
 
   /// Returns chord notes of a given root note in a given octave (-2 to 7)
-  List<int> getChordOfOctave(int rootNote, int octave) {
-    return intervals
-        .map((n) => n + (rootNote % 12) + (octave + 2).clamp(0, 9) * 12)
-        .where((n) => n < 128)
-        .toList();
-  }
+  List<int> getChordOfOctave(int rootNote, int octave) => intervals
+      .map((n) => n + (rootNote % 12) + (octave + 2).clamp(0, 9) * 12)
+      .where((n) => n < 128)
+      .toList();
 }
 
 enum Inversion {
@@ -89,9 +87,7 @@ enum Note {
   final String label;
   final Sign sign;
 
-  int getInterval(Note other) {
-    return (semitone - other.semitone).abs();
-  }
+  int getInterval(Note other) => (semitone - other.semitone).abs();
 
   static Note fromSemitone(int note, [Sign sign = Sign.sharp]) {
     for (final val in Note.values) {
@@ -315,15 +311,13 @@ enum CC {
   final int value;
 
   /// A list of all undefined and general purpose CCs (76 in total)
-  static List<int> get undefined {
-    return [
-      3,
-      9,
-      ...List.generate(64 - 14, (index) => index + 14),
-      ...List.generate(91 - 85, (index) => index + 85),
-      ...List.generate(120 - 102, (index) => index + 102),
-    ];
-  }
+  static List<int> get undefined => [
+        3,
+        9,
+        ...List.generate(64 - 14, (index) => index + 14),
+        ...List.generate(91 - 85, (index) => index + 85),
+        ...List.generate(120 - 102, (index) => index + 102),
+      ];
 }
 
 /*

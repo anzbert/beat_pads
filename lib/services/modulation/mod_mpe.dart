@@ -39,7 +39,7 @@ class ModPitchBend extends Mod {
 
   @override
   void send(int channel, int note, double distance) {
-    final int pitchChange = (distance * 0x3FFF).toInt();
+    final pitchChange = (distance * 0x3FFF).toInt();
 
     if (!listEquals<num>([channel, pitchChange], lastSentValues)) {
       PitchBendMessage(
@@ -55,7 +55,7 @@ class ModPitchBend extends Mod {
 class ModMPEAftertouch1D extends Mod {
   @override
   void send(int channel, int note, double distance) {
-    final int atChange = (distance.abs() * 127).toInt();
+    final atChange = (distance.abs() * 127).toInt();
 
     if (!listEquals<num>([channel, atChange], lastSentValues)) {
       ATMessage(channel: channel, pressure: atChange).send();
@@ -67,7 +67,7 @@ class ModMPEAftertouch1D extends Mod {
 class ModMPEAftertouch642D extends Mod {
   @override
   void send(int channel, int note, double distance) {
-    final int atChange = ((distance + 1) / 2 * 127).toInt();
+    final atChange = ((distance + 1) / 2 * 127).toInt();
 
     if (!listEquals<num>([channel, atChange], lastSentValues)) {
       ATMessage(channel: channel, pressure: atChange).send();
@@ -82,7 +82,7 @@ class ModCC1D extends Mod {
 
   @override
   void send(int channel, int note, double distance) {
-    final int ccChange = (distance.abs() * 127).toInt();
+    final ccChange = (distance.abs() * 127).toInt();
 
     if (!listEquals<num>([channel, note, ccChange], lastSentValues)) {
       CCMessage(channel: channel, controller: cc.value, value: ccChange).send();
@@ -97,7 +97,7 @@ class ModCC642D extends Mod {
 
   @override
   void send(int channel, int note, double distance) {
-    final int ccChange = ((distance + 1) / 2 * 127).toInt();
+    final ccChange = ((distance + 1) / 2 * 127).toInt();
 
     if (!listEquals<num>([channel, note, ccChange], lastSentValues)) {
       CCMessage(channel: channel, controller: cc.value, value: ccChange).send();

@@ -35,8 +35,8 @@ class PadMenuScreen extends ConsumerWidget {
     }
   }
 
-  void goToPadsScreen(BuildContext context) {
-    Navigator.pushReplacement(
+  Future<void> goToPadsScreen(BuildContext context) async {
+    await Navigator.pushReplacement(
       context,
       MaterialPageRoute<BeatPadsScreen>(
         builder: (context) => const BeatPadsScreen(),
@@ -45,35 +45,33 @@ class PadMenuScreen extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return FutureBuilder(
-      future: Future.delayed(
-          Duration(milliseconds: Timing.screenTransitionTime), () async {
-        final bool result = await DeviceUtils.enableRotation();
-        await Future<void>.delayed(
-          Duration(milliseconds: Timing.screenTransitionTime),
-        );
-        return result;
-      }),
-      builder: (context, AsyncSnapshot<bool?> done) {
-        if (done.data == false || done.data == null) {
-          return const Scaffold(body: SizedBox.expand());
-        }
+  Widget build(BuildContext context, WidgetRef ref) => FutureBuilder(
+        future: Future.delayed(
+            Duration(milliseconds: Timing.screenTransitionTime), () async {
+          final result = await DeviceUtils.enableRotation();
+          await Future<void>.delayed(
+            Duration(milliseconds: Timing.screenTransitionTime),
+          );
+          return result;
+        }),
+        builder: (context, done) {
+          if (done.data == false || done.data == null) {
+            return const Scaffold(body: SizedBox.expand());
+          }
 
-        return Scaffold(
-          appBar: AppBar(
-            title: GradientText(
-              'Beat Pads',
-              style: Theme.of(context).textTheme.headlineMedium,
-              colors: [
-                Palette.lightPink,
-                Palette.cadetBlue,
-                Palette.laserLemon,
-              ],
-            ),
-            leading: Builder(
-              builder: (BuildContext context) {
-                return IconButton(
+          return Scaffold(
+            appBar: AppBar(
+              title: GradientText(
+                'Beat Pads',
+                style: Theme.of(context).textTheme.headlineMedium,
+                colors: [
+                  Palette.lightPink,
+                  Palette.cadetBlue,
+                  Palette.laserLemon,
+                ],
+              ),
+              leading: Builder(
+                builder: (context) => IconButton(
                   onPressed: () {
                     Scaffold.of(context).openDrawer();
                   },
@@ -82,104 +80,102 @@ class PadMenuScreen extends ConsumerWidget {
                     color: Palette.lightPink,
                     size: 36,
                   ),
-                );
-              },
-            ),
-            actions: [
-              Padding(
-                padding: const EdgeInsets.only(right: 8),
-                child: DropdownButton(
-                  value: ref.watch(presetNotifierProvider),
-                  iconSize: 32,
-                  iconEnabledColor: PresetButtons
-                      .backgoundColors[ref.watch(presetNotifierProvider) - 1],
-                  underline: const SizedBox.shrink(),
-                  onChanged: (int? newValue) {
-                    if (newValue != null) {
-                      ref.read(presetNotifierProvider.notifier).set(newValue);
-                    }
-                  },
-                  items: [
-                    for (int i = 1;
-                        i <= PresetButtons.backgoundColors.length;
-                        i++)
-                      DropdownMenuItem(
-                        value: i,
-                        child: Text(
-                          'P$i',
-                          style: TextStyle(
-                            color: PresetButtons.backgoundColors[i - 1],
-                            fontSize: 31,
+                ),
+              ),
+              actions: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 8),
+                  child: DropdownButton(
+                    value: ref.watch(presetNotifierProvider),
+                    iconSize: 32,
+                    iconEnabledColor: PresetButtons
+                        .backgoundColors[ref.watch(presetNotifierProvider) - 1],
+                    underline: const SizedBox.shrink(),
+                    onChanged: (newValue) {
+                      if (newValue != null) {
+                        ref.read(presetNotifierProvider.notifier).set(newValue);
+                      }
+                    },
+                    items: [
+                      for (int i = 1;
+                          i <= PresetButtons.backgoundColors.length;
+                          i++)
+                        DropdownMenuItem(
+                          value: i,
+                          child: Text(
+                            'P$i',
+                            style: TextStyle(
+                              color: PresetButtons.backgoundColors[i - 1],
+                              fontSize: 31,
+                            ),
                           ),
-                        ),
-                      )
-                  ],
-                ),
-              )
-            ],
-          ),
-          drawer: const Drawer(
-            child: MidiConfig(),
-          ),
-          bottomNavigationBar: BottomNavigationBar(
-            type: BottomNavigationBarType.fixed,
-            selectedItemColor: Palette.cadetBlue,
-            backgroundColor: Palette.darkGrey,
-            currentIndex: ref.watch(selectedMenuState).index,
-            onTap: (int tappedIndex) {
-              ref.read(selectedMenuState.notifier).state =
-                  Menu.values[tappedIndex];
-            },
-            items: [
-              BottomNavigationBarItem(
-                icon: const Icon(Icons.apps),
-                activeIcon: Icon(
-                  Icons.apps,
-                  color: Palette.cadetBlue,
-                ),
-                label: 'Layout',
-              ),
-              BottomNavigationBarItem(
-                activeIcon: Icon(
-                  Icons.music_note,
-                  color: Palette.cadetBlue,
-                ),
-                icon: const Icon(Icons.music_note),
-                label: 'Midi',
-              ),
-              BottomNavigationBarItem(
-                icon: const Icon(Icons.touch_app),
-                activeIcon: Icon(
-                  Icons.touch_app,
-                  color: Palette.cadetBlue,
-                ),
-                label: 'Advanced',
-              ),
-              BottomNavigationBarItem(
-                activeIcon: Icon(
-                  Icons.settings,
-                  color: Palette.cadetBlue,
-                ),
-                icon: const Icon(Icons.settings),
-                label: 'System',
-              ),
-            ],
-          ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () => goToPadsScreen(context),
-            backgroundColor: PresetButtons
-                .backgoundColors[ref.watch(presetNotifierProvider) - 1],
-            child: Icon(
-              Icons.play_arrow,
-              color: Palette.darkGrey,
-              size: 36,
+                        )
+                    ],
+                  ),
+                )
+              ],
             ),
-          ),
-          body: SafeArea(
-            child: getMenu(ref.watch(selectedMenuState)),
-          ),
-        );
-      },
-    );
-  }
+            drawer: const Drawer(
+              child: MidiConfig(),
+            ),
+            bottomNavigationBar: BottomNavigationBar(
+              type: BottomNavigationBarType.fixed,
+              selectedItemColor: Palette.cadetBlue,
+              backgroundColor: Palette.darkGrey,
+              currentIndex: ref.watch(selectedMenuState).index,
+              onTap: (tappedIndex) {
+                ref.read(selectedMenuState.notifier).state =
+                    Menu.values[tappedIndex];
+              },
+              items: [
+                BottomNavigationBarItem(
+                  icon: const Icon(Icons.apps),
+                  activeIcon: Icon(
+                    Icons.apps,
+                    color: Palette.cadetBlue,
+                  ),
+                  label: 'Layout',
+                ),
+                BottomNavigationBarItem(
+                  activeIcon: Icon(
+                    Icons.music_note,
+                    color: Palette.cadetBlue,
+                  ),
+                  icon: const Icon(Icons.music_note),
+                  label: 'Midi',
+                ),
+                BottomNavigationBarItem(
+                  icon: const Icon(Icons.touch_app),
+                  activeIcon: Icon(
+                    Icons.touch_app,
+                    color: Palette.cadetBlue,
+                  ),
+                  label: 'Advanced',
+                ),
+                BottomNavigationBarItem(
+                  activeIcon: Icon(
+                    Icons.settings,
+                    color: Palette.cadetBlue,
+                  ),
+                  icon: const Icon(Icons.settings),
+                  label: 'System',
+                ),
+              ],
+            ),
+            floatingActionButton: FloatingActionButton(
+              onPressed: () async => goToPadsScreen(context),
+              backgroundColor: PresetButtons
+                  .backgoundColors[ref.watch(presetNotifierProvider) - 1],
+              child: Icon(
+                Icons.play_arrow,
+                color: Palette.darkGrey,
+                size: 36,
+              ),
+            ),
+            body: SafeArea(
+              child: getMenu(ref.watch(selectedMenuState)),
+            ),
+          );
+        },
+      );
 }

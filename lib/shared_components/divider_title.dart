@@ -6,15 +6,13 @@ class DividerTitle extends StatelessWidget {
   final String title;
 
   @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      title: const Divider(),
-      trailing: Text(
-        title,
-        style: TextStyle(
-          fontSize: Theme.of(context).textTheme.headlineSmall!.fontSize,
+  Widget build(BuildContext context) => ListTile(
+        title: const Divider(),
+        trailing: Text(
+          title,
+          style: TextStyle(
+            fontSize: Theme.of(context).textTheme.headlineSmall!.fontSize,
+          ),
         ),
-      ),
-    );
-  }
+      );
 }

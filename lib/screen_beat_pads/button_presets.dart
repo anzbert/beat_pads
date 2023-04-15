@@ -30,23 +30,21 @@ class PresetButtons extends ConsumerWidget {
   final ClickType clickType;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return Flex(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      crossAxisAlignment:
-          row ? CrossAxisAlignment.center : CrossAxisAlignment.stretch,
-      direction: row ? Axis.horizontal : Axis.vertical,
-      children: [
-        for (int i = 1; i <= backgoundColors.length; i++)
-          _PresetButton(
-            minimumSize: minimumSize,
-            i,
-            backgoundColors[i - 1],
-            clickType: clickType,
-          )
-      ],
-    );
-  }
+  Widget build(BuildContext context, WidgetRef ref) => Flex(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment:
+            row ? CrossAxisAlignment.center : CrossAxisAlignment.stretch,
+        direction: row ? Axis.horizontal : Axis.vertical,
+        children: [
+          for (int i = 1; i <= backgoundColors.length; i++)
+            _PresetButton(
+              minimumSize: minimumSize,
+              i,
+              backgoundColors[i - 1],
+              clickType: clickType,
+            )
+        ],
+      );
 }
 
 class _PresetButton extends ConsumerWidget {
@@ -67,9 +65,9 @@ class _PresetButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final double width = MediaQuery.of(context).size.width;
-    final double padSpacing = width * ThemeConst.padSpacingFactor;
-    final double padRadius = width * ThemeConst.padRadiusFactor;
+    final width = MediaQuery.of(context).size.width;
+    final padSpacing = width * ThemeConst.padSpacingFactor;
+    final padRadius = width * ThemeConst.padRadiusFactor;
     return minimumSize
         ? Flexible(
             child: Padding(

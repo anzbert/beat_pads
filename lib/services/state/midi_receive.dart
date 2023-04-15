@@ -5,18 +5,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 /// Wraps the FlutterMidiCommand onMidiDataReceived Stream in a Streamprovider
 final rxMidiStream = StreamProvider<MidiMessagePacket>(
   (ref) async* {
-    final Stream<MidiPacket> rxStream =
-        MidiCommand().onMidiDataReceived ?? const Stream.empty();
+    final rxStream = MidiCommand().onMidiDataReceived ?? const Stream.empty();
 
-    final int channel = ref.watch(channelUsableProv);
+    final channel = ref.watch(channelUsableProv);
 
     await for (final MidiPacket packet in rxStream) {
-      final int statusByte = packet.data[0];
+      final statusByte = packet.data[0];
 
       if (statusByte & 0xF0 == 0xF0) continue; // filter: command messages
       if (statusByte & 0x0F != channel) continue; // filter: channel
 
-      final MidiMessageType type = MidiMessageType.fromStatusByte(statusByte);
+      final type = MidiMessageType.fromStatusByte(statusByte);
 
       yield MidiMessagePacket(type, packet.data.skip(1).toList());
     }
@@ -25,16 +24,14 @@ final rxMidiStream = StreamProvider<MidiMessagePacket>(
 
 /// This provider holds a list of velocities of all received midi notes in the
 /// currently selected master channel
-final rxNoteProvider =
-    NotifierProvider<_RxNoteVelocitiesNotifier, List<int>>(() {
-  return _RxNoteVelocitiesNotifier();
-});
+final rxNoteProvider = NotifierProvider<_RxNoteVelocitiesNotifier, List<int>>(
+  _RxNoteVelocitiesNotifier.new,
+);
 
 class _RxNoteVelocitiesNotifier extends Notifier<List<int>> {
   @override
   List<int> build() {
-    ref.listen(rxMidiStream,
-        (AsyncValue<MidiMessagePacket>? _, AsyncValue<MidiMessagePacket> next) {
+    ref.listen(rxMidiStream, (_, next) {
       if (next.hasError || next.hasValue == false || next.value == null) return;
       if (next.value!.content.length < 2) return; // message too short
 

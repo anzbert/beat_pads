@@ -16,52 +16,50 @@ class IntCounterTile extends StatelessWidget {
   final void Function()? resetFunction;
 
   @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      title: Row(
-        children: [
-          Text(label),
-          if (resetFunction != null)
-            TextButton(
-              onPressed: () => resetFunction!(),
-              child: const Text('Reset'),
+  Widget build(BuildContext context) => ListTile(
+        title: Row(
+          children: [
+            Text(label),
+            if (resetFunction != null)
+              TextButton(
+                onPressed: () => resetFunction!(),
+                child: const Text('Reset'),
+              ),
+          ],
+        ),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                if (readValue - 1 >= 0) setValue(readValue - 1); // no negatives
+              },
+              style: ElevatedButton.styleFrom(
+                foregroundColor: Palette.darkGrey,
+                backgroundColor: Palette.laserLemon,
+                shape: const CircleBorder(),
+              ),
+              child: const Icon(Icons.remove),
             ),
-        ],
-      ),
-      trailing: Row(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          ElevatedButton(
-            onPressed: () {
-              if (readValue - 1 >= 0) setValue(readValue - 1); // no negatives
-            },
-            style: ElevatedButton.styleFrom(
-              foregroundColor: Palette.darkGrey,
-              backgroundColor: Palette.laserLemon,
-              shape: const CircleBorder(),
+            Text(
+              readValue.toString(),
+              style: TextStyle(
+                fontSize: Theme.of(context).textTheme.titleMedium!.fontSize,
+              ),
             ),
-            child: const Icon(Icons.remove),
-          ),
-          Text(
-            readValue.toString(),
-            style: TextStyle(
-              fontSize: Theme.of(context).textTheme.titleMedium!.fontSize,
+            ElevatedButton(
+              onPressed: () {
+                setValue(readValue + 1);
+              },
+              style: ElevatedButton.styleFrom(
+                foregroundColor: Palette.darkGrey,
+                backgroundColor: Palette.cadetBlue,
+                shape: const CircleBorder(),
+              ),
+              child: const Icon(Icons.add),
             ),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              setValue(readValue + 1);
-            },
-            style: ElevatedButton.styleFrom(
-              foregroundColor: Palette.darkGrey,
-              backgroundColor: Palette.cadetBlue,
-              shape: const CircleBorder(),
-            ),
-            child: const Icon(Icons.add),
-          ),
-        ],
-      ),
-    );
-  }
+          ],
+        ),
+      );
 }

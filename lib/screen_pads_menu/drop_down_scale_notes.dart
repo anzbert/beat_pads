@@ -21,7 +21,7 @@ class DropdownScaleNotes extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<int> items =
+    final items =
         MidiUtils.allAbsoluteScaleNotes(usedScale.intervals, rootNote);
     final List<DropdownMenuItem<int>> menuItems;
 

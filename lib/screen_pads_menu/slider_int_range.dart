@@ -25,53 +25,51 @@ class MidiRangeSelectorTile extends StatelessWidget {
   final bool note;
 
   @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        ListTile(
-          title: Row(
-            children: [
-              Text(label),
-              if (resetFunction != null)
-                TextButton(
-                  onPressed: () => resetFunction!(),
-                  style: TextButton.styleFrom(
-                    minimumSize: Size.zero,
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+  Widget build(BuildContext context) => Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          ListTile(
+            title: Row(
+              children: [
+                Text(label),
+                if (resetFunction != null)
+                  TextButton(
+                    onPressed: () => resetFunction!(),
+                    style: TextButton.styleFrom(
+                      minimumSize: Size.zero,
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    ),
+                    child: const Text('Reset'),
                   ),
-                  child: const Text('Reset'),
-                ),
-            ],
+              ],
+            ),
+            trailing: Text('$readMin - $readMax'),
           ),
-          trailing: Text('$readMin - $readMax'),
-        ),
-        Builder(
-          builder: (context) {
-            final double width = MediaQuery.of(context).size.width;
-            return SizedBox(
-              width: width * ThemeConst.sliderWidthFactor,
-              child: RangeSlider(
-                values: RangeValues(readMin.toDouble(), readMax.toDouble()),
-                min: 10,
-                max: 127,
-                labels: const RangeLabels(
-                  'Min',
-                  'Max',
+          Builder(
+            builder: (context) {
+              final width = MediaQuery.of(context).size.width;
+              return SizedBox(
+                width: width * ThemeConst.sliderWidthFactor,
+                child: RangeSlider(
+                  values: RangeValues(readMin.toDouble(), readMax.toDouble()),
+                  min: 10,
+                  max: 127,
+                  labels: const RangeLabels(
+                    'Min',
+                    'Max',
+                  ),
+                  onChanged: (values) {
+                    setMin(values.start.toInt());
+                    setMax(values.end.toInt());
+                  },
+                  onChangeEnd: (_) {
+                    onChangeEnd?.call();
+                  },
                 ),
-                onChanged: (RangeValues values) {
-                  setMin(values.start.toInt());
-                  setMax(values.end.toInt());
-                },
-                onChangeEnd: (_) {
-                  onChangeEnd?.call();
-                },
-              ),
-            );
-          },
-        ),
-      ],
-    );
-  }
+              );
+            },
+          ),
+        ],
+      );
 }

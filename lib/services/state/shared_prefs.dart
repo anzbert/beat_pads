@@ -9,7 +9,7 @@ class Prefs {
   late SharedPreferences sharedPrefs;
 
   static Future<Prefs> initAsync() async {
-    final Prefs instance = Prefs._()
+    final instance = Prefs._()
       ..sharedPrefs = await SharedPreferences.getInstance();
     return instance;
   }
@@ -23,9 +23,7 @@ final resetAllProv = NotifierProvider<_ResetAllNotifier, bool>(
 
 class _ResetAllNotifier extends Notifier<bool> {
   @override
-  bool build() {
-    return false;
-  }
+  bool build() => false;
 
   /// Causes a change in state, which alerts all listeners of this [Notifier].
   void resetAll() {
@@ -33,7 +31,7 @@ class _ResetAllNotifier extends Notifier<bool> {
   }
 
   void resetAllPresets() {
-    for (int i = PresetNotfier.numberOfPresets; i >= 1; i--) {
+    for (var i = PresetNotfier.numberOfPresets; i >= 1; i--) {
       ref.read(presetNotifierProvider.notifier).set(i);
       resetAll();
     }
@@ -151,9 +149,9 @@ class SettingBoolNotifier extends SettingNotifier<bool> {
     await ref.read(sharedPrefProvider).sharedPrefs.setBool(presetKey, state);
   }
 
-  void toggleAndSave() {
+  Future<void> toggleAndSave() async {
     state = !state;
-    save();
+    await save();
   }
 
   @override
@@ -195,8 +193,7 @@ class SettingDoubleNotifier extends SettingNotifier<double> {
 
   @override
   double _load() {
-    final int? value =
-        ref.read(sharedPrefProvider).sharedPrefs.getInt(presetKey);
+    final value = ref.read(sharedPrefProvider).sharedPrefs.getInt(presetKey);
     return value != null ? value / 100 : defaultValue;
   }
 }
@@ -252,10 +249,9 @@ class SettingEnumNotifier<T extends Enum> extends SettingNotifier<T> {
 
   @override
   T _load() {
-    final String? name =
-        ref.read(sharedPrefProvider).sharedPrefs.getString(presetKey);
+    final name = ref.read(sharedPrefProvider).sharedPrefs.getString(presetKey);
     if (name != null) {
-      final T? value = nameMap[name];
+      final value = nameMap[name];
       if (value != null) return value;
     }
     return defaultValue;

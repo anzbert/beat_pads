@@ -37,21 +37,19 @@ class RefreshButtonState extends State<RefreshButton>
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Transform.rotate(
-      angle: animation.value,
-      child: IconButton(
-        onPressed: () {
-          widget.onPressed();
+  Widget build(BuildContext context) => Transform.rotate(
+        angle: animation.value,
+        child: IconButton(
+          onPressed: () {
+            widget.onPressed();
 
-          controller
-            ..reset()
-            ..forward();
-        },
-        icon: widget.icon,
-      ),
-    );
-  }
+            controller
+              ..reset()
+              ..forward();
+          },
+          icon: widget.icon,
+        ),
+      );
 
   @override
   void dispose() {

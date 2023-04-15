@@ -10,9 +10,7 @@ class HitTestObject extends SingleChildRenderObjectWidget {
   final int index;
 
   @override
-  TestProxyBox createRenderObject(BuildContext context) {
-    return TestProxyBox(index);
-  }
+  TestProxyBox createRenderObject(BuildContext context) => TestProxyBox(index);
 
   @override
   void updateRenderObject(BuildContext context, TestProxyBox renderObject) {

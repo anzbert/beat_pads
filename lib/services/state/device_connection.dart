@@ -1,9 +1,8 @@
 import 'package:flutter_midi_command/flutter_midi_command.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final devicesFutureProv = FutureProvider<List<MidiDevice>?>((ref) async {
-  return MidiCommand().devices;
-});
+final devicesFutureProv =
+    FutureProvider<List<MidiDevice>?>((ref) async => MidiCommand().devices);
 
 // This didnt seem to work ?!
 // final setupStreamProv = StreamProvider<String>(
@@ -18,12 +17,12 @@ final devicesFutureProv = FutureProvider<List<MidiDevice>?>((ref) async {
 //   },
 // );
 
-final connectedDevicesProv = Provider<List<MidiDevice>>((ref) {
-  return ref.watch(devicesFutureProv).when(
+final connectedDevicesProv = Provider<List<MidiDevice>>(
+  (ref) => ref.watch(devicesFutureProv).when(
         loading: () => [],
         error: (err, stack) => [],
         data: (deviceList) => deviceList == null
             ? []
             : [...deviceList.where((element) => element.connected)],
-      );
-});
+      ),
+);

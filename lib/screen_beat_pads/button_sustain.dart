@@ -27,9 +27,9 @@ class _SustainButtonDoubleTapState extends State<SustainButtonDoubleTap> {
 
   @override
   Widget build(BuildContext context) {
-    final double width = MediaQuery.of(context).size.width;
-    final double padRadius = width * ThemeConst.padRadiusFactor;
-    final double padSpacing = width * ThemeConst.padSpacingFactor;
+    final width = MediaQuery.of(context).size.width;
+    final padRadius = width * ThemeConst.padRadiusFactor;
+    final padSpacing = width * ThemeConst.padSpacingFactor;
     return Padding(
       padding: EdgeInsets.fromLTRB(0, padSpacing, padSpacing, padSpacing),
       child: GestureDetector(

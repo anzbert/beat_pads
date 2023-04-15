@@ -14,7 +14,8 @@
 # packages, and plugins designed to encourage good coding practices.
 
 # include: package:flutter_lints/flutter.yaml
-include: package:very_good_analysis/analysis_options.yaml
+include: package:austerity/analysis_options.yaml
+# include: package:very_good_analysis/analysis_options.yaml
 
 linter:
   # The lint rules applied to this project can be customized in the
@@ -29,11 +30,16 @@ linter:
   # `// ignore_for_file: name_of_lint` syntax on the line or in the file
   # producing the lint.
   rules:
+    public_member_api_docs: false
     # avoid_print: false
     # use_key_in_widget_constructors: false
     # prefer_single_quotes: false
-    public_member_api_docs: false
-    omit_local_variable_types: false
+    # omit_local_variable_types: false
     lines_longer_than_80_chars: false
+    avoid_classes_with_only_static_members: false
 # Additional information about this file can be found at
 # https://dart.dev/guides/language/analysis-options
+
+analyzer:
+  errors:
+    diagnostic_describe_all_properties: ignore

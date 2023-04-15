@@ -16,8 +16,8 @@ class VelocityOverlay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size size = Size.infinite;
-    final RenderBox? box = context.findRenderObject() as RenderBox?;
+    var size = Size.infinite;
+    final box = context.findRenderObject() as RenderBox?;
     if (box != null) size = box.size;
 
     return Container(

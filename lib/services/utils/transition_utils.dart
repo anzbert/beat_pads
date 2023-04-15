@@ -2,42 +2,40 @@ import 'package:flutter/material.dart';
 
 abstract class TransitionUtils {
   /// A Vertical slide transition Route builder
-  static Route<Widget> verticalSlide(Widget destinationPage) {
-    return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) => destinationPage,
-      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        const Offset begin = Offset(0, 1);
-        const Offset end = Offset.zero;
-        const Curve curve = Curves.ease;
+  static Route<Widget> verticalSlide(Widget destinationPage) =>
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) =>
+            destinationPage,
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          const begin = Offset(0, 1);
+          const end = Offset.zero;
+          const Curve curve = Curves.ease;
 
-        final Animatable<Offset> tween =
-            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+          final tween =
+              Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
 
-        return SlideTransition(
-          position: animation.drive(tween),
-          child: child,
-        );
-      },
-      // transitionDuration: const Duration(milliseconds: 250),
-    );
-  }
+          return SlideTransition(
+            position: animation.drive(tween),
+            child: child,
+          );
+        },
+        // transitionDuration: const Duration(milliseconds: 250),
+      );
 
   /// A Fade transition Route builder
-  static Route<Widget> fade(Widget destinationPage) {
-    return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) => destinationPage,
-      transitionsBuilder: (
-        BuildContext context,
-        Animation<double> animation,
-        Animation<double> secondaryAnimation,
-        Widget child,
-      ) {
-        return FadeTransition(
+  static Route<Widget> fade(Widget destinationPage) => PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) =>
+            destinationPage,
+        transitionsBuilder: (
+          context,
+          animation,
+          secondaryAnimation,
+          child,
+        ) =>
+            FadeTransition(
           opacity: animation,
           child: child,
-        );
-      },
-      transitionDuration: const Duration(milliseconds: 250),
-    );
-  }
+        ),
+        transitionDuration: const Duration(milliseconds: 250),
+      );
 }

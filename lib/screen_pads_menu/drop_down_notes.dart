@@ -13,7 +13,7 @@ class DropdownRootNote extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<DropdownMenuItem<int>> menuItems = List.generate(
+    final menuItems = List<DropdownMenuItem<int>>.generate(
       12,
       (index) => DropdownMenuItem<int>(
         value: index,

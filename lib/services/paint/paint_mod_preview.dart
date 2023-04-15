@@ -12,10 +12,10 @@ class PaintModPreview extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // Get Renderbox for gloabl to local offset conversion:
-    final RenderBox? box = context.findAncestorRenderObjectOfType<RenderBox>();
+    final box = context.findAncestorRenderObjectOfType<RenderBox>();
     if (box == null) return Stack();
 
-    final Size screenSize = MediaQuery.of(context).size;
+    final screenSize = MediaQuery.of(context).size;
 
     if (!ref.watch(modulation2DProv) ||
         ref.watch(playModeProv).oneDimensional) {

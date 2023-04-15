@@ -24,7 +24,7 @@ abstract class PlayModeHandler {
           .removeNoteFromReleaseBuffer(data.padNote);
     }
 
-    final NoteEvent noteOn = NoteEvent(
+    final noteOn = NoteEvent(
       ref.read(channelUsableProv),
       data.padNote,
       ref.read(velocitySliderValueProv.notifier).velocity(data.yPercentage),
@@ -40,7 +40,7 @@ abstract class PlayModeHandler {
   void handlePan(NullableTouchAndScreenData data) {}
 
   void handleEndTouch(CustomPointer touch) {
-    final bool eventInBuffer =
+    final eventInBuffer =
         ref.read(touchBuffer.notifier).eventInBuffer(touch.pointer);
     if (!eventInBuffer) return;
 
@@ -54,9 +54,9 @@ abstract class PlayModeHandler {
     } else {
       if (ref.read(modReleaseUsable) == 0 && ref.read(noteReleaseUsable) > 0) {
         ref.read(touchBuffer.notifier).modifyEvent(touch.pointer,
-            (eventInBuffer) {
+            (eventInBuffer) async {
           eventInBuffer.newPosition = eventInBuffer.origin; // mod to zero
-          ref.read(touchReleaseBuffer.notifier).updateReleasedEvent(
+          await ref.read(touchReleaseBuffer.notifier).updateReleasedEvent(
                 eventInBuffer,
               ); // instead of note off, event passed to release buffer
         });
@@ -79,7 +79,7 @@ abstract class PlayModeHandler {
   /// Returns the velocity if a given note is ON in any channel.
   /// Checks releasebuffer and active touchbuffer
   int isNoteOn(int note) {
-    int result = ref.read(touchBuffer.notifier).isNoteOn(note);
+    var result = ref.read(touchBuffer.notifier).isNoteOn(note);
 
     if (ref.read(modReleaseUsable) > 0 || ref.read(noteReleaseUsable) > 0) {
       if (result == 0) {

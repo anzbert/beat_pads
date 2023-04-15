@@ -35,8 +35,7 @@ class _ModWheelState extends ConsumerState<ModWheel> {
 
   @override
   Widget build(BuildContext context) {
-    ref.listen(rxMidiStream,
-        (AsyncValue<MidiMessagePacket>? _, AsyncValue<MidiMessagePacket> next) {
+    ref.listen(rxMidiStream, (_, next) {
       // GUARDS:
       if (next.hasError || next.hasValue == false || next.value == null) return;
       if (next.value!.content.length < 2) return; // message too short
@@ -50,25 +49,23 @@ class _ModWheelState extends ConsumerState<ModWheel> {
       }
     });
 
-    final double width = MediaQuery.of(context).size.width;
+    final width = MediaQuery.of(context).size.width;
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Flexible(
           flex: 5,
           child: LayoutBuilder(
-            builder: (context, constraints) {
-              return Align(
-                alignment: Alignment.bottomCenter,
-                child: Text(
-                  'Mod',
-                  style: TextStyle(
-                    fontSize: constraints.maxWidth * fontSizeFactor,
-                    color: Palette.darker(Palette.tan, 0.6),
-                  ),
+            builder: (context, constraints) => Align(
+              alignment: Alignment.bottomCenter,
+              child: Text(
+                'Mod',
+                style: TextStyle(
+                  fontSize: constraints.maxWidth * fontSizeFactor,
+                  color: Palette.darker(Palette.tan, 0.6),
                 ),
-              );
-            },
+              ),
+            ),
           ),
         ),
         Center(
@@ -108,7 +105,7 @@ class _ModWheelState extends ConsumerState<ModWheel> {
             widthFactor: 0.95,
             child: LayoutBuilder(
               builder: (context, constraints) {
-                final double padSpacing = width * ThemeConst.padSpacingFactor;
+                final padSpacing = width * ThemeConst.padSpacingFactor;
                 return Container(
                   margin: EdgeInsets.only(bottom: padSpacing),
                   child: Column(

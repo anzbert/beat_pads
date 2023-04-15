@@ -17,11 +17,11 @@ class BeatPad extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final double screenWidth = MediaQuery.of(context).size.width;
+    final screenWidth = MediaQuery.of(context).size.width;
 
-    final int velocity = ref.watch(senderProvider).isNoteOn(_note);
+    final velocity = ref.watch(senderProvider).isNoteOn(_note);
 
-    final Color color = ref.watch(padColorsProv).colorize(
+    final color = ref.watch(padColorsProv).colorize(
           ref.watch(scaleProv).intervals,
           ref.watch(baseHueProv),
           ref.watch(rootProv),
@@ -30,20 +30,20 @@ class BeatPad extends ConsumerWidget {
           noteOn: velocity != 0,
         );
 
-    final Color splashColor = Palette.splashColor;
+    final splashColor = Palette.splashColor;
 
-    final BorderRadius padRadius = BorderRadius.all(
+    final padRadius = BorderRadius.all(
       Radius.circular(screenWidth * ThemeConst.padRadiusFactor),
     );
-    final double padSpacing = screenWidth * ThemeConst.padSpacingFactor;
+    final padSpacing = screenWidth * ThemeConst.padSpacingFactor;
 
-    final Label label = PadLabels.getLabel(
+    final label = PadLabels.getLabel(
       ref.watch(padLabelsProv),
       ref.watch(layoutProv),
       _note,
     );
-    final double fontSize = screenWidth * 0.021;
-    final Color padTextColor = Palette.darkGrey;
+    final fontSize = screenWidth * 0.021;
+    final padTextColor = Palette.darkGrey;
 
     return Container(
       padding: EdgeInsets.all(padSpacing),

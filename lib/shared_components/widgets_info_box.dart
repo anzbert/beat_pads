@@ -11,36 +11,34 @@ class WidgetsInfoBox extends StatelessWidget {
   final List<Widget> body;
 
   @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Card(
-        color: Palette.darkGrey,
-        margin: const EdgeInsets.fromLTRB(8, 30, 8, 8),
-        elevation: 5,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (header != null)
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 12),
-                  child: DividerTitle(header!),
-                ),
-              ...body.map(
-                (text) => Column(
-                  children: [
-                    text,
-                    const SizedBox(
-                      height: 8,
-                    )
-                  ],
-                ),
-              )
-            ],
+  Widget build(BuildContext context) => Center(
+        child: Card(
+          color: Palette.darkGrey,
+          margin: const EdgeInsets.fromLTRB(8, 30, 8, 8),
+          elevation: 5,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (header != null)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 12),
+                    child: DividerTitle(header!),
+                  ),
+                ...body.map(
+                  (text) => Column(
+                    children: [
+                      text,
+                      const SizedBox(
+                        height: 8,
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ),
           ),
         ),
-      ),
-    );
-  }
+      );
 }

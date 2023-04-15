@@ -5,7 +5,7 @@ import 'package:flutter_midi_command/flutter_midi_command_messages.dart';
 class ModPolyAfterTouch1D extends Mod {
   @override
   void send(int channel, int note, double distance) {
-    final int polyATChange = (distance.abs() * 127).toInt();
+    final polyATChange = (distance.abs() * 127).toInt();
 
     if (!listEquals<num>([channel, note, polyATChange], lastSentValues)) {
       PolyATMessage(channel: channel, note: note, pressure: polyATChange)

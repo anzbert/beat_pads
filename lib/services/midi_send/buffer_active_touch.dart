@@ -8,9 +8,7 @@ final touchBuffer = NotifierProvider.autoDispose<TouchBuffer, List<TouchEvent>>(
 
 class TouchBuffer extends TouchBufferBase {
   @override
-  List<TouchEvent> build() {
-    return [];
-  }
+  List<TouchEvent> build() => [];
 
   /// Add [TouchEvent] with a [NoteEvent] to the buffers state
   void addNoteOn(CustomPointer touch, NoteEvent noteEvent, Size screenSize) {
@@ -36,7 +34,7 @@ class TouchBuffer extends TouchBufferBase {
   double averageRadialChangeOfActiveNotes() {
     if (state.isEmpty) return 0;
 
-    final double total = state
+    final total = state
         .where((element) => element.noteEvent.noteOnMessage != null)
         .map((e) => e.radialChange())
         .reduce((value, element) => value + element);
@@ -49,7 +47,7 @@ class TouchBuffer extends TouchBufferBase {
   Offset averageDirectionalChangeOfActiveNotes({bool absolute = false}) {
     if (state.isEmpty) return Offset.zero;
 
-    final Offset total = state
+    final total = state
         .where((element) => element.noteEvent.noteOnMessage != null)
         .map((e) => e.directionalChangeFromCenter())
         .reduce(

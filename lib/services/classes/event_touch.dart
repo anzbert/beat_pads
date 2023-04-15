@@ -48,8 +48,8 @@ class TouchEvent {
   /// touch to the current position in the context of the maximum Radius.
   /// Produces values from 0 to 1 from center to maxium Radius.
   double radialChange({Curve curve = Curves.easeIn, bool deadZone = true}) {
-    final double distanceFactor =
-        (Utils.offsetDistance(origin, newPosition) / maxRadius).clamp(0, 1);
+    final distanceFactor =
+        (Utils.offsetDistance(origin, newPosition) / maxRadius).clamp(0.0, 1.0);
 
     return Utils.curveTransform(
       deadZone ? applyDeadZone(distanceFactor) : distanceFactor,
@@ -64,10 +64,9 @@ class TouchEvent {
     Curve curve = Curves.easeIn,
     bool deadZone = true,
   }) {
-    final double factorX =
-        ((newPosition.dx - origin.dx) / maxRadius).clamp(-1, 1);
-    final double factorY =
-        ((-newPosition.dy + origin.dy) / maxRadius).clamp(-1, 1);
+    final factorX = ((newPosition.dx - origin.dx) / maxRadius).clamp(-1.0, 1.0);
+    final factorY =
+        ((-newPosition.dy + origin.dy) / maxRadius).clamp(-1.0, 1.0);
 
     return Offset(
       Utils.curveTransform(
@@ -94,9 +93,8 @@ class TouchEvent {
   }
 
   @override
-  String toString() {
-    return 'noteEvent: ${noteEvent.note} / isAnimated: $hasReturnAnimation / noteOn: ${noteEvent.isPlaying} / isDirty: $_dirty';
-  }
+  String toString() =>
+      'noteEvent: ${noteEvent.note} / isAnimated: $hasReturnAnimation / noteOn: ${noteEvent.isPlaying} / isDirty: $_dirty';
 
   bool get isModulating {
     if (directionalChangeFromCenter() != Offset.zero && radialChange() != 0) {

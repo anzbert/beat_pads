@@ -52,10 +52,10 @@ class MemberChannelProvider extends AutoDisposeNotifier<int> {
       throw ArgumentError('no member channels available');
     }
 
-    final Queue<int> usedChans = Queue.from(allMemberChannels);
+    final usedChans = Queue<int>.from(allMemberChannels);
 
-    for (final TouchEvent event in touchEvents) {
-      final bool removed = usedChans.remove(event.noteEvent.channel);
+    for (final event in touchEvents) {
+      final removed = usedChans.remove(event.noteEvent.channel);
       if (!removed) {
         Utils.logd('touchbuffer channel not part of memberlist!');
       }

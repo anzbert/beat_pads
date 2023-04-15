@@ -23,124 +23,123 @@ class CreditsBox extends StatelessWidget {
   static const double _linkFontSize = 18;
 
   @override
-  Widget build(BuildContext context) {
-    return WidgetsInfoBox(
-      header: 'Credits',
-      body: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Wrap(
-              children: const [
-                Text('Get the Source, contribute and report issues:'),
-              ],
-            ),
-            TextButton(
-              child: const Text(
-                'GitHub',
-                style: TextStyle(
-                  decoration: TextDecoration.underline,
-                  fontSize: _linkFontSize,
-                ),
+  Widget build(BuildContext context) => WidgetsInfoBox(
+        header: 'Credits',
+        body: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Wrap(
+                children: const [
+                  Text('Get the Source, contribute and report issues:'),
+                ],
               ),
-              onPressed: () async => webView('github.com', 'anzbert/beat_pads'),
-            )
-          ],
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Wrap(children: const [Text('My website:')]),
-            TextButton(
-              child: const Text(
-                'Anzio.dev',
-                style: TextStyle(
-                  decoration: TextDecoration.underline,
-                  fontSize: _linkFontSize,
+              TextButton(
+                child: const Text(
+                  'GitHub',
+                  style: TextStyle(
+                    decoration: TextDecoration.underline,
+                    fontSize: _linkFontSize,
+                  ),
                 ),
-              ),
-              onPressed: () async => webView('anzio.dev'),
-            )
-          ],
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Wrap(children: const [Text('Magic Tone Network & XpressPads:')]),
-            TextButton(
-              child: const Text(
-                'XpressPads.com',
-                style: TextStyle(
-                  decoration: TextDecoration.underline,
-                  fontSize: _linkFontSize,
+                onPressed: () async =>
+                    webView('github.com', 'anzbert/beat_pads'),
+              )
+            ],
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Wrap(children: const [Text('My website:')]),
+              TextButton(
+                child: const Text(
+                  'Anzio.dev',
+                  style: TextStyle(
+                    decoration: TextDecoration.underline,
+                    fontSize: _linkFontSize,
+                  ),
                 ),
-              ),
-              onPressed: () async => webView('xpresspads.com'),
-            )
-          ],
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Wrap(children: const [Text("Dog Logo by 'catalyststuff' from:")]),
-            TextButton(
-              child: const Text(
-                'FreePik.com',
-                style: TextStyle(
-                  decoration: TextDecoration.underline,
-                  fontSize: _linkFontSize,
+                onPressed: () async => webView('anzio.dev'),
+              )
+            ],
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Wrap(children: const [Text('Magic Tone Network & XpressPads:')]),
+              TextButton(
+                child: const Text(
+                  'XpressPads.com',
+                  style: TextStyle(
+                    decoration: TextDecoration.underline,
+                    fontSize: _linkFontSize,
+                  ),
                 ),
-              ),
-              onPressed: () async => webView('freepik.com'),
-            )
-          ],
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Wrap(children: const [Text('Splash Screen animated with Rive:')]),
-            TextButton(
-              child: const Text(
-                'Rive.app',
-                style: TextStyle(
-                  decoration: TextDecoration.underline,
-                  fontSize: _linkFontSize,
+                onPressed: () async => webView('xpresspads.com'),
+              )
+            ],
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Wrap(children: const [Text("Dog Logo by 'catalyststuff' from:")]),
+              TextButton(
+                child: const Text(
+                  'FreePik.com',
+                  style: TextStyle(
+                    decoration: TextDecoration.underline,
+                    fontSize: _linkFontSize,
+                  ),
                 ),
-              ),
-              onPressed: () async => webView('rive.app'),
-            )
-          ],
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Wrap(
-              children: const [Text('Contact me:')],
-            ),
-            TextButton(
-              child: const Text(
-                'anzbert@gmail.com',
-                style: TextStyle(
-                  decoration: TextDecoration.underline,
-                  fontSize: _linkFontSize,
+                onPressed: () async => webView('freepik.com'),
+              )
+            ],
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Wrap(children: const [Text('Splash Screen animated with Rive:')]),
+              TextButton(
+                child: const Text(
+                  'Rive.app',
+                  style: TextStyle(
+                    decoration: TextDecoration.underline,
+                    fontSize: _linkFontSize,
+                  ),
                 ),
+                onPressed: () async => webView('rive.app'),
+              )
+            ],
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Wrap(
+                children: const [Text('Contact me:')],
               ),
-              onPressed: () async {
-                final Uri encoded = Uri(
-                  scheme: 'mailto',
-                  path: 'anzbert@gmail.com',
-                  query: 'subject=App Feedback&body=Feedback for Beat pads',
-                );
-                if (await canLaunchUrl(encoded)) {
-                  await launchUrl(encoded);
-                } else {
-                  Utils.logd('Failure to launch webview with:\n$encoded');
-                }
-              },
-            )
-          ],
-        ),
-      ],
-    );
-  }
+              TextButton(
+                child: const Text(
+                  'anzbert@gmail.com',
+                  style: TextStyle(
+                    decoration: TextDecoration.underline,
+                    fontSize: _linkFontSize,
+                  ),
+                ),
+                onPressed: () async {
+                  final encoded = Uri(
+                    scheme: 'mailto',
+                    path: 'anzbert@gmail.com',
+                    query: 'subject=App Feedback&body=Feedback for Beat pads',
+                  );
+                  if (await canLaunchUrl(encoded)) {
+                    await launchUrl(encoded);
+                  } else {
+                    Utils.logd('Failure to launch webview with:\n$encoded');
+                  }
+                },
+              )
+            ],
+          ),
+        ],
+      );
 }

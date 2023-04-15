@@ -24,7 +24,7 @@ class PlayModeMPE extends PlayModeHandler {
           .removeNoteFromReleaseBuffer(data.padNote);
     }
 
-    final int newChannel = ref.read(mpeChannelProv.notifier).provideChannel([
+    final newChannel = ref.read(mpeChannelProv.notifier).provideChannel([
       ...ref.read(touchBuffer),
       ...ref.read(touchReleaseBuffer)
     ]); // get new channel from generator
@@ -36,7 +36,7 @@ class PlayModeMPE extends PlayModeHandler {
       mpeMods.rMod.send(newChannel, data.padNote, 0);
     }
 
-    final NoteEvent noteOn = NoteEvent(
+    final noteOn = NoteEvent(
       newChannel,
       data.padNote,
       ref.read(velocitySliderValueProv.notifier).velocity(data.yPercentage),

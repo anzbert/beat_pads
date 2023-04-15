@@ -8,17 +8,15 @@ class SwitchWakeLockTile extends ConsumerWidget {
   const SwitchWakeLockTile({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return ListTile(
-      title: const Text('Wake Lock'),
-      subtitle: const Text('Keep the screen locked on'),
-      trailing: Switch(
-        value: ref.watch(_wakeLockProv),
-        onChanged: (v) {
-          ref.read(_wakeLockProv.notifier).state = v;
-          Wakelock.toggle(enable: v);
-        },
-      ),
-    );
-  }
+  Widget build(BuildContext context, WidgetRef ref) => ListTile(
+        title: const Text('Wake Lock'),
+        subtitle: const Text('Keep the screen locked on'),
+        trailing: Switch(
+          value: ref.watch(_wakeLockProv),
+          onChanged: (v) async {
+            ref.read(_wakeLockProv.notifier).state = v;
+            await Wakelock.toggle(enable: v);
+          },
+        ),
+      );
 }

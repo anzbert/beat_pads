@@ -9,7 +9,7 @@ class PaintModulation extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // Get Renderbox for gloabl to local offset conversion:
-    final RenderBox? box = context.findAncestorRenderObjectOfType<RenderBox>();
+    final box = context.findAncestorRenderObjectOfType<RenderBox>();
     if (box == null) return Stack();
 
     // final midiSender = ref.watch(senderProvider);
@@ -21,79 +21,77 @@ class PaintModulation extends ConsumerWidget {
           ...ref.watch(touchBuffer),
         ]
             .where(
-          (element) =>
-              element.isModulating, // filter smaller than deadzone events
-        )
+              (element) =>
+                  element.isModulating, // filter smaller than deadzone events
+            )
             .map(
-          (touchEvent) {
-            return ref.watch(modulation2DProv) == false ||
-                    ref.watch(playModeProv).oneDimensional
-                // CIRCLE / RADIUS
-                ? CustomPaint(
-                    painter: CustomPaintRadius(
-                      dirty: touchEvent.dirty,
-                      origin: box.globalToLocal(touchEvent.origin),
-                      maxRadius: touchEvent.maxRadius,
-                      deadZone: touchEvent.deadZone,
-                      change: touchEvent.radialChange(
-                        curve: Curves.linear,
-                        deadZone: false,
+              (touchEvent) => ref.watch(modulation2DProv) == false ||
+                      ref.watch(playModeProv).oneDimensional
+                  // CIRCLE / RADIUS
+                  ? CustomPaint(
+                      painter: CustomPaintRadius(
+                        dirty: touchEvent.dirty,
+                        origin: box.globalToLocal(touchEvent.origin),
+                        maxRadius: touchEvent.maxRadius,
+                        deadZone: touchEvent.deadZone,
+                        change: touchEvent.radialChange(
+                          curve: Curves.linear,
+                          deadZone: false,
+                        ),
+                        colorBack: touchEvent.dirty
+                            ? dirtyColor
+                            : Palette.lightPink.withOpacity(
+                                touchEvent.radialChange(curve: Curves.easeOut) *
+                                    0.6,
+                              ),
+                        colorFront: touchEvent.dirty
+                            ? dirtyColor
+                            : Palette.laserLemon.withOpacity(
+                                touchEvent.radialChange(curve: Curves.easeOut) *
+                                    0.8,
+                              ),
+                        colorDeadZone: touchEvent.dirty
+                            ? dirtyColor
+                            : Palette.laserLemon.withOpacity(
+                                touchEvent.radialChange(curve: Curves.easeOut) *
+                                    0.4,
+                              ),
                       ),
-                      colorBack: touchEvent.dirty
-                          ? dirtyColor
-                          : Palette.lightPink.withOpacity(
-                              touchEvent.radialChange(curve: Curves.easeOut) *
-                                  0.6,
-                            ),
-                      colorFront: touchEvent.dirty
-                          ? dirtyColor
-                          : Palette.laserLemon.withOpacity(
-                              touchEvent.radialChange(curve: Curves.easeOut) *
-                                  0.8,
-                            ),
-                      colorDeadZone: touchEvent.dirty
-                          ? dirtyColor
-                          : Palette.laserLemon.withOpacity(
-                              touchEvent.radialChange(curve: Curves.easeOut) *
-                                  0.4,
-                            ),
-                    ),
-                  )
-                // SQUARE / X AND Y
-                : CustomPaint(
-                    painter: CustomPaintXYSquare(
-                      dirty: touchEvent.dirty,
-                      origin: box.globalToLocal(touchEvent.origin),
-                      maxRadius: touchEvent.maxRadius,
-                      deadZone: touchEvent.deadZone,
-                      change: touchEvent.directionalChangeFromCenter(
-                        curve: Curves.linear,
-                        deadZone: false,
+                    )
+                  // SQUARE / X AND Y
+                  : CustomPaint(
+                      painter: CustomPaintXYSquare(
+                        dirty: touchEvent.dirty,
+                        origin: box.globalToLocal(touchEvent.origin),
+                        maxRadius: touchEvent.maxRadius,
+                        deadZone: touchEvent.deadZone,
+                        change: touchEvent.directionalChangeFromCenter(
+                          curve: Curves.linear,
+                          deadZone: false,
+                        ),
+                        radialChange:
+                            touchEvent.radialChange(curve: Curves.linear),
+                        colorBack: touchEvent.dirty
+                            ? dirtyColor
+                            : Palette.lightPink.withOpacity(
+                                touchEvent.radialChange(curve: Curves.easeOut) *
+                                    0.6,
+                              ),
+                        colorFront: touchEvent.dirty
+                            ? dirtyColor
+                            : Palette.laserLemon.withOpacity(
+                                touchEvent.radialChange(curve: Curves.easeOut) *
+                                    0.8,
+                              ),
+                        colorDeadZone: touchEvent.dirty
+                            ? dirtyColor
+                            : Palette.laserLemon.withOpacity(
+                                touchEvent.radialChange(curve: Curves.easeOut) *
+                                    0.4,
+                              ),
                       ),
-                      radialChange:
-                          touchEvent.radialChange(curve: Curves.linear),
-                      colorBack: touchEvent.dirty
-                          ? dirtyColor
-                          : Palette.lightPink.withOpacity(
-                              touchEvent.radialChange(curve: Curves.easeOut) *
-                                  0.6,
-                            ),
-                      colorFront: touchEvent.dirty
-                          ? dirtyColor
-                          : Palette.laserLemon.withOpacity(
-                              touchEvent.radialChange(curve: Curves.easeOut) *
-                                  0.8,
-                            ),
-                      colorDeadZone: touchEvent.dirty
-                          ? dirtyColor
-                          : Palette.laserLemon.withOpacity(
-                              touchEvent.radialChange(curve: Curves.easeOut) *
-                                  0.4,
-                            ),
                     ),
-                  );
-          },
-        ),
+            ),
       ],
     );
   }

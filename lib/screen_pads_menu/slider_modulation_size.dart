@@ -28,58 +28,56 @@ class ModSizeSliderTile extends ConsumerWidget {
   final void Function()? resetValue;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        ListTile(
-          title: Row(
-            children: [
-              Text(label),
-              if (resetValue != null)
-                TextButton(
-                  onPressed: () {
-                    resetValue!();
-                    ref.read(showModPreview.notifier).state = true;
-                    Future.delayed(const Duration(milliseconds: 800), () {
-                      if (context.mounted) {
-                        ref.read(showModPreview.notifier).state = false;
-                      }
-                    });
-                  },
-                  style: TextButton.styleFrom(
-                    minimumSize: Size.zero,
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  ),
-                  child: const Text('Reset'),
-                )
-            ],
+  Widget build(BuildContext context, WidgetRef ref) => Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          ListTile(
+            title: Row(
+              children: [
+                Text(label),
+                if (resetValue != null)
+                  TextButton(
+                    onPressed: () {
+                      resetValue!();
+                      ref.read(showModPreview.notifier).state = true;
+                      Future.delayed(const Duration(milliseconds: 800), () {
+                        if (context.mounted) {
+                          ref.read(showModPreview.notifier).state = false;
+                        }
+                      });
+                    },
+                    style: TextButton.styleFrom(
+                      minimumSize: Size.zero,
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    ),
+                    child: const Text('Reset'),
+                  )
+              ],
+            ),
+            subtitle: subtitle != null ? Text(subtitle!) : null,
+            trailing: trailing,
           ),
-          subtitle: subtitle != null ? Text(subtitle!) : null,
-          trailing: trailing,
-        ),
-        Builder(
-          builder: (context) {
-            final double width = MediaQuery.of(context).size.width;
-            return SizedBox(
-              width: width * ThemeConst.sliderWidthFactor,
-              child: Slider(
-                min: min,
-                max: max,
-                value: readValue.clamp(min, max),
-                onChanged: setValue,
-                onChangeStart: (_) =>
-                    ref.read(showModPreview.notifier).state = true,
-                onChangeEnd: (_) {
-                  ref.read(showModPreview.notifier).state = false;
-                  onChangeEnd?.call();
-                },
-              ),
-            );
-          },
-        ),
-      ],
-    );
-  }
+          Builder(
+            builder: (context) {
+              final width = MediaQuery.of(context).size.width;
+              return SizedBox(
+                width: width * ThemeConst.sliderWidthFactor,
+                child: Slider(
+                  min: min,
+                  max: max,
+                  value: readValue.clamp(min, max),
+                  onChanged: setValue,
+                  onChangeStart: (_) =>
+                      ref.read(showModPreview.notifier).state = true,
+                  onChangeEnd: (_) {
+                    ref.read(showModPreview.notifier).state = false;
+                    onChangeEnd?.call();
+                  },
+                ),
+              );
+            },
+          ),
+        ],
+      );
 }

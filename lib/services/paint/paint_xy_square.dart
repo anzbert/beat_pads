@@ -80,10 +80,9 @@ class CustomPaintXYSquare extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(CustomPaintXYSquare oldDelegate) {
-    return oldDelegate.change != change ||
-        oldDelegate.deadZone != deadZone ||
-        oldDelegate.colorDeadZone != colorDeadZone ||
-        oldDelegate.maxRadius != maxRadius;
-  }
+  bool shouldRepaint(CustomPaintXYSquare oldDelegate) =>
+      oldDelegate.change != change ||
+      oldDelegate.deadZone != deadZone ||
+      oldDelegate.colorDeadZone != colorDeadZone ||
+      oldDelegate.maxRadius != maxRadius;
 }

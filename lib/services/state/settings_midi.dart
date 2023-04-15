@@ -2,19 +2,19 @@ import 'package:beat_pads/services/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // CHANNEL
-final channelSettingProv = NotifierProvider<SettingIntNotifier, int>(() {
-  return SettingIntNotifier(
+final channelSettingProv = NotifierProvider<SettingIntNotifier, int>(
+  () => SettingIntNotifier(
     key: 'channel',
     defaultValue: 0,
     max: 15,
-  );
-});
+  ),
+);
 
 final channelUsableProv = Provider<int>(
   (ref) {
-    final int channel = ref.watch(channelSettingProv);
-    final PlayMode playMode = ref.watch(playModeProv);
-    final bool upperZone = channel > 7;
+    final channel = ref.watch(channelSettingProv);
+    final playMode = ref.watch(playModeProv);
+    final upperZone = channel > 7;
 
     if (playMode == PlayMode.mpe) {
       return upperZone ? 15 : 0;
@@ -24,50 +24,50 @@ final channelUsableProv = Provider<int>(
   },
 );
 
-final mpeMemberChannelsProv = NotifierProvider<SettingIntNotifier, int>(() {
-  return SettingIntNotifier(
+final mpeMemberChannelsProv = NotifierProvider<SettingIntNotifier, int>(
+  () => SettingIntNotifier(
     key: 'mpeMemberChannels',
     defaultValue: 8,
     min: 1,
     max: 15,
-  );
-});
+  ),
+);
 
 final zoneProv = Provider<bool>((ref) {
-  final int channel = ref.watch(channelSettingProv);
+  final channel = ref.watch(channelSettingProv);
   return channel > 7;
 });
 
 // VELOCITY
-final velocityProv = NotifierProvider<SettingIntNotifier, int>(() {
-  return SettingIntNotifier(
+final velocityProv = NotifierProvider<SettingIntNotifier, int>(
+  () => SettingIntNotifier(
     key: 'velocity',
     defaultValue: 110,
     max: 127,
-  );
-});
+  ),
+);
 
 final velocityModeProv =
-    NotifierProvider<SettingEnumNotifier<VelocityMode>, VelocityMode>(() {
-  return SettingEnumNotifier<VelocityMode>(
+    NotifierProvider<SettingEnumNotifier<VelocityMode>, VelocityMode>(
+  () => SettingEnumNotifier<VelocityMode>(
     nameMap: VelocityMode.values.asNameMap(),
     key: 'velocityMode',
     defaultValue: VelocityMode.fixed,
-  );
-});
+  ),
+);
 
-final velocityMinProv = NotifierProvider<SettingIntNotifier, int>(() {
-  return SettingIntNotifier(
+final velocityMinProv = NotifierProvider<SettingIntNotifier, int>(
+  () => SettingIntNotifier(
     key: 'velocityMin',
     defaultValue: 100,
     max: 126,
-  );
-});
+  ),
+);
 
-final velocityMaxProv = NotifierProvider<SettingIntNotifier, int>(() {
-  return SettingIntNotifier(
+final velocityMaxProv = NotifierProvider<SettingIntNotifier, int>(
+  () => SettingIntNotifier(
     key: 'velocityMax',
     defaultValue: 110,
     max: 127,
-  );
-});
+  ),
+);

@@ -7,13 +7,9 @@ class Vector2Int {
   final int x;
   final int y;
 
-  int get area {
-    return x * y;
-  }
+  int get area => x * y;
 
-  List<int> toList() {
-    return [x, y];
-  }
+  List<int> toList() => [x, y];
 }
 
 class CustomPointer {
@@ -73,7 +69,5 @@ class MidiMessagePacket {
   final List<int> content;
 
   @override
-  String toString() {
-    return 'Type: $type / Content: $content';
-  }
+  String toString() => 'Type: $type / Content: $content';
 }

@@ -15,7 +15,7 @@ class _MidiConfigState extends ConsumerState<MidiConfig> {
   final MidiCommand _midiCommand = MidiCommand();
   bool connecting = false;
 
-  void setDevice(MidiDevice device) {
+  Future<void> setDevice(MidiDevice device) async {
     if (device.connected) {
       _midiCommand.disconnectDevice(device);
       setState(() {});
@@ -23,7 +23,7 @@ class _MidiConfigState extends ConsumerState<MidiConfig> {
       setState(() {
         connecting = true;
       });
-      _midiCommand.connectToDevice(device).then(
+      await _midiCommand.connectToDevice(device).then(
             (_) => setState(() {
               connecting = false;
             }),
@@ -32,19 +32,17 @@ class _MidiConfigState extends ConsumerState<MidiConfig> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Devices',
-          style: Theme.of(context)
-              .textTheme
-              .headlineSmall!
-              .copyWith(color: Palette.lightPink),
-        ),
-        leading: Builder(
-          builder: (BuildContext context) {
-            return IconButton(
+  Widget build(BuildContext context) => Scaffold(
+        appBar: AppBar(
+          title: Text(
+            'Devices',
+            style: Theme.of(context)
+                .textTheme
+                .headlineSmall!
+                .copyWith(color: Palette.lightPink),
+          ),
+          leading: Builder(
+            builder: (context) => IconButton(
               onPressed: () {
                 Navigator.pop(context);
               },
@@ -53,72 +51,71 @@ class _MidiConfigState extends ConsumerState<MidiConfig> {
                 color: Palette.lightPink,
                 size: 30,
               ),
-            );
-          },
-        ),
-        actions: [
-          RefreshButton(
-            onPressed: () => setState(() {}),
-            icon: Icon(
-              Icons.refresh,
-              size: 30,
-              color: Palette.lightPink,
             ),
           ),
-        ],
-      ),
-      body: ListView(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16),
-            child: FutureBuilder(
-              future: _midiCommand.devices,
-              builder: (
-                BuildContext context,
-                AsyncSnapshot<List<MidiDevice>?> snapshot,
-              ) {
-                if (snapshot.hasData && snapshot.data!.isNotEmpty) {
-                  final List<MidiDevice>? devices = snapshot.data;
-                  return connecting
-                      // WHILE CONNECTING SHOW CIRCULAR PROGRESS INDICATOR:
-                      ? Center(
-                          child: SizedBox(
-                            width: 40,
-                            height: 40,
-                            child: CircularProgressIndicator(
-                              color: Palette.cadetBlue,
+          actions: [
+            RefreshButton(
+              onPressed: () => setState(() {}),
+              icon: Icon(
+                Icons.refresh,
+                size: 30,
+                color: Palette.lightPink,
+              ),
+            ),
+          ],
+        ),
+        body: ListView(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              child: FutureBuilder(
+                future: _midiCommand.devices,
+                builder: (
+                  context,
+                  snapshot,
+                ) {
+                  if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+                    final devices = snapshot.data;
+                    return connecting
+                        // WHILE CONNECTING SHOW CIRCULAR PROGRESS INDICATOR:
+                        ? Center(
+                            child: SizedBox(
+                              width: 40,
+                              height: 40,
+                              child: CircularProgressIndicator(
+                                color: Palette.cadetBlue,
+                              ),
                             ),
-                          ),
-                        )
-                      :
-                      // OTHERWISE, SHOW LIST:
-                      Builder(
-                          builder: (context) {
-                            WidgetsBinding.instance.addPostFrameCallback(
-                              (_) {
-                                ref.invalidate(devicesFutureProv);
-                              },
-                            );
-                            return Column(
-                              children: [
-                                if (devices!.isEmpty)
-                                  Container(
-                                    margin: const EdgeInsets.symmetric(
-                                      vertical: 12,
-                                    ),
-                                    color: Palette.lightPink,
-                                    height: 40,
-                                    child: Center(
-                                      child: Text(
-                                        'No Midi Adapter found...',
-                                        style:
-                                            TextStyle(color: Palette.darkGrey),
+                          )
+                        :
+                        // OTHERWISE, SHOW LIST:
+                        Builder(
+                            builder: (context) {
+                              WidgetsBinding.instance.addPostFrameCallback(
+                                (_) {
+                                  ref.invalidate(devicesFutureProv);
+                                },
+                              );
+                              return Column(
+                                children: [
+                                  if (devices!.isEmpty)
+                                    Container(
+                                      margin: const EdgeInsets.symmetric(
+                                        vertical: 12,
+                                      ),
+                                      color: Palette.lightPink,
+                                      height: 40,
+                                      child: Center(
+                                        child: Text(
+                                          'No Midi Adapter found...',
+                                          style: TextStyle(
+                                            color: Palette.darkGrey,
+                                          ),
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ...devices.map(
-                                  (device) {
-                                    return Container(
+                                  ...devices.map(
+                                    (device) => Container(
                                       margin: const EdgeInsets.symmetric(
                                         vertical: 12,
                                       ),
@@ -129,8 +126,8 @@ class _MidiConfigState extends ConsumerState<MidiConfig> {
                                               0.4,
                                             ),
                                       child: TextButton(
-                                        onPressed: () {
-                                          setDevice(device);
+                                        onPressed: () async {
+                                          await setDevice(device);
                                         },
                                         child: SizedBox(
                                           height: 40,
@@ -154,28 +151,26 @@ class _MidiConfigState extends ConsumerState<MidiConfig> {
                                           ),
                                         ),
                                       ),
-                                    );
-                                  },
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                } else if (snapshot.hasError) {
-                  return Center(child: Text(snapshot.error.toString()));
-                } else {
-                  return const Center(
-                    child: Text('- No Midi Devices Detected -'),
-                  );
-                }
-              },
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text(snapshot.error.toString()));
+                  } else {
+                    return const Center(
+                      child: Text('- No Midi Devices Detected -'),
+                    );
+                  }
+                },
+              ),
             ),
-          ),
-          ...helpText
-        ],
-      ),
-    );
-  }
+            ...helpText
+          ],
+        ),
+      );
 
   // As in example. MidiCommand.dispose() only seems to dispose of
   // bluetooth ressources?! Disposing anyway, just to be sure.

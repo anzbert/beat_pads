@@ -23,7 +23,7 @@ class ThemedSlider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double width = MediaQuery.of(context).size.width;
+    final width = MediaQuery.of(context).size.width;
     return RotatedBox(
       quarterTurns: 3,
       child: FractionallySizedBox(
@@ -107,9 +107,8 @@ class CustomSliderThumbRect extends SliderComponentShape {
   final double thumbHeight;
 
   @override
-  Size getPreferredSize(bool isEnabled, bool isDiscrete) {
-    return Size.fromRadius(thumbRadius / 2);
-  }
+  Size getPreferredSize(bool isEnabled, bool isDiscrete) =>
+      Size.fromRadius(thumbRadius / 2);
 
   @override
   void paint(
@@ -126,7 +125,7 @@ class CustomSliderThumbRect extends SliderComponentShape {
     required double textScaleFactor,
     required Size sizeWithOverflow,
   }) {
-    final Canvas canvas = context.canvas;
+    final canvas = context.canvas;
 
     final fractionHeight = parentBox.constraints.maxWidth / 127 * thumbHeight;
 

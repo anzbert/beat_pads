@@ -43,16 +43,14 @@ class DropdownModulation extends StatelessWidget {
   final List<DropdownMenuItem<MPEmods>> items;
 
   @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: DropdownButton<MPEmods>(
-        value: readValue,
-        items: items,
-        onChanged: (MPEmods? value) {
-          if (value != null) setValue(value);
-        },
-      ),
-    );
-  }
+  Widget build(BuildContext context) => Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: DropdownButton<MPEmods>(
+          value: readValue,
+          items: items,
+          onChanged: (value) {
+            if (value != null) setValue(value);
+          },
+        ),
+      );
 }

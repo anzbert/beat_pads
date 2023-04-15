@@ -1,5 +1,3 @@
-// ignore_for_file: require_trailing_commas
-
 import 'package:beat_pads/services/services.dart';
 
 enum Layout {
@@ -40,19 +38,29 @@ enum Layout {
     switch (this) {
       case Layout.magicToneNetwork:
         return LayoutProps(
-            resizable: true, defaultDimensions: const Vector2Int(8, 8));
+          resizable: true,
+          defaultDimensions: const Vector2Int(8, 8),
+        );
       case Layout.xPressPadsStandard:
         return LayoutProps(
-            resizable: false, defaultDimensions: const Vector2Int(4, 4));
+          resizable: false,
+          defaultDimensions: const Vector2Int(4, 4),
+        );
       case Layout.xPressPadsLatinJazz:
         return LayoutProps(
-            resizable: false, defaultDimensions: const Vector2Int(4, 4));
+          resizable: false,
+          defaultDimensions: const Vector2Int(4, 4),
+        );
       case Layout.xPressPadsXO:
         return LayoutProps(
-            resizable: false, defaultDimensions: const Vector2Int(4, 4));
+          resizable: false,
+          defaultDimensions: const Vector2Int(4, 4),
+        );
       case Layout.xPressPadsXtreme:
         return LayoutProps(
-            resizable: false, defaultDimensions: const Vector2Int(8, 4));
+          resizable: false,
+          defaultDimensions: const Vector2Int(8, 4),
+        );
       // ignore: no_default_cases
       default:
         return LayoutProps(resizable: true);
@@ -60,9 +68,13 @@ enum Layout {
   }
 
   Grid getGrid(
-      int width, int height, int rootNote, int baseNote, List<int> scaleList) {
-    final GridData settings =
-        GridData(width, height, rootNote, baseNote, scaleList);
+    int width,
+    int height,
+    int rootNote,
+    int baseNote,
+    List<int> scaleList,
+  ) {
+    final settings = GridData(width, height, rootNote, baseNote, scaleList);
 
     switch (this) {
       case Layout.continuous:
@@ -96,7 +108,12 @@ enum Layout {
 
 class GridData {
   GridData(
-      this.width, this.height, this.rootNote, this.baseNote, this.scaleList);
+    this.width,
+    this.height,
+    this.rootNote,
+    this.baseNote,
+    this.scaleList,
+  );
   final int width;
   final int height;
   final int rootNote;
@@ -129,9 +146,10 @@ abstract class Grid {
     if (settings.height * settings.width != list.length) return [[]];
     return List.generate(
       settings.height,
-      (row) => List.generate(settings.width, (note) {
-        return list[row * settings.width + note];
-      }),
+      (row) => List.generate(
+        settings.width,
+        (note) => list[row * settings.width + note],
+      ),
     ).reversed.toList();
   }
 }
@@ -143,9 +161,9 @@ class GridRowInterval extends Grid {
 
   @override
   List<CustomPad> get list {
-    final List<CustomPad> grid = [];
-    for (int row = 0; row < settings.height; row++) {
-      for (int note = 0; note < settings.width; note++) {
+    final grid = <CustomPad>[];
+    for (var row = 0; row < settings.height; row++) {
+      for (var note = 0; note < settings.width; note++) {
         grid.add(CustomPad(settings.baseNote + row * rowInterval + note));
       }
     }
@@ -158,14 +176,14 @@ class GridMTN extends Grid {
 
   @override
   List<CustomPad> get list {
-    final List<CustomPad> grid = [];
+    final grid = <CustomPad>[];
 
-    final bool sameColumn = settings.rootNote % 2 ==
+    final sameColumn = settings.rootNote % 2 ==
         settings.baseNote % 2; // in the MTN, odd and even columns alternate
 
-    for (int row = 0; row < settings.height; row++) {
-      int next = settings.baseNote;
-      for (int note = 0; note < settings.width; note++) {
+    for (var row = 0; row < settings.height; row++) {
+      var next = settings.baseNote;
+      for (var note = 0; note < settings.width; note++) {
         grid.add(CustomPad(next + row * 4));
         if (note.isEven) {
           next = sameColumn ? next + 7 : next - 5;
@@ -184,25 +202,25 @@ class GridScaleOnly extends Grid {
 
   @override
   List<CustomPad> get list {
-    final List<int> actualNotes =
+    final actualNotes =
         MidiUtils.absoluteScaleNotes(settings.rootNote, settings.scaleList);
 
-    int validatedBase = settings.baseNote;
+    var validatedBase = settings.baseNote;
     while (!actualNotes.contains(validatedBase % 12)) {
       validatedBase = (validatedBase + 1) % 127;
     }
 
-    final int baseOffset = actualNotes.indexOf(
-        validatedBase % 12); // check where grid will start within scale
+    final baseOffset = actualNotes.indexOf(
+      validatedBase % 12,
+    ); // check where grid will start within scale
 
-    int octave = 0;
-    int lastResult = 0;
+    var octave = 0;
+    var lastResult = 0;
 
-    final List<CustomPad> grid =
-        List.generate(settings.width * settings.height, (gridIndex) {
-      final int out =
-          actualNotes[(gridIndex + baseOffset) % actualNotes.length] +
-              settings.baseNote ~/ 12 * 12;
+    final grid =
+        List<CustomPad>.generate(settings.width * settings.height, (gridIndex) {
+      final out = actualNotes[(gridIndex + baseOffset) % actualNotes.length] +
+          settings.baseNote ~/ 12 * 12;
 
       if (out < lastResult) octave++;
       lastResult = out;
@@ -223,40 +241,39 @@ class GridScaleOffset extends Grid {
   List<CustomPad> get list {
     /// applied scale pattern to currently selected root note
     /// root note is a value between 0-11
-    final List<int> actualScaleNotes =
+    final actualScaleNotes =
         MidiUtils.absoluteScaleNotes(settings.rootNote, settings.scaleList);
 
     /// baseNote that is actually part of the currently selected scale
-    int validatedBase = settings.baseNote; // basenote is a value between 0-127
+    var validatedBase = settings.baseNote; // basenote is a value between 0-127
     while (!actualScaleNotes.contains(validatedBase % 12)) {
       validatedBase = (validatedBase + 1) % 127;
     }
 
     /// index in actualNotes of the starting note
-    final int baseIndex = actualScaleNotes.indexOf(validatedBase % 12);
+    final baseIndex = actualScaleNotes.indexOf(validatedBase % 12);
 
     // GRID CALCULATION ///////////////////////////
-    final List<CustomPad> grid = [];
+    final grid = <CustomPad>[];
 
-    int nextRowStart = validatedBase;
-    int nextBaseIndex = baseIndex;
+    var nextRowStart = validatedBase;
+    var nextBaseIndex = baseIndex;
 
-    for (int row = 0; row < settings.height; row++) {
-      final int baseNoteOffset = nextRowStart - actualScaleNotes[nextBaseIndex];
+    for (var row = 0; row < settings.height; row++) {
+      final baseNoteOffset = nextRowStart - actualScaleNotes[nextBaseIndex];
 
       // CALCULATE SINGLE ROW:
-      int rowPrevAdd = 0;
-      int rowOctave = 0;
+      var rowPrevAdd = 0;
+      var rowOctave = 0;
 
-      for (int note = 0; note < settings.width; note++) {
-        final int additiveIndex =
-            (nextBaseIndex + note) % actualScaleNotes.length;
+      for (var note = 0; note < settings.width; note++) {
+        final additiveIndex = (nextBaseIndex + note) % actualScaleNotes.length;
 
         if (actualScaleNotes[additiveIndex] < rowPrevAdd) {
           rowOctave++;
         }
 
-        final int next =
+        final next =
             baseNoteOffset + actualScaleNotes[additiveIndex] + (rowOctave * 12);
 
         rowPrevAdd = actualScaleNotes[additiveIndex];
@@ -266,7 +283,7 @@ class GridScaleOffset extends Grid {
 
       // CALCULATE NEXT ROW START PAD:
       nextBaseIndex = (nextBaseIndex + interval) % actualScaleNotes.length;
-      final int next = baseNoteOffset + actualScaleNotes[nextBaseIndex];
+      final next = baseNoteOffset + actualScaleNotes[nextBaseIndex];
       nextRowStart = next < nextRowStart ? next + 12 : next;
     }
     return grid;
@@ -281,9 +298,7 @@ class GridXpressPads extends Grid {
   final XPP xPressPads;
 
   @override
-  List<CustomPad> get list {
-    return xPressPads.list.map(CustomPad.new).toList();
-  }
+  List<CustomPad> get list => xPressPads.list.map(CustomPad.new).toList();
 }
 
 // constant data about XPP layouts:

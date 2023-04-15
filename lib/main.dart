@@ -7,20 +7,20 @@ import 'package:flutter/rendering.dart'; // for debug repaint rainbow, if enable
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Holds the shared_preferences Object, which can load and save persistent data
-final sharedPrefProvider = Provider<Prefs>((ref) {
+final Provider<Prefs> sharedPrefProvider = Provider<Prefs>((ref) {
   throw UnimplementedError(); // overriden in ProviderScope
 });
 
 // MAIN FUNCTION ////////////////////////////////////////////////////////
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // debugRepaintRainbowEnabled = true;
 
-  DeviceUtils.hideSystemUi()
+  await DeviceUtils.hideSystemUi()
       .then((_) => DeviceUtils.enableRotation())
       .then((_) => Prefs.initAsync())
       .then(
-        (Prefs initialPreferences) => runApp(
+        (initialPreferences) => runApp(
           ProviderScope(
             overrides: [
               sharedPrefProvider.overrideWithValue(initialPreferences),

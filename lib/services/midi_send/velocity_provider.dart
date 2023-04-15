@@ -15,9 +15,7 @@ enum VelocityMode {
 }
 
 final velocityRangeProv = Provider<int>(
-  (ref) {
-    return ref.watch(velocityMaxProv) - ref.watch(velocityMinProv);
-  },
+  (ref) => ref.watch(velocityMaxProv) - ref.watch(velocityMinProv),
 );
 
 final velocitySliderValueProv = NotifierProvider<VelocityProvider, double>(
@@ -46,7 +44,7 @@ class VelocityProvider extends Notifier<double> {
   int velocity(double percentage) {
     switch (ref.read(velocityModeProv)) {
       case VelocityMode.random:
-        final double randVelocity =
+        final randVelocity =
             _randomGenerator.nextInt(ref.read(velocityRangeProv)) +
                 (state - ref.read(velocityRangeProv) / 2);
         return randVelocity.round().clamp(10, 127);
@@ -55,7 +53,7 @@ class VelocityProvider extends Notifier<double> {
         return state.round().clamp(10, 127);
 
       case VelocityMode.yAxis:
-        final double min = state - ref.read(velocityRangeProv) / 2;
+        final min = state - ref.read(velocityRangeProv) / 2;
         return (min + ref.read(velocityRangeProv) * percentage)
             .round()
             .clamp(0, 127);
@@ -75,7 +73,5 @@ class VelocityProvider extends Notifier<double> {
     }
   }
 
-  int get asInt {
-    return state.round().clamp(0, 127);
-  }
+  int get asInt => state.round().clamp(0, 127);
 }

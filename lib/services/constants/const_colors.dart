@@ -16,7 +16,7 @@ abstract class Palette {
       const HSLColor.fromAHSL(0.2, 0, 0, .33).toColor();
 
   static Color darker(Color color, double factor) {
-    final HSLColor hsl = HSLColor.fromColor(color);
+    final hsl = HSLColor.fromColor(color);
     return hsl
         .withLightness(hsl.lightness * factor)
         .withSaturation(hsl.saturation * (factor * 0.33))

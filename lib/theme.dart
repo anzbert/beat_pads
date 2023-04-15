@@ -48,7 +48,7 @@ ThemeData appTheme = ThemeData.dark().copyWith(
     thumbColor: Palette.cadetBlue,
   ),
   switchTheme: SwitchThemeData(
-    thumbColor: MaterialStateProperty.resolveWith((Set<MaterialState> states) {
+    thumbColor: MaterialStateProperty.resolveWith((states) {
       if (states.contains(MaterialState.selected)) {
         return Palette.darker(Palette.yellowGreen, 0.9);
       }
@@ -57,7 +57,7 @@ ThemeData appTheme = ThemeData.dark().copyWith(
       }
       return Palette.cadetBlue;
     }),
-    trackColor: MaterialStateProperty.resolveWith((Set<MaterialState> states) {
+    trackColor: MaterialStateProperty.resolveWith((states) {
       if (states.contains(MaterialState.selected)) {
         return Palette.yellowGreen;
       }

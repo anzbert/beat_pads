@@ -25,7 +25,7 @@ class CustomPaintRadius extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     // BACK
-    final Paint brushBack = Paint()
+    final brushBack = Paint()
       ..color = colorBack
       ..strokeWidth = 8
       ..strokeCap = StrokeCap.round;
@@ -45,7 +45,7 @@ class CustomPaintRadius extends CustomPainter {
     // canvas.drawCircle(origin, maxRadius, brushBack); // background
 
     // FRONT
-    final Paint brush = Paint()
+    final brush = Paint()
       ..color = colorFront
       ..style = PaintingStyle.stroke
       ..strokeWidth = 6
@@ -70,10 +70,9 @@ class CustomPaintRadius extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(CustomPaintRadius oldDelegate) {
-    return oldDelegate.change != change ||
-        oldDelegate.deadZone != deadZone ||
-        oldDelegate.colorDeadZone != colorDeadZone ||
-        oldDelegate.maxRadius != maxRadius;
-  }
+  bool shouldRepaint(CustomPaintRadius oldDelegate) =>
+      oldDelegate.change != change ||
+      oldDelegate.deadZone != deadZone ||
+      oldDelegate.colorDeadZone != colorDeadZone ||
+      oldDelegate.maxRadius != maxRadius;
 }

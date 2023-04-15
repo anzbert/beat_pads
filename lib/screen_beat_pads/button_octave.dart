@@ -8,18 +8,18 @@ class OctaveButtons extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final double width = MediaQuery.of(context).size.width;
-    final double padSpacing = width * ThemeConst.padSpacingFactor;
-    final double padRadius = width * ThemeConst.padRadiusFactor;
+    final width = MediaQuery.of(context).size.width;
+    final padSpacing = width * ThemeConst.padSpacingFactor;
+    final padRadius = width * ThemeConst.padRadiusFactor;
     return Column(
       children: [
         Expanded(
           child: Padding(
             padding: EdgeInsets.fromLTRB(0, padSpacing, padSpacing, padSpacing),
             child: ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 ref.read(baseOctaveProv.notifier).increment();
-                ref.read(baseOctaveProv.notifier).save();
+                await ref.read(baseOctaveProv.notifier).save();
               },
               style: ElevatedButton.styleFrom(
                 foregroundColor: Palette.darkGrey,
@@ -43,9 +43,9 @@ class OctaveButtons extends ConsumerWidget {
           child: Padding(
             padding: EdgeInsets.fromLTRB(0, padSpacing, padSpacing, padSpacing),
             child: ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 ref.read(baseOctaveProv.notifier).decrement();
-                ref.read(baseOctaveProv.notifier).save();
+                await ref.read(baseOctaveProv.notifier).save();
               },
               style: ElevatedButton.styleFrom(
                 foregroundColor: Palette.darkGrey,

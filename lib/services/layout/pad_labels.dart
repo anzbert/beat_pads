@@ -12,7 +12,7 @@ enum PadLabels {
   String toString() => title;
 
   static Label getLabel(PadLabels padLabels, Layout layout, int note) {
-    final Label label = Label();
+    final label = Label();
 
     if (padLabels == PadLabels.none) return label;
 

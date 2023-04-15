@@ -11,19 +11,16 @@ class TouchReleaseBuffer extends TouchBufferBase {
   bool _checkerRunning = false;
 
   @override
-  List<TouchEvent> build() {
-    return [];
-  }
+  List<TouchEvent> build() => [];
 
   /// Check if any of the [TouchEvent]s currently contain an active note
-  bool get _hasActiveNotes {
-    return state.any((element) => element.noteEvent.noteOnMessage != null);
-  }
+  bool get _hasActiveNotes =>
+      state.any((element) => element.noteEvent.noteOnMessage != null);
 
   /// Update note in the released events buffer, by adding it or updating
   /// the timer of the corresponding note
-  void updateReleasedEvent(TouchEvent event) {
-    final int index = state.indexWhere(
+  Future<void> updateReleasedEvent(TouchEvent event) async {
+    final index = state.indexWhere(
       (element) => element.noteEvent.note == event.noteEvent.note,
     );
 
@@ -38,7 +35,7 @@ class TouchReleaseBuffer extends TouchBufferBase {
       event.noteEvent.updateReleaseTime();
       state = [...state, event];
     }
-    if (state.isNotEmpty) _checkReleasedEvents();
+    if (state.isNotEmpty) await _checkReleasedEvents();
   }
 
   Future<void> _checkReleasedEvents() async {
@@ -49,7 +46,7 @@ class TouchReleaseBuffer extends TouchBufferBase {
       await Future.delayed(
         const Duration(milliseconds: 5),
         () {
-          for (int i = 0; i < state.length; i++) {
+          for (var i = 0; i < state.length; i++) {
             if (DateTime.now().millisecondsSinceEpoch -
                     state[i].noteEvent.releaseTime >
                 ref.read(noteReleaseUsable)) {
@@ -88,7 +85,7 @@ class TouchReleaseBuffer extends TouchBufferBase {
   /// Remove all [TouchEvent]s that have been marked to be discarded
   /// from the buffer
   void killAllMarkedReleasedTouchEvents() {
-    if (state.any((TouchEvent element) => element.kill)) {
+    if (state.any((element) => element.kill)) {
       state = state.where((element) => !element.kill).toList();
     }
   }

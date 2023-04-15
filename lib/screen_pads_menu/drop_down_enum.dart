@@ -13,7 +13,7 @@ class DropdownEnum<T extends Enum> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<DropdownMenuItem<T>> dropList = values
+    final dropList = values
         .map(
           (enumItem) => DropdownMenuItem(
             value: enumItem,
@@ -27,7 +27,7 @@ class DropdownEnum<T extends Enum> extends StatelessWidget {
       child: DropdownButton<T>(
         value: readValue,
         items: dropList,
-        onChanged: (T? v) {
+        onChanged: (v) {
           if (v != null) setValue(v);
         },
       ),

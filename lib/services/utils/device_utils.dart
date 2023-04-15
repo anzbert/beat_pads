@@ -11,12 +11,10 @@ abstract class DeviceUtils {
       MediaQuery.of(context).orientation.name == 'landscape';
 
   /// Lock Orientation to Portrait
-  static Future<void> portraitOnly() {
-    return SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
-  }
+  static Future<void> portraitOnly() => SystemChrome.setPreferredOrientations([
+        DeviceOrientation.portraitUp,
+        DeviceOrientation.portraitDown,
+      ]);
 
   /// Lock Orientation to Landscape
   static Future<bool> landscapeOnly() async {
@@ -46,28 +44,23 @@ abstract class DeviceUtils {
   }
 
   /// Hide Top and Bottom Menu Bars
-  static Future<void> hideSystemUi() {
-    return SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
-  }
+  static Future<void> hideSystemUi() =>
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
 
   /// Show Top and Bottom Menu Bars
-  static Future<void> showSystemUi() {
-    return SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-  }
+  static Future<void> showSystemUi() =>
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
 
   /// Show Top Menu Bar only
-  static Future<void> showSystemUiTop() {
-    return SystemChrome.setEnabledSystemUIMode(
-      SystemUiMode.manual,
-      overlays: [SystemUiOverlay.top],
-    );
-  }
+  static Future<void> showSystemUiTop() => SystemChrome.setEnabledSystemUIMode(
+        SystemUiMode.manual,
+        overlays: [SystemUiOverlay.top],
+      );
 
   /// Show Bottom Menu Bar only
-  static Future<void> showSystemUiBottom() {
-    return SystemChrome.setEnabledSystemUIMode(
-      SystemUiMode.manual,
-      overlays: [SystemUiOverlay.bottom],
-    );
-  }
+  static Future<void> showSystemUiBottom() =>
+      SystemChrome.setEnabledSystemUIMode(
+        SystemUiMode.manual,
+        overlays: [SystemUiOverlay.bottom],
+      );
 }

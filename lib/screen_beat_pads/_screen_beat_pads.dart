@@ -7,29 +7,27 @@ class BeatPadsScreen extends StatelessWidget {
   /// This is the main playing screen with a pad grid and additional Controls
   const BeatPadsScreen({super.key});
   @override
-  Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: Future<bool>.delayed(
-          Duration(milliseconds: Timing.screenTransitionTime), () async {
-        final bool result = await DeviceUtils.landscapeOnly();
-        await Future<void>.delayed(
-          Duration(milliseconds: Timing.screenTransitionTime),
-        );
-        return result;
-      }),
-      builder: (context, AsyncSnapshot<bool?> done) {
-        if (done.data == false || done.data == null) {
-          return const Scaffold(body: SizedBox.expand());
-        }
-        return const Scaffold(
-          body: SafeArea(
-            child: BeatPadsAndControls(),
-          ),
-          drawer: Drawer(
-            child: MidiConfig(),
-          ),
-        );
-      },
-    );
-  }
+  Widget build(BuildContext context) => FutureBuilder(
+        future: Future<bool>.delayed(
+            Duration(milliseconds: Timing.screenTransitionTime), () async {
+          final result = await DeviceUtils.landscapeOnly();
+          await Future<void>.delayed(
+            Duration(milliseconds: Timing.screenTransitionTime),
+          );
+          return result;
+        }),
+        builder: (context, done) {
+          if (done.data == false || done.data == null) {
+            return const Scaffold(body: SizedBox.expand());
+          }
+          return const Scaffold(
+            body: SafeArea(
+              child: BeatPadsAndControls(),
+            ),
+            drawer: Drawer(
+              child: MidiConfig(),
+            ),
+          );
+        },
+      );
 }

@@ -21,7 +21,7 @@ class BeatPadsAndControls extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.listen(baseOctaveProv, (int? prev, int now) {
+    ref.listen(baseOctaveProv, (prev, now) {
       if (prev != null && prev != now && !preview) {
         ref.read(senderProvider).markDirty();
       }
@@ -94,7 +94,7 @@ class BeatPadsAndControls extends ConsumerWidget {
           if (!ref.watch(sustainButtonProv) && !ref.watch(octaveButtonsProv))
             Builder(
               builder: (context) {
-                final double width = MediaQuery.of(context).size.width;
+                final width = MediaQuery.of(context).size.width;
                 return Positioned.directional(
                   top: width * 0.006,
                   start: width * 0.006,

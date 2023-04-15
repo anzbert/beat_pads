@@ -13,7 +13,7 @@ enum ScreenSize {
   final int maxGrid;
 
   static ScreenSize getSizeEnum(BuildContext context) {
-    final double deviceWidth = MediaQuery.of(context).size.shortestSide;
+    final deviceWidth = MediaQuery.of(context).size.shortestSide;
     if (deviceWidth > 900) return ScreenSize.large;
     if (deviceWidth > 600) return ScreenSize.normal;
     return ScreenSize.small;

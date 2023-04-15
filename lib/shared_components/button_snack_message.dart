@@ -14,19 +14,17 @@ class SnackMessageButton extends StatelessWidget {
   final String label;
 
   @override
-  Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: () {
-        onPressed();
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(message)));
-      },
-      child: Text(
-        label,
-        style: TextStyle(
-          color: Palette.darkGrey,
+  Widget build(BuildContext context) => ElevatedButton(
+        onPressed: () {
+          onPressed();
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text(message)));
+        },
+        child: Text(
+          label,
+          style: TextStyle(
+            color: Palette.darkGrey,
+          ),
         ),
-      ),
-    );
-  }
+      );
 }

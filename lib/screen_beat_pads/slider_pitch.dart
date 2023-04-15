@@ -41,25 +41,23 @@ class _PitchSliderEasedState extends State<PitchSliderEased>
 
   @override
   Widget build(BuildContext context) {
-    final double width = MediaQuery.of(context).size.width;
+    final width = MediaQuery.of(context).size.width;
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Flexible(
           flex: 5,
           child: LayoutBuilder(
-            builder: (context, constraints) {
-              return Align(
-                alignment: Alignment.bottomCenter,
-                child: Text(
-                  'Pitch',
-                  style: TextStyle(
-                    fontSize: constraints.maxWidth * fontSizeFactor,
-                    color: Palette.darker(Palette.laserLemon, 0.6),
-                  ),
+            builder: (context, constraints) => Align(
+              alignment: Alignment.bottomCenter,
+              child: Text(
+                'Pitch',
+                style: TextStyle(
+                  fontSize: constraints.maxWidth * fontSizeFactor,
+                  color: Palette.darker(Palette.laserLemon, 0.6),
                 ),
-              );
-            },
+              ),
+            ),
           ),
         ),
         Center(
@@ -128,7 +126,7 @@ class _PitchSliderEasedState extends State<PitchSliderEased>
             widthFactor: 0.95,
             child: LayoutBuilder(
               builder: (context, constraints) {
-                final double padSpacing = width * ThemeConst.padSpacingFactor;
+                final padSpacing = width * ThemeConst.padSpacingFactor;
                 return Container(
                   margin: EdgeInsets.only(bottom: padSpacing),
                   child: Column(

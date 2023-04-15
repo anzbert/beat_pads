@@ -14,7 +14,7 @@ class PlayModeSlide extends PlayModeHandler {
           .removeNoteFromReleaseBuffer(data.padNote);
     }
 
-    final NoteEvent noteOn = NoteEvent(
+    final noteOn = NoteEvent(
       ref.read(channelUsableProv),
       data.padNote,
       ref.read(velocitySliderValueProv.notifier).velocity(data.yPercentage),
@@ -30,7 +30,8 @@ class PlayModeSlide extends PlayModeHandler {
   @override
   void handlePan(NullableTouchAndScreenData data) {
     // Turn note off:
-    ref.read(touchBuffer.notifier).modifyEvent(data.pointer, (eventInBuffer) {
+    ref.read(touchBuffer.notifier).modifyEvent(data.pointer,
+        (eventInBuffer) async {
       if (eventInBuffer.dirty) return;
 
       if (data.padNote != eventInBuffer.noteEvent.note &&
@@ -38,7 +39,7 @@ class PlayModeSlide extends PlayModeHandler {
         if (ref.read(noteReleaseUsable) == 0) {
           eventInBuffer.noteEvent.noteOff(); // turn note off immediately
         } else {
-          ref.read(noteReleaseBuffer.notifier).updateReleasedNoteEvent(
+          await ref.read(noteReleaseBuffer.notifier).updateReleasedNoteEvent(
                 NoteEvent(
                   eventInBuffer.noteEvent.channel,
                   eventInBuffer.noteEvent.note,
@@ -70,12 +71,13 @@ class PlayModeSlide extends PlayModeHandler {
 
   @override
   void handleEndTouch(CustomPointer touch) {
-    ref.read(touchBuffer.notifier).modifyEvent(touch.pointer, (eventInBuffer) {
+    ref.read(touchBuffer.notifier).modifyEvent(touch.pointer,
+        (eventInBuffer) async {
       if (ref.read(noteReleaseUsable) == 0) {
         eventInBuffer.noteEvent.noteOff(); // noteOFF
         ref.read(touchBuffer.notifier).removeById(eventInBuffer.uniqueID);
       } else {
-        ref.read(noteReleaseBuffer.notifier).updateReleasedNoteEvent(
+        await ref.read(noteReleaseBuffer.notifier).updateReleasedNoteEvent(
               eventInBuffer.noteEvent,
             ); // instead of note off, event passed to release buffer
         ref.read(touchBuffer.notifier).removeById(eventInBuffer.uniqueID);
@@ -88,7 +90,7 @@ class PlayModeSlide extends PlayModeHandler {
   /// Checks releasebuffer and active touchbuffer
   @override
   int isNoteOn(int note) {
-    int result = ref.read(touchBuffer.notifier).isNoteOn(note);
+    var result = ref.read(touchBuffer.notifier).isNoteOn(note);
 
     if (ref.read(modReleaseUsable) > 0 || ref.read(noteReleaseUsable) > 0) {
       if (result == 0) {

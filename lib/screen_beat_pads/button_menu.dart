@@ -13,15 +13,15 @@ class ReturnToMenuButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double width = MediaQuery.of(context).size.width;
-    final double padSpacing = width * ThemeConst.padSpacingFactor;
-    final double padRadius = width * ThemeConst.padRadiusFactor;
+    final width = MediaQuery.of(context).size.width;
+    final padSpacing = width * ThemeConst.padSpacingFactor;
+    final padRadius = width * ThemeConst.padRadiusFactor;
     return Padding(
       padding: EdgeInsets.fromLTRB(0, padSpacing, padSpacing, padSpacing),
       child: GestureDetector(
-        onDoubleTap: () {
+        onDoubleTap: () async {
           // using pushReplacement to trigger dispose on pad screen
-          Navigator.pushReplacement(
+          await Navigator.pushReplacement(
             context,
             MaterialPageRoute<PadMenuScreen>(
               builder: (context) => const PadMenuScreen(),

@@ -1,7 +1,6 @@
 import 'package:beat_pads/screen_beat_pads/beat_pad.dart';
 import 'package:beat_pads/services/services.dart';
 import 'package:beat_pads/shared_components/_shared.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -48,27 +47,27 @@ class _BeatPadGridState extends ConsumerState<BeatPadGrid>
   /// Returns a CustomPointer with the index of the clicked pad and the position
   /// Offset within the pad surface
   PadAndTouchData? _detectTappedItem(PointerEvent event) {
-    final BuildContext? context = _padsWidgetKey.currentContext;
+    final context = _padsWidgetKey.currentContext;
     if (context == null) return null;
 
-    final RenderBox? box = context.findAncestorRenderObjectOfType<RenderBox>();
+    final box = context.findAncestorRenderObjectOfType<RenderBox>();
     if (box == null) return null;
 
-    final Offset localOffset = box.globalToLocal(event.position);
+    final localOffset = box.globalToLocal(event.position);
 
-    final BoxHitTestResult results = BoxHitTestResult();
+    final results = BoxHitTestResult();
 
     if (box.hitTest(results, position: localOffset)) {
-      for (final HitTestEntry<HitTestTarget> hit in results.path) {
-        final HitTestTarget target = hit.target;
+      for (final hit in results.path) {
+        final target = hit.target;
 
         if (target is TestProxyBox) {
           // final Offset position = target.globalToLocal(event.position);
 
-          double yPos = target.globalToLocal(event.position).dy;
-          double ySize = target.size.height;
+          var yPos = target.globalToLocal(event.position).dy;
+          var ySize = target.size.height;
 
-          const double yDeadZone = 20; // pixels
+          const yDeadZone = 20.0; // pixels
 
           if (yPos < yDeadZone) {
             yPos = 0;
@@ -99,10 +98,10 @@ class _BeatPadGridState extends ConsumerState<BeatPadGrid>
   }
 
   void down(PointerEvent touch) {
-    final PadAndTouchData? result = _detectTappedItem(touch);
+    final result = _detectTappedItem(touch);
 
     if (mounted && result != null) {
-      final PadTouchAndScreenData data = PadTouchAndScreenData(
+      final data = PadTouchAndScreenData(
         pointer: touch.pointer,
         screenTouchPos: touch.position,
         screenSize: MediaQuery.of(context).size,
@@ -120,7 +119,7 @@ class _BeatPadGridState extends ConsumerState<BeatPadGrid>
     }
 
     if (mounted) {
-      final PadAndTouchData? data = _detectTappedItem(touch);
+      final data = _detectTappedItem(touch);
       ref.read(senderProvider).handlePan(
             NullableTouchAndScreenData(
               pointer: touch.pointer,
@@ -140,20 +139,19 @@ class _BeatPadGridState extends ConsumerState<BeatPadGrid>
 
       if (ref.read(modReleaseUsable) > 0 &&
           ref.read(playModeProv).modulatable) {
-        final TouchEvent? event =
+        final event =
             ref.read(touchReleaseBuffer.notifier).getByID(touch.pointer);
         if (event == null || event.newPosition == event.origin) return;
 
-        final ReturnAnimation returnAnim = ReturnAnimation(
+        final returnAnim = ReturnAnimation(
           event.uniqueID,
           ref.read(modReleaseUsable),
           tickerProvider: this,
         );
 
-        final double absoluteMaxRadius =
-            MediaQuery.of(context).size.longestSide *
-                ref.read(modulationRadiusProv);
-        final Offset constrainedPosition = ref.read(modulation2DProv)
+        final absoluteMaxRadius = MediaQuery.of(context).size.longestSide *
+            ref.read(modulationRadiusProv);
+        final constrainedPosition = ref.read(modulation2DProv)
             ? Utils.limitToSquare(
                 event.origin,
                 touch.position,
@@ -166,7 +164,7 @@ class _BeatPadGridState extends ConsumerState<BeatPadGrid>
               );
 
         returnAnim.animation.addListener(() {
-          final TouchEvent? touchEvent = ref
+          final touchEvent = ref
               .read(touchReleaseBuffer.notifier)
               .getByID(returnAnim.uniqueID);
 
@@ -219,7 +217,7 @@ class _BeatPadGridState extends ConsumerState<BeatPadGrid>
 
   @override
   Widget build(BuildContext context) {
-    final List<List<CustomPad>> rows = ref.watch(rowProv);
+    final rows = ref.watch(rowProv);
     return Stack(
       children: [
         Listener(
@@ -234,37 +232,35 @@ class _BeatPadGridState extends ConsumerState<BeatPadGrid>
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ...rows.map(
-                (row) {
-                  return Expanded(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        ...row.map(
-                          (customPad) {
-                            switch (customPad.padType) {
-                              case PadType.encoder:
-                                // Case not implemented...
-                                return const SizedBox.expand();
-                              case PadType.chord:
-                                // Case not implemented...
-                                return const SizedBox.expand();
-                              case PadType.note:
-                                return Expanded(
-                                  child: HitTestObject(
-                                    index: customPad.padValue,
-                                    child: BeatPad(
-                                      note: customPad.padValue,
-                                      preview: widget.preview,
-                                    ),
+                (row) => Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ...row.map(
+                        (customPad) {
+                          switch (customPad.padType) {
+                            case PadType.encoder:
+                              // Case not implemented...
+                              return const SizedBox.expand();
+                            case PadType.chord:
+                              // Case not implemented...
+                              return const SizedBox.expand();
+                            case PadType.note:
+                              return Expanded(
+                                child: HitTestObject(
+                                  index: customPad.padValue,
+                                  child: BeatPad(
+                                    note: customPad.padValue,
+                                    preview: widget.preview,
                                   ),
-                                );
-                            }
-                          },
-                        ),
-                      ],
-                    ),
-                  );
-                },
+                                ),
+                              );
+                          }
+                        },
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ],
           ),
@@ -282,7 +278,7 @@ class _BeatPadGridState extends ConsumerState<BeatPadGrid>
       MPEinitMessage(memberChannels: 0, upperZone: upperzone).send();
     }
 
-    for (final ReturnAnimation anim in _animations) {
+    for (final anim in _animations) {
       anim.controller.dispose();
     }
     _animations.clear();

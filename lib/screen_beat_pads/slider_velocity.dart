@@ -24,25 +24,23 @@ class _SliderVelocityState extends ConsumerState<SliderVelocity> {
 
   @override
   Widget build(BuildContext context) {
-    final double width = MediaQuery.of(context).size.width;
+    final width = MediaQuery.of(context).size.width;
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Flexible(
           flex: 5,
           child: LayoutBuilder(
-            builder: (context, constraints) {
-              return Align(
-                alignment: Alignment.bottomCenter,
-                child: Text(
-                  'Vel',
-                  style: TextStyle(
-                    fontSize: constraints.maxWidth * fontSizeFactor,
-                    color: Palette.darker(Palette.cadetBlue, 0.6),
-                  ),
+            builder: (context, constraints) => Align(
+              alignment: Alignment.bottomCenter,
+              child: Text(
+                'Vel',
+                style: TextStyle(
+                  fontSize: constraints.maxWidth * fontSizeFactor,
+                  color: Palette.darker(Palette.cadetBlue, 0.6),
                 ),
-              );
-            },
+              ),
+            ),
           ),
         ),
         Center(
@@ -61,7 +59,7 @@ class _SliderVelocityState extends ConsumerState<SliderVelocity> {
                 min: 10,
                 max: 127,
                 value: ref.watch(velocitySliderValueProv).clamp(10, 127),
-                onChanged: (double v) {
+                onChanged: (v) {
                   ref.read(velocitySliderValueProv.notifier).set(v);
                 },
                 onChangeEnd: (_) {},
@@ -78,7 +76,7 @@ class _SliderVelocityState extends ConsumerState<SliderVelocity> {
                 min: 10,
                 max: 127,
                 value: ref.watch(velocitySliderValueProv).clamp(10, 127),
-                onChanged: (double v) {
+                onChanged: (v) {
                   ref.read(velocitySliderValueProv.notifier).set(v);
                 },
               ),
@@ -97,7 +95,7 @@ class _SliderVelocityState extends ConsumerState<SliderVelocity> {
             widthFactor: 0.95,
             child: LayoutBuilder(
               builder: (context, constraints) {
-                final double padSpacing = width * ThemeConst.padSpacingFactor;
+                final padSpacing = width * ThemeConst.padSpacingFactor;
                 return Container(
                   margin: EdgeInsets.only(bottom: padSpacing),
                   child: Column(
@@ -121,8 +119,7 @@ class _SliderVelocityState extends ConsumerState<SliderVelocity> {
                             ? Align(
                                 alignment: Alignment.centerRight,
                                 child: Text(
-                                  // ignore: prefer_single_quotes
-                                  "${String.fromCharCode(177)}${ref.watch(velocityRangeProv) ~/ 2}",
+                                  '${String.fromCharCode(177)}${ref.watch(velocityRangeProv) ~/ 2}',
                                   style: TextStyle(
                                     fontSize: constraints.maxWidth *
                                         fontSizeFactor *
