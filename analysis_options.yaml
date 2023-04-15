@@ -15,7 +15,6 @@
 
 # include: package:flutter_lints/flutter.yaml
 include: package:austerity/analysis_options.yaml
-# include: package:very_good_analysis/analysis_options.yaml
 
 linter:
   # The lint rules applied to this project can be customized in the
