@@ -90,9 +90,9 @@ class PadMenuScreen extends ConsumerWidget {
                 padding: const EdgeInsets.only(right: 8),
                 child: DropdownButton(
                   value: ref.watch(presetNotifierProvider),
-                  iconSize: 0,
-                  // ignore: lines_longer_than_80_chars
-                  // iconEnabledColor: PresetButtons.backgoundColors[ref.watch(presetNotifierProvider) - 1],
+                  iconSize: 32,
+                  iconEnabledColor: PresetButtons
+                      .backgoundColors[ref.watch(presetNotifierProvider) - 1],
                   underline: const SizedBox.shrink(),
                   onChanged: (int? newValue) {
                     if (newValue != null) {
