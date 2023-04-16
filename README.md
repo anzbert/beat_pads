@@ -9,7 +9,7 @@
 
 ### ...or compile it yourself
 
-- Install the [Flutter](https://flutter.dev/) toolchain as per [these instructions](https://docs.flutter.dev/get-started/install)
+- Install the [Flutter](https://flutter.dev/) toolchain as per [these instructions](https://docs.flutter.dev/get-started/install) and make sure you are running the latest version
 - Clone or download this repository
 - Edit and debug with [VScode](https://code.visualstudio.com/)
 - Compile for Android with ```flutter build apk``` or for iOS with ```flutter build ios``` (compiling for iOS requires a computer running MacOS)
