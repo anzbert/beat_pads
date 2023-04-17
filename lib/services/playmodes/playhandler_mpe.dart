@@ -2,51 +2,50 @@ import 'package:beat_pads/services/services.dart';
 
 class PlayModeMPE extends PlayModeHandler {
   PlayModeMPE(super.ref)
-      : mpeMods = SendMpe(
+      : _mpeMods = SendMpe(
           ref.read(mpe2DXProv).getMod(ref.read(mpePitchbendRangeProv)),
           ref.read(mpe2DYProv).getMod(ref.read(mpePitchbendRangeProv)),
           ref.read(mpe1DRadiusProv).getMod(ref.read(mpePitchbendRangeProv)),
         ),
-        mpeChannelGenerator = MPEChannelGenerator(
+        _mpeChannelGenerator = MPEChannelGenerator(
           memberChannels: ref.read(mpeMemberChannelsProv),
           upperZone: ref.read(zoneProv),
         );
 
-  final SendMpe mpeMods;
-  final MPEChannelGenerator mpeChannelGenerator;
+  final SendMpe _mpeMods;
+  final MPEChannelGenerator _mpeChannelGenerator;
 
   @override
   void handleNewTouch(PadTouchAndScreenData data) {
     // remove note if it is still playing
-    if (ref.read(modReleaseUsable) > 0 || ref.read(noteReleaseUsable) > 0) {
-      ref
-          .read(noteReleaseBuffer.notifier)
+    if (refRead(modReleaseUsable) > 0 || refRead(noteReleaseUsable) > 0) {
+      refRead(noteReleaseBuffer.notifier)
           .removeNoteFromReleaseBuffer(data.padNote);
     }
 
-    final newChannel = mpeChannelGenerator.provideChannel([
-      ...ref.read(touchBuffer),
-      ...ref.read(touchReleaseBuffer)
+    final newChannel = _mpeChannelGenerator.provideChannel([
+      ...refRead(touchBuffer),
+      ...refRead(touchReleaseBuffer)
     ]); // get new channel from generator
 
-    if (ref.read(modulation2DProv)) {
-      mpeMods.xMod.send(newChannel, data.padNote, 0);
-      mpeMods.yMod.send(newChannel, data.padNote, 0);
+    if (refRead(modulation2DProv)) {
+      _mpeMods.xMod.send(newChannel, data.padNote, 0);
+      _mpeMods.yMod.send(newChannel, data.padNote, 0);
     } else {
-      mpeMods.rMod.send(newChannel, data.padNote, 0);
+      _mpeMods.rMod.send(newChannel, data.padNote, 0);
     }
 
     final noteOn = NoteEvent(
       newChannel,
       data.padNote,
-      ref.read(velocitySliderValueProv.notifier).velocity(data.yPercentage),
+      refRead(velocitySliderValueProv.notifier).velocity(data.yPercentage),
     )..noteOn();
 
-    ref.read(touchBuffer.notifier).addNoteOn(
-          CustomPointer(data.pointer, data.screenTouchPos),
-          noteOn,
-          data.screenSize,
-        );
+    refRead(touchBuffer.notifier).addNoteOn(
+      CustomPointer(data.pointer, data.screenTouchPos),
+      noteOn,
+      data.screenSize,
+    );
   }
 
   @override
@@ -59,33 +58,29 @@ class PlayModeMPE extends PlayModeHandler {
       event = eventInBuffer;
     }
 
-    if (ref
-        .read(
-          touchBuffer.notifier,
-        )
-        .modifyEvent(data.pointer, modify)) {
-    } else if (ref
-        .read(
-          touchReleaseBuffer.notifier,
-        )
-        .modifyEvent(data.pointer, modify)) {
+    if (refRead(
+      touchBuffer.notifier,
+    ).modifyEvent(data.pointer, modify)) {
+    } else if (refRead(
+      touchReleaseBuffer.notifier,
+    ).modifyEvent(data.pointer, modify)) {
     } else {
       return;
     }
 
-    if (ref.read(modulation2DProv) && event != null) {
-      mpeMods.xMod.send(
+    if (refRead(modulation2DProv) && event != null) {
+      _mpeMods.xMod.send(
         event!.noteEvent.channel,
         event!.noteEvent.note,
         event!.directionalChangeFromCenter().dx,
       );
-      mpeMods.yMod.send(
+      _mpeMods.yMod.send(
         event!.noteEvent.channel,
         event!.noteEvent.note,
         event!.directionalChangeFromCenter().dy,
       );
     } else {
-      mpeMods.rMod.send(
+      _mpeMods.rMod.send(
         event!.noteEvent.channel,
         event!.noteEvent.note,
         event!.radialChange(),
@@ -95,10 +90,10 @@ class PlayModeMPE extends PlayModeHandler {
 
   @override
   void handleEndTouch(CustomPointer touch) {
-    if (!ref.read(touchBuffer.notifier).eventInBuffer(touch.pointer)) return;
+    if (!refRead(touchBuffer.notifier).eventInBuffer(touch.pointer)) return;
 
-    if (ref.read(modReleaseUsable) == 0 && ref.read(noteReleaseUsable) == 0) {
-      ref.read(touchBuffer.notifier).modifyEvent(touch.pointer, (event) {
+    if (refRead(modReleaseUsable) == 0 && refRead(noteReleaseUsable) == 0) {
+      refRead(touchBuffer.notifier).modifyEvent(touch.pointer, (event) {
         releaseMPEChannel(event.noteEvent.channel);
       });
     }
@@ -108,6 +103,6 @@ class PlayModeMPE extends PlayModeHandler {
   /// Used in MPE Mode to make a memberchannel available again for new
   /// touch events
   void releaseMPEChannel(int channel) {
-    mpeChannelGenerator.releaseMPEChannel(channel);
+    _mpeChannelGenerator.releaseMPEChannel(channel);
   }
 }

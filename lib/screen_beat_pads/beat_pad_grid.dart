@@ -114,9 +114,7 @@ class _BeatPadGridState extends ConsumerState<BeatPadGrid>
   }
 
   void move(PointerEvent touch) {
-    if (ref.read(playModeProv) == PlayMode.noSlide) {
-      return;
-    }
+    if (ref.read(playModeProv) == PlayMode.noPan) return;
 
     if (mounted) {
       final data = _detectTappedItem(touch);

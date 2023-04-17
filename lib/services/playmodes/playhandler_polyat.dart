@@ -7,7 +7,7 @@ class PlayModePolyAT extends PlayModeHandler {
   /// Adds a poly AT message to the regular note handling
   @override
   void handleNewTouch(PadTouchAndScreenData data) {
-    polyATMod.send(ref.read(channelUsableProv), data.padNote, 0);
+    polyATMod.send(refRead(channelUsableProv), data.padNote, 0);
     super.handleNewTouch(data);
   }
 
@@ -23,23 +23,19 @@ class PlayModePolyAT extends PlayModeHandler {
       event = eventInBuffer;
     }
 
-    if (ref
-        .read(
-          touchBuffer.notifier,
-        )
-        .modifyEvent(data.pointer, modify)) {
-    } else if (ref
-        .read(
-          touchReleaseBuffer.notifier,
-        )
-        .modifyEvent(data.pointer, modify)) {
+    if (refRead(
+      touchBuffer.notifier,
+    ).modifyEvent(data.pointer, modify)) {
+    } else if (refRead(
+      touchReleaseBuffer.notifier,
+    ).modifyEvent(data.pointer, modify)) {
     } else {
       return;
     }
 
     if (event != null) {
       polyATMod.send(
-        ref.read(channelUsableProv),
+        refRead(channelUsableProv),
         event!.noteEvent.note,
         event!.radialChange(),
       );

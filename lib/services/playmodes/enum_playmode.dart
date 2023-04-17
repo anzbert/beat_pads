@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 enum PlayMode {
   slide('Trigger Notes'),
-  noSlide('Disabled'),
+  noPan('Disabled'),
   polyAT('Poly Aftertouch'),
   mpe('MPE');
 
@@ -44,8 +44,8 @@ enum PlayMode {
     switch (this) {
       case PlayMode.mpe:
         return PlayModeMPE(ref);
-      case PlayMode.noSlide:
-        return PlayModeNoSlide(ref);
+      case PlayMode.noPan:
+        return PlayModeNoPan(ref);
       case PlayMode.slide:
         return PlayModeSlide(ref);
       case PlayMode.polyAT:

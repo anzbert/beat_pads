@@ -8,80 +8,83 @@ final senderProvider = Provider<PlayModeHandler>((ref) {
   return playMode.getPlayModeApi(ref);
 });
 
-// Uses default PlayModeHandler behaviour
-class PlayModeNoSlide extends PlayModeHandler {
-  PlayModeNoSlide(super.ref);
+/// Handler which uses the default [PlayModeHandler] behaviour
+class PlayModeNoPan extends PlayModeHandler {
+  /// A basic Playmode handler, which does not react to finger panning events.
+  PlayModeNoPan(super.ref);
 }
 
 abstract class PlayModeHandler {
-  PlayModeHandler(this.ref);
+  PlayModeHandler(ProviderRef<PlayModeHandler> ref) : refRead = ref.read;
 
-  final ProviderRef<PlayModeHandler> ref;
+  /// Use this to to read the current settings in the [PlayModeHandler].
+  /// This Function has been created to prevent from accidently using
+  /// ```watch``` or ```listen``` in these Handlers.
+  final T Function<T>(ProviderListenable<T>) refRead;
 
   void handleNewTouch(PadTouchAndScreenData data) {
-    if (ref.read(modReleaseUsable) > 0 || ref.read(noteReleaseUsable) > 0) {
-      ref
-          .read(touchReleaseBuffer.notifier)
+    if (refRead(modReleaseUsable) > 0 || refRead(noteReleaseUsable) > 0) {
+      refRead(touchReleaseBuffer.notifier)
           .removeNoteFromReleaseBuffer(data.padNote);
     }
 
     final noteOn = NoteEvent(
-      ref.read(channelUsableProv),
+      refRead(channelUsableProv),
       data.padNote,
-      ref.read(velocitySliderValueProv.notifier).velocity(data.yPercentage),
-    )..noteOn(cc: ref.read(sendCCProv));
+      refRead(velocitySliderValueProv.notifier).velocity(data.yPercentage),
+    )..noteOn(cc: refRead(sendCCProv));
 
-    ref.read(touchBuffer.notifier).addNoteOn(
-          CustomPointer(data.pointer, data.screenTouchPos),
-          noteOn,
-          data.screenSize,
-        );
+    refRead(touchBuffer.notifier).addNoteOn(
+      CustomPointer(data.pointer, data.screenTouchPos),
+      noteOn,
+      data.screenSize,
+    );
   }
 
   void handlePan(NullableTouchAndScreenData data) {}
 
   void handleEndTouch(CustomPointer touch) {
-    if (!ref.read(touchBuffer.notifier).eventInBuffer(touch.pointer)) return;
+    if (!refRead(touchBuffer.notifier).eventInBuffer(touch.pointer)) return;
 
-    if (ref.read(modReleaseUsable) == 0 && ref.read(noteReleaseUsable) == 0) {
-      ref.read(touchBuffer.notifier).modifyEvent(touch.pointer, (event) {
+    if (refRead(modReleaseUsable) == 0 && refRead(noteReleaseUsable) == 0) {
+      refRead(touchBuffer.notifier).modifyEvent(touch.pointer, (event) {
         event.noteEvent.noteOff();
       });
 
-      ref.read(touchBuffer.notifier).removeById(touch.pointer);
+      refRead(touchBuffer.notifier).removeById(touch.pointer);
     } else {
-      if (ref.read(modReleaseUsable) == 0 && ref.read(noteReleaseUsable) > 0) {
-        ref.read(touchBuffer.notifier).modifyEvent(touch.pointer,
+      if (refRead(modReleaseUsable) == 0 && refRead(noteReleaseUsable) > 0) {
+        refRead(touchBuffer.notifier).modifyEvent(touch.pointer,
             (eventInBuffer) async {
           eventInBuffer.newPosition = eventInBuffer.origin; // mod to zero
-          await ref.read(touchReleaseBuffer.notifier).updateReleasedEvent(
-                eventInBuffer,
-              ); // instead of note off, event passed to release buffer
+          await refRead(touchReleaseBuffer.notifier).updateReleasedEvent(
+            eventInBuffer,
+          ); // instead of note off, event passed to release buffer
         });
       }
-      ref.read(touchBuffer.notifier).removeById(touch.pointer);
+      refRead(touchBuffer.notifier).removeById(touch.pointer);
     }
   }
 
   void killAllNotes() {
-    ref.read(touchBuffer.notifier).allNotesOff();
-    ref.read(touchReleaseBuffer.notifier).allNotesOff();
+    refRead(touchBuffer.notifier).allNotesOff();
+    refRead(touchReleaseBuffer.notifier).allNotesOff();
   }
 
   /// Prevent further input to all currently touched notes
   void markDirty() {
-    ref.read(touchBuffer.notifier).markDirty();
-    ref.read(touchReleaseBuffer.notifier).markDirty();
+    refRead(touchBuffer.notifier).markDirty();
+    refRead(touchReleaseBuffer.notifier).markDirty();
   }
 
   /// Returns the velocity if a given note is ON in any channel.
   /// Checks releasebuffer and active touchbuffer
   int isNoteOn(int note) {
-    var result = ref.read(touchBuffer.notifier).isNoteOn(note);
+    var result = refRead(touchBuffer.notifier).isNoteOn(note);
 
-    if (ref.read(modReleaseUsable) > 0 || ref.read(noteReleaseUsable) > 0) {
+    if (refRead(modReleaseUsable) > 0 || refRead(noteReleaseUsable) > 0) {
       if (result == 0) {
-        result = ref.read(touchReleaseBuffer.notifier).isNoteOn(note);
+        result = refRead(touchReleaseBuffer.notifier).isNoteOn(note);
       }
     }
 

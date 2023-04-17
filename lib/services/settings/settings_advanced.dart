@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 final playModeProv = NotifierProvider<SettingEnumNotifier<PlayMode>, PlayMode>(
   () => SettingEnumNotifier<PlayMode>(
     key: 'playMode',
-    defaultValue: PlayMode.noSlide,
+    defaultValue: PlayMode.noPan,
     nameMap: PlayMode.values.asNameMap(),
   ),
 );

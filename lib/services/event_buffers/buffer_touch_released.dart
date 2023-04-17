@@ -13,6 +13,7 @@ class TouchReleaseBuffer extends TouchBufferBase {
   @override
   List<TouchEvent> build() => [];
 
+  /// Releases a Channel for re-use (only when in MPE mode)
   void releaseChannelIfMpeMode(int channel) {
     if (ref.read(senderProvider) is PlayModeMPE) {
       (ref.read(senderProvider) as PlayModeMPE).releaseMPEChannel(channel);
