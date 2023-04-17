@@ -13,6 +13,12 @@ class TouchReleaseBuffer extends TouchBufferBase {
   @override
   List<TouchEvent> build() => [];
 
+  void releaseChannelIfMpeMode(int channel) {
+    if (ref.read(senderProvider) is PlayModeMPE) {
+      (ref.read(senderProvider) as PlayModeMPE).releaseMPEChannel(channel);
+    }
+  }
+
   /// Check if any of the [TouchEvent]s currently contain an active note
   bool get _hasActiveNotes =>
       state.any((element) => element.noteEvent.noteOnMessage != null);
@@ -26,9 +32,8 @@ class TouchReleaseBuffer extends TouchBufferBase {
 
     if (index >= 0) {
       state[index].noteEvent.updateReleaseTime(); // update time
-      ref
-          .read(mpeChannelProv.notifier)
-          .releaseMPEChannel(state[index].noteEvent.channel);
+      releaseChannelIfMpeMode(state[index].noteEvent.channel);
+
       state[index].noteEvent.channel = event.noteEvent.channel;
       state = [...state];
     } else {
@@ -52,9 +57,7 @@ class TouchReleaseBuffer extends TouchBufferBase {
                 ref.read(noteReleaseUsable)) {
               state[i].noteEvent.noteOff(); // note OFF
 
-              ref.read(mpeChannelProv.notifier).releaseMPEChannel(
-                    state[i].noteEvent.channel,
-                  ); // release MPE channel
+              releaseChannelIfMpeMode(state[i].noteEvent.channel);
 
               // mark to remove from buffer
               state[i].markKillIfNoteOffAndNoAnimation();
@@ -72,9 +75,7 @@ class TouchReleaseBuffer extends TouchBufferBase {
   void removeNoteFromReleaseBuffer(int note) {
     for (final element in state) {
       if (element.noteEvent.note == note) {
-        ref
-            .read(mpeChannelProv.notifier)
-            .releaseMPEChannel(element.noteEvent.channel);
+        releaseChannelIfMpeMode(element.noteEvent.channel);
       }
     }
     if (state.any((element) => element.noteEvent.note == note)) {

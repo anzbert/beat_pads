@@ -15,6 +15,7 @@ class PlayModeNoSlide extends PlayModeHandler {
 
 abstract class PlayModeHandler {
   PlayModeHandler(this.ref);
+
   final ProviderRef<PlayModeHandler> ref;
 
   void handleNewTouch(PadTouchAndScreenData data) {
@@ -40,14 +41,11 @@ abstract class PlayModeHandler {
   void handlePan(NullableTouchAndScreenData data) {}
 
   void handleEndTouch(CustomPointer touch) {
-    final eventInBuffer =
-        ref.read(touchBuffer.notifier).eventInBuffer(touch.pointer);
-    if (!eventInBuffer) return;
+    if (!ref.read(touchBuffer.notifier).eventInBuffer(touch.pointer)) return;
 
     if (ref.read(modReleaseUsable) == 0 && ref.read(noteReleaseUsable) == 0) {
       ref.read(touchBuffer.notifier).modifyEvent(touch.pointer, (event) {
         event.noteEvent.noteOff();
-        releaseMPEChannel(event.noteEvent.channel);
       });
 
       ref.read(touchBuffer.notifier).removeById(touch.pointer);
@@ -89,7 +87,4 @@ abstract class PlayModeHandler {
 
     return result;
   }
-
-  /// Does nothing, unless overridden in MPE
-  void releaseMPEChannel(int channel) {}
 }

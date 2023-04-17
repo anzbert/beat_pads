@@ -1,5 +1,5 @@
 import 'package:beat_pads/main.dart';
-import 'package:beat_pads/services/state/settings_presets.dart';
+import 'package:beat_pads/services/settings/settings_presets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

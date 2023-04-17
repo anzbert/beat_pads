@@ -6,14 +6,14 @@ class PlayModeMPE extends PlayModeHandler {
           ref.read(mpe2DXProv).getMod(ref.read(mpePitchbendRangeProv)),
           ref.read(mpe2DYProv).getMod(ref.read(mpePitchbendRangeProv)),
           ref.read(mpe1DRadiusProv).getMod(ref.read(mpePitchbendRangeProv)),
+        ),
+        mpeChannelGenerator = MPEChannelGenerator(
+          memberChannels: ref.read(mpeMemberChannelsProv),
+          upperZone: ref.read(zoneProv),
         );
-  final SendMpe mpeMods;
 
-  /// Release channel in MPE channel provider
-  @override
-  void releaseMPEChannel(int channel) {
-    ref.read(mpeChannelProv.notifier).releaseMPEChannel(channel);
-  }
+  final SendMpe mpeMods;
+  final MPEChannelGenerator mpeChannelGenerator;
 
   @override
   void handleNewTouch(PadTouchAndScreenData data) {
@@ -24,7 +24,7 @@ class PlayModeMPE extends PlayModeHandler {
           .removeNoteFromReleaseBuffer(data.padNote);
     }
 
-    final newChannel = ref.read(mpeChannelProv.notifier).provideChannel([
+    final newChannel = mpeChannelGenerator.provideChannel([
       ...ref.read(touchBuffer),
       ...ref.read(touchReleaseBuffer)
     ]); // get new channel from generator
@@ -91,5 +91,23 @@ class PlayModeMPE extends PlayModeHandler {
         event!.radialChange(),
       );
     }
+  }
+
+  @override
+  void handleEndTouch(CustomPointer touch) {
+    if (!ref.read(touchBuffer.notifier).eventInBuffer(touch.pointer)) return;
+
+    if (ref.read(modReleaseUsable) == 0 && ref.read(noteReleaseUsable) == 0) {
+      ref.read(touchBuffer.notifier).modifyEvent(touch.pointer, (event) {
+        releaseMPEChannel(event.noteEvent.channel);
+      });
+    }
+    super.handleEndTouch(touch);
+  }
+
+  /// Used in MPE Mode to make a memberchannel available again for new
+  /// touch events
+  void releaseMPEChannel(int channel) {
+    mpeChannelGenerator.releaseMPEChannel(channel);
   }
 }
