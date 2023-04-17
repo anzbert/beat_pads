@@ -1,8 +1,8 @@
 import 'package:beat_pads/screen_pads_menu/drop_down_enum.dart';
 import 'package:beat_pads/screen_pads_menu/slider_int.dart';
 import 'package:beat_pads/screen_pads_menu/slider_int_range.dart';
+import 'package:beat_pads/screens_shared_widgets/divider_title.dart';
 import 'package:beat_pads/services/services.dart';
-import 'package:beat_pads/shared_components/divider_title.dart';
 import 'package:beat_pads/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

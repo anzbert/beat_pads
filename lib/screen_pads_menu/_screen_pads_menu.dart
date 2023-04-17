@@ -1,11 +1,11 @@
 import 'package:beat_pads/screen_beat_pads/_screen_beat_pads.dart';
-import 'package:beat_pads/screen_beat_pads/button_presets.dart';
+import 'package:beat_pads/screen_midi_devices/_drawer_devices.dart';
 import 'package:beat_pads/screen_pads_menu/menu_advanced.dart';
 import 'package:beat_pads/screen_pads_menu/menu_layout.dart';
 import 'package:beat_pads/screen_pads_menu/menu_midi.dart';
 import 'package:beat_pads/screen_pads_menu/menu_system.dart';
+import 'package:beat_pads/screens_shared_widgets/button_presets.dart';
 import 'package:beat_pads/services/services.dart';
-import 'package:beat_pads/shared_components/_shared.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';

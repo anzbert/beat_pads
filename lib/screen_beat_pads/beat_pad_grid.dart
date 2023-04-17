@@ -1,6 +1,6 @@
 import 'package:beat_pads/screen_beat_pads/beat_pad.dart';
+import 'package:beat_pads/screens_shared_widgets/renderbox_indexed.dart';
 import 'package:beat_pads/services/services.dart';
-import 'package:beat_pads/shared_components/_shared.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

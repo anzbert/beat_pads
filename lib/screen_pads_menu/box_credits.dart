@@ -1,5 +1,5 @@
+import 'package:beat_pads/screens_shared_widgets/widgets_info_box.dart';
 import 'package:beat_pads/services/services.dart';
-import 'package:beat_pads/shared_components/_shared.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 

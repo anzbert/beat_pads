@@ -1,5 +1,5 @@
+import 'package:beat_pads/screens_shared_widgets/divider_title.dart';
 import 'package:beat_pads/services/services.dart';
-import 'package:beat_pads/shared_components/divider_title.dart';
 import 'package:flutter/material.dart';
 
 /// A Card-based Info-Text Box Widget that takes an array of Widgets
