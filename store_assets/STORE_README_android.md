@@ -1,35 +1,40 @@
-# Beat Pads
+# Beat Pads (Midi MPE) - Android Version
 
-[Apple Store](https://apps.apple.com/us/app/beat-pads/id1633882803)
-
-[Google Play](https://play.google.com/store/apps/details?id=io.anzio.beat_pads&hl=en_AU&gl=US&pli=1)
+This App is open source. Access the code here: https://github.com/anzbert/beat_pads
 
 ## Important Disclaimer
 
-This App is **ONLY** usable as a Midi Controller. It does **NOT** produce any sound on its own as of yet, but requires a host application or second device with Ableton, Fruity Loops, Garage Band, Logic, a Software Synthesizers or any other Music Production Software. 
+This App is **ONLY** usable as a Midi Controller. It does **NOT** produce any sound on its own and requires a host application or a second device with a DAW or other sound production app.
 
-Otherwise, continue reading and I hope you will have a lot of fun with it!
+## Information
 
-## Description
+Beat Pads is a lightweight Midi Controller app for mobile phones and tablets for melodies and finger drumming at home and on the go. Connections can be made virtually to other apps via platform midi channels or via USB to other devices.
 
-Beat Pads is a lightweight Midi Controller app for mobile phones and tablets for finger drumming and producing beats at home and on the go.
+This app aims to be an easy-to-use pad input device featuring a variety of layouts, intuitive playability and modern modulation options, such as MPE and Polyphonic Aftertouch. It was designed for people that prefer pads to pianos! The focus of this app is not to be a jack-of-all-trades Midi swiss army knife, but instead to be a great at one thing: Intuitive and versatile pad controls.
 
-Beat Pads is not trying to be complete DAW controller and Midi swiss army knife. Its aim is to be an easy to use pad input device featuring a variety of layouts, intuitive playability and modern modulation options, such as MPE and Polyphonic Aftertouch. It was designed for people that prefer pads to pianos!
+## Android Specific Info
+
+Can be used with any Mac or PC via USB. Also usable with a virtual connection on your Android device to other installed Apps which support this feature.
 
 ## Features
 
 - A size-adjustable grid of pads for finger drumming and melody input
 - Various layouts and colors, inspired by the Ableton Push
+- Presets can be saved with different pad setups
 - Innovative MPE and polyphonic Aftertouch modulation with graphical feedback
+- Send Velocity by Y-Axis, randomly or with a fixed value
 - Usable as a standard MIDI device with any PC, Mac or other USB host
-- Zero-latency connection via USB
 - Optional controls, such as Pitch Bend, Mod Wheel and Sustain
 - Highligh a large number of musical scales
 - Receives Midi Notes, making the pads usable like a Launchpad
-- Supports virtual Midi connection to synthesizer apps on your device, such as FluidSynth
+- Supports virtual Midi connection to other apps on your device
 - Built-In support for the popular finger drumming courses from XpressPads.com
 - And more...
 
-## Suggestions
+## Feedback and Contributions
 
-If you have any bugs to report or suggestions for future releases, please email me at anzbert@gmail.com. I am looking forward to hearing your ideas.
+Anyone is most welcome to contribute, report an issue or start a discussion in the Github repository. Thanks!
+
+## Licence
+
+Licenced under GPL3. The code in this project is freely usable in any other open source project. Enjoy 👍

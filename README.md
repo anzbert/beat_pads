@@ -19,8 +19,6 @@ Beat Pads is a lightweight Midi Controller app for mobile phones and tablets for
 
 This app aims to be an easy-to-use pad input device featuring a variety of layouts, intuitive playability and modern modulation options, such as MPE and Polyphonic Aftertouch. It was designed for people that prefer pads to pianos! The focus of this app is not to be a jack-of-all-trades Midi swiss army knife, but instead to be a great at one thing: Intuitive and versatile pad controls.
 
-This App is **ONLY** usable as a Midi Controller. It does **NOT** produce any sound on its own and requires a host application or a second device with a DAW or other sound production app.
-
 AUv3 is unfortunately not supported at this time, as it is [currently impossible with Flutter](https://github.com/flutter/flutter/issues/16092).
 
 Wifi works on iOS, but Wifi and Bluetooth support is otherwise limited due to platform restrictions.
@@ -42,7 +40,7 @@ Wifi works on iOS, but Wifi and Bluetooth support is otherwise limited due to pl
 
 ## Feedback and Contributions
 
-Anyone is most welcome to contribute, report an issue or start a discussion in this repository. Thanks!
+Anyone is most welcome to contribute, report an issue or start a discussion in the Github repository. Thanks!
 
 ## Known issues
 
