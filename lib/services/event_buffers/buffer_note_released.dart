@@ -2,12 +2,12 @@ import 'package:beat_pads/services/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final noteReleaseBuffer =
-    NotifierProvider.autoDispose<NoteReleaseBuffer, List<NoteEvent>>(
-  NoteReleaseBuffer.new,
+    NotifierProvider.autoDispose<_NoteReleaseBuffer, List<NoteEvent>>(
+  _NoteReleaseBuffer.new,
 );
 
 /// Buffer for [NoteEvent]s that are no longer associated with a [TouchEvent]
-class NoteReleaseBuffer extends AutoDisposeNotifier<List<NoteEvent>> {
+class _NoteReleaseBuffer extends AutoDisposeNotifier<List<NoteEvent>> {
   bool checkerRunning = false;
 
   @override

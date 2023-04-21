@@ -2,11 +2,12 @@ import 'package:beat_pads/services/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final touchBuffer = NotifierProvider.autoDispose<TouchBuffer, List<TouchEvent>>(
-  TouchBuffer.new,
+final touchBuffer =
+    NotifierProvider.autoDispose<_TouchBuffer, List<TouchEvent>>(
+  _TouchBuffer.new,
 );
 
-class TouchBuffer extends TouchBufferBase {
+class _TouchBuffer extends TouchBufferBase {
   @override
   List<TouchEvent> build() => [];
 

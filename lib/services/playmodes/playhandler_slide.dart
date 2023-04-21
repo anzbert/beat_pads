@@ -16,7 +16,8 @@ class PlayModeSlide extends PlayModeHandler {
     final noteOn = NoteEvent(
       refRead(channelUsableProv),
       data.padNote,
-      refRead(velocitySliderValueProv.notifier).velocity(data.yPercentage),
+      refRead(velocitySliderValueProv.notifier)
+          .generateVelocity(data.yPercentage),
     )..noteOn(cc: refRead(sendCCProv));
 
     refRead(touchBuffer.notifier).addNoteOn(
@@ -44,7 +45,7 @@ class PlayModeSlide extends PlayModeHandler {
               eventInBuffer.noteEvent.note,
               eventInBuffer.noteEvent.noteOnMessage?.velocity ??
                   refRead(velocitySliderValueProv.notifier)
-                      .velocity(data.yPercentage ?? .5),
+                      .generateVelocity(data.yPercentage ?? .5),
             ),
           ); // add note event to release buffer
           eventInBuffer.noteEvent.clear();
@@ -57,7 +58,7 @@ class PlayModeSlide extends PlayModeHandler {
             refRead(channelUsableProv),
             data.padNote!,
             refRead(velocitySliderValueProv.notifier)
-                .velocity(data.yPercentage ?? .5),
+                .generateVelocity(data.yPercentage ?? .5),
           )..noteOn(
               cc: refRead(playModeProv).singleChannel && refRead(sendCCProv),
             );

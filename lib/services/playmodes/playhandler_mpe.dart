@@ -38,7 +38,8 @@ class PlayModeMPE extends PlayModeHandler {
     final noteOn = NoteEvent(
       newChannel,
       data.padNote,
-      refRead(velocitySliderValueProv.notifier).velocity(data.yPercentage),
+      refRead(velocitySliderValueProv.notifier)
+          .generateVelocity(data.yPercentage),
     )..noteOn();
 
     refRead(touchBuffer.notifier).addNoteOn(

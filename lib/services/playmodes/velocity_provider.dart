@@ -18,15 +18,15 @@ final velocityRangeProv = Provider<int>(
   (ref) => ref.watch(velocityMaxProv) - ref.watch(velocityMinProv),
 );
 
-final velocitySliderValueProv = NotifierProvider<VelocityProvider, double>(
-  VelocityProvider.new,
+final velocitySliderValueProv = NotifierProvider<_VelocityProvider, double>(
+  _VelocityProvider.new,
 );
 
-class VelocityProvider extends Notifier<double> {
+class _VelocityProvider extends Notifier<double> {
   /// Provides working velocity values for sending midi
   /// notes in random, y-axis and fixed velocity mode and stores values
   /// for the slider on the pad screen in its state
-  VelocityProvider() : _randomGenerator = Random();
+  _VelocityProvider() : _randomGenerator = Random();
   final Random _randomGenerator;
 
   @override
@@ -38,10 +38,11 @@ class VelocityProvider extends Notifier<double> {
     }
   }
 
-  /// Use this value to send notes.
+  /// Use this value to send notes. Velocity is generated from the slider value,
+  /// regardless if it's displayed on the Padscreen or not.
   /// Random velocity is based on a center-of-range value, usable with a
   /// single-value slider.
-  int velocity(double percentage) {
+  int generateVelocity(double percentage) {
     switch (ref.read(velocityModeProv)) {
       case VelocityMode.random:
         final randVelocity =
@@ -72,6 +73,4 @@ class VelocityProvider extends Notifier<double> {
       );
     }
   }
-
-  int get asInt => state.round().clamp(0, 127);
 }

@@ -31,7 +31,8 @@ abstract class PlayModeHandler {
     final noteOn = NoteEvent(
       refRead(channelUsableProv),
       data.padNote,
-      refRead(velocitySliderValueProv.notifier).velocity(data.yPercentage),
+      refRead(velocitySliderValueProv.notifier)
+          .generateVelocity(data.yPercentage),
     )..noteOn(cc: refRead(sendCCProv));
 
     refRead(touchBuffer.notifier).addNoteOn(

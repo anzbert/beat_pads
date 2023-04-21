@@ -2,12 +2,12 @@ import 'package:beat_pads/services/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final touchReleaseBuffer =
-    NotifierProvider.autoDispose<TouchReleaseBuffer, List<TouchEvent>>(
-  TouchReleaseBuffer.new,
+    NotifierProvider.autoDispose<_TouchReleaseBuffer, List<TouchEvent>>(
+  _TouchReleaseBuffer.new,
 );
 
 /// Data Structure that holds released Touch Events
-class TouchReleaseBuffer extends TouchBufferBase {
+class _TouchReleaseBuffer extends TouchBufferBase {
   bool _checkerRunning = false;
 
   @override

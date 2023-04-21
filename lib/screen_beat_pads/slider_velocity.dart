@@ -105,8 +105,9 @@ class _SliderVelocityState extends ConsumerState<SliderVelocity> {
                         flex: 2,
                         child: Text(
                           ref
-                              .watch(velocitySliderValueProv.notifier)
-                              .asInt
+                              .watch(velocitySliderValueProv)
+                              .round()
+                              .clamp(0, 127)
                               .toString(),
                           style: DefaultTextStyle.of(context).style.copyWith(
                                 fontSize: constraints.maxWidth * fontSizeFactor,
