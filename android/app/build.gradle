@@ -35,6 +35,8 @@ def keystoreProperties = new Properties()
 
 
 android {
+    namespace 'io.anzio.beat_pads'
+
     ndkVersion "25.2.9519653"
 
     compileSdkVersion flutter.compileSdkVersion
