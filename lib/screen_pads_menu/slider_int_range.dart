@@ -44,7 +44,10 @@ class MidiRangeSelectorTile extends StatelessWidget {
                   ),
               ],
             ),
-            trailing: Text('$readMin - $readMax'),
+            trailing: Text(
+              '$readMin - $readMax',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
           ),
           Builder(
             builder: (context) {

@@ -49,7 +49,7 @@ class MenuMidi extends ConsumerWidget {
             max: 16,
             label: 'Midi Channel',
             subtitle: 'In MPE Mode only 1 or 16',
-            trailing: Text((ref.watch(channelUsableProv) + 1).toString()),
+            trailing: (ref.watch(channelUsableProv) + 1).toString(),
             setValue: (v) => ref.read(channelSettingProv.notifier).set(v - 1),
             readValue: ref.watch(channelUsableProv) + 1,
             onChangeEnd: ref.read(channelSettingProv.notifier).save,
@@ -59,13 +59,11 @@ class MenuMidi extends ConsumerWidget {
             max: 15,
             label: 'MPE Member Channels',
             subtitle: 'Number of member channels to allocate in MPE mode',
-            trailing: Text(
-              ref.watch(zoneProv)
-                  ? '${ref.watch(mpeMemberChannelsProv)} (${15 - ref.watch(
-                        mpeMemberChannelsProv,
-                      )} to 15)'
-                  : '${ref.watch(mpeMemberChannelsProv)} (2 to ${ref.watch(mpeMemberChannelsProv) + 1})',
-            ),
+            trailing: ref.watch(zoneProv)
+                ? '${ref.watch(mpeMemberChannelsProv)} (${15 - ref.watch(
+                      mpeMemberChannelsProv,
+                    )} to 15)'
+                : '${ref.watch(mpeMemberChannelsProv)} (2 to ${ref.watch(mpeMemberChannelsProv) + 1})',
             setValue: (v) => ref.read(mpeMemberChannelsProv.notifier).set(v),
             readValue: ref.watch(mpeMemberChannelsProv),
             onChangeEnd: ref.read(mpeMemberChannelsProv.notifier).save,
@@ -86,7 +84,7 @@ class MenuMidi extends ConsumerWidget {
               min: 10,
               max: 127,
               label: 'Fixed Velocity',
-              trailing: Text(ref.watch(velocityProv).toString()),
+              trailing: ref.watch(velocityProv).toString(),
               readValue: ref.watch(velocityProv),
               setValue: (v) => ref.read(velocityProv.notifier).set(v),
               resetValue: ref.read(velocityProv.notifier).reset,

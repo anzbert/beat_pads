@@ -44,9 +44,7 @@ class IntCounterTile extends StatelessWidget {
             ),
             Text(
               readValue.toString(),
-              style: TextStyle(
-                fontSize: Theme.of(context).textTheme.titleMedium!.fontSize,
-              ),
+              style: Theme.of(context).textTheme.titleMedium,
             ),
             ElevatedButton(
               onPressed: () {

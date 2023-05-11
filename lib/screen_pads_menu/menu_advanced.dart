@@ -41,9 +41,8 @@ class MenuInput extends ConsumerWidget {
                   label: 'Input Size',
                   subtitle:
                       'Modulation field width, relative to the pad screen',
-                  trailing: Text(
-                    '${(ref.watch(modulationRadiusProv) * 100).toInt()}%',
-                  ),
+                  trailing:
+                      '${(ref.watch(modulationRadiusProv) * 100).toInt()}%',
                   readValue: ref.watch(modulationRadiusProv).clamp(
                         ref.watch(modulationRadiusProv.notifier).min,
                         ref.watch(modulationRadiusProv.notifier).max,
@@ -60,9 +59,8 @@ class MenuInput extends ConsumerWidget {
                   label: 'Dead Zone',
                   subtitle:
                       'Size of the non-reactive center of the modulation field',
-                  trailing: Text(
-                    '${(ref.watch(modulationDeadZoneProv) * 100).toInt()}%',
-                  ),
+                  trailing:
+                      '${(ref.watch(modulationDeadZoneProv) * 100).toInt()}%',
                   readValue: ref.watch(modulationDeadZoneProv).clamp(
                         ref.watch(modulationDeadZoneProv.notifier).min,
                         ref.watch(modulationDeadZoneProv.notifier).max,
@@ -128,7 +126,7 @@ class MenuInput extends ConsumerWidget {
                     max: 48,
                     label: 'Pitch Bend Range',
                     subtitle: 'Maximum MPE Pitch Bend in semitones',
-                    trailing: Text('${ref.watch(mpePitchbendRangeProv)} st'),
+                    trailing: ref.watch(mpePitchbendRangeProv).toString(),
                     readValue: ref.watch(mpePitchbendRangeProv),
                     setValue: (v) =>
                         ref.read(mpePitchbendRangeProv.notifier).set(v),

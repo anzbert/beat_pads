@@ -20,7 +20,7 @@ class IntSliderTile extends StatelessWidget {
   final int min;
   final int max;
   final int readValue;
-  final Widget trailing;
+  final String trailing;
   final void Function()? onChangeEnd;
   final void Function(int) setValue;
   final void Function()? resetValue;
@@ -46,7 +46,10 @@ class IntSliderTile extends StatelessWidget {
               ],
             ),
             subtitle: subtitle != null ? Text(subtitle!) : null,
-            trailing: trailing,
+            trailing: Text(
+              trailing,
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
           ),
           Builder(
             builder: (context) {

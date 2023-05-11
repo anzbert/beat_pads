@@ -22,7 +22,7 @@ class ModSizeSliderTile extends ConsumerWidget {
   final double min;
   final double max;
   final double readValue;
-  final Widget trailing;
+  final String trailing;
   final void Function(double) setValue;
   final void Function()? onChangeEnd;
   final void Function()? resetValue;
@@ -56,7 +56,10 @@ class ModSizeSliderTile extends ConsumerWidget {
               ],
             ),
             subtitle: subtitle != null ? Text(subtitle!) : null,
-            trailing: trailing,
+            trailing: Text(
+              trailing,
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
           ),
           Builder(
             builder: (context) {

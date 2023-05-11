@@ -257,7 +257,7 @@ class MenuLayout extends ConsumerWidget {
                 label: 'Hue',
                 max: 360,
                 subtitle: 'Root Note hue on the RGB color wheel',
-                trailing: Text(ref.watch(baseHueProv).toString()),
+                trailing: ref.watch(baseHueProv).toString(),
                 readValue: ref.watch(baseHueProv),
                 setValue: (v) => ref.read(baseHueProv.notifier).set(v),
                 resetValue: ref.read(baseHueProv.notifier).reset,
