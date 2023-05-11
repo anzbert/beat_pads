@@ -38,13 +38,14 @@ class Preview extends ConsumerWidget {
                                 ),
                               ),
                               // Text Outline
+                              // TODO(anzio): Stroke not drawing properly with impeller on iOS in Flutter 3.10
                               Text(
                                 'Preview',
                                 style: TextStyle(
                                   foreground: Paint()
                                     ..style = PaintingStyle.stroke
                                     ..strokeWidth = 0.15
-                                    ..color = Palette.darkGrey,
+                                    ..color = Colors.grey,
                                 ),
                               ),
                             ],
