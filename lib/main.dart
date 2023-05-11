@@ -3,7 +3,7 @@ import 'package:beat_pads/services/services.dart';
 import 'package:beat_pads/theme.dart';
 import 'package:flutter/material.dart';
 // ignore: unused_import
-import 'package:flutter/rendering.dart'; // for debug repaint rainbow, if enabled in main()
+import 'package:flutter/rendering.dart'; // for visual debug helpers (uncomment in main() function)
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Holds the shared_preferences Object, which can load and save persistent data
@@ -13,8 +13,10 @@ final Provider<Prefs> sharedPrefProvider = Provider<Prefs>((ref) {
 
 // MAIN FUNCTION ////////////////////////////////////////////////////////
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  // debugPaintSizeEnabled = true;
   // debugRepaintRainbowEnabled = true;
+
+  WidgetsFlutterBinding.ensureInitialized();
 
   await DeviceUtils.hideSystemUi()
       .then((_) => DeviceUtils.enableRotation())
