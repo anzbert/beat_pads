@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:beat_pads/screen_pads_menu/_screen_pads_menu.dart';
 import 'package:beat_pads/services/services.dart';
@@ -28,7 +29,7 @@ class _SplashScreenState extends State<SplashScreen> {
             child: Column(
               children: [
                 const Expanded(
-                  flex: 10,
+                  flex: 8,
                   child: RiveAnimation.asset(
                     'assets/anim/doggo.riv',
                     alignment: Alignment.center,
@@ -37,33 +38,58 @@ class _SplashScreenState extends State<SplashScreen> {
                 Expanded(
                   flex: 3,
                   child: FittedBox(
+                    fit: BoxFit.scaleDown,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 50),
-                      child: AnimatedTextKit(
-                        animatedTexts: [
-                          ColorizeAnimatedText(
-                            'BeatPads',
-                            speed: const Duration(milliseconds: 250),
-                            textAlign: TextAlign.center,
-                            textStyle: const TextStyle(
-                              fontSize: 52,
-                              fontFamily: 'Righteous',
-                              letterSpacing: 4,
-                              fontWeight: FontWeight.bold,
+                      // AnimatedTextKit 4.2.2 broken as of flutter 3.10 with Impeller on iOS
+                      // Using a placeholder static text widget in the meantime.
+                      // TODO(anzio): Remove placholder when it works again after an update
+                      child: Platform.isIOS
+                          ? Builder(
+                              builder: (context) {
+                                Future<void>.delayed(
+                                  const Duration(milliseconds: 2000),
+                                  () => setState(
+                                    () => showClickToContinue = true,
+                                  ),
+                                );
+                                return Text(
+                                  'Beat Pads',
+                                  style: TextStyle(
+                                    fontSize: 52,
+                                    fontFamily: 'Righteous',
+                                    letterSpacing: 4,
+                                    fontWeight: FontWeight.bold,
+                                    color: Palette.cadetBlue,
+                                  ),
+                                );
+                              },
+                            )
+                          : AnimatedTextKit(
+                              animatedTexts: [
+                                ColorizeAnimatedText(
+                                  'BeatPads',
+                                  speed: const Duration(milliseconds: 250),
+                                  textAlign: TextAlign.center,
+                                  textStyle: const TextStyle(
+                                    fontSize: 52,
+                                    fontFamily: 'Righteous',
+                                    letterSpacing: 4,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  colors: [
+                                    Palette.cadetBlue,
+                                    Palette.lightPink,
+                                    Palette.darkGrey,
+                                    Palette.yellowGreen,
+                                  ],
+                                ),
+                              ],
+                              isRepeatingAnimation: false,
+                              onFinished: () => setState(
+                                () => showClickToContinue = true,
+                              ),
                             ),
-                            colors: [
-                              Palette.cadetBlue,
-                              Palette.lightPink,
-                              Palette.darkGrey,
-                              Palette.yellowGreen,
-                            ],
-                          ),
-                        ],
-                        isRepeatingAnimation: false,
-                        onFinished: () => setState(() {
-                          showClickToContinue = true;
-                        }),
-                      ),
                     ),
                   ),
                 ),

@@ -36,11 +36,12 @@ dependencies:
   # cupertino_icons: ^1.0.2
 
 dev_dependencies:
-  austerity: ^1.0.0
+  # austerity: ^1.0.0
   # flutter_lints: ^2.0.0
   flutter_launcher_icons: ^0.13.0
   flutter_test:
     sdk: flutter
+  very_good_analysis: ^4.0.0
 
 flutter_icons:
   # Recompile icons with:

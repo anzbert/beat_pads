@@ -14,7 +14,8 @@
 # packages, and plugins designed to encourage good coding practices.
 
 # include: package:flutter_lints/flutter.yaml
-include: package:austerity/analysis_options.yaml
+# include: package:austerity/analysis_options.yaml
+include: package:very_good_analysis/analysis_options.yaml
 
 linter:
   # The lint rules applied to this project can be customized in the
