@@ -11,6 +11,10 @@ final Provider<Prefs> sharedPrefProvider = Provider<Prefs>((ref) {
   throw UnimplementedError(); // overriden in ProviderScope
 });
 
+// TODO: BUGS !!!
+// - no noteoffs
+// - show velocity doesnt work
+
 // MAIN FUNCTION ////////////////////////////////////////////////////////
 void main() async {
   // debugPaintSizeEnabled = true;

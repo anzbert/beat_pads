@@ -41,11 +41,9 @@ enum Chord {
         break;
       case Inversion.second:
         chord[0] = chord[0] + 12;
-        break;
       case Inversion.third:
         chord[0] = chord[0] + 12;
         chord[1] = chord[1] + 12;
-        break;
     }
     return chord.where((n) => n < 128).toList();
   }

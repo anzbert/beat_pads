@@ -324,10 +324,10 @@ packages:
     dependency: transitive
     description:
       name: rive_common
-      sha256: "7c4be235d75c34a0f257b4487c0cc314188aa2f9a6c177d34f02df53d7c25831"
+      sha256: "89c6264706b18e2526ff220bd23f3ab25ef152d57ebed4b9e4f5d72aebba4f97"
       url: "https://pub.dev"
     source: hosted
-    version: "0.0.5"
+    version: "0.0.6"
   riverpod:
     dependency: transitive
     description:
@@ -545,10 +545,10 @@ packages:
     dependency: "direct dev"
     description:
       name: very_good_analysis
-      sha256: ebc48c51db35beeeec8c414e32f7bd78e612bd7f5992ccb0d46e19edaeb40b08
+      sha256: "5f77d7c00d6010d8ad93ac5d91ecc851c216bcc1e7a51e56c3c01b27152453bb"
       url: "https://pub.dev"
     source: hosted
-    version: "4.0.0+1"
+    version: "5.0.0"
   wakelock:
     dependency: "direct main"
     description:

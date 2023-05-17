@@ -37,6 +37,7 @@ linter:
     # omit_local_variable_types: false
     lines_longer_than_80_chars: false
     avoid_classes_with_only_static_members: false
+    flutter_style_todos: false
 # Additional information about this file can be found at
 # https://dart.dev/guides/language/analysis-options
 
