@@ -4,6 +4,7 @@ enum Layout {
   majorThird('Major Third'),
   minorThird('Minor Third'),
   quart('Quart'),
+  quint('Quint'),
   continuous('Continuous'),
   scaleNotesOnly('Scale - Continuous'),
   scaleNotes3rd('Scale - 3rd'),
@@ -85,6 +86,8 @@ enum Layout {
         return GridRowInterval(settings, rowInterval: 4);
       case Layout.quart:
         return GridRowInterval(settings, rowInterval: 5);
+      case Layout.quint:
+        return GridRowInterval(settings, rowInterval: 7);
       case Layout.scaleNotesOnly:
         // return GridScaleOffset(settings, settings.width);
         return GridScaleOnly(settings);
