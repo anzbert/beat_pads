@@ -18,7 +18,7 @@ dependencies:
 
   animated_text_kit: ^4.2.2
   flutter_riverpod: ^2.3.2
-  rive: ^0.10.2
+  rive: ^0.11.0
   shared_preferences: ^2.0.20
   simple_gradient_text: ^1.2.4
   url_launcher: ^6.1.10

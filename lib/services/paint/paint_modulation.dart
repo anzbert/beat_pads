@@ -10,7 +10,7 @@ class PaintModulation extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     // Get Renderbox for gloabl to local offset conversion:
     final RenderBox? box = context.findAncestorRenderObjectOfType<RenderBox>();
-    if (box == null) return Stack();
+    if (box == null) return const Stack();
 
     final midiSender = ref.watch(senderProvider);
 

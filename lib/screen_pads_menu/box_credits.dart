@@ -30,7 +30,7 @@ class CreditsBox extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Wrap(children: const [
+            const Wrap(children: [
               Text("Get the Source, contribute and report issues:"),
             ]),
             TextButton(
@@ -48,7 +48,7 @@ class CreditsBox extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Wrap(children: const [Text("My website:")]),
+            const Wrap(children: [Text("My website:")]),
             TextButton(
               child: Text(
                 "Anzio.dev",
@@ -63,7 +63,7 @@ class CreditsBox extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Wrap(children: const [Text("Magic Tone Network & XpressPads:")]),
+            const Wrap(children: [Text("Magic Tone Network & XpressPads:")]),
             TextButton(
               child: Text(
                 "XpressPads.com",
@@ -78,7 +78,7 @@ class CreditsBox extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Wrap(children: const [Text("Dog Logo by 'catalyststuff' from:")]),
+            const Wrap(children: [Text("Dog Logo by 'catalyststuff' from:")]),
             TextButton(
               child: Text(
                 "FreePik.com",
@@ -93,7 +93,7 @@ class CreditsBox extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Wrap(children: const [Text("Splash Screen animated with Rive:")]),
+            const Wrap(children: [Text("Splash Screen animated with Rive:")]),
             TextButton(
               child: Text("Rive.app",
                   style: TextStyle(
@@ -106,8 +106,8 @@ class CreditsBox extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Wrap(
-              children: const [Text("Contact me:")],
+            const Wrap(
+              children: [Text("Contact me:")],
             ),
             TextButton(
               child: Text(
