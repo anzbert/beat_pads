@@ -7,7 +7,7 @@ final noteReleaseBuffer = NotifierProvider<_NoteReleaseBuffer, List<NoteEvent>>(
 
 /// Buffer for [NoteEvent]s that are no longer associated with a [TouchEvent]
 class _NoteReleaseBuffer extends Notifier<List<NoteEvent>> {
-  bool checkerRunning = false;
+  bool _checkerRunning = false;
 
   @override
   List<NoteEvent> build() => [];
@@ -28,8 +28,8 @@ class _NoteReleaseBuffer extends Notifier<List<NoteEvent>> {
   }
 
   Future<void> _checkReleasedNoteEvents() async {
-    if (checkerRunning) return; // only one running instance possible!
-    checkerRunning = true;
+    if (_checkerRunning) return; // only one running instance possible!
+    _checkerRunning = true;
 
     while (state.isNotEmpty) {
       await Future.delayed(
@@ -47,7 +47,7 @@ class _NoteReleaseBuffer extends Notifier<List<NoteEvent>> {
         },
       );
     }
-    checkerRunning = false;
+    _checkerRunning = false;
   }
 
   void removeNoteFromReleaseBuffer(int note) {

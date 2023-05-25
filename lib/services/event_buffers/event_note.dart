@@ -38,7 +38,7 @@ class NoteEvent {
     }
   }
 
-  /// Cleaer Note On message without sending note off
+  /// Clear Note On message without sending note off
   void clear() {
     noteOnMessage = null;
   }
