@@ -4,6 +4,7 @@ import 'package:beat_pads/screen_pads_menu/_screen_pads_menu.dart';
 import 'package:beat_pads/services/services.dart';
 import 'package:flutter/material.dart';
 import 'package:rive/rive.dart';
+import 'package:simple_gradient_text/simple_gradient_text.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -42,10 +43,12 @@ class _SplashScreenState extends State<SplashScreen> {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 50),
                       // AnimatedTextKit 4.2.2 broken as of flutter 3.10 with Impeller on iOS
-                      // Using a placeholder static text widget in the meantime.
-                      // TODO(anzio): Remove placholder when it works again after an update
+                      // Using a placeholder GradientText widget in the meantime.
+                      // TODO(anzio): Remove placeholder Widget when it works again
                       child: Platform.isIOS
-                          ? Builder(
+                          ?
+                          // iOS:
+                          Builder(
                               builder: (context) {
                                 Future<void>.delayed(
                                   const Duration(milliseconds: 2000),
@@ -53,7 +56,7 @@ class _SplashScreenState extends State<SplashScreen> {
                                     () => showClickToContinue = true,
                                   ),
                                 );
-                                return Text(
+                                return GradientText(
                                   'Beat Pads',
                                   style: TextStyle(
                                     fontSize: 52,
@@ -62,9 +65,27 @@ class _SplashScreenState extends State<SplashScreen> {
                                     fontWeight: FontWeight.bold,
                                     color: Palette.cadetBlue,
                                   ),
+                                  colors: [
+                                    Palette.lightPink,
+                                    Palette.cadetBlue,
+                                    Palette.yellowGreen,
+                                  ],
                                 );
+                                // or alternatively use unicolor Text:
+                                // return Text(
+                                //   'Beat Pads',
+                                //   style: TextStyle(
+                                //     fontSize: 52,
+                                //     fontFamily: 'Righteous',
+                                //     letterSpacing: 4,
+                                //     fontWeight: FontWeight.bold,
+                                //     color: Palette.cadetBlue,
+                                //   ),
+                                // );
                               },
                             )
+
+                          // ANDROID:
                           : AnimatedTextKit(
                               animatedTexts: [
                                 ColorizeAnimatedText(
@@ -105,7 +126,7 @@ class _SplashScreenState extends State<SplashScreen> {
                             ),
                           ],
                         )
-                      : const Text(''),
+                      : const SizedBox.shrink(),
                 ),
               ],
             ),
