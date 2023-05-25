@@ -98,6 +98,7 @@ class _BeatPadGridState extends ConsumerState<BeatPadGrid>
   }
 
   void down(PointerEvent touch) {
+    // print('down: ${ref.read(touchBuffer)}');
     final result = _detectTappedItem(touch);
 
     if (mounted && result != null) {
@@ -114,6 +115,7 @@ class _BeatPadGridState extends ConsumerState<BeatPadGrid>
   }
 
   void move(PointerEvent touch) {
+    // print('pan: ${ref.read(touchBuffer)}');
     if (ref.read(playModeProv) == PlayMode.noPan) return;
 
     if (mounted) {
@@ -131,6 +133,8 @@ class _BeatPadGridState extends ConsumerState<BeatPadGrid>
 
   void upAndCancel(PointerEvent touch) {
     if (mounted) {
+      // print('up: ${ref.read(touchBuffer)}');
+
       ref
           .read(senderProvider)
           .handleEndTouch(CustomPointer(touch.pointer, touch.position));

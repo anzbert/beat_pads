@@ -1,14 +1,14 @@
 import 'package:beat_pads/services/services.dart';
 
 enum Layout {
-  majorThird('Major Third'),
-  minorThird('Minor Third'),
-  quart('Quart'),
-  quint('Quint'),
-  continuous('Continuous'),
-  scaleNotesOnly('Scale - Continuous'),
-  scaleNotes3rd('Scale - 3rd'),
-  scaleNotes4th('Scale - 4th'),
+  // minorThird('Chromatic - Min 3rd'),
+  majorThird('Chromatic - Maj 3rd'),
+  quart('Chromatic - 4th'),
+  quint('Chromatic - 5th'),
+  continuous('Chromatic - Sequential'),
+  scaleNotes3rd('In Key - 3rd'),
+  scaleNotes4th('In Key - 4th'),
+  scaleNotesOnly('In Key - Sequential'),
   magicToneNetwork('Magic Tone Network™'),
   xPressPadsStandard('XpressPads™ Standard 4x4'),
   xPressPadsLatinJazz('XpressPads™ Latin/Jazz 4x4'),
@@ -80,8 +80,8 @@ enum Layout {
     switch (this) {
       case Layout.continuous:
         return GridRowInterval(settings, rowInterval: width);
-      case Layout.minorThird:
-        return GridRowInterval(settings, rowInterval: 3);
+      // case Layout.minorThird:
+      //   return GridRowInterval(settings, rowInterval: 3);
       case Layout.majorThird:
         return GridRowInterval(settings, rowInterval: 4);
       case Layout.quart:

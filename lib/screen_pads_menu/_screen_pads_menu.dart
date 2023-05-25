@@ -163,7 +163,14 @@ class PadMenuScreen extends ConsumerWidget {
               ],
             ),
             floatingActionButton: FloatingActionButton(
-              onPressed: () async => goToPadsScreen(context),
+              onPressed: () async {
+                // clear all buffers:
+                ref.read(touchBuffer.notifier).allNotesOff();
+                ref.read(touchReleaseBuffer.notifier).allNotesOff();
+                ref.read(noteReleaseBuffer.notifier).allNotesOff();
+
+                await goToPadsScreen(context);
+              },
               backgroundColor: PresetButtons
                   .backgoundColors[ref.watch(presetNotifierProvider) - 1],
               child: Icon(

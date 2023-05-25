@@ -2,7 +2,7 @@ import 'package:beat_pads/services/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final touchReleaseBuffer =
-    NotifierProvider.autoDispose<_TouchReleaseBuffer, List<TouchEvent>>(
+    NotifierProvider<_TouchReleaseBuffer, List<TouchEvent>>(
   _TouchReleaseBuffer.new,
 );
 

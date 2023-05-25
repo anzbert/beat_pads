@@ -2,7 +2,7 @@ import 'package:beat_pads/services/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Base Class used for the active and released touch buffer
-abstract class TouchBufferBase extends AutoDisposeNotifier<List<TouchEvent>> {
+abstract class TouchBufferBase extends Notifier<List<TouchEvent>> {
   /// Use to find and read an event in the buffer, don't use it to modify
   /// this event, but use [modifyEvent] instead.
   TouchEvent? getByID(int id) {

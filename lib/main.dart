@@ -12,8 +12,7 @@ final Provider<Prefs> sharedPrefProvider = Provider<Prefs>((ref) {
 });
 
 // TODO: BUGS !!!
-// - no noteoffs
-// - show velocity doesnt work
+// - investigate: 'show velocity doesnt work'
 
 // MAIN FUNCTION ////////////////////////////////////////////////////////
 void main() async {

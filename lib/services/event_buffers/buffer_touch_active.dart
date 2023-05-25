@@ -2,14 +2,17 @@ import 'package:beat_pads/services/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final touchBuffer =
-    NotifierProvider.autoDispose<_TouchBuffer, List<TouchEvent>>(
+final touchBuffer = NotifierProvider<_TouchBuffer, List<TouchEvent>>(
   _TouchBuffer.new,
 );
 
 class _TouchBuffer extends TouchBufferBase {
   @override
-  List<TouchEvent> build() => [];
+  List<TouchEvent> build() {
+    // print('building touchbuffer');
+
+    return [];
+  }
 
   /// Add [TouchEvent] with a [NoteEvent] to the buffers state
   void addNoteOn(CustomPointer touch, NoteEvent noteEvent, Size screenSize) {
