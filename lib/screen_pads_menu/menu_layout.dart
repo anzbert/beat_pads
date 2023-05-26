@@ -105,9 +105,9 @@ class MenuLayout extends ConsumerWidget {
               const DividerTitle('Layout'),
               ListTile(
                 title: const Text('Layout'),
-                subtitle: const Text(
-                  'Choose vertical row intervals with or without non-scale notes or pick a fixed preset layout',
-                ),
+                // subtitle: const Text(
+                //   'Choose row intervals, use of non-scale notes or fixed preset layouts',
+                // ),
                 trailing: DropdownEnum<Layout>(
                   values: Layout.values,
                   readValue: ref.watch<Layout>(layoutProv),
