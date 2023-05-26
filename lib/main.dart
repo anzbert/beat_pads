@@ -13,6 +13,7 @@ final Provider<Prefs> sharedPrefProvider = Provider<Prefs>((ref) {
 
 // TODO: BUGS !!!
 // - investigate: 'show velocity doesnt work'
+// - pitch bend range adjustment not working
 
 // MAIN FUNCTION ////////////////////////////////////////////////////////
 void main() async {
