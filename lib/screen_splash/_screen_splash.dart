@@ -57,7 +57,7 @@ class _SplashScreenState extends State<SplashScreen> {
                                   ),
                                 );
                                 return GradientText(
-                                  'Beat Pads',
+                                  'Midi Poly Grid',
                                   style: TextStyle(
                                     fontSize: 52,
                                     fontFamily: 'Righteous',
@@ -73,7 +73,7 @@ class _SplashScreenState extends State<SplashScreen> {
                                 );
                                 // or alternatively use unicolor Text:
                                 // return Text(
-                                //   'Beat Pads',
+                                //   'Midi Poly Grid',
                                 //   style: TextStyle(
                                 //     fontSize: 52,
                                 //     fontFamily: 'Righteous',

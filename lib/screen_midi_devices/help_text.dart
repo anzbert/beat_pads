@@ -34,11 +34,11 @@ List<Widget> helpText = [
     header: 'Virtual',
     body: [
       if (Platform.isIOS)
-        "Some third-Party apps, like 'AudioKit Synth One', make a Virtual Midi Device available on your Phone or Tablet, which you can connect to in Beat Pads through CoreMidi",
+        "Some third-Party apps, like 'AudioKit Synth One', make a Virtual Midi Device available on your Phone or Tablet, which you can connect to in Midi Poly Grid through CoreMidi",
       if (Platform.isAndroid)
-        "Some third-Party apps, like 'FluidSynth', make a Virtual Midi Device available on your Phone or Tablet, which you can connect to in Beat Pads",
+        "Some third-Party apps, like 'FluidSynth', make a Virtual Midi Device available on your Phone or Tablet, which you can connect to in Midi Poly Grid",
       'When such an App has been installed it will appear in this Device List',
-      'After connection, Beat Pads can send Midi Data to the App, for example, to play a Synthesizer on your Device with Beat Pads',
+      'After connection, Midi Poly Grid can send Midi Data to the App, for example, to play a Synthesizer on your Device with Midi Poly Grid',
       '',
       'Note: If the receiving App has a Setting to allow it to run in the background, make sure to enable it'
     ],

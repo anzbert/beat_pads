@@ -4,6 +4,7 @@ enum Layout {
   // minorThird('Chromatic - Min 3rd'),
   majorThird('Chromatic - Maj 3rd'),
   quart('Chromatic - 4th'),
+  tritone('Chromatic - Tritone'),
   quint('Chromatic - 5th'),
   continuous('Chromatic - Sequential'),
   scaleNotes3rd('In Key - 3rd'),
@@ -78,23 +79,24 @@ enum Layout {
     final settings = GridData(width, height, rootNote, baseNote, scaleList);
 
     switch (this) {
-      case Layout.continuous:
-        return GridRowInterval(settings, rowInterval: width);
       // case Layout.minorThird:
       //   return GridRowInterval(settings, rowInterval: 3);
       case Layout.majorThird:
         return GridRowInterval(settings, rowInterval: 4);
       case Layout.quart:
         return GridRowInterval(settings, rowInterval: 5);
+      case Layout.tritone:
+        return GridRowInterval(settings, rowInterval: 6);
       case Layout.quint:
         return GridRowInterval(settings, rowInterval: 7);
-      case Layout.scaleNotesOnly:
-        // return GridScaleOffset(settings, settings.width);
-        return GridScaleOnly(settings);
-      case Layout.scaleNotes4th:
-        return GridScaleOffset(settings, 3);
+      case Layout.continuous:
+        return GridRowInterval(settings, rowInterval: width);
       case Layout.scaleNotes3rd:
         return GridScaleOffset(settings, 2);
+      case Layout.scaleNotes4th:
+        return GridScaleOffset(settings, 3);
+      case Layout.scaleNotesOnly:
+        return GridScaleOnly(settings);
       case Layout.magicToneNetwork:
         return GridMTN(settings);
       case Layout.xPressPadsStandard:

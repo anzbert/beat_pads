@@ -62,7 +62,7 @@ class PadMenuScreen extends ConsumerWidget {
           return Scaffold(
             appBar: AppBar(
               title: GradientText(
-                'Beat Pads',
+                'Midi Poly Grid',
                 style: Theme.of(context).textTheme.headlineMedium,
                 colors: [
                   Palette.lightPink,
@@ -87,7 +87,8 @@ class PadMenuScreen extends ConsumerWidget {
                   padding: const EdgeInsets.only(right: 8),
                   child: DropdownButton(
                     value: ref.watch(presetNotifierProvider),
-                    iconSize: 32,
+                    // iconSize: 32,
+                    iconSize: 0, // 0 means ArrowDown Icon is off
                     iconEnabledColor: PresetButtons
                         .backgoundColors[ref.watch(presetNotifierProvider) - 1],
                     underline: const SizedBox.shrink(),
