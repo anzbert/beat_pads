@@ -14,6 +14,9 @@ final Provider<Prefs> sharedPrefProvider = Provider<Prefs>((ref) {
 // TODO: BUGS !!!
 // - investigate: 'show velocity doesnt work'
 // - pitch bend range adjustment not working
+// - pan Mode „Trigger Notes“ only partially working (breaks after a few Pads)
+// - some root notes displayed in grey instead of in color
+// - same note hits are not being displayed
 
 // MAIN FUNCTION ////////////////////////////////////////////////////////
 void main() async {
