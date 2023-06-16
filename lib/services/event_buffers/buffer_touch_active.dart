@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final touchBuffer = NotifierProvider<_TouchBuffer, List<TouchEvent>>(
   _TouchBuffer.new,
+  name: 'touchBuffer',
 );
 
 class _TouchBuffer extends TouchBufferBase {

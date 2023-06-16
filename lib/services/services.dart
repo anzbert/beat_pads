@@ -37,5 +37,6 @@ export 'settings/shared_prefs.dart';
 export 'utility/data_classes.dart';
 export 'utility/device_utils.dart';
 export 'utility/gen_utils.dart';
+export 'utility/logger.dart';
 export 'utility/midi_utils.dart';
 export 'utility/transition_utils.dart';
