@@ -20,7 +20,7 @@ class VelocityOverlay extends StatelessWidget {
     final box = context.findRenderObject() as RenderBox?;
     if (box != null) size = box.size;
 
-    print("rebuilding");
+    print('rebuilding');
     print(_velocity);
 
     return Container(
