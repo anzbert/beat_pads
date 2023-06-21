@@ -1,7 +1,7 @@
 import 'package:beat_pads/services/services.dart';
 
 class PlayModePolyAT extends PlayModeHandler {
-  PlayModePolyAT(super.ref) : polyATMod = ModPolyAfterTouch1D();
+  PlayModePolyAT(super.refRead) : polyATMod = ModPolyAfterTouch1D();
   final ModPolyAfterTouch1D polyATMod;
 
   /// Adds a poly AT message to the regular note handling

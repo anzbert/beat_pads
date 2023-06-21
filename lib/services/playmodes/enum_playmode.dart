@@ -1,6 +1,3 @@
-import 'package:beat_pads/services/services.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 enum PlayMode {
   slide('Trigger Notes'),
   noPan('Disabled'),
@@ -38,18 +35,5 @@ enum PlayMode {
   bool get singleChannel {
     if (this == PlayMode.mpe) return false;
     return true;
-  }
-
-  PlayModeHandler getPlayModeApi(ProviderRef<PlayModeHandler> ref) {
-    switch (this) {
-      case PlayMode.mpe:
-        return PlayModeMPE(ref);
-      case PlayMode.noPan:
-        return PlayModeNoPan(ref);
-      case PlayMode.slide:
-        return PlayModeSlide(ref);
-      case PlayMode.polyAT:
-        return PlayModePolyAT(ref);
-    }
   }
 }

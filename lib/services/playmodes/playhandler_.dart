@@ -3,9 +3,33 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// The usable sender object, which refreshes when the playmode changes
 final senderProvider = Provider<PlayModeHandler>((ref) {
-  final playMode = ref.watch(playModeProv);
+  /// Used to access values in notifiers within functions.
+  /// Prevents the use of watch outside of build() or Providers.
+  final refRead = ref.read;
 
-  return playMode.getPlayModeApi(ref);
+  final mpeMod = SendMpe(
+    ref.watch(mpe2DXProv).getMod(ref.watch(mpePitchbendRangeProv)),
+    ref.watch(mpe2DYProv).getMod(ref.watch(mpePitchbendRangeProv)),
+    ref.watch(mpe1DRadiusProv).getMod(ref.watch(mpePitchbendRangeProv)),
+  );
+
+  final mpeChannelGen = MPEChannelGenerator(
+    memberChannels: ref.watch(mpeMemberChannelsProv),
+    upperZone: ref.watch(zoneProv),
+  );
+
+  switch (ref.watch(playModeProv)) {
+    case PlayMode.mpe:
+      return PlayModeMPE(refRead, mpeMod, mpeChannelGen);
+    case PlayMode.noPan:
+      return PlayModeNoPan(refRead);
+    case PlayMode.slide:
+      return PlayModeSlide(refRead);
+    case PlayMode.polyAT:
+      return PlayModePolyAT(refRead);
+  }
+
+  // return playMode.getPlayModeApi(refRead, mpeMod, mpeChannelGen);
 });
 
 /// Handler which uses the default [PlayModeHandler] behaviour
@@ -15,10 +39,10 @@ class PlayModeNoPan extends PlayModeHandler {
 }
 
 abstract class PlayModeHandler {
-  PlayModeHandler(ProviderRef<PlayModeHandler> ref) : refRead = ref.read;
+  PlayModeHandler(this.refRead);
 
-  /// Use this to to read the current settings in the [PlayModeHandler].
-  /// This Function has been created to prevent from accidently using
+  /// Use this to to read the current settings in the setting Providers.
+  /// Has been created to only read and prevent from accidently using
   /// ```watch``` or ```listen``` in these Handlers.
   final T Function<T>(ProviderListenable<T>) refRead;
 

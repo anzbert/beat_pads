@@ -4,7 +4,7 @@ class PlayModeSlide extends PlayModeHandler {
   /// Sliding playmode. Uses notereleasebuffer instead of touchreleasebuffer,
   /// since one touch can be the cause of many released notes in this mode.
   /// There is no modulation, hence no tracking of touch required
-  PlayModeSlide(super.ref);
+  PlayModeSlide(super.refRead);
 
   @override
   void handleNewTouch(PadTouchAndScreenData data) {

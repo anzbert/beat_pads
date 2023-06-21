@@ -1,16 +1,9 @@
 import 'package:beat_pads/services/services.dart';
 
 class PlayModeMPE extends PlayModeHandler {
-  PlayModeMPE(super.ref)
-      : _mpeMods = SendMpe(
-          ref.read(mpe2DXProv).getMod(ref.read(mpePitchbendRangeProv)),
-          ref.read(mpe2DYProv).getMod(ref.read(mpePitchbendRangeProv)),
-          ref.read(mpe1DRadiusProv).getMod(ref.read(mpePitchbendRangeProv)),
-        ),
-        _mpeChannelGenerator = MPEChannelGenerator(
-          memberChannels: ref.read(mpeMemberChannelsProv),
-          upperZone: ref.read(zoneProv),
-        );
+  PlayModeMPE(super.refRead, SendMpe mpeMods, MPEChannelGenerator mpeChannelGen)
+      : _mpeMods = mpeMods,
+        _mpeChannelGenerator = mpeChannelGen;
 
   final SendMpe _mpeMods;
   final MPEChannelGenerator _mpeChannelGenerator;

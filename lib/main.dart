@@ -14,7 +14,6 @@ final Provider<Prefs> sharedPrefProvider = Provider<Prefs>((ref) {
 
 // TODO: BUGS !!!
 // - pan Mode „Trigger Notes“ only partially working (breaks after a few Pads)
-// - pitch bend range adjustment not working
 // - some root notes displayed in grey instead of in color
 
 // MAIN FUNCTION ////////////////////////////////////////////////////////
