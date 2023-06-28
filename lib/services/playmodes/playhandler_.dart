@@ -72,14 +72,15 @@ abstract class PlayModeHandler {
     if (!refRead(touchBuffer.notifier).eventInBuffer(touch.pointer)) return;
 
     if (refRead(modReleaseUsable) == 0 && refRead(noteReleaseUsable) == 0) {
-      refRead(touchBuffer.notifier).modifyEvent(touch.pointer, (event) {
+      refRead(touchBuffer.notifier).modifyEventWithPointerId(touch.pointer,
+          (event) {
         event.noteEvent.noteOff();
       });
 
       refRead(touchBuffer.notifier).removeById(touch.pointer);
     } else {
       if (refRead(modReleaseUsable) == 0 && refRead(noteReleaseUsable) > 0) {
-        refRead(touchBuffer.notifier).modifyEvent(touch.pointer,
+        refRead(touchBuffer.notifier).modifyEventWithPointerId(touch.pointer,
             (eventInBuffer) async {
           eventInBuffer.newPosition = eventInBuffer.origin; // mod to zero
           await refRead(touchReleaseBuffer.notifier).updateReleasedEvent(

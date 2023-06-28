@@ -54,10 +54,10 @@ class PlayModeMPE extends PlayModeHandler {
 
     if (refRead(
       touchBuffer.notifier,
-    ).modifyEvent(data.pointer, modify)) {
+    ).modifyEventWithPointerId(data.pointer, modify)) {
     } else if (refRead(
       touchReleaseBuffer.notifier,
-    ).modifyEvent(data.pointer, modify)) {
+    ).modifyEventWithPointerId(data.pointer, modify)) {
     } else {
       return;
     }
@@ -87,7 +87,8 @@ class PlayModeMPE extends PlayModeHandler {
     if (!refRead(touchBuffer.notifier).eventInBuffer(touch.pointer)) return;
 
     if (refRead(modReleaseUsable) == 0 && refRead(noteReleaseUsable) == 0) {
-      refRead(touchBuffer.notifier).modifyEvent(touch.pointer, (event) {
+      refRead(touchBuffer.notifier).modifyEventWithPointerId(touch.pointer,
+          (event) {
         releaseMPEChannel(event.noteEvent.channel);
       });
     }

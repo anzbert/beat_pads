@@ -1,7 +1,8 @@
 import 'package:beat_pads/screen_splash/_screen_splash.dart';
 import 'package:beat_pads/services/services.dart';
 import 'package:beat_pads/theme.dart';
-import 'package:flutter/foundation.dart';
+// ignore: unused_import
+import 'package:flutter/foundation.dart'; // for Riverpod logger (uncomment in ProviderScope() )
 import 'package:flutter/material.dart';
 // ignore: unused_import
 import 'package:flutter/rendering.dart'; // for visual debug helpers (uncomment in main() function)
@@ -12,9 +13,8 @@ final Provider<Prefs> sharedPrefProvider = Provider<Prefs>((ref) {
   throw UnimplementedError(); // overriden in ProviderScope
 });
 
-// TODO: BUGS !!!
-// - pan Mode „Trigger Notes“ only partially working (breaks after a few Pads)
-// - some root notes displayed in grey instead of in color
+// TODO: BUG LIST
+// - reported, but have not experienced this one myself: some root notes displayed in grey instead of in color
 
 // MAIN FUNCTION ////////////////////////////////////////////////////////
 void main() async {
@@ -29,7 +29,8 @@ void main() async {
       .then(
         (initialPreferences) => runApp(
           ProviderScope(
-            observers: kDebugMode ? [DebugRiverpodLogger()] : null,
+            // uncomment observers line to log Riverpod changes:
+            // observers: kDebugMode ? [DebugRiverpodLogger()] : null,
             overrides: [
               sharedPrefProvider.overrideWithValue(initialPreferences),
             ],

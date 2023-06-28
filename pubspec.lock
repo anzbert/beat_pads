@@ -316,18 +316,18 @@ packages:
     dependency: "direct main"
     description:
       name: rive
-      sha256: "55e1f8bf249444545a7c832830d2bbb9adae759193fb879294bc6018b9f0eedd"
+      sha256: f3b8af0898c987d68019e91d92257edd902c28c816e49de033a7272e86bd5425
       url: "https://pub.dev"
     source: hosted
-    version: "0.11.3"
+    version: "0.11.4"
   rive_common:
     dependency: transitive
     description:
       name: rive_common
-      sha256: "7e17937b790bb2f631767b3d505da8c298309c0a6ab08cd317fa6fe081ed5b63"
+      sha256: f6687f9d70e6fd3888a9b0e9c0b307966d2ce74cf00cfb01dce906c3bbada52f
       url: "https://pub.dev"
     source: hosted
-    version: "0.0.10"
+    version: "0.1.0"
   riverpod:
     dependency: transitive
     description:
@@ -372,10 +372,10 @@ packages:
     dependency: transitive
     description:
       name: shared_preferences_platform_interface
-      sha256: fb5cf25c0235df2d0640ac1b1174f6466bd311f621574997ac59018a6664548d
+      sha256: "23b052f17a25b90ff2b61aad4cc962154da76fb62848a9ce088efe30d7c50ab1"
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.0"
+    version: "2.3.0"
   shared_preferences_web:
     dependency: transitive
     description:
@@ -481,10 +481,10 @@ packages:
     dependency: transitive
     description:
       name: url_launcher_android
-      sha256: eed4e6a1164aa9794409325c3b707ff424d4d1c2a785e7db67f8bbda00e36e51
+      sha256: "15f5acbf0dce90146a0f5a2c4a002b1814a6303c4c5c075aa2623b2d16156f03"
       url: "https://pub.dev"
     source: hosted
-    version: "6.0.35"
+    version: "6.0.36"
   url_launcher_ios:
     dependency: transitive
     description:

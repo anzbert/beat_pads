@@ -25,10 +25,10 @@ class PlayModePolyAT extends PlayModeHandler {
 
     if (refRead(
       touchBuffer.notifier,
-    ).modifyEvent(data.pointer, modify)) {
+    ).modifyEventWithPointerId(data.pointer, modify)) {
     } else if (refRead(
       touchReleaseBuffer.notifier,
-    ).modifyEvent(data.pointer, modify)) {
+    ).modifyEventWithPointerId(data.pointer, modify)) {
     } else {
       return;
     }

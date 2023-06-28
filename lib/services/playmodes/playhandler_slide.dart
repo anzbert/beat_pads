@@ -29,47 +29,54 @@ class PlayModeSlide extends PlayModeHandler {
 
   @override
   void handlePan(NullableTouchAndScreenData data) {
-    // Turn note off:
-    refRead(touchBuffer.notifier).modifyEvent(data.pointer,
-        (eventInBuffer) async {
-      if (eventInBuffer.dirty) return;
+    // turn note off:
+    refRead(touchBuffer.notifier).modifyEventWithPointerId(
+      data.pointer,
+      (eventInBuffer) async {
+        if (eventInBuffer.dirty) return;
 
-      if (data.padNote != eventInBuffer.noteEvent.note &&
-          eventInBuffer.noteEvent.noteOnMessage != null) {
-        if (refRead(noteReleaseUsable) == 0) {
-          eventInBuffer.noteEvent.noteOff(); // turn note off immediately
-        } else {
-          await refRead(noteReleaseBuffer.notifier).updateReleasedNoteEvent(
-            NoteEvent(
-              eventInBuffer.noteEvent.channel,
-              eventInBuffer.noteEvent.note,
-              eventInBuffer.noteEvent.noteOnMessage?.velocity ??
-                  refRead(velocitySliderValueProv.notifier)
-                      .generateVelocity(data.yPercentage ?? .5),
-            ),
-          ); // add note event to release buffer
-          eventInBuffer.noteEvent.clear();
-        }
-
-        // Play new note:
-        if (data.padNote != null &&
-            eventInBuffer.noteEvent.noteOnMessage == null) {
-          eventInBuffer.noteEvent = NoteEvent(
-            refRead(channelUsableProv),
-            data.padNote!,
-            refRead(velocitySliderValueProv.notifier)
-                .generateVelocity(data.yPercentage ?? .5),
-          )..noteOn(
-              cc: refRead(playModeProv).singleChannel && refRead(sendCCProv),
+        // if new note id (can be null as well) is not the same as the note id in the stored event (can not be null)
+        if (data.padNote != eventInBuffer.noteEvent.note) {
+          // use note release buffer or not:
+          if (refRead(noteReleaseUsable) == 0) {
+            // turn note off immediately...
+            eventInBuffer.noteEvent.noteOff(); // also sets noteEvent to null
+          } else {
+            // ...or update in release buffer
+            await refRead(noteReleaseBuffer.notifier).updateReleasedNoteEvent(
+              NoteEvent(
+                eventInBuffer.noteEvent.channel,
+                eventInBuffer.noteEvent.note,
+                eventInBuffer.noteEvent.noteOnMessage?.velocity ??
+                    refRead(velocitySliderValueProv.notifier)
+                        .generateVelocity(data.yPercentage ?? .5),
+              ),
             );
+            eventInBuffer.noteEvent.clear();
+          }
+
+          // if new note is NOT null
+          // and if there is NO stored note event,
+          // create a new noteEvent and send it:
+          if (data.padNote != null &&
+              eventInBuffer.noteEvent.noteOnMessage == null) {
+            eventInBuffer.noteEvent = NoteEvent(
+              refRead(channelUsableProv),
+              data.padNote!,
+              refRead(velocitySliderValueProv.notifier)
+                  .generateVelocity(data.yPercentage ?? .5),
+            )..noteOn(
+                cc: refRead(playModeProv).singleChannel && refRead(sendCCProv),
+              );
+          }
         }
-      }
-    });
+      },
+    );
   }
 
   @override
   void handleEndTouch(CustomPointer touch) {
-    refRead(touchBuffer.notifier).modifyEvent(touch.pointer,
+    refRead(touchBuffer.notifier).modifyEventWithPointerId(touch.pointer,
         (eventInBuffer) async {
       if (refRead(noteReleaseUsable) == 0) {
         eventInBuffer.noteEvent.noteOff(); // noteOFF

@@ -62,8 +62,6 @@ class _BeatPadGridState extends ConsumerState<BeatPadGrid>
         final target = hit.target;
 
         if (target is TestProxyBox) {
-          // final Offset position = target.globalToLocal(event.position);
-
           var yPos = target.globalToLocal(event.position).dy;
           var ySize = target.size.height;
 
@@ -98,10 +96,12 @@ class _BeatPadGridState extends ConsumerState<BeatPadGrid>
   }
 
   void down(PointerEvent touch) {
+    if (!mounted) return;
+
     // print('down: ${ref.read(touchBuffer)}');
     final result = _detectTappedItem(touch);
 
-    if (mounted && result != null) {
+    if (result != null) {
       final data = PadTouchAndScreenData(
         pointer: touch.pointer,
         screenTouchPos: touch.position,
@@ -115,111 +115,108 @@ class _BeatPadGridState extends ConsumerState<BeatPadGrid>
   }
 
   void move(PointerEvent touch) {
-    // print('pan: ${ref.read(touchBuffer)}');
+    if (!mounted) return;
+
     if (ref.read(playModeProv) == PlayMode.noPan) return;
 
-    if (mounted) {
-      final data = _detectTappedItem(touch);
-      ref.read(senderProvider).handlePan(
-            NullableTouchAndScreenData(
-              pointer: touch.pointer,
-              padNote: data?.padId,
-              yPercentage: data?.yPercentage,
-              screenTouchPos: touch.position,
-            ),
-          );
-    }
+    final data = _detectTappedItem(touch);
+    // print('padNote: ${data?.padId}');
+    ref.read(senderProvider).handlePan(
+          NullableTouchAndScreenData(
+            pointer: touch.pointer,
+            padNote: data?.padId,
+            yPercentage: data?.yPercentage,
+            screenTouchPos: touch.position,
+          ),
+        );
   }
 
   void upAndCancel(PointerEvent touch) {
-    if (mounted) {
-      // print('up: ${ref.read(touchBuffer)}');
+    if (!mounted) return;
+
+    // print('up: ${ref.read(touchBuffer)}');
+
+    ref
+        .read(senderProvider)
+        .handleEndTouch(CustomPointer(touch.pointer, touch.position));
+
+    if (ref.read(modReleaseUsable) > 0 && ref.read(playModeProv).modulatable) {
+      final event =
+          ref.read(touchReleaseBuffer.notifier).getByID(touch.pointer);
+      if (event == null || event.newPosition == event.origin) return;
+
+      final returnAnim = ReturnAnimation(
+        event.uniqueID,
+        ref.read(modReleaseUsable),
+        tickerProvider: this,
+      );
+
+      final absoluteMaxRadius = MediaQuery.of(context).size.longestSide *
+          ref.read(modulationRadiusProv);
+      final constrainedPosition = ref.read(modulation2DProv)
+          ? Utils.limitToSquare(
+              event.origin,
+              touch.position,
+              absoluteMaxRadius,
+            )
+          : Utils.limitToCircle(
+              event.origin,
+              touch.position,
+              absoluteMaxRadius,
+            );
+
+      returnAnim.animation.addListener(() {
+        final touchEvent =
+            ref.read(touchReleaseBuffer.notifier).getByID(returnAnim.uniqueID);
+
+        if (!mounted || touchEvent == null) {
+          returnAnim.markKillAndDisposeController();
+          killAllMarkedAnimations();
+          return;
+        }
+        if (returnAnim.isCompleted) {
+          ref.read(touchReleaseBuffer.notifier).modifyEventWithPointerId(
+              returnAnim.uniqueID, (releasedTouchEvent) {
+            releasedTouchEvent
+              ..hasReturnAnimation = false
+              ..markKillIfNoteOffAndNoAnimation();
+          });
+          ref
+              .read(touchReleaseBuffer.notifier)
+              .killAllMarkedReleasedTouchEvents();
+
+          returnAnim.markKillAndDisposeController();
+          killAllMarkedAnimations();
+          return;
+        } else {
+          ref.read(senderProvider).handlePan(
+                NullableTouchAndScreenData(
+                  pointer: touch.pointer,
+                  padNote: null,
+                  yPercentage: null,
+                  screenTouchPos: Offset.lerp(
+                    constrainedPosition,
+                    event.origin,
+                    returnAnim.value,
+                  )!,
+                ),
+              );
+          setState(() {});
+        }
+      });
 
       ref
-          .read(senderProvider)
-          .handleEndTouch(CustomPointer(touch.pointer, touch.position));
-
-      if (ref.read(modReleaseUsable) > 0 &&
-          ref.read(playModeProv).modulatable) {
-        final event =
-            ref.read(touchReleaseBuffer.notifier).getByID(touch.pointer);
-        if (event == null || event.newPosition == event.origin) return;
-
-        final returnAnim = ReturnAnimation(
-          event.uniqueID,
-          ref.read(modReleaseUsable),
-          tickerProvider: this,
-        );
-
-        final absoluteMaxRadius = MediaQuery.of(context).size.longestSide *
-            ref.read(modulationRadiusProv);
-        final constrainedPosition = ref.read(modulation2DProv)
-            ? Utils.limitToSquare(
-                event.origin,
-                touch.position,
-                absoluteMaxRadius,
-              )
-            : Utils.limitToCircle(
-                event.origin,
-                touch.position,
-                absoluteMaxRadius,
-              );
-
-        returnAnim.animation.addListener(() {
-          final touchEvent = ref
-              .read(touchReleaseBuffer.notifier)
-              .getByID(returnAnim.uniqueID);
-
-          if (!mounted || touchEvent == null) {
-            returnAnim.markKillAndDisposeController();
-            killAllMarkedAnimations();
-            return;
-          }
-          if (returnAnim.isCompleted) {
-            ref
-                .read(touchReleaseBuffer.notifier)
-                .modifyEvent(returnAnim.uniqueID, (releasedTouchEvent) {
-              releasedTouchEvent
-                ..hasReturnAnimation = false
-                ..markKillIfNoteOffAndNoAnimation();
-            });
-            ref
-                .read(touchReleaseBuffer.notifier)
-                .killAllMarkedReleasedTouchEvents();
-
-            returnAnim.markKillAndDisposeController();
-            killAllMarkedAnimations();
-            return;
-          } else {
-            ref.read(senderProvider).handlePan(
-                  NullableTouchAndScreenData(
-                    pointer: touch.pointer,
-                    padNote: null,
-                    yPercentage: null,
-                    screenTouchPos: Offset.lerp(
-                      constrainedPosition,
-                      event.origin,
-                      returnAnim.value,
-                    )!,
-                  ),
-                );
-            setState(() {});
-          }
-        });
-
-        ref.read(touchReleaseBuffer.notifier).modifyEvent(touch.pointer,
-            (activeEvent) {
-          activeEvent.hasReturnAnimation = true;
-        });
-        returnAnim.forward();
-        _animations.add(returnAnim);
-      }
+          .read(touchReleaseBuffer.notifier)
+          .modifyEventWithPointerId(touch.pointer, (activeEvent) {
+        activeEvent.hasReturnAnimation = true;
+      });
+      returnAnim.forward();
+      _animations.add(returnAnim);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final rows = ref.watch(rowProv);
     return Stack(
       children: [
         Listener(
@@ -233,37 +230,37 @@ class _BeatPadGridState extends ConsumerState<BeatPadGrid>
             key: _padsWidgetKey,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              ...rows.map(
-                (row) => Expanded(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ...row.map(
-                        (customPad) {
-                          switch (customPad.padType) {
-                            case PadType.encoder:
-                              // Case not implemented...
-                              return const SizedBox.expand();
-                            case PadType.chord:
-                              // Case not implemented...
-                              return const SizedBox.expand();
-                            case PadType.note:
-                              return Expanded(
-                                child: HitTestObject(
-                                  index: customPad.padValue,
-                                  child: BeatPad(
-                                    note: customPad.padValue,
-                                    preview: widget.preview,
-                                  ),
-                                ),
-                              );
-                          }
-                        },
+              ...ref.watch(rowProv).map(
+                    (row) => Expanded(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ...row.map(
+                            (customPad) {
+                              switch (customPad.padType) {
+                                case PadType.note:
+                                  return Expanded(
+                                    child: HitTestObject(
+                                      index: customPad.padValue,
+                                      child: BeatPad(
+                                        note: customPad.padValue,
+                                        preview: widget.preview,
+                                      ),
+                                    ),
+                                  );
+                                case PadType.encoder:
+                                  // Case not implemented...
+                                  return const SizedBox.expand();
+                                case PadType.chord:
+                                  // Case not implemented...
+                                  return const SizedBox.expand();
+                              }
+                            },
+                          ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
-                ),
-              ),
             ],
           ),
         ),

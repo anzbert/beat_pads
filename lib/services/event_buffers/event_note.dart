@@ -43,7 +43,8 @@ class NoteEvent {
     noteOnMessage = null;
   }
 
-  /// Send this noteEvent's NoteOffMessage, if note is still on
+  /// Send this noteEvent's NoteOffMessage, if note is still on,
+  /// and set [NoteEvent] to null.
   void noteOff() {
     if (noteOnMessage != null) {
       NoteOffMessage(channel: channel, note: note).send();

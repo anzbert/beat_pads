@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 /// Base Class used for the active and released touch buffer
 abstract class TouchBufferBase extends Notifier<List<TouchEvent>> {
   /// Use to find and read an event in the buffer, don't use it to modify
-  /// this event, but use [modifyEvent] instead.
+  /// this event, but use [modifyEventWithPointerId] instead.
   TouchEvent? getByID(int id) {
     for (final event in state) {
       if (event.uniqueID == id) {
@@ -25,7 +25,10 @@ abstract class TouchBufferBase extends Notifier<List<TouchEvent>> {
   }
 
   /// Get an event and modify it, if it is available in the buffer
-  bool modifyEvent(int id, void Function(TouchEvent eventInBuffer) modify) {
+  bool modifyEventWithPointerId(
+    int id,
+    void Function(TouchEvent eventInBuffer) modify,
+  ) {
     for (final event in state) {
       if (event.uniqueID == id) {
         modify(event);
