@@ -14,7 +14,8 @@ final Provider<Prefs> sharedPrefProvider = Provider<Prefs>((ref) {
 });
 
 // TODO: BUG LIST
-// - reported, but have not experienced this one myself: some root notes displayed in grey instead of in color
+// - ipad connection timeout when screen times out
+// - reported: no note off being sent?!
 
 // MAIN FUNCTION ////////////////////////////////////////////////////////
 void main() async {
