@@ -41,15 +41,16 @@ dev_dependencies:
   flutter_lints: ^2.0.0
   flutter_launcher_icons: ^0.13.0
 
-flutter_icons:
+flutter_launcher_icons:
   # Recompile icons with:
-  #   flutter pub run flutter_launcher_icons:main
+  #   dart run flutter_launcher_icons
 
   #  - Icons Settings -
   # image_path: "assets/logo/logo.png"
   ios: true
   image_path_ios: "assets/logo/logo_ios.png"
   remove_alpha_ios: true
+
   android: true
   image_path_android: "assets/logo/logo.png"
   adaptive_icon_foreground: "assets/logo/logo_foreground.png"
