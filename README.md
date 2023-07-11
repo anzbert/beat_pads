@@ -1,3 +1,7 @@
+## IMPORTANT: use the pre_refactor branch at the moment, as there is a problem with note offs in the master branch
+
+---
+
 # Midi Poly Grid
 
 ## Installation
