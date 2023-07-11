@@ -1,4 +1,4 @@
-# Beat Pads
+# Midi Poly Grid
 
 [Apple Store](https://apps.apple.com/us/app/beat-pads/id1633882803)
 
@@ -6,15 +6,15 @@
 
 ## Important Disclaimer
 
-This App is **ONLY** usable as a Midi Controller. It does **NOT** produce any sound on its own as of yet, but requires a host application or second device with Ableton, Fruity Loops, Garage Band, Logic, a Software Synthesizers or any other Music Production Software. 
+This App is **ONLY** usable as a Midi Controller. It does **NOT** produce any sound on its own as of yet, but requires a host application or second device with Ableton, Fruity Loops, Garage Band, Logic, a Software Synthesizers or any other Music Production Software.
 
 Otherwise, continue reading and I hope you will have a lot of fun with it!
 
 ## Description
 
-Beat Pads is a lightweight Midi Controller app for mobile phones and tablets for finger drumming and producing beats at home and on the go.
+Midi Poly Grid is a lightweight Midi Controller app for mobile phones and tablets for finger drumming and producing beats at home and on the go.
 
-Beat Pads is not trying to be complete DAW controller and Midi swiss army knife. Its aim is to be an easy to use pad input device featuring a variety of layouts, intuitive playability and modern modulation options, such as MPE and Polyphonic Aftertouch. It was designed for people that prefer pads to pianos!
+Midi Poly Grid is not trying to be complete DAW controller and Midi swiss army knife. Its aim is to be an easy to use pad input device featuring a variety of layouts, intuitive playability and modern modulation options, such as MPE and Polyphonic Aftertouch. It was designed for people that prefer pads to pianos!
 
 ## Features
 

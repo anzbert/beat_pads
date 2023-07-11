@@ -121,7 +121,7 @@ class CreditsBox extends StatelessWidget {
                   scheme: 'mailto',
                   path: 'anzbert@gmail.com',
                   query:
-                      'subject=App Feedback&body=Feedback for Beat pads', //add subject and body here
+                      'subject=App Feedback&body=Feedback for Midi Poly Grid', //add subject and body here
                 );
                 if (await canLaunchUrl(encoded)) {
                   await launchUrl(encoded);

@@ -60,7 +60,7 @@ class PadMenuScreen extends ConsumerWidget {
           return Scaffold(
             appBar: AppBar(
               title: GradientText(
-                'Beat Pads',
+                'Midi Poly Grid',
                 style: Theme.of(context).textTheme.headlineMedium,
                 colors: [
                   Palette.lightPink,

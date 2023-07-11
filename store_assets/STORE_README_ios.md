@@ -1,4 +1,4 @@
-# Beat Pads - iOS Version
+# Midi Poly Grid - iOS Version
 
 Now open source: https://github.com/anzbert/beat_pads
 
@@ -14,9 +14,9 @@ Otherwise, continue reading and I hope you will have a lot of fun with it!
 
 ## Description
 
-Beat Pads is a lightweight Midi Controller app for mobile phones and tablets for finger drumming and producing beats at home and on the go.
+Midi Poly Grid is a lightweight Midi Controller app for mobile phones and tablets for finger drumming and producing beats at home and on the go.
 
-Beat Pads is not trying to be complete DAW controller and Midi swiss army knife. Its aim is to be an easy to use pad input device featuring a variety of layouts, intuitive playability and modern modulation options, such as MPE and Polyphonic Aftertouch. It was designed for people that prefer pads to pianos!
+Midi Poly Grid is not trying to be complete DAW controller and Midi swiss army knife. Its aim is to be an easy to use pad input device featuring a variety of layouts, intuitive playability and modern modulation options, such as MPE and Polyphonic Aftertouch. It was designed for people that prefer pads to pianos!
 
 ## Features
 

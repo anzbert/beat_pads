@@ -1,4 +1,4 @@
-# Beat Pads
+# Midi Poly Grid
 
 ## Installation
 
@@ -12,12 +12,12 @@
 - Install the [Flutter](https://flutter.dev/) toolchain as per [these instructions](https://docs.flutter.dev/get-started/install) and make sure you are running the latest version
 - Clone or download this repository
 - Edit and debug with [VScode](https://code.visualstudio.com/)
-- Compile for Android with ```flutter build apk``` or for iOS with ```flutter build ios``` (compiling for iOS requires a computer running MacOS)
-- Install to your device via USB with ```flutter install```
+- Compile for Android with `flutter build apk` or for iOS with `flutter build ios` (compiling for iOS requires a computer running MacOS)
+- Install to your device via USB with `flutter install`
 
 ## Information
 
-Beat Pads is a lightweight crossplatform Midi Controller app for mobile phones and tablets for melodies and finger drumming at home and on the go. Connections can be made virtually to other apps via platform midi channels or via USB to other devices.
+Midi Poly Grid is a lightweight crossplatform Midi Controller app for mobile phones and tablets for melodies and finger drumming at home and on the go. Connections can be made virtually to other apps via platform midi channels or via USB to other devices.
 
 This app aims to be an easy-to-use pad input device featuring a variety of layouts, intuitive playability and modern modulation options, such as MPE and Polyphonic Aftertouch. It was designed for people that prefer pads to pianos! The focus of this app is not to be a jack-of-all-trades Midi swiss army knife, but instead to be a great at one thing: Intuitive and versatile pad controls.
 

@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="io.anzio.beat_pads">
-    <application android:label="Beat Pads" android:name="${applicationName}"
+    <application android:label="Midi Poly Grid" android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity android:name=".MainActivity" android:exported="true"
             android:launchMode="singleTop" android:theme="@style/LaunchTheme"
