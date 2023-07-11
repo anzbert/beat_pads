@@ -14,8 +14,8 @@ final Provider<Prefs> sharedPrefProvider = Provider<Prefs>((ref) {
 });
 
 // TODO: BUG LIST
+// - SEVERE: no note off being sent in some modes. seems to be related to release delays and buffers?!
 // - ipad connection timeout when screen times out
-// - reported: no note off being sent?!
 
 // MAIN FUNCTION ////////////////////////////////////////////////////////
 void main() async {
