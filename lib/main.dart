@@ -1,4 +1,6 @@
 // ignore: unused_import
+import 'package:flutter/foundation.dart';
+// ignore: unused_import
 import 'package:flutter/rendering.dart'; // for debug repaint rainbow, if enabled in main()
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -23,6 +25,8 @@ void main() {
       .then(
         (Prefs initialPreferences) => runApp(
           ProviderScope(
+            // uncomment observers line to log Riverpod changes:
+            observers: kDebugMode ? [DebugRiverpodLogger()] : null,
             overrides: [
               sharedPrefProvider.overrideWithValue(initialPreferences),
             ],
