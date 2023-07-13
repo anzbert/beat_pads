@@ -26,7 +26,7 @@ void main() {
         (Prefs initialPreferences) => runApp(
           ProviderScope(
             // uncomment observers line to log Riverpod changes:
-            observers: kDebugMode ? [DebugRiverpodLogger()] : null,
+            // observers: kDebugMode ? [DebugRiverpodLogger()] : null,
             overrides: [
               sharedPrefProvider.overrideWithValue(initialPreferences),
             ],
