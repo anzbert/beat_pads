@@ -46,7 +46,7 @@ class _SplashScreenState extends State<SplashScreen> {
                     child: AnimatedTextKit(
                       animatedTexts: [
                         ColorizeAnimatedText(
-                          'BeatPads',
+                          'Midi Poly Grid',
                           speed: const Duration(milliseconds: 250),
                           textAlign: TextAlign.center,
                           textStyle: const TextStyle(
