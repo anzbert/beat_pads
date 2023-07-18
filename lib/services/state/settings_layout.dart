@@ -76,7 +76,7 @@ final widthProv = NotifierProvider<SettingIntNotifier, int>(() {
   return SettingIntNotifier(
     key: 'width',
     defaultValue: 4,
-    min: 2,
+    min: 1,
     max: 16,
   );
 });
@@ -84,7 +84,7 @@ final heightProv = NotifierProvider<SettingIntNotifier, int>(() {
   return SettingIntNotifier(
     key: 'height',
     defaultValue: 4,
-    min: 2,
+    min: 1,
     max: 16,
   );
 });
