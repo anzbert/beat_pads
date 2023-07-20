@@ -13,19 +13,15 @@
 
 ### ...or compile it yourself
 
-- Install the [Flutter](https://flutter.dev/) toolchain as per [these instructions](https://docs.flutter.dev/get-started/install) and make sure you are running the latest version
+- Install the [Flutter](https://flutter.dev/) toolchain as per [these instructions](https://docs.flutter.dev/get-started/install)
 - Clone or download this repository
-- Edit and debug with [VScode](https://code.visualstudio.com/)
-- Compile for Android with `flutter build apk` or for iOS with `flutter build ios` (compiling for iOS requires a computer running MacOS)
-- Install to your device via USB with `flutter install`
+- Compile with [VScode](https://code.visualstudio.com/)
 
 ## Information
 
-Midi Poly Grid is a lightweight crossplatform Midi Controller app for mobile phones and tablets for melodies and finger drumming at home and on the go. Connections can be made virtually to other apps via platform midi channels or via USB to other devices.
+Midi Poly Grid (formerly known as 'Beat Pads') is a lightweight Midi Controller app for mobile phones and tablets for melodies and finger drumming at home and on the go. Connections can be made virtually to other apps via platform midi channels or via USB to other devices.
 
 This app aims to be an easy-to-use pad input device featuring a variety of layouts, intuitive playability and modern modulation options, such as MPE and Polyphonic Aftertouch. It was designed for people that prefer pads to pianos! The focus of this app is not to be a jack-of-all-trades Midi swiss army knife, but instead to be a great at one thing: Intuitive and versatile pad controls.
-
-This App is **ONLY** usable as a Midi Controller. It does **NOT** produce any sound on its own and requires a host application or a second device with a DAW or other sound production app.
 
 AUv3 is unfortunately not supported at this time, as it is [currently impossible with Flutter](https://github.com/flutter/flutter/issues/16092).
 
@@ -48,7 +44,7 @@ Wifi works on iOS, but Wifi and Bluetooth support is otherwise limited due to pl
 
 ## Feedback and Contributions
 
-Anyone is most welcome to contribute, report an issue or start a discussion in this repository. Thanks!
+Anyone is most welcome to contribute, report an issue or start a discussion in the Github repository. Thanks!
 
 ## Known issues
 
