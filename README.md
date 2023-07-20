@@ -1,4 +1,4 @@
-## IMPORTANT: use the pre_refactor branch at the moment, as there is a problem with note offs in the master branch
+## IMPORTANT: use the main branch at the moment, as there is a problem with note offs in this dev branch
 
 ---
 
