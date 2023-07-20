@@ -48,7 +48,7 @@ Anyone is most welcome to contribute, report an issue or start a discussion in t
 
 ## Known issues
 
-- Project still using outdated ChangeNotifier in Riverpod state management -> Refactor
+- Project has some state management problems with its buffers. Note offs affected and the solution would be a propper refactor of the buffer design
 
 ## Licence
 
