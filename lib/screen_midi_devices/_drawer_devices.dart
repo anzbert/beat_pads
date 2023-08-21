@@ -146,7 +146,7 @@ class _MidiConfigState extends ConsumerState<MidiConfig> {
                                                   Icons.check,
                                                   size: 24,
                                                   color: Colors.white,
-                                                )
+                                                ),
                                             ],
                                           ),
                                         ),
@@ -167,7 +167,7 @@ class _MidiConfigState extends ConsumerState<MidiConfig> {
                 },
               ),
             ),
-            ...helpText
+            ...helpText,
           ],
         ),
       );

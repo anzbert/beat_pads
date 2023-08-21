@@ -18,7 +18,7 @@ class PlayModeMPE extends PlayModeHandler {
 
     final newChannel = _mpeChannelGenerator.provideChannel([
       ...refRead(touchBuffer),
-      ...refRead(touchReleaseBuffer)
+      ...refRead(touchReleaseBuffer),
     ]); // get new channel from generator
 
     if (refRead(modulation2DProv)) {

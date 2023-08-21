@@ -42,10 +42,10 @@ class StringInfoBox extends StatelessWidget {
                       Text(text),
                       const SizedBox(
                         height: 5,
-                      )
+                      ),
                     ],
                   ),
-                )
+                ),
               ],
             ),
           ),

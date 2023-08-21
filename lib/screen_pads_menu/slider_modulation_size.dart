@@ -52,7 +52,7 @@ class ModSizeSliderTile extends ConsumerWidget {
                       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     ),
                     child: const Text('Reset'),
-                  )
+                  ),
               ],
             ),
             subtitle: subtitle != null ? Text(subtitle!) : null,

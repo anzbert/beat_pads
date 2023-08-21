@@ -146,7 +146,7 @@ class _PitchSliderEasedState extends State<PitchSliderEased>
                       ),
                       const Expanded(
                         child: SizedBox.expand(),
-                      )
+                      ),
                     ],
                   ),
                 );

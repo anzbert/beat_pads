@@ -22,7 +22,7 @@ class PresetButtons extends ConsumerWidget {
     Palette.lightPink,
     Palette.cadetBlue,
     Palette.yellowGreen,
-    Palette.tan
+    Palette.tan,
   ];
 
   final bool row;
@@ -42,7 +42,7 @@ class PresetButtons extends ConsumerWidget {
               i,
               backgoundColors[i - 1],
               clickType: clickType,
-            )
+            ),
         ],
       );
 }

@@ -44,7 +44,7 @@ class CreditsBox extends StatelessWidget {
                 ),
                 onPressed: () async =>
                     webView('github.com', 'anzbert/beat_pads'),
-              )
+              ),
             ],
           ),
           Column(
@@ -60,7 +60,7 @@ class CreditsBox extends StatelessWidget {
                   ),
                 ),
                 onPressed: () async => webView('anzio.dev'),
-              )
+              ),
             ],
           ),
           Column(
@@ -76,7 +76,7 @@ class CreditsBox extends StatelessWidget {
                   ),
                 ),
                 onPressed: () async => webView('xpresspads.com'),
-              )
+              ),
             ],
           ),
           Column(
@@ -92,7 +92,7 @@ class CreditsBox extends StatelessWidget {
                   ),
                 ),
                 onPressed: () async => webView('freepik.com'),
-              )
+              ),
             ],
           ),
           Column(
@@ -108,7 +108,7 @@ class CreditsBox extends StatelessWidget {
                   ),
                 ),
                 onPressed: () async => webView('rive.app'),
-              )
+              ),
             ],
           ),
           Column(
@@ -138,7 +138,7 @@ class CreditsBox extends StatelessWidget {
                     Utils.logd('Failure to launch webview with:\n$encoded');
                   }
                 },
-              )
+              ),
             ],
           ),
         ],

@@ -32,10 +32,10 @@ class WidgetsInfoBox extends StatelessWidget {
                       text,
                       const SizedBox(
                         height: 8,
-                      )
+                      ),
                     ],
                   ),
-                )
+                ),
               ],
             ),
           ),

@@ -25,7 +25,7 @@ class _TouchBuffer extends TouchBufferBase {
         ref.read(modulationDeadZoneProv),
         ref.read(modulationRadiusProv),
         screenSize,
-      )
+      ),
     ];
   }
 

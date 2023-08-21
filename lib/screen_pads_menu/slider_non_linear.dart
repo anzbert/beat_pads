@@ -42,7 +42,7 @@ class NonLinearSliderTile extends StatelessWidget {
                       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     ),
                     child: const Text('Reset'),
-                  )
+                  ),
               ],
             ),
             subtitle: subtitle != null ? Text(subtitle!) : null,

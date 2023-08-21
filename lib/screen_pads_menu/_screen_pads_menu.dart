@@ -110,10 +110,10 @@ class PadMenuScreen extends ConsumerWidget {
                               fontSize: 31,
                             ),
                           ),
-                        )
+                        ),
                     ],
                   ),
-                )
+                ),
               ],
             ),
             drawer: const Drawer(

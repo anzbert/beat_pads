@@ -125,7 +125,7 @@ class _ModWheelState extends ConsumerState<ModWheel> {
                       ),
                       const Expanded(
                         child: SizedBox.expand(),
-                      )
+                      ),
                     ],
                   ),
                 );

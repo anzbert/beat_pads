@@ -40,7 +40,7 @@ List<Widget> helpText = [
       'When such an App has been installed it will appear in this Device List',
       'After connection, Midi Poly Grid can send Midi Data to the App, for example, to play a Synthesizer on your Device with Midi Poly Grid',
       '',
-      'Note: If the receiving App has a Setting to allow it to run in the background, make sure to enable it'
+      'Note: If the receiving App has a Setting to allow it to run in the background, make sure to enable it',
     ],
   ),
   if (Platform.isIOS)
@@ -52,7 +52,7 @@ List<Widget> helpText = [
         "Open 'Audio MIDI Setup' on Mac and open the 'MIDI Studio' window",
         "Create a Session in the 'MIDI Network Setup' window and connect to your iPad/iPhone",
         '',
-        "Note: Wireless Protocols add Latency. Connection to Windows Hosts via WiFi requires third-party Software (like 'rtpMIDI')"
+        "Note: Wireless Protocols add Latency. Connection to Windows Hosts via WiFi requires third-party Software (like 'rtpMIDI')",
       ],
     ),
 ];
