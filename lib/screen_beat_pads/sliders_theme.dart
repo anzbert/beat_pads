@@ -51,9 +51,11 @@ class ThemedSlider extends StatelessWidget {
                   overlayColor: Colors.transparent,
                   thumbShape: range == null
                       ? RoundSliderThumbShape(
+                          elevation: 3.0,
                           enabledThumbRadius: width * 0.033,
                         )
                       : CustomSliderThumbRect(
+                          enabledThumbRadius: width * 0.033,
                           thumbRadius: width * 0.07,
                           thumbHeight: range!.toDouble()),
                   trackShape: CustomTrackShape(),
@@ -95,10 +97,12 @@ class CustomTrackShape extends RoundedRectSliderTrackShape {
 
 class CustomSliderThumbRect extends SliderComponentShape {
   final double thumbRadius;
+  final double enabledThumbRadius;
   final double thumbHeight;
 
   const CustomSliderThumbRect({
     required this.thumbRadius,
+    required this.enabledThumbRadius,
     this.thumbHeight = 20,
   });
 
@@ -124,6 +128,7 @@ class CustomSliderThumbRect extends SliderComponentShape {
   }) {
     final Canvas canvas = context.canvas;
 
+    // Rectangle
     var fractionHeight = parentBox.constraints.maxWidth / 127 * thumbHeight;
 
     final rRect = RRect.fromRectAndRadius(
@@ -132,10 +137,23 @@ class CustomSliderThumbRect extends SliderComponentShape {
       Radius.circular(thumbRadius * .1),
     );
 
-    final paint = Paint()
-      ..color = sliderTheme.thumbColor! //Thumb Background Color
+    final rectPaint = Paint()
+      ..color =
+          sliderTheme.thumbColor!.withOpacity(0.5) // Thumb Background Color
       ..style = PaintingStyle.fill;
 
-    canvas.drawRRect(rRect, paint);
+    canvas.drawRRect(rRect, rectPaint);
+
+    // Circle with Shadow
+    final thumbCirclePath = Path()
+      ..addOval(Rect.fromCircle(center: center, radius: enabledThumbRadius));
+    canvas.drawShadow(thumbCirclePath, Colors.black, 3.0, true);
+    canvas.drawPath(thumbCirclePath, Paint()..color = sliderTheme.thumbColor!);
+
+    // canvas.drawCircle(
+    //   center,
+    //   enabledThumbRadius,
+    //   Paint()..color = sliderTheme.thumbColor!,
+    // );
   }
 }

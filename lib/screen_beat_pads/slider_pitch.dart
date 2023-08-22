@@ -72,6 +72,7 @@ class PitchSliderEasedState extends State<PitchSliderEased>
             thumbColor: Palette.laserLemon,
             centerLine: true,
             child: Slider(
+              allowedInteraction: SliderInteraction.slideThumb,
               min: -1,
               max: 1,
               value: _pitch,

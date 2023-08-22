@@ -79,6 +79,7 @@ class _ModWheelState extends ConsumerState<ModWheel> {
             child: RotatedBox(
               quarterTurns: 0,
               child: Slider(
+                allowedInteraction: SliderInteraction.slideThumb,
                 min: 0,
                 max: 127,
                 value: ref.watch(_modWheelProvider).toDouble(),
