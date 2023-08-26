@@ -11,7 +11,9 @@
 
 - Install the [Flutter](https://flutter.dev/) toolchain as per [these instructions](https://docs.flutter.dev/get-started/install)
 - Clone or download this repository
-- Compile with [VScode](https://code.visualstudio.com/)
+- Edit with [VScode](https://code.visualstudio.com/)
+- Run an Android or iOS Emulator and try with ```flutter run```
+- Compile for Android with ```flutter build apk``` or for iOS with ```flutter build ios``` and install to a plugged in device with ```flutter install```
 
 ## Information
 
