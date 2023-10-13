@@ -8,7 +8,7 @@ class CreditsBox extends StatelessWidget {
 
   Future<bool> webView(String host, [String? path]) async {
     final httpUri = Uri(
-      scheme: 'https',
+      scheme: 'http',
       host: host,
       path: path,
     );
