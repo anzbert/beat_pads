@@ -50,4 +50,4 @@ Anyone is most welcome to contribute, report an issue or start a discussion in t
 
 ## Licence
 
-Licenced under GPL3. The code in this project is freely usable in any other open source project. Enjoy 👍
+Licenced under GPL3. The code in this project is freely usable in any other **open source** project. Enjoy 👍
