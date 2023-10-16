@@ -1,9 +1,9 @@
 import 'package:beat_pads/services/services.dart';
 
 class PlayModePolyAT extends PlayModeHandler {
-  final ModPolyAfterTouch1D polyATMod;
   PlayModePolyAT(super.screenSize, super.notifyParent)
       : polyATMod = ModPolyAfterTouch1D();
+  final ModPolyAfterTouch1D polyATMod;
 
   @override
   void handleNewTouch(PadTouchAndScreenData data) {
@@ -13,7 +13,7 @@ class PlayModePolyAT extends PlayModeHandler {
 
   @override
   void handlePan(NullableTouchAndScreenData data) {
-    TouchEvent? eventInBuffer = touchBuffer.getByID(data.pointer) ??
+    final TouchEvent? eventInBuffer = touchBuffer.getByID(data.pointer) ??
         touchReleaseBuffer.getByID(data.pointer);
     if (eventInBuffer == null) return;
 

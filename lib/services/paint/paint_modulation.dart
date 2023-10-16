@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class PaintModulation extends ConsumerWidget {
-  PaintModulation({Key? key}) : super(key: key);
+  PaintModulation({super.key});
 
   final dirtyColor = Palette.dirtyTranslucent;
   @override
@@ -18,7 +18,7 @@ class PaintModulation extends ConsumerWidget {
       children: [
         ...[
           ...midiSender.playModeHandler.touchReleaseBuffer.buffer,
-          ...midiSender.playModeHandler.touchBuffer.buffer
+          ...midiSender.playModeHandler.touchBuffer.buffer,
         ]
             .where(
           (element) =>
@@ -36,22 +36,27 @@ class PaintModulation extends ConsumerWidget {
                       maxRadius: touchEvent.maxRadius,
                       deadZone: touchEvent.deadZone,
                       change: touchEvent.radialChange(
-                          curve: Curves.linear, deadZone: false),
+                        curve: Curves.linear,
+                        deadZone: false,
+                      ),
                       colorBack: touchEvent.dirty
                           ? dirtyColor
                           : Palette.lightPink.withOpacity(
                               touchEvent.radialChange(curve: Curves.easeOut) *
-                                  0.6),
+                                  0.6,
+                            ),
                       colorFront: touchEvent.dirty
                           ? dirtyColor
                           : Palette.laserLemon.withOpacity(
                               touchEvent.radialChange(curve: Curves.easeOut) *
-                                  0.8),
+                                  0.8,
+                            ),
                       colorDeadZone: touchEvent.dirty
                           ? dirtyColor
                           : Palette.laserLemon.withOpacity(
                               touchEvent.radialChange(curve: Curves.easeOut) *
-                                  0.4),
+                                  0.4,
+                            ),
                     ),
                   )
                 // SQUARE / X AND Y
@@ -62,24 +67,29 @@ class PaintModulation extends ConsumerWidget {
                       maxRadius: touchEvent.maxRadius,
                       deadZone: touchEvent.deadZone,
                       change: touchEvent.directionalChangeFromCenter(
-                          curve: Curves.linear, deadZone: false),
+                        curve: Curves.linear,
+                        deadZone: false,
+                      ),
                       radialChange:
                           touchEvent.radialChange(curve: Curves.linear),
                       colorBack: touchEvent.dirty
                           ? dirtyColor
                           : Palette.lightPink.withOpacity(
                               touchEvent.radialChange(curve: Curves.easeOut) *
-                                  0.6),
+                                  0.6,
+                            ),
                       colorFront: touchEvent.dirty
                           ? dirtyColor
                           : Palette.laserLemon.withOpacity(
                               touchEvent.radialChange(curve: Curves.easeOut) *
-                                  0.8),
+                                  0.8,
+                            ),
                       colorDeadZone: touchEvent.dirty
                           ? dirtyColor
                           : Palette.laserLemon.withOpacity(
                               touchEvent.radialChange(curve: Curves.easeOut) *
-                                  0.4),
+                                  0.4,
+                            ),
                     ),
                   );
           },

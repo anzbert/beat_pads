@@ -6,13 +6,6 @@ class PlayModeNoSlide extends PlayModeHandler {
 }
 
 abstract class PlayModeHandler {
-  final SendSettings settings;
-  final Function notifyParent;
-  final VelocityProvider velocityProvider;
-
-  final TouchBuffer touchBuffer;
-  late TouchReleaseBuffer touchReleaseBuffer;
-
   PlayModeHandler(
     this.settings,
     this.notifyParent,
@@ -24,25 +17,36 @@ abstract class PlayModeHandler {
       notifyParent,
     );
   }
+  final SendSettings settings;
+  final void Function() notifyParent;
+  final VelocityProvider velocityProvider;
+
+  final TouchBuffer touchBuffer;
+  late TouchReleaseBuffer touchReleaseBuffer;
 
   void handleNewTouch(PadTouchAndScreenData data) {
     if (settings.modReleaseTime > 0 || settings.noteReleaseTime > 0) {
       touchReleaseBuffer.removeNoteFromReleaseBuffer(data.padNote);
     }
 
-    NoteEvent noteOn = NoteEvent(settings.channel, data.padNote,
-        velocityProvider.velocity(data.yPercentage))
-      ..noteOn(cc: settings.sendCC);
+    final NoteEvent noteOn = NoteEvent(
+      settings.channel,
+      data.padNote,
+      velocityProvider.velocity(data.yPercentage),
+    )..noteOn(cc: settings.sendCC);
 
-    touchBuffer.addNoteOn(CustomPointer(data.pointer, data.screenTouchPos),
-        noteOn, data.screenSize);
+    touchBuffer.addNoteOn(
+      CustomPointer(data.pointer, data.screenTouchPos),
+      noteOn,
+      data.screenSize,
+    );
     notifyParent();
   }
 
   void handlePan(NullableTouchAndScreenData data) {}
 
   void handleEndTouch(CustomPointer touch) {
-    TouchEvent? eventInBuffer = touchBuffer.getByID(touch.pointer);
+    final TouchEvent? eventInBuffer = touchBuffer.getByID(touch.pointer);
     if (eventInBuffer == null) return;
 
     if (settings.modReleaseTime == 0 && settings.noteReleaseTime == 0) {
@@ -56,25 +60,26 @@ abstract class PlayModeHandler {
         eventInBuffer.newPosition = eventInBuffer.origin; // mod to zero
       }
       touchReleaseBuffer.updateReleasedEvent(
-          eventInBuffer); // instead of note off, event passed to release buffer
+        eventInBuffer,
+      ); // instead of note off, event passed to release buffer
       touchBuffer.remove(eventInBuffer);
     }
   }
 
   void killAllNotes() {
-    for (TouchEvent touch in touchBuffer.buffer) {
+    for (final TouchEvent touch in touchBuffer.buffer) {
       if (touch.noteEvent.isPlaying) touch.noteEvent.noteOff();
     }
-    for (TouchEvent touch in touchReleaseBuffer.buffer) {
+    for (final TouchEvent touch in touchReleaseBuffer.buffer) {
       if (touch.noteEvent.isPlaying) touch.noteEvent.noteOff();
     }
   }
 
   void markDirty() {
-    for (var event in touchBuffer.buffer) {
+    for (final event in touchBuffer.buffer) {
       event.markDirty();
     }
-    for (var event in touchReleaseBuffer.buffer) {
+    for (final event in touchReleaseBuffer.buffer) {
       event.markDirty();
     }
   }
@@ -82,14 +87,14 @@ abstract class PlayModeHandler {
   /// Returns the velocity if a given note is ON in any channel.
   /// Checks releasebuffer and active touchbuffer
   int isNoteOn(int note) {
-    for (TouchEvent touch in touchBuffer.buffer) {
+    for (final TouchEvent touch in touchBuffer.buffer) {
       if (touch.noteEvent.note == note && touch.noteEvent.isPlaying) {
         return touch.noteEvent.velocity;
         // return true;
       }
     }
     if (settings.modReleaseTime > 0 || settings.noteReleaseTime > 0) {
-      for (TouchEvent event in touchReleaseBuffer.buffer) {
+      for (final TouchEvent event in touchReleaseBuffer.buffer) {
         if (event.noteEvent.note == note && event.noteEvent.isPlaying) {
           return event.noteEvent.velocity;
           // return true;

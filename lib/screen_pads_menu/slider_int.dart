@@ -2,27 +2,27 @@ import 'package:beat_pads/theme.dart';
 import 'package:flutter/material.dart';
 
 class IntSliderTile extends StatelessWidget {
-  const IntSliderTile(
-      {this.label = "#label",
-      this.subtitle,
-      this.min = 0,
-      this.max = 128,
-      required this.setValue,
-      required this.readValue,
-      this.resetValue,
-      required this.trailing,
-      this.onChangeEnd,
-      Key? key})
-      : super(key: key);
+  const IntSliderTile({
+    required this.setValue,
+    required this.readValue,
+    required this.trailing,
+    this.label = '#label',
+    this.subtitle,
+    this.min = 0,
+    this.max = 128,
+    this.resetValue,
+    this.onChangeEnd,
+    super.key,
+  });
 
-  final Function? onChangeEnd;
+  final void Function()? onChangeEnd;
   final String label;
   final String? subtitle;
   final int min;
   final int max;
-  final Function setValue;
   final int readValue;
-  final Function? resetValue;
+  final void Function(int) setValue;
+  final void Function()? resetValue;
   final Widget trailing;
 
   @override
@@ -42,8 +42,8 @@ class IntSliderTile extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 12),
                     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   ),
-                  child: const Text("Reset"),
-                )
+                  child: const Text('Reset'),
+                ),
             ],
           ),
           subtitle: subtitle != null ? Text(subtitle!) : null,
@@ -51,7 +51,7 @@ class IntSliderTile extends StatelessWidget {
         ),
         Builder(
           builder: (context) {
-            double width = MediaQuery.of(context).size.width;
+            final double width = MediaQuery.of(context).size.width;
             return SizedBox(
               width: width * ThemeConst.sliderWidthFactor,
               child: Slider(
@@ -62,7 +62,7 @@ class IntSliderTile extends StatelessWidget {
                   setValue(value.toInt());
                 },
                 onChangeEnd: (_) {
-                  if (onChangeEnd != null) onChangeEnd!();
+                  onChangeEnd?.call();
                 },
               ),
             );

@@ -1,17 +1,16 @@
 import 'package:beat_pads/screen_beat_pads/velocity_overlay.dart';
+import 'package:beat_pads/services/services.dart';
 import 'package:beat_pads/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:beat_pads/services/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class SlideBeatPad extends ConsumerWidget {
-  final bool preview;
-
   const SlideBeatPad({
     required this.note,
-    Key? key,
     required this.preview,
-  }) : super(key: key);
+    super.key,
+  });
+  final bool preview;
 
   final int note;
 
@@ -27,18 +26,22 @@ class SlideBeatPad extends ConsumerWidget {
           ref.watch(baseHueProv),
           ref.watch(rootProv),
           note,
-          velocity != 0 ? true : false,
+          velocity != 0,
           preview ? 0 : ref.watch(rxNoteProvider)[note],
         );
 
     final Color splashColor = Palette.splashColor;
 
     final BorderRadius padRadius = BorderRadius.all(
-        Radius.circular(screenWidth * ThemeConst.padRadiusFactor));
+      Radius.circular(screenWidth * ThemeConst.padRadiusFactor),
+    );
     final double padSpacing = screenWidth * ThemeConst.padSpacingFactor;
 
     final Label label = PadLabels.getLabel(
-        ref.watch(padLabelsProv), ref.watch(layoutProv), note);
+      ref.watch(padLabelsProv),
+      ref.watch(layoutProv),
+      note,
+    );
     final double fontSize = screenWidth * 0.021;
     final Color padTextColor = Palette.darkGrey;
 

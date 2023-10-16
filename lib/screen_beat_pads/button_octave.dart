@@ -1,16 +1,16 @@
+import 'package:beat_pads/services/services.dart';
 import 'package:beat_pads/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:beat_pads/services/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class OctaveButtons extends ConsumerWidget {
-  const OctaveButtons({Key? key}) : super(key: key);
+  const OctaveButtons({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    double width = MediaQuery.of(context).size.width;
-    double padSpacing = width * ThemeConst.padSpacingFactor;
-    double padRadius = width * ThemeConst.padRadiusFactor;
+    final double width = MediaQuery.of(context).size.width;
+    final double padSpacing = width * ThemeConst.padSpacingFactor;
+    final double padRadius = width * ThemeConst.padRadiusFactor;
     return Column(
       children: [
         Expanded(
@@ -25,7 +25,7 @@ class OctaveButtons extends ConsumerWidget {
               style: ElevatedButton.styleFrom(
                 foregroundColor: Palette.darkGrey,
                 backgroundColor: Palette.cadetBlue,
-                padding: const EdgeInsets.all(0),
+                padding: EdgeInsets.zero,
                 alignment: Alignment.center,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(padRadius),
@@ -53,7 +53,7 @@ class OctaveButtons extends ConsumerWidget {
               style: ElevatedButton.styleFrom(
                 foregroundColor: Palette.darkGrey,
                 backgroundColor: Palette.laserLemon,
-                padding: const EdgeInsets.all(0),
+                padding: EdgeInsets.zero,
                 alignment: Alignment.center,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(padRadius),

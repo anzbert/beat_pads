@@ -1,14 +1,13 @@
 import 'package:beat_pads/services/services.dart';
 
 class NoteReleaseBuffer {
-  final SendSettings _settings;
-  bool checkerRunning = false;
-  final Function _notifyListenersOfParent;
-
   /// Data Structure that holds released Note Events. Only used by slide playmode!
   NoteReleaseBuffer(this._settings, this._notifyListenersOfParent) {
     // Utils.debugLog("note release buffer:", _buffer, 1);
   }
+  final SendSettings _settings;
+  bool checkerRunning = false;
+  final void Function() _notifyListenersOfParent;
 
   List<NoteEvent> _buffer = [];
   List<NoteEvent> get buffer => _buffer;
@@ -16,7 +15,8 @@ class NoteReleaseBuffer {
   /// Update note in the released events buffer, by adding it or updating
   /// the timer of the corresponding note
   void updateReleasedNoteEvent(NoteEvent event) {
-    int index = _buffer.indexWhere((element) => element.note == event.note);
+    final int index =
+        _buffer.indexWhere((element) => element.note == event.note);
 
     if (index >= 0) {
       _buffer[index].updateReleaseTime(); // update time
@@ -27,7 +27,7 @@ class NoteReleaseBuffer {
     if (_buffer.isNotEmpty) checkReleasedNoteEvents();
   }
 
-  void checkReleasedNoteEvents() async {
+  Future<void> checkReleasedNoteEvents() async {
     if (checkerRunning) return; // only one running instance possible!
     checkerRunning = true;
 

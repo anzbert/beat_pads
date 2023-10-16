@@ -1,12 +1,12 @@
 import 'package:beat_pads/screen_pads_menu/_screen_pads_menu.dart';
 import 'package:beat_pads/screen_pads_menu/box_credits.dart';
+import 'package:beat_pads/screen_pads_menu/switch_wake_lock.dart';
 import 'package:beat_pads/services/services.dart';
+import 'package:beat_pads/shared_components/_shared.dart';
+import 'package:beat_pads/shared_components/divider_title.dart';
 import 'package:beat_pads/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:beat_pads/shared_components/_shared.dart';
-import 'package:beat_pads/screen_pads_menu/switch_wake_lock.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../shared_components/divider_title.dart';
 
 class MenuSystem extends ConsumerWidget {
   const MenuSystem();
@@ -16,15 +16,15 @@ class MenuSystem extends ConsumerWidget {
     return ListView(
       padding: const EdgeInsets.only(bottom: ThemeConst.listViewBottomPadding),
       children: <Widget>[
-        const DividerTitle("System"),
+        const DividerTitle('System'),
         const SwitchWakeLockTile(),
-        const DividerTitle("Reset"),
+        const DividerTitle('Reset'),
         Center(
           child: ConstrainedBox(
             constraints:
                 const BoxConstraints(minWidth: ThemeConst.menuButtonMinWidth),
             child: SnackMessageButton(
-              label: "Reset Midi Buffers",
+              label: 'Reset Midi Buffers',
               message: "Midi buffer cleared & 'Stop All Notes' sent",
               onPressed: () {
                 ref.read(rxNoteProvider.notifier).reset();
@@ -42,7 +42,7 @@ class MenuSystem extends ConsumerWidget {
                 backgroundColor: Palette.lightPink,
               ),
               child: const Text(
-                "Reset All Presets",
+                'Reset All Presets',
               ),
               onPressed: () {
                 showDialog<String>(

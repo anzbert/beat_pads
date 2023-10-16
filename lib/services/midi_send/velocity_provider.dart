@@ -3,9 +3,9 @@ import 'dart:math';
 import 'package:beat_pads/services/state/midi_send.dart';
 
 enum VelocityMode {
-  random("Random"),
-  fixed("Fixed"),
-  yAxis("Y-Axis");
+  random('Random'),
+  fixed('Fixed'),
+  yAxis('Y-Axis');
 
   const VelocityMode(this.title);
   final String title;
@@ -15,13 +15,6 @@ enum VelocityMode {
 }
 
 class VelocityProvider {
-  final SendSettings _settings;
-  final Function _notifyParent;
-  final Random _random;
-  final int velocityRange;
-  double _velocityRandomCenter;
-  int _velocityFixed;
-
   /// Provides and stores working velocity values for sending midi
   /// notes in random, y-axis and fixed velocity mode
   VelocityProvider(this._settings, this._notifyParent)
@@ -29,20 +22,28 @@ class VelocityProvider {
         velocityRange = _settings.velocityRange,
         _velocityFixed = _settings.velocity,
         _velocityRandomCenter = _settings.velocityCenter.clamp(
-            9 + _settings.velocityRange / 2, 128 - _settings.velocityRange / 2);
+          9 + _settings.velocityRange / 2,
+          128 - _settings.velocityRange / 2,
+        );
+  final SendSettings _settings;
+  final void Function() _notifyParent;
+  final Random _random;
+  final int velocityRange;
+  double _velocityRandomCenter;
+  int _velocityFixed;
 
   /// Use this value to send notes.
   /// Random velocity is based on a center-of-range value, usable with a single-value slider.
   int velocity(double percentage) {
     switch (_settings.velocityMode) {
       case VelocityMode.random:
-        double randVelocity = _random.nextInt(velocityRange) +
+        final double randVelocity = _random.nextInt(velocityRange) +
             (_velocityRandomCenter - velocityRange / 2);
         return randVelocity.round().clamp(10, 127);
       case VelocityMode.fixed:
         return velocityFixed.clamp(10, 127);
       case VelocityMode.yAxis:
-        double min = _velocityRandomCenter - velocityRange / 2;
+        final double min = _velocityRandomCenter - velocityRange / 2;
         return (min + velocityRange * percentage).round().clamp(0, 127);
     }
   }

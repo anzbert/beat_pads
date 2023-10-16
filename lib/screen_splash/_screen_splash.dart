@@ -1,12 +1,11 @@
-import 'package:beat_pads/screen_pads_menu/_screen_pads_menu.dart';
-import 'package:flutter/material.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:beat_pads/screen_pads_menu/_screen_pads_menu.dart';
+import 'package:beat_pads/services/services.dart';
+import 'package:flutter/material.dart';
 import 'package:rive/rive.dart';
 
-import 'package:beat_pads/services/services.dart';
-
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({Key? key}) : super(key: key);
+  const SplashScreen({super.key});
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -42,7 +41,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 child: FittedBox(
                   fit: BoxFit.contain,
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 50.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 50),
                     child: AnimatedTextKit(
                       animatedTexts: [
                         ColorizeAnimatedText(
@@ -50,9 +49,9 @@ class _SplashScreenState extends State<SplashScreen> {
                           speed: const Duration(milliseconds: 250),
                           textAlign: TextAlign.center,
                           textStyle: const TextStyle(
-                            fontSize: 52.0,
+                            fontSize: 52,
                             fontFamily: 'Righteous',
-                            letterSpacing: 4.0,
+                            letterSpacing: 4,
                             fontWeight: FontWeight.bold,
                           ),
                           colors: [
@@ -85,7 +84,7 @@ class _SplashScreenState extends State<SplashScreen> {
                           ),
                         ],
                       )
-                    : const Text(""),
+                    : const Text(''),
               ),
             ],
           ),

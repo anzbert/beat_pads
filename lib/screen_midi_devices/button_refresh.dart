@@ -1,11 +1,10 @@
-import 'package:flutter/material.dart';
 import 'dart:math';
+import 'package:flutter/material.dart';
 
 class RefreshButton extends StatefulWidget {
-  const RefreshButton({required this.onPressed, required this.icon, Key? key})
-      : super(key: key);
+  const RefreshButton({required this.onPressed, required this.icon, super.key});
 
-  final Function onPressed;
+  final void Function() onPressed;
   final Icon icon;
 
   @override
@@ -45,8 +44,9 @@ class RefreshButtonState extends State<RefreshButton>
         onPressed: () {
           widget.onPressed();
 
-          controller.reset();
-          controller.forward();
+          controller
+            ..reset()
+            ..forward();
         },
         icon: widget.icon,
       ),

@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 
 class ThemedSlider extends StatelessWidget {
   ThemedSlider({
-    Key? key,
     required this.child,
-    this.centerLine = false,
     required this.thumbColor,
+    super.key,
+    this.centerLine = false,
     this.showTrack = false,
     this.range,
-  }) : super(key: key);
+  });
 
   final Widget child;
   final bool centerLine;
@@ -23,7 +23,7 @@ class ThemedSlider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
+    final double width = MediaQuery.of(context).size.width;
     return RotatedBox(
       quarterTurns: 3,
       child: FractionallySizedBox(
@@ -43,24 +43,26 @@ class ThemedSlider extends StatelessWidget {
                 width: width * 0.015,
               ),
             SliderTheme(
-                data: SliderTheme.of(context).copyWith(
-                  trackHeight: width * 0.015,
-                  activeTrackColor: showTrack ? Palette.cadetBlue : _trackColor,
-                  inactiveTrackColor: _trackColor,
-                  thumbColor: thumbColor,
-                  overlayColor: Colors.transparent,
-                  thumbShape: range == null
-                      ? RoundSliderThumbShape(
-                          elevation: 3.0,
-                          enabledThumbRadius: width * 0.033,
-                        )
-                      : CustomSliderThumbRect(
-                          enabledThumbRadius: width * 0.033,
-                          thumbRadius: width * 0.07,
-                          thumbHeight: range!.toDouble()),
-                  trackShape: CustomTrackShape(),
-                ),
-                child: child),
+              data: SliderTheme.of(context).copyWith(
+                trackHeight: width * 0.015,
+                activeTrackColor: showTrack ? Palette.cadetBlue : _trackColor,
+                inactiveTrackColor: _trackColor,
+                thumbColor: thumbColor,
+                overlayColor: Colors.transparent,
+                thumbShape: range == null
+                    ? RoundSliderThumbShape(
+                        elevation: 3,
+                        enabledThumbRadius: width * 0.033,
+                      )
+                    : CustomSliderThumbRect(
+                        enabledThumbRadius: width * 0.033,
+                        thumbRadius: width * 0.07,
+                        thumbHeight: range!.toDouble(),
+                      ),
+                trackShape: CustomTrackShape(),
+              ),
+              child: child,
+            ),
           ],
         ),
       ),
@@ -83,28 +85,30 @@ class CustomTrackShape extends RoundedRectSliderTrackShape {
     bool isEnabled = false,
     double additionalActiveTrackHeight = 2,
   }) {
-    super.paint(context, offset,
-        parentBox: parentBox,
-        sliderTheme: sliderTheme,
-        enableAnimation: enableAnimation,
-        textDirection: textDirection,
-        thumbCenter: thumbCenter,
-        isDiscrete: isDiscrete,
-        isEnabled: isEnabled,
-        additionalActiveTrackHeight: 0);
+    super.paint(
+      context,
+      offset,
+      parentBox: parentBox,
+      sliderTheme: sliderTheme,
+      enableAnimation: enableAnimation,
+      textDirection: textDirection,
+      thumbCenter: thumbCenter,
+      isDiscrete: isDiscrete,
+      isEnabled: isEnabled,
+      additionalActiveTrackHeight: 0,
+    );
   }
 }
 
 class CustomSliderThumbRect extends SliderComponentShape {
-  final double thumbRadius;
-  final double enabledThumbRadius;
-  final double thumbHeight;
-
   const CustomSliderThumbRect({
     required this.thumbRadius,
     required this.enabledThumbRadius,
     this.thumbHeight = 20,
   });
+  final double thumbRadius;
+  final double enabledThumbRadius;
+  final double thumbHeight;
 
   @override
   Size getPreferredSize(bool isEnabled, bool isDiscrete) {
@@ -129,11 +133,14 @@ class CustomSliderThumbRect extends SliderComponentShape {
     final Canvas canvas = context.canvas;
 
     // Rectangle
-    var fractionHeight = parentBox.constraints.maxWidth / 127 * thumbHeight;
+    final fractionHeight = parentBox.constraints.maxWidth / 127 * thumbHeight;
 
     final rRect = RRect.fromRectAndRadius(
       Rect.fromCenter(
-          center: center, width: fractionHeight, height: thumbRadius),
+        center: center,
+        width: fractionHeight,
+        height: thumbRadius,
+      ),
       Radius.circular(thumbRadius * .1),
     );
 
@@ -147,8 +154,9 @@ class CustomSliderThumbRect extends SliderComponentShape {
     // Circle with Shadow
     final thumbCirclePath = Path()
       ..addOval(Rect.fromCircle(center: center, radius: enabledThumbRadius));
-    canvas.drawShadow(thumbCirclePath, Colors.black, 3.0, true);
-    canvas.drawPath(thumbCirclePath, Paint()..color = sliderTheme.thumbColor!);
+    canvas
+      ..drawShadow(thumbCirclePath, Colors.black, 3, true)
+      ..drawPath(thumbCirclePath, Paint()..color = sliderTheme.thumbColor!);
 
     // canvas.drawCircle(
     //   center,

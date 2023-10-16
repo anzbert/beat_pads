@@ -2,19 +2,12 @@ import 'package:beat_pads/services/services.dart';
 import 'package:flutter/material.dart';
 
 class DropdownModulation extends StatelessWidget {
-  final MPEmods? otherValue;
-  final MPEmods readValue;
-  final Dims? dimensions;
-  final Function setValue;
-  final List<DropdownMenuItem<MPEmods>> items;
-
-  DropdownModulation(
-      {required this.readValue,
-      required this.setValue,
-      this.otherValue,
-      this.dimensions,
-      Key? key})
-      : items = MPEmods.values
+  DropdownModulation({
+    required this.readValue,
+    required this.setValue,
+    this.otherValue,
+    this.dimensions,
+  }) : items = MPEmods.values
             .where((modulation) {
               if (dimensions != null) {
                 if (dimensions != modulation.dimensions) {
@@ -30,8 +23,10 @@ class DropdownModulation extends StatelessWidget {
                       ? DropdownMenuItem<MPEmods>(
                           value: modulation,
                           enabled: false,
-                          child: Text(modulation.title,
-                              style: TextStyle(color: Palette.lightGrey)),
+                          child: Text(
+                            modulation.title,
+                            style: TextStyle(color: Palette.lightGrey),
+                          ),
                         )
                       : DropdownMenuItem<MPEmods>(
                           value: modulation,
@@ -39,11 +34,16 @@ class DropdownModulation extends StatelessWidget {
                         ),
             )
             .toList();
+  final MPEmods? otherValue;
+  final MPEmods readValue;
+  final Dims? dimensions;
+  final void Function(MPEmods) setValue;
+  final List<DropdownMenuItem<MPEmods>> items;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: DropdownButton<MPEmods>(
         value: readValue,
         items: items,

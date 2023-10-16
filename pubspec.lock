@@ -146,10 +146,18 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_midi_command
-      sha256: fc3984422f501fe589c84dbdc9859904d2c1201940665fc83af2151437f3ff31
+      sha256: ee01be8ea45fe9381a727968d17f2d06ec307d63025bb872c3b0b50b30442623
       url: "https://pub.dev"
     source: hosted
-    version: "0.4.12"
+    version: "0.4.14"
+  flutter_midi_command_linux:
+    dependency: transitive
+    description:
+      name: flutter_midi_command_linux
+      sha256: c4d6dcf136fd4718aa827c201446f935f2752e37b702ed712373c675cbdbb0d0
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.3.0"
   flutter_midi_command_platform_interface:
     dependency: transitive
     description:
@@ -162,10 +170,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_riverpod
-      sha256: e667e406a74d67715f1fa0bd941d9ded49aff72f3a9f4440a36aece4e8d457a7
+      sha256: bdba94be666ecb1beeb0f5a748d96cdd6a37215f27e6b48c7673b95cecb800c8
       url: "https://pub.dev"
     source: hosted
-    version: "2.4.3"
+    version: "2.4.4"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -256,6 +264,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.9.1"
+  midi:
+    dependency: transitive
+    description:
+      name: midi
+      sha256: "737c86a4ffbbe06352a8ec90bf5153774202f4b38dfb8e45af255cee18e2b9de"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.0"
   path:
     dependency: transitive
     description:
@@ -340,10 +356,10 @@ packages:
     dependency: transitive
     description:
       name: riverpod
-      sha256: "494bf2cfb4df30000273d3052bdb1cc1de738574c6b678f0beb146ea56f5e208"
+      sha256: "2af3d127a6e4e34b89b8f1f018086f5ded04b8e538174f0510bba3e4c0d878b1"
       url: "https://pub.dev"
     source: hosted
-    version: "2.4.3"
+    version: "2.4.4"
   shared_preferences:
     dependency: "direct main"
     description:
@@ -469,6 +485,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.6.0"
+  tuple:
+    dependency: transitive
+    description:
+      name: tuple
+      sha256: a97ce2013f240b2f3807bcbaf218765b6f301c3eff91092bcfa23a039e7dd151
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.2"
   typed_data:
     dependency: transitive
     description:
@@ -549,6 +573,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.4"
+  very_good_analysis:
+    dependency: "direct dev"
+    description:
+      name: very_good_analysis
+      sha256: "9ae7f3a3bd5764fb021b335ca28a34f040cd0ab6eec00a1b213b445dae58a4b8"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.1.0"
   wakelock:
     dependency: "direct main"
     description:

@@ -25,16 +25,18 @@ class CustomPaintRadius extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     // BACK
-    Paint brushBack = Paint()
+    final Paint brushBack = Paint()
       ..color = colorBack
       ..strokeWidth = 8
       ..strokeCap = StrokeCap.round;
 
-    var pathBack = Path()
-      ..addOval(Rect.fromCircle(
-        center: origin,
-        radius: maxRadius,
-      ));
+    final pathBack = Path()
+      ..addOval(
+        Rect.fromCircle(
+          center: origin,
+          radius: maxRadius,
+        ),
+      );
 
     if (!dirty) {
       canvas.drawShadow(pathBack, Colors.black.withOpacity(change), 6, true);
@@ -43,7 +45,7 @@ class CustomPaintRadius extends CustomPainter {
     // canvas.drawCircle(origin, maxRadius, brushBack); // background
 
     // FRONT
-    Paint brush = Paint()
+    final Paint brush = Paint()
       ..color = colorFront
       ..style = PaintingStyle.stroke
       ..strokeWidth = 6
@@ -59,8 +61,9 @@ class CustomPaintRadius extends CustomPainter {
     // canvas.drawShadow(pathFront, const Color(0xff000000), 3, true);
     // canvas.drawPath(pathFront, brush);
 
-    brush.style = PaintingStyle.fill;
-    brush.color = colorDeadZone;
+    brush
+      ..style = PaintingStyle.fill
+      ..color = colorDeadZone;
     if (change > deadZone) {
       canvas.drawCircle(origin, maxRadius * deadZone, brush); // deadZone
     }

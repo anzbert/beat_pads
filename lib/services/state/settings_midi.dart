@@ -11,17 +11,17 @@ final channelSettingProv = NotifierProvider<SettingIntNotifier, int>(() {
 });
 
 final channelUsableProv = Provider<int>(
-  ((ref) {
-    int channel = ref.watch(channelSettingProv);
-    PlayMode playMode = ref.watch(playModeProv);
-    bool upperZone = channel > 7 ? true : false;
+  (ref) {
+    final int channel = ref.watch(channelSettingProv);
+    final PlayMode playMode = ref.watch(playModeProv);
+    final bool upperZone = channel > 7;
 
     if (playMode == PlayMode.mpe) {
       return upperZone ? 15 : 0;
     }
 
     return channel;
-  }),
+  },
 );
 
 final mpeMemberChannelsProv = NotifierProvider<SettingIntNotifier, int>(() {
@@ -34,8 +34,8 @@ final mpeMemberChannelsProv = NotifierProvider<SettingIntNotifier, int>(() {
 });
 
 final zoneProv = Provider<bool>((ref) {
-  int channel = ref.watch(channelSettingProv);
-  return channel > 7 ? true : false;
+  final int channel = ref.watch(channelSettingProv);
+  return channel > 7;
 });
 
 // VELOCITY
@@ -72,9 +72,9 @@ final velocityMaxProv = NotifierProvider<SettingIntNotifier, int>(() {
   );
 });
 
-final velocityRangeProv = Provider<int>(((ref) {
+final velocityRangeProv = Provider<int>((ref) {
   return ref.watch(velocityMaxProv) - ref.watch(velocityMinProv);
-}));
-final velocityCenterProv = Provider<double>(((ref) {
+});
+final velocityCenterProv = Provider<double>((ref) {
   return (ref.watch(velocityMaxProv) + ref.watch(velocityMinProv)) / 2;
-}));
+});

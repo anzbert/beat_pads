@@ -29,45 +29,51 @@ class CustomPaintXYSquare extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     // BACK:
-    Paint brushRect = Paint()
+    final Paint brushRect = Paint()
       ..color = colorBack
       ..strokeWidth = 8
       ..strokeCap = StrokeCap.round;
 
-    RRect roundedRect = RRect.fromRectAndRadius(
-        Rect.fromCircle(
-          center: origin,
-          radius: maxRadius,
-        ),
-        const Radius.circular(12));
+    final RRect roundedRect = RRect.fromRectAndRadius(
+      Rect.fromCircle(
+        center: origin,
+        radius: maxRadius,
+      ),
+      const Radius.circular(12),
+    );
 
-    var pathBack = Path()..addRRect(roundedRect);
+    final pathBack = Path()..addRRect(roundedRect);
     if (!dirty) {
       canvas.drawShadow(
-          pathBack, Colors.black.withOpacity(radialChange), 6, true);
+        pathBack,
+        Colors.black.withOpacity(radialChange),
+        6,
+        true,
+      );
     }
     canvas.drawPath(pathBack, brushRect);
     // canvas.drawRRect(roundedRect, brushRect); // background
 
     // FRONT:
-    Paint brush = Paint()
+    final Paint brush = Paint()
       ..color = colorFront
       ..style = PaintingStyle.stroke
       ..strokeWidth = 6
       ..strokeCap = StrokeCap.round;
 
-    Offset originY = origin.translate(changeAbsolute.dx, -maxRadius);
-    Offset pointY = ((Offset.fromDirection(pi / 2)) + origin)
+    final Offset originY = origin.translate(changeAbsolute.dx, -maxRadius);
+    final Offset pointY = ((Offset.fromDirection(pi / 2)) + origin)
         .translate(changeAbsolute.dx, maxRadius);
     canvas.drawLine(originY, pointY, brush); // vertical Y line
 
-    Offset originX = origin.translate(-maxRadius, -changeAbsolute.dy);
-    Offset pointX = ((Offset.fromDirection(2 * pi)) + origin)
+    final Offset originX = origin.translate(-maxRadius, -changeAbsolute.dy);
+    final Offset pointX = ((Offset.fromDirection(2 * pi)) + origin)
         .translate(maxRadius, -changeAbsolute.dy);
     canvas.drawLine(originX, pointX, brush); // horizontal X line
 
     brush.style = PaintingStyle.fill;
-    Offset touch = origin.translate(changeAbsolute.dx, -changeAbsolute.dy);
+    final Offset touch =
+        origin.translate(changeAbsolute.dx, -changeAbsolute.dy);
     canvas.drawCircle(touch, 12, brush); // touch tracker
 
     brush.color = colorDeadZone;

@@ -6,10 +6,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class SliderVelocity extends ConsumerStatefulWidget {
   const SliderVelocity({
-    Key? key,
     required this.channel,
     required this.randomVelocity,
-  }) : super(key: key);
+    super.key,
+  });
 
   final int channel;
   final bool randomVelocity;
@@ -24,24 +24,26 @@ class _SliderVelocityState extends ConsumerState<SliderVelocity> {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
+    final double width = MediaQuery.of(context).size.width;
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Flexible(
           flex: 5,
-          child: LayoutBuilder(builder: (context, constraints) {
-            return Align(
-              alignment: Alignment.bottomCenter,
-              child: Text(
-                "Vel",
-                style: TextStyle(
-                  fontSize: constraints.maxWidth * fontSizeFactor,
-                  color: Palette.darker(Palette.cadetBlue, 0.6),
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              return Align(
+                alignment: Alignment.bottomCenter,
+                child: Text(
+                  'Vel',
+                  style: TextStyle(
+                    fontSize: constraints.maxWidth * fontSizeFactor,
+                    color: Palette.darker(Palette.cadetBlue, 0.6),
+                  ),
                 ),
-              ),
-            );
-          }),
+              );
+            },
+          ),
         ),
         Center(
           child: Divider(
@@ -60,8 +62,12 @@ class _SliderVelocityState extends ConsumerState<SliderVelocity> {
                 min: 10,
                 max: 127,
                 value: ref
-                    .watch(senderProvider.select((value) =>
-                        value.playModeHandler.velocityProvider.velocityFixed))
+                    .watch(
+                      senderProvider.select(
+                        (value) => value
+                            .playModeHandler.velocityProvider.velocityFixed,
+                      ),
+                    )
                     .clamp(10, 127)
                     .toDouble(),
                 onChanged: (v) {
@@ -79,16 +85,24 @@ class _SliderVelocityState extends ConsumerState<SliderVelocity> {
           Flexible(
             flex: 30,
             child: ThemedSlider(
-              range: ref.watch(senderProvider.select((value) =>
-                  value.playModeHandler.velocityProvider.velocityRange)),
+              range: ref.watch(
+                senderProvider.select(
+                  (value) =>
+                      value.playModeHandler.velocityProvider.velocityRange,
+                ),
+              ),
               thumbColor: Palette.cadetBlue,
               child: Slider(
                 allowedInteraction: SliderInteraction.slideThumb,
                 min: 10,
                 max: 127,
                 value: ref
-                    .watch(senderProvider.select((value) => value
-                        .playModeHandler.velocityProvider.velocityRandomCenter))
+                    .watch(
+                      senderProvider.select(
+                        (value) => value.playModeHandler.velocityProvider
+                            .velocityRandomCenter,
+                      ),
+                    )
                     .clamp(10, 127),
                 onChanged: (v) {
                   ref
@@ -122,14 +136,14 @@ class _SliderVelocityState extends ConsumerState<SliderVelocity> {
                       Flexible(
                         flex: 2,
                         child: Text(
-                            ref.watch(velocityModeProv) != VelocityMode.fixed
-                                ? "${ref.watch(senderProvider.select((value) => value.playModeHandler.velocityProvider.velocityRandomCenter)).round()}"
-                                : "${ref.watch(senderProvider.select((value) => value.playModeHandler.velocityProvider.velocityFixed))}",
-                            style: DefaultTextStyle.of(context).style.copyWith(
-                                  fontSize:
-                                      constraints.maxWidth * fontSizeFactor,
-                                  color: Palette.darker(Palette.cadetBlue, 0.6),
-                                )),
+                          ref.watch(velocityModeProv) != VelocityMode.fixed
+                              ? '${ref.watch(senderProvider.select((value) => value.playModeHandler.velocityProvider.velocityRandomCenter)).round()}'
+                              : '${ref.watch(senderProvider.select((value) => value.playModeHandler.velocityProvider.velocityFixed))}',
+                          style: DefaultTextStyle.of(context).style.copyWith(
+                                fontSize: constraints.maxWidth * fontSizeFactor,
+                                color: Palette.darker(Palette.cadetBlue, 0.6),
+                              ),
+                        ),
                       ),
                       Flexible(
                         flex: 1,
@@ -137,7 +151,7 @@ class _SliderVelocityState extends ConsumerState<SliderVelocity> {
                             ? Align(
                                 alignment: Alignment.centerRight,
                                 child: Text(
-                                  "${String.fromCharCode(177)}${ref.watch(senderProvider.select((value) => value.playModeHandler.velocityProvider.velocityRange)) ~/ 2}",
+                                  '${String.fromCharCode(177)}${ref.watch(senderProvider.select((value) => value.playModeHandler.velocityProvider.velocityRange)) ~/ 2}',
                                   style: TextStyle(
                                     fontSize: constraints.maxWidth *
                                         fontSizeFactor *

@@ -1,23 +1,25 @@
 import 'package:beat_pads/services/services.dart';
 
 class TouchReleaseBuffer {
-  final SendSettings _settings;
-  final Function releaseMPEChannel;
-  bool checkerRunning = false;
-  final Function _notifyListenersOfParent;
-
   /// Data Structure that holds released Touch Events
   TouchReleaseBuffer(
-      this._settings, this.releaseMPEChannel, this._notifyListenersOfParent) {
+    this._settings,
+    this.releaseMPEChannel,
+    this._notifyListenersOfParent,
+  ) {
     // Utils.debugLog("touch release buffer:", _buffer, 1);
   }
+  final SendSettings _settings;
+  final void Function(int) releaseMPEChannel;
+  bool checkerRunning = false;
+  final void Function() _notifyListenersOfParent;
 
   final List<TouchEvent> _buffer = [];
   List<TouchEvent> get buffer => _buffer;
 
   /// Find and return a TouchEvent from the buffer by its uniqueID, if possible
   TouchEvent? getByID(int id) {
-    for (TouchEvent event in _buffer) {
+    for (final TouchEvent event in _buffer) {
       if (event.uniqueID == id) {
         return event;
       }
@@ -27,7 +29,7 @@ class TouchReleaseBuffer {
 
   bool isNoteInBuffer(int? note) {
     if (note == null) return false;
-    for (var event in _buffer) {
+    for (final event in _buffer) {
       if (event.noteEvent.note == note) return true;
     }
     return false;
@@ -40,8 +42,9 @@ class TouchReleaseBuffer {
   /// Update note in the released events buffer, by adding it or updating
   /// the timer of the corresponding note
   void updateReleasedEvent(TouchEvent event) {
-    int index = _buffer.indexWhere(
-        (element) => element.noteEvent.note == event.noteEvent.note);
+    final int index = _buffer.indexWhere(
+      (element) => element.noteEvent.note == event.noteEvent.note,
+    );
 
     if (index >= 0) {
       _buffer[index].noteEvent.updateReleaseTime(); // update time
@@ -54,7 +57,7 @@ class TouchReleaseBuffer {
     if (_buffer.isNotEmpty) checkReleasedEvents();
   }
 
-  void checkReleasedEvents() async {
+  Future<void> checkReleasedEvents() async {
     if (checkerRunning) return; // only one running instance possible!
     checkerRunning = true;
 
@@ -69,7 +72,8 @@ class TouchReleaseBuffer {
               _buffer[i].noteEvent.noteOff(); // note OFF
 
               releaseMPEChannel(
-                  _buffer[i].noteEvent.channel); // release MPE channel
+                _buffer[i].noteEvent.channel,
+              ); // release MPE channel
 
               _buffer[i].markKillIfNoteOffAndNoAnimation();
               _notifyListenersOfParent(); // notify to update pads
@@ -83,7 +87,7 @@ class TouchReleaseBuffer {
   }
 
   void removeNoteFromReleaseBuffer(int note) {
-    for (var element in _buffer) {
+    for (final element in _buffer) {
       if (element.noteEvent.note == note) {
         releaseMPEChannel(element.noteEvent.channel);
       }

@@ -3,23 +3,23 @@ import 'package:flutter/material.dart';
 
 class NonLinearSliderTile extends StatelessWidget {
   const NonLinearSliderTile({
-    this.label = "#Label",
+    required this.readValue,
+    required this.setValue,
+    this.label = '#Label',
     this.subtitle,
     this.resetFunction,
     this.onChangeEnd,
-    required this.readValue,
-    required this.setValue,
     this.displayValue,
     this.steps = 100,
     this.start = 0,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final int steps;
   final int start;
-  final Function? resetFunction;
-  final Function? onChangeEnd;
-  final Function setValue;
+  final void Function()? resetFunction;
+  final void Function()? onChangeEnd;
+  final void Function(int) setValue;
   final int readValue;
   final String label;
   final String? subtitle;
@@ -42,8 +42,8 @@ class NonLinearSliderTile extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 12),
                     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   ),
-                  child: const Text("Reset"),
-                )
+                  child: const Text('Reset'),
+                ),
             ],
           ),
           subtitle: subtitle != null ? Text(subtitle!) : null,
@@ -53,7 +53,7 @@ class NonLinearSliderTile extends StatelessWidget {
         ),
         Builder(
           builder: (context) {
-            double width = MediaQuery.of(context).size.width;
+            final double width = MediaQuery.of(context).size.width;
             return SizedBox(
               width: width * ThemeConst.sliderWidthFactor,
               child: Slider(
@@ -64,7 +64,7 @@ class NonLinearSliderTile extends StatelessWidget {
                   setValue(value.toInt());
                 },
                 onChangeEnd: (_) {
-                  if (onChangeEnd != null) onChangeEnd!();
+                  onChangeEnd?.call();
                 },
               ),
             );

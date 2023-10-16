@@ -1,10 +1,10 @@
+import 'package:beat_pads/services/services.dart';
 import 'package:beat_pads/shared_components/_shared.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:beat_pads/services/services.dart';
 
 class CreditsBox extends StatelessWidget {
-  const CreditsBox({Key? key}) : super(key: key);
+  const CreditsBox({super.key});
 
   Future<bool> webView(String host, [String? path]) async {
     final httpUri = Uri(
@@ -13,66 +13,70 @@ class CreditsBox extends StatelessWidget {
       path: path,
     );
     if (await canLaunchUrl(httpUri)) {
-      return await launchUrl(httpUri);
+      return launchUrl(httpUri);
     } else {
-      Utils.logd("Failure to launch webview with:\n$httpUri");
+      Utils.logd('Failure to launch webview with:\n$httpUri');
       return false;
     }
   }
 
-  final double _linkFontSize = 18;
+  static const double _linkFontSize = 18;
 
   @override
   Widget build(BuildContext context) {
     return WidgetsInfoBox(
-      header: "Credits",
+      header: 'Credits',
       body: [
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Wrap(children: [
-              Text("Get the Source, contribute and report issues:"),
-            ]),
+            const Wrap(
+              children: [
+                Text('Get the Source, contribute and report issues:'),
+              ],
+            ),
             TextButton(
-              child: Text(
-                "GitHub",
+              child: const Text(
+                'GitHub',
                 style: TextStyle(
-                    decoration: TextDecoration.underline,
-                    fontSize: _linkFontSize),
+                  decoration: TextDecoration.underline,
+                  fontSize: _linkFontSize,
+                ),
               ),
-              onPressed: () async =>
-                  await webView("github.com", "anzbert/beat_pads"),
-            )
+              onPressed: () async => webView('github.com', 'anzbert/beat_pads'),
+            ),
           ],
         ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Wrap(children: [Text("My website:")]),
+            const Wrap(children: [Text('My website:')]),
             TextButton(
-              child: Text(
-                "Anzio.dev",
+              child: const Text(
+                'Anzio.dev',
                 style: TextStyle(
-                    decoration: TextDecoration.underline,
-                    fontSize: _linkFontSize),
+                  decoration: TextDecoration.underline,
+                  fontSize: _linkFontSize,
+                ),
               ),
-              onPressed: () async => await webView("anzio.dev"),
-            )
+              onPressed: () async => webView('anzio.dev'),
+            ),
           ],
         ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Wrap(children: [Text("Magic Tone Network & XpressPads:")]),
+            const Wrap(children: [Text('Magic Tone Network & XpressPads:')]),
             TextButton(
-              child: Text(
-                "XpressPads.com",
+              child: const Text(
+                'XpressPads.com',
                 style: TextStyle(
-                    decoration: TextDecoration.underline,
-                    fontSize: _linkFontSize),
+                  decoration: TextDecoration.underline,
+                  fontSize: _linkFontSize,
+                ),
               ),
-              onPressed: () async => await webView("xpresspads.com"),
-            )
+              onPressed: () async => webView('xpresspads.com'),
+            ),
           ],
         ),
         Column(
@@ -80,41 +84,46 @@ class CreditsBox extends StatelessWidget {
           children: [
             const Wrap(children: [Text("Dog Logo by 'catalyststuff' from:")]),
             TextButton(
-              child: Text(
-                "FreePik.com",
+              child: const Text(
+                'FreePik.com',
                 style: TextStyle(
-                    decoration: TextDecoration.underline,
-                    fontSize: _linkFontSize),
+                  decoration: TextDecoration.underline,
+                  fontSize: _linkFontSize,
+                ),
               ),
-              onPressed: () async => await webView("freepik.com"),
-            )
+              onPressed: () async => webView('freepik.com'),
+            ),
           ],
         ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Wrap(children: [Text("Splash Screen animated with Rive:")]),
+            const Wrap(children: [Text('Splash Screen animated with Rive:')]),
             TextButton(
-              child: Text("Rive.app",
-                  style: TextStyle(
-                      decoration: TextDecoration.underline,
-                      fontSize: _linkFontSize)),
-              onPressed: () async => await webView("rive.app"),
-            )
+              child: const Text(
+                'Rive.app',
+                style: TextStyle(
+                  decoration: TextDecoration.underline,
+                  fontSize: _linkFontSize,
+                ),
+              ),
+              onPressed: () async => webView('rive.app'),
+            ),
           ],
         ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Wrap(
-              children: [Text("Contact me:")],
+              children: [Text('Contact me:')],
             ),
             TextButton(
-              child: Text(
-                "anzbert@gmail.com",
+              child: const Text(
+                'anzbert@gmail.com',
                 style: TextStyle(
-                    decoration: TextDecoration.underline,
-                    fontSize: _linkFontSize),
+                  decoration: TextDecoration.underline,
+                  fontSize: _linkFontSize,
+                ),
               ),
               onPressed: () async {
                 final Uri encoded = Uri(
@@ -126,10 +135,10 @@ class CreditsBox extends StatelessWidget {
                 if (await canLaunchUrl(encoded)) {
                   await launchUrl(encoded);
                 } else {
-                  Utils.logd("Failure to launch webview with:\n$encoded");
+                  Utils.logd('Failure to launch webview with:\n$encoded');
                 }
               },
-            )
+            ),
           ],
         ),
       ],

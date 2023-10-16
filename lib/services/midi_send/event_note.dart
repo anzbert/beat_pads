@@ -1,6 +1,13 @@
 import 'package:flutter_midi_command/flutter_midi_command_messages.dart';
 
 class NoteEvent {
+  /// Create and store a NoteOn event for its lifetime as well as its release time
+  NoteEvent(this.channel, this.note, this.velocity)
+      : noteOnMessage = NoteOnMessage(
+          channel: channel,
+          note: note,
+          velocity: velocity,
+        );
   int channel;
   final int note;
   final int velocity;
@@ -9,19 +16,11 @@ class NoteEvent {
   NoteOnMessage? noteOnMessage;
   int releaseTime = 0;
 
-  bool get isPlaying => noteOnMessage == null ? false : true;
+  bool get isPlaying => noteOnMessage != null;
 
   bool _kill = false;
   void markKill() => _kill = true;
   bool get kill => _kill;
-
-  /// Create and store a NoteOn event for its lifetime as well as its release time
-  NoteEvent(this.channel, this.note, this.velocity)
-      : noteOnMessage = NoteOnMessage(
-          channel: channel,
-          note: note,
-          velocity: velocity,
-        );
 
   /// Update to keep track of when the note was last released
   void updateReleaseTime() =>
@@ -31,7 +30,7 @@ class NoteEvent {
   void updateMPEchannel(int newChan) => channel = newChan;
 
   /// Send this noteEvent's NoteOnMessage
-  void noteOn({cc = false}) {
+  void noteOn({bool cc = false}) {
     noteOnMessage?.send();
     if (cc) {
       ccMessage =

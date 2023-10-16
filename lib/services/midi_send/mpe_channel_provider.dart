@@ -8,18 +8,20 @@ In the simplest workable implementation, a new note will be assigned to the Chan
 */
 
 class MemberChannelProvider {
+  MemberChannelProvider(this.upperZone, this.members)
+      : allMemberChannels = List.generate(
+          members,
+          (i) => i + (upperZone ? 15 - members : 1),
+          growable: false,
+        ),
+        channelQueue = Queue.from(
+          List.generate(members, (i) => i + (upperZone ? 15 - members : 1)),
+        );
   final bool upperZone;
   final int members;
 
   final List<int> allMemberChannels;
   final Queue<int> channelQueue;
-
-  MemberChannelProvider(this.upperZone, this.members)
-      : allMemberChannels = List.generate(
-            members, (i) => i + (upperZone ? 15 - members : 1),
-            growable: false),
-        channelQueue = Queue.from(
-            List.generate(members, (i) => i + (upperZone ? 15 - members : 1)));
 
   void releaseMPEChannel(int channel) {
     if (!channelQueue.contains(channel)) {
@@ -35,14 +37,16 @@ class MemberChannelProvider {
   }
 
   int _leastNotes(List<TouchEvent> touchEvents) {
-    if (allMemberChannels.isEmpty) throw ("no member channels available");
+    if (allMemberChannels.isEmpty) {
+      throw ArgumentError('no member channels available');
+    }
 
-    Queue<int> usedChans = Queue.from(allMemberChannels);
+    final Queue<int> usedChans = Queue.from(allMemberChannels);
 
-    for (TouchEvent event in touchEvents) {
-      bool removed = usedChans.remove(event.noteEvent.channel);
+    for (final TouchEvent event in touchEvents) {
+      final bool removed = usedChans.remove(event.noteEvent.channel);
       if (!removed) {
-        Utils.logd("touchbuffer channel not part of memberlist!");
+        Utils.logd('touchbuffer channel not part of memberlist!');
       }
       usedChans.addFirst(event.noteEvent.channel);
     }

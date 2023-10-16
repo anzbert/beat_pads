@@ -1,9 +1,6 @@
 import 'package:beat_pads/services/services.dart';
 
 class PlayModeMPE extends PlayModeHandler {
-  final SendMpe mpeMods;
-  final MemberChannelProvider channelProvider;
-
   PlayModeMPE(super.settings, super.notifyParent)
       : mpeMods = SendMpe(
           settings.mpe2DX.getMod(settings.mpePitchbendRange),
@@ -12,6 +9,8 @@ class PlayModeMPE extends PlayModeHandler {
         ),
         channelProvider =
             MemberChannelProvider(settings.zone, settings.mpeMemberChannels);
+  final SendMpe mpeMods;
+  final MemberChannelProvider channelProvider;
 
   /// Release channel in MPE channel provider
   @override
@@ -26,9 +25,9 @@ class PlayModeMPE extends PlayModeHandler {
       touchReleaseBuffer.removeNoteFromReleaseBuffer(data.padNote);
     }
 
-    int newChannel = channelProvider.provideChannel([
+    final int newChannel = channelProvider.provideChannel([
       ...touchBuffer.buffer,
-      ...touchReleaseBuffer.buffer
+      ...touchReleaseBuffer.buffer,
     ]); // get new channel from generator
 
     if (settings.modulation2D) {
@@ -38,19 +37,24 @@ class PlayModeMPE extends PlayModeHandler {
       mpeMods.rMod.send(newChannel, data.padNote, 0);
     }
 
-    NoteEvent noteOn = NoteEvent(
-        newChannel, data.padNote, velocityProvider.velocity(data.yPercentage))
-      ..noteOn(cc: false);
+    final NoteEvent noteOn = NoteEvent(
+      newChannel,
+      data.padNote,
+      velocityProvider.velocity(data.yPercentage),
+    )..noteOn(cc: false);
 
-    touchBuffer.addNoteOn(CustomPointer(data.pointer, data.screenTouchPos),
-        noteOn, data.screenSize);
+    touchBuffer.addNoteOn(
+      CustomPointer(data.pointer, data.screenTouchPos),
+      noteOn,
+      data.screenSize,
+    );
     notifyParent();
   }
 
   @override
   // void handlePan(CustomPointer touch, int? note) {
   void handlePan(NullableTouchAndScreenData data) {
-    TouchEvent? eventInBuffer = touchBuffer.getByID(data.pointer) ??
+    final TouchEvent? eventInBuffer = touchBuffer.getByID(data.pointer) ??
         touchReleaseBuffer.getByID(data.pointer);
     if (eventInBuffer == null) return;
 

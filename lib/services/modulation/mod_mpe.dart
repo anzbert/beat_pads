@@ -19,17 +19,16 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_midi_command/flutter_midi_command_messages.dart';
 
 class SendMpe {
+  SendMpe(this.xMod, this.yMod, this.rMod);
   final Mod xMod;
   final Mod yMod;
   final Mod rMod;
-
-  SendMpe(this.xMod, this.yMod, this.rMod);
 }
 
 class ModPitchBend extends Mod {
+  ModPitchBend(this.pitchBendMax, this.range);
   final int pitchBendMax;
   final Range range;
-  ModPitchBend(this.pitchBendMax, this.range);
 
   double dist(double input) {
     if (range == Range.up) return input.abs();
@@ -39,7 +38,7 @@ class ModPitchBend extends Mod {
 
   @override
   void send(int channel, int note, double distance) {
-    int pitchChange = (distance * 0x3FFF).toInt();
+    final int pitchChange = (distance * 0x3FFF).toInt();
 
     if (!listEquals<num>([channel, pitchChange], lastSentValues)) {
       PitchBendMessage(
@@ -55,7 +54,7 @@ class ModPitchBend extends Mod {
 class ModMPEAftertouch1D extends Mod {
   @override
   void send(int channel, int note, double distance) {
-    int atChange = (distance.abs() * 127).toInt();
+    final int atChange = (distance.abs() * 127).toInt();
 
     if (!listEquals<num>([channel, atChange], lastSentValues)) {
       ATMessage(channel: channel, pressure: atChange).send();
@@ -67,7 +66,7 @@ class ModMPEAftertouch1D extends Mod {
 class ModMPEAftertouch642D extends Mod {
   @override
   void send(int channel, int note, double distance) {
-    int atChange = ((distance + 1) / 2 * 127).toInt();
+    final int atChange = ((distance + 1) / 2 * 127).toInt();
 
     if (!listEquals<num>([channel, atChange], lastSentValues)) {
       ATMessage(channel: channel, pressure: atChange).send();
@@ -77,12 +76,12 @@ class ModMPEAftertouch642D extends Mod {
 }
 
 class ModCC1D extends Mod {
-  final CC cc;
   ModCC1D(this.cc);
+  final CC cc;
 
   @override
   void send(int channel, int note, double distance) {
-    int ccChange = (distance.abs() * 127).toInt();
+    final int ccChange = (distance.abs() * 127).toInt();
 
     if (!listEquals<num>([channel, note, ccChange], lastSentValues)) {
       CCMessage(channel: channel, controller: cc.value, value: ccChange).send();
@@ -92,12 +91,12 @@ class ModCC1D extends Mod {
 }
 
 class ModCC642D extends Mod {
-  final CC cc;
   ModCC642D(this.cc);
+  final CC cc;
 
   @override
   void send(int channel, int note, double distance) {
-    int ccChange = ((distance + 1) / 2 * 127).toInt();
+    final int ccChange = ((distance + 1) / 2 * 127).toInt();
 
     if (!listEquals<num>([channel, note, ccChange], lastSentValues)) {
       CCMessage(channel: channel, controller: cc.value, value: ccChange).send();
@@ -109,34 +108,33 @@ class ModCC642D extends Mod {
 class ModNull extends Mod {
   @override
   void send(int channel, int note, double distance) {
-    Utils.logd("Sending debug placeholder: $channel / $note / $distance");
+    Utils.logd('Sending debug placeholder: $channel / $note / $distance');
   }
 }
 
 // for dropdown menu
 enum MPEmods {
-  pitchbend("Pitch Bend Up & Down", Dims.two, Group.pitch),
-  pitchbendUp("Pitch Bend Up", Dims.one, Group.pitch),
-  pitchbendDown("Pitch Bend Down", Dims.one, Group.pitch),
-  mpeAftertouch("AT Pressure", Dims.one, Group.at),
-  mpeAftertouch64("AT Pressure Center 64", Dims.two, Group.at),
-  slide("Slide [74]", Dims.one, Group.slide),
-  slide64("Slide [74] Center 64", Dims.two, Group.slide),
-  pan("Pan [10]", Dims.one, Group.pan),
-  pan64("Pan [10] Center 64", Dims.two, Group.pan),
-  gain("Gain [7]", Dims.one, Group.gain),
-  gain64("Gain [7] Center 64", Dims.two, Group.gain),
+  pitchbend('Pitch Bend Up & Down', Dims.two, Group.pitch),
+  pitchbendUp('Pitch Bend Up', Dims.one, Group.pitch),
+  pitchbendDown('Pitch Bend Down', Dims.one, Group.pitch),
+  mpeAftertouch('AT Pressure', Dims.one, Group.at),
+  mpeAftertouch64('AT Pressure Center 64', Dims.two, Group.at),
+  slide('Slide [74]', Dims.one, Group.slide),
+  slide64('Slide [74] Center 64', Dims.two, Group.slide),
+  pan('Pan [10]', Dims.one, Group.pan),
+  pan64('Pan [10] Center 64', Dims.two, Group.pan),
+  gain('Gain [7]', Dims.one, Group.gain),
+  gain64('Gain [7] Center 64', Dims.two, Group.gain),
 
-  none("None", Dims.one, Group.none);
+  none('None', Dims.one, Group.none);
 
+  const MPEmods(this.title, this.dimensions, this.exclusiveGroup);
   @override
   String toString() => title;
 
   final String title;
   final Dims dimensions;
   final Group exclusiveGroup;
-
-  const MPEmods(this.title, this.dimensions, this.exclusiveGroup);
 
   Mod getMod(int pitchBendMax) {
     if (this == MPEmods.mpeAftertouch) return ModMPEAftertouch1D();

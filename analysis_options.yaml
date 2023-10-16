@@ -13,9 +13,9 @@
 # The following line activates a set of recommended lints for Flutter apps,
 # packages, and plugins designed to encourage good coding practices.
 
-include: package:flutter_lints/flutter.yaml
+# include: package:flutter_lints/flutter.yaml
 # include: package:austerity/analysis_options.yaml
-# include: package:very_good_analysis/analysis_options.yaml
+include: package:very_good_analysis/analysis_options.yaml
 
 linter:
   # The lint rules applied to this project can be customized in the
@@ -30,11 +30,14 @@ linter:
   # `// ignore_for_file: name_of_lint` syntax on the line or in the file
   # producing the lint.
   rules:
+    avoid_redundant_argument_values: false
     public_member_api_docs: false
+    avoid_positional_boolean_parameters: false
+    omit_local_variable_types: false
+    use_setters_to_change_properties: false
     # avoid_print: false
     use_key_in_widget_constructors: false
     # prefer_single_quotes: false
-    # omit_local_variable_types: false
     lines_longer_than_80_chars: false
     avoid_classes_with_only_static_members: false
     flutter_style_todos: false

@@ -1,7 +1,7 @@
+import 'package:beat_pads/main.dart';
 import 'package:beat_pads/services/state/settings_presets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../main.dart';
 
 /// Holds an instance of the loaded [SharedPreferences]
 class Prefs {
@@ -9,7 +9,8 @@ class Prefs {
   late SharedPreferences sharedPrefs;
 
   static Future<Prefs> initAsync() async {
-    Prefs instance = Prefs._();
+    final Prefs instance = Prefs._();
+    // ignore: cascade_invocations
     instance.sharedPrefs = await SharedPreferences.getInstance();
     return instance;
   }
@@ -17,6 +18,7 @@ class Prefs {
 
 /// Call ``resetAll()`` on this [Notifier] to alert all [SettingNotifier]s to reset themselves
 final resetAllProv = NotifierProvider<_ResetAllNotifier, bool>(
+  // ignore: unnecessary_lambdas
   () => _ResetAllNotifier(),
 );
 
@@ -40,18 +42,17 @@ class _ResetAllNotifier extends Notifier<bool> {
 }
 
 abstract class SettingNotifier<T> extends Notifier<T> {
-  final T defaultValue;
-  final String key;
-  String presetKey;
-  final bool usesPresets;
-  final bool resettable;
-
   SettingNotifier({
     required this.key,
     required this.defaultValue,
     this.usesPresets = true,
     this.resettable = true,
-  }) : presetKey = "{$key}-${PresetNotfier.basePreset}";
+  }) : presetKey = '{$key}-${PresetNotfier.basePreset}';
+  final T defaultValue;
+  final String key;
+  String presetKey;
+  final bool usesPresets;
+  final bool resettable;
 
   /// Set this Settings state to a new value
   void set(T newState) {
@@ -73,7 +74,7 @@ abstract class SettingNotifier<T> extends Notifier<T> {
     }
     if (usesPresets) {
       ref.listen(presetNotifierProvider, (_, next) {
-        presetKey = "{$key}-$next";
+        presetKey = '{$key}-$next';
         state = _load();
       });
     }
@@ -93,20 +94,19 @@ abstract class SettingNotifier<T> extends Notifier<T> {
 }
 
 class SettingIntNotifier extends SettingNotifier<int> {
-  final int min;
-  final int max;
-
   SettingIntNotifier({
     required this.max,
-    this.min = 0,
     required super.key,
     required super.defaultValue,
+    this.min = 0,
     super.resettable,
     super.usesPresets,
   });
+  final int min;
+  final int max;
 
   @override
-  void save() async {
+  Future<void> save() async {
     await ref.read(sharedPrefProvider).sharedPrefs.setInt(presetKey, state);
   }
 
@@ -145,7 +145,7 @@ class SettingBoolNotifier extends SettingNotifier<bool> {
   }
 
   @override
-  void save() async {
+  Future<void> save() async {
     await ref.read(sharedPrefProvider).sharedPrefs.setBool(presetKey, state);
   }
 
@@ -161,17 +161,16 @@ class SettingBoolNotifier extends SettingNotifier<bool> {
 }
 
 class SettingDoubleNotifier extends SettingNotifier<double> {
-  final double min;
-  final double max;
-
   SettingDoubleNotifier({
-    this.min = 0,
     required this.max,
     required super.key,
     required super.defaultValue,
+    this.min = 0,
     super.resettable,
     super.usesPresets,
   });
+  final double min;
+  final double max;
 
   @override
   void set(double newState) {
@@ -179,7 +178,7 @@ class SettingDoubleNotifier extends SettingNotifier<double> {
   }
 
   @override
-  void save() async {
+  Future<void> save() async {
     await ref
         .read(sharedPrefProvider)
         .sharedPrefs
@@ -194,7 +193,8 @@ class SettingDoubleNotifier extends SettingNotifier<double> {
 
   @override
   double _load() {
-    int? value = ref.read(sharedPrefProvider).sharedPrefs.getInt(presetKey);
+    final int? value =
+        ref.read(sharedPrefProvider).sharedPrefs.getInt(presetKey);
     return value != null ? value / 100 : defaultValue;
   }
 }
@@ -208,7 +208,7 @@ class SettingStringNotifier extends SettingNotifier<String> {
   });
 
   @override
-  void save() async {
+  Future<void> save() async {
     await ref.read(sharedPrefProvider).sharedPrefs.setString(presetKey, state);
   }
 
@@ -225,8 +225,6 @@ class SettingStringNotifier extends SettingNotifier<String> {
 }
 
 class SettingEnumNotifier<T extends Enum> extends SettingNotifier<T> {
-  final Map<String, T> nameMap;
-
   SettingEnumNotifier({
     required this.nameMap,
     required super.key,
@@ -234,9 +232,10 @@ class SettingEnumNotifier<T extends Enum> extends SettingNotifier<T> {
     super.resettable,
     super.usesPresets,
   });
+  final Map<String, T> nameMap;
 
   @override
-  void save() async {
+  Future<void> save() async {
     await ref
         .read(sharedPrefProvider)
         .sharedPrefs
@@ -251,10 +250,10 @@ class SettingEnumNotifier<T extends Enum> extends SettingNotifier<T> {
 
   @override
   T _load() {
-    String? name =
+    final String? name =
         ref.read(sharedPrefProvider).sharedPrefs.getString(presetKey);
     if (name != null) {
-      T? value = nameMap[name];
+      final T? value = nameMap[name];
       if (value != null) return value;
     }
     return defaultValue;

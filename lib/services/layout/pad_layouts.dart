@@ -11,10 +11,10 @@ enum Layout {
   scaleNotes4th('In Key - 4th'),
   scaleNotesOnly('In Key - Sequential'),
   magicToneNetwork('Magic Tone Network™'),
-  xPressPadsStandard("XpressPads™ Standard 4x4"),
-  xPressPadsLatinJazz("XpressPads™ Latin/Jazz 4x4"),
-  xPressPadsXO("XpressPads™ with XO 4x4"),
-  xPressPadsXtreme("XpressPads™ Xtreme 8x4");
+  xPressPadsStandard('XpressPads™ Standard 4x4'),
+  xPressPadsLatinJazz('XpressPads™ Latin/Jazz 4x4'),
+  xPressPadsXO('XpressPads™ with XO 4x4'),
+  xPressPadsXtreme('XpressPads™ Xtreme 8x4');
 
   const Layout(this.title);
   final String title;
@@ -30,6 +30,7 @@ enum Layout {
         return true;
       case Layout.xPressPadsXtreme:
         return true;
+      // ignore: no_default_cases
       default:
         return false;
     }
@@ -39,27 +40,44 @@ enum Layout {
     switch (this) {
       case Layout.magicToneNetwork:
         return LayoutProps(
-            resizable: true, defaultDimensions: const Vector2Int(8, 8));
+          resizable: true,
+          defaultDimensions: const Vector2Int(8, 8),
+        );
       case Layout.xPressPadsStandard:
         return LayoutProps(
-            resizable: false, defaultDimensions: const Vector2Int(4, 4));
+          resizable: false,
+          defaultDimensions: const Vector2Int(4, 4),
+        );
       case Layout.xPressPadsLatinJazz:
         return LayoutProps(
-            resizable: false, defaultDimensions: const Vector2Int(4, 4));
+          resizable: false,
+          defaultDimensions: const Vector2Int(4, 4),
+        );
       case Layout.xPressPadsXO:
         return LayoutProps(
-            resizable: false, defaultDimensions: const Vector2Int(4, 4));
+          resizable: false,
+          defaultDimensions: const Vector2Int(4, 4),
+        );
       case Layout.xPressPadsXtreme:
         return LayoutProps(
-            resizable: false, defaultDimensions: const Vector2Int(8, 4));
+          resizable: false,
+          defaultDimensions: const Vector2Int(8, 4),
+        );
+      // ignore: no_default_cases
       default:
         return LayoutProps(resizable: true);
     }
   }
 
   Grid getGrid(
-      int width, int height, int rootNote, int baseNote, List<int> scaleList) {
-    GridData settings = GridData(width, height, rootNote, baseNote, scaleList);
+    int width,
+    int height,
+    int rootNote,
+    int baseNote,
+    List<int> scaleList,
+  ) {
+    final GridData settings =
+        GridData(width, height, rootNote, baseNote, scaleList);
 
     switch (this) {
       case Layout.continuous:
@@ -94,14 +112,18 @@ enum Layout {
 }
 
 class GridData {
+  GridData(
+    this.width,
+    this.height,
+    this.rootNote,
+    this.baseNote,
+    this.scaleList,
+  );
   final int width;
   final int height;
   final int rootNote;
   final int baseNote;
   final List<int> scaleList;
-
-  GridData(
-      this.width, this.height, this.rootNote, this.baseNote, this.scaleList);
 }
 
 class LayoutProps {
@@ -137,14 +159,13 @@ abstract class Grid {
 }
 
 class GridRowInterval extends Grid {
-  GridRowInterval(GridData settings, {required this.rowInterval})
-      : super(settings);
+  GridRowInterval(super.settings, {required this.rowInterval});
 
   final int rowInterval;
 
   @override
   List<CustomPad> get list {
-    List<CustomPad> grid = [];
+    final List<CustomPad> grid = [];
     for (int row = 0; row < settings.height; row++) {
       for (int note = 0; note < settings.width; note++) {
         grid.add(CustomPad(settings.baseNote + row * rowInterval + note));
@@ -155,13 +176,13 @@ class GridRowInterval extends Grid {
 }
 
 class GridMTN extends Grid {
-  GridMTN(GridData settings) : super(settings);
+  GridMTN(super.settings);
 
   @override
   List<CustomPad> get list {
-    List<CustomPad> grid = [];
+    final List<CustomPad> grid = [];
 
-    bool sameColumn = settings.rootNote % 2 ==
+    final bool sameColumn = settings.rootNote % 2 ==
         settings.baseNote % 2; // in the MTN, odd and even columns alternate
 
     for (int row = 0; row < settings.height; row++) {
@@ -181,11 +202,11 @@ class GridMTN extends Grid {
 }
 
 class GridScaleOnly extends Grid {
-  GridScaleOnly(GridData settings) : super(settings);
+  GridScaleOnly(super.settings);
 
   @override
   List<CustomPad> get list {
-    List<int> actualNotes =
+    final List<int> actualNotes =
         MidiUtils.absoluteScaleNotes(settings.rootNote, settings.scaleList);
 
     int validatedBase = settings.baseNote;
@@ -193,16 +214,18 @@ class GridScaleOnly extends Grid {
       validatedBase = (validatedBase + 1) % 127;
     }
 
-    int baseOffset = actualNotes.indexOf(
-        validatedBase % 12); // check where grid will start within scale
+    final int baseOffset = actualNotes.indexOf(
+      validatedBase % 12,
+    ); // check where grid will start within scale
 
     int octave = 0;
     int lastResult = 0;
 
-    List<CustomPad> grid =
+    final List<CustomPad> grid =
         List.generate(settings.width * settings.height, (gridIndex) {
-      int out = actualNotes[(gridIndex + baseOffset) % actualNotes.length] +
-          settings.baseNote ~/ 12 * 12;
+      final int out =
+          actualNotes[(gridIndex + baseOffset) % actualNotes.length] +
+              settings.baseNote ~/ 12 * 12;
 
       if (out < lastResult) octave++;
       lastResult = out;
@@ -215,7 +238,7 @@ class GridScaleOnly extends Grid {
 }
 
 class GridScaleOffset extends Grid {
-  GridScaleOffset(GridData settings, this.interval) : super(settings);
+  GridScaleOffset(super.settings, this.interval);
 
   final int interval;
 
@@ -236,7 +259,7 @@ class GridScaleOffset extends Grid {
     final int baseIndex = actualScaleNotes.indexOf(validatedBase % 12);
 
     // GRID CALCULATION ///////////////////////////
-    List<CustomPad> grid = [];
+    final List<CustomPad> grid = [];
 
     int nextRowStart = validatedBase;
     int nextBaseIndex = baseIndex;
@@ -276,13 +299,13 @@ class GridScaleOffset extends Grid {
 }
 
 class GridXpressPads extends Grid {
-  GridXpressPads(GridData settings, this.xPressPads) : super(settings);
+  GridXpressPads(super.settings, this.xPressPads);
 
   final XPP xPressPads;
 
   @override
   List<CustomPad> get list {
-    return xPressPads.list.map((e) => CustomPad(e)).toList();
+    return xPressPads.list.map(CustomPad.new).toList();
   }
 }
 

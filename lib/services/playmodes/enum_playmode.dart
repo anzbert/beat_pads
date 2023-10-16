@@ -1,10 +1,10 @@
 import 'package:beat_pads/services/services.dart';
 
 enum PlayMode {
-  slide("Trigger Notes"),
-  noSlide("Disabled"),
-  polyAT("Poly Aftertouch"),
-  mpe("MPE");
+  slide('Trigger Notes'),
+  noSlide('Disabled'),
+  polyAT('Poly Aftertouch'),
+  mpe('MPE');
 
   const PlayMode(this.title);
   final String title;
@@ -18,6 +18,7 @@ enum PlayMode {
         return true;
       case PlayMode.mpe:
         return true;
+      // ignore: no_default_cases
       default:
         return false;
     }
@@ -27,6 +28,7 @@ enum PlayMode {
     switch (this) {
       case PlayMode.mpe:
         return false;
+      // ignore: no_default_cases
       default:
         return true;
     }
@@ -37,7 +39,10 @@ enum PlayMode {
     return true;
   }
 
-  PlayModeHandler getPlayModeApi(SendSettings settings, Function notifyParent) {
+  PlayModeHandler getPlayModeApi(
+    SendSettings settings,
+    void Function() notifyParent,
+  ) {
     switch (this) {
       case PlayMode.mpe:
         return PlayModeMPE(settings, notifyParent);

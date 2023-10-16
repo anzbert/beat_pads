@@ -2,13 +2,13 @@ import 'package:beat_pads/services/services.dart';
 import 'package:flutter/material.dart';
 
 enum PadColors {
-  highlightRoot("Highlight Root"),
-  colorWheel("Pitch"),
+  highlightRoot('Highlight Root'),
+  colorWheel('Pitch'),
   // halfColorWheel("In Pitch (Halfed Color Range)"),
-  circleOfFifth("Circle of Fifths");
+  circleOfFifth('Circle of Fifths');
 
-  final String title;
   const PadColors(this.title);
+  final String title;
 
   @override
   String toString() => title;

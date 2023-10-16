@@ -11,12 +11,10 @@ class _IntNotifier extends Notifier<int> {
   void set(int newState) => state = newState;
 }
 
-final _modWheelProvider =
-    NotifierProvider<_IntNotifier, int>(() => _IntNotifier());
+final _modWheelProvider = NotifierProvider<_IntNotifier, int>(_IntNotifier.new);
 
 class ModWheel extends ConsumerStatefulWidget {
-  const ModWheel({Key? key, required this.channel, required this.preview})
-      : super(key: key);
+  const ModWheel({required this.channel, required this.preview, super.key});
 
   final bool preview;
   final int channel;
@@ -46,24 +44,26 @@ class _ModWheelState extends ConsumerState<ModWheel> {
       }
     });
 
-    double width = MediaQuery.of(context).size.width;
+    final double width = MediaQuery.of(context).size.width;
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Flexible(
           flex: 5,
-          child: LayoutBuilder(builder: (context, constraints) {
-            return Align(
-              alignment: Alignment.bottomCenter,
-              child: Text(
-                "Mod",
-                style: TextStyle(
-                  fontSize: constraints.maxWidth * fontSizeFactor,
-                  color: Palette.darker(Palette.tan, 0.6),
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              return Align(
+                alignment: Alignment.bottomCenter,
+                child: Text(
+                  'Mod',
+                  style: TextStyle(
+                    fontSize: constraints.maxWidth * fontSizeFactor,
+                    color: Palette.darker(Palette.tan, 0.6),
+                  ),
                 ),
-              ),
-            );
-          }),
+              );
+            },
+          ),
         ),
         Center(
           child: Divider(
@@ -115,7 +115,7 @@ class _ModWheelState extends ConsumerState<ModWheel> {
                         flex: 2,
                         child: Center(
                           child: Text(
-                            "${ref.watch(_modWheelProvider)}",
+                            '${ref.watch(_modWheelProvider)}',
                             style: TextStyle(
                               fontSize: constraints.maxWidth * fontSizeFactor,
                               color: Palette.darker(Palette.tan, 0.6),
@@ -126,7 +126,7 @@ class _ModWheelState extends ConsumerState<ModWheel> {
                       const Expanded(
                         flex: 1,
                         child: SizedBox.expand(),
-                      )
+                      ),
                     ],
                   ),
                 );

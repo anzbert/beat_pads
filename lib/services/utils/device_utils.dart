@@ -4,11 +4,11 @@ import 'package:flutter/services.dart';
 abstract class DeviceUtils {
   /// check if the orientation is currently Portrait
   static bool isPortrait(BuildContext context) =>
-      MediaQuery.of(context).orientation.name == "portrait";
+      MediaQuery.of(context).orientation.name == 'portrait';
 
   /// check if the orientation is currently Landscape
   static bool isLandscape(BuildContext context) =>
-      MediaQuery.of(context).orientation.name == "landscape";
+      MediaQuery.of(context).orientation.name == 'landscape';
 
   /// Lock Orientation to Portrait
   static Future<void> portraitOnly() {
@@ -57,13 +57,17 @@ abstract class DeviceUtils {
 
   /// Show Top Menu Bar only
   static Future<void> showSystemUiTop() {
-    return SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
-        overlays: [SystemUiOverlay.top]);
+    return SystemChrome.setEnabledSystemUIMode(
+      SystemUiMode.manual,
+      overlays: [SystemUiOverlay.top],
+    );
   }
 
   /// Show Bottom Menu Bar only
   static Future<void> showSystemUiBottom() {
-    return SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
-        overlays: [SystemUiOverlay.bottom]);
+    return SystemChrome.setEnabledSystemUIMode(
+      SystemUiMode.manual,
+      overlays: [SystemUiOverlay.bottom],
+    );
   }
 }

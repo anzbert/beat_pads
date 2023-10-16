@@ -7,25 +7,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 // TODO Refactor! Replace outdated ChangeNotifier with new Riverpod Notifiers. Extract parts into seperate providers.
 
 class SendSettings {
-  final PlayMode playMode;
-  final int channel;
-  final double modulationRadius;
-  final double modulationDeadZone;
-  final int mpeMemberChannels;
-  final bool zone;
-  final bool sendCC;
-  final int noteReleaseTime;
-  final int modReleaseTime;
-  final MPEmods mpe1DRadius;
-  final MPEmods mpe2DX;
-  final MPEmods mpe2DY;
-  final int mpePitchbendRange;
-  final bool modulation2D;
-  final int velocityRange;
-  final int velocity;
-  final double velocityCenter;
-  final VelocityMode velocityMode;
-
   /// A data object which holds all the settings required for sending midi
   SendSettings(
     this.channel,
@@ -47,6 +28,24 @@ class SendSettings {
     this.velocityCenter,
     this.velocityMode,
   );
+  final PlayMode playMode;
+  final int channel;
+  final double modulationRadius;
+  final double modulationDeadZone;
+  final int mpeMemberChannels;
+  final bool zone;
+  final bool sendCC;
+  final int noteReleaseTime;
+  final int modReleaseTime;
+  final MPEmods mpe1DRadius;
+  final MPEmods mpe2DX;
+  final MPEmods mpe2DY;
+  final int mpePitchbendRange;
+  final bool modulation2D;
+  final int velocityRange;
+  final int velocity;
+  final double velocityCenter;
+  final VelocityMode velocityMode;
 }
 
 /// Reactive state of the current send-settings to be used in legacy changenotifier
@@ -79,11 +78,6 @@ final senderProvider = ChangeNotifierProvider.autoDispose<MidiSender>((ref) {
 });
 
 class MidiSender extends ChangeNotifier {
-  late PlayModeHandler playModeHandler;
-  final SendSettings settings;
-
-  bool _disposed = false;
-
   /// Handles Touches and Midi Message sending
   MidiSender(this.settings) {
     playModeHandler = settings.playMode
@@ -91,11 +85,15 @@ class MidiSender extends ChangeNotifier {
 
     if (settings.playMode == PlayMode.mpe) {
       MPEinitMessage(
-              memberChannels: settings.mpeMemberChannels,
-              upperZone: settings.zone)
-          .send();
+        memberChannels: settings.mpeMemberChannels,
+        upperZone: settings.zone,
+      ).send();
     }
   }
+  late PlayModeHandler playModeHandler;
+  final SendSettings settings;
+
+  bool _disposed = false;
 
   /// Can be passed into sub-Classes
   void _notifyListenersOfMidiSender() => notifyListeners();

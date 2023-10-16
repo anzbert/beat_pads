@@ -2,10 +2,9 @@ import 'package:beat_pads/services/services.dart';
 import 'package:flutter/material.dart';
 
 class TouchBuffer {
-  final SendSettings settings;
-
   /// Data Structure that holds Touch Events, which hold notes and perform geometry operations
   TouchBuffer(this.settings);
+  final SendSettings settings;
 
   List<TouchEvent> _buffer = [];
   List<TouchEvent> get buffer => _buffer;
@@ -17,7 +16,7 @@ class TouchBuffer {
 
   /// Find and return a TouchEvent from the buffer by its uniqueID, if possible
   TouchEvent? getByID(int id) {
-    for (TouchEvent event in _buffer) {
+    for (final TouchEvent event in _buffer) {
       if (event.uniqueID == id) {
         return event;
       }
@@ -36,10 +35,10 @@ class TouchBuffer {
   double averageRadialChangeOfActiveNotes() {
     if (buffer.isEmpty) return 0;
 
-    double total = buffer
+    final double total = buffer
         .where((element) => element.noteEvent.noteOnMessage != null)
         .map((e) => e.radialChange())
-        .reduce(((value, element) => value + element));
+        .reduce((value, element) => value + element);
 
     return total / buffer.length;
   }
@@ -47,14 +46,16 @@ class TouchBuffer {
   /// Get an average directional change from all currently active notes.
   /// This is a common method to determine Channel Pressure
   Offset averageDirectionalChangeOfActiveNotes({bool absolute = false}) {
-    if (buffer.isEmpty) return const Offset(0, 0);
+    if (buffer.isEmpty) return Offset.zero;
 
-    Offset total = buffer
+    final Offset total = buffer
         .where((element) => element.noteEvent.noteOnMessage != null)
         .map((e) => e.directionalChangeFromCenter())
-        .reduce(((value, element) => absolute
-            ? value + Offset(element.dx.abs(), element.dy.abs())
-            : value + element));
+        .reduce(
+          (value, element) => absolute
+              ? value + Offset(element.dx.abs(), element.dy.abs())
+              : value + element,
+        );
 
     return Offset(total.dx / buffer.length, total.dy / buffer.length);
   }

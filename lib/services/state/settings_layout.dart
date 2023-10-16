@@ -11,10 +11,11 @@ final layoutProv = NotifierProvider<SettingEnumNotifier<Layout>, Layout>(() {
 });
 
 class LayoutSettingNotifier extends SettingEnumNotifier<Layout> {
-  LayoutSettingNotifier(
-      {required super.nameMap,
-      required super.key,
-      required super.defaultValue});
+  LayoutSettingNotifier({
+    required super.nameMap,
+    required super.key,
+    required super.defaultValue,
+  });
 
   @override
   void set(Layout newState) {
@@ -58,9 +59,11 @@ final baseProv = NotifierProvider<SettingIntNotifier, int>(() {
   );
 });
 
-final baseNoteProv = Provider<int>(((ref) {
-  return (ref.watch(baseOctaveProv) + 2) * 12 + ref.watch(baseProv);
-}));
+final baseNoteProv = Provider<int>(
+  (ref) {
+    return (ref.watch(baseOctaveProv) + 2) * 12 + ref.watch(baseProv);
+  },
+);
 
 final baseOctaveProv = NotifierProvider<SettingIntNotifier, int>(() {
   return SettingIntNotifier(
@@ -89,25 +92,27 @@ final heightProv = NotifierProvider<SettingIntNotifier, int>(() {
   );
 });
 
-final rowProv = Provider<List<List<CustomPad>>>(((ref) {
-  return ref
-      .watch(layoutProv)
-      .getGrid(
-        ref.watch(widthProv),
-        ref.watch(heightProv),
-        ref.watch(rootProv),
-        ref.watch(baseNoteProv),
-        ref.watch(scaleProv).intervals,
-      )
-      .rows;
-}));
+final rowProv = Provider<List<List<CustomPad>>>(
+  (ref) {
+    return ref
+        .watch(layoutProv)
+        .getGrid(
+          ref.watch(widthProv),
+          ref.watch(heightProv),
+          ref.watch(rootProv),
+          ref.watch(baseNoteProv),
+          ref.watch(scaleProv).intervals,
+        )
+        .rows;
+  },
+);
 
 // LABELS AND COLOR
 final padLabelsProv =
     NotifierProvider<SettingEnumNotifier<PadLabels>, PadLabels>(() {
   return SettingEnumNotifier<PadLabels>(
     nameMap: PadLabels.values.asNameMap(),
-    key: "padLabels",
+    key: 'padLabels',
     defaultValue: PadLabels.note,
   );
 });
@@ -116,14 +121,14 @@ final padColorsProv =
     NotifierProvider<SettingEnumNotifier<PadColors>, PadColors>(() {
   return SettingEnumNotifier<PadColors>(
     nameMap: PadColors.values.asNameMap(),
-    key: "padColors",
+    key: 'padColors',
     defaultValue: PadColors.highlightRoot,
   );
 });
 
 final baseHueProv = NotifierProvider<SettingIntNotifier, int>(() {
   return SettingIntNotifier(
-    key: "baseHue",
+    key: 'baseHue',
     defaultValue: 240,
     max: 360,
   );

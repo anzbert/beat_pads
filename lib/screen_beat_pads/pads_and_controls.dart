@@ -1,18 +1,17 @@
+import 'package:beat_pads/screen_beat_pads/beat_pad_grid.dart';
+import 'package:beat_pads/screen_beat_pads/button_menu.dart';
 import 'package:beat_pads/screen_beat_pads/button_presets.dart';
 import 'package:beat_pads/screen_beat_pads/buttons_oct_and_sustain.dart';
-import 'package:beat_pads/screen_beat_pads/button_menu.dart';
-import 'package:beat_pads/screen_beat_pads/beat_pad_grid.dart';
 import 'package:beat_pads/screen_beat_pads/slider_mod_wheel.dart';
 import 'package:beat_pads/screen_beat_pads/slider_pitch.dart';
 import 'package:beat_pads/screen_beat_pads/slider_velocity.dart';
-import 'package:flutter/material.dart';
 import 'package:beat_pads/services/services.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class BeatPadsAndControls extends ConsumerWidget {
-  final bool preview;
-
   const BeatPadsAndControls({required this.preview});
+  final bool preview;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -92,20 +91,22 @@ class BeatPadsAndControls extends ConsumerWidget {
         ),
         if (!preview)
           if (!ref.watch(sustainButtonProv) && !ref.watch(octaveButtonsProv))
-            Builder(builder: (context) {
-              double width = MediaQuery.of(context).size.width;
-              return Positioned.directional(
-                top: width * 0.006,
-                start: width * 0.006,
-                textDirection: TextDirection.ltr,
-                child: SizedBox.square(
-                  dimension: width * 0.06,
-                  child: const ReturnToMenuButton(
-                    transparent: true,
+            Builder(
+              builder: (context) {
+                final double width = MediaQuery.of(context).size.width;
+                return Positioned.directional(
+                  top: width * 0.006,
+                  start: width * 0.006,
+                  textDirection: TextDirection.ltr,
+                  child: SizedBox.square(
+                    dimension: width * 0.06,
+                    child: const ReturnToMenuButton(
+                      transparent: true,
+                    ),
                   ),
-                ),
-              );
-            }),
+                );
+              },
+            ),
         if (ref.watch(connectedDevicesProv).isEmpty && !preview)
           Positioned(
             bottom: 15,
@@ -115,8 +116,9 @@ class BeatPadsAndControls extends ConsumerWidget {
                 Scaffold.of(context).openDrawer();
               },
               style: ElevatedButton.styleFrom(
-                  backgroundColor: Palette.lightPink,
-                  textStyle: const TextStyle(fontWeight: FontWeight.bold)),
+                backgroundColor: Palette.lightPink,
+                textStyle: const TextStyle(fontWeight: FontWeight.bold),
+              ),
               child: const Row(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -125,7 +127,7 @@ class BeatPadsAndControls extends ConsumerWidget {
                     Icons.cable,
                   ),
                   Text(
-                    "Select Midi Device",
+                    'Select Midi Device',
                   ),
                 ],
               ),

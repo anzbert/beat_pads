@@ -1,15 +1,15 @@
 import 'package:beat_pads/screen_beat_pads/sliders_theme.dart';
+import 'package:beat_pads/services/services.dart';
 import 'package:beat_pads/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_midi_command/flutter_midi_command_messages.dart';
-import 'package:beat_pads/services/services.dart';
 
 class PitchSliderEased extends StatefulWidget {
   const PitchSliderEased({
     required this.channel,
     required this.resetTime,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final int channel;
   final int resetTime;
@@ -33,30 +33,34 @@ class PitchSliderEasedState extends State<PitchSliderEased>
   void initState() {
     super.initState();
     _controller = AnimationController(
-        duration: Duration(milliseconds: widget.resetTime), vsync: this);
+      duration: Duration(milliseconds: widget.resetTime),
+      vsync: this,
+    );
     _curve = CurvedAnimation(parent: _controller, curve: Curves.easeOutExpo);
   }
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
+    final double width = MediaQuery.of(context).size.width;
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Flexible(
           flex: 5,
-          child: LayoutBuilder(builder: (context, constraints) {
-            return Align(
-              alignment: Alignment.bottomCenter,
-              child: Text(
-                "Pitch",
-                style: TextStyle(
-                  fontSize: constraints.maxWidth * fontSizeFactor,
-                  color: Palette.darker(Palette.laserLemon, 0.6),
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              return Align(
+                alignment: Alignment.bottomCenter,
+                child: Text(
+                  'Pitch',
+                  style: TextStyle(
+                    fontSize: constraints.maxWidth * fontSizeFactor,
+                    color: Palette.darker(Palette.laserLemon, 0.6),
+                  ),
                 ),
-              ),
-            );
-          }),
+              );
+            },
+          ),
         ),
         Center(
           child: Divider(
@@ -97,8 +101,9 @@ class PitchSliderEasedState extends State<PitchSliderEased>
                     ).send();
                   });
 
-                  _controller.reset();
-                  _controller.forward();
+                  _controller
+                    ..reset()
+                    ..forward();
                 } else {
                   setState(() => _pitch = 0);
                   PitchBendMessage(
@@ -137,7 +142,7 @@ class PitchSliderEasedState extends State<PitchSliderEased>
                         flex: 2,
                         child: Center(
                           child: Text(
-                            "${(_pitch * 12).round()}",
+                            '${(_pitch * 12).round()}',
                             style: TextStyle(
                               fontSize: constraints.maxWidth * fontSizeFactor,
                               color: Palette.darker(Palette.laserLemon, 0.6),
@@ -148,7 +153,7 @@ class PitchSliderEasedState extends State<PitchSliderEased>
                       const Expanded(
                         flex: 1,
                         child: SizedBox.expand(),
-                      )
+                      ),
                     ],
                   ),
                 );

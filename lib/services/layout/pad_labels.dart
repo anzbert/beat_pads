@@ -1,18 +1,18 @@
 import 'package:beat_pads/services/services.dart';
 
 enum PadLabels {
-  note("Note Names"),
-  value("Midi Value"),
-  none("None");
+  note('Note Names'),
+  value('Midi Value'),
+  none('None');
 
-  final String title;
   const PadLabels(this.title);
+  final String title;
 
   @override
   String toString() => title;
 
   static Label getLabel(PadLabels padLabels, Layout layout, int note) {
-    Label label = Label();
+    final Label label = Label();
 
     if (padLabels == PadLabels.none) return label;
 
@@ -31,7 +31,7 @@ enum PadLabels {
 }
 
 class Label {
+  Label({this.title, this.subtitle});
   String? title;
   String? subtitle;
-  Label({this.title, this.subtitle});
 }
