@@ -146,10 +146,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_midi_command
-      sha256: ee01be8ea45fe9381a727968d17f2d06ec307d63025bb872c3b0b50b30442623
+      sha256: "8b1e6d80ee8e79af04037b7ef01cb2743b56f1be9f5bb9f90be493c42e18c589"
       url: "https://pub.dev"
     source: hosted
-    version: "0.4.14"
+    version: "0.4.15"
   flutter_midi_command_linux:
     dependency: transitive
     description:
@@ -162,10 +162,10 @@ packages:
     dependency: transitive
     description:
       name: flutter_midi_command_platform_interface
-      sha256: cb250720a36d55252ff22612752bd2fb69e8308e9a75e1cb8ef4e0ee0134d77f
+      sha256: "8c146b88b058cea208e58ff49b1a387da19734d7356eba3e4291f866fc61e23e"
       url: "https://pub.dev"
     source: hosted
-    version: "0.4.0"
+    version: "0.4.1"
   flutter_riverpod:
     dependency: "direct main"
     description:
