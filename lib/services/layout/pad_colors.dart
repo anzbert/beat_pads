@@ -18,9 +18,9 @@ enum PadColors {
     int baseHue,
     int rootNote,
     int note,
-    bool noteOn,
-    int receivedVelocity,
-  ) {
+    int receivedVelocity, {
+    required bool noteOn,
+  }) {
     final double hue;
 
     // note on

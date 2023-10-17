@@ -17,12 +17,10 @@ class ControlButtonsRect extends ConsumerWidget {
         ),
         if (ref.watch(octaveButtonsProv))
           const Expanded(
-            flex: 1,
             child: OctaveButtons(),
           ),
         if (ref.watch(sustainButtonProv))
           Expanded(
-            flex: 1,
             child:
                 SustainButtonDoubleTap(channel: ref.watch(channelUsableProv)),
           ),

@@ -7,8 +7,10 @@ class PlayModeMPE extends PlayModeHandler {
           settings.mpe2DY.getMod(settings.mpePitchbendRange),
           settings.mpe1DRadius.getMod(settings.mpePitchbendRange),
         ),
-        channelProvider =
-            MemberChannelProvider(settings.zone, settings.mpeMemberChannels);
+        channelProvider = MemberChannelProvider(
+          settings.mpeMemberChannels,
+          upperZone: settings.zone,
+        );
   final SendMpe mpeMods;
   final MemberChannelProvider channelProvider;
 
@@ -41,7 +43,7 @@ class PlayModeMPE extends PlayModeHandler {
       newChannel,
       data.padNote,
       velocityProvider.velocity(data.yPercentage),
-    )..noteOn(cc: false);
+    )..noteOn();
 
     touchBuffer.addNoteOn(
       CustomPointer(data.pointer, data.screenTouchPos),

@@ -71,8 +71,6 @@ class _PresetButton extends ConsumerWidget {
     final double padRadius = width * ThemeConst.padRadiusFactor;
     return minimumSize
         ? Flexible(
-            fit: FlexFit.loose,
-            flex: 1,
             child: Padding(
               padding:
                   EdgeInsets.fromLTRB(padSpacing, padSpacing, 0, padSpacing),
@@ -91,7 +89,6 @@ class _PresetButton extends ConsumerWidget {
             ),
           )
         : Expanded(
-            flex: 1,
             child: Padding(
               padding:
                   EdgeInsets.fromLTRB(padSpacing, padSpacing, 0, padSpacing),

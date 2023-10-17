@@ -80,7 +80,6 @@ class _ModWheelState extends ConsumerState<ModWheel> {
               quarterTurns: 0,
               child: Slider(
                 allowedInteraction: SliderInteraction.slideThumb,
-                min: 0,
                 max: 127,
                 value: ref.watch(_modWheelProvider).toDouble(),
                 onChanged: (v) {
@@ -109,7 +108,6 @@ class _ModWheelState extends ConsumerState<ModWheel> {
                   margin: EdgeInsets.only(bottom: padSpacing),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Expanded(
                         flex: 2,
@@ -124,7 +122,6 @@ class _ModWheelState extends ConsumerState<ModWheel> {
                         ),
                       ),
                       const Expanded(
-                        flex: 1,
                         child: SizedBox.expand(),
                       ),
                     ],

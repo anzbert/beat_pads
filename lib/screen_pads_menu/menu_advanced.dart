@@ -147,7 +147,6 @@ class MenuInput extends ConsumerWidget {
                   : ref.watch(noteReleaseUsable) < 1000
                       ? '${ref.watch(noteReleaseUsable)} ms'
                       : '${ref.watch(noteReleaseUsable) / 1000} s',
-              start: 0,
               steps: Timing.releaseDelayTimes.length ~/ 1.5,
               onChangeEnd: ref.read(noteReleaseStepProv.notifier).save,
             ),
@@ -165,7 +164,6 @@ class MenuInput extends ConsumerWidget {
                     : ref.watch(modReleaseUsable) < 1000
                         ? '${ref.watch(modReleaseUsable)} ms'
                         : '${ref.watch(modReleaseUsable) / 1000} s',
-                start: 0,
                 steps: Timing.releaseDelayTimes.length ~/ 1.5,
                 onChangeEnd: ref.read(modReleaseStepProv.notifier).save,
               ),

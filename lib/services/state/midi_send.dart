@@ -14,6 +14,7 @@ class SendSettings {
     this.modulationDeadZone,
     this.mpeMemberChannels,
     this.playMode,
+    // ignore: avoid_positional_boolean_parameters
     this.zone,
     this.sendCC,
     this.noteReleaseTime,

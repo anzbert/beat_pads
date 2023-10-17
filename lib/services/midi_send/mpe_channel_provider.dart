@@ -8,8 +8,10 @@ In the simplest workable implementation, a new note will be assigned to the Chan
 */
 
 class MemberChannelProvider {
-  MemberChannelProvider(this.upperZone, this.members)
-      : allMemberChannels = List.generate(
+  MemberChannelProvider(
+    this.members, {
+    required this.upperZone,
+  })  : allMemberChannels = List.generate(
           members,
           (i) => i + (upperZone ? 15 - members : 1),
           growable: false,

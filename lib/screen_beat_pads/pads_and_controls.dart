@@ -28,9 +28,6 @@ class BeatPadsAndControls extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const Expanded(
-              // SKIP laggy edge area. OS uses edges to detect system gestures
-              // and messes with touch detection
-              flex: 1,
               child: SizedBox(),
             ),
             // CONTROL BUTTONS
@@ -80,11 +77,9 @@ class BeatPadsAndControls extends ConsumerWidget {
                 flex: 5,
                 child: PresetButtons(
                   clickType: ClickType.double,
-                  minimumSize: false,
                 ),
               ),
             const Expanded(
-              flex: 1,
               child: SizedBox(),
             ),
           ],

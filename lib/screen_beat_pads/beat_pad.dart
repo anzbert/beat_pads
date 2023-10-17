@@ -26,8 +26,8 @@ class SlideBeatPad extends ConsumerWidget {
           ref.watch(baseHueProv),
           ref.watch(rootProv),
           note,
-          velocity != 0,
           preview ? 0 : ref.watch(rxNoteProvider)[note],
+          noteOn: velocity != 0,
         );
 
     final Color splashColor = Palette.splashColor;
@@ -85,13 +85,10 @@ class SlideBeatPad extends ConsumerWidget {
                       padding: EdgeInsets.all(padSpacing),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           if (label.subtitle != null)
                             Flexible(
-                              fit: FlexFit.loose,
-                              flex: 1,
                               child: Text(
                                 label.subtitle!,
                                 style: TextStyle(
@@ -102,8 +99,6 @@ class SlideBeatPad extends ConsumerWidget {
                             ),
                           if (label.title != null)
                             Flexible(
-                              fit: FlexFit.loose,
-                              flex: 1,
                               child: Text(
                                 label.title!,
                                 style: TextStyle(

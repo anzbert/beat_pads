@@ -233,7 +233,6 @@ class MenuLayout extends ConsumerWidget {
                     : ref.watch(pitchBendEaseUsable) < 1000
                         ? '${ref.watch(pitchBendEaseUsable)} ms'
                         : '${ref.watch(pitchBendEaseUsable) / 1000} s',
-                start: 0,
                 steps: Timing.releaseDelayTimes.length - 1,
                 onChangeEnd: ref.read(pitchBendEaseStepProv.notifier).save,
               ),
@@ -262,7 +261,6 @@ class MenuLayout extends ConsumerWidget {
               ),
               IntSliderTile(
                 label: 'Hue',
-                min: 0,
                 max: 360,
                 subtitle: 'Root Note hue on the RGB color wheel',
                 trailing: Text(ref.watch(baseHueProv).toString()),

@@ -66,11 +66,11 @@ enum MidiMessageType {
 abstract class MidiUtils {
   /// Kill all notes on a channel
   static void sendAllNotesOffMessage(int channel) {
-    CCMessage(channel: channel, controller: 123, value: 0).send();
+    CCMessage(channel: channel, controller: 123).send();
   }
 
   /// Sends a Sustain-pedal midi message
-  static void sendSustainMessage(int channel, bool state) {
+  static void sendSustainMessage(int channel, {required bool state}) {
     CCMessage(channel: channel, controller: 64, value: state ? 127 : 0).send();
   }
 

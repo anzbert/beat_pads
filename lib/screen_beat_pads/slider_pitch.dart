@@ -78,7 +78,6 @@ class PitchSliderEasedState extends State<PitchSliderEased>
             child: Slider(
               allowedInteraction: SliderInteraction.slideThumb,
               min: -1,
-              max: 1,
               value: _pitch,
               onChanged: (val) {
                 setState(() => _pitch = val);
@@ -108,7 +107,6 @@ class PitchSliderEasedState extends State<PitchSliderEased>
                   setState(() => _pitch = 0);
                   PitchBendMessage(
                     channel: widget.channel,
-                    bend: 0,
                   ).send();
                 }
               },
@@ -136,7 +134,6 @@ class PitchSliderEasedState extends State<PitchSliderEased>
                   margin: EdgeInsets.only(bottom: padSpacing),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Expanded(
                         flex: 2,
@@ -151,7 +148,6 @@ class PitchSliderEasedState extends State<PitchSliderEased>
                         ),
                       ),
                       const Expanded(
-                        flex: 1,
                         child: SizedBox.expand(),
                       ),
                     ],
@@ -171,7 +167,6 @@ class PitchSliderEasedState extends State<PitchSliderEased>
     if (_pitch != 0) {
       PitchBendMessage(
         channel: widget.channel,
-        bend: 0,
       ).send();
     }
     super.dispose();

@@ -146,7 +146,6 @@ class _SliderVelocityState extends ConsumerState<SliderVelocity> {
                         ),
                       ),
                       Flexible(
-                        flex: 1,
                         child: ref.watch(velocityModeProv) != VelocityMode.fixed
                             ? Align(
                                 alignment: Alignment.centerRight,

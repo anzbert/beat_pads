@@ -51,7 +51,7 @@ class NoteEvent {
       noteOnMessage = null;
     }
     if (ccMessage != null) {
-      CCMessage(channel: (channel + 1) % 16, controller: note, value: 0).send();
+      CCMessage(channel: (channel + 1) % 16, controller: note).send();
       ccMessage = null;
     }
   }

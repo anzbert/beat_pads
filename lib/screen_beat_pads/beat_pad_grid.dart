@@ -206,16 +206,13 @@ class _SlidePadsState extends ConsumerState<SlidePads>
             child: Column(
               // Hit testing happens on this keyed Widget, which contains all the pads
               key: _padsWidgetKey,
-              crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ...rows.map(
                   (row) {
                     return Expanded(
-                      flex: 1,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           ...row.map(
                             (customPad) {
@@ -228,7 +225,6 @@ class _SlidePadsState extends ConsumerState<SlidePads>
                                   return const SizedBox.expand();
                                 case PadType.note:
                                   return Expanded(
-                                    flex: 1,
                                     child: HitTestObject(
                                       index: customPad.padValue,
                                       child: SlideBeatPad(

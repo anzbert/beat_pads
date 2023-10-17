@@ -46,7 +46,7 @@ class _RxNoteVelocitiesNotifier extends Notifier<List<int>> {
       }
     });
 
-    return List.filled(128, 0, growable: false);
+    return List.filled(128, 0);
   }
 
   void changeValue(int note, int velocity) {
@@ -57,6 +57,6 @@ class _RxNoteVelocitiesNotifier extends Notifier<List<int>> {
   }
 
   void reset() {
-    state = List.filled(128, 0, growable: false);
+    state = List.filled(128, 0);
   }
 }

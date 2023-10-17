@@ -30,14 +30,14 @@ linter:
   # `// ignore_for_file: name_of_lint` syntax on the line or in the file
   # producing the lint.
   rules:
-    avoid_redundant_argument_values: false
     public_member_api_docs: false
-    avoid_positional_boolean_parameters: false
     omit_local_variable_types: false
     use_setters_to_change_properties: false
+    # avoid_redundant_argument_values: false
+    # avoid_positional_boolean_parameters: false
     # avoid_print: false
-    use_key_in_widget_constructors: false
     # prefer_single_quotes: false
+    use_key_in_widget_constructors: false
     lines_longer_than_80_chars: false
     avoid_classes_with_only_static_members: false
     flutter_style_todos: false

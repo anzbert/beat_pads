@@ -32,7 +32,6 @@ class DropdownScaleNotes extends StatelessWidget {
             child: Text(
               MidiUtils.getNoteName(
                 note,
-                showOctaveIndex: true,
                 showNoteValue: true,
               ),
             ),

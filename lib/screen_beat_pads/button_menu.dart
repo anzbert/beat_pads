@@ -57,7 +57,6 @@ class ReturnToMenuButton extends StatelessWidget {
               showDuration: const Duration(milliseconds: 1000),
               padding: const EdgeInsets.all(5),
               child: const FittedBox(
-                fit: BoxFit.contain,
                 child: Icon(
                   Icons.menu_rounded,
                   size: 100,

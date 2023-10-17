@@ -14,7 +14,6 @@ class OctaveButtons extends ConsumerWidget {
     return Column(
       children: [
         Expanded(
-          flex: 1,
           child: Padding(
             padding: EdgeInsets.fromLTRB(0, padSpacing, padSpacing, padSpacing),
             child: ElevatedButton(
@@ -32,7 +31,6 @@ class OctaveButtons extends ConsumerWidget {
                 ),
               ),
               child: const FittedBox(
-                fit: BoxFit.contain,
                 child: Icon(
                   Icons.add,
                   size: 100,
@@ -42,7 +40,6 @@ class OctaveButtons extends ConsumerWidget {
           ),
         ),
         Expanded(
-          flex: 1,
           child: Padding(
             padding: EdgeInsets.fromLTRB(0, padSpacing, padSpacing, padSpacing),
             child: ElevatedButton(
@@ -60,7 +57,6 @@ class OctaveButtons extends ConsumerWidget {
                 ),
               ),
               child: const FittedBox(
-                fit: BoxFit.contain,
                 child: Icon(
                   Icons.remove,
                   size: 100,

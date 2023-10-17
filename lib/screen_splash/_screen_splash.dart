@@ -27,7 +27,6 @@ class _SplashScreenState extends State<SplashScreen> {
         },
         child: Center(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const Expanded(
                 flex: 10,
@@ -39,7 +38,6 @@ class _SplashScreenState extends State<SplashScreen> {
               Expanded(
                 flex: 3,
                 child: FittedBox(
-                  fit: BoxFit.contain,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 50),
                     child: AnimatedTextKit(
@@ -71,10 +69,8 @@ class _SplashScreenState extends State<SplashScreen> {
                 ),
               ),
               Expanded(
-                flex: 1,
                 child: showClickToContinue
                     ? AnimatedTextKit(
-                        isRepeatingAnimation: true,
                         repeatForever: true,
                         animatedTexts: [
                           FadeAnimatedText(
