@@ -26,7 +26,7 @@ dependencies:
     # path: /Users/anz/localDev/FlutterMidiCommand
 
   flutter_riverpod: ^2.3.2
-  rive: ^0.11.17
+  rive: ^0.12.1
   shared_preferences: ^2.0.20
   simple_gradient_text: ^1.2.4
   url_launcher: ^6.1.10
