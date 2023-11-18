@@ -11,6 +11,7 @@ version: 0.9.14+83
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
+  flutter: ^3.16.0
 
 dependencies:
   animated_text_kit: ^4.2.2
