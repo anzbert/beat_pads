@@ -15,6 +15,9 @@
 - Run an Android or iOS Emulator and try with ```flutter run```
 - Compile for Android with ```flutter build apk``` or for iOS with ```flutter build ios``` and install to a plugged in device with ```flutter install```
 
+  ...and maybe:
+  <a href='https://ko-fi.com/S6S8SP865' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://storage.ko-fi.com/cdn/kofi4.png?v=3' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
+
 ## Information
 
 Midi Poly Grid (formerly known as 'Beat Pads') is a lightweight Midi Controller app for mobile phones and tablets for melodies and finger drumming at home and on the go. Connections can be made virtually to other apps via platform midi channels or via USB to other devices.
