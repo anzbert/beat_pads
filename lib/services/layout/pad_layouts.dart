@@ -211,18 +211,11 @@ class GridHarmonicTable extends Grid {
   List<CustomPad> get list {
     final List<CustomPad> grid = [];
 
-    final bool sameColumn = settings.rootNote % 2 ==
-        settings.baseNote % 2; // in the HT, odd and even columns alternate
-
     for (int row = 0; row < settings.height; row++) {
       int next = settings.baseNote;
       for (int note = 0; note < settings.width; note++) {
         grid.add(CustomPad(next + row * 7));
-        if (note.isEven) {
-          next = sameColumn ? next + 4 : next - 3;
-        } else {
-          next = sameColumn ? next - 3 : next + 4;
-        }
+        next = next + 4;
       }
     }
 
