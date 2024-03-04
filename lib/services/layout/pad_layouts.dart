@@ -11,6 +11,7 @@ enum Layout {
   scaleNotes4th('In Key - 4th'),
   scaleNotesOnly('In Key - Sequential'),
   magicToneNetwork('Magic Tone Network™'),
+  harmonicTable('Harmonic Table'),
   xPressPadsStandard('XpressPads™ Standard 4x4'),
   xPressPadsLatinJazz('XpressPads™ Latin/Jazz 4x4'),
   xPressPadsXO('XpressPads™ with XO 4x4'),
@@ -99,6 +100,8 @@ enum Layout {
         return GridScaleOffset(settings, 2);
       case Layout.magicToneNetwork:
         return GridMTN(settings);
+      case Layout.harmonicTable:
+        return GridHarmonicTable(settings);
       case Layout.xPressPadsStandard:
         return GridXpressPads(settings, XPP.standard);
       case Layout.xPressPadsLatinJazz:
@@ -193,6 +196,32 @@ class GridMTN extends Grid {
           next = sameColumn ? next + 7 : next - 5;
         } else {
           next = sameColumn ? next - 5 : next + 7;
+        }
+      }
+    }
+
+    return grid;
+  }
+}
+
+class GridHarmonicTable extends Grid {
+  GridHarmonicTable(super.settings);
+
+  @override
+  List<CustomPad> get list {
+    final List<CustomPad> grid = [];
+
+    final bool sameColumn = settings.rootNote % 2 ==
+        settings.baseNote % 2; // in the HT, odd and even columns alternate
+
+    for (int row = 0; row < settings.height; row++) {
+      int next = settings.baseNote;
+      for (int note = 0; note < settings.width; note++) {
+        grid.add(CustomPad(next + row * 7));
+        if (note.isEven) {
+          next = sameColumn ? next + 4 : next - 3;
+        } else {
+          next = sameColumn ? next - 3 : next + 4;
         }
       }
     }
