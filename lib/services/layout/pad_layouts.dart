@@ -10,6 +10,7 @@ enum Layout {
   scaleNotes3rd('In Key - 3rd'),
   scaleNotes4th('In Key - 4th'),
   scaleNotesOnly('In Key - Sequential'),
+  harmonicTable('Harmonic Table'),
   magicToneNetwork('Magic Tone Network™'),
   xPressPadsStandard('XpressPads™ Standard 4x4'),
   xPressPadsLatinJazz('XpressPads™ Latin/Jazz 4x4'),
@@ -99,6 +100,8 @@ enum Layout {
         return GridScaleOffset(settings, 2);
       case Layout.magicToneNetwork:
         return GridMTN(settings);
+      case Layout.harmonicTable:
+        return GridHarmonicTable(settings);
       case Layout.xPressPadsStandard:
         return GridXpressPads(settings, XPP.standard);
       case Layout.xPressPadsLatinJazz:
@@ -194,6 +197,25 @@ class GridMTN extends Grid {
         } else {
           next = sameColumn ? next - 5 : next + 7;
         }
+      }
+    }
+
+    return grid;
+  }
+}
+
+class GridHarmonicTable extends Grid {
+  GridHarmonicTable(super.settings);
+
+  @override
+  List<CustomPad> get list {
+    final List<CustomPad> grid = [];
+
+    for (int row = 0; row < settings.height; row++) {
+      int next = settings.baseNote;
+      for (int note = 0; note < settings.width; note++) {
+        grid.add(CustomPad(next + row * 7));
+        next = next + 4;
       }
     }
 
