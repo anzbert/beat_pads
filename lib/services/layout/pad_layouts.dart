@@ -11,6 +11,7 @@ enum Layout {
   scaleNotes4th('In Key - 4th'),
   scaleNotesOnly('In Key - Sequential'),
   harmonicTable('Harmonic Table'),
+  wickiHayden('Wicki-Hayden'),
   magicToneNetwork('Magic Tone Network™'),
   xPressPadsStandard('XpressPads™ Standard 4x4'),
   xPressPadsLatinJazz('XpressPads™ Latin/Jazz 4x4'),
@@ -102,6 +103,8 @@ enum Layout {
         return GridMTN(settings);
       case Layout.harmonicTable:
         return GridHarmonicTable(settings);
+      case Layout.wickiHayden:
+        return GridWickiHayden(settings);
       case Layout.xPressPadsStandard:
         return GridXpressPads(settings, XPP.standard);
       case Layout.xPressPadsLatinJazz:
@@ -216,6 +219,25 @@ class GridHarmonicTable extends Grid {
       for (int note = 0; note < settings.width; note++) {
         grid.add(CustomPad(next + row * 7));
         next = next + 4;
+      }
+    }
+
+    return grid;
+  }
+}
+
+class GridWickiHayden extends Grid {
+  GridWickiHayden(super.settings);
+
+  @override
+  List<CustomPad> get list {
+    final List<CustomPad> grid = [];
+
+    for (int row = 0; row < settings.height; row++) {
+      int next = settings.baseNote;
+      for (int note = 0; note < settings.width; note++) {
+        grid.add(CustomPad(next + row * 7));
+        next = next + 2;
       }
     }
 
