@@ -1,16 +1,14 @@
 import 'package:beat_pads/services/services.dart';
 
 enum Layout {
-  // minorThird('Chromatic - Min 3rd'),
-  majorThird('Chromatic - Maj 3rd'),
-  quart('Chromatic - 4th'),
-  tritone('Chromatic - Tritone'),
-  quint('Chromatic - 5th'),
+  majorThird('Chromatic - Vertical Maj 3rd'),
+  quart('Chromatic - Vertical 4th'),
+  quint('Chromatic - Vertical 5th'),
+  customIntervals('Chromatic - Custom X & Y'),
   continuous('Chromatic - Sequential'),
-  scaleNotes3rd('In Key - 3rd'),
-  scaleNotes4th('In Key - 4th'),
+  scaleNotes3rd('In Key - Vertical 3rd'),
+  scaleNotes4th('In Key - Vertical 4th'),
   scaleNotesOnly('In Key - Sequential'),
-  harmonicTable('Harmonic Table'),
   magicToneNetwork('Magic Tone Network™'),
   xPressPadsStandard('XpressPads™ Standard 4x4'),
   xPressPadsLatinJazz('XpressPads™ Latin/Jazz 4x4'),
@@ -70,15 +68,10 @@ enum Layout {
     }
   }
 
-  Grid getGrid(
-    int width,
-    int height,
-    int rootNote,
-    int baseNote,
-    List<int> scaleList,
-  ) {
-    final GridData settings =
-        GridData(width, height, rootNote, baseNote, scaleList);
+  Grid getGrid(int width, int height, int rootNote, int baseNote,
+      List<int> scaleList, int customIntervalX, int customIntervalY) {
+    final GridData settings = GridData(width, height, rootNote, baseNote,
+        scaleList, customIntervalX, customIntervalY);
 
     switch (this) {
       case Layout.continuous:
@@ -87,8 +80,8 @@ enum Layout {
         return GridRowInterval(settings, rowInterval: 4);
       case Layout.quart:
         return GridRowInterval(settings, rowInterval: 5);
-      case Layout.tritone:
-        return GridRowInterval(settings, rowInterval: 6);
+      // case Layout.tritone:
+      //   return GridRowInterval(settings, rowInterval: 6);
       case Layout.quint:
         return GridRowInterval(settings, rowInterval: 7);
       case Layout.scaleNotesOnly:
@@ -100,8 +93,12 @@ enum Layout {
         return GridScaleOffset(settings, 2);
       case Layout.magicToneNetwork:
         return GridMTN(settings);
-      case Layout.harmonicTable:
-        return GridHarmonicTable(settings);
+      // case Layout.harmonicTable:
+      //   return GridHarmonicTable(settings);
+      // case Layout.wickiHayden:
+      //   return GridWickiHayden(settings);
+      case Layout.customIntervals:
+        return GridCustomIntervals(settings);
       case Layout.xPressPadsStandard:
         return GridXpressPads(settings, XPP.standard);
       case Layout.xPressPadsLatinJazz:
@@ -114,21 +111,21 @@ enum Layout {
   }
 }
 
+/// Holds all the settings required to build any Grid
 class GridData {
-  GridData(
-    this.width,
-    this.height,
-    this.rootNote,
-    this.baseNote,
-    this.scaleList,
-  );
+  GridData(this.width, this.height, this.rootNote, this.baseNote,
+      this.scaleList, this.customIntervalX, this.customIntervalY);
   final int width;
   final int height;
   final int rootNote;
   final int baseNote;
   final List<int> scaleList;
+  final int customIntervalX;
+  final int customIntervalY;
 }
 
+/// Holds special properties that can be assigned to different Layouts
+/// For example, if they are resizable.
 class LayoutProps {
   LayoutProps({
     required this.resizable,
@@ -139,6 +136,9 @@ class LayoutProps {
   final Vector2Int? defaultDimensions;
 }
 
+/// Base class that converts a List into the required rows
+/// Classes derived from this one need to implement a function that
+/// creates a list of notes
 abstract class Grid {
   /// Creates a Pad Grid generating class using the current settings
   Grid(this.settings);
@@ -204,8 +204,46 @@ class GridMTN extends Grid {
   }
 }
 
-class GridHarmonicTable extends Grid {
-  GridHarmonicTable(super.settings);
+// class GridHarmonicTable extends Grid {
+//   GridHarmonicTable(super.settings);
+
+//   @override
+//   List<CustomPad> get list {
+//     final List<CustomPad> grid = [];
+
+//     for (int row = 0; row < settings.height; row++) {
+//       int next = settings.baseNote;
+//       for (int note = 0; note < settings.width; note++) {
+//         grid.add(CustomPad(next + row * 7));
+//         next = next + 4;
+//       }
+//     }
+
+//     return grid;
+//   }
+// }
+
+// class GridWickiHayden extends Grid {
+//   GridWickiHayden(super.settings);
+
+//   @override
+//   List<CustomPad> get list {
+//     final List<CustomPad> grid = [];
+
+//     for (int row = 0; row < settings.height; row++) {
+//       int next = settings.baseNote;
+//       for (int note = 0; note < settings.width; note++) {
+//         grid.add(CustomPad(next + row * 5));
+//         next = next + 2;
+//       }
+//     }
+
+//     return grid;
+//   }
+// }
+
+class GridCustomIntervals extends Grid {
+  GridCustomIntervals(super.settings);
 
   @override
   List<CustomPad> get list {
@@ -214,8 +252,8 @@ class GridHarmonicTable extends Grid {
     for (int row = 0; row < settings.height; row++) {
       int next = settings.baseNote;
       for (int note = 0; note < settings.width; note++) {
-        grid.add(CustomPad(next + row * 7));
-        next = next + 4;
+        grid.add(CustomPad(next + row * settings.customIntervalY));
+        next = next + settings.customIntervalX;
       }
     }
 
