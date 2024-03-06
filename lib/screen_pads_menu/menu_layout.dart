@@ -113,6 +113,26 @@ class MenuLayout extends ConsumerWidget {
                       ref.read(layoutProv.notifier).setAndSave(v),
                 ),
               ),
+              // if (resizableGrid &&
+              //     ref.watch(layoutProv) == Layout.customIntervals)
+              //   const DividerTitle('Custom'),
+              if (resizableGrid &&
+                  ref.watch(layoutProv) == Layout.customIntervals)
+                IntCounterTile(
+                  label: 'X Interval',
+                  setValue: (int v) =>
+                      ref.read(customIntervalXProv.notifier).setAndSave(v),
+                  readValue: ref.watch(customIntervalXProv),
+                ),
+              if (resizableGrid &&
+                  ref.watch(layoutProv) == Layout.customIntervals)
+                IntCounterTile(
+                  label: 'Y Interval',
+                  setValue: (int v) =>
+                      ref.read(customIntervalYProv.notifier).setAndSave(v),
+                  readValue: ref.watch(customIntervalYProv),
+                ),
+              if (resizableGrid) const DividerTitle('Size'),
               if (resizableGrid)
                 IntCounterTile(
                   label: 'Width',

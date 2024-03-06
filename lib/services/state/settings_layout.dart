@@ -74,6 +74,25 @@ final baseOctaveProv = NotifierProvider<SettingIntNotifier, int>(() {
   );
 });
 
+// CUSTOM INTERVALS
+final customIntervalXProv = NotifierProvider<SettingIntNotifier, int>(() {
+  return SettingIntNotifier(
+    key: 'customIntervalX',
+    defaultValue: 1,
+    min: 1,
+    max: 12,
+  );
+});
+
+final customIntervalYProv = NotifierProvider<SettingIntNotifier, int>(() {
+  return SettingIntNotifier(
+    key: 'customIntervalY',
+    defaultValue: 4,
+    min: 1,
+    max: 12,
+  );
+});
+
 // GRID SIZE
 final widthProv = NotifierProvider<SettingIntNotifier, int>(() {
   return SettingIntNotifier(
@@ -102,6 +121,8 @@ final rowProv = Provider<List<List<CustomPad>>>(
           ref.watch(rootProv),
           ref.watch(baseNoteProv),
           ref.watch(scaleProv).intervals,
+          ref.watch(customIntervalXProv),
+          ref.watch(customIntervalYProv),
         )
         .rows;
   },
