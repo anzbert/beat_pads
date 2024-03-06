@@ -236,7 +236,7 @@ class GridWickiHayden extends Grid {
     for (int row = 0; row < settings.height; row++) {
       int next = settings.baseNote;
       for (int note = 0; note < settings.width; note++) {
-        grid.add(CustomPad(next + row * 7));
+        grid.add(CustomPad(next + row * 5));
         next = next + 2;
       }
     }
