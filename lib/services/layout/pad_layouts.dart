@@ -49,26 +49,30 @@ enum Layout {
         scaleList, customIntervalX, customIntervalY);
 
     switch (this) {
-      case Layout.continuous:
-        return GridRowInterval(settings, rowInterval: width);
       case Layout.majorThird:
         return GridRowInterval(settings, rowInterval: 4);
       case Layout.quart:
         return GridRowInterval(settings, rowInterval: 5);
       case Layout.quint:
         return GridRowInterval(settings, rowInterval: 7);
-      case Layout.scaleNotesOnly:
-        return GridScaleOnly(settings);
-      case Layout.scaleNotes4th:
-        return GridScaleOffset(settings, 3);
-      case Layout.scaleNotes3rd:
-        return GridScaleOffset(settings, 2);
-      case Layout.scaleNotesCustom:
-        return GridScaleCustom(settings);
-      case Layout.magicToneNetwork:
-        return GridMTN(settings);
       case Layout.customIntervals:
         return GridCustomIntervals(settings);
+      case Layout.continuous:
+        return GridRowInterval(settings, rowInterval: width);
+
+      case Layout.scaleNotes3rd:
+        return GridScaleCustom(settings, fixedX: 1, fixedY: 2);
+      // return GridScaleOffset(settings, 2);
+      case Layout.scaleNotes4th:
+        return GridScaleCustom(settings, fixedX: 1, fixedY: 3);
+      // return GridScaleOffset(settings, 3);
+      case Layout.scaleNotesCustom:
+        return GridScaleCustom(settings);
+      case Layout.scaleNotesOnly:
+        return GridScaleOnly(settings);
+
+      case Layout.magicToneNetwork:
+        return GridMTN(settings);
       case Layout.xPressPadsStandard:
         return GridXpressPads(settings, XPP.standard);
       case Layout.xPressPadsLatinJazz:
@@ -278,11 +282,21 @@ class GridScaleOffset extends Grid {
   // ////////////////////////////////////////////////
 }
 
+/// Calculate a grid using only scale notes in Key with custom in-scale Intervals on X and Y
 class GridScaleCustom extends Grid {
-  GridScaleCustom(super.settings);
+  GridScaleCustom(super.settings, {this.fixedX, this.fixedY}) {
+    fixedX ??= settings.customIntervalX;
+    fixedY ??= settings.customIntervalY;
+  }
+
+  int? fixedY;
+  int? fixedX;
 
   @override
   List<CustomPad> get list {
+    // fixedX ??= settings.customIntervalX;
+    // fixedY ??= settings.customIntervalY;
+
     /// applied scale pattern to currently selected root note
     /// root note is a value between 0-11
     final List<int> actualScaleNotes =
@@ -294,10 +308,10 @@ class GridScaleCustom extends Grid {
       validatedBase = (validatedBase + 1) % 127;
     }
 
-    /// index in actualNotes of the starting note
+    /// index in actualNotes (of the scale) of the starting note
     final int baseIndex = actualScaleNotes.indexOf(validatedBase % 12);
 
-    // GRID CALCULATION ///////////////////////////
+    // MAIN GRID CALCULATION ///////////////////////////
     final List<CustomPad> grid = [];
 
     int nextRowStart = validatedBase;
@@ -306,34 +320,29 @@ class GridScaleCustom extends Grid {
     for (int row = 0; row < settings.height; row++) {
       final int baseNoteOffset = nextRowStart - actualScaleNotes[nextBaseIndex];
 
-      // CALCULATE SINGLE ROW:
-      int rowPrevAdd = 0;
-      int rowOctave = 0;
-
+      // CALCULATE THE CURRENT ROW:
       for (int note = 0; note < settings.width; note++) {
+        final int octavejumpsOnX = note * fixedX! ~/ actualScaleNotes.length;
+
         final int additiveIndex =
-            (nextBaseIndex + note) % actualScaleNotes.length;
+            (nextBaseIndex + note * fixedX!) % actualScaleNotes.length;
 
-        if (actualScaleNotes[additiveIndex] < rowPrevAdd) {
-          rowOctave++;
-        }
-
-        final int next =
-            baseNoteOffset + actualScaleNotes[additiveIndex] + (rowOctave * 12);
-
-        rowPrevAdd = actualScaleNotes[additiveIndex];
+        final int next = baseNoteOffset +
+            actualScaleNotes[additiveIndex] +
+            octavejumpsOnX * 12;
 
         grid.add(CustomPad(next));
       }
 
-      // CALCULATE NEXT ROW START PAD:
-      nextBaseIndex =
-          (nextBaseIndex + settings.customIntervalY) % actualScaleNotes.length;
-      final int next = baseNoteOffset + actualScaleNotes[nextBaseIndex];
-      nextRowStart = next < nextRowStart ? next + 12 : next;
-      nextRowStart = settings.customIntervalY >= actualScaleNotes.length
-          ? next + 12
-          : next;
+      // CALCULATE NEXT ROW START PAD ONE STEP HIGHER ON THE Y-AXIS:
+      final int octavejumpsOnY =
+          (nextBaseIndex + fixedY!) ~/ actualScaleNotes.length;
+
+      nextBaseIndex = (nextBaseIndex + fixedY!) % actualScaleNotes.length;
+
+      nextRowStart = baseNoteOffset +
+          actualScaleNotes[nextBaseIndex] +
+          octavejumpsOnY * 12;
     }
     return grid;
   }
