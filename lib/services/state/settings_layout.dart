@@ -19,24 +19,20 @@ class LayoutSettingNotifier extends SettingEnumNotifier<Layout> {
 
   @override
   void set(Layout newState) {
-    if (!newState.props.resizable) {
+    if (!newState.resizable) {
       ref.read(rootProv.notifier).reset();
     }
 
-    if (!newState.props.resizable) {
+    if (!newState.resizable) {
       ref.read(scaleProv.notifier).reset();
     }
 
-    if (newState.props.defaultDimensions?.x != null) {
-      ref
-          .read(widthProv.notifier)
-          .setAndSave(newState.props.defaultDimensions!.x);
+    if (newState.defaultDimensions?.x != null) {
+      ref.read(widthProv.notifier).setAndSave(newState.defaultDimensions!.x);
     }
 
-    if (newState.props.defaultDimensions?.y != null) {
-      ref
-          .read(heightProv.notifier)
-          .setAndSave(newState.props.defaultDimensions!.y);
+    if (newState.defaultDimensions?.y != null) {
+      ref.read(heightProv.notifier).setAndSave(newState.defaultDimensions!.y);
     }
     super.set(newState);
   }

@@ -4,69 +4,44 @@ enum Layout {
   majorThird('Chromatic - Vertical Maj 3rd'),
   quart('Chromatic - Vertical 4th'),
   quint('Chromatic - Vertical 5th'),
-  customIntervals('Chromatic - Custom X & Y'),
+  customIntervals('Chromatic - Custom X & Y', custom: true),
   continuous('Chromatic - Sequential'),
   scaleNotes3rd('In Key - Vertical 3rd'),
   scaleNotes4th('In Key - Vertical 4th'),
+  // scaleNotesCustom('In Key - Custom X & Y', custom: true),
   scaleNotesOnly('In Key - Sequential'),
-  magicToneNetwork('Magic Tone Network™'),
-  xPressPadsStandard('XpressPads™ Standard 4x4'),
-  xPressPadsLatinJazz('XpressPads™ Latin/Jazz 4x4'),
-  xPressPadsXO('XpressPads™ with XO 4x4'),
-  xPressPadsXtreme('XpressPads™ Xtreme 8x4');
+  magicToneNetwork('Magic Tone Network™', defaultDimensions: Vector2Int(8, 8)),
+  xPressPadsStandard('XpressPads™ Standard 4x4',
+      resizable: false,
+      defaultDimensions: Vector2Int(4, 4),
+      gmPercussion: true),
+  xPressPadsLatinJazz('XpressPads™ Latin/Jazz 4x4',
+      resizable: false,
+      defaultDimensions: Vector2Int(4, 4),
+      gmPercussion: true),
+  xPressPadsXO('XpressPads™ with XO 4x4',
+      resizable: false, defaultDimensions: Vector2Int(4, 4)),
+  xPressPadsXtreme('XpressPads™ Xtreme 8x4',
+      resizable: false,
+      defaultDimensions: Vector2Int(8, 4),
+      gmPercussion: true);
 
-  const Layout(this.title);
+  const Layout(
+    this.title, {
+    this.custom = false,
+    this.resizable = true,
+    this.gmPercussion = false,
+    this.defaultDimensions,
+  });
+
   final String title;
+  final bool custom;
+  final bool resizable;
+  final bool gmPercussion;
+  final Vector2Int? defaultDimensions;
 
   @override
   String toString() => title;
-
-  bool get gmPercussion {
-    switch (this) {
-      case Layout.xPressPadsStandard:
-        return true;
-      case Layout.xPressPadsLatinJazz:
-        return true;
-      case Layout.xPressPadsXtreme:
-        return true;
-      // ignore: no_default_cases
-      default:
-        return false;
-    }
-  }
-
-  LayoutProps get props {
-    switch (this) {
-      case Layout.magicToneNetwork:
-        return LayoutProps(
-          resizable: true,
-          defaultDimensions: const Vector2Int(8, 8),
-        );
-      case Layout.xPressPadsStandard:
-        return LayoutProps(
-          resizable: false,
-          defaultDimensions: const Vector2Int(4, 4),
-        );
-      case Layout.xPressPadsLatinJazz:
-        return LayoutProps(
-          resizable: false,
-          defaultDimensions: const Vector2Int(4, 4),
-        );
-      case Layout.xPressPadsXO:
-        return LayoutProps(
-          resizable: false,
-          defaultDimensions: const Vector2Int(4, 4),
-        );
-      case Layout.xPressPadsXtreme:
-        return LayoutProps(
-          resizable: false,
-          defaultDimensions: const Vector2Int(8, 4),
-        );
-      // ignore: no_default_cases
-      default:
-        return LayoutProps(resizable: true);
-    }
-  }
 
   Grid getGrid(int width, int height, int rootNote, int baseNote,
       List<int> scaleList, int customIntervalX, int customIntervalY) {
@@ -80,23 +55,18 @@ enum Layout {
         return GridRowInterval(settings, rowInterval: 4);
       case Layout.quart:
         return GridRowInterval(settings, rowInterval: 5);
-      // case Layout.tritone:
-      //   return GridRowInterval(settings, rowInterval: 6);
       case Layout.quint:
         return GridRowInterval(settings, rowInterval: 7);
       case Layout.scaleNotesOnly:
-        // return GridScaleOffset(settings, settings.width);
         return GridScaleOnly(settings);
       case Layout.scaleNotes4th:
         return GridScaleOffset(settings, 3);
       case Layout.scaleNotes3rd:
         return GridScaleOffset(settings, 2);
+      // case Layout.scaleNotesCustom:
+      //   return GridScaleCustom(settings);
       case Layout.magicToneNetwork:
         return GridMTN(settings);
-      // case Layout.harmonicTable:
-      //   return GridHarmonicTable(settings);
-      // case Layout.wickiHayden:
-      //   return GridWickiHayden(settings);
       case Layout.customIntervals:
         return GridCustomIntervals(settings);
       case Layout.xPressPadsStandard:
@@ -122,18 +92,6 @@ class GridData {
   final List<int> scaleList;
   final int customIntervalX;
   final int customIntervalY;
-}
-
-/// Holds special properties that can be assigned to different Layouts
-/// For example, if they are resizable.
-class LayoutProps {
-  LayoutProps({
-    required this.resizable,
-    this.defaultDimensions,
-  });
-
-  final bool resizable;
-  final Vector2Int? defaultDimensions;
 }
 
 /// Base class that converts a List into the required rows
@@ -203,44 +161,6 @@ class GridMTN extends Grid {
     return grid;
   }
 }
-
-// class GridHarmonicTable extends Grid {
-//   GridHarmonicTable(super.settings);
-
-//   @override
-//   List<CustomPad> get list {
-//     final List<CustomPad> grid = [];
-
-//     for (int row = 0; row < settings.height; row++) {
-//       int next = settings.baseNote;
-//       for (int note = 0; note < settings.width; note++) {
-//         grid.add(CustomPad(next + row * 7));
-//         next = next + 4;
-//       }
-//     }
-
-//     return grid;
-//   }
-// }
-
-// class GridWickiHayden extends Grid {
-//   GridWickiHayden(super.settings);
-
-//   @override
-//   List<CustomPad> get list {
-//     final List<CustomPad> grid = [];
-
-//     for (int row = 0; row < settings.height; row++) {
-//       int next = settings.baseNote;
-//       for (int note = 0; note < settings.width; note++) {
-//         grid.add(CustomPad(next + row * 5));
-//         next = next + 2;
-//       }
-//     }
-
-//     return grid;
-//   }
-// }
 
 class GridCustomIntervals extends Grid {
   GridCustomIntervals(super.settings);
@@ -349,6 +269,66 @@ class GridScaleOffset extends Grid {
 
       // CALCULATE NEXT ROW START PAD:
       nextBaseIndex = (nextBaseIndex + interval) % actualScaleNotes.length;
+      final int next = baseNoteOffset + actualScaleNotes[nextBaseIndex];
+      nextRowStart = next < nextRowStart ? next + 12 : next;
+    }
+    return grid;
+  }
+
+  // ////////////////////////////////////////////////
+}
+
+class GridScaleCustom extends Grid {
+  GridScaleCustom(super.settings);
+
+  @override
+  List<CustomPad> get list {
+    /// applied scale pattern to currently selected root note
+    /// root note is a value between 0-11
+    final List<int> actualScaleNotes =
+        MidiUtils.absoluteScaleNotes(settings.rootNote, settings.scaleList);
+
+    /// baseNote that is actually part of the currently selected scale
+    int validatedBase = settings.baseNote; // basenote is a value between 0-127
+    while (!actualScaleNotes.contains(validatedBase % 12)) {
+      validatedBase = (validatedBase + 1) % 127;
+    }
+
+    /// index in actualNotes of the starting note
+    final int baseIndex = actualScaleNotes.indexOf(validatedBase % 12);
+
+    // GRID CALCULATION ///////////////////////////
+    final List<CustomPad> grid = [];
+
+    int nextRowStart = validatedBase;
+    int nextBaseIndex = baseIndex;
+
+    for (int row = 0; row < settings.height; row++) {
+      final int baseNoteOffset = nextRowStart - actualScaleNotes[nextBaseIndex];
+
+      // CALCULATE SINGLE ROW:
+      int rowPrevAdd = 0;
+      int rowOctave = 0;
+
+      for (int note = 0; note < settings.width; note++) {
+        final int additiveIndex =
+            (nextBaseIndex + note) % actualScaleNotes.length;
+
+        if (actualScaleNotes[additiveIndex] < rowPrevAdd) {
+          rowOctave++;
+        }
+
+        final int next =
+            baseNoteOffset + actualScaleNotes[additiveIndex] + (rowOctave * 12);
+
+        rowPrevAdd = actualScaleNotes[additiveIndex];
+
+        grid.add(CustomPad(next));
+      }
+
+      // CALCULATE NEXT ROW START PAD:
+      nextBaseIndex =
+          (nextBaseIndex + settings.customIntervalY) % actualScaleNotes.length;
       final int next = baseNoteOffset + actualScaleNotes[nextBaseIndex];
       nextRowStart = next < nextRowStart ? next + 12 : next;
     }
