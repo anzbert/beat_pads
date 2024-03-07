@@ -8,7 +8,7 @@ enum Layout {
   continuous('Chromatic - Sequential'),
   scaleNotes3rd('In Key - Vertical 3rd'),
   scaleNotes4th('In Key - Vertical 4th'),
-  // scaleNotesCustom('In Key - Custom X & Y', custom: true),
+  scaleNotesCustom('In Key - Custom X & Y', custom: true),
   scaleNotesOnly('In Key - Sequential'),
   magicToneNetwork('Magic Tone Network™', defaultDimensions: Vector2Int(8, 8)),
   xPressPadsStandard('XpressPads™ Standard 4x4',
@@ -63,8 +63,8 @@ enum Layout {
         return GridScaleOffset(settings, 3);
       case Layout.scaleNotes3rd:
         return GridScaleOffset(settings, 2);
-      // case Layout.scaleNotesCustom:
-      //   return GridScaleCustom(settings);
+      case Layout.scaleNotesCustom:
+        return GridScaleCustom(settings);
       case Layout.magicToneNetwork:
         return GridMTN(settings);
       case Layout.customIntervals:
@@ -331,6 +331,9 @@ class GridScaleCustom extends Grid {
           (nextBaseIndex + settings.customIntervalY) % actualScaleNotes.length;
       final int next = baseNoteOffset + actualScaleNotes[nextBaseIndex];
       nextRowStart = next < nextRowStart ? next + 12 : next;
+      nextRowStart = settings.customIntervalY >= actualScaleNotes.length
+          ? next + 12
+          : next;
     }
     return grid;
   }
