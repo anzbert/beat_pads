@@ -83,7 +83,7 @@ final customIntervalXProv = NotifierProvider<SettingIntNotifier, int>(() {
 final customIntervalYProv = NotifierProvider<SettingIntNotifier, int>(() {
   return SettingIntNotifier(
     key: 'customIntervalY',
-    defaultValue: 4,
+    defaultValue: 1,
     min: 1,
     max: 12,
   );

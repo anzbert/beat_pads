@@ -8,6 +8,7 @@ enum Layout {
   continuous('Chromatic - Sequential'),
   scaleNotes3rd('In Key - Vertical 3rd'),
   scaleNotes4th('In Key - Vertical 4th'),
+  scaleNotes5th('In Key - Vertical 5th'),
   scaleNotesCustom('In Key - Custom X & Y', custom: true),
   scaleNotesOnly('In Key - Sequential'),
   magicToneNetwork('Magic Tone Network™', defaultDimensions: Vector2Int(8, 8)),
@@ -66,6 +67,8 @@ enum Layout {
       case Layout.scaleNotes4th:
         return GridScaleCustom(settings, fixedX: 1, fixedY: 3);
       // return GridScaleOffset(settings, 3);
+      case Layout.scaleNotes5th:
+        return GridScaleCustom(settings, fixedX: 1, fixedY: 4);
       case Layout.scaleNotesCustom:
         return GridScaleCustom(settings);
       case Layout.scaleNotesOnly:
@@ -221,66 +224,66 @@ class GridScaleOnly extends Grid {
   }
 }
 
-class GridScaleOffset extends Grid {
-  GridScaleOffset(super.settings, this.interval);
+// class GridScaleOffset extends Grid {
+//   GridScaleOffset(super.settings, this.interval);
 
-  final int interval;
+//   final int interval;
 
-  @override
-  List<CustomPad> get list {
-    /// applied scale pattern to currently selected root note
-    /// root note is a value between 0-11
-    final List<int> actualScaleNotes =
-        MidiUtils.absoluteScaleNotes(settings.rootNote, settings.scaleList);
+//   @override
+//   List<CustomPad> get list {
+//     /// applied scale pattern to currently selected root note
+//     /// root note is a value between 0-11
+//     final List<int> actualScaleNotes =
+//         MidiUtils.absoluteScaleNotes(settings.rootNote, settings.scaleList);
 
-    /// baseNote that is actually part of the currently selected scale
-    int validatedBase = settings.baseNote; // basenote is a value between 0-127
-    while (!actualScaleNotes.contains(validatedBase % 12)) {
-      validatedBase = (validatedBase + 1) % 127;
-    }
+//     /// baseNote that is actually part of the currently selected scale
+//     int validatedBase = settings.baseNote; // basenote is a value between 0-127
+//     while (!actualScaleNotes.contains(validatedBase % 12)) {
+//       validatedBase = (validatedBase + 1) % 127;
+//     }
 
-    /// index in actualNotes of the starting note
-    final int baseIndex = actualScaleNotes.indexOf(validatedBase % 12);
+//     /// index in actualNotes of the starting note
+//     final int baseIndex = actualScaleNotes.indexOf(validatedBase % 12);
 
-    // GRID CALCULATION ///////////////////////////
-    final List<CustomPad> grid = [];
+//     // GRID CALCULATION ///////////////////////////
+//     final List<CustomPad> grid = [];
 
-    int nextRowStart = validatedBase;
-    int nextBaseIndex = baseIndex;
+//     int nextRowStart = validatedBase;
+//     int nextBaseIndex = baseIndex;
 
-    for (int row = 0; row < settings.height; row++) {
-      final int baseNoteOffset = nextRowStart - actualScaleNotes[nextBaseIndex];
+//     for (int row = 0; row < settings.height; row++) {
+//       final int baseNoteOffset = nextRowStart - actualScaleNotes[nextBaseIndex];
 
-      // CALCULATE SINGLE ROW:
-      int rowPrevAdd = 0;
-      int rowOctave = 0;
+//       // CALCULATE SINGLE ROW:
+//       int rowPrevAdd = 0;
+//       int rowOctave = 0;
 
-      for (int note = 0; note < settings.width; note++) {
-        final int additiveIndex =
-            (nextBaseIndex + note) % actualScaleNotes.length;
+//       for (int note = 0; note < settings.width; note++) {
+//         final int additiveIndex =
+//             (nextBaseIndex + note) % actualScaleNotes.length;
 
-        if (actualScaleNotes[additiveIndex] < rowPrevAdd) {
-          rowOctave++;
-        }
+//         if (actualScaleNotes[additiveIndex] < rowPrevAdd) {
+//           rowOctave++;
+//         }
 
-        final int next =
-            baseNoteOffset + actualScaleNotes[additiveIndex] + (rowOctave * 12);
+//         final int next =
+//             baseNoteOffset + actualScaleNotes[additiveIndex] + (rowOctave * 12);
 
-        rowPrevAdd = actualScaleNotes[additiveIndex];
+//         rowPrevAdd = actualScaleNotes[additiveIndex];
 
-        grid.add(CustomPad(next));
-      }
+//         grid.add(CustomPad(next));
+//       }
 
-      // CALCULATE NEXT ROW START PAD:
-      nextBaseIndex = (nextBaseIndex + interval) % actualScaleNotes.length;
-      final int next = baseNoteOffset + actualScaleNotes[nextBaseIndex];
-      nextRowStart = next < nextRowStart ? next + 12 : next;
-    }
-    return grid;
-  }
+//       // CALCULATE NEXT ROW START PAD:
+//       nextBaseIndex = (nextBaseIndex + interval) % actualScaleNotes.length;
+//       final int next = baseNoteOffset + actualScaleNotes[nextBaseIndex];
+//       nextRowStart = next < nextRowStart ? next + 12 : next;
+//     }
+//     return grid;
+//   }
 
-  // ////////////////////////////////////////////////
-}
+//   // ////////////////////////////////////////////////
+// }
 
 /// Calculate a grid using only scale notes in Key with custom in-scale Intervals on X and Y
 class GridScaleCustom extends Grid {
