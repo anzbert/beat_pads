@@ -16,10 +16,8 @@ class MenuLayout extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final bool resizableGrid = ref
-        .watch(layoutProv)
-        .props
-        .resizable; // Is the layout fixed or resizable?
+    final bool resizableGrid =
+        ref.watch(layoutProv).resizable; // Is the layout fixed or resizable?
     final bool isPortrait =
         MediaQuery.of(context).orientation.name == 'portrait';
     return Flex(
@@ -113,19 +111,14 @@ class MenuLayout extends ConsumerWidget {
                       ref.read(layoutProv.notifier).setAndSave(v),
                 ),
               ),
-              // if (resizableGrid &&
-              //     ref.watch(layoutProv) == Layout.customIntervals)
-              //   const DividerTitle('Custom'),
-              if (resizableGrid &&
-                  ref.watch(layoutProv) == Layout.customIntervals)
+              if (resizableGrid && ref.watch(layoutProv).custom)
                 IntCounterTile(
                   label: 'X Interval',
                   setValue: (int v) =>
                       ref.read(customIntervalXProv.notifier).setAndSave(v),
                   readValue: ref.watch(customIntervalXProv),
                 ),
-              if (resizableGrid &&
-                  ref.watch(layoutProv) == Layout.customIntervals)
+              if (resizableGrid && ref.watch(layoutProv).custom)
                 IntCounterTile(
                   label: 'Y Interval',
                   setValue: (int v) =>
