@@ -5,7 +5,7 @@ enum Layout {
   quart('Chromatic - Vertical 4th'),
   quint('Chromatic - Vertical 5th'),
   customIntervals('Chromatic - Custom X & Y', custom: true),
-  continuous('Chromatic - Sequential'),
+  sequential('Chromatic - Sequential'),
   scaleNotes3rd('In Key - Vertical 3rd'),
   scaleNotes4th('In Key - Vertical 4th'),
   scaleNotes5th('In Key - Vertical 5th'),
@@ -51,28 +51,26 @@ enum Layout {
 
     switch (this) {
       case Layout.majorThird:
-        return GridRowInterval(settings, rowInterval: 4);
+        return GridChromaticByRowInterval(settings, rowInterval: 4);
       case Layout.quart:
-        return GridRowInterval(settings, rowInterval: 5);
+        return GridChromaticByRowInterval(settings, rowInterval: 5);
       case Layout.quint:
-        return GridRowInterval(settings, rowInterval: 7);
+        return GridChromaticByRowInterval(settings, rowInterval: 7);
       case Layout.customIntervals:
-        return GridCustomIntervals(settings);
-      case Layout.continuous:
-        return GridRowInterval(settings, rowInterval: width);
+        return GridChromaticByCustomIntervals(settings);
+      case Layout.sequential:
+        return GridChromaticByRowInterval(settings, rowInterval: width);
 
       case Layout.scaleNotes3rd:
-        return GridScaleCustom(settings, fixedX: 1, fixedY: 2);
-      // return GridScaleOffset(settings, 2);
+        return GridInScaleCustom(settings, fixedXY: const Vector2Int(1, 2));
       case Layout.scaleNotes4th:
-        return GridScaleCustom(settings, fixedX: 1, fixedY: 3);
-      // return GridScaleOffset(settings, 3);
+        return GridInScaleCustom(settings, fixedXY: const Vector2Int(1, 3));
       case Layout.scaleNotes5th:
-        return GridScaleCustom(settings, fixedX: 1, fixedY: 4);
+        return GridInScaleCustom(settings, fixedXY: const Vector2Int(1, 4));
       case Layout.scaleNotesCustom:
-        return GridScaleCustom(settings);
+        return GridInScaleCustom(settings);
       case Layout.scaleNotesOnly:
-        return GridScaleOnly(settings);
+        return GridInScaleSequential(settings);
 
       case Layout.magicToneNetwork:
         return GridMTN(settings);
@@ -126,8 +124,8 @@ abstract class Grid {
   }
 }
 
-class GridRowInterval extends Grid {
-  GridRowInterval(super.settings, {required this.rowInterval});
+class GridChromaticByRowInterval extends Grid {
+  GridChromaticByRowInterval(super.settings, {required this.rowInterval});
 
   final int rowInterval;
 
@@ -169,8 +167,8 @@ class GridMTN extends Grid {
   }
 }
 
-class GridCustomIntervals extends Grid {
-  GridCustomIntervals(super.settings);
+class GridChromaticByCustomIntervals extends Grid {
+  GridChromaticByCustomIntervals(super.settings);
 
   @override
   List<CustomPad> get list {
@@ -188,8 +186,8 @@ class GridCustomIntervals extends Grid {
   }
 }
 
-class GridScaleOnly extends Grid {
-  GridScaleOnly(super.settings);
+class GridInScaleSequential extends Grid {
+  GridInScaleSequential(super.settings);
 
   @override
   List<CustomPad> get list {
@@ -224,133 +222,76 @@ class GridScaleOnly extends Grid {
   }
 }
 
-// class GridScaleOffset extends Grid {
-//   GridScaleOffset(super.settings, this.interval);
-
-//   final int interval;
-
-//   @override
-//   List<CustomPad> get list {
-//     /// applied scale pattern to currently selected root note
-//     /// root note is a value between 0-11
-//     final List<int> actualScaleNotes =
-//         MidiUtils.absoluteScaleNotes(settings.rootNote, settings.scaleList);
-
-//     /// baseNote that is actually part of the currently selected scale
-//     int validatedBase = settings.baseNote; // basenote is a value between 0-127
-//     while (!actualScaleNotes.contains(validatedBase % 12)) {
-//       validatedBase = (validatedBase + 1) % 127;
-//     }
-
-//     /// index in actualNotes of the starting note
-//     final int baseIndex = actualScaleNotes.indexOf(validatedBase % 12);
-
-//     // GRID CALCULATION ///////////////////////////
-//     final List<CustomPad> grid = [];
-
-//     int nextRowStart = validatedBase;
-//     int nextBaseIndex = baseIndex;
-
-//     for (int row = 0; row < settings.height; row++) {
-//       final int baseNoteOffset = nextRowStart - actualScaleNotes[nextBaseIndex];
-
-//       // CALCULATE SINGLE ROW:
-//       int rowPrevAdd = 0;
-//       int rowOctave = 0;
-
-//       for (int note = 0; note < settings.width; note++) {
-//         final int additiveIndex =
-//             (nextBaseIndex + note) % actualScaleNotes.length;
-
-//         if (actualScaleNotes[additiveIndex] < rowPrevAdd) {
-//           rowOctave++;
-//         }
-
-//         final int next =
-//             baseNoteOffset + actualScaleNotes[additiveIndex] + (rowOctave * 12);
-
-//         rowPrevAdd = actualScaleNotes[additiveIndex];
-
-//         grid.add(CustomPad(next));
-//       }
-
-//       // CALCULATE NEXT ROW START PAD:
-//       nextBaseIndex = (nextBaseIndex + interval) % actualScaleNotes.length;
-//       final int next = baseNoteOffset + actualScaleNotes[nextBaseIndex];
-//       nextRowStart = next < nextRowStart ? next + 12 : next;
-//     }
-//     return grid;
-//   }
-
-//   // ////////////////////////////////////////////////
-// }
-
 /// Calculate a grid using only scale notes in Key with custom in-scale Intervals on X and Y
-class GridScaleCustom extends Grid {
-  GridScaleCustom(super.settings, {this.fixedX, this.fixedY}) {
-    fixedX ??= settings.customIntervalX;
-    fixedY ??= settings.customIntervalY;
+class GridInScaleCustom extends Grid {
+  GridInScaleCustom(super.settings, {this.fixedXY}) {
+    fixedXY ??= Vector2Int(settings.customIntervalX, settings.customIntervalY);
+    allScaleNotes = getScaleNotes(settings.scaleList, settings.rootNote);
   }
 
-  int? fixedY;
-  int? fixedX;
+  Vector2Int? fixedXY;
+  late final List<int> allScaleNotes;
+
+  /// Produces all notes in a scale between 0 and 127 given a scale of notes between 0 and 11
+  List<int> getScaleNotes(List<int> scaleNotes, int root) {
+    const semitonesPerOctave = 12;
+    int midiRoot = root + (root * semitonesPerOctave);
+    Set<int> midiNotes = {}; // Use a Set to ensure uniqueness
+
+    // Iterate through all possible MIDI values (0 to 127)
+    for (int midiNote = 0; midiNote < 128; midiNote++) {
+      // Calculate the equivalent scale note based on the MIDI value
+      int note = (midiNote - midiRoot) % semitonesPerOctave;
+
+      // Check if the note is part of the provided scale pattern
+      if (scaleNotes.contains(note)) {
+        midiNotes.add(midiNote);
+      }
+    }
+
+    return midiNotes.toList(); // Return a list of unique MIDI values
+  }
 
   @override
   List<CustomPad> get list {
-    // fixedX ??= settings.customIntervalX;
-    // fixedY ??= settings.customIntervalY;
-
     /// applied scale pattern to currently selected root note
     /// root note is a value between 0-11
     final List<int> actualScaleNotes =
         MidiUtils.absoluteScaleNotes(settings.rootNote, settings.scaleList);
 
     /// baseNote that is actually part of the currently selected scale
-    int validatedBase = settings.baseNote; // basenote is a value between 0-127
-    while (!actualScaleNotes.contains(validatedBase % 12)) {
-      validatedBase = (validatedBase + 1) % 127;
+    int validatedBaseCheck =
+        settings.baseNote; // basenote is a value between 0-127
+    while (!actualScaleNotes.contains(validatedBaseCheck % 12)) {
+      validatedBaseCheck = (validatedBaseCheck + 1) % 127;
     }
 
-    /// index in actualNotes (of the scale) of the starting note
-    final int baseIndex = actualScaleNotes.indexOf(validatedBase % 12);
+    /// ScaleNotes Index of first Note in the Row
+    int rowStartIndex = allScaleNotes.indexOf(
+        validatedBaseCheck); // init with the index in the scalelist of the first note in the grid
 
-    // MAIN GRID CALCULATION ///////////////////////////
+    /// List of all the calculated Notes in the grid
     final List<CustomPad> grid = [];
 
-    int nextRowStart = validatedBase;
-    int nextBaseIndex = baseIndex;
-
+    // CALCULATE GRID:
     for (int row = 0; row < settings.height; row++) {
-      final int baseNoteOffset = nextRowStart - actualScaleNotes[nextBaseIndex];
-
-      // CALCULATE THE CURRENT ROW:
+      // X - GET ROW
       for (int note = 0; note < settings.width; note++) {
-        final int octavejumpsOnX = note * fixedX! ~/ actualScaleNotes.length;
+        int nextNote = rowStartIndex + note * fixedXY!.x;
 
-        final int additiveIndex =
-            (nextBaseIndex + note * fixedX!) % actualScaleNotes.length;
-
-        final int next = baseNoteOffset +
-            actualScaleNotes[additiveIndex] +
-            octavejumpsOnX * 12;
-
-        grid.add(CustomPad(next));
+        if (nextNote >= allScaleNotes.length || nextNote.isNegative) {
+          grid.add(CustomPad(999));
+        } else {
+          grid.add(CustomPad(allScaleNotes[nextNote]));
+        }
       }
 
-      // CALCULATE NEXT ROW START PAD ONE STEP HIGHER ON THE Y-AXIS:
-      final int octavejumpsOnY =
-          (nextBaseIndex + fixedY!) ~/ actualScaleNotes.length;
-
-      nextBaseIndex = (nextBaseIndex + fixedY!) % actualScaleNotes.length;
-
-      nextRowStart = baseNoteOffset +
-          actualScaleNotes[nextBaseIndex] +
-          octavejumpsOnY * 12;
+      // Y - GET NEXT ROW START
+      rowStartIndex = (rowStartIndex + fixedXY!.y);
     }
+
     return grid;
   }
-
-  // ////////////////////////////////////////////////
 }
 
 class GridXpressPads extends Grid {
@@ -362,116 +303,4 @@ class GridXpressPads extends Grid {
   List<CustomPad> get list {
     return xPressPads.list.map(CustomPad.new).toList();
   }
-}
-
-// constant data about XPP layouts:
-enum XPP {
-  standard,
-  latinJazz,
-  xo,
-  xtreme;
-
-  List<int> get list {
-    switch (this) {
-      case XPP.standard:
-        return XppConstants.standardGrid;
-      case XPP.latinJazz:
-        return XppConstants.latinJazzGrid;
-      case XPP.xo:
-        return XppConstants.standardGridXO;
-      case XPP.xtreme:
-        return XppConstants.xtremeGrid;
-    }
-  }
-}
-
-abstract class XppConstants {
-  static const List<int> standardGrid = [
-    36,
-    42,
-    42,
-    36,
-    38,
-    46,
-    46,
-    38,
-    43,
-    50,
-    50,
-    43,
-    49,
-    51,
-    51,
-    49,
-  ];
-  static const List<int> standardGridXO = [
-    36,
-    40,
-    40,
-    36,
-    38,
-    41,
-    41,
-    38,
-    39,
-    42,
-    42,
-    39,
-    43,
-    37,
-    37,
-    43,
-  ];
-  static const List<int> latinJazzGrid = [
-    36,
-    44,
-    44,
-    36,
-    43,
-    49,
-    49,
-    43,
-    50,
-    38,
-    38,
-    50,
-    51,
-    37,
-    37,
-    51,
-  ];
-  static const List<int> xtremeGrid = [
-    37,
-    36,
-    42,
-    51,
-    51,
-    42,
-    36,
-    37,
-    40,
-    38,
-    46,
-    53,
-    53,
-    46,
-    38,
-    40,
-    41,
-    43,
-    47,
-    50,
-    50,
-    47,
-    43,
-    41,
-    55,
-    49,
-    56,
-    57,
-    57,
-    56,
-    49,
-    55,
-  ];
 }
