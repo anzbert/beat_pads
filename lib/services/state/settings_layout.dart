@@ -139,7 +139,7 @@ final padColorsProv =
   return SettingEnumNotifier<PadColors>(
     nameMap: PadColors.values.asNameMap(),
     key: 'padColors',
-    defaultValue: PadColors.highlightRoot,
+    defaultValue: PadColors.colorWheel,
   );
 });
 
