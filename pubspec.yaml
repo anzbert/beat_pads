@@ -1,7 +1,7 @@
 name: beat_pads
 description: Midi Poly Grid - A USB Midi Pad Controller for Music Production with MPE and Polyphonic Aftertouch
 publish_to: "none"
-version: 0.9.18+87
+version: 0.9.19+88
 
 # Read more about Android versioning:
 # https://developer.android.com/studio/publish/versioning
@@ -27,7 +27,7 @@ dependencies:
     # path: /Users/anz/localDev/FlutterMidiCommand
 
   flutter_riverpod: ^2.3.2
-  rive: ^0.12.1
+  rive: ^0.13.0
   shared_preferences: ^2.0.20
   simple_gradient_text: ^1.2.4
   url_launcher: ^6.1.10

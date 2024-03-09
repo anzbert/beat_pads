@@ -18,6 +18,16 @@ class MenuSystem extends ConsumerWidget {
       children: <Widget>[
         const DividerTitle('System'),
         const SwitchWakeLockTile(),
+        ListTile(
+          title: const Text('Fader Tracks Touchable'),
+          subtitle: const Text(
+              'Allow Faders to be moved by touching anywhere on their track'),
+          trailing: Switch(
+            value: ref.watch(sliderTapAndSlideProv),
+            onChanged: (bool v) =>
+                ref.read(sliderTapAndSlideProv.notifier).setAndSave(v),
+          ),
+        ),
         const DividerTitle('Reset'),
         Center(
           child: ConstrainedBox(

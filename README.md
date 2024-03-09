@@ -49,9 +49,11 @@ Wifi works on iOS, but Wifi and Bluetooth support is otherwise limited due to pl
 
 Anyone is most welcome to contribute, report an issue or start a discussion in the Github repository. Thanks!
 
-## Known issues
+## ToDo List
 
+- iOS devices disconnect from Midi sometimes when screen times out and wkaelock is off -> Implement auto reconnect to last connected devices
 - Project still using outdated ChangeNotifier in Riverpod state management -> Refactor
+- Add MPE behavior like on the Push 3, where targeted pitch bends can be done by dragging to a different pad
 
 ## Licence
 

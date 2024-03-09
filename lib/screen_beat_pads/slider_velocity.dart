@@ -58,7 +58,9 @@ class _SliderVelocityState extends ConsumerState<SliderVelocity> {
             child: ThemedSlider(
               thumbColor: Palette.cadetBlue,
               child: Slider(
-                allowedInteraction: SliderInteraction.slideThumb,
+                allowedInteraction: ref.watch(sliderTapAndSlideProv)
+                    ? SliderInteraction.tapAndSlide
+                    : SliderInteraction.slideThumb,
                 min: 10,
                 max: 127,
                 value: ref
@@ -93,7 +95,9 @@ class _SliderVelocityState extends ConsumerState<SliderVelocity> {
               ),
               thumbColor: Palette.cadetBlue,
               child: Slider(
-                allowedInteraction: SliderInteraction.slideThumb,
+                allowedInteraction: ref.watch(sliderTapAndSlideProv)
+                    ? SliderInteraction.tapAndSlide
+                    : SliderInteraction.slideThumb,
                 min: 10,
                 max: 127,
                 value: ref

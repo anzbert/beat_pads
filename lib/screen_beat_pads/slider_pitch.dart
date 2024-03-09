@@ -3,8 +3,9 @@ import 'package:beat_pads/services/services.dart';
 import 'package:beat_pads/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_midi_command/flutter_midi_command_messages.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class PitchSliderEased extends StatefulWidget {
+class PitchSliderEased extends ConsumerStatefulWidget {
   const PitchSliderEased({
     required this.channel,
     required this.resetTime,
@@ -15,10 +16,10 @@ class PitchSliderEased extends StatefulWidget {
   final int resetTime;
 
   @override
-  PitchSliderEasedState createState() => PitchSliderEasedState();
+  ConsumerState<PitchSliderEased> createState() => _PitchSliderEasedState();
 }
 
-class PitchSliderEasedState extends State<PitchSliderEased>
+class _PitchSliderEasedState extends ConsumerState<PitchSliderEased>
     with SingleTickerProviderStateMixin {
   late Animation<double> _animation;
   late AnimationController _controller;
@@ -76,7 +77,9 @@ class PitchSliderEasedState extends State<PitchSliderEased>
             thumbColor: Palette.laserLemon,
             centerLine: true,
             child: Slider(
-              allowedInteraction: SliderInteraction.slideThumb,
+              allowedInteraction: ref.watch(sliderTapAndSlideProv)
+                  ? SliderInteraction.tapAndSlide
+                  : SliderInteraction.slideThumb,
               min: -1,
               value: _pitch,
               onChanged: (val) {
