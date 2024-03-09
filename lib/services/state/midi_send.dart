@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Sending logic still uses ChangeNotifier. Could be refactored for Riverpod
 // for improved clarity and expandability.
-// TODO Refactor! Replace outdated ChangeNotifier with new Riverpod Notifiers. Extract parts into seperate providers.
+// TODO Refactor: Replace outdated ChangeNotifier with new Riverpod Notifiers. Extract midi send system parts into seperate providers (Time consuming)
 
 class SendSettings {
   /// A data object which holds all the settings required for sending midi
