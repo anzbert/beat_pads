@@ -144,7 +144,7 @@ class MenuLayout extends ConsumerWidget {
                       ref.read(heightProv.notifier).setAndSave(v),
                   readValue: ref.watch(heightProv),
                 ),
-              if (resizableGrid) const DividerTitle('Scales'),
+              if (resizableGrid) const DividerTitle('Scale'),
               if (resizableGrid)
                 ListTile(
                   title: const Text('Scale'),

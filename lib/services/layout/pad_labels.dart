@@ -22,7 +22,7 @@ enum PadLabels {
     if (padLabels == PadLabels.value) {
       label.title = note.toString();
     }
-    if (layout.gmPercussion) {
+    if (layout.gmPercussionLabels) {
       label.subtitle = MidiUtils.getNoteName(note, gmPercussionLabels: true);
     }
 

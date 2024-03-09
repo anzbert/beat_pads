@@ -15,30 +15,30 @@ enum Layout {
   xPressPadsStandard('XpressPads™ Standard 4x4',
       resizable: false,
       defaultDimensions: Vector2Int(4, 4),
-      gmPercussion: true),
+      gmPercussionLabels: true),
   xPressPadsLatinJazz('XpressPads™ Latin/Jazz 4x4',
       resizable: false,
       defaultDimensions: Vector2Int(4, 4),
-      gmPercussion: true),
+      gmPercussionLabels: true),
   xPressPadsXO('XpressPads™ with XO 4x4',
       resizable: false, defaultDimensions: Vector2Int(4, 4)),
   xPressPadsXtreme('XpressPads™ Xtreme 8x4',
       resizable: false,
       defaultDimensions: Vector2Int(8, 4),
-      gmPercussion: true);
+      gmPercussionLabels: true);
 
   const Layout(
     this.title, {
     this.custom = false,
     this.resizable = true,
-    this.gmPercussion = false,
+    this.gmPercussionLabels = false,
     this.defaultDimensions,
   });
 
   final String title;
   final bool custom;
   final bool resizable;
-  final bool gmPercussion;
+  final bool gmPercussionLabels;
   final Vector2Int? defaultDimensions;
 
   @override
