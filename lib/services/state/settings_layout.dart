@@ -83,7 +83,7 @@ final customIntervalXProv = NotifierProvider<SettingIntNotifier, int>(() {
 final customIntervalYProv = NotifierProvider<SettingIntNotifier, int>(() {
   return SettingIntNotifier(
     key: 'customIntervalY',
-    defaultValue: 4,
+    defaultValue: 1,
     min: 1,
     max: 12,
   );
@@ -139,7 +139,7 @@ final padColorsProv =
   return SettingEnumNotifier<PadColors>(
     nameMap: PadColors.values.asNameMap(),
     key: 'padColors',
-    defaultValue: PadColors.highlightRoot,
+    defaultValue: PadColors.colorWheel,
   );
 });
 

@@ -3,6 +3,7 @@ export 'constants/const_colors.dart';
 export 'constants/const_device.dart';
 export 'constants/const_midi.dart';
 export 'constants/const_timing.dart';
+export 'constants/const_xpresspads.dart';
 export 'layout/pad_colors.dart';
 export 'layout/pad_labels.dart';
 export 'layout/pad_layouts.dart';

@@ -113,14 +113,18 @@ class MenuLayout extends ConsumerWidget {
               ),
               if (resizableGrid && ref.watch(layoutProv).custom)
                 IntCounterTile(
-                  label: 'X Interval',
+                  label: ref.watch(layoutProv) == Layout.scaleNotesCustom
+                      ? 'X Scale Steps'
+                      : 'X Semitones',
                   setValue: (int v) =>
                       ref.read(customIntervalXProv.notifier).setAndSave(v),
                   readValue: ref.watch(customIntervalXProv),
                 ),
               if (resizableGrid && ref.watch(layoutProv).custom)
                 IntCounterTile(
-                  label: 'Y Interval',
+                  label: ref.watch(layoutProv) == Layout.scaleNotesCustom
+                      ? 'Y Scale Steps'
+                      : 'Y Semitones',
                   setValue: (int v) =>
                       ref.read(customIntervalYProv.notifier).setAndSave(v),
                   readValue: ref.watch(customIntervalYProv),
@@ -140,7 +144,7 @@ class MenuLayout extends ConsumerWidget {
                       ref.read(heightProv.notifier).setAndSave(v),
                   readValue: ref.watch(heightProv),
                 ),
-              if (resizableGrid) const DividerTitle('Scales'),
+              if (resizableGrid) const DividerTitle('Scale'),
               if (resizableGrid)
                 ListTile(
                   title: const Text('Scale'),

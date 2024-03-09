@@ -65,7 +65,7 @@ class SlideBeatPad extends ConsumerWidget {
                     child: Padding(
                       padding: EdgeInsets.all(padSpacing),
                       child: Text(
-                        note.toString(),
+                        '#',
                         style: TextStyle(
                           fontStyle: FontStyle.italic,
                           color: Palette.lightGrey,
