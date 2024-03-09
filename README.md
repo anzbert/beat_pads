@@ -51,9 +51,9 @@ Anyone is most welcome to contribute, report an issue or start a discussion in t
 
 ## ToDo List
 
-- iOS devices disconnect from Midi sometimes when screen times out and wkaelock is off -> Implement auto reconnect to last connected devices
-- Project still using outdated ChangeNotifier in Riverpod state management -> Refactor
+- iOS devices disconnect from Midi sometimes when screen times out and wakelock is off -> Implement auto-reconnect to last connected devices
 - Add MPE behavior like on the Push 3, where targeted pitch bends can be done by dragging to a different pad
+- Low Priority: Project still using outdated ChangeNotifier in Riverpod state management -> Refactor
 
 ## Licence
 
