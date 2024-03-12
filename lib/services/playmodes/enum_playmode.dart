@@ -1,5 +1,7 @@
 import 'package:beat_pads/services/services.dart';
 
+// TODO Add targeted Pitch slide MPE mode like on the Push 3
+
 enum PlayMode {
   slide('Trigger Notes'),
   noSlide('Disabled'),
