@@ -6,7 +6,8 @@ enum PlayMode {
   slide('Trigger Notes'),
   noSlide('Disabled'),
   polyAT('Poly Aftertouch'),
-  mpe('MPE');
+  mpe('MPE'),
+  mpeTargetPb('MPE - Pitch to Pad');
 
   const PlayMode(this.title);
   final String title;
@@ -20,6 +21,8 @@ enum PlayMode {
         return true;
       case PlayMode.mpe:
         return true;
+      case PlayMode.mpeTargetPb:
+        return true;
       // ignore: no_default_cases
       default:
         return false;
@@ -30,6 +33,8 @@ enum PlayMode {
     switch (this) {
       case PlayMode.mpe:
         return false;
+      case PlayMode.mpeTargetPb:
+        return false;
       // ignore: no_default_cases
       default:
         return true;
@@ -37,7 +42,7 @@ enum PlayMode {
   }
 
   bool get singleChannel {
-    if (this == PlayMode.mpe) return false;
+    if (this == PlayMode.mpe || this == PlayMode.mpeTargetPb) return false;
     return true;
   }
 
@@ -48,6 +53,8 @@ enum PlayMode {
     switch (this) {
       case PlayMode.mpe:
         return PlayModeMPE(settings, notifyParent);
+      case PlayMode.mpeTargetPb:
+        return PlayModeMPETargetPb(settings, notifyParent);
       case PlayMode.noSlide:
         return PlayModeNoSlide(settings, notifyParent);
       case PlayMode.slide:
