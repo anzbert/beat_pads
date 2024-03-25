@@ -9,19 +9,21 @@ enum PlayMode {
   polyAT(
     'Poly Aftertouch',
     modulatable: true,
+    oneDimensional: true,
+    singleChannel: true,
   ),
 
   mpe(
     'MPE',
     modulatable: true,
-    oneDimensional: true,
+    oneDimensional: false,
     singleChannel: false,
   ),
 
   mpeTargetPb(
     'MPE - Pitch to Pad',
     modulatable: true,
-    oneDimensional: true,
+    oneDimensional: false,
     singleChannel: false,
   );
 
