@@ -40,7 +40,7 @@ Wifi works on iOS, but Wifi and Bluetooth support is otherwise limited due to pl
 - Optional controls, such as Pitch Bend, Mod Wheel and Sustain
 - Highligh a large number of musical scales
 - Receives Midi Notes, making the pads usable like a Launchpad
-- Custom grid creation based on the note intervals on the X and Y Axis to create Grids inspired by the Harmonic Table, Wicki Hayden, MidiMech and others
+- Custom grid creation based on the note intervals on the X and Y Axis to create Grids inspired by the Harmonic Table, Wicki Hayden, [MidiMech](https://github.com/flipcoder/midimech) and others
 - Supports virtual Midi connection to other apps on your device
 - Built-In support for the popular finger drumming courses from XpressPads.com
 - And more...
