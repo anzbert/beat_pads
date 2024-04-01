@@ -24,7 +24,7 @@ This app aims to be an easy-to-use pad input device featuring a variety of layou
 - Optional controls, such as Pitch Bend, Mod Wheel and Sustain
 - Highligh a large number of musical scales
 - Receives Midi Notes, making the pads usable like a Launchpad
-- Custom grid creation based on the note intervals on the X and Y Axis to create Grids inspired by the Harmonic Table, Wicki Hayden and others
+- Custom grid creation based on the note intervals on the X and Y Axis to create Grids inspired by the Harmonic Table, Wicki Hayden, MidiMech and others
 - Supports virtual Midi connection to other apps on your device
 - Built-In support for the popular finger drumming courses from XpressPads.com
 - And more...
