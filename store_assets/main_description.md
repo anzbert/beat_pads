@@ -18,6 +18,7 @@ This app aims to be an easy-to-use pad input device featuring a variety of layou
 - Various layouts and colors, inspired by the Ableton Push
 - Presets can be saved with different pad setups
 - Innovative MPE and polyphonic Aftertouch modulation with graphical feedback
+- Push Style MPE pitchbend and slide
 - Send Velocity by Y position on pad, randomly or with a fixed value
 - Usable as a standard MIDI device with any PC, Mac or other USB host
 - Optional controls, such as Pitch Bend, Mod Wheel and Sustain
