@@ -28,9 +28,11 @@ class PadAndTouchData {
   /// , as well as information about the touched pad widget size
   PadAndTouchData({
     required this.yPercentage,
+    required this.xPercentage,
     required this.padId,
   });
   final double yPercentage;
+  final double xPercentage;
   final int padId;
 }
 
@@ -58,10 +60,12 @@ class NullableTouchAndScreenData {
     required this.pointer,
     required this.padNote,
     required this.yPercentage,
+    required this.xPercentage,
     required this.screenTouchPos,
   });
   final int pointer;
   final double? yPercentage;
+  final double? xPercentage;
   final int? padNote;
   final Offset screenTouchPos;
 }

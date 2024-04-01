@@ -25,6 +25,24 @@ class SendMpe {
   final Mod rMod;
 }
 
+class ModPitchBendToNote extends Mod {
+  ModPitchBendToNote();
+
+  @override
+  void send(int channel, int note, double distance) {
+    final int pitchChange = (distance * 0x3FFF).toInt();
+
+    if (!listEquals<num>([channel, pitchChange], lastSentValues)) {
+      PitchBendMessage(
+        channel: channel,
+        bend: distance,
+      ).send();
+
+      lastSentValues = [channel, pitchChange];
+    }
+  }
+}
+
 class ModPitchBend extends Mod {
   ModPitchBend(this.pitchBendMax, this.range);
   final int pitchBendMax;

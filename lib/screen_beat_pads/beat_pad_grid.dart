@@ -62,10 +62,31 @@ class _SlidePadsState extends ConsumerState<SlidePads>
             ySize = ySize - yDeadZone * 2;
           }
 
+          double xPos = target.globalToLocal(event.position).dx;
+          double xSize = target.size.width;
+
+          const double xDeadZone = 20; // pixels
+
+          if (xPos < xDeadZone) {
+            xPos = 0;
+          } else if (xPos > xSize - xDeadZone) {
+            xPos = xSize;
+          } else {
+            xPos = Utils.mapValueToTargetRange(
+              xPos,
+              xDeadZone,
+              xSize - xDeadZone,
+              0,
+              xSize - xDeadZone * 2,
+            );
+            xSize = xSize - xDeadZone * 2;
+          }
+
           return target.index >= 0 && target.index < 128
               ? PadAndTouchData(
                   padId: target.index, // = Note
                   yPercentage: 1 - (yPos / ySize).clamp(0, 1),
+                  xPercentage: (xPos / xSize).clamp(0, 1),
                 )
               : null;
         }
@@ -103,6 +124,7 @@ class _SlidePadsState extends ConsumerState<SlidePads>
               pointer: touch.pointer,
               padNote: data?.padId,
               yPercentage: data?.yPercentage,
+              xPercentage: data?.xPercentage,
               screenTouchPos: touch.position,
             ),
           );
@@ -173,6 +195,7 @@ class _SlidePadsState extends ConsumerState<SlidePads>
                     pointer: touch.pointer,
                     padNote: null,
                     yPercentage: null,
+                    xPercentage: null,
                     screenTouchPos: Offset.lerp(
                       constrainedPosition,
                       event.origin,
@@ -245,7 +268,8 @@ class _SlidePadsState extends ConsumerState<SlidePads>
             ),
           ),
         ),
-        if (ref.watch(playModeProv).modulatable)
+        if (ref.watch(playModeProv).modulatable &&
+            ref.watch(playModeProv) != PlayMode.mpeTargetPb)
           RepaintBoundary(child: PaintModulation()),
       ],
     );

@@ -1,9 +1,11 @@
+import 'dart:math';
+
 import 'package:beat_pads/services/services.dart';
 
 class PlayModeMPETargetPb extends PlayModeHandler {
   PlayModeMPETargetPb(super.settings, super.notifyParent)
       : mpeMods = SendMpe(
-          settings.mpe2DX.getMod(settings.mpePitchbendRange),
+          ModPitchBendToNote(),
           settings.mpe2DY.getMod(settings.mpePitchbendRange),
           settings.mpe1DRadius.getMod(settings.mpePitchbendRange),
         ),
@@ -63,23 +65,49 @@ class PlayModeMPETargetPb extends PlayModeHandler {
     eventInBuffer.updatePosition(data.screenTouchPos);
     notifyParent(); // for circle drawing
 
-    if (settings.modulation2D) {
+    if (data.padNote != null) {
+      double pitchDistance =
+          ((data.padNote! - eventInBuffer.noteEvent.note) / 48)
+              .clamp(-1.0, 1.0);
+
+      double pitchModifier = 0;
+      if (data.xPercentage != null) {
+        pitchModifier =
+            ((0x3FFF / 48) * (data.xPercentage! * 2 - 1)) / 0x3FFF / 2;
+        // Utils.logd(pitchModifier);
+      }
+
       mpeMods.xMod.send(
         eventInBuffer.noteEvent.channel,
         eventInBuffer.noteEvent.note,
-        eventInBuffer.directionalChangeFromCenter().dx,
+        // eventInBuffer.directionalChangeFromCenter().dx,
+        pitchDistance + pitchModifier,
       );
+
       mpeMods.yMod.send(
         eventInBuffer.noteEvent.channel,
         eventInBuffer.noteEvent.note,
         eventInBuffer.directionalChangeFromCenter().dy,
       );
-    } else {
-      mpeMods.rMod.send(
-        eventInBuffer.noteEvent.channel,
-        eventInBuffer.noteEvent.note,
-        eventInBuffer.radialChange(),
-      );
     }
+
+    //   if (settings.modulation2D) {
+    //     mpeMods.xMod.send(
+    //       eventInBuffer.noteEvent.channel,
+    //       eventInBuffer.noteEvent.note,
+    //       eventInBuffer.directionalChangeFromCenter().dx,
+    //     );
+    //     mpeMods.yMod.send(
+    //       eventInBuffer.noteEvent.channel,
+    //       eventInBuffer.noteEvent.note,
+    //       eventInBuffer.directionalChangeFromCenter().dy,
+    //     );
+    //   } else {
+    //     mpeMods.rMod.send(
+    //       eventInBuffer.noteEvent.channel,
+    //       eventInBuffer.noteEvent.note,
+    //       eventInBuffer.radialChange(),
+    //     );
+    //   }
   }
 }
