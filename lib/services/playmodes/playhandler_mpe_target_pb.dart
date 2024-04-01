@@ -1,13 +1,11 @@
-import 'dart:math';
-
 import 'package:beat_pads/services/services.dart';
 
 class PlayModeMPETargetPb extends PlayModeHandler {
   PlayModeMPETargetPb(super.settings, super.notifyParent)
       : mpeMods = SendMpe(
           ModPitchBendToNote(),
-          settings.mpe2DY.getMod(settings.mpePitchbendRange),
-          settings.mpe1DRadius.getMod(settings.mpePitchbendRange),
+          ModCC642D(CC.slide),
+          ModNull(),
         ),
         channelProvider = MemberChannelProvider(
           settings.mpeMemberChannels,
@@ -34,12 +32,8 @@ class PlayModeMPETargetPb extends PlayModeHandler {
       ...touchReleaseBuffer.buffer,
     ]); // get new channel from generator
 
-    if (settings.modulation2D) {
-      mpeMods.xMod.send(newChannel, data.padNote, 0);
-      mpeMods.yMod.send(newChannel, data.padNote, 0);
-    } else {
-      mpeMods.rMod.send(newChannel, data.padNote, 0);
-    }
+    mpeMods.xMod.send(newChannel, data.padNote, 0);
+    mpeMods.yMod.send(newChannel, data.padNote, 0);
 
     final NoteEvent noteOn = NoteEvent(
       newChannel,
@@ -56,14 +50,14 @@ class PlayModeMPETargetPb extends PlayModeHandler {
   }
 
   @override
-  // void handlePan(CustomPointer touch, int? note) {
   void handlePan(NullableTouchAndScreenData data) {
     final TouchEvent? eventInBuffer = touchBuffer.getByID(data.pointer) ??
         touchReleaseBuffer.getByID(data.pointer);
     if (eventInBuffer == null) return;
 
-    eventInBuffer.updatePosition(data.screenTouchPos);
-    notifyParent(); // for circle drawing
+    // commented out, since no drawing is required
+    // eventInBuffer.updatePosition(data.screenTouchPos);
+    // notifyParent(); // for circle drawing
 
     if (data.padNote != null) {
       double pitchDistance =
@@ -74,40 +68,21 @@ class PlayModeMPETargetPb extends PlayModeHandler {
       if (data.xPercentage != null) {
         pitchModifier =
             ((0x3FFF / 48) * (data.xPercentage! * 2 - 1)) / 0x3FFF / 2;
-        // Utils.logd(pitchModifier);
       }
 
       mpeMods.xMod.send(
         eventInBuffer.noteEvent.channel,
         eventInBuffer.noteEvent.note,
-        // eventInBuffer.directionalChangeFromCenter().dx,
         pitchDistance + pitchModifier,
       );
 
-      mpeMods.yMod.send(
-        eventInBuffer.noteEvent.channel,
-        eventInBuffer.noteEvent.note,
-        eventInBuffer.directionalChangeFromCenter().dy,
-      );
+      if (data.yPercentage != null) {
+        mpeMods.yMod.send(
+          eventInBuffer.noteEvent.channel,
+          eventInBuffer.noteEvent.note,
+          data.yPercentage! * 2 - 1,
+        );
+      }
     }
-
-    //   if (settings.modulation2D) {
-    //     mpeMods.xMod.send(
-    //       eventInBuffer.noteEvent.channel,
-    //       eventInBuffer.noteEvent.note,
-    //       eventInBuffer.directionalChangeFromCenter().dx,
-    //     );
-    //     mpeMods.yMod.send(
-    //       eventInBuffer.noteEvent.channel,
-    //       eventInBuffer.noteEvent.note,
-    //       eventInBuffer.directionalChangeFromCenter().dy,
-    //     );
-    //   } else {
-    //     mpeMods.rMod.send(
-    //       eventInBuffer.noteEvent.channel,
-    //       eventInBuffer.noteEvent.note,
-    //       eventInBuffer.radialChange(),
-    //     );
-    //   }
   }
 }

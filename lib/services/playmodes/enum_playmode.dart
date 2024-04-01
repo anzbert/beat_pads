@@ -1,35 +1,33 @@
 import 'package:beat_pads/services/services.dart';
 
-// TODO Add targeted Pitch slide MPE mode like on the Push 3
-
 enum PlayMode {
   noSlide('Disabled'),
   slide('Trigger Notes'),
 
   polyAT(
     'Poly Aftertouch',
-    modulatable: true,
+    modulationOverlay: true,
     oneDimensional: true,
     singleChannel: true,
   ),
 
   mpe(
     'MPE',
-    modulatable: true,
+    modulationOverlay: true,
     oneDimensional: false,
     singleChannel: false,
   ),
 
   mpeTargetPb(
-    'MPE - Pitch to Pad',
-    modulatable: true,
+    'MPE - Push Style',
+    modulationOverlay: false, // what?
     oneDimensional: false,
     singleChannel: false,
   );
 
   const PlayMode(
     this.title, {
-    this.modulatable = false,
+    this.modulationOverlay = false,
     this.oneDimensional = true,
     this.singleChannel = true,
   });
@@ -37,7 +35,7 @@ enum PlayMode {
   final String title;
 
   /// Layout uses a modulation overlay and can be modulated by finger panning
-  final bool modulatable;
+  final bool modulationOverlay;
 
   /// Layout uses a modulation overlay that is circular with only
   /// one modulated parameter

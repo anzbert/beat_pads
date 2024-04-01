@@ -138,7 +138,7 @@ class _SlidePadsState extends ConsumerState<SlidePads>
           .handleEndTouch(CustomPointer(touch.pointer, touch.position));
 
       if (ref.read(modReleaseUsable) > 0 &&
-          ref.read(playModeProv).modulatable) {
+          ref.read(playModeProv).modulationOverlay) {
         final TouchEvent? event = ref
             .read(senderProvider.notifier)
             .playModeHandler
@@ -268,8 +268,7 @@ class _SlidePadsState extends ConsumerState<SlidePads>
             ),
           ),
         ),
-        if (ref.watch(playModeProv).modulatable &&
-            ref.watch(playModeProv) != PlayMode.mpeTargetPb)
+        if (ref.watch(playModeProv).modulationOverlay)
           RepaintBoundary(child: PaintModulation()),
       ],
     );

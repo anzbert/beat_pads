@@ -4,6 +4,7 @@ import 'package:beat_pads/screen_pads_menu/slider_int.dart';
 import 'package:beat_pads/screen_pads_menu/slider_modulation_size.dart';
 import 'package:beat_pads/screen_pads_menu/slider_non_linear.dart';
 import 'package:beat_pads/services/services.dart';
+import 'package:beat_pads/shared_components/_shared.dart';
 import 'package:beat_pads/shared_components/divider_title.dart';
 import 'package:beat_pads/theme.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +36,18 @@ class MenuInput extends ConsumerWidget {
                     ref.read(playModeProv.notifier).setAndSave(v),
               ),
             ),
-            if (ref.watch(playModeProv).modulatable)
+            if (ref.watch(playModeProv) == PlayMode.mpeTargetPb)
+              const StringInfoBox(
+                header: 'Push Style MPE',
+                body: [
+                  'This mode functions like the MPE input on the latest Push device. This is what it does:',
+                  'Sliding on the X-Axis, or to a different pad, bends the pitch towards that pad.',
+                  'Sliding on the Y-Axis, on the surface of the current pad, sends MPE Slide messages (CC 74). The center of the pad corresponds to a slide value of 64',
+                  '',
+                  'Important: Set your instrument to accept the maximum range of MPE Pitchbend, which is 48 semitones.',
+                ],
+              ),
+            if (ref.watch(playModeProv).modulationOverlay)
               ModSizeSliderTile(
                 min: ref.watch(modulationRadiusProv.notifier).min,
                 max: ref.watch(modulationRadiusProv.notifier).max,
@@ -52,7 +64,7 @@ class MenuInput extends ConsumerWidget {
                 resetValue: ref.read(modulationRadiusProv.notifier).reset,
                 onChangeEnd: ref.read(modulationRadiusProv.notifier).save,
               ),
-            if (ref.watch(playModeProv).modulatable)
+            if (ref.watch(playModeProv).modulationOverlay)
               ModSizeSliderTile(
                 min: ref.watch(modulationDeadZoneProv.notifier).min,
                 max: ref.watch(modulationDeadZoneProv.notifier).max,
@@ -150,7 +162,7 @@ class MenuInput extends ConsumerWidget {
               steps: Timing.releaseDelayTimes.length ~/ 1.5,
               onChangeEnd: ref.read(noteReleaseStepProv.notifier).save,
             ),
-            if (ref.watch(playModeProv).modulatable)
+            if (ref.watch(playModeProv).modulationOverlay)
               NonLinearSliderTile(
                 label: 'Modulation Ease Back',
                 subtitle:
