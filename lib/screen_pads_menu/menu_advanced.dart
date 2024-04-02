@@ -45,6 +45,7 @@ class MenuInput extends ConsumerWidget {
                   'Sliding on the Y-Axis, on the surface of the current pad, sends MPE Slide messages (CC 74). The center of the pad corresponds to a slide value of 64',
                   '',
                   'Important: Set your instrument to accept the maximum range of MPE Pitchbend, which is 48 semitones.',
+                  'Experimental Feature: Slides without a jump in pitch only work in chromatic mode at this point.',
                 ],
               ),
             if (ref.watch(playModeProv).modulationOverlay)

@@ -1,5 +1,7 @@
 import 'package:beat_pads/services/services.dart';
 
+// TODO Add seamless slides for non-chromatic modes
+
 class PlayModeMPETargetPb extends PlayModeHandler {
   PlayModeMPETargetPb(super.settings, super.notifyParent)
       : mpeMods = SendMpe(
