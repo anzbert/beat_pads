@@ -4,25 +4,25 @@ import 'package:flutter/rendering.dart';
 class HitTestObject extends SingleChildRenderObjectWidget {
   const HitTestObject({
     required Widget super.child,
-    required this.index,
+    required this.value,
     super.key,
   });
-  final int index;
+  final int value;
 
   @override
   TestProxyBox createRenderObject(BuildContext context) {
-    return TestProxyBox(index);
+    return TestProxyBox(value);
   }
 
   @override
   void updateRenderObject(BuildContext context, TestProxyBox renderObject) {
-    renderObject.index = index;
+    renderObject.value = value;
   }
 }
 
 // should have get size function here or just layoutbuilder instead?
 // https://www.woolha.com/tutorials/flutter-get-widget-size-and-position
 class TestProxyBox extends RenderProxyBox {
-  TestProxyBox(this.index);
-  int index;
+  TestProxyBox(this.value);
+  int value;
 }

@@ -111,7 +111,7 @@ abstract class Grid {
   /// Get a List of all notes in the current grid
   List<CustomPad> get list;
 
-  /// Get a List of Rows of all notes in the grid, starting from the top Row
+  /// Convert List to Rows of all notes in the grid, starting from the top Row
   /// Useful for building the grid with a Column Widget
   List<List<CustomPad>> get rows {
     if (settings.height * settings.width != list.length) return [[]];

@@ -82,9 +82,9 @@ class _SlidePadsState extends ConsumerState<SlidePads>
             xSize = xSize - xDeadZone * 2;
           }
 
-          return target.index >= 0 && target.index < 128
+          return target.value >= 0 && target.value < 128
               ? PadAndTouchData(
-                  padId: target.index, // = Note
+                  padId: target.value, // = Note
                   yPercentage: 1 - (yPos / ySize).clamp(0, 1),
                   xPercentage: (xPos / xSize).clamp(0, 1),
                 )
@@ -250,7 +250,7 @@ class _SlidePadsState extends ConsumerState<SlidePads>
                                 case PadType.note:
                                   return Expanded(
                                     child: HitTestObject(
-                                      index: customPad.padValue,
+                                      value: customPad.padValue,
                                       child: SlideBeatPad(
                                         note: customPad.padValue,
                                         preview: widget.preview,
