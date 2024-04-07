@@ -26,7 +26,7 @@ class PlayModeMPETargetPb extends PlayModeHandler {
   void handleNewTouch(PadTouchAndScreenData data) {
     // remove note if it is still playing
     if (settings.modReleaseTime > 0 || settings.noteReleaseTime > 0) {
-      touchReleaseBuffer.removeNoteFromReleaseBuffer(data.padNote);
+      touchReleaseBuffer.removeNoteFromReleaseBuffer(data.customPad.padValue);
     }
 
     /// new channel from MPE channel generator
@@ -35,7 +35,7 @@ class PlayModeMPETargetPb extends PlayModeHandler {
       ...touchReleaseBuffer.buffer,
     ]);
 
-    mpeMods.xMod.send(newChannel, data.padNote, 0);
+    mpeMods.xMod.send(newChannel, data.customPad.padValue, 0);
 
     // Relative mode Slide (start with a value of 64, regardless of tap position on y-axis):
     // mpeMods.yMod.send(newChannel, data.padNote, 0);
@@ -43,13 +43,13 @@ class PlayModeMPETargetPb extends PlayModeHandler {
     // Absolute mode Slide (send slide value according to y-position of tap):
     mpeMods.yMod.send(
       newChannel,
-      data.padNote,
+      data.customPad.padValue,
       data.yPercentage * 2 - 1,
     );
 
     final NoteEvent noteOn = NoteEvent(
       newChannel,
-      data.padNote,
+      data.customPad.padValue,
       velocityProvider.velocity(data.yPercentage),
     )..noteOn();
 
@@ -71,9 +71,9 @@ class PlayModeMPETargetPb extends PlayModeHandler {
     // eventInBuffer.updatePosition(data.screenTouchPos);
     // notifyParent(); // for circle drawing
 
-    if (data.padNote != null) {
+    if (data.customPad?.padValue != null) {
       double pitchDistance =
-          ((data.padNote! - eventInBuffer.noteEvent.note) / 48)
+          ((data.customPad!.padValue - eventInBuffer.noteEvent.note) / 48)
               .clamp(-1.0, 1.0);
 
       double pitchModifier = 0;

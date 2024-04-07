@@ -13,12 +13,12 @@ class PlayModeSlide extends PlayModeHandler {
   @override
   void handleNewTouch(PadTouchAndScreenData data) {
     if (settings.noteReleaseTime > 0) {
-      noteReleaseBuffer.removeNoteFromReleaseBuffer(data.padNote);
+      noteReleaseBuffer.removeNoteFromReleaseBuffer(data.customPad.padValue);
     }
 
     final NoteEvent noteOn = NoteEvent(
       settings.channel,
-      data.padNote,
+      data.customPad.padValue,
       velocityProvider.velocity(data.yPercentage),
     )..noteOn(cc: settings.sendCC);
 
@@ -36,7 +36,7 @@ class PlayModeSlide extends PlayModeHandler {
     if (eventInBuffer == null || eventInBuffer.dirty) return;
 
     // Turn note off:
-    if (data.padNote != eventInBuffer.noteEvent.note &&
+    if (data.customPad?.padValue != eventInBuffer.noteEvent.note &&
         eventInBuffer.noteEvent.noteOnMessage != null) {
       if (settings.noteReleaseTime == 0) {
         eventInBuffer.noteEvent.noteOff(); // turn note off immediately
@@ -55,10 +55,11 @@ class PlayModeSlide extends PlayModeHandler {
       notifyParent();
     }
     // Play new note:
-    if (data.padNote != null && eventInBuffer.noteEvent.noteOnMessage == null) {
+    if (data.customPad?.padValue != null &&
+        eventInBuffer.noteEvent.noteOnMessage == null) {
       eventInBuffer.noteEvent = NoteEvent(
         settings.channel,
-        data.padNote!,
+        data.customPad!.padValue,
         velocityProvider.velocity(data.yPercentage ?? .5),
       )..noteOn(cc: settings.playMode.singleChannel && settings.sendCC);
 

@@ -124,6 +124,7 @@ abstract class Grid {
   }
 }
 
+/// A chromatic Grid with variable intervals between rows
 class GridChromaticByRowInterval extends Grid {
   GridChromaticByRowInterval(super.settings, {required this.rowInterval});
 
@@ -141,32 +142,6 @@ class GridChromaticByRowInterval extends Grid {
   }
 }
 
-class GridMTN extends Grid {
-  GridMTN(super.settings);
-
-  @override
-  List<CustomPad> get list {
-    final List<CustomPad> grid = [];
-
-    final bool sameColumn = settings.rootNote % 2 ==
-        settings.baseNote % 2; // in the MTN, odd and even columns alternate
-
-    for (int row = 0; row < settings.height; row++) {
-      int next = settings.baseNote;
-      for (int note = 0; note < settings.width; note++) {
-        grid.add(CustomPad(next + row * 4));
-        if (note.isEven) {
-          next = sameColumn ? next + 7 : next - 5;
-        } else {
-          next = sameColumn ? next - 5 : next + 7;
-        }
-      }
-    }
-
-    return grid;
-  }
-}
-
 class GridChromaticByCustomIntervals extends Grid {
   GridChromaticByCustomIntervals(super.settings);
 
@@ -177,7 +152,11 @@ class GridChromaticByCustomIntervals extends Grid {
     for (int row = 0; row < settings.height; row++) {
       int next = settings.baseNote;
       for (int note = 0; note < settings.width; note++) {
-        grid.add(CustomPad(next + row * settings.customIntervalY));
+        grid.add(CustomPad(
+          next + row * settings.customIntervalY,
+          pitchBendLeft: settings.customIntervalX,
+          pitchBendRight: settings.customIntervalX,
+        ));
         next = next + settings.customIntervalX;
       }
     }
@@ -288,6 +267,33 @@ class GridInScaleCustom extends Grid {
 
       // Y - GET NEXT ROW START
       rowStartIndex = (rowStartIndex + fixedXY!.y);
+    }
+
+    return grid;
+  }
+}
+
+/// The Magic Tone Network grid
+class GridMTN extends Grid {
+  GridMTN(super.settings);
+
+  @override
+  List<CustomPad> get list {
+    final List<CustomPad> grid = [];
+
+    final bool sameColumn = settings.rootNote % 2 ==
+        settings.baseNote % 2; // in the MTN, odd and even columns alternate
+
+    for (int row = 0; row < settings.height; row++) {
+      int next = settings.baseNote;
+      for (int note = 0; note < settings.width; note++) {
+        grid.add(CustomPad(next + row * 4));
+        if (note.isEven) {
+          next = sameColumn ? next + 7 : next - 5;
+        } else {
+          next = sameColumn ? next - 5 : next + 7;
+        }
+      }
     }
 
     return grid;

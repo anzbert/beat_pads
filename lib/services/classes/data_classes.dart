@@ -29,11 +29,11 @@ class PadAndTouchData {
   PadAndTouchData({
     required this.yPercentage,
     required this.xPercentage,
-    required this.padId,
+    required this.customPad,
   });
   final double yPercentage;
   final double xPercentage;
-  final int padId;
+  final CustomPad customPad;
 }
 
 class PadTouchAndScreenData {
@@ -42,7 +42,7 @@ class PadTouchAndScreenData {
   PadTouchAndScreenData({
     required this.screenSize,
     required this.pointer,
-    required this.padNote,
+    required this.customPad,
     required this.yPercentage,
     required this.xPercentage,
     required this.screenTouchPos,
@@ -50,7 +50,7 @@ class PadTouchAndScreenData {
   final int pointer;
   final double yPercentage;
   final double xPercentage;
-  final int padNote;
+  final CustomPad customPad;
   final Offset screenTouchPos;
   final Size screenSize;
 }
@@ -60,7 +60,7 @@ class NullableTouchAndScreenData {
   /// , as well as information about the touched pad widget size
   NullableTouchAndScreenData({
     required this.pointer,
-    required this.padNote,
+    required this.customPad,
     required this.yPercentage,
     required this.xPercentage,
     required this.screenTouchPos,
@@ -68,7 +68,7 @@ class NullableTouchAndScreenData {
   final int pointer;
   final double? yPercentage;
   final double? xPercentage;
-  final int? padNote;
+  final CustomPad? customPad;
   final Offset screenTouchPos;
 }
 

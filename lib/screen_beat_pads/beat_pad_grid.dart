@@ -82,9 +82,10 @@ class _SlidePadsState extends ConsumerState<SlidePads>
             xSize = xSize - xDeadZone * 2;
           }
 
-          return target.value >= 0 && target.value < 128
+          return target.customPad.padValue >= 0 &&
+                  target.customPad.padValue < 128
               ? PadAndTouchData(
-                  padId: target.value, // = Note
+                  customPad: target.customPad, // = Note
                   yPercentage: 1 - (yPos / ySize).clamp(0, 1),
                   xPercentage: (xPos / xSize).clamp(0, 1),
                 )
@@ -104,7 +105,7 @@ class _SlidePadsState extends ConsumerState<SlidePads>
         pointer: touch.pointer,
         screenTouchPos: touch.position,
         screenSize: MediaQuery.of(context).size,
-        padNote: result.padId,
+        customPad: result.customPad,
         yPercentage: result.yPercentage,
         xPercentage: result.xPercentage,
       );
@@ -123,7 +124,7 @@ class _SlidePadsState extends ConsumerState<SlidePads>
       ref.read(senderProvider.notifier).handlePan(
             NullableTouchAndScreenData(
               pointer: touch.pointer,
-              padNote: data?.padId,
+              customPad: data?.customPad,
               yPercentage: data?.yPercentage,
               xPercentage: data?.xPercentage,
               screenTouchPos: touch.position,
@@ -194,7 +195,7 @@ class _SlidePadsState extends ConsumerState<SlidePads>
             ref.read(senderProvider.notifier).handlePan(
                   NullableTouchAndScreenData(
                     pointer: touch.pointer,
-                    padNote: null,
+                    customPad: null,
                     yPercentage: null,
                     xPercentage: null,
                     screenTouchPos: Offset.lerp(
@@ -250,7 +251,7 @@ class _SlidePadsState extends ConsumerState<SlidePads>
                                 case PadType.note:
                                   return Expanded(
                                     child: HitTestObject(
-                                      value: customPad.padValue,
+                                      customPad: customPad,
                                       child: SlideBeatPad(
                                         note: customPad.padValue,
                                         preview: widget.preview,
