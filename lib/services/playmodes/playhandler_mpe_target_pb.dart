@@ -36,7 +36,16 @@ class PlayModeMPETargetPb extends PlayModeHandler {
     ]);
 
     mpeMods.xMod.send(newChannel, data.padNote, 0);
-    mpeMods.yMod.send(newChannel, data.padNote, 0);
+
+    // Relative mode Slide (start with a value of 64, regardless of tap position on y-axis):
+    // mpeMods.yMod.send(newChannel, data.padNote, 0);
+
+    // Absolute mode Slide (send slide value according to y-position of tap):
+    mpeMods.yMod.send(
+      newChannel,
+      data.padNote,
+      data.yPercentage * 2 - 1,
+    );
 
     final NoteEvent noteOn = NoteEvent(
       newChannel,
