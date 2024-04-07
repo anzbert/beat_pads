@@ -29,10 +29,11 @@ class PlayModeMPETargetPb extends PlayModeHandler {
       touchReleaseBuffer.removeNoteFromReleaseBuffer(data.padNote);
     }
 
+    /// new channel from MPE channel generator
     final int newChannel = channelProvider.provideChannel([
       ...touchBuffer.buffer,
       ...touchReleaseBuffer.buffer,
-    ]); // get new channel from generator
+    ]);
 
     mpeMods.xMod.send(newChannel, data.padNote, 0);
     mpeMods.yMod.send(newChannel, data.padNote, 0);

@@ -106,6 +106,7 @@ class _SlidePadsState extends ConsumerState<SlidePads>
         screenSize: MediaQuery.of(context).size,
         padNote: result.padId,
         yPercentage: result.yPercentage,
+        xPercentage: result.xPercentage,
       );
 
       ref.read<MidiSender>(senderProvider.notifier).handleNewTouch(data);

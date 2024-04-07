@@ -44,10 +44,12 @@ class PadTouchAndScreenData {
     required this.pointer,
     required this.padNote,
     required this.yPercentage,
+    required this.xPercentage,
     required this.screenTouchPos,
   });
   final int pointer;
   final double yPercentage;
+  final double xPercentage;
   final int padNote;
   final Offset screenTouchPos;
   final Size screenSize;
