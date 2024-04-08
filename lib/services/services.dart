@@ -26,6 +26,7 @@ export 'paint/paint_xy_square.dart';
 export 'playmodes/enum_playmode.dart';
 export 'playmodes/playhandler_.dart';
 export 'playmodes/playhandler_mpe.dart';
+export 'playmodes/playhandler_mpe_target_pb.dart';
 export 'playmodes/playhandler_polyat.dart';
 export 'playmodes/playhandler_slide.dart';
 export 'state/device_connection.dart';

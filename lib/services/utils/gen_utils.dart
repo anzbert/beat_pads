@@ -128,4 +128,22 @@ abstract class Utils {
       }
     }
   }
+
+  /// step through a list and wrap around. with wrap around for negative values
+  static int getValueAfterSteps(List<int> numbers, int index, int steps) {
+    // Handle potential errors
+    if (index < 0 || index >= numbers.length) {
+      throw ArgumentError('Index out of bounds');
+    }
+
+    // Calculate the final index after taking the steps (handling negative steps)
+    int finalIndex = index + steps;
+    while (finalIndex < 0) {
+      finalIndex += numbers.length; // Wrap around from the beginning
+    }
+    finalIndex = finalIndex % numbers.length; // Ensure within bounds
+
+    // Return the value at the final index
+    return numbers[finalIndex];
+  }
 }

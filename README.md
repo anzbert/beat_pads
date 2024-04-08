@@ -35,6 +35,7 @@ Wifi works on iOS, but Wifi and Bluetooth support is otherwise limited due to pl
 - Various layouts and colors, inspired by the Ableton Push
 - Presets can be saved with different pad setups
 - Innovative MPE and polyphonic Aftertouch modulation with graphical feedback
+- Push Style MPE pitchbend and slide
 - Send Velocity by Y position on pad, randomly or with a fixed value
 - Usable as a standard MIDI device with any PC, Mac or other USB host
 - Optional controls, such as Pitch Bend, Mod Wheel and Sustain
@@ -51,8 +52,7 @@ Anyone is most welcome to contribute, report an issue or start a discussion in t
 
 ## ToDo List
 
-- iOS devices disconnect from Midi sometimes when screen times out and wakelock is off -> Implement auto-reconnect to last connected devices
-- Add MPE behavior like on the Push 3, where targeted pitch bends can be done by dragging to a different pad
+- Potential issue: iOS devices disconnect from Midi sometimes when screen times out and wakelock is off -> Implement auto-reconnect to last connected devices
 - Low Priority: Project still using outdated ChangeNotifier in Riverpod state management -> Refactor
 
 ## Licence

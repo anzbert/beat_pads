@@ -24,7 +24,7 @@ class PlayModeMPE extends PlayModeHandler {
   void handleNewTouch(PadTouchAndScreenData data) {
     // remove note if it is still playing
     if (settings.modReleaseTime > 0 || settings.noteReleaseTime > 0) {
-      touchReleaseBuffer.removeNoteFromReleaseBuffer(data.padNote);
+      touchReleaseBuffer.removeNoteFromReleaseBuffer(data.customPad.padValue);
     }
 
     final int newChannel = channelProvider.provideChannel([
@@ -33,15 +33,15 @@ class PlayModeMPE extends PlayModeHandler {
     ]); // get new channel from generator
 
     if (settings.modulation2D) {
-      mpeMods.xMod.send(newChannel, data.padNote, 0);
-      mpeMods.yMod.send(newChannel, data.padNote, 0);
+      mpeMods.xMod.send(newChannel, data.customPad.padValue, 0);
+      mpeMods.yMod.send(newChannel, data.customPad.padValue, 0);
     } else {
-      mpeMods.rMod.send(newChannel, data.padNote, 0);
+      mpeMods.rMod.send(newChannel, data.customPad.padValue, 0);
     }
 
     final NoteEvent noteOn = NoteEvent(
       newChannel,
-      data.padNote,
+      data.customPad.padValue,
       velocityProvider.velocity(data.yPercentage),
     )..noteOn();
 

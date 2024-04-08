@@ -26,12 +26,12 @@ abstract class PlayModeHandler {
 
   void handleNewTouch(PadTouchAndScreenData data) {
     if (settings.modReleaseTime > 0 || settings.noteReleaseTime > 0) {
-      touchReleaseBuffer.removeNoteFromReleaseBuffer(data.padNote);
+      touchReleaseBuffer.removeNoteFromReleaseBuffer(data.customPad.padValue);
     }
 
     final NoteEvent noteOn = NoteEvent(
       settings.channel,
-      data.padNote,
+      data.customPad.padValue,
       velocityProvider.velocity(data.yPercentage),
     )..noteOn(cc: settings.sendCC);
 

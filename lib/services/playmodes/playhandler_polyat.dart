@@ -7,7 +7,7 @@ class PlayModePolyAT extends PlayModeHandler {
 
   @override
   void handleNewTouch(PadTouchAndScreenData data) {
-    polyATMod.send(settings.channel, data.padNote, 0);
+    polyATMod.send(settings.channel, data.customPad.padValue, 0);
     super.handleNewTouch(data);
   }
 
