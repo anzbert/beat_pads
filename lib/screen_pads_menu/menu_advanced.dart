@@ -40,12 +40,15 @@ class MenuInput extends ConsumerWidget {
               const StringInfoBox(
                 header: 'Push Style MPE',
                 body: [
-                  'This mode functions like the MPE input on the latest Push device. This is what it does:',
-                  'Sliding on the X-Axis, or to a different pad, bends the pitch towards that pad.',
-                  'Sliding on the Y-Axis, on the surface of the current pad, sends MPE Slide messages (CC 74). The center of the pad corresponds to a slide value of 64',
+                  ' - THIS MODE IS STILL IN THE EXPERIMENTAL STAGE - ',
+                  'It currently functions similar to the MPE input on the latest Push device. This is how it works:',
+                  '- X-Axis: Slide your finger to other pads and bend the pitch towards them.',
+                  '- Y-Axis: Sends an MPE Slide message (CC 74). The center of the pad corresponds to a slide value of 64',
                   '',
-                  'Important: Set your instrument to accept the maximum range of MPE Pitchbend, which is 48 semitones.',
-                  'Experimental Feature: Slides without a jump in pitch only work in chromatic mode at this point.',
+                  'Notes:',
+                  '- Set your instrument to accept the maximum range of MPE Pitchbend (48 semitones) for this mode to create the expected pitches.',
+                  '- There are no advanced settings for this mode yet, such as adjustable deadzones, a relative slide setting or visual feedback.',
+                  '- Feedback on the GitHub page is welcome!',
                 ],
               ),
             if (ref.watch(playModeProv).modulationOverlay)
