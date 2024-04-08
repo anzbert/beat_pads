@@ -25,7 +25,7 @@ class CreditsBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return WidgetsInfoBox(
-      header: 'Credits',
+      header: 'Links',
       body: [
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,

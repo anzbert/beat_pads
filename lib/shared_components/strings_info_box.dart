@@ -27,7 +27,7 @@ class StringInfoBox extends StatelessWidget {
                         child: Divider(),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(left: 16),
+                        padding: const EdgeInsets.only(left: 16, right: 12),
                         child: Text(
                           header!,
                           style: Theme.of(context).textTheme.headlineSmall,
