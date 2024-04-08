@@ -70,7 +70,8 @@ enum Layout {
       case Layout.scaleNotesCustom:
         return GridInScaleCustom(settings);
       case Layout.scaleNotesOnly:
-        return GridInScaleSequential(settings);
+        return GridInScaleCustom(settings,
+            fixedXY: Vector2Int(1, settings.width));
 
       case Layout.magicToneNetwork:
         return GridMTN(settings);
@@ -142,6 +143,7 @@ class GridChromaticByRowInterval extends Grid {
   }
 }
 
+/// Grid that has custom set semitone intervals on the x and y axis
 class GridChromaticByCustomIntervals extends Grid {
   GridChromaticByCustomIntervals(super.settings);
 
@@ -160,42 +162,6 @@ class GridChromaticByCustomIntervals extends Grid {
         next = next + settings.customIntervalX;
       }
     }
-
-    return grid;
-  }
-}
-
-class GridInScaleSequential extends Grid {
-  GridInScaleSequential(super.settings);
-
-  @override
-  List<CustomPad> get list {
-    final List<int> actualNotes =
-        MidiUtils.absoluteScaleNotes(settings.rootNote, settings.scaleList);
-
-    int validatedBase = settings.baseNote;
-    while (!actualNotes.contains(validatedBase % 12)) {
-      validatedBase = (validatedBase + 1) % 127;
-    }
-
-    final int baseOffset = actualNotes.indexOf(
-      validatedBase % 12,
-    ); // check where grid will start within scale
-
-    int octave = 0;
-    int lastResult = 0;
-
-    final List<CustomPad> grid =
-        List.generate(settings.width * settings.height, (gridIndex) {
-      final int out =
-          actualNotes[(gridIndex + baseOffset) % actualNotes.length] +
-              settings.baseNote ~/ 12 * 12;
-
-      if (out < lastResult) octave++;
-      lastResult = out;
-
-      return CustomPad(out + 12 * octave);
-    });
 
     return grid;
   }
@@ -259,9 +225,35 @@ class GridInScaleCustom extends Grid {
         int nextNote = rowStartIndex + note * fixedXY!.x;
 
         if (nextNote >= allScaleNotes.length || nextNote.isNegative) {
-          grid.add(CustomPad(999));
+          grid.add(CustomPad(999)); // an out of range pad
         } else {
-          grid.add(CustomPad(allScaleNotes[nextNote]));
+          final int next = allScaleNotes[nextNote];
+
+          // calculate left and right pitch difference:
+          final int actualNextNote = next % 12;
+          final int actualNextNoteIndex =
+              actualScaleNotes.indexOf(actualNextNote);
+
+          int left = Utils.getValueAfterSteps(
+                  actualScaleNotes, actualNextNoteIndex, -fixedXY!.x)
+              .abs();
+          left = left > actualNextNote
+              ? actualNextNote + 12 - left
+              : actualNextNote - left;
+          int right = Utils.getValueAfterSteps(
+                  actualScaleNotes, actualNextNoteIndex, fixedXY!.x)
+              .abs();
+          right = right < actualNextNote
+              ? right + 12 - actualNextNote
+              : right - actualNextNote;
+
+          // print([left, next, right]);
+
+          grid.add(CustomPad(
+            next,
+            pitchBendLeft: left,
+            pitchBendRight: right,
+          ));
         }
       }
 
@@ -287,7 +279,18 @@ class GridMTN extends Grid {
     for (int row = 0; row < settings.height; row++) {
       int next = settings.baseNote;
       for (int note = 0; note < settings.width; note++) {
-        grid.add(CustomPad(next + row * 4));
+        final bool tickTock = note.isEven ? sameColumn : !sameColumn;
+
+        final int left = tickTock ? -5 : 7;
+        final int right = tickTock ? 7 : -5;
+        // print([left, next, right]);
+
+        grid.add(CustomPad(
+          next + row * 4,
+          pitchBendLeft: left,
+          pitchBendRight: right,
+        ));
+
         if (note.isEven) {
           next = sameColumn ? next + 7 : next - 5;
         } else {

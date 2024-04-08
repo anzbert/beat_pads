@@ -9,6 +9,8 @@ class HitTestObject extends SingleChildRenderObjectWidget {
     required this.customPad,
     super.key,
   });
+
+  /// the pad that is currently detected in the hitboxtest
   final CustomPad customPad;
 
   @override
