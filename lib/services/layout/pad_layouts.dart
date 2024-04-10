@@ -116,10 +116,11 @@ abstract class Grid {
   /// Useful for building the grid with a Column Widget
   List<List<CustomPad>> get rows {
     if (settings.height * settings.width != list.length) return [[]];
+
     return List.generate(
       settings.height,
       (row) => List.generate(settings.width, (note) {
-        return list[row * settings.width + note];
+        return list[row * settings.width + note]..row = row;
       }),
     ).reversed.toList();
   }
