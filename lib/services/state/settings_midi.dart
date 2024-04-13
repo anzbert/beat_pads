@@ -16,7 +16,7 @@ final channelUsableProv = Provider<int>(
     final PlayMode playMode = ref.watch(playModeProv);
     final bool upperZone = channel > 7;
 
-    if (playMode == PlayMode.mpe) {
+    if (playMode == PlayMode.mpe || playMode == PlayMode.mpeTargetPb) {
       return upperZone ? 15 : 0;
     }
 

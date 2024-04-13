@@ -115,9 +115,9 @@ final modReleaseUsable = Provider<int>(
 );
 
 // PUSH STYLE MODE
-final pitchbendOnlyOnRowProv = NotifierProvider<SettingBoolNotifier, bool>(() {
+final mpeOnlyOnRowProv = NotifierProvider<SettingBoolNotifier, bool>(() {
   return SettingBoolNotifier(
-    key: 'pitchbendOnlyOnRow',
+    key: 'mpeOnlyOnRow',
     defaultValue: false,
   );
 });

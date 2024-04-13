@@ -53,12 +53,13 @@ class MenuInput extends ConsumerWidget {
               ),
             if (ref.watch(playModeProv) == PlayMode.mpeTargetPb)
               ListTile(
-                title: const Text('Restrict Pitchbend to Row'),
-                subtitle: const Text('Ignore pitchbends on the Y-Axis'),
+                title: const Text('X-Axis MPE only'),
+                subtitle: const Text(
+                    'Ignore modulation on pads below or above current Row'),
                 trailing: Switch(
-                  value: ref.watch(pitchbendOnlyOnRowProv),
+                  value: ref.watch(mpeOnlyOnRowProv),
                   onChanged: (bool v) =>
-                      ref.read(pitchbendOnlyOnRowProv.notifier).setAndSave(v),
+                      ref.read(mpeOnlyOnRowProv.notifier).setAndSave(v),
                 ),
               ),
             if (ref.watch(playModeProv).modulationOverlay)

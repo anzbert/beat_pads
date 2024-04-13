@@ -67,11 +67,15 @@ class PlayModeMPETargetPb extends PlayModeHandler {
         touchReleaseBuffer.getByID(data.pointer);
     if (eventInBuffer == null) return;
 
-    // commented out, since no drawing is required
+    // commented out, since no drawing is required as of yet
     // eventInBuffer.updatePosition(data.screenTouchPos);
-    // notifyParent(); // for circle drawing
+    // notifyParent(); // for overlay drawing
 
     if (data.customPad?.padValue != null) {
+      // Guard: MPE only on current row
+      if (settings.pitchbendOnlyOnRow &&
+          data.customPad!.row != eventInBuffer.noteEvent.pad.row) return;
+
       // SLIDE
       if (data.yPercentage != null) {
         mpeMods.yMod.send(
@@ -83,10 +87,6 @@ class PlayModeMPETargetPb extends PlayModeHandler {
 
       // PITCHBEND
       const double semitonePitchbendRange = 0x3FFF / 48;
-      const double halfPitchbendRange = 0x3FFF / 2;
-
-      if (settings.pitchbendOnlyOnRow &&
-          data.customPad!.row != eventInBuffer.noteEvent.pad.row) return;
 
       double pitchDistance =
           ((data.customPad!.padValue - eventInBuffer.noteEvent.note) / 48)
@@ -99,14 +99,16 @@ class PlayModeMPETargetPb extends PlayModeHandler {
           pitchModifier = (semitonePitchbendRange *
                   data.customPad!.pitchBendLeft *
                   (data.xPercentage! * 2 - 1)) /
-              halfPitchbendRange;
+              0x3FFF /
+              2;
         }
         // slide right
         else {
           pitchModifier = (semitonePitchbendRange *
                   data.customPad!.pitchBendRight *
                   (data.xPercentage! * 2 - 1)) /
-              halfPitchbendRange;
+              0x3FFF /
+              2;
         }
       }
 
