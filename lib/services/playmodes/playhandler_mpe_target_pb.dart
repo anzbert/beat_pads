@@ -68,8 +68,8 @@ class PlayModeMPETargetPb extends PlayModeHandler {
     if (eventInBuffer == null) return;
 
     // commented out, since no drawing is required as of yet
-    // eventInBuffer.updatePosition(data.screenTouchPos);
-    // notifyParent(); // for overlay drawing
+    eventInBuffer.updatePosition(data.screenTouchPos);
+    notifyParent(); // for overlay drawing
 
     if (data.customPad?.padValue != null) {
       // Guard: MPE only on current row

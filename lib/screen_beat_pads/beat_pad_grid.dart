@@ -271,7 +271,9 @@ class _SlidePadsState extends ConsumerState<SlidePads>
           ),
         ),
         if (ref.watch(playModeProv).modulationOverlay)
-          RepaintBoundary(child: PaintModulation()),
+          RepaintBoundary(child: PaintModulation())
+        else if (ref.watch(playModeProv) == PlayMode.mpeTargetPb)
+          RepaintBoundary(child: PaintPushStyle()),
       ],
     );
   }
