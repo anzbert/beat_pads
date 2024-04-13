@@ -64,8 +64,8 @@ class CustomPaintPushOverlay extends CustomPainter {
         padRect.centerRight,
         padRect.centerLeft,
         [
-          colorX.withOpacity(0.5),
           colorX.withOpacity(0.0),
+          colorX.withOpacity(0.5),
           colorX,
           colorX,
           colorX.withOpacity(0.5),
