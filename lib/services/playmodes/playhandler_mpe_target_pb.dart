@@ -74,7 +74,7 @@ class PlayModeMPETargetPb extends PlayModeHandler {
     if (data.customPad?.padValue != null) {
       // Guard: MPE only on current row
       if (settings.pitchbendOnlyOnRow &&
-          data.customPad!.row != eventInBuffer.noteEvent.pad.row) return;
+          data.customPad?.row != eventInBuffer.noteEvent.pad.row) return;
 
       // SLIDE
       if (data.yPercentage != null) {
