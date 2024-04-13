@@ -68,7 +68,7 @@ class PlayModeMPETargetPb extends PlayModeHandler {
         touchReleaseBuffer.getByID(data.pointer);
     if (eventInBuffer == null) return;
 
-    // Guard: MPE only on current row
+    // Guard: MPE only on current row setting check
     if (settings.pitchbendOnlyOnRow &&
         data.customPad?.row != eventInBuffer.noteEvent.pad.row) return;
 
