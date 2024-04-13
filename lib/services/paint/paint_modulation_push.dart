@@ -24,13 +24,15 @@ class PaintPushStyle extends ConsumerWidget {
         ]
             .where(
           (element) =>
-              element.isModulating, // filter smaller than deadzone events
+              element.directionalChangeUnclamped() >=
+              const Offset(1, 1), // filter out smaller than 1 px events
         )
             .map(
           (touchEvent) {
             return CustomPaint(
               painter: CustomPaintPushOverlay(
                 screenSize: screenSize,
+                pitchDeadzonePercent: ref.watch(pitchDeadzone),
                 dirty: touchEvent.dirty,
                 origin: box.globalToLocal(touchEvent.origin),
                 originPadBox: PadBox(
@@ -42,11 +44,10 @@ class PaintPushStyle extends ConsumerWidget {
                         box.globalToLocal(touchEvent.newPadBox.padPosition),
                     padSize: touchEvent.newPadBox.padSize),
                 change: box.globalToLocal(touchEvent.newPosition),
-                colorFront: touchEvent.dirty
-                    ? dirtyColor
-                    : Palette.laserLemon.withOpacity(
-                        touchEvent.radialChange(curve: Curves.easeOut) * 0.8,
-                      ),
+                colorX: touchEvent.dirty ? dirtyColor : Colors.white,
+                colorY: touchEvent.dirty ? dirtyColor : Palette.lightGrey,
+                // colorX: Colors.white,
+                // colorY: Palette.lightGrey,
               ),
             );
           },

@@ -121,3 +121,11 @@ final mpeOnlyOnRowProv = NotifierProvider<SettingBoolNotifier, bool>(() {
     defaultValue: false,
   );
 });
+
+final pitchDeadzone = NotifierProvider<SettingIntNotifier, int>(() {
+  return SettingIntNotifier(
+    key: 'pitchDeadzone',
+    defaultValue: 10,
+    max: 100,
+  );
+});

@@ -1,7 +1,5 @@
 import 'package:beat_pads/services/services.dart';
 
-// TODO Add seamless slides for non-chromatic modes
-
 class PlayModeMPETargetPb extends PlayModeHandler {
   PlayModeMPETargetPb(super.settings, super.notifyParent)
       : mpeMods = SendMpe(
@@ -89,6 +87,9 @@ class PlayModeMPETargetPb extends PlayModeHandler {
       }
 
       // PITCHBEND
+
+      // TODO implement pitchbenddeadzone according to visualisation
+
       const double semitonePitchbendRange = 0x3FFF / 48;
 
       double pitchDistance =
@@ -122,4 +123,10 @@ class PlayModeMPETargetPb extends PlayModeHandler {
       );
     }
   }
+
+  /// Returns the velocity if a given note is ON in any channel.
+  /// Checks releasebuffer and active touchbuffer
+  /// Don't show onPads in this mode yet. TODO show all same notes as on
+  @override
+  int isNoteOn(int note) => 0;
 }

@@ -62,6 +62,19 @@ class MenuInput extends ConsumerWidget {
                       ref.read(mpeOnlyOnRowProv.notifier).setAndSave(v),
                 ),
               ),
+            if (ref.watch(playModeProv) == PlayMode.mpeTargetPb)
+              IntSliderTile(
+                min: 0,
+                max: 75,
+                label: 'Pitch Deadzone',
+                subtitle:
+                    'Set the size of the stable pitch zone in the center of the pad in percent',
+                trailing: Text(ref.watch(pitchDeadzone).toString()),
+                readValue: ref.watch(pitchDeadzone),
+                setValue: (int v) => ref.read(pitchDeadzone.notifier).set(v),
+                resetValue: ref.read(pitchDeadzone.notifier).reset,
+                onChangeEnd: ref.read(pitchDeadzone.notifier).save,
+              ),
             if (ref.watch(playModeProv).modulationOverlay)
               ModSizeSliderTile(
                 min: ref.watch(modulationRadiusProv.notifier).min,
