@@ -69,7 +69,7 @@ class PlayModeMPETargetPb extends PlayModeHandler {
 
     // Guard: MPE only on current row
     if (settings.pitchbendOnlyOnRow &&
-        data.customPad!.row != eventInBuffer.noteEvent.pad.row) return;
+        data.customPad?.row != eventInBuffer.noteEvent.pad.row) return;
 
     // commented out, since no drawing is required as of yet
     eventInBuffer.updatePosition(data.screenTouchPos);

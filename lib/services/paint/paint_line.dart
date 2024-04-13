@@ -31,7 +31,7 @@ class CustomPaintLine extends CustomPainter {
     final Paint brush = Paint()
       ..color = colorFront
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 6
+      ..strokeWidth = 10
       ..strokeCap = StrokeCap.round;
 
     // final Offset touch =
