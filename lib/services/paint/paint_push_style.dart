@@ -30,8 +30,11 @@ class PaintPushStyle extends ConsumerWidget {
               painter: CustomPaintLine(
                 dirty: touchEvent.dirty,
                 origin: box.globalToLocal(touchEvent.origin),
-                change:
-                    box.globalToLocal(touchEvent.directionalChangeUnclamped()),
+                padBox: PadBox(
+                    padPosition:
+                        box.globalToLocal(touchEvent.newPadBox.padPosition),
+                    padSize: touchEvent.newPadBox.padSize),
+                change: box.globalToLocal(touchEvent.newPosition),
                 colorFront: touchEvent.dirty
                     ? dirtyColor
                     : Palette.laserLemon.withOpacity(

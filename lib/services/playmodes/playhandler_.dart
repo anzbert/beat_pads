@@ -39,6 +39,7 @@ abstract class PlayModeHandler {
       CustomPointer(data.pointer, data.screenTouchPos),
       noteOn,
       data.screenSize,
+      data.padBox,
     );
     notifyParent();
   }

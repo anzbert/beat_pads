@@ -1,7 +1,9 @@
+import 'package:beat_pads/services/services.dart';
 import 'package:flutter/material.dart';
 
 class CustomPaintLine extends CustomPainter {
   CustomPaintLine({
+    required this.padBox,
     required this.origin,
     // required this.maxRadius,
     // required this.deadZone,
@@ -22,6 +24,7 @@ class CustomPaintLine extends CustomPainter {
   // final Color colorDeadZone;
   final Offset change;
   final bool dirty;
+  final PadBox padBox;
 
   // final Offset changeAbsolute;
 
@@ -38,6 +41,12 @@ class CustomPaintLine extends CustomPainter {
     //     origin.translate(changeAbsolute.dx, -changeAbsolute.dy);
 
     canvas.drawLine(origin, change, brush); // deadzone
+    canvas.drawRect(
+        Rect.fromPoints(
+            padBox.padPosition,
+            padBox.padPosition
+                .translate(padBox.padSize.width, padBox.padSize.height)),
+        brush);
   }
 
   @override

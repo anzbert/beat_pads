@@ -57,6 +57,7 @@ class PlayModeMPETargetPb extends PlayModeHandler {
       CustomPointer(data.pointer, data.screenTouchPos),
       noteOn,
       data.screenSize,
+      data.padBox,
     );
     notifyParent();
   }
@@ -72,10 +73,10 @@ class PlayModeMPETargetPb extends PlayModeHandler {
         data.customPad?.row != eventInBuffer.noteEvent.pad.row) return;
 
     // commented out, since no drawing is required as of yet
-    eventInBuffer.updatePosition(data.screenTouchPos);
+    eventInBuffer.updatePosition(data.screenTouchPos, data.padBox);
     notifyParent(); // for overlay drawing
 
-    print(eventInBuffer.newPosition);
+    // print(eventInBuffer.newPosition);
 
     if (data.customPad?.padValue != null) {
       // SLIDE

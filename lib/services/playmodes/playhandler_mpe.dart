@@ -49,6 +49,7 @@ class PlayModeMPE extends PlayModeHandler {
       CustomPointer(data.pointer, data.screenTouchPos),
       noteOn,
       data.screenSize,
+      data.padBox,
     );
     notifyParent();
   }

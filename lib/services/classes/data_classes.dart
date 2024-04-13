@@ -1,6 +1,15 @@
 import 'package:beat_pads/services/services.dart';
 import 'package:flutter/material.dart';
 
+class PadBox {
+  PadBox({
+    required this.padPosition,
+    required this.padSize,
+  });
+  final Offset padPosition;
+  final Size padSize;
+}
+
 class Vector2Int {
   /// A simple class that holds an integer x and y value
   const Vector2Int(this.x, this.y);
@@ -27,6 +36,7 @@ class PadAndTouchData {
   /// Contains a pointer ID with information about the touch location
   /// , as well as information about the touched pad widget size
   PadAndTouchData({
+    required this.padBox,
     required this.yPercentage,
     required this.xPercentage,
     required this.customPad,
@@ -34,6 +44,7 @@ class PadAndTouchData {
   final double yPercentage;
   final double xPercentage;
   final CustomPad customPad;
+  final PadBox padBox;
 }
 
 class PadTouchAndScreenData {
@@ -46,6 +57,7 @@ class PadTouchAndScreenData {
     required this.yPercentage,
     required this.xPercentage,
     required this.screenTouchPos,
+    required this.padBox,
   });
   final int pointer;
   final double yPercentage;
@@ -53,6 +65,7 @@ class PadTouchAndScreenData {
   final CustomPad customPad;
   final Offset screenTouchPos;
   final Size screenSize;
+  final PadBox padBox;
 }
 
 class NullableTouchAndScreenData {
@@ -64,12 +77,14 @@ class NullableTouchAndScreenData {
     required this.yPercentage,
     required this.xPercentage,
     required this.screenTouchPos,
+    required this.padBox,
   });
   final int pointer;
   final double? yPercentage;
   final double? xPercentage;
   final CustomPad? customPad;
   final Offset screenTouchPos;
+  final PadBox? padBox;
 }
 
 class MidiMessagePacket {
