@@ -14,6 +14,8 @@ class PaintPushStyle extends ConsumerWidget {
 
     final midiSender = ref.watch(senderProvider);
 
+    final Size screenSize = MediaQuery.of(context).size;
+
     return Stack(
       children: [
         ...[
@@ -27,7 +29,8 @@ class PaintPushStyle extends ConsumerWidget {
             .map(
           (touchEvent) {
             return CustomPaint(
-              painter: CustomPaintLine(
+              painter: CustomPaintPushOverlay(
+                screenSize: screenSize,
                 dirty: touchEvent.dirty,
                 origin: box.globalToLocal(touchEvent.origin),
                 originPadBox: PadBox(

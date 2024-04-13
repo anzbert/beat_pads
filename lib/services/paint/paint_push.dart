@@ -1,9 +1,11 @@
 import 'package:beat_pads/services/services.dart';
+import 'package:beat_pads/theme.dart';
 import 'package:flutter/material.dart';
 
-class CustomPaintLine extends CustomPainter {
-  CustomPaintLine({
+class CustomPaintPushOverlay extends CustomPainter {
+  CustomPaintPushOverlay({
     required this.padBox,
+    required this.screenSize,
     required this.originPadBox,
     required this.origin,
     // required this.maxRadius,
@@ -16,6 +18,7 @@ class CustomPaintLine extends CustomPainter {
     // required this.colorDeadZone,
   });
 
+  final Size screenSize;
   final Offset origin;
   // final double maxRadius;
   // final double deadZone;
@@ -37,17 +40,27 @@ class CustomPaintLine extends CustomPainter {
       ..strokeWidth = 10
       ..strokeCap = StrokeCap.round;
 
+    final Paint brush2 = Paint()
+      ..color = colorFront
+      ..style = PaintingStyle.fill
+      // ..strokeWidth = 10
+      ..strokeCap = StrokeCap.round;
+
     canvas.drawLine(originPadBox.padCenter, change, brush); // deadzone
-    canvas.drawRect(
-        Rect.fromPoints(
-            padBox.padPosition,
-            padBox.padPosition
-                .translate(padBox.padSize.width, padBox.padSize.height)),
-        brush);
+
+    final Radius padRadius =
+        Radius.circular(screenSize.width * ThemeConst.padRadiusFactor);
+
+    Rect rect = Rect.fromPoints(
+      padBox.padPosition,
+      padBox.padPosition.translate(padBox.padSize.width, padBox.padSize.height),
+    );
+
+    canvas.drawRRect(RRect.fromRectAndRadius(rect, padRadius), brush2);
   }
 
   @override
-  bool shouldRepaint(CustomPaintLine oldDelegate) {
+  bool shouldRepaint(CustomPaintPushOverlay oldDelegate) {
     return oldDelegate.change != change;
   }
 }
