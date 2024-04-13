@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 class CustomPaintLine extends CustomPainter {
   CustomPaintLine({
     required this.padBox,
+    required this.originPadBox,
     required this.origin,
     // required this.maxRadius,
     // required this.deadZone,
@@ -25,8 +26,7 @@ class CustomPaintLine extends CustomPainter {
   final Offset change;
   final bool dirty;
   final PadBox padBox;
-
-  // final Offset changeAbsolute;
+  final PadBox originPadBox;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -37,10 +37,7 @@ class CustomPaintLine extends CustomPainter {
       ..strokeWidth = 10
       ..strokeCap = StrokeCap.round;
 
-    // final Offset touch =
-    //     origin.translate(changeAbsolute.dx, -changeAbsolute.dy);
-
-    canvas.drawLine(origin, change, brush); // deadzone
+    canvas.drawLine(originPadBox.padCenter, change, brush); // deadzone
     canvas.drawRect(
         Rect.fromPoints(
             padBox.padPosition,

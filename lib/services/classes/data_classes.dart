@@ -8,6 +8,13 @@ class PadBox {
   });
   final Offset padPosition;
   final Size padSize;
+
+  Offset get padCenter {
+    return Offset(
+      padPosition.dx + padSize.width / 2,
+      padPosition.dy + padSize.height / 2,
+    );
+  }
 }
 
 class Vector2Int {
