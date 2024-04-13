@@ -67,15 +67,17 @@ class PlayModeMPETargetPb extends PlayModeHandler {
         touchReleaseBuffer.getByID(data.pointer);
     if (eventInBuffer == null) return;
 
+    // Guard: MPE only on current row
+    if (settings.pitchbendOnlyOnRow &&
+        data.customPad!.row != eventInBuffer.noteEvent.pad.row) return;
+
     // commented out, since no drawing is required as of yet
     eventInBuffer.updatePosition(data.screenTouchPos);
     notifyParent(); // for overlay drawing
 
-    if (data.customPad?.padValue != null) {
-      // Guard: MPE only on current row
-      if (settings.pitchbendOnlyOnRow &&
-          data.customPad!.row != eventInBuffer.noteEvent.pad.row) return;
+    print(eventInBuffer.newPosition);
 
+    if (data.customPad?.padValue != null) {
       // SLIDE
       if (data.yPercentage != null) {
         mpeMods.yMod.send(

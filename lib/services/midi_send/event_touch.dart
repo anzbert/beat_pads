@@ -79,6 +79,21 @@ class TouchEvent {
     );
   }
 
+  /// Get the directional change factor from the origin of the
+  /// touch to the current position.
+  Offset directionalChangeUnclamped(
+      // Curve curve = Curves.easeIn,
+      // bool deadZone = true,
+      ) {
+    // final double factorX =
+    //     ((newPosition.dx - origin.dx) / maxRadius).clamp(-1, 1);
+    // final double factorY =
+    //     ((-newPosition.dy + origin.dy) / maxRadius).clamp(-1, 1);
+
+    return Offset(newPosition.dx, newPosition.dy);
+    // return Offset(newPosition.dx - origin.dx, newPosition.dy + origin.dy);
+  }
+
   /// Applies a deadZone to an input value, which means that the function
   /// only returns a value when it is above the given threshhold.
   /// Then remaps range **from** 0 to 1.0 **to** deadZone to 1.0.

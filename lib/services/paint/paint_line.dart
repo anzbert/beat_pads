@@ -34,6 +34,9 @@ class CustomPaintLine extends CustomPainter {
       ..strokeWidth = 6
       ..strokeCap = StrokeCap.round;
 
+    // final Offset touch =
+    //     origin.translate(changeAbsolute.dx, -changeAbsolute.dy);
+
     canvas.drawLine(origin, change, brush); // deadzone
   }
 
