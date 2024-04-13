@@ -72,9 +72,13 @@ class PlayModeMPETargetPb extends PlayModeHandler {
     // notifyParent(); // for circle drawing
 
     if (data.customPad?.padValue != null) {
-      const double semiTonePb = 0x3FFF / 48;
+      const double semitonePitchbendRange = 0x3FFF / 48;
+      const double halfPitchbendRange = 0x3FFF / 2;
 
       // PITCHBEND
+
+      // if(settings.pitchbendOnlyOnRow && data.customPad!.row != eventInBuffer.noteEvent.){}
+
       double pitchDistance =
           ((data.customPad!.padValue - eventInBuffer.noteEvent.note) / 48)
               .clamp(-1.0, 1.0);
@@ -83,23 +87,19 @@ class PlayModeMPETargetPb extends PlayModeHandler {
       if (data.xPercentage != null) {
         // slide left
         if (data.xPercentage! < 0.5) {
-          pitchModifier = (semiTonePb *
+          pitchModifier = (semitonePitchbendRange *
                   data.customPad!.pitchBendLeft *
                   (data.xPercentage! * 2 - 1)) /
-              0x3FFF /
-              2;
+              halfPitchbendRange;
         }
         // slide right
         else {
-          pitchModifier = (semiTonePb *
+          pitchModifier = (semitonePitchbendRange *
                   data.customPad!.pitchBendRight *
                   (data.xPercentage! * 2 - 1)) /
-              0x3FFF /
-              2;
+              halfPitchbendRange;
         }
       }
-
-      // if left // if right
 
       mpeMods.xMod.send(
         eventInBuffer.noteEvent.channel,

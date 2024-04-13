@@ -113,3 +113,11 @@ final modReleaseUsable = Provider<int>(
         .clamp(0, Timing.releaseDelayTimes.length - 1)];
   },
 );
+
+// PUSH STYLE MODE
+final pitchbendOnlyOnRowProv = NotifierProvider<SettingBoolNotifier, bool>(() {
+  return SettingBoolNotifier(
+    key: 'pitchbendOnlyOnRow',
+    defaultValue: false,
+  );
+});

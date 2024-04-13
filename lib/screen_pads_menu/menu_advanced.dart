@@ -51,6 +51,16 @@ class MenuInput extends ConsumerWidget {
                   '- Feedback on the GitHub page is welcome!',
                 ],
               ),
+            if (ref.watch(playModeProv) == PlayMode.mpeTargetPb)
+              ListTile(
+                title: const Text('Restrict Pitchbend to Row'),
+                subtitle: const Text('Ignore pitchbends on the Y-Axis'),
+                trailing: Switch(
+                  value: ref.watch(pitchbendOnlyOnRowProv),
+                  onChanged: (bool v) =>
+                      ref.read(pitchbendOnlyOnRowProv.notifier).setAndSave(v),
+                ),
+              ),
             if (ref.watch(playModeProv).modulationOverlay)
               ModSizeSliderTile(
                 min: ref.watch(modulationRadiusProv.notifier).min,
