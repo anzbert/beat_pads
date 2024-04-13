@@ -49,7 +49,7 @@ class PlayModeMPETargetPb extends PlayModeHandler {
 
     final NoteEvent noteOn = NoteEvent(
       newChannel,
-      data.customPad.padValue,
+      data.customPad,
       velocityProvider.velocity(data.yPercentage),
     )..noteOn();
 
@@ -67,45 +67,14 @@ class PlayModeMPETargetPb extends PlayModeHandler {
         touchReleaseBuffer.getByID(data.pointer);
     if (eventInBuffer == null) return;
 
-    // commented out, since no drawing is required
+    // commented out, since no drawing is required as of yet
     // eventInBuffer.updatePosition(data.screenTouchPos);
-    // notifyParent(); // for circle drawing
+    // notifyParent(); // for overlay drawing
 
     if (data.customPad?.padValue != null) {
-      const double semiTonePb = 0x3FFF / 48;
-
-      // PITCHBEND
-      double pitchDistance =
-          ((data.customPad!.padValue - eventInBuffer.noteEvent.note) / 48)
-              .clamp(-1.0, 1.0);
-
-      double pitchModifier = 0;
-      if (data.xPercentage != null) {
-        // slide left
-        if (data.xPercentage! < 0.5) {
-          pitchModifier = (semiTonePb *
-                  data.customPad!.pitchBendLeft *
-                  (data.xPercentage! * 2 - 1)) /
-              0x3FFF /
-              2;
-        }
-        // slide right
-        else {
-          pitchModifier = (semiTonePb *
-                  data.customPad!.pitchBendRight *
-                  (data.xPercentage! * 2 - 1)) /
-              0x3FFF /
-              2;
-        }
-      }
-
-      // if left // if right
-
-      mpeMods.xMod.send(
-        eventInBuffer.noteEvent.channel,
-        eventInBuffer.noteEvent.note,
-        pitchDistance + pitchModifier,
-      );
+      // Guard: MPE only on current row
+      if (settings.pitchbendOnlyOnRow &&
+          data.customPad!.row != eventInBuffer.noteEvent.pad.row) return;
 
       // SLIDE
       if (data.yPercentage != null) {
@@ -115,6 +84,39 @@ class PlayModeMPETargetPb extends PlayModeHandler {
           data.yPercentage! * 2 - 1,
         );
       }
+
+      // PITCHBEND
+      const double semitonePitchbendRange = 0x3FFF / 48;
+
+      double pitchDistance =
+          ((data.customPad!.padValue - eventInBuffer.noteEvent.note) / 48)
+              .clamp(-1.0, 1.0);
+
+      double pitchModifier = 0;
+      if (data.xPercentage != null) {
+        // slide left
+        if (data.xPercentage! < 0.5) {
+          pitchModifier = (semitonePitchbendRange *
+                  data.customPad!.pitchBendLeft *
+                  (data.xPercentage! * 2 - 1)) /
+              0x3FFF /
+              2;
+        }
+        // slide right
+        else {
+          pitchModifier = (semitonePitchbendRange *
+                  data.customPad!.pitchBendRight *
+                  (data.xPercentage! * 2 - 1)) /
+              0x3FFF /
+              2;
+        }
+      }
+
+      mpeMods.xMod.send(
+        eventInBuffer.noteEvent.channel,
+        eventInBuffer.noteEvent.note,
+        pitchDistance + pitchModifier,
+      );
     }
   }
 }

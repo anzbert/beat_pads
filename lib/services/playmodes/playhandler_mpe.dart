@@ -41,7 +41,7 @@ class PlayModeMPE extends PlayModeHandler {
 
     final NoteEvent noteOn = NoteEvent(
       newChannel,
-      data.customPad.padValue,
+      data.customPad,
       velocityProvider.velocity(data.yPercentage),
     )..noteOn();
 
