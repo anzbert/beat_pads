@@ -31,7 +31,7 @@ abstract class PlayModeHandler {
 
     final NoteEvent noteOn = NoteEvent(
       settings.channel,
-      data.customPad.padValue,
+      data.customPad,
       velocityProvider.velocity(data.yPercentage),
     )..noteOn(cc: settings.sendCC);
 

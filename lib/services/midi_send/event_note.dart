@@ -1,14 +1,17 @@
+import 'package:beat_pads/services/services.dart';
 import 'package:flutter_midi_command/flutter_midi_command_messages.dart';
 
 class NoteEvent {
   /// Create and store a NoteOn event for its lifetime as well as its release time
-  NoteEvent(this.channel, this.note, this.velocity)
+  NoteEvent(this.channel, this.pad, this.velocity)
       : noteOnMessage = NoteOnMessage(
           channel: channel,
-          note: note,
+          note: pad.padValue,
           velocity: velocity,
-        );
+        ),
+        note = pad.padValue;
   int channel;
+  final CustomPad pad;
   final int note;
   final int velocity;
 

@@ -49,7 +49,7 @@ class PlayModeMPETargetPb extends PlayModeHandler {
 
     final NoteEvent noteOn = NoteEvent(
       newChannel,
-      data.customPad.padValue,
+      data.customPad,
       velocityProvider.velocity(data.yPercentage),
     )..noteOn();
 
@@ -72,12 +72,21 @@ class PlayModeMPETargetPb extends PlayModeHandler {
     // notifyParent(); // for circle drawing
 
     if (data.customPad?.padValue != null) {
+      // SLIDE
+      if (data.yPercentage != null) {
+        mpeMods.yMod.send(
+          eventInBuffer.noteEvent.channel,
+          eventInBuffer.noteEvent.note,
+          data.yPercentage! * 2 - 1,
+        );
+      }
+
+      // PITCHBEND
       const double semitonePitchbendRange = 0x3FFF / 48;
       const double halfPitchbendRange = 0x3FFF / 2;
 
-      // PITCHBEND
-
-      // if(settings.pitchbendOnlyOnRow && data.customPad!.row != eventInBuffer.noteEvent.){}
+      if (settings.pitchbendOnlyOnRow &&
+          data.customPad!.row != eventInBuffer.noteEvent.pad.row) return;
 
       double pitchDistance =
           ((data.customPad!.padValue - eventInBuffer.noteEvent.note) / 48)
@@ -106,15 +115,6 @@ class PlayModeMPETargetPb extends PlayModeHandler {
         eventInBuffer.noteEvent.note,
         pitchDistance + pitchModifier,
       );
-
-      // SLIDE
-      if (data.yPercentage != null) {
-        mpeMods.yMod.send(
-          eventInBuffer.noteEvent.channel,
-          eventInBuffer.noteEvent.note,
-          data.yPercentage! * 2 - 1,
-        );
-      }
     }
   }
 }
