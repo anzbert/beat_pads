@@ -31,10 +31,21 @@ class CustomPaintPushOverlay extends CustomPainter {
     final Radius padRadius =
         Radius.circular(screenSize.width * ThemeConst.padRadiusFactor);
 
+    final double padSpacing = screenSize.width * ThemeConst.padSpacingFactor;
+
     final Rect padRect = Rect.fromPoints(
-      padBox.padPosition,
-      padBox.padPosition.translate(padBox.padSize.width, padBox.padSize.height),
+      padBox.padPosition + Offset(padSpacing, padSpacing),
+      padBox.padPosition
+              .translate(padBox.padSize.width, padBox.padSize.height) -
+          Offset(padSpacing, padSpacing),
     );
+    // final Rect padRect = Rect.fromPoints(
+    //   padBox.padPosition,
+    //   padBox.padPosition + Offset(padBox.padSize.width, padBox.padSize.height),
+    // );
+    final padSpacingPercentage = padSpacing * 2 / padRect.width;
+
+    // canvas.drawRect(padRect, Paint()..color = Palette.cadetBlue);
 
     // origin to pointer line:
     // final Paint stroke1 = Paint()
@@ -45,28 +56,28 @@ class CustomPaintPushOverlay extends CustomPainter {
     // canvas.drawLine(originPadBox.padCenter, change, stroke1);
 
     // VERTICAL LINE
-    const double deadzoneBorder = 0.01;
-    const double deadZoneOpacityBorder = 0.2;
+    final leftBorder = 0.5 - halfPitchDeadzoneFraction + padSpacingPercentage;
+    final rightBorder = 0.5 + halfPitchDeadzoneFraction - padSpacingPercentage;
 
     final Paint gradient = Paint()
       ..shader = ui.Gradient.linear(
         padRect.centerRight,
         padRect.centerLeft,
         [
-          colorX.withOpacity(0),
-          colorX.withOpacity(1 - deadZoneOpacityBorder),
+          colorX.withOpacity(0.5),
+          colorX.withOpacity(0.0),
           colorX,
           colorX,
-          colorX.withOpacity(1 - deadZoneOpacityBorder),
-          colorX.withOpacity(0),
+          colorX.withOpacity(0.5),
+          colorX.withOpacity(0.0),
         ],
         [
           0,
-          0.5 - halfPitchDeadzoneFraction - deadzoneBorder,
-          0.5 - halfPitchDeadzoneFraction,
-          0.5 + halfPitchDeadzoneFraction,
-          0.5 + halfPitchDeadzoneFraction + deadzoneBorder,
-          1
+          leftBorder,
+          leftBorder + 0.02,
+          rightBorder - 0.02,
+          rightBorder,
+          1,
         ],
       );
     canvas.drawRRect(RRect.fromRectAndRadius(padRect, padRadius), gradient);
@@ -88,6 +99,7 @@ class CustomPaintPushOverlay extends CustomPainter {
         ],
         [0, 0.1, 0.5, 0.9, 1],
       );
+    // final Paint brush2 = Paint();
     canvas.drawLine(Offset(padRect.left, change.dy),
         Offset(padRect.right, change.dy), brush1);
   }

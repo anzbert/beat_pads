@@ -78,41 +78,61 @@ class PlayModeMPETargetPb extends PlayModeHandler {
 
     if (data.customPad?.padValue != null) {
       // SLIDE
-      if (data.yPercentage != null) {
-        mpeMods.yMod.send(
-          eventInBuffer.noteEvent.channel,
-          eventInBuffer.noteEvent.note,
-          data.yPercentage! * 2 - 1,
-        );
-      }
+      // if (data.yPercentage != null) {
+      //   mpeMods.yMod.send(
+      //     eventInBuffer.noteEvent.channel,
+      //     eventInBuffer.noteEvent.note,
+      //     data.yPercentage! * 2 - 1,
+      //   );
+      // }
 
       // PITCHBEND
 
       // TODO implement pitchbenddeadzone according to visualisation
 
+      /// The hex range of one semitone in the pitchbend 14bit range
       const double semitonePitchbendRange = 0x3FFF / 48;
 
+      /// coarse pitch adjustment to the tone that it is currently bent to in -1 to +1
       double pitchDistance =
           ((data.customPad!.padValue - eventInBuffer.noteEvent.note) / 48)
               .clamp(-1.0, 1.0);
 
+      /// fine adjustment of the pitch bend
       double pitchModifier = 0;
+
       if (data.xPercentage != null) {
-        // slide left
-        if (data.xPercentage! < 0.5) {
-          pitchModifier = (semitonePitchbendRange *
-                  data.customPad!.pitchBendLeft *
-                  (data.xPercentage! * 2 - 1)) /
-              0x3FFF /
-              2;
+        /// current deadzone size in a percent fraction 0 to 1.0
+        final double pitchDeadzone = settings.pitchDeadzone / 100;
+
+        /// maps the 0 to 1.0 X-axis value on pad to a range between -1.0 and +1.0
+        final double pitchPercentage = data.xPercentage! * 2 - 1;
+
+        // print(pitchPercentage);
+
+        if (pitchPercentage.abs() < pitchDeadzone) {
+          pitchModifier = 0;
+          // print("deadzone: $pitchPercentage");
         }
-        // slide right
+        // left (negative)
+        else if (pitchPercentage < 0) {
+          final mappedPercentage = Utils.mapValueToTargetRange(
+              pitchPercentage, -1, -pitchDeadzone, -1, 0);
+          pitchModifier =
+              ((semitonePitchbendRange * data.customPad!.pitchBendLeft) *
+                      mappedPercentage) /
+                  0x3FFF /
+                  2;
+        }
+        // right (positive)
         else {
-          pitchModifier = (semitonePitchbendRange *
-                  data.customPad!.pitchBendRight *
-                  (data.xPercentage! * 2 - 1)) /
-              0x3FFF /
-              2;
+          final mappedPercentage = Utils.mapValueToTargetRange(
+              pitchPercentage, pitchDeadzone, 1, 0, 1);
+          pitchModifier =
+              ((semitonePitchbendRange * data.customPad!.pitchBendRight) *
+                      mappedPercentage) /
+                  0x3FFF /
+                  2;
         }
       }
 
