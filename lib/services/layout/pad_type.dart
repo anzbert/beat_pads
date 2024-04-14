@@ -9,7 +9,6 @@ enum PadType {
 class CustomPad {
   CustomPad(
     this.padValue, {
-    this.row = 0,
     this.pitchBendLeft = 1,
     this.pitchBendRight = 1,
     this.padType = PadType.note,
@@ -18,7 +17,11 @@ class CustomPad {
   final int padValue;
   final PadType padType;
   final Chord chord;
-  int row;
+
+  int row = 0;
+  int column = 0;
+
+  int get id => row * 100 + column;
 
   /// Semitones to pitchbend in [PlayMode.mpeTargetPb] left and right
   /// on the current pad. Default is 1 semitone.

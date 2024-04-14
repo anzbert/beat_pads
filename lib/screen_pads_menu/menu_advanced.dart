@@ -73,12 +73,23 @@ class MenuInput extends ConsumerWidget {
                 ),
               ),
             if (ref.watch(playModeProv) == PlayMode.mpeTargetPb)
+              ListTile(
+                title: const Text('Relative Mode'),
+                subtitle: const Text(
+                    'In this mode, the pad is in tune at the position of the initial touch, not the center of the pad'),
+                trailing: Switch(
+                  value: ref.watch(mpeRelativeModeProv),
+                  onChanged: (bool v) =>
+                      ref.read(mpeRelativeModeProv.notifier).setAndSave(v),
+                ),
+              ),
+            if (ref.watch(playModeProv) == PlayMode.mpeTargetPb)
               IntSliderTile(
                 min: 0,
                 max: 75,
-                label: 'Pitch Deadzone',
+                label: 'In-Tune Zone',
                 subtitle:
-                    'Set the size of the stable pitch zone in the center of the pad in percent',
+                    'Set the size of the stable pitch deadzone in percent',
                 trailing: Text(ref.watch(pitchDeadzone).toString()),
                 readValue: ref.watch(pitchDeadzone),
                 setValue: (int v) => ref.read(pitchDeadzone.notifier).set(v),

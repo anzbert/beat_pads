@@ -120,7 +120,9 @@ abstract class Grid {
     return List.generate(
       settings.height,
       (row) => List.generate(settings.width, (note) {
-        return list[row * settings.width + note]..row = row;
+        return list[row * settings.width + note]
+          ..row = row
+          ..column = note;
       }),
     ).reversed.toList();
   }

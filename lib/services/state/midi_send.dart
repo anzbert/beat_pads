@@ -31,6 +31,7 @@ class SendSettings {
     this.pitchbendOnlyOnRow,
     this.pitchDeadzone,
     this.mpePushStyleYAxisMod,
+    this.mpeRelativeMode,
   );
   final PlayMode playMode;
   final int channel;
@@ -53,6 +54,7 @@ class SendSettings {
   final bool pitchbendOnlyOnRow;
   final int pitchDeadzone;
   final MPEpushStyleYAxisMods mpePushStyleYAxisMod;
+  final bool mpeRelativeMode;
 }
 
 /// Reactive state of the current send-settings to be used in legacy changenotifier
@@ -79,6 +81,7 @@ final combinedSettings = Provider.autoDispose<SendSettings>((ref) {
     ref.watch(mpeOnlyOnRowProv),
     ref.watch(pitchDeadzone),
     ref.watch(mpePushYAxisModeProv),
+    ref.watch(mpeRelativeModeProv),
   );
 });
 
