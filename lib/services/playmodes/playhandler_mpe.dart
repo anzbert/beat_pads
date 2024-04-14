@@ -50,6 +50,8 @@ class PlayModeMPE extends PlayModeHandler {
       noteOn,
       data.screenSize,
       data.padBox,
+      data.xPercentage,
+      data.yPercentage,
     );
     notifyParent();
   }

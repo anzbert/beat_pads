@@ -14,8 +14,10 @@ class CustomPaintPushOverlay extends CustomPainter {
     required this.dirty,
     required this.colorX,
     required this.colorY,
+    required this.relativeMode,
   }) : halfPitchDeadzoneFraction = pitchDeadzonePercent / 100 / 2;
 
+  final bool relativeMode;
   final Size screenSize;
   final Offset origin;
   final Color colorX;
@@ -48,11 +50,11 @@ class CustomPaintPushOverlay extends CustomPainter {
     // canvas.drawRect(padRect, Paint()..color = Palette.cadetBlue);
 
     // origin to pointer line:
-    // final Paint stroke1 = Paint()
-    //   ..color = colorFront.withOpacity(0.3)
-    //   ..style = PaintingStyle.stroke
-    //   ..strokeWidth = 10
-    //   ..strokeCap = StrokeCap.round;
+    final Paint stroke1 = Paint()
+      ..color = Palette.cadetBlue
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 10
+      ..strokeCap = StrokeCap.round;
     // canvas.drawLine(originPadBox.padCenter, change, stroke1);
 
     // VERTICAL LINE
@@ -102,6 +104,13 @@ class CustomPaintPushOverlay extends CustomPainter {
     // final Paint brush2 = Paint();
     canvas.drawLine(Offset(padRect.left, change.dy),
         Offset(padRect.right, change.dy), brush1);
+
+    // Center
+    if (relativeMode) {
+      canvas.drawCircle(origin, 5, stroke1);
+    } else {
+      canvas.drawCircle(padRect.center, 5, stroke1);
+    }
   }
 
   @override

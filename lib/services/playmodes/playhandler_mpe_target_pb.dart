@@ -113,6 +113,8 @@ class PlayModeMPETargetPb extends PlayModeHandler {
       noteOn,
       data.screenSize,
       data.padBox,
+      data.xPercentage,
+      data.yPercentage,
     );
     notifyParent();
   }
@@ -122,6 +124,10 @@ class PlayModeMPETargetPb extends PlayModeHandler {
     final TouchEvent? eventInBuffer = touchBuffer.getByID(data.pointer) ??
         touchReleaseBuffer.getByID(data.pointer);
     if (eventInBuffer == null) return;
+
+    if (eventInBuffer.noteEvent.pad.id != data.customPad?.id) {
+      eventInBuffer.leftInitialPad = true;
+    }
 
     // OVERLAY  ///////////////////////////////////
     Offset touchPosition = data.screenTouchPos;
@@ -156,11 +162,34 @@ class PlayModeMPETargetPb extends PlayModeHandler {
     if (data.customPad?.padValue != null) {
       // SLIDE
       if (data.yPercentage != null) {
-        mpeMods.yMod.send(
-          eventInBuffer.noteEvent.channel,
-          eventInBuffer.noteEvent.note,
-          data.yPercentage! * 2 - 1,
-        );
+        // relative mode
+        if (settings.mpeRelativeMode && !eventInBuffer.leftInitialPad) {
+          if (data.yPercentage != null) {
+            final double yPercentageMiddle = eventInBuffer.originYPercentage;
+            double sendPercentage = 0;
+
+            if (data.yPercentage! <= yPercentageMiddle) {
+              sendPercentage = Utils.mapValueToTargetRange(
+                  data.yPercentage!, 0, yPercentageMiddle, 0, 0.5);
+            } else {
+              sendPercentage = Utils.mapValueToTargetRange(
+                  data.yPercentage!, yPercentageMiddle, 1, 0.5, 1);
+            }
+            mpeMods.yMod.send(
+              eventInBuffer.noteEvent.channel,
+              eventInBuffer.noteEvent.note,
+              sendPercentage * 2 - 1,
+            );
+          }
+        }
+        // absolute mode
+        else {
+          mpeMods.yMod.send(
+            eventInBuffer.noteEvent.channel,
+            eventInBuffer.noteEvent.note,
+            data.yPercentage! * 2 - 1,
+          );
+        }
       }
 
       // PITCHBEND

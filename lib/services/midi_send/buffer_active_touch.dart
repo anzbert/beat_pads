@@ -11,8 +11,9 @@ class TouchBuffer {
 
   /// Add touchevent with noteevent to buffer
   void addNoteOn(CustomPointer touch, NoteEvent noteEvent, Size screenSize,
-      PadBox padbox) {
-    _buffer.add(TouchEvent(touch, noteEvent, settings, screenSize, padbox));
+      PadBox padbox, double originXPercentage, double originYPercentage) {
+    _buffer.add(TouchEvent(touch, noteEvent, settings, screenSize, padbox,
+        originXPercentage, originYPercentage));
   }
 
   /// Find and return a TouchEvent from the buffer by its uniqueID, if possible

@@ -76,7 +76,7 @@ class MenuInput extends ConsumerWidget {
               ListTile(
                 title: const Text('Relative Mode'),
                 subtitle: const Text(
-                    'In this mode, the pad is in tune at the position of the initial touch, not the center of the pad'),
+                    'The initially touched pad adjusts its center to the position of the touch, not the center of the pad as in absolute mode'),
                 trailing: Switch(
                   value: ref.watch(mpeRelativeModeProv),
                   onChanged: (bool v) =>
