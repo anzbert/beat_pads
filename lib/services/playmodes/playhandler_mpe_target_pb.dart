@@ -5,15 +5,29 @@ class PlayModeMPETargetPb extends PlayModeHandler {
   PlayModeMPETargetPb(super.settings, super.notifyParent)
       : mpeMods = SendMpe(
           ModPitchBendToNote(),
-          ModCC642D(CC.slide),
+          settings.mpePushStyleYAxisMod.getMod(),
           ModNull(),
         ),
         channelProvider = MemberChannelProvider(
           settings.mpeMemberChannels,
           upperZone: settings.zone,
-        );
+        ),
+        pitchDeadzone = settings.pitchDeadzone / 100;
+
   final SendMpe mpeMods;
   final MemberChannelProvider channelProvider;
+
+  /// current deadzone size in a percent fraction 0 to 1.0
+  final double pitchDeadzone;
+
+  /// The hex range of one semitone in the pitchbend 14bit range
+  static const double semitonePitchbendRange = 0x3FFF / 48;
+
+  /// coarse pitch adjustment to the tone that it is currently bent to in -1 to +1
+  double pitchDistance = 0;
+
+  /// fine adjustment of the pitch bend
+  double pitchModifier = 0;
 
   /// Release channel in MPE channel provider
   @override
@@ -34,17 +48,54 @@ class PlayModeMPETargetPb extends PlayModeHandler {
       ...touchReleaseBuffer.buffer,
     ]);
 
-    mpeMods.xMod.send(newChannel, data.customPad.padValue, 0);
-
+    /////// MPE ////////////////////
     // Relative mode Slide (start with a value of 64, regardless of tap position on y-axis):
+    // mpeMods.xMod.send(newChannel, data.customPad.padValue, 0);
     // mpeMods.yMod.send(newChannel, data.padNote, 0);
 
-    // Absolute mode Slide (send slide value according to y-position of tap):
+    // Absolute mode
+    // SLIDE
     mpeMods.yMod.send(
       newChannel,
       data.customPad.padValue,
       data.yPercentage * 2 - 1,
     );
+
+    // PITCHBEND
+    /// maps the 0 to 1.0 X-axis value on pad to a range between -1.0 and +1.0
+    final double pitchPercentage = data.xPercentage * 2 - 1;
+
+    if (pitchPercentage.abs() < pitchDeadzone) {
+      pitchModifier = 0;
+    }
+    // left (negative)
+    else if (pitchPercentage < 0) {
+      final mappedPercentage = Utils.mapValueToTargetRange(
+          pitchPercentage, -1, -pitchDeadzone, -1, 0);
+      pitchModifier =
+          ((semitonePitchbendRange * data.customPad!.pitchBendLeft) *
+                  mappedPercentage) /
+              0x3FFF /
+              2;
+    }
+    // right (positive)
+    else {
+      final mappedPercentage =
+          Utils.mapValueToTargetRange(pitchPercentage, pitchDeadzone, 1, 0, 1);
+      pitchModifier =
+          ((semitonePitchbendRange * data.customPad!.pitchBendRight) *
+                  mappedPercentage) /
+              0x3FFF /
+              2;
+    }
+
+    mpeMods.xMod.send(
+      newChannel,
+      data.customPad.padValue,
+      pitchDistance + pitchModifier,
+    );
+
+    //////////////////////////////////////////////////
 
     final NoteEvent noteOn = NoteEvent(
       newChannel,
@@ -88,13 +139,10 @@ class PlayModeMPETargetPb extends PlayModeHandler {
       eventInBuffer.updatePosition(touchPosition, data.padBox);
     }
 
-    // commented out, since no drawing is required as of yet
     if (data.customPad != null) notifyParent(); // for overlay drawing
 
     if (settings.pitchbendOnlyOnRow &&
         data.customPad?.row != eventInBuffer.noteEvent.pad.row) return;
-
-    // print(eventInBuffer.newPosition);
 
     if (data.customPad?.padValue != null) {
       // SLIDE
@@ -107,32 +155,17 @@ class PlayModeMPETargetPb extends PlayModeHandler {
       }
 
       // PITCHBEND
-
-      // TODO implement pitchbenddeadzone according to visualisation
-
-      /// The hex range of one semitone in the pitchbend 14bit range
-      const double semitonePitchbendRange = 0x3FFF / 48;
-
       /// coarse pitch adjustment to the tone that it is currently bent to in -1 to +1
-      double pitchDistance =
+      pitchDistance =
           ((data.customPad!.padValue - eventInBuffer.noteEvent.note) / 48)
               .clamp(-1.0, 1.0);
 
-      /// fine adjustment of the pitch bend
-      double pitchModifier = 0;
-
       if (data.xPercentage != null) {
-        /// current deadzone size in a percent fraction 0 to 1.0
-        final double pitchDeadzone = settings.pitchDeadzone / 100;
-
         /// maps the 0 to 1.0 X-axis value on pad to a range between -1.0 and +1.0
         final double pitchPercentage = data.xPercentage! * 2 - 1;
 
-        // print(pitchPercentage);
-
         if (pitchPercentage.abs() < pitchDeadzone) {
           pitchModifier = 0;
-          // print("deadzone: $pitchPercentage");
         }
         // left (negative)
         else if (pitchPercentage < 0) {

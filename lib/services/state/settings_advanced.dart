@@ -125,7 +125,16 @@ final mpeOnlyOnRowProv = NotifierProvider<SettingBoolNotifier, bool>(() {
 final pitchDeadzone = NotifierProvider<SettingIntNotifier, int>(() {
   return SettingIntNotifier(
     key: 'pitchDeadzone',
-    defaultValue: 25,
     max: 100,
+    defaultValue: 30,
+  );
+});
+
+final mpePushYAxisModeProv = NotifierProvider<
+    SettingEnumNotifier<MPEpushStyleYAxisMods>, MPEpushStyleYAxisMods>(() {
+  return SettingEnumNotifier<MPEpushStyleYAxisMods>(
+    nameMap: MPEpushStyleYAxisMods.values.asNameMap(),
+    key: 'mpePushYAxisMode',
+    defaultValue: MPEpushStyleYAxisMods.slide64,
   );
 });
