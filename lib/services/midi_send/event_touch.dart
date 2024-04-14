@@ -8,8 +8,11 @@ class TouchEvent {
     this.noteEvent,
     SendSettings settings,
     Size screenSize,
+    PadBox padBox,
   )   : origin = touch.position,
+        originPadBox = padBox,
         newPosition = touch.position,
+        newPadBox = padBox,
         uniqueID = touch.pointer,
         deadZone = settings.modulationDeadZone,
         maxRadius = screenSize.longestSide * settings.modulationRadius;
@@ -20,9 +23,11 @@ class TouchEvent {
 
   // Geometry parameters:
   final Offset origin;
+  final PadBox originPadBox;
   final double maxRadius;
   final double deadZone;
   Offset newPosition;
+  PadBox newPadBox;
 
   bool hasReturnAnimation = false;
 
@@ -38,8 +43,11 @@ class TouchEvent {
   bool get dirty => _dirty;
 
   /// Updates stored touch event with latest touch position. Used for geometry
-  void updatePosition(Offset updatedPosition) {
+  void updatePosition(Offset updatedPosition, [PadBox? updatedPadBox]) {
     newPosition = updatedPosition;
+    if (updatedPadBox != null) {
+      newPadBox = updatedPadBox;
+    }
   }
 
   /// Get the radial change factor from the origin of the
@@ -77,6 +85,21 @@ class TouchEvent {
         curve,
       ),
     );
+  }
+
+  /// Get the directional change factor from the origin of the
+  /// touch to the current position.
+  Offset directionalChangeUnclamped(
+      // Curve curve = Curves.easeIn,
+      // bool deadZone = true,
+      ) {
+    // final double factorX =
+    //     ((newPosition.dx - origin.dx) / maxRadius).clamp(-1, 1);
+    // final double factorY =
+    //     ((-newPosition.dy + origin.dy) / maxRadius).clamp(-1, 1);
+
+    return Offset(newPosition.dx, newPosition.dy);
+    // return Offset(newPosition.dx - origin.dx, newPosition.dy + origin.dy);
   }
 
   /// Applies a deadZone to an input value, which means that the function

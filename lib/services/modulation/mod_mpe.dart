@@ -210,3 +210,39 @@ enum Range {
   down,
   full;
 }
+
+// for dropdown menu
+enum MPEpushStyleYAxisMods {
+  mpeAftertouch64('AT Pressure Center 64', Dims.two, Group.at),
+  // slide('Slide [74]', Dims.one, Group.slide),
+  slide64('Slide [74] Center 64', Dims.two, Group.slide),
+  // pan('Pan [10]', Dims.one, Group.pan),
+  pan64('Pan [10] Center 64', Dims.two, Group.pan),
+  // gain('Gain [7]', Dims.one, Group.gain),
+  gain64('Gain [7] Center 64', Dims.two, Group.gain),
+
+  none('None', Dims.one, Group.none);
+
+  const MPEpushStyleYAxisMods(this.title, this.dimensions, this.exclusiveGroup);
+  @override
+  String toString() => title;
+
+  final String title;
+  final Dims dimensions;
+  final Group exclusiveGroup;
+
+  Mod getMod() {
+    //  if (this == MPEpushStyleYAxisMods.mpeAftertouch) return ModMPEAftertouch1D();
+    if (this == MPEpushStyleYAxisMods.mpeAftertouch64) {
+      return ModMPEAftertouch642D();
+    }
+    // if (this == MPEpushStyleYAxisMods.slide) return ModCC1D(CC.slide);
+    if (this == MPEpushStyleYAxisMods.slide64) return ModCC642D(CC.slide);
+    // if (this == MPEpushStyleYAxisMods.pan) return ModCC1D(CC.pan);
+    if (this == MPEpushStyleYAxisMods.pan64) return ModCC642D(CC.pan);
+    // if (this == MPEpushStyleYAxisMods.gain) return ModCC1D(CC.gain);
+    if (this == MPEpushStyleYAxisMods.gain64) return ModCC642D(CC.gain);
+
+    return ModNull();
+  }
+}

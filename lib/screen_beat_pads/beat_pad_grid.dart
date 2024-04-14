@@ -85,10 +85,12 @@ class _SlidePadsState extends ConsumerState<SlidePads>
           return target.customPad.padValue >= 0 &&
                   target.customPad.padValue < 128
               ? PadAndTouchData(
-                  customPad: target.customPad, // = Note
+                  customPad: target.customPad,
                   yPercentage: 1 - (yPos / ySize).clamp(0, 1),
                   xPercentage: (xPos / xSize).clamp(0, 1),
-                )
+                  padBox: PadBox(
+                      padPosition: target.localToGlobal(Offset.zero),
+                      padSize: target.size))
               : null;
         }
       }
@@ -108,6 +110,7 @@ class _SlidePadsState extends ConsumerState<SlidePads>
         customPad: result.customPad,
         yPercentage: result.yPercentage,
         xPercentage: result.xPercentage,
+        padBox: result.padBox,
       );
 
       ref.read<MidiSender>(senderProvider.notifier).handleNewTouch(data);
@@ -128,6 +131,7 @@ class _SlidePadsState extends ConsumerState<SlidePads>
               yPercentage: data?.yPercentage,
               xPercentage: data?.xPercentage,
               screenTouchPos: touch.position,
+              padBox: data?.padBox,
             ),
           );
     }
@@ -198,6 +202,7 @@ class _SlidePadsState extends ConsumerState<SlidePads>
                     customPad: null,
                     yPercentage: null,
                     xPercentage: null,
+                    padBox: null,
                     screenTouchPos: Offset.lerp(
                       constrainedPosition,
                       event.origin,
@@ -271,7 +276,9 @@ class _SlidePadsState extends ConsumerState<SlidePads>
           ),
         ),
         if (ref.watch(playModeProv).modulationOverlay)
-          RepaintBoundary(child: PaintModulation()),
+          RepaintBoundary(child: PaintModulation())
+        else if (ref.watch(playModeProv) == PlayMode.mpeTargetPb)
+          RepaintBoundary(child: PaintPushStyle()),
       ],
     );
   }

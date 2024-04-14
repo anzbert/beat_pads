@@ -43,17 +43,27 @@ class MenuInput extends ConsumerWidget {
                   ' - THIS MODE IS STILL IN THE EXPERIMENTAL STAGE - ',
                   'It currently functions similar to the MPE input on the latest Push device. This is how it works:',
                   '- X-Axis: Slide your finger to other pads and bend the pitch towards them.',
-                  '- Y-Axis: Sends an MPE Slide message (CC 74). The center of the pad corresponds to a slide value of 64',
+                  '- Y-Axis: Sends a configurable MPE message (Default: Slide / CC 74). The center of the pad corresponds to a slide value of 64',
                   '',
                   'Notes:',
                   '- Set your instrument to accept the maximum range of MPE Pitchbend (48 semitones) for this mode to create the expected pitches.',
-                  '- There are no advanced settings for this mode yet, such as adjustable deadzones, a relative slide setting or visual feedback.',
+                  '- All touches are sending ABSOLUTE modulation values as per the position on the pad. No RELATIVE mode yet, which would handle modulation values relative to the initial touch position.',
                   '- Feedback on the GitHub page is welcome!',
                 ],
               ),
             if (ref.watch(playModeProv) == PlayMode.mpeTargetPb)
               ListTile(
-                title: const Text('X-Axis MPE only'),
+                title: const Text('Y-Axis'),
+                trailing: DropdownEnum(
+                  values: MPEpushStyleYAxisMods.values,
+                  readValue: ref.watch(mpePushYAxisModeProv),
+                  setValue: (MPEpushStyleYAxisMods v) =>
+                      ref.read(mpePushYAxisModeProv.notifier).setAndSave(v),
+                ),
+              ),
+            if (ref.watch(playModeProv) == PlayMode.mpeTargetPb)
+              ListTile(
+                title: const Text('Row Pads only'),
                 subtitle: const Text(
                     'Ignore modulation on pads below or above current Row'),
                 trailing: Switch(
@@ -61,6 +71,19 @@ class MenuInput extends ConsumerWidget {
                   onChanged: (bool v) =>
                       ref.read(mpeOnlyOnRowProv.notifier).setAndSave(v),
                 ),
+              ),
+            if (ref.watch(playModeProv) == PlayMode.mpeTargetPb)
+              IntSliderTile(
+                min: 0,
+                max: 75,
+                label: 'Pitch Deadzone',
+                subtitle:
+                    'Set the size of the stable pitch zone in the center of the pad in percent',
+                trailing: Text(ref.watch(pitchDeadzone).toString()),
+                readValue: ref.watch(pitchDeadzone),
+                setValue: (int v) => ref.read(pitchDeadzone.notifier).set(v),
+                resetValue: ref.read(pitchDeadzone.notifier).reset,
+                onChangeEnd: ref.read(pitchDeadzone.notifier).save,
               ),
             if (ref.watch(playModeProv).modulationOverlay)
               ModSizeSliderTile(
