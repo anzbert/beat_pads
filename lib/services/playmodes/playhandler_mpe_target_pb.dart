@@ -72,18 +72,17 @@ class PlayModeMPETargetPb extends PlayModeHandler {
     else if (pitchPercentage < 0) {
       final mappedPercentage = Utils.mapValueToTargetRange(
           pitchPercentage, -1, -pitchDeadzone, -1, 0);
-      pitchModifier =
-          ((semitonePitchbendRange * data.customPad!.pitchBendLeft) *
-                  mappedPercentage) /
-              0x3FFF /
-              2;
+      pitchModifier = ((semitonePitchbendRange * data.customPad.pitchBendLeft) *
+              mappedPercentage) /
+          0x3FFF /
+          2;
     }
     // right (positive)
     else {
       final mappedPercentage =
           Utils.mapValueToTargetRange(pitchPercentage, pitchDeadzone, 1, 0, 1);
       pitchModifier =
-          ((semitonePitchbendRange * data.customPad!.pitchBendRight) *
+          ((semitonePitchbendRange * data.customPad.pitchBendRight) *
                   mappedPercentage) /
               0x3FFF /
               2;
@@ -118,6 +117,7 @@ class PlayModeMPETargetPb extends PlayModeHandler {
         touchReleaseBuffer.getByID(data.pointer);
     if (eventInBuffer == null) return;
 
+    // OVERLAY POSITION ///////////////////////////////////
     Offset touchPosition = data.screenTouchPos;
 
     // check if row limit is on
@@ -142,8 +142,11 @@ class PlayModeMPETargetPb extends PlayModeHandler {
     if (data.customPad != null) notifyParent(); // for overlay drawing
 
     if (settings.pitchbendOnlyOnRow &&
-        data.customPad?.row != eventInBuffer.noteEvent.pad.row) return;
+        data.customPad?.row != eventInBuffer.noteEvent.pad.row) {
+      return; // send no MPE message
+    }
 
+    // MPE MESSAGE //////////////////////////////////////////////////
     if (data.customPad?.padValue != null) {
       // SLIDE
       if (data.yPercentage != null) {
