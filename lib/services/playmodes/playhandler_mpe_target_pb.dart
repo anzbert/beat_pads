@@ -1,4 +1,5 @@
 import 'package:beat_pads/services/services.dart';
+import 'package:flutter/material.dart';
 
 class PlayModeMPETargetPb extends PlayModeHandler {
   PlayModeMPETargetPb(super.settings, super.notifyParent)
@@ -66,25 +67,44 @@ class PlayModeMPETargetPb extends PlayModeHandler {
         touchReleaseBuffer.getByID(data.pointer);
     if (eventInBuffer == null) return;
 
-    // Guard: MPE only on current row setting check
+    Offset touchPosition = data.screenTouchPos;
+
+    // check if row limit is on
     if (settings.pitchbendOnlyOnRow &&
-        data.customPad?.row != eventInBuffer.noteEvent.pad.row) return;
+        data.customPad?.row != eventInBuffer.noteEvent.pad.row) {
+      if (data.customPad != null) {
+        if (eventInBuffer.noteEvent.pad.row < data.customPad!.row) {
+          touchPosition = Offset(data.screenTouchPos.dx,
+              eventInBuffer.originPadBox.padPosition.dy);
+        } else if (eventInBuffer.noteEvent.pad.row > data.customPad!.row) {
+          touchPosition = Offset(
+              data.screenTouchPos.dx,
+              eventInBuffer.originPadBox.padPosition.dy +
+                  eventInBuffer.originPadBox.padSize.height);
+        }
+        eventInBuffer.updatePosition(touchPosition, eventInBuffer.newPadBox);
+      }
+    } else {
+      eventInBuffer.updatePosition(touchPosition, data.padBox);
+    }
 
     // commented out, since no drawing is required as of yet
-    eventInBuffer.updatePosition(data.screenTouchPos, data.padBox);
-    notifyParent(); // for overlay drawing
+    if (data.customPad != null) notifyParent(); // for overlay drawing
+
+    if (settings.pitchbendOnlyOnRow &&
+        data.customPad?.row != eventInBuffer.noteEvent.pad.row) return;
 
     // print(eventInBuffer.newPosition);
 
     if (data.customPad?.padValue != null) {
       // SLIDE
-      // if (data.yPercentage != null) {
-      //   mpeMods.yMod.send(
-      //     eventInBuffer.noteEvent.channel,
-      //     eventInBuffer.noteEvent.note,
-      //     data.yPercentage! * 2 - 1,
-      //   );
-      // }
+      if (data.yPercentage != null) {
+        mpeMods.yMod.send(
+          eventInBuffer.noteEvent.channel,
+          eventInBuffer.noteEvent.note,
+          data.yPercentage! * 2 - 1,
+        );
+      }
 
       // PITCHBEND
 
