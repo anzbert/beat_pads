@@ -63,15 +63,16 @@ abstract class Utils {
   ) {
     final double inputRange = inputRangeEnd - inputRangeStart;
     if (inputRange == 0) {
+      return 0;
       throw ('input range cant be zero'); // prevent dividing by 0
     }
-
+    final double outputRange = outputRangeEnd - outputRangeStart;
+    if (outputRange == 0) {
+      throw ('output range cant be zero'); // prevent dividing by 0
+    }
     if (inputValue > inputRangeEnd || inputValue < inputRangeStart) {
       throw ('input value outside of input range');
     }
-
-    final double outputRange = outputRangeEnd - outputRangeStart;
-    if (outputRange == 0) return 0;
 
     return (inputValue - inputRangeStart) * outputRange / inputRange +
         outputRangeStart;

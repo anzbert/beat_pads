@@ -31,6 +31,7 @@ class PaintPushStyle extends ConsumerWidget {
           (touchEvent) {
             return CustomPaint(
               painter: CustomPaintPushOverlay(
+                originXPercentage: touchEvent.originXPercentage,
                 relativeMode: !touchEvent.leftInitialPad &&
                     ref.watch(mpeRelativeModeProv),
                 screenSize: screenSize,

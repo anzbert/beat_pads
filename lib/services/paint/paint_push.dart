@@ -15,7 +15,8 @@ class CustomPaintPushOverlay extends CustomPainter {
     required this.colorX,
     required this.colorY,
     required this.relativeMode,
-  }) : halfPitchDeadzoneFraction = pitchDeadzonePercent / 100 / 2;
+    required this.originXPercentage,
+  }) : pitchDeadzoneFraction = pitchDeadzonePercent / 100;
 
   final bool relativeMode;
   final Size screenSize;
@@ -26,7 +27,8 @@ class CustomPaintPushOverlay extends CustomPainter {
   final bool dirty;
   final PadBox padBox;
   final PadBox originPadBox;
-  final double halfPitchDeadzoneFraction;
+  final double pitchDeadzoneFraction;
+  final double originXPercentage;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -35,54 +37,44 @@ class CustomPaintPushOverlay extends CustomPainter {
 
     final double padSpacing = screenSize.width * ThemeConst.padSpacingFactor;
 
-    final Rect padRect = Rect.fromPoints(
-      padBox.padPosition + Offset(padSpacing, padSpacing),
-      padBox.padPosition
-              .translate(padBox.padSize.width, padBox.padSize.height) -
-          Offset(padSpacing, padSpacing),
-    );
-    // final Rect padRect = Rect.fromPoints(
-    //   padBox.padPosition,
-    //   padBox.padPosition + Offset(padBox.padSize.width, padBox.padSize.height),
+    // final Rect padRectPadded = Rect.fromPoints(
+    //   padBox.padPosition + Offset(padSpacing, padSpacing),
+    //   padBox.padPosition
+    //           .translate(padBox.padSize.width, padBox.padSize.height) -
+    //       Offset(padSpacing, padSpacing),
     // );
+    final Rect padRect = Rect.fromPoints(
+      padBox.padPosition,
+      padBox.padPosition + Offset(padBox.padSize.width, padBox.padSize.height),
+    );
     final padSpacingPercentage = padSpacing * 2 / padRect.width;
 
     // canvas.drawRect(padRect, Paint()..color = Palette.cadetBlue);
 
     // origin to pointer line:
     final Paint stroke1 = Paint()
-      ..color = Palette.cadetBlue
+      ..color = colorX
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 10
-      ..strokeCap = StrokeCap.round;
+      ..strokeWidth = 6
+      ..strokeCap = StrokeCap.butt;
     // canvas.drawLine(originPadBox.padCenter, change, stroke1);
 
     // VERTICAL LINE
-    final leftBorder = 0.5 - halfPitchDeadzoneFraction + padSpacingPercentage;
-    final rightBorder = 0.5 + halfPitchDeadzoneFraction - padSpacingPercentage;
-
-    final Paint gradient = Paint()
-      ..shader = ui.Gradient.linear(
-        padRect.centerRight,
-        padRect.centerLeft,
-        [
-          colorX.withOpacity(0.0),
-          colorX.withOpacity(0.5),
-          colorX,
-          colorX,
-          colorX.withOpacity(0.5),
-          colorX.withOpacity(0.0),
-        ],
-        [
-          0,
-          leftBorder,
-          leftBorder + 0.02,
-          rightBorder - 0.02,
-          rightBorder,
-          1,
-        ],
-      );
-    canvas.drawRRect(RRect.fromRectAndRadius(padRect, padRadius), gradient);
+    if (relativeMode) {
+      canvas.drawLine(
+          Offset(origin.dx, padRect.top + padSpacing),
+          Offset(origin.dx, padRect.bottom - padSpacing),
+          stroke1
+            ..strokeWidth =
+                (padRect.width - 2 * padSpacing) * pitchDeadzoneFraction);
+    } else {
+      canvas.drawLine(
+          padRect.topCenter + Offset(0, padSpacing),
+          padRect.bottomCenter - Offset(0, padSpacing),
+          stroke1
+            ..strokeWidth =
+                (padRect.width - 2 * padSpacing) * pitchDeadzoneFraction);
+    }
 
     // HORIZONTAL LINE
     final Paint brush1 = Paint()
@@ -107,9 +99,9 @@ class CustomPaintPushOverlay extends CustomPainter {
 
     // Center
     if (relativeMode) {
-      canvas.drawCircle(origin, 5, stroke1);
+      canvas.drawCircle(origin, 5, brush1);
     } else {
-      canvas.drawCircle(padRect.center, 5, stroke1);
+      canvas.drawCircle(padRect.center, 5, brush1);
     }
   }
 

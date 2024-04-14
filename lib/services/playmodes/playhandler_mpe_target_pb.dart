@@ -193,45 +193,99 @@ class PlayModeMPETargetPb extends PlayModeHandler {
       }
 
       // PITCHBEND
-      /// coarse pitch adjustment to the tone that it is currently bent to in -1 to +1
-      pitchDistance =
-          ((data.customPad!.padValue - eventInBuffer.noteEvent.note) / 48)
-              .clamp(-1.0, 1.0);
+      // relative mode
+      if (settings.mpeRelativeMode && !eventInBuffer.leftInitialPad) {
+        if (data.xPercentage != null) {
+          // still on initial pad
+          pitchDistance = 0;
+          final double xPercentageMiddle = eventInBuffer.originXPercentage;
 
-      if (data.xPercentage != null) {
-        /// maps the 0 to 1.0 X-axis value on pad to a range between -1.0 and +1.0
-        final double pitchPercentage = data.xPercentage! * 2 - 1;
+          double adjustedMiddle = 0;
+          if (data.xPercentage! <= xPercentageMiddle) {
+            adjustedMiddle = Utils.mapValueToTargetRange(
+                data.xPercentage!, 0, xPercentageMiddle, 0, 0.5);
+          } else {
+            adjustedMiddle = Utils.mapValueToTargetRange(
+                data.xPercentage!, xPercentageMiddle, 1, 0.5, 1);
+          }
 
-        if (pitchPercentage.abs() < pitchDeadzone) {
-          pitchModifier = 0;
+          /// maps the 0 to 1.0 X-axis value on pad to a range between -1.0 and +1.0
+          final double pitchPercentage = adjustedMiddle * 2 - 1;
+
+          if (pitchPercentage.abs() < pitchDeadzone) {
+            pitchModifier = 0;
+          }
+          // left (negative)
+          else if (pitchPercentage < 0) {
+            final mappedPercentage = Utils.mapValueToTargetRange(
+                pitchPercentage, -1, -pitchDeadzone, -1, 0);
+            pitchModifier =
+                ((semitonePitchbendRange * data.customPad!.pitchBendLeft) *
+                        mappedPercentage) /
+                    0x3FFF /
+                    2;
+          }
+          // right (positive)
+          else {
+            final mappedPercentage = Utils.mapValueToTargetRange(
+                pitchPercentage, pitchDeadzone, 1, 0, 1);
+            pitchModifier =
+                ((semitonePitchbendRange * data.customPad!.pitchBendRight) *
+                        mappedPercentage) /
+                    0x3FFF /
+                    2;
+          }
         }
-        // left (negative)
-        else if (pitchPercentage < 0) {
-          final mappedPercentage = Utils.mapValueToTargetRange(
-              pitchPercentage, -1, -pitchDeadzone, -1, 0);
-          pitchModifier =
-              ((semitonePitchbendRange * data.customPad!.pitchBendLeft) *
-                      mappedPercentage) /
-                  0x3FFF /
-                  2;
-        }
-        // right (positive)
-        else {
-          final mappedPercentage = Utils.mapValueToTargetRange(
-              pitchPercentage, pitchDeadzone, 1, 0, 1);
-          pitchModifier =
-              ((semitonePitchbendRange * data.customPad!.pitchBendRight) *
-                      mappedPercentage) /
-                  0x3FFF /
-                  2;
-        }
+
+        mpeMods.xMod.send(
+          eventInBuffer.noteEvent.channel,
+          eventInBuffer.noteEvent.note,
+          pitchDistance + pitchModifier,
+        );
       }
 
-      mpeMods.xMod.send(
-        eventInBuffer.noteEvent.channel,
-        eventInBuffer.noteEvent.note,
-        pitchDistance + pitchModifier,
-      );
+      // absolute mode
+      else {
+        /// coarse pitch adjustment to the tone that it is currently bent to in -1 to +1
+        pitchDistance =
+            ((data.customPad!.padValue - eventInBuffer.noteEvent.note) / 48)
+                .clamp(-1.0, 1.0);
+
+        if (data.xPercentage != null) {
+          /// maps the 0 to 1.0 X-axis value on pad to a range between -1.0 and +1.0
+          final double pitchPercentage = data.xPercentage! * 2 - 1;
+
+          if (pitchPercentage.abs() < pitchDeadzone) {
+            pitchModifier = 0;
+          }
+          // left (negative)
+          else if (pitchPercentage < 0) {
+            final mappedPercentage = Utils.mapValueToTargetRange(
+                pitchPercentage, -1, -pitchDeadzone, -1, 0);
+            pitchModifier =
+                ((semitonePitchbendRange * data.customPad!.pitchBendLeft) *
+                        mappedPercentage) /
+                    0x3FFF /
+                    2;
+          }
+          // right (positive)
+          else {
+            final mappedPercentage = Utils.mapValueToTargetRange(
+                pitchPercentage, pitchDeadzone, 1, 0, 1);
+            pitchModifier =
+                ((semitonePitchbendRange * data.customPad!.pitchBendRight) *
+                        mappedPercentage) /
+                    0x3FFF /
+                    2;
+          }
+        }
+
+        mpeMods.xMod.send(
+          eventInBuffer.noteEvent.channel,
+          eventInBuffer.noteEvent.note,
+          pitchDistance + pitchModifier,
+        );
+      }
     }
   }
 
