@@ -138,7 +138,7 @@ class PlayModeMPETargetPb extends PlayModeHandler {
     } else {
       eventInBuffer.updatePosition(touchPosition, data.padBox);
     }
-
+    
     if (data.customPad != null) notifyParent(); // for overlay drawing
 
     if (settings.pitchbendOnlyOnRow &&
