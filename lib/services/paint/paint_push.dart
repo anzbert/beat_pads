@@ -16,8 +16,11 @@ class CustomPaintPushOverlay extends CustomPainter {
     required this.colorY,
     required this.relativeMode,
     required this.originXPercentage,
+    required this.yMod,
   }) : pitchDeadzoneFraction = pitchDeadzonePercent / 100;
 
+  final bool yMod;
+  // final bool xMod;
   final bool relativeMode;
   final Size screenSize;
   final Offset origin;
@@ -59,7 +62,7 @@ class CustomPaintPushOverlay extends CustomPainter {
       ..strokeCap = StrokeCap.butt;
     // canvas.drawLine(originPadBox.padCenter, change, stroke1);
 
-    // VERTICAL LINE
+    // VERTICAL LINE (deadzone)
     if (relativeMode) {
       canvas.drawLine(
           Offset(origin.dx, padRect.top + padSpacing),
@@ -94,8 +97,10 @@ class CustomPaintPushOverlay extends CustomPainter {
         [0, 0.1, 0.5, 0.9, 1],
       );
     // final Paint brush2 = Paint();
-    canvas.drawLine(Offset(padRect.left, change.dy),
-        Offset(padRect.right, change.dy), stroke2);
+    if (yMod) {
+      canvas.drawLine(Offset(padRect.left, change.dy),
+          Offset(padRect.right, change.dy), stroke2);
+    }
 
     // Center
     final Paint stroke3 = Paint()

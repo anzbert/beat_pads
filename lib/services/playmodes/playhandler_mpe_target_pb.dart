@@ -106,7 +106,7 @@ class PlayModeMPETargetPb extends PlayModeHandler {
 
       pitchModifier = 0;
       if (realXPercentage < leftDeadzoneBorder) {
-        // left (negative)
+        // left (negative: -1 to [leftDeadzoneBorder])
         final mappedPercentage = Utils.mapValueToTargetRange(
           pitchPercentage.clamp(-percentageEdge, -pitchDeadzone),
           -percentageEdge,
@@ -120,7 +120,7 @@ class PlayModeMPETargetPb extends PlayModeHandler {
                 0x3FFF /
                 2;
       }
-      // right
+      // right (positive: [rightDeadzoneBorder] to 1)
       else if (realXPercentage > rightDeadzoneBorder) {
         final mappedPercentage = Utils.mapValueToTargetRange(
           pitchPercentage.clamp(pitchDeadzone, percentageEdge),
@@ -195,7 +195,8 @@ class PlayModeMPETargetPb extends PlayModeHandler {
       }
       eventInBuffer.updatePosition(touchPosition, eventInBuffer.newPadBox);
       notifyParent();
-    } else {
+    } else if (data.customPad?.row == eventInBuffer.noteEvent.pad.row &&
+        data.customPad != null) {
       eventInBuffer.updatePosition(touchPosition, data.padBox);
       notifyParent();
     }
@@ -263,8 +264,8 @@ class PlayModeMPETargetPb extends PlayModeHandler {
 
     // X - AXIS PITCHBEND ///////////////////////////////////////////
     //
-    // RELATIVE mode
-    if (settings.mpeRelativeMode && !eventInBuffer.leftInitialPad) {
+    // RELATIVE mode TODO this one doesnt work + visualization is screwed
+    if (settings.mpeRelativeMode && eventInBuffer.leftInitialPad == false) {
       /// coarse pitch adjustment to the tone that it is currently bent to in -1 to +1
       pitchDistance = 0;
 
@@ -272,9 +273,9 @@ class PlayModeMPETargetPb extends PlayModeHandler {
       if (data.padBox == null) return;
 
       final double leftDeadzoneBorder =
-          (eventInBuffer.originXPercentage - pitchDeadzone / 2).clamp(-1, 1);
+          (realXPercentage - pitchDeadzone / 2).clamp(-1, 1);
       final double rightDeadzoneBorder =
-          (eventInBuffer.originXPercentage + pitchDeadzone / 2).clamp(-1, 1);
+          (realXPercentage + pitchDeadzone / 2).clamp(-1, 1);
 
       /// maps the 0 to 1.0 X-axis value on pad to a range between -1.0 and +1.0
       double pitchPercentage = realXPercentage * 2 - 1;
@@ -282,7 +283,7 @@ class PlayModeMPETargetPb extends PlayModeHandler {
 
       pitchModifier = 0;
 
-      // left (negative)
+      // left (negative: -1 to [leftDeadzoneBorder])
       if (realXPercentage < leftDeadzoneBorder) {
         final mappedPercentage = Utils.mapValueToTargetRange(
           pitchPercentage.clamp(-percentageEdge, -leftDeadzoneBorder),
@@ -297,7 +298,7 @@ class PlayModeMPETargetPb extends PlayModeHandler {
                 0x3FFF /
                 2;
       }
-      // right (positive)
+      // right (positive: [rightDeadzoneBorder] to 1)
       else if (realXPercentage > rightDeadzoneBorder) {
         final mappedPercentage = Utils.mapValueToTargetRange(
           pitchPercentage.clamp(rightDeadzoneBorder, percentageEdge),
@@ -319,7 +320,7 @@ class PlayModeMPETargetPb extends PlayModeHandler {
       );
     }
 
-    // ABSOLUTE mode TODO broken again ?!
+    // ABSOLUTE mode
     else {
       /// coarse pitch adjustment to the tone that it is currently bent to in -1 to +1
       pitchDistance =
@@ -334,7 +335,7 @@ class PlayModeMPETargetPb extends PlayModeHandler {
 
       pitchModifier = 0;
       if (realXPercentage < leftDeadzoneBorder) {
-        // left (negative)
+        // left (negative: -1 to [leftDeadzoneBorder])
         final mappedPercentage = Utils.mapValueToTargetRange(
           pitchPercentage.clamp(-percentageEdge, -pitchDeadzone),
           -percentageEdge,
@@ -348,7 +349,7 @@ class PlayModeMPETargetPb extends PlayModeHandler {
                 0x3FFF /
                 2;
       }
-      // right
+      // right (positive: [rightDeadzoneBorder] to 1)
       else if (realXPercentage > rightDeadzoneBorder) {
         final mappedPercentage = Utils.mapValueToTargetRange(
           pitchPercentage.clamp(pitchDeadzone, percentageEdge),

@@ -49,6 +49,8 @@ class PaintPushStyle extends ConsumerWidget {
                 change: box.globalToLocal(touchEvent.newPosition),
                 colorX: touchEvent.dirty ? dirtyColor : Colors.white,
                 colorY: touchEvent.dirty ? dirtyColor : Palette.lightGrey,
+                yMod: ref.watch(mpePushYAxisModeProv) !=
+                    MPEpushStyleYAxisMods.none,
                 // colorX: Colors.white,
                 // colorY: Palette.lightGrey,
               ),
