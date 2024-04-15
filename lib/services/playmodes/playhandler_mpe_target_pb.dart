@@ -273,22 +273,25 @@ class PlayModeMPETargetPb extends PlayModeHandler {
       if (data.padBox == null) return;
 
       final double leftDeadzoneBorder =
-          (realXPercentage - pitchDeadzone / 2).clamp(-1, 1);
+          ((eventInBuffer.originXPercentage - pitchDeadzone / 2) * 2 - 1)
+              .clamp(-percentageEdge, 1);
       final double rightDeadzoneBorder =
-          (realXPercentage + pitchDeadzone / 2).clamp(-1, 1);
+          ((eventInBuffer.originXPercentage + pitchDeadzone / 2) * 2 - 1)
+              .clamp(-1, percentageEdge);
 
       /// maps the 0 to 1.0 X-axis value on pad to a range between -1.0 and +1.0
       double pitchPercentage = realXPercentage * 2 - 1;
-      // print(leftDeadzoneBorder);
+      print(leftDeadzoneBorder);
 
       pitchModifier = 0;
+      // print(leftDeadzoneBorder);
 
       // left (negative: -1 to [leftDeadzoneBorder])
-      if (realXPercentage < leftDeadzoneBorder) {
+      if (pitchPercentage < leftDeadzoneBorder) {
         final mappedPercentage = Utils.mapValueToTargetRange(
-          pitchPercentage.clamp(-percentageEdge, -leftDeadzoneBorder),
+          pitchPercentage.clamp(-percentageEdge, leftDeadzoneBorder),
           -percentageEdge,
-          -leftDeadzoneBorder,
+          leftDeadzoneBorder,
           -1,
           0,
         );
@@ -299,7 +302,7 @@ class PlayModeMPETargetPb extends PlayModeHandler {
                 2;
       }
       // right (positive: [rightDeadzoneBorder] to 1)
-      else if (realXPercentage > rightDeadzoneBorder) {
+      else if (pitchPercentage > rightDeadzoneBorder) {
         final mappedPercentage = Utils.mapValueToTargetRange(
           pitchPercentage.clamp(rightDeadzoneBorder, percentageEdge),
           rightDeadzoneBorder,
