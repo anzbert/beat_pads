@@ -69,18 +69,37 @@ class PlayModeMPETargetPb extends PlayModeHandler {
 
     // ABSOLUTE mode (the MPE value center is always in the centre of the pad)
     else {
+      // Working Variables:
+      final double realYPercentage = data.yPercentage;
+      final double realXPercentage = data.xPercentage;
+
+      // Y - AXIS SLIDE ////////////////////////////////////////////////
+      //
+      final double clampedYPercentage = Utils.mapValueToTargetRange(
+        realYPercentage.clamp(1 - percentageEdge, percentageEdge),
+        1 - percentageEdge,
+        percentageEdge,
+        0,
+        1,
+      );
+
+      mpeMods.yMod.send(
+        newChannel,
+        data.customPad.padValue,
+        clampedYPercentage * 2 - 1,
+      );
+
+      final double leftDeadzoneBorder = 0.5 - pitchDeadzone / 2;
+      final double rightDeadzoneBorder = 0.5 + pitchDeadzone / 2;
+
+      // X - AXIS PITCHBEND ///////////////////////////////////////////
+      //
+      // Working variables:
       /// coarse pitch adjustment to the tone that it is currently bent to in -1 to +1
       double pitchDistance = 0;
 
       /// fine adjustment of the pitch bend
       double pitchModifier = 0;
-
-      /// coarse pitch adjustment to the tone that it is currently bent to in -1 to +1
-      pitchDistance = 0;
-      final double realXPercentage = data.xPercentage;
-
-      final double leftDeadzoneBorder = 0.5 - pitchDeadzone / 2;
-      final double rightDeadzoneBorder = 0.5 + pitchDeadzone / 2;
 
       /// maps the 0 to 1.0 X-axis value on pad to a range between -1.0 and +1.0
       double pitchPercentage = realXPercentage * 2 - 1;
@@ -198,13 +217,6 @@ class PlayModeMPETargetPb extends PlayModeHandler {
     // Working Variables:
     final double realYPercentage = data.yPercentage!;
     final double realXPercentage = data.xPercentage!;
-    final double clampedYPercentage = Utils.mapValueToTargetRange(
-      realYPercentage.clamp(1 - percentageEdge, percentageEdge),
-      1 - percentageEdge,
-      percentageEdge,
-      0,
-      1,
-    );
 
     /// coarse pitch adjustment to the tone that it is currently bent to in -1 to +1
     double pitchDistance = 0;
@@ -214,6 +226,13 @@ class PlayModeMPETargetPb extends PlayModeHandler {
 
     // Y - AXIS SLIDE ////////////////////////////////////////////////
     //
+    final double clampedYPercentage = Utils.mapValueToTargetRange(
+      realYPercentage.clamp(1 - percentageEdge, percentageEdge),
+      1 - percentageEdge,
+      percentageEdge,
+      0,
+      1,
+    );
     // RELATIVE mode
     if (settings.mpeRelativeMode && !eventInBuffer.leftInitialPad) {
       final double yPercentageMiddle = eventInBuffer.originYPercentage;
