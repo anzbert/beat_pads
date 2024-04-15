@@ -39,9 +39,10 @@ class PlayModeMPETargetPb extends PlayModeHandler {
   /// Returns the velocity if a given note is ON in any channel.
   /// Checks releasebuffer and active touchbuffer
   /// The MPE Push Style mode doesn't show activated notes at this stage
-  /// TODO check if velocity display works at all
   @override
-  int isNoteOn(int note) => 0;
+  int isNoteOn(int note) {
+    return 0;
+  }
 
   // NEW TOUCH //////////////////////////////////////////////////////////////
   /// Handles a new touch of a pad in the MPE Push style mode
@@ -263,7 +264,7 @@ class PlayModeMPETargetPb extends PlayModeHandler {
 
     // X - AXIS PITCHBEND ///////////////////////////////////////////
     //
-    // RELATIVE mode TODO this one doesnt work + visualization is screwed
+    // RELATIVE mode
     if (settings.mpeRelativeMode && eventInBuffer.leftInitialPad == false) {
       /// coarse pitch adjustment to the tone that it is currently bent to in -1 to +1
       pitchDistance = 0;
@@ -307,36 +308,6 @@ class PlayModeMPETargetPb extends PlayModeHandler {
                 2;
       }
 
-      // // left (negative: -1 to [leftDeadzoneBorder])
-      // if (pitchPercentage <= xPercentageMiddle) {
-      //   final mappedPercentage = Utils.mapValueToTargetRange(
-      //     pitchPercentage.clamp(-percentageEdge, leftDeadzoneBorder),
-      //     -percentageEdge,
-      //     leftDeadzoneBorder,
-      //     -1,
-      //     0,
-      //   );
-      //   pitchModifier =
-      //       ((semitonePitchbendRange * data.customPad!.pitchBendLeft) *
-      //               mappedPercentage) /
-      //           0x3FFF /
-      //           2;
-      // }
-      // // right (positive: [rightDeadzoneBorder] to 1)
-      // else {
-      //   final mappedPercentage = Utils.mapValueToTargetRange(
-      //     pitchPercentage.clamp(rightDeadzoneBorder, percentageEdge),
-      //     rightDeadzoneBorder,
-      //     percentageEdge,
-      //     0,
-      //     1,
-      //   );
-      //   pitchModifier =
-      //       ((semitonePitchbendRange * data.customPad!.pitchBendRight) *
-      //               mappedPercentage) /
-      //           0x3FFF /
-      //           2;
-      // }
       mpeMods.xMod.send(
         eventInBuffer.noteEvent.channel,
         eventInBuffer.noteEvent.note,

@@ -71,6 +71,28 @@ class CustomPaintPushOverlay extends CustomPainter {
                 (padRect.width - 2 * padSpacing) * pitchDeadzoneFraction);
     }
 
+    // Draw modulation center
+    final Paint fill1 = Paint()
+      ..style = PaintingStyle.fill
+      ..color = Colors.black.withOpacity(0.4);
+
+    final Paint stroke2 = stroke1..strokeWidth = 4;
+
+    if (relativeMode) {
+      canvas.drawLine(Offset(padRect.left + padSpacing, origin.dy),
+          Offset(padRect.right - padSpacing, origin.dy), fill1);
+      canvas.drawLine(Offset(origin.dx, padRect.top + padSpacing),
+          Offset(origin.dx, padRect.bottom - padSpacing), stroke1);
+      // canvas.drawCircle(origin, 3, fill1);
+    } else {
+      canvas.drawLine(Offset(padRect.left + padSpacing, padRect.center.dy),
+          Offset(padRect.right - padSpacing, padRect.center.dy), fill1);
+
+      // canvas.drawLine(Offset(padRect.center.dx, padRect.top),
+      //     Offset(padRect.center.dx, padRect.bottom), stroke3);
+      // canvas.drawCircle(padRect.center, 3, fill1);
+    }
+
     // HORIZONTAL LINE (modulation)
     final Paint gradientBrush1 = Paint()
       ..style = PaintingStyle.stroke
@@ -93,37 +115,12 @@ class CustomPaintPushOverlay extends CustomPainter {
       canvas.drawLine(Offset(padRect.left, change.dy),
           Offset(padRect.right, change.dy), gradientBrush1);
     }
-
-    // Draw modulation center
-    final Paint fill1 = Paint()
-      ..style = PaintingStyle.fill
-      ..color = Colors.black.withOpacity(0.4);
-
-    final Paint stroke3 = Paint()
-      ..color = Colors.black.withOpacity(0.3)
-      ..strokeCap = StrokeCap.butt
-      ..strokeWidth = 4;
-
-    if (relativeMode) {
-      // canvas.drawLine(Offset(padRect.left, origin.dy),
-      //     Offset(padRect.right, origin.dy), stroke3);
-      canvas.drawLine(Offset(origin.dx, padRect.top + padSpacing),
-          Offset(origin.dx, padRect.bottom - padSpacing), stroke1);
-      canvas.drawCircle(origin, 4, fill1);
-    } else {
-      // canvas.drawLine(Offset(padRect.left, padRect.center.dy),
-      //     Offset(padRect.right, padRect.center.dy), stroke3);
-
-      // canvas.drawLine(Offset(padRect.center.dx, padRect.top),
-      //     Offset(padRect.center.dx, padRect.bottom), stroke3);
-      canvas.drawCircle(padRect.center, 4, fill1);
-    }
   }
 
-  final Paint stroke3 = Paint()
-    ..color = Palette.cadetBlue
-    ..strokeCap = StrokeCap.butt
-    ..strokeWidth = 4;
+  // final Paint stroke3 = Paint()
+  //   ..color = Palette.cadetBlue
+  //   ..strokeCap = StrokeCap.butt
+  //   ..strokeWidth = 4;
 
   @override
   bool shouldRepaint(CustomPaintPushOverlay oldDelegate) {
