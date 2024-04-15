@@ -88,7 +88,7 @@ class MenuSystem extends ConsumerWidget {
           body: [
             'I want to thank these amazing testers for their extremely helpful feedback:',
             '',
-            'Samplix,  A. Samek,  tput73,  bruques',
+            'Samplix,  A. Samek,  tyslothrop1,  tput73,  bruques',
             '',
             'Thanks also to anyone I may have forgotten to mention!',
           ],
