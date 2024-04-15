@@ -201,7 +201,7 @@ class PlayModeMPETargetPb extends PlayModeHandler {
       eventInBuffer.updatePosition(touchPosition, data.padBox);
       notifyParent();
     }
-
+    
     // Guard:
     // send no MPE message if row-limit mode is on and the touch is on a pad outside the current row
     if (settings.pitchbendOnlyOnRow &&
