@@ -39,10 +39,10 @@ class PlayModeMPETargetPb extends PlayModeHandler {
   /// Returns the velocity if a given note is ON in any channel.
   /// Checks releasebuffer and active touchbuffer
   /// The MPE Push Style mode doesn't show activated notes at this stage
-  @override
-  int isNoteOn(int note) {
-    return 0;
-  }
+  // @override
+  // int isNoteOn(int note) {
+  //   return 0;
+  // }
 
   // NEW TOUCH //////////////////////////////////////////////////////////////
   /// Handles a new touch of a pad in the MPE Push style mode
@@ -175,7 +175,8 @@ class PlayModeMPETargetPb extends PlayModeHandler {
 
     // Check if finger movement has left the initial pad yet,
     // and mark the event in that case
-    if (eventInBuffer.noteEvent.pad.id != data.customPad?.id) {
+    if (eventInBuffer.noteEvent.pad.id != data.customPad?.id &&
+        data.customPad != null) {
       eventInBuffer.leftInitialPad = true;
     }
 

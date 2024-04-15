@@ -22,11 +22,12 @@ class PaintPushStyle extends ConsumerWidget {
           ...midiSender.playModeHandler.touchReleaseBuffer.buffer,
           ...midiSender.playModeHandler.touchBuffer.buffer,
         ]
-            .where(
-          (element) =>
-              element.directionalChangeUnclamped() >=
-              const Offset(1, 1), // filter out smaller than 1 px events
-        )
+            //     .where(
+            //   (element) =>
+            //       element.directionalChangeUnclamped() >=
+            //       const Offset(
+            //           0.1, 0.1), // filter out smaller than 1 px movement events
+            // )
             .map(
           (touchEvent) {
             return CustomPaint(
@@ -47,8 +48,6 @@ class PaintPushStyle extends ConsumerWidget {
                           box.globalToLocal(touchEvent.newPadBox.padPosition),
                       padSize: touchEvent.newPadBox.padSize),
                   change: box.globalToLocal(touchEvent.newPosition),
-                  colorX: touchEvent.dirty ? dirtyColor : Colors.white,
-                  colorY: touchEvent.dirty ? dirtyColor : Palette.lightGrey,
                   yMod: ref.watch(mpePushYAxisModeProv) !=
                       MPEpushStyleYAxisMods.none,
                   xMod: ref.watch(mpeRelativeModeProv)
