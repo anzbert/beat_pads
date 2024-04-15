@@ -17,10 +17,11 @@ class CustomPaintPushOverlay extends CustomPainter {
     required this.relativeMode,
     required this.originXPercentage,
     required this.yMod,
+    required this.xMod,
   }) : pitchDeadzoneFraction = pitchDeadzonePercent / 100;
 
   final bool yMod;
-  // final bool xMod;
+  final bool xMod;
   final bool relativeMode;
   final Size screenSize;
   final Offset origin;
@@ -35,42 +36,30 @@ class CustomPaintPushOverlay extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final Radius padRadius =
-        Radius.circular(screenSize.width * ThemeConst.padRadiusFactor);
-
+    // final Radius padRadius =
+    //     Radius.circular(screenSize.width * ThemeConst.padRadiusFactor);
+    // final padSpacingPercentage = padSpacing * 2 / padRect.width;
     final double padSpacing = screenSize.width * ThemeConst.padSpacingFactor;
 
-    // final Rect padRectPadded = Rect.fromPoints(
-    //   padBox.padPosition + Offset(padSpacing, padSpacing),
-    //   padBox.padPosition
-    //           .translate(padBox.padSize.width, padBox.padSize.height) -
-    //       Offset(padSpacing, padSpacing),
-    // );
     final Rect padRect = Rect.fromPoints(
       padBox.padPosition,
       padBox.padPosition + Offset(padBox.padSize.width, padBox.padSize.height),
     );
-    final padSpacingPercentage = padSpacing * 2 / padRect.width;
 
+    // draw whole rect
     // canvas.drawRect(padRect, Paint()..color = Palette.cadetBlue);
 
-    // origin to pointer line:
     final Paint stroke1 = Paint()
-      ..color = colorX
       ..style = PaintingStyle.stroke
+      ..color = colorX
       ..strokeWidth = 6
       ..strokeCap = StrokeCap.butt;
-    // canvas.drawLine(originPadBox.padCenter, change, stroke1);
+
+    // origin padbox center to pointer line:
+    canvas.drawLine(originPadBox.padCenter, change, stroke1);
 
     // VERTICAL LINE (deadzone)
-    if (relativeMode) {
-      canvas.drawLine(
-          Offset(origin.dx, padRect.top + padSpacing),
-          Offset(origin.dx, padRect.bottom - padSpacing),
-          stroke1
-            ..strokeWidth =
-                (padRect.width - 2 * padSpacing) * pitchDeadzoneFraction);
-    } else {
+    if (xMod) {
       canvas.drawLine(
           padRect.topCenter + Offset(0, padSpacing),
           padRect.bottomCenter - Offset(0, padSpacing),
@@ -79,7 +68,7 @@ class CustomPaintPushOverlay extends CustomPainter {
                 (padRect.width - 2 * padSpacing) * pitchDeadzoneFraction);
     }
 
-    // HORIZONTAL LINE
+    // HORIZONTAL LINE (modulation)
     final Paint stroke2 = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 8
