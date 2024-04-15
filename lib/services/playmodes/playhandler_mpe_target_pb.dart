@@ -195,8 +195,7 @@ class PlayModeMPETargetPb extends PlayModeHandler {
       }
       eventInBuffer.updatePosition(touchPosition, eventInBuffer.newPadBox);
       notifyParent();
-    } else if (data.customPad?.row == eventInBuffer.noteEvent.pad.row &&
-        data.customPad != null) {
+    } else {
       eventInBuffer.updatePosition(touchPosition, data.padBox);
       notifyParent();
     }
