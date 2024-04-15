@@ -14,85 +14,108 @@ class PlayModeMPETargetPb extends PlayModeHandler {
         ),
         pitchDeadzone = settings.pitchDeadzone / 100;
 
+  /// Currently selected Modulations on X and Y
   final SendMpe mpeMods;
+
+  /// Creates MPE channels for each new note event
   final MemberChannelProvider channelProvider;
 
-  /// current deadzone size in a percent fraction 0 to 1.0
+  /// Current x-axis deadzone size in a percent fraction 0.0 to 1.0
   final double pitchDeadzone;
 
-  /// The hex range of one semitone in the pitchbend 14bit range
+  /// The value width of one semitone in the pitchbend 14bit range
   static const double semitonePitchbendRange = 0x3FFF / 48;
 
-  /// coarse pitch adjustment to the tone that it is currently bent to in -1 to +1
-  double pitchDistance = 0;
+  /// Fraction value at which the pad registers a 1.0 (100%) of X or Y value
+  /// Conversely, at {1 - [percentageEdge]} a 0.0 is recorded
+  static const double percentageEdge = 0.9;
 
-  /// fine adjustment of the pitch bend
-  double pitchModifier = 0;
-
-  /// Release channel in MPE channel provider
+  /// Release channel in MPE channel provider when event has concluded
   @override
   void releaseMPEChannel(int channel) {
     channelProvider.releaseMPEChannel(channel);
   }
 
+  /// Returns the velocity if a given note is ON in any channel.
+  /// Checks releasebuffer and active touchbuffer
+  /// The MPE Push Style mode doesn't show activated notes at this stage
+  /// TODO check if velocity display works at all
+  @override
+  int isNoteOn(int note) => 0;
+
+  // NEW TOUCH //////////////////////////////////////////////////////////////
+  /// Handles a new touch of a pad in the MPE Push style mode
   @override
   void handleNewTouch(PadTouchAndScreenData data) {
-    // remove note if it is still playing
+    // Remove pressed note from buffer, if it was still on
     if (settings.modReleaseTime > 0 || settings.noteReleaseTime > 0) {
       touchReleaseBuffer.removeNoteFromReleaseBuffer(data.customPad.padValue);
     }
 
-    /// new channel from MPE channel generator
+    /// New channel from MPE channel generator
     final int newChannel = channelProvider.provideChannel([
       ...touchBuffer.buffer,
       ...touchReleaseBuffer.buffer,
     ]);
 
-    /////// MPE ////////////////////
+    // ///// MPE modulation //////////////////////////////////////////////////
     //
-    // Relative mode Slide (start with a value of 64, regardless of tap position on y-axis):
+    // RELATIVE mode (starts with a value of 64, regardless of tap position):
     if (settings.mpeRelativeMode) {
+      // 0 is the centre of -1.0 to 1.0 => 64
       mpeMods.xMod.send(newChannel, data.customPad.padValue, 0);
       mpeMods.yMod.send(newChannel, data.customPad.padValue, 0);
     }
 
-    // Absolute mode
+    // ABSOLUTE mode (the MPE value center is always in the centre of the pad)
     else {
-      // SLIDE
-      mpeMods.yMod.send(
-        newChannel,
-        data.customPad.padValue,
-        data.yPercentage * 2 - 1,
-      );
+      /// coarse pitch adjustment to the tone that it is currently bent to in -1 to +1
+      double pitchDistance = 0;
 
-      // PITCHBEND
+      /// fine adjustment of the pitch bend
+      double pitchModifier = 0;
+
+      /// coarse pitch adjustment to the tone that it is currently bent to in -1 to +1
+      pitchDistance = 0;
+      final double realXPercentage = data.xPercentage;
+
+      final double leftDeadzoneBorder = 0.5 - pitchDeadzone / 2;
+      final double rightDeadzoneBorder = 0.5 + pitchDeadzone / 2;
+
       /// maps the 0 to 1.0 X-axis value on pad to a range between -1.0 and +1.0
-      final double pitchPercentage = data.xPercentage * 2 - 1;
+      double pitchPercentage = realXPercentage * 2 - 1;
 
-      if (pitchPercentage.abs() < pitchDeadzone) {
-        pitchModifier = 0;
-      }
-      // left (negative)
-      else if (pitchPercentage < 0) {
+      pitchModifier = 0;
+      if (realXPercentage < leftDeadzoneBorder) {
+        // left (negative)
         final mappedPercentage = Utils.mapValueToTargetRange(
-            pitchPercentage, -1, -pitchDeadzone, -1, 0);
+          pitchPercentage.clamp(-percentageEdge, -pitchDeadzone),
+          -percentageEdge,
+          -pitchDeadzone,
+          -1,
+          0,
+        );
         pitchModifier =
             ((semitonePitchbendRange * data.customPad.pitchBendLeft) *
                     mappedPercentage) /
                 0x3FFF /
                 2;
       }
-      // right (positive)
-      else {
+      // right
+      else if (realXPercentage > rightDeadzoneBorder) {
         final mappedPercentage = Utils.mapValueToTargetRange(
-            pitchPercentage, pitchDeadzone, 1, 0, 1);
+          pitchPercentage.clamp(pitchDeadzone, percentageEdge),
+          pitchDeadzone,
+          percentageEdge,
+          0,
+          1,
+        );
         pitchModifier =
             ((semitonePitchbendRange * data.customPad.pitchBendRight) *
                     mappedPercentage) /
                 0x3FFF /
                 2;
       }
-
       mpeMods.xMod.send(
         newChannel,
         data.customPad.padValue,
@@ -100,8 +123,9 @@ class PlayModeMPETargetPb extends PlayModeHandler {
       );
     }
 
-    //////////////////////////////////////////////////
-
+    // NOTE EVENT ///////////////////////////////////////////////
+    /// [NoteEvent] to be sent via Midi, added to the [TouchEvent]
+    /// and stored in the [TouchBuffer]
     final NoteEvent noteOn = NoteEvent(
       newChannel,
       data.customPad,
@@ -116,183 +140,215 @@ class PlayModeMPETargetPb extends PlayModeHandler {
       data.xPercentage,
       data.yPercentage,
     );
-    notifyParent();
+
+    notifyParent(); // needs to be called, since the midi_send module is still using [ChangeNotifier]
   }
 
+  // PAN ////////////////////////////////////////////////////////////////
+  //
+  /// Handles finger pan movements in the MPE push style mode
   @override
   void handlePan(NullableTouchAndScreenData data) {
     final TouchEvent? eventInBuffer = touchBuffer.getByID(data.pointer) ??
         touchReleaseBuffer.getByID(data.pointer);
     if (eventInBuffer == null) return;
 
+    // Check if finger movement has left the initial pad yet,
+    // and mark the event in that case
     if (eventInBuffer.noteEvent.pad.id != data.customPad?.id) {
       eventInBuffer.leftInitialPad = true;
     }
 
-    // OVERLAY  ///////////////////////////////////
+    // ROW limit conditions
     Offset touchPosition = data.screenTouchPos;
 
-    // ROW limit conditions
     if (settings.pitchbendOnlyOnRow &&
-        data.customPad?.row != eventInBuffer.noteEvent.pad.row) {
-      if (data.customPad != null) {
-        if (eventInBuffer.noteEvent.pad.row < data.customPad!.row) {
-          touchPosition = Offset(data.screenTouchPos.dx,
-              eventInBuffer.originPadBox.padPosition.dy);
-        } else if (eventInBuffer.noteEvent.pad.row > data.customPad!.row) {
-          touchPosition = Offset(
-              data.screenTouchPos.dx,
-              eventInBuffer.originPadBox.padPosition.dy +
-                  eventInBuffer.originPadBox.padSize.height);
-        }
-        eventInBuffer.updatePosition(touchPosition, eventInBuffer.newPadBox);
+        data.customPad?.row != eventInBuffer.noteEvent.pad.row &&
+        data.customPad != null) {
+      if (eventInBuffer.noteEvent.pad.row < data.customPad!.row) {
+        touchPosition = Offset(
+            data.screenTouchPos.dx, eventInBuffer.originPadBox.padPosition.dy);
+      } else if (eventInBuffer.noteEvent.pad.row > data.customPad!.row) {
+        touchPosition = Offset(
+            data.screenTouchPos.dx,
+            eventInBuffer.originPadBox.padPosition.dy +
+                eventInBuffer.originPadBox.padSize.height);
       }
+      eventInBuffer.updatePosition(touchPosition, eventInBuffer.newPadBox);
+      notifyParent();
     } else {
       eventInBuffer.updatePosition(touchPosition, data.padBox);
+      notifyParent();
     }
 
-    if (data.customPad != null) notifyParent(); // for overlay drawing
-
+    // Guard:
+    // send no MPE message if row-limit mode is on and the touch is on a pad outside the current row
     if (settings.pitchbendOnlyOnRow &&
         data.customPad?.row != eventInBuffer.noteEvent.pad.row) {
-      return; // send no MPE message
+      return;
     }
 
-    // MPE MESSAGE //////////////////////////////////////////////////
-    if (data.customPad?.padValue != null) {
-      // SLIDE
-      if (data.yPercentage != null) {
-        // relative mode
-        if (settings.mpeRelativeMode && !eventInBuffer.leftInitialPad) {
-          if (data.yPercentage != null) {
-            final double yPercentageMiddle = eventInBuffer.originYPercentage;
-            double sendPercentage = 0;
+    // MPE Modulation Message ///////////////////////////////////////////
+    //
+    // Guards:
+    if (data.customPad?.padValue == null ||
+        data.yPercentage == null ||
+        data.xPercentage == null) return;
 
-            if (data.yPercentage! <= yPercentageMiddle) {
-              sendPercentage = Utils.mapValueToTargetRange(
-                  data.yPercentage!, 0, yPercentageMiddle, 0, 0.5);
-            } else {
-              sendPercentage = Utils.mapValueToTargetRange(
-                  data.yPercentage!, yPercentageMiddle, 1, 0.5, 1);
-            }
-            mpeMods.yMod.send(
-              eventInBuffer.noteEvent.channel,
-              eventInBuffer.noteEvent.note,
-              sendPercentage * 2 - 1,
-            );
-          }
-        }
-        // absolute mode
-        else {
-          mpeMods.yMod.send(
-            eventInBuffer.noteEvent.channel,
-            eventInBuffer.noteEvent.note,
-            data.yPercentage! * 2 - 1,
-          );
-        }
+    // Working Variables:
+    final double realYPercentage = data.yPercentage!;
+    final double realXPercentage = data.xPercentage!;
+    final double clampedYPercentage = Utils.mapValueToTargetRange(
+      realYPercentage.clamp(1 - percentageEdge, percentageEdge),
+      1 - percentageEdge,
+      percentageEdge,
+      0,
+      1,
+    );
+
+    /// coarse pitch adjustment to the tone that it is currently bent to in -1 to +1
+    double pitchDistance = 0;
+
+    /// fine adjustment of the pitch bend
+    double pitchModifier = 0;
+
+    // Y - AXIS SLIDE ////////////////////////////////////////////////
+    //
+    // RELATIVE mode
+    if (settings.mpeRelativeMode && !eventInBuffer.leftInitialPad) {
+      final double yPercentageMiddle = eventInBuffer.originYPercentage;
+      double sendPercentage = 0;
+
+      if (clampedYPercentage <= yPercentageMiddle) {
+        sendPercentage = Utils.mapValueToTargetRange(
+            clampedYPercentage, 0, yPercentageMiddle, 0, 0.5);
+      } else {
+        sendPercentage = Utils.mapValueToTargetRange(
+            clampedYPercentage, yPercentageMiddle, 1, 0.5, 1);
       }
+      mpeMods.yMod.send(
+        eventInBuffer.noteEvent.channel,
+        eventInBuffer.noteEvent.note,
+        sendPercentage * 2 - 1,
+      );
+    }
+    //
+    // ABSOLUTE mode
+    else {
+      mpeMods.yMod.send(
+        eventInBuffer.noteEvent.channel,
+        eventInBuffer.noteEvent.note,
+        clampedYPercentage * 2 - 1,
+      );
+    }
 
-      // PITCHBEND
-      // relative mode
-      if (settings.mpeRelativeMode && !eventInBuffer.leftInitialPad) {
-        if (data.xPercentage != null) {
-          // still on initial pad
-          pitchDistance = 0;
-          final double xPercentageMiddle = eventInBuffer.originXPercentage;
+    // X - AXIS PITCHBEND ///////////////////////////////////////////
+    //
+    // RELATIVE mode
+    if (settings.mpeRelativeMode && !eventInBuffer.leftInitialPad) {
+      /// coarse pitch adjustment to the tone that it is currently bent to in -1 to +1
+      pitchDistance = 0;
 
-          double adjustedMiddle = 0;
-          if (data.xPercentage! <= xPercentageMiddle) {
-            adjustedMiddle = Utils.mapValueToTargetRange(
-                data.xPercentage!, 0, xPercentageMiddle, 0, 0.5);
-          } else {
-            adjustedMiddle = Utils.mapValueToTargetRange(
-                data.xPercentage!, xPercentageMiddle, 1, 0.5, 1);
-          }
+      // Guards:
+      if (data.padBox == null) return;
 
-          /// maps the 0 to 1.0 X-axis value on pad to a range between -1.0 and +1.0
-          final double pitchPercentage = adjustedMiddle * 2 - 1;
+      final double leftDeadzoneBorder =
+          (eventInBuffer.originXPercentage - pitchDeadzone / 2).clamp(-1, 1);
+      final double rightDeadzoneBorder =
+          (eventInBuffer.originXPercentage + pitchDeadzone / 2).clamp(-1, 1);
 
-          if (pitchPercentage.abs() < pitchDeadzone) {
-            pitchModifier = 0;
-          }
-          // left (negative)
-          else if (pitchPercentage < 0) {
-            final mappedPercentage = Utils.mapValueToTargetRange(
-                pitchPercentage, -1, -pitchDeadzone, -1, 0);
-            pitchModifier =
-                ((semitonePitchbendRange * data.customPad!.pitchBendLeft) *
-                        mappedPercentage) /
-                    0x3FFF /
-                    2;
-          }
-          // right (positive)
-          else {
-            final mappedPercentage = Utils.mapValueToTargetRange(
-                pitchPercentage, pitchDeadzone, 1, 0, 1);
-            pitchModifier =
-                ((semitonePitchbendRange * data.customPad!.pitchBendRight) *
-                        mappedPercentage) /
-                    0x3FFF /
-                    2;
-          }
-        }
+      /// maps the 0 to 1.0 X-axis value on pad to a range between -1.0 and +1.0
+      double pitchPercentage = realXPercentage * 2 - 1;
+      // print(leftDeadzoneBorder);
 
-        mpeMods.xMod.send(
-          eventInBuffer.noteEvent.channel,
-          eventInBuffer.noteEvent.note,
-          pitchDistance + pitchModifier,
+      pitchModifier = 0;
+
+      // left (negative)
+      if (realXPercentage < leftDeadzoneBorder) {
+        final mappedPercentage = Utils.mapValueToTargetRange(
+          pitchPercentage.clamp(-percentageEdge, -leftDeadzoneBorder),
+          -percentageEdge,
+          -leftDeadzoneBorder,
+          -1,
+          0,
         );
+        pitchModifier =
+            ((semitonePitchbendRange * data.customPad!.pitchBendLeft) *
+                    mappedPercentage) /
+                0x3FFF /
+                2;
       }
-
-      // absolute mode
-      else {
-        /// coarse pitch adjustment to the tone that it is currently bent to in -1 to +1
-        pitchDistance =
-            ((data.customPad!.padValue - eventInBuffer.noteEvent.note) / 48)
-                .clamp(-1.0, 1.0);
-
-        if (data.xPercentage != null) {
-          /// maps the 0 to 1.0 X-axis value on pad to a range between -1.0 and +1.0
-          final double pitchPercentage = data.xPercentage! * 2 - 1;
-
-          if (pitchPercentage.abs() < pitchDeadzone) {
-            pitchModifier = 0;
-          }
-          // left (negative)
-          else if (pitchPercentage < 0) {
-            final mappedPercentage = Utils.mapValueToTargetRange(
-                pitchPercentage, -1, -pitchDeadzone, -1, 0);
-            pitchModifier =
-                ((semitonePitchbendRange * data.customPad!.pitchBendLeft) *
-                        mappedPercentage) /
-                    0x3FFF /
-                    2;
-          }
-          // right (positive)
-          else {
-            final mappedPercentage = Utils.mapValueToTargetRange(
-                pitchPercentage, pitchDeadzone, 1, 0, 1);
-            pitchModifier =
-                ((semitonePitchbendRange * data.customPad!.pitchBendRight) *
-                        mappedPercentage) /
-                    0x3FFF /
-                    2;
-          }
-        }
-
-        mpeMods.xMod.send(
-          eventInBuffer.noteEvent.channel,
-          eventInBuffer.noteEvent.note,
-          pitchDistance + pitchModifier,
+      // right (positive)
+      else if (realXPercentage > rightDeadzoneBorder) {
+        final mappedPercentage = Utils.mapValueToTargetRange(
+          pitchPercentage.clamp(rightDeadzoneBorder, percentageEdge),
+          rightDeadzoneBorder,
+          percentageEdge,
+          0,
+          1,
         );
+        pitchModifier =
+            ((semitonePitchbendRange * data.customPad!.pitchBendRight) *
+                    mappedPercentage) /
+                0x3FFF /
+                2;
       }
+      mpeMods.xMod.send(
+        eventInBuffer.noteEvent.channel,
+        eventInBuffer.noteEvent.note,
+        pitchDistance + pitchModifier,
+      );
+    }
+
+    // ABSOLUTE mode TODO broken again ?!
+    else {
+      /// coarse pitch adjustment to the tone that it is currently bent to in -1 to +1
+      pitchDistance =
+          ((data.customPad!.padValue - eventInBuffer.noteEvent.note) / 48)
+              .clamp(-1.0, 1.0);
+
+      final double leftDeadzoneBorder = 0.5 - pitchDeadzone / 2;
+      final double rightDeadzoneBorder = 0.5 + pitchDeadzone / 2;
+
+      /// maps the 0 to 1.0 X-axis value on pad to a range between -1.0 and +1.0
+      double pitchPercentage = realXPercentage * 2 - 1;
+
+      pitchModifier = 0;
+      if (realXPercentage < leftDeadzoneBorder) {
+        // left (negative)
+        final mappedPercentage = Utils.mapValueToTargetRange(
+          pitchPercentage.clamp(-percentageEdge, -pitchDeadzone),
+          -percentageEdge,
+          -pitchDeadzone,
+          -1,
+          0,
+        );
+        pitchModifier =
+            ((semitonePitchbendRange * data.customPad!.pitchBendLeft) *
+                    mappedPercentage) /
+                0x3FFF /
+                2;
+      }
+      // right
+      else if (realXPercentage > rightDeadzoneBorder) {
+        final mappedPercentage = Utils.mapValueToTargetRange(
+          pitchPercentage.clamp(pitchDeadzone, percentageEdge),
+          pitchDeadzone,
+          percentageEdge,
+          0,
+          1,
+        );
+        pitchModifier =
+            ((semitonePitchbendRange * data.customPad!.pitchBendRight) *
+                    mappedPercentage) /
+                0x3FFF /
+                2;
+      }
+      mpeMods.xMod.send(
+        eventInBuffer.noteEvent.channel,
+        eventInBuffer.noteEvent.note,
+        pitchDistance + pitchModifier,
+      );
     }
   }
-
-  /// Returns the velocity if a given note is ON in any channel.
-  /// Checks releasebuffer and active touchbuffer
-  /// The MPE Push Style mode doesn't show activated notes at this stage
-  /// TODO supports velocity display??
-  @override
-  int isNoteOn(int note) => 0;
 }

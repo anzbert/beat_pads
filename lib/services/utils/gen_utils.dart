@@ -64,6 +64,7 @@ abstract class Utils {
     final double inputRange = inputRangeEnd - inputRangeStart;
     if (inputRange == 0) {
       return 0;
+      // ignore: dead_code
       throw ('input range cant be zero'); // prevent dividing by 0
     }
     final double outputRange = outputRangeEnd - outputRangeStart;

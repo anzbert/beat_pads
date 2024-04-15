@@ -15,6 +15,13 @@ class PadBox {
       padPosition.dy + padSize.height / 2,
     );
   }
+
+  // Offset shiftedCenter(double percentage) {
+  //   return Offset(
+  //     padPosition.dx + padSize.width * percentage,
+  //     padPosition.dx + padSize.width * percentage,
+  //   );
+  // }
 }
 
 class Vector2Int {

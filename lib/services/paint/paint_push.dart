@@ -77,7 +77,7 @@ class CustomPaintPushOverlay extends CustomPainter {
     }
 
     // HORIZONTAL LINE
-    final Paint brush1 = Paint()
+    final Paint stroke2 = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 8
       ..strokeCap = StrokeCap.round
@@ -95,13 +95,16 @@ class CustomPaintPushOverlay extends CustomPainter {
       );
     // final Paint brush2 = Paint();
     canvas.drawLine(Offset(padRect.left, change.dy),
-        Offset(padRect.right, change.dy), brush1);
+        Offset(padRect.right, change.dy), stroke2);
 
     // Center
+    final Paint stroke3 = Paint()
+      ..style = PaintingStyle.fill
+      ..color = Palette.cadetBlue;
     if (relativeMode) {
-      canvas.drawCircle(origin, 5, brush1);
+      canvas.drawCircle(origin, 10, stroke3);
     } else {
-      canvas.drawCircle(padRect.center, 5, brush1);
+      canvas.drawCircle(padRect.center, 10, stroke3);
     }
   }
 
