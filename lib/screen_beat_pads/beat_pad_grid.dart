@@ -40,54 +40,15 @@ class _SlidePadsState extends ConsumerState<SlidePads>
         final HitTestTarget target = hit.target;
 
         if (target is TestProxyBox) {
-          // final Offset position = target.globalToLocal(event.position);
-
-          double yPos = target.globalToLocal(event.position).dy;
-          double ySize = target.size.height;
-
-          const double yDeadZone = 20; // pixels
-
-          if (yPos < yDeadZone) {
-            yPos = 0;
-          } else if (yPos > ySize - yDeadZone) {
-            yPos = ySize;
-          } else {
-            yPos = Utils.mapValueToTargetRange(
-              yPos,
-              yDeadZone,
-              ySize - yDeadZone,
-              0,
-              ySize - yDeadZone * 2,
-            );
-            ySize = ySize - yDeadZone * 2;
-          }
-
-          double xPos = target.globalToLocal(event.position).dx;
-          double xSize = target.size.width;
-
-          const double xDeadZone = 20; // pixels
-
-          if (xPos < xDeadZone) {
-            xPos = 0;
-          } else if (xPos > xSize - xDeadZone) {
-            xPos = xSize;
-          } else {
-            xPos = Utils.mapValueToTargetRange(
-              xPos,
-              xDeadZone,
-              xSize - xDeadZone,
-              0,
-              xSize - xDeadZone * 2,
-            );
-            xSize = xSize - xDeadZone * 2;
-          }
+          final Offset position = target.globalToLocal(event.position);
+          final Size size = target.size;
 
           return target.customPad.padValue >= 0 &&
                   target.customPad.padValue < 128
               ? PadAndTouchData(
                   customPad: target.customPad,
-                  yPercentage: 1 - (yPos / ySize).clamp(0, 1),
-                  xPercentage: (xPos / xSize).clamp(0, 1),
+                  yPercentage: 1 - (position.dy / size.height).clamp(0, 1),
+                  xPercentage: (position.dx / size.width).clamp(0, 1),
                   padBox: PadBox(
                       padPosition: target.localToGlobal(Offset.zero),
                       padSize: target.size))

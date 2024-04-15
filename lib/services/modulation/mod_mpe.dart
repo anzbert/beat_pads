@@ -126,7 +126,7 @@ class ModCC642D extends Mod {
 class ModNull extends Mod {
   @override
   void send(int channel, int note, double distance) {
-    Utils.logd('Sending debug placeholder: $channel / $note / $distance');
+    // Utils.logd('Sending debug placeholder: $channel / $note / $distance');
   }
 }
 

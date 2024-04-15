@@ -1,7 +1,6 @@
 import 'package:beat_pads/services/services.dart';
 import 'package:beat_pads/theme.dart';
 import 'package:flutter/material.dart';
-import 'dart:ui' as ui;
 
 class CustomPaintPushOverlay extends CustomPainter {
   CustomPaintPushOverlay({
@@ -12,96 +11,121 @@ class CustomPaintPushOverlay extends CustomPainter {
     required this.origin,
     required this.change,
     required this.dirty,
-    required this.colorX,
-    required this.colorY,
-  }) : halfPitchDeadzoneFraction = pitchDeadzonePercent / 100 / 2;
+    required this.relativeMode,
+    required this.originXPercentage,
+    required this.yMod,
+    required this.xMod,
+  }) : pitchDeadzoneFraction = pitchDeadzonePercent / 100;
 
+  final bool yMod;
+  final bool xMod;
+  final bool relativeMode;
   final Size screenSize;
   final Offset origin;
-  final Color colorX;
-  final Color colorY;
   final Offset change;
   final bool dirty;
   final PadBox padBox;
   final PadBox originPadBox;
-  final double halfPitchDeadzoneFraction;
+  final double pitchDeadzoneFraction;
+  final double originXPercentage;
 
   @override
   void paint(Canvas canvas, Size size) {
-    final Radius padRadius =
-        Radius.circular(screenSize.width * ThemeConst.padRadiusFactor);
+    const double minLineWidth = 2;
+    const Color color = Colors.black26;
+    const MaskFilter filter = MaskFilter.blur(BlurStyle.normal, 0.5);
+
+    // final Radius padRadius =
+    //     Radius.circular(screenSize.width * ThemeConst.padRadiusFactor);
+
+    // final double padSpacingFraction = padSpacing * 2 / padRect.width;
 
     final double padSpacing = screenSize.width * ThemeConst.padSpacingFactor;
 
     final Rect padRect = Rect.fromPoints(
-      padBox.padPosition + Offset(padSpacing, padSpacing),
-      padBox.padPosition
-              .translate(padBox.padSize.width, padBox.padSize.height) -
-          Offset(padSpacing, padSpacing),
+      padBox.padPosition,
+      padBox.padPosition + Offset(padBox.padSize.width, padBox.padSize.height),
     );
-    // final Rect padRect = Rect.fromPoints(
-    //   padBox.padPosition,
-    //   padBox.padPosition + Offset(padBox.padSize.width, padBox.padSize.height),
-    // );
-    final padSpacingPercentage = padSpacing * 2 / padRect.width;
 
-    // canvas.drawRect(padRect, Paint()..color = Palette.cadetBlue);
+    // TROUBLESHOOTING
+    // draw whole rect:
+    // canvas.drawRect(padRect, Paint()..color = Colors.green);
 
-    // origin to pointer line:
-    // final Paint stroke1 = Paint()
-    //   ..color = colorFront.withOpacity(0.3)
-    //   ..style = PaintingStyle.stroke
-    //   ..strokeWidth = 10
-    //   ..strokeCap = StrokeCap.round;
-    // canvas.drawLine(originPadBox.padCenter, change, stroke1);
+    // origin padbox center to pointer line:
+    // canvas.drawLine(
+    //     originPadBox.padCenter, change, Paint()..color = Colors.pink);
 
-    // VERTICAL LINE
-    final leftBorder = 0.5 - halfPitchDeadzoneFraction + padSpacingPercentage;
-    final rightBorder = 0.5 + halfPitchDeadzoneFraction - padSpacingPercentage;
+    // follow pointer:
+    // canvas.drawCircle(change, 20, Paint()..Colors.red);
 
-    final Paint gradient = Paint()
-      ..shader = ui.Gradient.linear(
-        padRect.centerRight,
-        padRect.centerLeft,
-        [
-          colorX.withOpacity(0.0),
-          colorX.withOpacity(0.5),
-          colorX,
-          colorX,
-          colorX.withOpacity(0.5),
-          colorX.withOpacity(0.0),
-        ],
-        [
-          0,
-          leftBorder,
-          leftBorder + 0.02,
-          rightBorder - 0.02,
-          rightBorder,
-          1,
-        ],
-      );
-    canvas.drawRRect(RRect.fromRectAndRadius(padRect, padRadius), gradient);
+    // VERTICAL LINE (deadzone)
+    if (xMod) {
+      final double deadzoneLineWidth =
+          ((padRect.width - 2 * padSpacing) * pitchDeadzoneFraction);
 
-    // HORIZONTAL LINE
-    final Paint brush1 = Paint()
+      final Paint verticaldeadzoneLineStroke = Paint()
+        ..style = PaintingStyle.stroke
+        ..color = color
+        ..maskFilter = filter
+        ..strokeWidth =
+            deadzoneLineWidth < minLineWidth ? minLineWidth : deadzoneLineWidth
+        ..strokeCap = StrokeCap.butt;
+
+      canvas.drawLine(
+          padRect.topCenter + Offset(0, padSpacing),
+          padRect.bottomCenter - Offset(0, padSpacing),
+          verticaldeadzoneLineStroke);
+    }
+
+    final Paint centerIndicatorLinesStroke = Paint()
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 8
-      ..strokeCap = StrokeCap.round
-      ..shader = ui.Gradient.linear(
-        padRect.centerLeft,
-        padRect.centerRight,
-        [
-          colorY.withOpacity(0),
-          colorY.withOpacity(0.9),
-          colorY,
-          colorY.withOpacity(0.9),
-          colorY.withOpacity(0),
-        ],
-        [0, 0.1, 0.5, 0.9, 1],
-      );
-    // final Paint brush2 = Paint();
-    canvas.drawLine(Offset(padRect.left, change.dy),
-        Offset(padRect.right, change.dy), brush1);
+      ..color = color
+      ..strokeWidth = minLineWidth
+      // ..blendMode = BlendMode.darken
+      ..maskFilter = filter
+      ..strokeCap = StrokeCap.butt;
+
+    if (relativeMode) {
+      // horizontal:
+      canvas.drawLine(
+          Offset(padRect.left + padSpacing, origin.dy),
+          Offset(padRect.right - padSpacing, origin.dy),
+          centerIndicatorLinesStroke);
+
+      // vertical:
+      canvas.drawLine(
+          Offset(origin.dx, padRect.top + padSpacing),
+          Offset(origin.dx, padRect.bottom - padSpacing),
+          centerIndicatorLinesStroke..color);
+
+      // center:
+      // canvas.drawCircle(origin, 3, centerIndicatorLinesStroke);
+    } else {
+      // horizontal:
+      canvas.drawLine(
+          Offset(padRect.left + padSpacing, padRect.center.dy),
+          Offset(padRect.right - padSpacing, padRect.center.dy),
+          centerIndicatorLinesStroke);
+
+      // vertical:
+      // canvas.drawLine(Offset(padRect.center.dx, padRect.top + padSpacing),
+      //     Offset(padRect.center.dx, padRect.bottom - padSpacing), centerIndicatorLinesStroke);
+
+      // center:
+      // canvas.drawCircle(padRect.center, 3, centerIndicatorLinesStroke);
+    }
+
+    // HORIZONTAL LINE (modulation)
+    if (yMod) {
+      final Paint yModIndicatorLine = Paint()
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 8
+        ..color = Colors.black54
+        ..strokeCap = StrokeCap.butt;
+
+      canvas.drawLine(Offset(padRect.left, change.dy),
+          Offset(padRect.right, change.dy), yModIndicatorLine);
+    }
   }
 
   @override

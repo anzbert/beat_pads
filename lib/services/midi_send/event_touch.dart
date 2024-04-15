@@ -9,6 +9,8 @@ class TouchEvent {
     SendSettings settings,
     Size screenSize,
     PadBox padBox,
+    this.originXPercentage,
+    this.originYPercentage,
   )   : origin = touch.position,
         originPadBox = padBox,
         newPosition = touch.position,
@@ -18,6 +20,8 @@ class TouchEvent {
         maxRadius = screenSize.longestSide * settings.modulationRadius;
   final int uniqueID;
 
+  bool leftInitialPad = false;
+
   // Note and modulation parameters:
   NoteEvent noteEvent;
 
@@ -26,6 +30,8 @@ class TouchEvent {
   final PadBox originPadBox;
   final double maxRadius;
   final double deadZone;
+  final double originYPercentage;
+  final double originXPercentage;
   Offset newPosition;
   PadBox newPadBox;
 

@@ -22,33 +22,37 @@ class PaintPushStyle extends ConsumerWidget {
           ...midiSender.playModeHandler.touchReleaseBuffer.buffer,
           ...midiSender.playModeHandler.touchBuffer.buffer,
         ]
-            .where(
-          (element) =>
-              element.directionalChangeUnclamped() >=
-              const Offset(1, 1), // filter out smaller than 1 px events
-        )
+            //     .where(
+            //   (element) =>
+            //       element.directionalChangeUnclamped() >=
+            //       const Offset(
+            //           0.1, 0.1), // filter out smaller than 1 px movement events
+            // )
             .map(
           (touchEvent) {
             return CustomPaint(
               painter: CustomPaintPushOverlay(
-                screenSize: screenSize,
-                pitchDeadzonePercent: ref.watch(pitchDeadzone),
-                dirty: touchEvent.dirty,
-                origin: box.globalToLocal(touchEvent.origin),
-                originPadBox: PadBox(
-                    padPosition:
-                        box.globalToLocal(touchEvent.originPadBox.padPosition),
-                    padSize: touchEvent.originPadBox.padSize),
-                padBox: PadBox(
-                    padPosition:
-                        box.globalToLocal(touchEvent.newPadBox.padPosition),
-                    padSize: touchEvent.newPadBox.padSize),
-                change: box.globalToLocal(touchEvent.newPosition),
-                colorX: touchEvent.dirty ? dirtyColor : Colors.white,
-                colorY: touchEvent.dirty ? dirtyColor : Palette.lightGrey,
-                // colorX: Colors.white,
-                // colorY: Palette.lightGrey,
-              ),
+                  originXPercentage: touchEvent.originXPercentage,
+                  relativeMode: !touchEvent.leftInitialPad &&
+                      ref.watch(mpeRelativeModeProv),
+                  screenSize: screenSize,
+                  pitchDeadzonePercent: ref.watch(pitchDeadzone),
+                  dirty: touchEvent.dirty,
+                  origin: box.globalToLocal(touchEvent.origin),
+                  originPadBox: PadBox(
+                      padPosition: box
+                          .globalToLocal(touchEvent.originPadBox.padPosition),
+                      padSize: touchEvent.originPadBox.padSize),
+                  padBox: PadBox(
+                      padPosition:
+                          box.globalToLocal(touchEvent.newPadBox.padPosition),
+                      padSize: touchEvent.newPadBox.padSize),
+                  change: box.globalToLocal(touchEvent.newPosition),
+                  yMod: ref.watch(mpePushYAxisModeProv) !=
+                      MPEpushStyleYAxisMods.none,
+                  xMod: ref.watch(mpeRelativeModeProv)
+                      ? touchEvent.leftInitialPad
+                      : true),
             );
           },
         ),

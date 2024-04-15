@@ -122,6 +122,13 @@ final mpeOnlyOnRowProv = NotifierProvider<SettingBoolNotifier, bool>(() {
   );
 });
 
+final mpeRelativeModeProv = NotifierProvider<SettingBoolNotifier, bool>(() {
+  return SettingBoolNotifier(
+    key: 'mpeRelativeMode',
+    defaultValue: false,
+  );
+});
+
 final pitchDeadzone = NotifierProvider<SettingIntNotifier, int>(() {
   return SettingIntNotifier(
     key: 'pitchDeadzone',
