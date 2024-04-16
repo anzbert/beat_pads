@@ -36,7 +36,7 @@ class PaintPushStyle extends ConsumerWidget {
                   relativeMode: !touchEvent.leftInitialPad &&
                       ref.watch(mpeRelativeModeProv),
                   screenSize: screenSize,
-                  pitchDeadzonePercent: ref.watch(pitchDeadzone),
+                  pitchDeadzonePercent: ref.watch(pitchDeadzoneProv),
                   dirty: touchEvent.dirty,
                   origin: box.globalToLocal(touchEvent.origin),
                   originPadBox: PadBox(

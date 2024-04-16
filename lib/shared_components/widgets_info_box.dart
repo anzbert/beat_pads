@@ -14,7 +14,7 @@ class WidgetsInfoBox extends StatelessWidget {
     return Center(
       child: Card(
         color: Palette.darkGrey,
-        margin: const EdgeInsets.fromLTRB(8, 30, 8, 8),
+        margin: const EdgeInsets.fromLTRB(8, 8, 8, 8),
         elevation: 5,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),

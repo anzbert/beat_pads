@@ -40,14 +40,10 @@ class MenuInput extends ConsumerWidget {
               const StringInfoBox(
                 header: 'Push Style MPE',
                 body: [
-                  ' - STILL IN DEVELOPMENT - ',
-                  'It currently functions similar to the MPE input on the latest Push device. This is how it works:',
-                  '- X-Axis: Slide your finger to other pads and bend the pitch towards them.',
-                  '- Y-Axis: Sends a configurable MPE message (Default: Slide / CC 74). The center of the pad corresponds to a value of 64',
-                  '',
-                  'Notes:',
-                  '- Set your instrument to accept the maximum range of MPE Pitchbend (48 semitones) for this mode to create the expected pitches.',
-                  '- Feedback on the GitHub page is welcome!',
+                  'Slide your finger to other pads and bend the pitch towards them.',
+                  'Send a modulation on the pad Y-Axis (Default: Slide / CC 74).',
+                  'Note: Set your instrument to the max range of MPE Pitchbend (48 semitones), to produce the expected pitches.',
+                  'This mode is still new and feedback on the GitHub page is very welcome!',
                 ],
               ),
             if (ref.watch(playModeProv) == PlayMode.mpeTargetPb)
@@ -77,18 +73,19 @@ class MenuInput extends ConsumerWidget {
                 max: 75,
                 label: 'In-Tune Zone',
                 subtitle:
-                    'Set the size of the stable pitch deadzone, in percent of the pad width',
-                trailing: Text(ref.watch(pitchDeadzone).toString()),
-                readValue: ref.watch(pitchDeadzone),
-                setValue: (int v) => ref.read(pitchDeadzone.notifier).set(v),
-                resetValue: ref.read(pitchDeadzone.notifier).reset,
-                onChangeEnd: ref.read(pitchDeadzone.notifier).save,
+                    'Set the size of the pad center with stable pitch, in percent of the pad width',
+                trailing: Text(ref.watch(pitchDeadzoneProv).toString()),
+                readValue: ref.watch(pitchDeadzoneProv),
+                setValue: (int v) =>
+                    ref.read(pitchDeadzoneProv.notifier).set(v),
+                resetValue: ref.read(pitchDeadzoneProv.notifier).reset,
+                onChangeEnd: ref.read(pitchDeadzoneProv.notifier).save,
               ),
             if (ref.watch(playModeProv) == PlayMode.mpeTargetPb)
               ListTile(
                 title: const Text('Relative Mode'),
                 subtitle: const Text(
-                    "The initially touched pad uses the touch position as the modulation center and doesn't use the In-Tune zone. Pads you slide to still have the normal behaviour"),
+                    "The initial touch position becomes the Pitch and Slide center for that pad"),
                 trailing: Switch(
                   value: ref.watch(mpeRelativeModeProv),
                   onChanged: (bool v) =>

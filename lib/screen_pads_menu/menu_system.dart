@@ -82,17 +82,15 @@ class MenuSystem extends ConsumerWidget {
             ),
           ),
         ),
-        const CreditsBox(),
         const StringInfoBox(
           header: 'Credits',
           body: [
-            'I want to thank these amazing testers for their extremely helpful feedback:',
-            '',
+            'I want to thank these wonderful people for their extremely helpful feedback:',
             'Samplix,  A. Samek,  tyslothrop1,  tput73,  bruques',
-            '',
             'Thanks also to anyone I may have forgotten to mention!',
           ],
         ),
+        const CreditsBox(),
       ],
     );
   }

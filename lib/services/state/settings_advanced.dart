@@ -129,11 +129,11 @@ final mpeRelativeModeProv = NotifierProvider<SettingBoolNotifier, bool>(() {
   );
 });
 
-final pitchDeadzone = NotifierProvider<SettingIntNotifier, int>(() {
+final pitchDeadzoneProv = NotifierProvider<SettingIntNotifier, int>(() {
   return SettingIntNotifier(
     key: 'pitchDeadzone',
     max: 100,
-    defaultValue: 30,
+    defaultValue: 33,
   );
 });
 

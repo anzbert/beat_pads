@@ -11,10 +11,10 @@ class StringInfoBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Card(
-        margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+        margin: const EdgeInsets.fromLTRB(8, 16, 8, 8),
         elevation: 5,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -39,9 +39,11 @@ class StringInfoBox extends StatelessWidget {
               ...body.map(
                 (text) => Column(
                   children: [
-                    Text(text),
+                    Text(
+                      text,
+                    ),
                     const SizedBox(
-                      height: 5,
+                      height: 8,
                     ),
                   ],
                 ),
