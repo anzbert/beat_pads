@@ -69,7 +69,7 @@ class ModPitchBend extends Mod {
   }
 }
 
-class ModMPEAftertouch1D extends Mod {
+class ModChannelAftertouch1D extends Mod {
   @override
   void send(int channel, int note, double distance) {
     final int atChange = (distance.abs() * 127).toInt();
@@ -81,7 +81,7 @@ class ModMPEAftertouch1D extends Mod {
   }
 }
 
-class ModMPEAftertouch642D extends Mod {
+class ModChannelAftertouch642D extends Mod {
   @override
   void send(int channel, int note, double distance) {
     final int atChange = ((distance + 1) / 2 * 127).toInt();
@@ -155,8 +155,8 @@ enum MPEmods {
   final Group exclusiveGroup;
 
   Mod getMod(int pitchBendMax) {
-    if (this == MPEmods.mpeAftertouch) return ModMPEAftertouch1D();
-    if (this == MPEmods.mpeAftertouch64) return ModMPEAftertouch642D();
+    if (this == MPEmods.mpeAftertouch) return ModChannelAftertouch1D();
+    if (this == MPEmods.mpeAftertouch64) return ModChannelAftertouch642D();
     if (this == MPEmods.slide) return ModCC1D(CC.slide);
     if (this == MPEmods.slide64) return ModCC642D(CC.slide);
     if (this == MPEmods.pan) return ModCC1D(CC.pan);
@@ -232,9 +232,9 @@ enum MPEpushStyleYAxisMods {
   final Group exclusiveGroup;
 
   Mod getMod() {
-    //  if (this == MPEpushStyleYAxisMods.mpeAftertouch) return ModMPEAftertouch1D();
+    //  if (this == MPEpushStyleYAxisMods.mpeAftertouch) return ModChannelAftertouch1D();
     if (this == MPEpushStyleYAxisMods.mpeAftertouch64) {
-      return ModMPEAftertouch642D();
+      return ModChannelAftertouch642D();
     }
     // if (this == MPEpushStyleYAxisMods.slide) return ModCC1D(CC.slide);
     if (this == MPEpushStyleYAxisMods.slide64) return ModCC642D(CC.slide);
