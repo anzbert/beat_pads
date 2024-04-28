@@ -7,11 +7,14 @@ class PlayModeChannelMod extends PlayModeHandler {
 
   @override
   void handleNewTouch(PadTouchAndScreenData data) {
-    channelATMod.send(
-      0.0,
-      settings.channel,
-      0, // note is irrelevant
-    );
+    if (!touchBuffer.anyOtherEventModulating(data.pointer)) {
+      channelATMod.send(
+        0.0,
+        settings.channel,
+        0, // note is irrelevant
+      );
+    }
+
     super.handleNewTouch(data);
   }
 
@@ -32,4 +35,16 @@ class PlayModeChannelMod extends PlayModeHandler {
       0, // note is irrelevant
     );
   }
+
+  // @override
+  // void handleEndTouch(CustomPointer touch) {
+  //   if (!touchBuffer.anyOtherEventModulating(touch.pointer)) {
+  //     channelATMod.send(
+  //       0.0,
+  //       settings.channel,
+  //       0, // note is irrelevant
+  //     );
+  //   }
+  //   super.handleEndTouch(touch);
+  // }
 }

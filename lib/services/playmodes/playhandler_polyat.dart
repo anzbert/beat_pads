@@ -30,4 +30,20 @@ class PlayModePolyAT extends PlayModeHandler {
       eventInBuffer.noteEvent.note,
     );
   }
+
+  // @override
+  // void handleEndTouch(CustomPointer touch) {
+  //   final TouchEvent? eventInBuffer = touchBuffer.getByID(touch.pointer) ??
+  //       touchReleaseBuffer.getByID(touch.pointer);
+
+  //   if (eventInBuffer != null) {
+  //     polyATMod.send(
+  //       0,
+  //       settings.channel,
+  //       eventInBuffer.noteEvent.note,
+  //     );
+  //   }
+
+  //   super.handleEndTouch(touch);
+  // }
 }
