@@ -4,6 +4,13 @@ enum PlayMode {
   noSlide('Disabled'),
   slide('Trigger Notes'),
 
+  channelMod(
+    'Channel Aftertouch',
+    modulationOverlay: true,
+    oneDimensional: true,
+    singleChannel: true,
+  ),
+
   polyAT(
     'Poly Aftertouch',
     modulationOverlay: true,
@@ -62,6 +69,8 @@ enum PlayMode {
         return PlayModeSlide(settings, notifyParent);
       case PlayMode.polyAT:
         return PlayModePolyAT(settings, notifyParent);
+      case PlayMode.channelMod:
+        return PlayModeChannelMod(settings, notifyParent);
     }
   }
 }

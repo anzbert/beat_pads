@@ -2,7 +2,7 @@ import 'package:beat_pads/services/services.dart';
 
 class PlayModeMPE extends PlayModeHandler {
   PlayModeMPE(super.settings, super.notifyParent)
-      : mpeMods = SendMpe(
+      : mpeMods = SendMod(
           settings.mpe2DX.getMod(settings.mpePitchbendRange),
           settings.mpe2DY.getMod(settings.mpePitchbendRange),
           settings.mpe1DRadius.getMod(settings.mpePitchbendRange),
@@ -11,7 +11,7 @@ class PlayModeMPE extends PlayModeHandler {
           settings.mpeMemberChannels,
           upperZone: settings.zone,
         );
-  final SendMpe mpeMods;
+  final SendMod mpeMods;
   final MemberChannelProvider channelProvider;
 
   /// Release channel in MPE channel provider
@@ -33,10 +33,22 @@ class PlayModeMPE extends PlayModeHandler {
     ]); // get new channel from generator
 
     if (settings.modulation2D) {
-      mpeMods.xMod.send(newChannel, data.customPad.padValue, 0);
-      mpeMods.yMod.send(newChannel, data.customPad.padValue, 0);
+      mpeMods.xMod.send(
+        0,
+        newChannel,
+        data.customPad.padValue,
+      );
+      mpeMods.yMod.send(
+        0,
+        newChannel,
+        data.customPad.padValue,
+      );
     } else {
-      mpeMods.rMod.send(newChannel, data.customPad.padValue, 0);
+      mpeMods.rMod.send(
+        0,
+        newChannel,
+        data.customPad.padValue,
+      );
     }
 
     final NoteEvent noteOn = NoteEvent(
@@ -68,20 +80,20 @@ class PlayModeMPE extends PlayModeHandler {
 
     if (settings.modulation2D) {
       mpeMods.xMod.send(
+        eventInBuffer.directionalChangeFromCenter().dx,
         eventInBuffer.noteEvent.channel,
         eventInBuffer.noteEvent.note,
-        eventInBuffer.directionalChangeFromCenter().dx,
       );
       mpeMods.yMod.send(
+        eventInBuffer.directionalChangeFromCenter().dy,
         eventInBuffer.noteEvent.channel,
         eventInBuffer.noteEvent.note,
-        eventInBuffer.directionalChangeFromCenter().dy,
       );
     } else {
       mpeMods.rMod.send(
+        eventInBuffer.radialChange(),
         eventInBuffer.noteEvent.channel,
         eventInBuffer.noteEvent.note,
-        eventInBuffer.radialChange(),
       );
     }
   }
