@@ -3,7 +3,6 @@ import 'package:beat_pads/screen_pads_menu/drop_down_modulation.dart';
 import 'package:beat_pads/screen_pads_menu/slider_int.dart';
 import 'package:beat_pads/screen_pads_menu/slider_modulation_size.dart';
 import 'package:beat_pads/screen_pads_menu/slider_non_linear.dart';
-import 'package:beat_pads/services/constants/const_colors.dart';
 import 'package:beat_pads/services/services.dart';
 import 'package:beat_pads/shared_components/_shared.dart';
 import 'package:beat_pads/shared_components/divider_title.dart';
