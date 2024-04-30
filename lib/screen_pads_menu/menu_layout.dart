@@ -109,11 +109,11 @@ class MenuLayout extends ConsumerWidget {
                     readValue: ref.watch<Layout>(layoutProv),
                     setValue: (Layout v) {
                       ref.read(layoutProv.notifier).setAndSave(v);
-                      if (v == Layout.progrChange) {
-                        ref
-                            .read(scaleProv.notifier)
-                            .setAndSave(Scale.chromatic);
-                      }
+                      // if (v == Layout.progrChange) {
+                      //   ref
+                      //       .read(scaleProv.notifier)
+                      //       .setAndSave(Scale.chromatic);
+                      // }
                     }),
               ),
               if (resizableGrid && ref.watch(layoutProv).custom)
@@ -150,7 +150,7 @@ class MenuLayout extends ConsumerWidget {
                   readValue: ref.watch(heightProv),
                 ),
               if (resizableGrid) const DividerTitle('Scale'),
-              if (resizableGrid)
+              if (resizableGrid && ref.watch(layoutProv) != Layout.progrChange)
                 ListTile(
                   title: const Text('Scale'),
                   trailing: DropdownEnum<Scale>(
