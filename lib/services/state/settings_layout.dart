@@ -64,7 +64,7 @@ final baseNoteProv = Provider<int>(
 final baseOctaveProv = NotifierProvider<SettingIntNotifier, int>(() {
   return SettingIntNotifier(
     key: 'baseOctave',
-    defaultValue: 1,
+    defaultValue: 3,
     min: 0,
     max: 9,
   );
