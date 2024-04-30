@@ -105,11 +105,16 @@ class MenuLayout extends ConsumerWidget {
               ListTile(
                 title: const Text('Layout'),
                 trailing: DropdownEnum<Layout>(
-                  values: Layout.values,
-                  readValue: ref.watch<Layout>(layoutProv),
-                  setValue: (Layout v) =>
-                      ref.read(layoutProv.notifier).setAndSave(v),
-                ),
+                    values: Layout.values,
+                    readValue: ref.watch<Layout>(layoutProv),
+                    setValue: (Layout v) {
+                      ref.read(layoutProv.notifier).setAndSave(v);
+                      if (v == Layout.progrChange) {
+                        ref
+                            .read(scaleProv.notifier)
+                            .setAndSave(Scale.chromatic);
+                      }
+                    }),
               ),
               if (resizableGrid && ref.watch(layoutProv).custom)
                 IntCounterTile(

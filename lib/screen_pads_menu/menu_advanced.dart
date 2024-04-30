@@ -270,6 +270,21 @@ class MenuInput extends ConsumerWidget {
           ],
         ),
         if (ref.watch(showModPreview)) const PaintModPreview(),
+        if (ref.watch(layoutProv) == Layout.progrChange)
+          Container(
+            padding: const EdgeInsets.all(24),
+            color: Palette.darkGrey.withOpacity(0.86),
+            child: Center(
+              child: Text(
+                'Advanced settings disabled when using the Program Change layout',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color: Palette.whiteLike,
+                    fontSize:
+                        Theme.of(context).textTheme.headlineSmall!.fontSize),
+              ),
+            ),
+          )
       ],
     );
   }
