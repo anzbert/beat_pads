@@ -26,6 +26,17 @@ class TouchBuffer {
     return null;
   }
 
+  /// check if any other event except for the one with the given ID is currently modulating
+  /// , meaning if any other touch has moved beyond the deadzone
+  bool anyOtherEventModulating(int id) {
+    for (final TouchEvent event in _buffer) {
+      if (event.isModulating && event.uniqueID != id) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   /// Remove touchevent from buffer
   void remove(TouchEvent event) {
     _buffer =

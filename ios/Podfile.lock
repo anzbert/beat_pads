@@ -37,7 +37,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   flutter_midi_command: 760f0ec4b7c6d3034982f6045e878d9b7d01674e
-  rive_common: c537b4eed761e903a9403d93c347b69bd7a4762f
+  rive_common: 8630be7f6385198f9d31a5bc8cd7f6ccccedf5a1
   shared_preferences_foundation: b4c3b4cddf1c21f02770737f147a3f5da9d39695
   url_launcher_ios: 6116280ddcfe98ab8820085d8d76ae7449447586
   wakelock: d0fc7c864128eac40eba1617cb5264d9c940b46f

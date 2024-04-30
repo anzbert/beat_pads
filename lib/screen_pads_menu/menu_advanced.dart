@@ -46,6 +46,37 @@ class MenuInput extends ConsumerWidget {
                   'This mode is still new and feedback on the GitHub page is very welcome!',
                 ],
               ),
+            if (ref.watch(playModeProv) == PlayMode.channelMod)
+              const StringInfoBox(
+                header: 'Channel Aftertouch',
+                body: [
+                  'Slide your finger to send monophonic Aftertouch data for all notes on the current channel.',
+                  'Note: Only one modulation can be sent at a time, which means further touch slides are ignored while a modulation is already in process.',
+                ],
+              ),
+            if (ref.watch(playModeProv) == PlayMode.polyAT)
+              const StringInfoBox(
+                header: 'Polyphonic Aftertouch',
+                body: [
+                  'Slide your finger to send polyphonic Aftertouch data for the current note.',
+                  'Every Note can handle its own Aftertouch modulation in this mode.',
+                ],
+              ),
+            if (ref.watch(playModeProv) == PlayMode.mpe)
+              const StringInfoBox(
+                header: 'MPE',
+                body: [
+                  'Slide your finger to send custom modulation data for any activated note on the grid. An overlay will appear, showing the current modulation state.',
+                  'You can choose one-dimensional modulation to control one paramter by the distance to where the movement started. Or two-dimensional modulation along an X and Y Axis, centered on the initial touch.',
+                ],
+              ),
+            if (ref.watch(playModeProv) == PlayMode.slide)
+              const StringInfoBox(
+                header: 'Trigger Notes',
+                body: [
+                  'Any note you slide your finger over gets triggered after the initial touch.',
+                ],
+              ),
             if (ref.watch(playModeProv) == PlayMode.mpeTargetPb)
               ListTile(
                 title: const Text('Y-Axis'),
@@ -224,8 +255,7 @@ class MenuInput extends ConsumerWidget {
                 steps: Timing.releaseDelayTimes.length ~/ 1.5,
                 onChangeEnd: ref.read(modReleaseStepProv.notifier).save,
               ),
-            if (ref.watch(playModeProv).singleChannel)
-              const DividerTitle('Output'),
+            if (ref.watch(playModeProv).singleChannel) const DividerTitle('CC'),
             if (ref.watch(playModeProv).singleChannel)
               ListTile(
                 title: const Text('Control Change'),

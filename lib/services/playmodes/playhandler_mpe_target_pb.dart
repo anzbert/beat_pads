@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class PlayModeMPETargetPb extends PlayModeHandler {
   PlayModeMPETargetPb(super.settings, super.notifyParent)
-      : mpeMods = SendMpe(
+      : mpeMods = SendMod(
           ModPitchBendToNote(),
           settings.mpePushStyleYAxisMod.getMod(),
           ModNull(),
@@ -15,7 +15,7 @@ class PlayModeMPETargetPb extends PlayModeHandler {
         pitchDeadzone = settings.pitchDeadzone / 100;
 
   /// Currently selected Modulations on X and Y
-  final SendMpe mpeMods;
+  final SendMod mpeMods;
 
   /// Creates MPE channels for each new note event
   final MemberChannelProvider channelProvider;
@@ -64,8 +64,16 @@ class PlayModeMPETargetPb extends PlayModeHandler {
     // RELATIVE mode (starts with a value of 64, regardless of tap position):
     if (settings.mpeRelativeMode) {
       // 0 is the centre of -1.0 to 1.0 => 64
-      mpeMods.xMod.send(newChannel, data.customPad.padValue, 0);
-      mpeMods.yMod.send(newChannel, data.customPad.padValue, 0);
+      mpeMods.xMod.send(
+        0,
+        newChannel,
+        data.customPad.padValue,
+      );
+      mpeMods.yMod.send(
+        0,
+        newChannel,
+        data.customPad.padValue,
+      );
     }
 
     // ABSOLUTE mode (the MPE value center is always in the centre of the pad)
@@ -85,9 +93,9 @@ class PlayModeMPETargetPb extends PlayModeHandler {
       );
 
       mpeMods.yMod.send(
+        clampedYPercentage * 2 - 1,
         newChannel,
         data.customPad.padValue,
-        clampedYPercentage * 2 - 1,
       );
 
       final double leftDeadzoneBorder = 0.5 - pitchDeadzone / 2;
@@ -137,9 +145,9 @@ class PlayModeMPETargetPb extends PlayModeHandler {
                 2;
       }
       mpeMods.xMod.send(
+        pitchDistance + pitchModifier,
         newChannel,
         data.customPad.padValue,
-        pitchDistance + pitchModifier,
       );
     }
 
@@ -201,7 +209,7 @@ class PlayModeMPETargetPb extends PlayModeHandler {
       eventInBuffer.updatePosition(touchPosition, data.padBox);
       notifyParent();
     }
-    
+
     // Guard:
     // send no MPE message if row-limit mode is on and the touch is on a pad outside the current row
     if (settings.pitchbendOnlyOnRow &&
@@ -248,18 +256,18 @@ class PlayModeMPETargetPb extends PlayModeHandler {
             clampedYPercentage, yPercentageMiddle, 1, 0.5, 1);
       }
       mpeMods.yMod.send(
+        sendPercentage * 2 - 1,
         eventInBuffer.noteEvent.channel,
         eventInBuffer.noteEvent.note,
-        sendPercentage * 2 - 1,
       );
     }
     //
     // ABSOLUTE mode
     else {
       mpeMods.yMod.send(
+        clampedYPercentage * 2 - 1,
         eventInBuffer.noteEvent.channel,
         eventInBuffer.noteEvent.note,
-        clampedYPercentage * 2 - 1,
       );
     }
 
@@ -310,9 +318,9 @@ class PlayModeMPETargetPb extends PlayModeHandler {
       }
 
       mpeMods.xMod.send(
+        pitchDistance + pitchModifier,
         eventInBuffer.noteEvent.channel,
         eventInBuffer.noteEvent.note,
-        pitchDistance + pitchModifier,
       );
     }
 
@@ -361,9 +369,9 @@ class PlayModeMPETargetPb extends PlayModeHandler {
                 2;
       }
       mpeMods.xMod.send(
+        pitchDistance + pitchModifier,
         eventInBuffer.noteEvent.channel,
         eventInBuffer.noteEvent.note,
-        pitchDistance + pitchModifier,
       );
     }
   }
