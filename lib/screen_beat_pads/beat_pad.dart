@@ -21,14 +21,23 @@ class SlideBeatPad extends ConsumerWidget {
     final int velocity =
         ref.watch(senderProvider).playModeHandler.isNoteOn(note);
 
-    final Color color = ref.watch(padColorsProv).colorize(
-          ref.watch(scaleProv).intervals,
-          ref.watch(baseHueProv),
-          ref.watch(rootProv),
-          note,
-          preview ? 0 : ref.watch(rxNoteProvider)[note],
-          noteOn: velocity != 0,
-        );
+    final Color color = ref.watch(layoutProv) == Layout.progrChange
+        ? ref.watch(padColorsProv).colorize(
+              ref.watch(scaleProv).intervals,
+              ref.watch(baseHueProv),
+              ref.watch(rootProv),
+              note,
+              0,
+              noteOn: false,
+            )
+        : ref.watch(padColorsProv).colorize(
+              ref.watch(scaleProv).intervals,
+              ref.watch(baseHueProv),
+              ref.watch(rootProv),
+              note,
+              preview ? 0 : ref.watch(rxNoteProvider)[note],
+              noteOn: velocity != 0,
+            );
 
     final Color splashColor = Palette.splashColor;
 
@@ -37,11 +46,13 @@ class SlideBeatPad extends ConsumerWidget {
     );
     final double padSpacing = screenWidth * ThemeConst.padSpacingFactor;
 
-    final Label label = PadLabels.getLabel(
-      ref.watch(padLabelsProv),
-      ref.watch(layoutProv),
-      note,
-    );
+    final Label label = ref.watch(layoutProv) == Layout.progrChange
+        ? Label(title: '${note + 1}', subtitle: 'Program')
+        : PadLabels.getLabel(
+            ref.watch(padLabelsProv),
+            ref.watch(layoutProv),
+            note,
+          );
     final double fontSize = screenWidth * 0.021;
     final Color padTextColor = Palette.darkGrey;
 

@@ -57,7 +57,7 @@ final baseProv = NotifierProvider<SettingIntNotifier, int>(() {
 
 final baseNoteProv = Provider<int>(
   (ref) {
-    return (ref.watch(baseOctaveProv) + 2) * 12 + ref.watch(baseProv);
+    return (ref.watch(baseOctaveProv)) * 12 + ref.watch(baseProv);
   },
 );
 
@@ -65,8 +65,8 @@ final baseOctaveProv = NotifierProvider<SettingIntNotifier, int>(() {
   return SettingIntNotifier(
     key: 'baseOctave',
     defaultValue: 1,
-    min: -2,
-    max: 7,
+    min: 0,
+    max: 9,
   );
 });
 

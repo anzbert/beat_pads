@@ -1,5 +1,6 @@
 import 'package:beat_pads/services/services.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_midi_command/flutter_midi_command_messages.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Sending logic still uses ChangeNotifier. Could be refactored for Riverpod
@@ -32,6 +33,7 @@ class SendSettings {
     this.pitchDeadzone,
     this.mpePushStyleYAxisMod,
     this.mpeRelativeMode,
+    this.layout,
   );
   final PlayMode playMode;
   final int channel;
@@ -55,6 +57,7 @@ class SendSettings {
   final int pitchDeadzone;
   final MPEpushStyleYAxisMods mpePushStyleYAxisMod;
   final bool mpeRelativeMode;
+  final Layout layout;
 }
 
 /// Reactive state of the current send-settings to be used in legacy changenotifier
@@ -82,6 +85,7 @@ final combinedSettings = Provider.autoDispose<SendSettings>((ref) {
     ref.watch(pitchBendEaseUsable),
     ref.watch(mpePushYAxisModeProv),
     ref.watch(mpeRelativeModeProv),
+    ref.watch(layoutProv),
   );
 });
 
@@ -138,17 +142,26 @@ class MidiSender extends ChangeNotifier {
   /// Handles a new touch on a pad, creating and sending new noteOn events
   /// in the touch buffer
   void handleNewTouch(PadTouchAndScreenData data) {
-    playModeHandler.handleNewTouch(data);
+    if (settings.layout != Layout.progrChange) {
+      playModeHandler.handleNewTouch(data);
+    } else {
+      PCMessage(channel: settings.channel, program: data.customPad.padValue)
+          .send();
+    }
   }
 
   /// Handles sliding across pads in 'slide' mode
   void handlePan(NullableTouchAndScreenData data) {
-    playModeHandler.handlePan(data);
+    if (settings.layout != Layout.progrChange) {
+      playModeHandler.handlePan(data);
+    }
   }
 
   /// Cleans up Touchevent, when contact with screen ends and the pointer is removed
   /// Adds released events to a buffer when auto-sustain is being used
   void handleEndTouch(CustomPointer touch) {
-    playModeHandler.handleEndTouch(touch);
+    if (settings.layout != Layout.progrChange) {
+      playModeHandler.handleEndTouch(touch);
+    }
   }
 }

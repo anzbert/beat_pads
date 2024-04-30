@@ -11,6 +11,7 @@ enum Layout {
   scaleNotes5th('In Key - Vertical 4 Scale Steps'),
   scaleNotesCustom('In Key - Custom X & Y', custom: true),
   scaleNotesOnly('In Key - Sequential'),
+  progrChange('Program Changes'),
   magicToneNetwork('Magic Tone Network™', defaultDimensions: Vector2Int(8, 8)),
   xPressPadsStandard('XpressPads™ Standard 4x4',
       resizable: false,
@@ -25,7 +26,8 @@ enum Layout {
   xPressPadsXtreme('XpressPads™ Xtreme 8x4',
       resizable: false,
       defaultDimensions: Vector2Int(8, 4),
-      gmPercussionLabels: true);
+      gmPercussionLabels: true),
+  ;
 
   const Layout(
     this.title, {
@@ -83,6 +85,8 @@ enum Layout {
         return GridXpressPads(settings, XPP.xo);
       case Layout.xPressPadsXtreme:
         return GridXpressPads(settings, XPP.xtreme);
+      case Layout.progrChange:
+        return GridChromaticByRowInterval(settings, rowInterval: width);
     }
   }
 }
