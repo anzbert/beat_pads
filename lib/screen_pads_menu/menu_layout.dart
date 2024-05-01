@@ -1,6 +1,7 @@
 import 'package:beat_pads/screen_beat_pads/button_presets.dart';
 import 'package:beat_pads/screen_pads_menu/counter_int.dart';
 import 'package:beat_pads/screen_pads_menu/drop_down_enum.dart';
+import 'package:beat_pads/screen_pads_menu/drop_down_int.dart';
 import 'package:beat_pads/screen_pads_menu/drop_down_notes.dart';
 import 'package:beat_pads/screen_pads_menu/preview_beat_pads.dart';
 import 'package:beat_pads/screen_pads_menu/slider_int.dart';
@@ -109,11 +110,6 @@ class MenuLayout extends ConsumerWidget {
                     readValue: ref.watch<Layout>(layoutProv),
                     setValue: (Layout v) {
                       ref.read(layoutProv.notifier).setAndSave(v);
-                      // if (v == Layout.progrChange) {
-                      //   ref
-                      //       .read(scaleProv.notifier)
-                      //       .setAndSave(Scale.chromatic);
-                      // }
                     }),
               ),
               if (resizableGrid && ref.watch(layoutProv).custom)
@@ -149,7 +145,10 @@ class MenuLayout extends ConsumerWidget {
                       ref.read(heightProv.notifier).setAndSave(v),
                   readValue: ref.watch(heightProv),
                 ),
-              if (resizableGrid) const DividerTitle('Scale'),
+              if (resizableGrid)
+                DividerTitle(ref.watch(layoutProv) != Layout.progrChange
+                    ? 'Scale'
+                    : 'Program'),
               if (resizableGrid && ref.watch(layoutProv) != Layout.progrChange)
                 ListTile(
                   title: const Text('Scale'),
@@ -164,7 +163,7 @@ class MenuLayout extends ConsumerWidget {
                     },
                   ),
                 ),
-              if (resizableGrid)
+              if (resizableGrid && ref.watch(layoutProv) != Layout.progrChange)
                 ListTile(
                   title: const Text('Scale Root Note'),
                   subtitle: const Text('Root Note of the selected scale'),
@@ -176,44 +175,33 @@ class MenuLayout extends ConsumerWidget {
                     readValue: ref.watch(rootProv),
                   ),
                 ),
-              if (resizableGrid)
-                IntCounterTile(
-                  label: 'Base Note',
-                  // subtitle: 'Change lowest Note in the Grid',
-                  readValue: ref.watch(baseProv),
-                  setValue: (int v) {
-                    if (ref.read(layoutProv).chromatic) {
-                      ref.read(baseProv.notifier).setAndSave(v);
-                    } else {
-                      final scale = ref.read(scaleProv).intervals;
-                      while (!scale.contains(v)) {
-                        if (v > ref.read(baseProv)) {
-                          v = (v + 1) % 12;
-                        } else {
-                          v = v - 1;
-                          if (v.isNegative) v = 11;
-                        }
-                      }
-                      ref.read(baseProv.notifier).setAndSave(v);
-                    }
-                  },
-                  modDisplay: (v) {
-                    return Note.fromSemitone(v).label;
-                  },
-                  resetFunction: ref.read(baseProv.notifier).reset,
+              if (resizableGrid && ref.watch(layoutProv) != Layout.progrChange)
+                ListTile(
+                  title: const Text('Base Note'),
+                  subtitle: const Text(
+                    'The lowest Note in the Grid, on the bottom left',
+                  ),
+                  trailing: DropdownRootNote(
+                    setValue: (int v) =>
+                        ref.read(baseProv.notifier).setAndSave(v),
+                    readValue: ref.watch(baseProv),
+                  ),
                 ),
-              // ListTile(
-              //   title: const Text('Base Note'),
-              //   subtitle: const Text(
-              //     'The lowest Note in the Grid, on the bottom left',
-              //   ),
-              //   trailing: DropdownRootNote(
-              //     setValue: (int v) =>
-              //         ref.read(baseProv.notifier).setAndSave(v),
-              //     readValue: ref.watch(baseProv),
-              //   ),
-              // ),
-              if (resizableGrid)
+              if (ref.watch(layoutProv) == Layout.progrChange)
+                ListTile(
+                  title: const Text('Base Program'),
+                  subtitle: const Text(
+                    'The lowest Program in the Grid, on the bottom left',
+                  ),
+                  trailing: DropdownInt(
+                    readValue: ref.watch(baseProgramProv) + 1,
+                    setValue: (int v) =>
+                        ref.read(baseProgramProv.notifier).setAndSave(v - 1),
+                    size: 128,
+                    start: 1,
+                  ),
+                ),
+              if (resizableGrid && ref.watch(layoutProv) != Layout.progrChange)
                 IntCounterTile(
                   label: 'Base Octave',
                   readValue: ref.watch(baseOctaveProv),
