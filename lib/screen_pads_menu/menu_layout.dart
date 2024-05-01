@@ -156,8 +156,12 @@ class MenuLayout extends ConsumerWidget {
                   trailing: DropdownEnum<Scale>(
                     values: Scale.values,
                     readValue: ref.watch(scaleProv),
-                    setValue: (Scale v) =>
-                        ref.read(scaleProv.notifier).setAndSave(v),
+                    setValue: (Scale v) {
+                      ref.read(scaleProv.notifier).setAndSave(v);
+                      ref
+                          .read(baseProv.notifier)
+                          .setAndSave(ref.read(rootProv));
+                    },
                   ),
                 ),
               if (resizableGrid)
@@ -173,17 +177,42 @@ class MenuLayout extends ConsumerWidget {
                   ),
                 ),
               if (resizableGrid)
-                ListTile(
-                  title: const Text('Base Note'),
-                  subtitle: const Text(
-                    'The lowest Note in the Grid, on the bottom left',
-                  ),
-                  trailing: DropdownRootNote(
-                    setValue: (int v) =>
-                        ref.read(baseProv.notifier).setAndSave(v),
-                    readValue: ref.watch(baseProv),
-                  ),
+                IntCounterTile(
+                  label: 'Base Note',
+                  // subtitle: 'Change lowest Note in the Grid',
+                  readValue: ref.watch(baseProv),
+                  setValue: (int v) {
+                    if (ref.read(layoutProv).chromatic) {
+                      ref.read(baseProv.notifier).setAndSave(v);
+                    } else {
+                      final scale = ref.read(scaleProv).intervals;
+                      while (!scale.contains(v)) {
+                        if (v > ref.read(baseProv)) {
+                          v = (v + 1) % 12;
+                        } else {
+                          v = v - 1;
+                          if (v.isNegative) v = 11;
+                        }
+                      }
+                      ref.read(baseProv.notifier).setAndSave(v);
+                    }
+                  },
+                  modDisplay: (v) {
+                    return Note.fromSemitone(v).label;
+                  },
+                  resetFunction: ref.read(baseProv.notifier).reset,
                 ),
+              // ListTile(
+              //   title: const Text('Base Note'),
+              //   subtitle: const Text(
+              //     'The lowest Note in the Grid, on the bottom left',
+              //   ),
+              //   trailing: DropdownRootNote(
+              //     setValue: (int v) =>
+              //         ref.read(baseProv.notifier).setAndSave(v),
+              //     readValue: ref.watch(baseProv),
+              //   ),
+              // ),
               if (resizableGrid)
                 IntCounterTile(
                   label: 'Base Octave',

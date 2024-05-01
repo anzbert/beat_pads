@@ -1,17 +1,17 @@
 import 'package:beat_pads/services/services.dart';
 
 enum Layout {
-  majorThird('Chromatic - Vertical Maj 3rd'),
-  quart('Chromatic - Vertical 4th'),
-  quint('Chromatic - Vertical 5th'),
-  customIntervals('Chromatic - Custom X & Y', custom: true),
-  sequential('Chromatic - Sequential'),
+  majorThird('Chromatic - Vertical Maj 3rd', chromatic: true),
+  quart('Chromatic - Vertical 4th', chromatic: true),
+  quint('Chromatic - Vertical 5th', chromatic: true),
+  customIntervals('Chromatic - Custom X & Y', custom: true, chromatic: true),
+  sequential('Chromatic - Sequential', chromatic: true),
   scaleNotes3rd('In Key - Vertical 2 Scale Steps'),
   scaleNotes4th('In Key - Vertical 3 Scale Steps'),
   scaleNotes5th('In Key - Vertical 4 Scale Steps'),
   scaleNotesCustom('In Key - Custom X & Y', custom: true),
   scaleNotesOnly('In Key - Sequential'),
-  progrChange('Program Changes'),
+  progrChange('Program Changes', chromatic: true),
   magicToneNetwork('Magic Tone Network™', defaultDimensions: Vector2Int(8, 8)),
   xPressPadsStandard('XpressPads™ Standard 4x4',
       resizable: false,
@@ -33,6 +33,7 @@ enum Layout {
     this.title, {
     this.custom = false,
     this.resizable = true,
+    this.chromatic = false,
     this.gmPercussionLabels = false,
     this.defaultDimensions,
   });
@@ -42,6 +43,7 @@ enum Layout {
   final bool resizable;
   final bool gmPercussionLabels;
   final Vector2Int? defaultDimensions;
+  final bool chromatic;
 
   @override
   String toString() => title;

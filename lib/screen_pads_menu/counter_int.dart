@@ -5,6 +5,8 @@ class IntCounterTile extends StatelessWidget {
   const IntCounterTile({
     required this.readValue,
     required this.setValue,
+    this.subtitle,
+    this.modDisplay,
     this.label = '#label',
     this.resetFunction,
     super.key,
@@ -12,8 +14,10 @@ class IntCounterTile extends StatelessWidget {
 
   final String label;
   final int readValue;
+  final String Function(int)? modDisplay;
   final void Function(int) setValue;
   final void Function()? resetFunction;
+  final String? subtitle;
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +32,7 @@ class IntCounterTile extends StatelessWidget {
             ),
         ],
       ),
+      subtitle: subtitle == null ? null : Text(subtitle!),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.end,
@@ -43,10 +48,16 @@ class IntCounterTile extends StatelessWidget {
             ),
             child: const Icon(Icons.remove),
           ),
-          Text(
-            readValue.toString(),
-            style: TextStyle(
-              fontSize: Theme.of(context).textTheme.titleMedium!.fontSize,
+          SizedBox(
+            width: 40,
+            child: Text(
+              modDisplay == null
+                  ? readValue.toString()
+                  : modDisplay!(readValue),
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: Theme.of(context).textTheme.titleMedium!.fontSize,
+              ),
             ),
           ),
           ElevatedButton(
