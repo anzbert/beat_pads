@@ -112,6 +112,20 @@ class MenuLayout extends ConsumerWidget {
                       ref.read(layoutProv.notifier).setAndSave(v);
                     }),
               ),
+              if (ref.watch(layoutProv) == Layout.progrChange)
+                ListTile(
+                  title: const Text('Base Program'),
+                  subtitle: const Text(
+                    'Lowest Program on the Grid',
+                  ),
+                  trailing: DropdownInt(
+                    readValue: ref.watch(baseProgramProv) + 1,
+                    setValue: (int v) =>
+                        ref.read(baseProgramProv.notifier).setAndSave(v - 1),
+                    size: 128,
+                    start: 1,
+                  ),
+                ),
               if (resizableGrid && ref.watch(layoutProv).custom)
                 IntCounterTile(
                   label: ref.watch(layoutProv) == Layout.scaleNotesCustom
@@ -145,10 +159,8 @@ class MenuLayout extends ConsumerWidget {
                       ref.read(heightProv.notifier).setAndSave(v),
                   readValue: ref.watch(heightProv),
                 ),
-              if (resizableGrid)
-                DividerTitle(ref.watch(layoutProv) != Layout.progrChange
-                    ? 'Scale'
-                    : 'Program'),
+              if (resizableGrid && ref.watch(layoutProv) != Layout.progrChange)
+                const DividerTitle('Scale'),
               if (resizableGrid && ref.watch(layoutProv) != Layout.progrChange)
                 ListTile(
                   title: const Text('Scale'),
@@ -196,20 +208,6 @@ class MenuLayout extends ConsumerWidget {
                   setValue: (int v) =>
                       ref.read(baseOctaveProv.notifier).setAndSave(v),
                   resetFunction: ref.read(baseOctaveProv.notifier).reset,
-                ),
-              if (ref.watch(layoutProv) == Layout.progrChange)
-                ListTile(
-                  title: const Text('Base Program'),
-                  subtitle: const Text(
-                    'Lowest Program on the Grid',
-                  ),
-                  trailing: DropdownInt(
-                    readValue: ref.watch(baseProgramProv) + 1,
-                    setValue: (int v) =>
-                        ref.read(baseProgramProv.notifier).setAndSave(v - 1),
-                    size: 128,
-                    start: 1,
-                  ),
                 ),
               const DividerTitle('Controls'),
               if (resizableGrid)
