@@ -165,7 +165,7 @@ class MenuLayout extends ConsumerWidget {
                 ),
               if (resizableGrid && ref.watch(layoutProv) != Layout.progrChange)
                 ListTile(
-                  title: const Text('Scale Root Note'),
+                  title: const Text('Root Note'),
                   subtitle: const Text('Root Note of the selected scale'),
                   trailing: DropdownRootNote(
                     setValue: (int v) {
@@ -179,26 +179,14 @@ class MenuLayout extends ConsumerWidget {
                 ListTile(
                   title: const Text('Base Note'),
                   subtitle: const Text(
-                    'The lowest Note in the Grid, on the bottom left',
+                    'Lowest Note on the bottom left',
                   ),
                   trailing: DropdownRootNote(
+                    enabledList: MidiUtils.absoluteScaleNotes(
+                        ref.watch(rootProv), ref.watch(scaleProv).intervals),
                     setValue: (int v) =>
                         ref.read(baseProv.notifier).setAndSave(v),
                     readValue: ref.watch(baseProv),
-                  ),
-                ),
-              if (ref.watch(layoutProv) == Layout.progrChange)
-                ListTile(
-                  title: const Text('Base Program'),
-                  subtitle: const Text(
-                    'The lowest Program in the Grid, on the bottom left',
-                  ),
-                  trailing: DropdownInt(
-                    readValue: ref.watch(baseProgramProv) + 1,
-                    setValue: (int v) =>
-                        ref.read(baseProgramProv.notifier).setAndSave(v - 1),
-                    size: 128,
-                    start: 1,
                   ),
                 ),
               if (resizableGrid && ref.watch(layoutProv) != Layout.progrChange)
@@ -208,6 +196,20 @@ class MenuLayout extends ConsumerWidget {
                   setValue: (int v) =>
                       ref.read(baseOctaveProv.notifier).setAndSave(v),
                   resetFunction: ref.read(baseOctaveProv.notifier).reset,
+                ),
+              if (ref.watch(layoutProv) == Layout.progrChange)
+                ListTile(
+                  title: const Text('Base Program'),
+                  subtitle: const Text(
+                    'Lowest Program on the Grid',
+                  ),
+                  trailing: DropdownInt(
+                    readValue: ref.watch(baseProgramProv) + 1,
+                    setValue: (int v) =>
+                        ref.read(baseProgramProv.notifier).setAndSave(v - 1),
+                    size: 128,
+                    start: 1,
+                  ),
                 ),
               const DividerTitle('Controls'),
               if (resizableGrid)
@@ -259,22 +261,27 @@ class MenuLayout extends ConsumerWidget {
                       ref.read(pitchBendProv.notifier).setAndSave(v),
                 ),
               ),
-              NonLinearSliderTile(
-                label: 'Pitch Bend Return',
-                subtitle:
-                    'Set time in milliseconds for Pitch Bend Slider to ease back to Zero',
-                readValue: ref.watch(pitchBendEaseStepProv),
-                setValue: (int v) =>
-                    ref.read(pitchBendEaseStepProv.notifier).set(v),
-                resetFunction: ref.read(pitchBendEaseStepProv.notifier).reset,
-                displayValue: ref.watch(pitchBendEaseUsable) == 0
-                    ? 'Off'
-                    : ref.watch(pitchBendEaseUsable) < 1000
-                        ? '${ref.watch(pitchBendEaseUsable)} ms'
-                        : '${ref.watch(pitchBendEaseUsable) / 1000} s',
-                steps: Timing.releaseDelayTimes.length - 1,
-                onChangeEnd: ref.read(pitchBendEaseStepProv.notifier).save,
-              ),
+              if (ref.watch(pitchBendProv))
+                Container(
+                  color: Palette.dirtyTranslucent,
+                  child: NonLinearSliderTile(
+                    label: 'Pitch Bend Return',
+                    subtitle:
+                        'Set time in milliseconds for Pitch Bend Slider to ease back to Zero',
+                    readValue: ref.watch(pitchBendEaseStepProv),
+                    setValue: (int v) =>
+                        ref.read(pitchBendEaseStepProv.notifier).set(v),
+                    resetFunction:
+                        ref.read(pitchBendEaseStepProv.notifier).reset,
+                    displayValue: ref.watch(pitchBendEaseUsable) == 0
+                        ? 'Off'
+                        : ref.watch(pitchBendEaseUsable) < 1000
+                            ? '${ref.watch(pitchBendEaseUsable)} ms'
+                            : '${ref.watch(pitchBendEaseUsable) / 1000} s',
+                    steps: Timing.releaseDelayTimes.length - 1,
+                    onChangeEnd: ref.read(pitchBendEaseStepProv.notifier).save,
+                  ),
+                ),
               const DividerTitle('Display'),
               ListTile(
                 title: const Text('Pad Labels'),

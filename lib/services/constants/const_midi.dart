@@ -86,6 +86,11 @@ enum Note {
   final String label;
   final Sign sign;
 
+  @override
+  String toString() {
+    return label;
+  }
+
   int getInterval(Note other) {
     return (semitone - other.semitone).abs();
   }
