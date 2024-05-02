@@ -26,7 +26,9 @@ class DropdownRootNote extends StatelessWidget {
             index,
             showOctaveIndex: false,
           ),
-          style: enabled ? null : TextStyle(color: Palette.darkGrey),
+          style: enabled
+              ? const TextStyle(fontWeight: FontWeight.bold)
+              : TextStyle(color: Palette.darkGrey),
         ),
       );
     });

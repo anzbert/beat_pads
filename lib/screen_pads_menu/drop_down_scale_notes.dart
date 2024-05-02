@@ -34,6 +34,7 @@ class DropdownScaleNotes extends StatelessWidget {
                 note,
                 showNoteValue: true,
               ),
+              style: const TextStyle(fontWeight: FontWeight.bold),
             ),
           ),
         )

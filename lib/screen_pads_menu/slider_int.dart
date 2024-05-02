@@ -23,7 +23,7 @@ class IntSliderTile extends StatelessWidget {
   final int readValue;
   final void Function(int) setValue;
   final void Function()? resetValue;
-  final Widget trailing;
+  final String trailing;
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +47,10 @@ class IntSliderTile extends StatelessWidget {
             ],
           ),
           subtitle: subtitle != null ? Text(subtitle!) : null,
-          trailing: trailing,
+          trailing: Text(
+            trailing,
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
         ),
         Builder(
           builder: (context) {

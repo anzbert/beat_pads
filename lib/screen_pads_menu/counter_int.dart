@@ -57,6 +57,7 @@ class IntCounterTile extends StatelessWidget {
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: Theme.of(context).textTheme.titleMedium!.fontSize,
+                fontWeight: FontWeight.bold,
               ),
             ),
           ),

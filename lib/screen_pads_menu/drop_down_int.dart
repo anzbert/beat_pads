@@ -22,6 +22,7 @@ class DropdownInt extends StatelessWidget {
         value: index + start,
         child: Text(
           (index + start).toString(),
+          style: const TextStyle(fontWeight: FontWeight.bold),
         ),
       ),
     );

@@ -17,7 +17,10 @@ class DropdownEnum<T extends Enum> extends StatelessWidget {
         .map(
           (enumItem) => DropdownMenuItem(
             value: enumItem,
-            child: Text(enumItem.toString()),
+            child: Text(
+              enumItem.toString(),
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
           ),
         )
         .toList();

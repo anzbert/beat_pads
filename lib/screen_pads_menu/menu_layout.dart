@@ -103,14 +103,21 @@ class MenuLayout extends ConsumerWidget {
                 ),
               ),
               const DividerTitle('Layout'),
-              ListTile(
-                title: const Text('Layout'),
-                trailing: DropdownEnum<Layout>(
-                    values: Layout.values,
-                    readValue: ref.watch<Layout>(layoutProv),
-                    setValue: (Layout v) {
-                      ref.read(layoutProv.notifier).setAndSave(v);
-                    }),
+              Container(
+                margin: const EdgeInsets.only(bottom: 12),
+                color: Palette.darkGrey,
+                child: ListTile(
+                  title: const Text(
+                    'Layout',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  trailing: DropdownEnum<Layout>(
+                      values: Layout.values,
+                      readValue: ref.watch<Layout>(layoutProv),
+                      setValue: (Layout v) {
+                        ref.read(layoutProv.notifier).setAndSave(v);
+                      }),
+                ),
               ),
               if (ref.watch(layoutProv) == Layout.progrChange)
                 ListTile(
@@ -204,6 +211,7 @@ class MenuLayout extends ConsumerWidget {
               if (resizableGrid && ref.watch(layoutProv) != Layout.progrChange)
                 IntCounterTile(
                   label: 'Base Octave',
+                  modDisplay: (v) => '${v - 2}',
                   readValue: ref.watch(baseOctaveProv),
                   setValue: (int v) =>
                       ref.read(baseOctaveProv.notifier).setAndSave(v),
@@ -307,7 +315,7 @@ class MenuLayout extends ConsumerWidget {
                 label: 'Hue',
                 max: 360,
                 subtitle: 'Root Note hue on the RGB color wheel',
-                trailing: Text(ref.watch(baseHueProv).toString()),
+                trailing: ref.watch(baseHueProv).toString(),
                 readValue: ref.watch(baseHueProv),
                 setValue: (int v) => ref.read(baseHueProv.notifier).set(v),
                 resetValue: ref.read(baseHueProv.notifier).reset,
@@ -320,8 +328,9 @@ class MenuLayout extends ConsumerWidget {
                 ),
                 trailing: Switch(
                   value: ref.watch(velocityVisualProv),
-                  onChanged: (bool v) =>
-                      ref.read(velocityVisualProv.notifier).setAndSave(v),
+                  onChanged: (bool v) {
+                    ref.read(velocityVisualProv.notifier).setAndSave(v);
+                  },
                 ),
               ),
             ],
