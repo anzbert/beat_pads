@@ -27,11 +27,10 @@ class DropdownEnum<T extends Enum> extends StatelessWidget {
                   : highlight!.contains(enumItem)
                       ? TextStyle(
                           fontWeight: FontWeight.bold,
-                          color: Palette.laserLemon,
+                          color: Palette.yellowGreen,
                         )
-                      : TextStyle(
+                      : const TextStyle(
                           fontWeight: FontWeight.bold,
-                          // color: Palette.splashColor,
                         ),
             ),
           ),
