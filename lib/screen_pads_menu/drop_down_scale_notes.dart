@@ -7,7 +7,7 @@ class DropdownScaleNotes extends StatelessWidget {
     required this.setValue,
     required this.readValue,
     this.scale = Scale.chromatic,
-    this.layout = Layout.majorThird,
+    this.layout = Layout.customIntervals,
     super.key,
   }) : usedScale = layout == Layout.scaleNotesOnly ? scale : Scale.chromatic;
 

@@ -6,7 +6,7 @@ final layoutProv = NotifierProvider<SettingEnumNotifier<Layout>, Layout>(() {
   return LayoutSettingNotifier(
     nameMap: Layout.values.asNameMap(),
     key: 'layout',
-    defaultValue: Layout.majorThird,
+    defaultValue: Layout.customIntervals,
   );
 });
 
@@ -96,7 +96,7 @@ final customIntervalXProv = NotifierProvider<SettingIntNotifier, int>(() {
 final customIntervalYProv = NotifierProvider<SettingIntNotifier, int>(() {
   return SettingIntNotifier(
     key: 'customIntervalY',
-    defaultValue: 1,
+    defaultValue: 4,
     min: 1,
     max: 12,
   );

@@ -1,15 +1,15 @@
 import 'package:beat_pads/services/services.dart';
 
 enum Layout {
-  majorThird('Chromatic - Vertical Maj 3rd', chromatic: true),
-  quart('Chromatic - Vertical 4th', chromatic: true),
-  quint('Chromatic - Vertical 5th', chromatic: true),
-  customIntervals('Chromatic - Custom X & Y', custom: true, chromatic: true),
+  // majorThird('Chromatic - Vertical Maj 3rd', chromatic: true),
+  // quart('Chromatic - Vertical 4th', chromatic: true),
+  // quint('Chromatic - Vertical 5th', chromatic: true),
+  customIntervals('Chromatic', custom: true, chromatic: true),
+  scaleNotesCustom('In Key', custom: true),
   sequential('Chromatic - Sequential', chromatic: true),
-  scaleNotes3rd('In Key - Vertical 2 Scale Steps'),
-  scaleNotes4th('In Key - Vertical 3 Scale Steps'),
-  scaleNotes5th('In Key - Vertical 4 Scale Steps'),
-  scaleNotesCustom('In Key - Custom X & Y', custom: true),
+  // scaleNotes3rd('In Key - Vertical 2 Scale Steps'),
+  // scaleNotes4th('In Key - Vertical 3 Scale Steps'),
+  // scaleNotes5th('In Key - Vertical 4 Scale Steps'),
   scaleNotesOnly('In Key - Sequential'),
   progrChange('Program Changes', chromatic: true),
   magicToneNetwork('Magic Tone Network™', defaultDimensions: Vector2Int(8, 8)),
@@ -54,23 +54,23 @@ enum Layout {
         scaleList, customIntervalX, customIntervalY);
 
     switch (this) {
-      case Layout.majorThird:
-        return GridChromaticByRowInterval(settings, rowInterval: 4);
-      case Layout.quart:
-        return GridChromaticByRowInterval(settings, rowInterval: 5);
-      case Layout.quint:
-        return GridChromaticByRowInterval(settings, rowInterval: 7);
+      // case Layout.majorThird:
+      //   return GridChromaticByRowInterval(settings, rowInterval: 4);
+      // case Layout.quart:
+      //   return GridChromaticByRowInterval(settings, rowInterval: 5);
+      // case Layout.quint:
+      //   return GridChromaticByRowInterval(settings, rowInterval: 7);
       case Layout.customIntervals:
         return GridChromaticByCustomIntervals(settings);
       case Layout.sequential:
         return GridChromaticByRowInterval(settings, rowInterval: width);
 
-      case Layout.scaleNotes3rd:
-        return GridInScaleCustom(settings, fixedXY: const Vector2Int(1, 2));
-      case Layout.scaleNotes4th:
-        return GridInScaleCustom(settings, fixedXY: const Vector2Int(1, 3));
-      case Layout.scaleNotes5th:
-        return GridInScaleCustom(settings, fixedXY: const Vector2Int(1, 4));
+      // case Layout.scaleNotes3rd:
+      //   return GridInScaleCustom(settings, fixedXY: const Vector2Int(1, 2));
+      // case Layout.scaleNotes4th:
+      //   return GridInScaleCustom(settings, fixedXY: const Vector2Int(1, 3));
+      // case Layout.scaleNotes5th:
+      //   return GridInScaleCustom(settings, fixedXY: const Vector2Int(1, 4));
       case Layout.scaleNotesCustom:
         return GridInScaleCustom(settings);
       case Layout.scaleNotesOnly:

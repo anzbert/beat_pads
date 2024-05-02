@@ -1,3 +1,4 @@
+import 'package:beat_pads/services/constants/const_colors.dart';
 import 'package:flutter/material.dart';
 
 class DropdownEnum<T extends Enum> extends StatelessWidget {
@@ -5,11 +6,13 @@ class DropdownEnum<T extends Enum> extends StatelessWidget {
     required this.values,
     required this.readValue,
     required this.setValue,
+    this.highlight,
     super.key,
   });
   final T readValue;
   final void Function(T) setValue;
   final List<T> values;
+  final List<T>? highlight;
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +22,17 @@ class DropdownEnum<T extends Enum> extends StatelessWidget {
             value: enumItem,
             child: Text(
               enumItem.toString(),
-              style: const TextStyle(fontWeight: FontWeight.bold),
+              style: highlight == null
+                  ? null
+                  : highlight!.contains(enumItem)
+                      ? TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Palette.laserLemon,
+                        )
+                      : TextStyle(
+                          fontWeight: FontWeight.bold,
+                          // color: Palette.splashColor,
+                        ),
             ),
           ),
         )

@@ -112,6 +112,10 @@ class MenuLayout extends ConsumerWidget {
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   trailing: DropdownEnum<Layout>(
+                      highlight: const [
+                        Layout.customIntervals,
+                        Layout.scaleNotesCustom
+                      ],
                       values: Layout.values,
                       readValue: ref.watch<Layout>(layoutProv),
                       setValue: (Layout v) {
@@ -136,8 +140,8 @@ class MenuLayout extends ConsumerWidget {
               if (resizableGrid && ref.watch(layoutProv).custom)
                 IntCounterTile(
                   label: ref.watch(layoutProv) == Layout.scaleNotesCustom
-                      ? 'X Scale Steps'
-                      : 'X Semitones',
+                      ? 'X: Scale Steps'
+                      : 'X: Semitones',
                   setValue: (int v) =>
                       ref.read(customIntervalXProv.notifier).setAndSave(v),
                   readValue: ref.watch(customIntervalXProv),
@@ -145,8 +149,8 @@ class MenuLayout extends ConsumerWidget {
               if (resizableGrid && ref.watch(layoutProv).custom)
                 IntCounterTile(
                   label: ref.watch(layoutProv) == Layout.scaleNotesCustom
-                      ? 'Y Scale Steps'
-                      : 'Y Semitones',
+                      ? 'Y: Scale Steps'
+                      : 'Y: Semitones',
                   setValue: (int v) =>
                       ref.read(customIntervalYProv.notifier).setAndSave(v),
                   readValue: ref.watch(customIntervalYProv),
