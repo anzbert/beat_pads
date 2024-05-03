@@ -6,6 +6,7 @@ class DropdownEnum<T extends Enum> extends StatelessWidget {
     required this.values,
     required this.readValue,
     required this.setValue,
+    this.filter,
     this.highlight,
     super.key,
   });
@@ -13,10 +14,15 @@ class DropdownEnum<T extends Enum> extends StatelessWidget {
   final void Function(T) setValue;
   final List<T> values;
   final List<T>? highlight;
+  final bool Function(T)? filter;
 
   @override
   Widget build(BuildContext context) {
     final List<DropdownMenuItem<T>> dropList = values
+        .where((element) {
+          if (filter == null) return true;
+          return filter!(element);
+        })
         .map(
           (enumItem) => DropdownMenuItem(
             value: enumItem,
