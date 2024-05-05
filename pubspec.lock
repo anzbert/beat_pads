@@ -13,10 +13,10 @@ packages:
     dependency: transitive
     description:
       name: archive
-      sha256: ecf4273855368121b1caed0d10d4513c7241dfc813f7d3c8933b36622ae9b265
+      sha256: "0763b45fa9294197a2885c8567927e2830ade852e5c896fd4ab7e0e348d0f373"
       url: "https://pub.dev"
     source: hosted
-    version: "3.5.1"
+    version: "3.5.0"
   args:
     dependency: transitive
     description:
@@ -348,18 +348,18 @@ packages:
     dependency: "direct main"
     description:
       name: rive
-      sha256: befdee09230cf16a13a2914828ccc5e55d9b76ee5c3400957c0963533010f50a
+      sha256: "95690a0fb4f6e195c53b217ab3cc0e0b0f443c670adbdee9d57d636a36b82b18"
       url: "https://pub.dev"
     source: hosted
-    version: "0.13.3"
+    version: "0.13.2"
   rive_common:
     dependency: transitive
     description:
       name: rive_common
-      sha256: "496cdd0bc59481b38701a3c31693cfc74942df18cd3d72b9d386f4beed58a8d5"
+      sha256: "3eee68fcab3e0882090cea5a8cf7acea7967f469a34a2580322575603b094435"
       url: "https://pub.dev"
     source: hosted
-    version: "0.4.7"
+    version: "0.4.5"
   riverpod:
     dependency: transitive
     description:
