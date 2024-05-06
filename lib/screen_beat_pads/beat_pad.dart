@@ -23,7 +23,7 @@ class SlideBeatPad extends ConsumerWidget {
 
     final Color color = ref.watch(layoutProv) == Layout.progrChange
         ? ref.watch(padColorsProv).colorize(
-              ref.watch(scaleProv).intervals,
+              Scale.chromatic.intervals,
               ref.watch(baseHueProv),
               ref.watch(rootProv),
               note,

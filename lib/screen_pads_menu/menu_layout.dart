@@ -1,6 +1,7 @@
 import 'package:beat_pads/screen_beat_pads/button_presets.dart';
 import 'package:beat_pads/screen_pads_menu/counter_int.dart';
 import 'package:beat_pads/screen_pads_menu/drop_down_enum.dart';
+import 'package:beat_pads/screen_pads_menu/drop_down_int.dart';
 import 'package:beat_pads/screen_pads_menu/drop_down_notes.dart';
 import 'package:beat_pads/screen_pads_menu/preview_beat_pads.dart';
 import 'package:beat_pads/screen_pads_menu/slider_int.dart';
@@ -102,25 +103,45 @@ class MenuLayout extends ConsumerWidget {
                 ),
               ),
               const DividerTitle('Layout'),
-              ListTile(
-                title: const Text('Layout'),
-                trailing: DropdownEnum<Layout>(
-                    values: Layout.values,
-                    readValue: ref.watch<Layout>(layoutProv),
-                    setValue: (Layout v) {
-                      ref.read(layoutProv.notifier).setAndSave(v);
-                      if (v == Layout.progrChange) {
-                        ref
-                            .read(scaleProv.notifier)
-                            .setAndSave(Scale.chromatic);
-                      }
-                    }),
+              Container(
+                margin: const EdgeInsets.only(bottom: 12),
+                color: Palette.darkGrey,
+                child: ListTile(
+                  title: const Text(
+                    'Layout',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  trailing: DropdownEnum<Layout>(
+                      highlight: const [
+                        Layout.customIntervals,
+                        Layout.scaleNotesCustom
+                      ],
+                      values: Layout.values,
+                      readValue: ref.watch<Layout>(layoutProv),
+                      setValue: (Layout v) {
+                        ref.read(layoutProv.notifier).setAndSave(v);
+                      }),
+                ),
               ),
+              if (ref.watch(layoutProv) == Layout.progrChange)
+                ListTile(
+                  title: const Text('Base Program'),
+                  subtitle: const Text(
+                    'Lowest Program on the Grid',
+                  ),
+                  trailing: DropdownInt(
+                    readValue: ref.watch(baseProgramProv) + 1,
+                    setValue: (int v) =>
+                        ref.read(baseProgramProv.notifier).setAndSave(v - 1),
+                    size: 128,
+                    start: 1,
+                  ),
+                ),
               if (resizableGrid && ref.watch(layoutProv).custom)
                 IntCounterTile(
                   label: ref.watch(layoutProv) == Layout.scaleNotesCustom
-                      ? 'X Scale Steps'
-                      : 'X Semitones',
+                      ? 'X: Scale Steps'
+                      : 'X: Semitones',
                   setValue: (int v) =>
                       ref.read(customIntervalXProv.notifier).setAndSave(v),
                   readValue: ref.watch(customIntervalXProv),
@@ -128,8 +149,8 @@ class MenuLayout extends ConsumerWidget {
               if (resizableGrid && ref.watch(layoutProv).custom)
                 IntCounterTile(
                   label: ref.watch(layoutProv) == Layout.scaleNotesCustom
-                      ? 'Y Scale Steps'
-                      : 'Y Semitones',
+                      ? 'Y: Scale Steps'
+                      : 'Y: Semitones',
                   setValue: (int v) =>
                       ref.read(customIntervalYProv.notifier).setAndSave(v),
                   readValue: ref.watch(customIntervalYProv),
@@ -149,20 +170,25 @@ class MenuLayout extends ConsumerWidget {
                       ref.read(heightProv.notifier).setAndSave(v),
                   readValue: ref.watch(heightProv),
                 ),
-              if (resizableGrid) const DividerTitle('Scale'),
-              if (resizableGrid)
+              if (resizableGrid && ref.watch(layoutProv) != Layout.progrChange)
+                const DividerTitle('Scale'),
+              if (resizableGrid && ref.watch(layoutProv) != Layout.progrChange)
                 ListTile(
                   title: const Text('Scale'),
                   trailing: DropdownEnum<Scale>(
                     values: Scale.values,
                     readValue: ref.watch(scaleProv),
-                    setValue: (Scale v) =>
-                        ref.read(scaleProv.notifier).setAndSave(v),
+                    setValue: (Scale v) {
+                      ref.read(scaleProv.notifier).setAndSave(v);
+                      ref
+                          .read(baseProv.notifier)
+                          .setAndSave(ref.read(rootProv));
+                    },
                   ),
                 ),
-              if (resizableGrid)
+              if (resizableGrid && ref.watch(layoutProv) != Layout.progrChange)
                 ListTile(
-                  title: const Text('Scale Root Note'),
+                  title: const Text('Root Note'),
                   subtitle: const Text('Root Note of the selected scale'),
                   trailing: DropdownRootNote(
                     setValue: (int v) {
@@ -172,21 +198,24 @@ class MenuLayout extends ConsumerWidget {
                     readValue: ref.watch(rootProv),
                   ),
                 ),
-              if (resizableGrid)
+              if (resizableGrid && ref.watch(layoutProv) != Layout.progrChange)
                 ListTile(
                   title: const Text('Base Note'),
                   subtitle: const Text(
-                    'The lowest Note in the Grid, on the bottom left',
+                    'Lowest Note on the bottom left',
                   ),
                   trailing: DropdownRootNote(
+                    enabledList: MidiUtils.absoluteScaleNotes(
+                        ref.watch(rootProv), ref.watch(scaleProv).intervals),
                     setValue: (int v) =>
                         ref.read(baseProv.notifier).setAndSave(v),
                     readValue: ref.watch(baseProv),
                   ),
                 ),
-              if (resizableGrid)
+              if (resizableGrid && ref.watch(layoutProv) != Layout.progrChange)
                 IntCounterTile(
                   label: 'Base Octave',
+                  modDisplay: (v) => '${v - 2}',
                   readValue: ref.watch(baseOctaveProv),
                   setValue: (int v) =>
                       ref.read(baseOctaveProv.notifier).setAndSave(v),
@@ -242,22 +271,27 @@ class MenuLayout extends ConsumerWidget {
                       ref.read(pitchBendProv.notifier).setAndSave(v),
                 ),
               ),
-              NonLinearSliderTile(
-                label: 'Pitch Bend Return',
-                subtitle:
-                    'Set time in milliseconds for Pitch Bend Slider to ease back to Zero',
-                readValue: ref.watch(pitchBendEaseStepProv),
-                setValue: (int v) =>
-                    ref.read(pitchBendEaseStepProv.notifier).set(v),
-                resetFunction: ref.read(pitchBendEaseStepProv.notifier).reset,
-                displayValue: ref.watch(pitchBendEaseUsable) == 0
-                    ? 'Off'
-                    : ref.watch(pitchBendEaseUsable) < 1000
-                        ? '${ref.watch(pitchBendEaseUsable)} ms'
-                        : '${ref.watch(pitchBendEaseUsable) / 1000} s',
-                steps: Timing.releaseDelayTimes.length - 1,
-                onChangeEnd: ref.read(pitchBendEaseStepProv.notifier).save,
-              ),
+              if (ref.watch(pitchBendProv))
+                Container(
+                  color: Palette.dirtyTranslucent,
+                  child: NonLinearSliderTile(
+                    label: 'Pitch Bend Return',
+                    subtitle:
+                        'Set time in milliseconds for Pitch Bend Slider to ease back to Zero',
+                    readValue: ref.watch(pitchBendEaseStepProv),
+                    setValue: (int v) =>
+                        ref.read(pitchBendEaseStepProv.notifier).set(v),
+                    resetFunction:
+                        ref.read(pitchBendEaseStepProv.notifier).reset,
+                    displayValue: ref.watch(pitchBendEaseUsable) == 0
+                        ? 'Off'
+                        : ref.watch(pitchBendEaseUsable) < 1000
+                            ? '${ref.watch(pitchBendEaseUsable)} ms'
+                            : '${ref.watch(pitchBendEaseUsable) / 1000} s',
+                    steps: Timing.releaseDelayTimes.length - 1,
+                    onChangeEnd: ref.read(pitchBendEaseStepProv.notifier).save,
+                  ),
+                ),
               const DividerTitle('Display'),
               ListTile(
                 title: const Text('Pad Labels'),
@@ -285,7 +319,7 @@ class MenuLayout extends ConsumerWidget {
                 label: 'Hue',
                 max: 360,
                 subtitle: 'Root Note hue on the RGB color wheel',
-                trailing: Text(ref.watch(baseHueProv).toString()),
+                trailing: ref.watch(baseHueProv).toString(),
                 readValue: ref.watch(baseHueProv),
                 setValue: (int v) => ref.read(baseHueProv.notifier).set(v),
                 resetValue: ref.read(baseHueProv.notifier).reset,
@@ -298,8 +332,9 @@ class MenuLayout extends ConsumerWidget {
                 ),
                 trailing: Switch(
                   value: ref.watch(velocityVisualProv),
-                  onChanged: (bool v) =>
-                      ref.read(velocityVisualProv.notifier).setAndSave(v),
+                  onChanged: (bool v) {
+                    ref.read(velocityVisualProv.notifier).setAndSave(v);
+                  },
                 ),
               ),
             ],

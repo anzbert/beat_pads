@@ -6,7 +6,7 @@ final layoutProv = NotifierProvider<SettingEnumNotifier<Layout>, Layout>(() {
   return LayoutSettingNotifier(
     nameMap: Layout.values.asNameMap(),
     key: 'layout',
-    defaultValue: Layout.majorThird,
+    defaultValue: Layout.customIntervals,
   );
 });
 
@@ -57,7 +57,11 @@ final baseProv = NotifierProvider<SettingIntNotifier, int>(() {
 
 final baseNoteProv = Provider<int>(
   (ref) {
-    return (ref.watch(baseOctaveProv)) * 12 + ref.watch(baseProv);
+    if (ref.watch(layoutProv) == Layout.progrChange) {
+      return ref.watch(baseProgramProv);
+    } else {
+      return (ref.watch(baseOctaveProv)) * 12 + ref.watch(baseProv);
+    }
   },
 );
 
@@ -67,6 +71,15 @@ final baseOctaveProv = NotifierProvider<SettingIntNotifier, int>(() {
     defaultValue: 3,
     min: 0,
     max: 9,
+  );
+});
+
+final baseProgramProv = NotifierProvider<SettingIntNotifier, int>(() {
+  return SettingIntNotifier(
+    key: 'baseProgram',
+    defaultValue: 0,
+    min: 0,
+    max: 127,
   );
 });
 
@@ -83,7 +96,7 @@ final customIntervalXProv = NotifierProvider<SettingIntNotifier, int>(() {
 final customIntervalYProv = NotifierProvider<SettingIntNotifier, int>(() {
   return SettingIntNotifier(
     key: 'customIntervalY',
-    defaultValue: 1,
+    defaultValue: 4,
     min: 1,
     max: 12,
   );

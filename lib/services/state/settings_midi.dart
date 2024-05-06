@@ -13,11 +13,12 @@ final channelSettingProv = NotifierProvider<SettingIntNotifier, int>(() {
 final channelUsableProv = Provider<int>(
   (ref) {
     final int channel = ref.watch(channelSettingProv);
-    final PlayMode playMode = ref.watch(playModeProv);
-    final bool upperZone = channel > 7;
 
-    if (playMode == PlayMode.mpe || playMode == PlayMode.mpeTargetPb) {
-      return upperZone ? 15 : 0;
+    if (ref.watch(layoutProv) != Layout.progrChange) {
+      if (ref.watch(playModeProv) == PlayMode.mpe ||
+          ref.watch(playModeProv) == PlayMode.mpeTargetPb) {
+        return channel > 7 ? 15 : 0;
+      }
     }
 
     return channel;

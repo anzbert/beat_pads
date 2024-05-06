@@ -82,6 +82,9 @@ class MenuSystem extends ConsumerWidget {
             ),
           ),
         ),
+        const SizedBox(
+          height: 30,
+        ),
         const StringInfoBox(
           header: 'Credits',
           body: [

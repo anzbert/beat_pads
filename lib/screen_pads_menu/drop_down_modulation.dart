@@ -25,12 +25,15 @@ class DropdownModulation extends StatelessWidget {
                           enabled: false,
                           child: Text(
                             modulation.title,
-                            style: TextStyle(color: Palette.lightGrey),
+                            style: TextStyle(color: Palette.darkGrey),
                           ),
                         )
                       : DropdownMenuItem<MPEmods>(
                           value: modulation,
-                          child: Text(modulation.title),
+                          child: Text(
+                            modulation.title,
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
                         ),
             )
             .toList();

@@ -48,8 +48,14 @@ class NonLinearSliderTile extends StatelessWidget {
           ),
           subtitle: subtitle != null ? Text(subtitle!) : null,
           trailing: displayValue != null
-              ? Text(displayValue!)
-              : Text(readValue.toString()),
+              ? Text(
+                  displayValue!,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                )
+              : Text(
+                  readValue.toString(),
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
         ),
         Builder(
           builder: (context) {
