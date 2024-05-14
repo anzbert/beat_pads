@@ -45,5 +45,7 @@ linter:
 # https://dart.dev/guides/language/analysis-options
 
 analyzer:
+  plugins:
+    - custom_lint # plugin for riverpod analysis (riverpod_lint/custom_lint)
   errors:
     diagnostic_describe_all_properties: ignore
