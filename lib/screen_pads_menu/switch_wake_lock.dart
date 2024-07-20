@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:wakelock/wakelock.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 final _wakeLockProv = StateProvider<bool>((ref) => false);
 
@@ -16,7 +16,7 @@ class SwitchWakeLockTile extends ConsumerWidget {
         value: ref.watch(_wakeLockProv),
         onChanged: (v) {
           ref.read(_wakeLockProv.notifier).state = v;
-          Wakelock.toggle(enable: v);
+          WakelockPlus.toggle(enable: v);
         },
       ),
     );
