@@ -5,6 +5,7 @@ enum Layout {
   scaleNotesCustom('In Key', custom: true),
   sequential('Chromatic - Sequential', chromatic: true),
   scaleNotesOnly('In Key - Sequential'),
+  drumRack('Drum Rack'),
 
   progrChange('Program Changes', chromatic: true),
 
@@ -54,6 +55,9 @@ enum Layout {
         return GridChromaticByCustomIntervals(settings);
       case Layout.sequential:
         return GridChromaticByRowInterval(settings, rowInterval: width);
+      
+      case Layout.drumRack:
+        return GridChromaticDrumRack(settings);
 
       case Layout.scaleNotesCustom:
         return GridInScaleCustom(settings);
@@ -130,6 +134,25 @@ class GridChromaticByRowInterval extends Grid {
     for (int row = 0; row < settings.height; row++) {
       for (int note = 0; note < settings.width; note++) {
         grid.add(CustomPad(settings.baseNote + row * rowInterval + note));
+      }
+    }
+    return grid;
+  }
+}
+
+//// A vertical chromatic drum rack Grid
+class GridChromaticDrumRack extends Grid {
+  GridChromaticDrumRack(super.settings);
+
+  @override
+  List<CustomPad> get list {
+    final List<CustomPad> grid = [];
+    for (int row = 0; row < settings.height; row++) {
+      for (int col = 0; col < settings.width; col++) {
+        int numVerticalRacks = 1 + (settings.height % 4);
+        int rackOffset = ((col ~/ 4) * 16 * numVerticalRacks);
+        int rowOffset = (col % 4) + row * 4;
+        grid.add(CustomPad(settings.baseNote + rackOffset + rowOffset));
       }
     }
     return grid;
