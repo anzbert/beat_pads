@@ -359,14 +359,14 @@ class PlayModeMPETargetPb extends PlayModeHandler {
                 0x3FFF /
                 2;
 
-        final finalPitchbend = pitchDistance + pitchModifier;
-        // print(["LEFT", finalPitchbend]);
+        // final finalPitchbend = pitchDistance + pitchModifier;
+        // // print(["LEFT", finalPitchbend]);
 
-        mpeMods.xMod.send(
-          finalPitchbend,
-          eventInBuffer.noteEvent.channel,
-          0, // Note is ignored in Pitchbend
-        );
+        // mpeMods.xMod.send(
+        //   finalPitchbend,
+        //   eventInBuffer.noteEvent.channel,
+        //   0, // Note is ignored in Pitchbend
+        // );
       }
       // right (positive: [rightDeadzoneBorder] to 1)
       else if (realXPercentage > rightDeadzoneBorder) {
@@ -383,17 +383,16 @@ class PlayModeMPETargetPb extends PlayModeHandler {
                 0x3FFF /
                 2;
 
-        final finalPitchbend = pitchDistance + pitchModifier;
         // print(["RIGHT", finalPitchbend]);
-
-        mpeMods.xMod.send(
-          finalPitchbend,
-          eventInBuffer.noteEvent.channel,
-          0, // Note is ignored in Pitchbend
-        );
       } else {
         // print("!In deadzone!");
       }
+      final finalPitchbend = pitchDistance + pitchModifier;
+      mpeMods.xMod.send(
+        finalPitchbend,
+        eventInBuffer.noteEvent.channel,
+        0, // Note is ignored in Pitchbend
+      );
     }
   }
 }
