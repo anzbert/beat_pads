@@ -30,9 +30,9 @@ class SendSettings {
     this.velocityCenter,
     this.velocityMode,
     this.pitchbendOnlyOnRow,
-    this.pitchDeadzone,
+    this.mpePushPitchDeadzone,
     this.mpePushStyleYAxisMod,
-    this.mpeRelativeMode,
+    this.mpePushRelativeMode,
     this.layout,
   );
   final PlayMode playMode;
@@ -54,9 +54,9 @@ class SendSettings {
   final double velocityCenter;
   final VelocityMode velocityMode;
   final bool pitchbendOnlyOnRow;
-  final int pitchDeadzone;
+  final int mpePushPitchDeadzone;
   final MPEpushStyleYAxisMods mpePushStyleYAxisMod;
-  final bool mpeRelativeMode;
+  final bool mpePushRelativeMode;
   final Layout layout;
 }
 
