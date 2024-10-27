@@ -82,7 +82,7 @@ final combinedSettings = Provider.autoDispose<SendSettings>((ref) {
     ref.watch(velocityCenterProv),
     ref.watch(velocityModeProv),
     ref.watch(mpeOnlyOnRowProv),
-    ref.watch(pitchBendEaseUsable),
+    ref.watch(pitchDeadzoneProv),
     ref.watch(mpePushYAxisModeProv),
     ref.watch(mpeRelativeModeProv),
     ref.watch(layoutProv),

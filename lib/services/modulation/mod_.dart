@@ -13,9 +13,9 @@ abstract class Mod {
 class ModPitchBendToNote extends Mod {
   ModPitchBendToNote();
 
-  /// note is ignored in this Mod function
+  /// Note is ignored in this Mod function
   @override
-  void send(double distance, int channel, int note) {
+  void send(double distance, int channel, [int note = 0]) {
     final int pitchChange = (distance * 0x3FFF).toInt();
 
     if (!listEquals<num>([channel, pitchChange], lastSentValues)) {
