@@ -12,7 +12,7 @@ class PlayModeMPETargetPb extends PlayModeHandler {
           settings.mpeMemberChannels,
           upperZone: settings.zone,
         ),
-        pitchDeadzone = settings.pitchDeadzone / 100;
+        pitchDeadzone = settings.mpePushPitchDeadzone / 100;
 
   /// Currently selected Modulations on X and Y
   final SendMod mpeMods;
@@ -62,7 +62,7 @@ class PlayModeMPETargetPb extends PlayModeHandler {
     // ///// MPE modulation //////////////////////////////////////////////////
     //
     // RELATIVE mode (starts with a value of 64, regardless of tap position):
-    if (settings.mpeRelativeMode) {
+    if (settings.mpePushRelativeMode) {
       // 0 is the centre of -1.0 to 1.0 => 64
       mpeMods.xMod.send(
         0,
@@ -234,7 +234,7 @@ class PlayModeMPETargetPb extends PlayModeHandler {
     /// fine adjustment of the pitch bend
     double pitchModifier = 0;
 
-    // Y - AXIS SLIDE ////////////////////////////////////////////////
+    // Y - AXIS SLIDE ///////////////////////////////////////////////////////////////////////////////
     //
     final double clampedYPercentage = Utils.mapValueToTargetRange(
       realYPercentage.clamp(1 - percentageEdge, percentageEdge),
@@ -243,8 +243,9 @@ class PlayModeMPETargetPb extends PlayModeHandler {
       0,
       1,
     );
+
     // RELATIVE mode
-    if (settings.mpeRelativeMode && !eventInBuffer.leftInitialPad) {
+    if (settings.mpePushRelativeMode && !eventInBuffer.leftInitialPad) {
       final double yPercentageMiddle = eventInBuffer.originYPercentage;
       double sendPercentage = 0;
 
@@ -271,10 +272,10 @@ class PlayModeMPETargetPb extends PlayModeHandler {
       );
     }
 
-    // X - AXIS PITCHBEND ///////////////////////////////////////////
+    // X - AXIS PITCHBEND ///////////////////////////////////////////////////////////////////////////////
     //
     // RELATIVE mode
-    if (settings.mpeRelativeMode && eventInBuffer.leftInitialPad == false) {
+    if (settings.mpePushRelativeMode && eventInBuffer.leftInitialPad == false) {
       /// coarse pitch adjustment to the tone that it is currently bent to in -1 to +1
       pitchDistance = 0;
 
@@ -320,7 +321,7 @@ class PlayModeMPETargetPb extends PlayModeHandler {
       mpeMods.xMod.send(
         pitchDistance + pitchModifier,
         eventInBuffer.noteEvent.channel,
-        eventInBuffer.noteEvent.note,
+        0, // Note is ignored in Pitchbend
       );
     }
 
@@ -333,6 +334,11 @@ class PlayModeMPETargetPb extends PlayModeHandler {
 
       final double leftDeadzoneBorder = 0.5 - pitchDeadzone / 2;
       final double rightDeadzoneBorder = 0.5 + pitchDeadzone / 2;
+
+      // print(pitchDeadzone / 2);
+
+      // print(["leftDZB", leftDeadzoneBorder]);
+      // print(["rightDZB", rightDeadzoneBorder]);
 
       /// maps the 0 to 1.0 X-axis value on pad to a range between -1.0 and +1.0
       double pitchPercentage = realXPercentage * 2 - 1;
@@ -352,6 +358,15 @@ class PlayModeMPETargetPb extends PlayModeHandler {
                     mappedPercentage) /
                 0x3FFF /
                 2;
+
+        // final finalPitchbend = pitchDistance + pitchModifier;
+        // // print(["LEFT", finalPitchbend]);
+
+        // mpeMods.xMod.send(
+        //   finalPitchbend,
+        //   eventInBuffer.noteEvent.channel,
+        //   0, // Note is ignored in Pitchbend
+        // );
       }
       // right (positive: [rightDeadzoneBorder] to 1)
       else if (realXPercentage > rightDeadzoneBorder) {
@@ -367,11 +382,16 @@ class PlayModeMPETargetPb extends PlayModeHandler {
                     mappedPercentage) /
                 0x3FFF /
                 2;
+
+        // print(["RIGHT", finalPitchbend]);
+      } else {
+        // print("!In deadzone!");
       }
+      final finalPitchbend = pitchDistance + pitchModifier;
       mpeMods.xMod.send(
-        pitchDistance + pitchModifier,
+        finalPitchbend,
         eventInBuffer.noteEvent.channel,
-        eventInBuffer.noteEvent.note,
+        0, // Note is ignored in Pitchbend
       );
     }
   }

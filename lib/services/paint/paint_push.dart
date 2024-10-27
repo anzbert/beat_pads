@@ -87,10 +87,12 @@ class CustomPaintPushOverlay extends CustomPainter {
 
     if (relativeMode) {
       // horizontal:
-      canvas.drawLine(
-          Offset(padRect.left + padSpacing, origin.dy),
-          Offset(padRect.right - padSpacing, origin.dy),
-          centerIndicatorLinesStroke);
+      if (yMod) {
+        canvas.drawLine(
+            Offset(padRect.left + padSpacing, origin.dy),
+            Offset(padRect.right - padSpacing, origin.dy),
+            centerIndicatorLinesStroke);
+      }
 
       // vertical:
       canvas.drawLine(
@@ -102,14 +104,18 @@ class CustomPaintPushOverlay extends CustomPainter {
       // canvas.drawCircle(origin, 3, centerIndicatorLinesStroke);
     } else {
       // horizontal:
-      canvas.drawLine(
-          Offset(padRect.left + padSpacing, padRect.center.dy),
-          Offset(padRect.right - padSpacing, padRect.center.dy),
-          centerIndicatorLinesStroke);
+      if (yMod) {
+        canvas.drawLine(
+            Offset(padRect.left + padSpacing, padRect.center.dy),
+            Offset(padRect.right - padSpacing, padRect.center.dy),
+            centerIndicatorLinesStroke);
+      }
 
       // vertical:
-      // canvas.drawLine(Offset(padRect.center.dx, padRect.top + padSpacing),
-      //     Offset(padRect.center.dx, padRect.bottom - padSpacing), centerIndicatorLinesStroke);
+      canvas.drawLine(
+          Offset(padRect.center.dx, padRect.top + padSpacing),
+          Offset(padRect.center.dx, padRect.bottom - padSpacing),
+          centerIndicatorLinesStroke);
 
       // center:
       // canvas.drawCircle(padRect.center, 3, centerIndicatorLinesStroke);
