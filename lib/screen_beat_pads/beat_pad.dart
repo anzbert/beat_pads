@@ -4,54 +4,55 @@ import 'package:beat_pads/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SlideBeatPad extends ConsumerWidget {
+class SlideBeatPad extends ConsumerStatefulWidget {
   const SlideBeatPad({
     required this.note,
     required this.preview,
     super.key,
   });
-  final bool preview;
 
+  final bool preview;
   final int note;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  _SlideBeatPadState createState() => _SlideBeatPadState();
+}
+
+class _SlideBeatPadState extends ConsumerState<SlideBeatPad> {
+  int sustainedVelocity = 0;
+
+  @override
+  Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
-
-    final int velocity =
-        ref.watch(senderProvider).playModeHandler.isNoteOn(note);
-
+    final int velocity = ref.watch(senderProvider).playModeHandler.isNoteOn(widget.note);
     final Color color = ref.watch(layoutProv) == Layout.progrChange
         ? ref.watch(padColorsProv).colorize(
-              Scale.chromatic.intervals,
-              ref.watch(baseHueProv),
-              ref.watch(rootProv),
-              note,
-              0,
-              noteOn: false,
-            )
+            Scale.chromatic.intervals,
+            ref.watch(baseHueProv),
+            ref.watch(rootProv),
+            widget.note,
+            0,
+            noteOn: false,
+          )
         : ref.watch(padColorsProv).colorize(
-              ref.watch(scaleProv).intervals,
-              ref.watch(baseHueProv),
-              ref.watch(rootProv),
-              note,
-              preview ? 0 : ref.watch(rxNoteProvider)[note],
-              noteOn: velocity != 0,
-            );
-
+            ref.watch(scaleProv).intervals,
+            ref.watch(baseHueProv),
+            ref.watch(rootProv),
+            widget.note,
+            widget.preview ? 0 : ref.watch(rxNoteProvider)[widget.note],
+            noteOn: velocity != 0,
+          );
     final Color splashColor = Palette.splashColor;
-
     final BorderRadius padRadius = BorderRadius.all(
       Radius.circular(screenWidth * ThemeConst.padRadiusFactor),
     );
     final double padSpacing = screenWidth * ThemeConst.padSpacingFactor;
-
     final Label label = ref.watch(layoutProv) == Layout.progrChange
-        ? Label(title: '${note + 1}', subtitle: 'Program')
+        ? Label(title: '${widget.note + 1}', subtitle: 'Program')
         : PadLabels.getLabel(
             ref.watch(padLabelsProv),
             ref.watch(layoutProv),
-            note,
+            widget.note,
           );
     final double fontSize = screenWidth * 0.021;
     final Color padTextColor = Palette.darkGrey;
@@ -68,10 +69,8 @@ class SlideBeatPad extends ConsumerWidget {
             color: color,
             borderRadius: padRadius,
             shadowColor: Colors.black,
-            child: note > 127 || note < 0
-                ?
-                // OUT OF MIDI RANGE
-                InkWell(
+            child: widget.note > 127 || widget.note < 0
+                ? InkWell(
                     borderRadius: padRadius,
                     child: Padding(
                       padding: EdgeInsets.all(padSpacing),
@@ -85,9 +84,7 @@ class SlideBeatPad extends ConsumerWidget {
                       ),
                     ),
                   )
-                :
-                // WITHIN MIDI RANGE
-                InkWell(
+                : InkWell(
                     onTapDown: (_) {},
                     borderRadius: padRadius,
                     highlightColor: color,
@@ -123,7 +120,7 @@ class SlideBeatPad extends ConsumerWidget {
                     ),
                   ),
           ),
-          if (ref.watch(velocityVisualProv) && preview == false)
+          if (ref.watch(velocityVisualProv) && widget.preview == false)
             VelocityOverlay(
               velocity: velocity,
               padRadius: padRadius,
