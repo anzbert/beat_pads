@@ -22,7 +22,7 @@ class _SlideBeatPadState extends ConsumerState<SlideBeatPad> {
   int sustainedVelocity = 0;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final double screenWidth = MediaQuery.of(context).size.width;
     final int velocity = ref.watch(senderProvider).playModeHandler.isNoteOn(widget.note);
     final Color color = ref.watch(layoutProv) == Layout.progrChange
