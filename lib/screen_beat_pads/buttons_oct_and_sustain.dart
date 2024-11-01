@@ -21,8 +21,7 @@ class ControlButtonsRect extends ConsumerWidget {
           ),
         if (ref.watch(sustainButtonProv))
           Expanded(
-            child:
-                SustainButtonDoubleTap(channel: ref.watch(channelUsableProv)),
+            child: SustainButtonDoubleTap(),
           ),
       ],
     );

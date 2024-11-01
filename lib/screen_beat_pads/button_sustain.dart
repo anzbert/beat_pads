@@ -1,67 +1,70 @@
 import 'package:beat_pads/services/services.dart';
 import 'package:beat_pads/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SustainButtonDoubleTap extends StatefulWidget {
-  const SustainButtonDoubleTap({required this.channel, super.key});
-
-  final int channel;
-
+class _SustainState extends AutoDisposeNotifier<bool> {
   @override
-  State<SustainButtonDoubleTap> createState() => _SustainButtonDoubleTapState();
-}
-
-class _SustainButtonDoubleTapState extends State<SustainButtonDoubleTap> {
-  bool sustainState = false;
-
-  @override
-  void dispose() {
-    if (sustainState == true) {
-      MidiUtils.sendSustainMessage(widget.channel, state: false);
-    }
-    super.dispose();
+  bool build() {
+    ref.onDispose(() {
+      state = false;
+      MidiUtils.sendSustainMessage(ref.read(channelUsableProv), state: state);
+    });
+    return false;
   }
 
+  void sustainOn() {
+    state = true;
+    MidiUtils.sendSustainMessage(ref.read(channelUsableProv), state: state);
+  }
+
+  void sustainOff() {
+    state = false;
+    MidiUtils.sendSustainMessage(ref.read(channelUsableProv), state: state);
+  }
+
+  void sustainToggle() {
+    state = !state;
+    MidiUtils.sendSustainMessage(ref.read(channelUsableProv), state: state);
+  }
+}
+
+final sustainStateProv =
+    AutoDisposeNotifierProvider<_SustainState, bool>(_SustainState.new);
+
+/////
+
+class SustainButtonDoubleTap extends ConsumerWidget {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final double width = MediaQuery.of(context).size.width;
     final double padRadius = width * ThemeConst.padRadiusFactor;
     final double padSpacing = width * ThemeConst.padSpacingFactor;
     return Padding(
       padding: EdgeInsets.fromLTRB(0, padSpacing, padSpacing, padSpacing),
       child: GestureDetector(
-        onDoubleTap: () => setState(() {
-          sustainState = true;
-          MidiUtils.sendSustainMessage(widget.channel, state: sustainState);
-        }),
+        onDoubleTap: () => ref.read(sustainStateProv.notifier).sustainToggle(),
         onTapDown: (_) {
-          if (!sustainState) {
-            setState(() {
-              sustainState = true;
-              MidiUtils.sendSustainMessage(widget.channel, state: sustainState);
-            });
+          if (!ref.read(sustainStateProv)) {
+            ref.read(sustainStateProv.notifier).sustainOn();
           }
         },
         onTapUp: (_) {
-          if (sustainState) {
-            setState(() {
-              sustainState = false;
-              MidiUtils.sendSustainMessage(widget.channel, state: sustainState);
-            });
+          if (ref.read(sustainStateProv)) {
+            ref.read(sustainStateProv.notifier).sustainOff();
           }
         },
         onPanEnd: (_) {
-          if (sustainState) {
-            setState(() {
-              sustainState = false;
-              MidiUtils.sendSustainMessage(widget.channel, state: sustainState);
-            });
+          if (ref.read(sustainStateProv)) {
+            ref.read(sustainStateProv.notifier).sustainOff();
           }
         },
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(padRadius * 1)),
-            color: sustainState ? Palette.lightPink : Palette.darkPink,
+            color: ref.watch(sustainStateProv)
+                ? Palette.lightPink
+                : Palette.darkPink,
             boxShadow: kElevationToShadow[6],
           ),
           child: RotatedBox(

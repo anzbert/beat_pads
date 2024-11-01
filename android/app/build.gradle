@@ -22,7 +22,7 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
-// Keystore setup /////
+// Keystore setup for Play Store API Key /////
 def keystoreProperties = new Properties()
    def keystorePropertiesFile = rootProject.file('key.properties')
    if (keystorePropertiesFile.exists()) {
@@ -32,7 +32,8 @@ def keystoreProperties = new Properties()
 
 
 android {
-    ndkVersion "25.1.8937393"
+    // namespace "io.anzio.beat_pads" // for future versions of gradle (8+) ?!
+    ndkVersion "25.1.8937393" // Rive needs a newer NDK than the default
 
     compileSdkVersion flutter.compileSdkVersion
 
@@ -52,7 +53,7 @@ android {
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "io.anzio.beat_pads"
-        minSdkVersion 24 // = Nougat 7.0
+        minSdkVersion 24 // 24 = Nougat 7.0
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
