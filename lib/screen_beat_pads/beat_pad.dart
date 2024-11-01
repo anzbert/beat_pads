@@ -1,3 +1,4 @@
+import 'package:beat_pads/screen_beat_pads/button_sustain.dart';
 import 'package:beat_pads/screen_beat_pads/velocity_overlay.dart';
 import 'package:beat_pads/services/services.dart';
 import 'package:beat_pads/theme.dart';
@@ -15,38 +16,54 @@ class SlideBeatPad extends ConsumerStatefulWidget {
   final int note;
 
   @override
-  _SlideBeatPadState createState() => _SlideBeatPadState();
+  SlideBeatPadState createState() => SlideBeatPadState();
 }
 
-class _SlideBeatPadState extends ConsumerState<SlideBeatPad> {
+class SlideBeatPadState extends ConsumerState<SlideBeatPad> {
   int sustainedVelocity = 0;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
-    final int velocity = ref.watch(senderProvider).playModeHandler.isNoteOn(widget.note);
+
+    final bool sustainState = ref.watch(sustainStateProv);
+    final int playedVelocity =
+        ref.watch(senderProvider).playModeHandler.isNoteOn(widget.note);
+
+    if (sustainState) {
+      if (sustainedVelocity < playedVelocity) {
+        sustainedVelocity = playedVelocity;
+      }
+    } else {
+      sustainedVelocity = 0;
+    }
+
     final Color color = ref.watch(layoutProv) == Layout.progrChange
         ? ref.watch(padColorsProv).colorize(
-            Scale.chromatic.intervals,
-            ref.watch(baseHueProv),
-            ref.watch(rootProv),
-            widget.note,
-            0,
-            noteOn: false,
-          )
+              Scale.chromatic.intervals,
+              ref.watch(baseHueProv),
+              ref.watch(rootProv),
+              widget.note,
+              0, // no Rx Midi with PROG Change
+              noteOn: false, // no NoteOn with PROG Change
+            )
         : ref.watch(padColorsProv).colorize(
-            ref.watch(scaleProv).intervals,
-            ref.watch(baseHueProv),
-            ref.watch(rootProv),
-            widget.note,
-            widget.preview ? 0 : ref.watch(rxNoteProvider)[widget.note],
-            noteOn: velocity != 0,
-          );
+              ref.watch(scaleProv).intervals,
+              ref.watch(baseHueProv),
+              ref.watch(rootProv),
+              widget.note,
+              widget.preview ? 0 : ref.watch(rxNoteProvider)[widget.note],
+              noteOn: sustainState ? sustainedVelocity > 0 : playedVelocity > 0,
+            );
+
     final Color splashColor = Palette.splashColor;
+
     final BorderRadius padRadius = BorderRadius.all(
       Radius.circular(screenWidth * ThemeConst.padRadiusFactor),
     );
+
     final double padSpacing = screenWidth * ThemeConst.padSpacingFactor;
+
     final Label label = ref.watch(layoutProv) == Layout.progrChange
         ? Label(title: '${widget.note + 1}', subtitle: 'Program')
         : PadLabels.getLabel(
@@ -54,8 +71,9 @@ class _SlideBeatPadState extends ConsumerState<SlideBeatPad> {
             ref.watch(layoutProv),
             widget.note,
           );
-    final double fontSize = screenWidth * 0.021;
+
     final Color padTextColor = Palette.darkGrey;
+    final double fontSize = screenWidth * 0.021;
 
     return Container(
       padding: EdgeInsets.all(padSpacing),
@@ -122,7 +140,7 @@ class _SlideBeatPadState extends ConsumerState<SlideBeatPad> {
           ),
           if (ref.watch(velocityVisualProv) && widget.preview == false)
             VelocityOverlay(
-              velocity: velocity,
+              velocity: sustainState ? sustainedVelocity : playedVelocity,
               padRadius: padRadius,
             ),
         ],

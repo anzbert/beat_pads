@@ -7,19 +7,25 @@ class _SustainState extends AutoDisposeNotifier<bool> {
   @override
   bool build() {
     ref.onDispose(() {
-      MidiUtils.sendSustainMessage(ref.read(channelUsableProv), state: false);
+      state = false;
+      MidiUtils.sendSustainMessage(ref.read(channelUsableProv), state: state);
     });
     return false;
   }
 
   void sustainOn() {
-    MidiUtils.sendSustainMessage(ref.read(channelUsableProv), state: true);
     state = true;
+    MidiUtils.sendSustainMessage(ref.read(channelUsableProv), state: state);
   }
 
   void sustainOff() {
-    MidiUtils.sendSustainMessage(ref.read(channelUsableProv), state: false);
     state = false;
+    MidiUtils.sendSustainMessage(ref.read(channelUsableProv), state: state);
+  }
+
+  void sustainToggle() {
+    state = !state;
+    MidiUtils.sendSustainMessage(ref.read(channelUsableProv), state: state);
   }
 }
 
@@ -37,7 +43,7 @@ class SustainButtonDoubleTap extends ConsumerWidget {
     return Padding(
       padding: EdgeInsets.fromLTRB(0, padSpacing, padSpacing, padSpacing),
       child: GestureDetector(
-        onDoubleTap: () => ref.read(sustainStateProv.notifier).sustainOn(),
+        onDoubleTap: () => ref.read(sustainStateProv.notifier).sustainToggle(),
         onTapDown: (_) {
           if (!ref.read(sustainStateProv)) {
             ref.read(sustainStateProv.notifier).sustainOn();
