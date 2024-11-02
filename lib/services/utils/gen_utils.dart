@@ -157,26 +157,4 @@ abstract class Utils {
     // Return the value at the final index
     return numbers[finalIndex];
   }
-
-  /// ranges from 0.0 to 1.0
-  static Color desaturate(Color color, [double amount = .1]) {
-    assert(amount >= 0 && amount <= 1);
-
-    final hsl = HSLColor.fromColor(color);
-    final hslDark =
-        hsl.withSaturation((hsl.saturation - amount).clamp(0.0, 1.0));
-
-    return hslDark.toColor();
-  }
-
-  /// ranges from 0.0 to 1.0
-  static Color lighten(Color color, [double amount = .1]) {
-    assert(amount >= 0 && amount <= 1);
-
-    final hsl = HSLColor.fromColor(color);
-    final hslLight =
-        hsl.withLightness((hsl.lightness + amount).clamp(0.0, 1.0));
-
-    return hslLight.toColor();
-  }
 }

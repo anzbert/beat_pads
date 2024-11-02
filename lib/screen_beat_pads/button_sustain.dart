@@ -34,34 +34,49 @@ final sustainStateProv =
 
 /////
 
-class SustainButtonDoubleTap extends ConsumerWidget {
+class SustainButtonDoubleTap extends ConsumerStatefulWidget {
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  SustainButtonDoubleTapState createState() => SustainButtonDoubleTapState();
+}
+
+class SustainButtonDoubleTapState
+    extends ConsumerState<SustainButtonDoubleTap> {
+  int lastTap = DateTime.now().millisecondsSinceEpoch;
+  int consecutiveTaps = 1;
+  static const int doubleTapTime = 300;
+
+  @override
+  Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;
     final double padRadius = width * ThemeConst.padRadiusFactor;
     final double padSpacing = width * ThemeConst.padSpacingFactor;
+
     return Padding(
       padding: EdgeInsets.fromLTRB(0, padSpacing, padSpacing, padSpacing),
       child: GestureDetector(
-        onDoubleTap: () => ref.read(sustainStateProv.notifier).sustainToggle(),
         onTapDown: (_) {
-          if (!ref.read(sustainStateProv)) {
-            ref.read(sustainStateProv.notifier).sustainOn();
+          int now = DateTime.now().millisecondsSinceEpoch;
+          if (now - lastTap < doubleTapTime) {
+            consecutiveTaps++;
+            if (consecutiveTaps >= 2) {
+              ref.read(sustainStateProv.notifier).sustainOn();
+            }
+          } else {
+            consecutiveTaps = 1;
+            if (!ref.read(sustainStateProv)) {
+              ref.read(sustainStateProv.notifier).sustainOn();
+            }
           }
+          lastTap = now;
         },
         onTapUp: (_) {
-          if (ref.read(sustainStateProv)) {
-            ref.read(sustainStateProv.notifier).sustainOff();
-          }
-        },
-        onPanEnd: (_) {
-          if (ref.read(sustainStateProv)) {
+          if (ref.read(sustainStateProv) && consecutiveTaps < 2) {
             ref.read(sustainStateProv.notifier).sustainOff();
           }
         },
         child: Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(padRadius * 1)),
+            borderRadius: BorderRadius.all(Radius.circular(padRadius)),
             color: ref.watch(sustainStateProv)
                 ? Palette.lightPink
                 : Palette.darkPink,
