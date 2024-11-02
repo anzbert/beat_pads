@@ -205,8 +205,10 @@ class MenuLayout extends ConsumerWidget {
                     'Lowest Note on the bottom left',
                   ),
                   trailing: DropdownRootNote(
-                    enabledList: MidiUtils.absoluteScaleNotes(
-                        ref.watch(rootProv), ref.watch(scaleProv).intervals),
+                    enabledList: ref.watch(layoutProv).chromatic
+                        ? null
+                        : MidiUtils.absoluteScaleNotes(ref.watch(rootProv),
+                            ref.watch(scaleProv).intervals),
                     setValue: (int v) =>
                         ref.read(baseProv.notifier).setAndSave(v),
                     readValue: ref.watch(baseProv),

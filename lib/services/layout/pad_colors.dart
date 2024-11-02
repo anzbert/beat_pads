@@ -24,7 +24,7 @@ enum PadColors {
     final double hue;
 
     // note on
-    if (noteOn) return Palette.whiteLike;
+    // if (noteOn) return Palette.whiteLike;
 
     // out of midi range
     if (note > 127 || note < 0) return Palette.darkGrey;
@@ -54,6 +54,8 @@ enum PadColors {
       .95,
       .80,
     ).toColor();
+
+    if (noteOn) return Utils.desaturate(color, 0.55);
 
     return MidiUtils.isNoteInScale(note, scaleList, rootNote)
         ? color
