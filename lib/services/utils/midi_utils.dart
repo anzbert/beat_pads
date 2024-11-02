@@ -71,6 +71,7 @@ abstract class MidiUtils {
 
   /// Sends a Sustain-pedal midi message
   static void sendSustainMessage(int channel, {required bool state}) {
+    // print("send $state");
     CCMessage(channel: channel, controller: 64, value: state ? 127 : 0).send();
   }
 

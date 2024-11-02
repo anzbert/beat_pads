@@ -8,6 +8,7 @@ enum PadColors {
   circleOfFifth('Circle of Fifths');
 
   const PadColors(this.title);
+
   final String title;
 
   @override
@@ -24,7 +25,7 @@ enum PadColors {
     final double hue;
 
     // note on
-    if (noteOn) return Palette.whiteLike;
+    // if (noteOn) return Palette.whiteLike;
 
     // out of midi range
     if (note > 127 || note < 0) return Palette.darkGrey;
@@ -55,8 +56,14 @@ enum PadColors {
       .80,
     ).toColor();
 
-    return MidiUtils.isNoteInScale(note, scaleList, rootNote)
-        ? color
-        : Palette.darker(Palette.lightGrey, 1);
+    if (noteOn) {
+      return MidiUtils.isNoteInScale(note, scaleList, rootNote)
+          ? Palette.desaturate(color, 0.58)
+          : Palette.lighten(Palette.darkishGrey, 0.18);
+    } else {
+      return MidiUtils.isNoteInScale(note, scaleList, rootNote)
+          ? color
+          : Palette.darkishGrey;
+    }
   }
 }
