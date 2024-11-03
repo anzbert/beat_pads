@@ -96,7 +96,7 @@ class GridData {
 
 /// Base class that converts a List into the required rows
 /// Classes derived from this one need to implement a function that
-/// creates a list of notes
+/// creates a _list of notes
 abstract class Grid {
   /// Creates a Pad Grid generating class using the current settings
   Grid(this.settings);
@@ -104,17 +104,18 @@ abstract class Grid {
   final GridData settings;
 
   /// Get a List of all notes in the current grid
-  List<CustomPad> get list;
+  List<CustomPad> get _list;
 
   /// Convert List to Rows of all notes in the grid, starting from the top Row
   /// Useful for building the grid with a Column Widget
   List<List<CustomPad>> get rows {
-    if (settings.height * settings.width != list.length) return [[]];
+    final calculatedList = _list;
+    if (settings.height * settings.width != calculatedList.length) return [[]];
 
     return List.generate(
       settings.height,
       (row) => List.generate(settings.width, (note) {
-        return list[row * settings.width + note]
+        return calculatedList[row * settings.width + note]
           ..row = row
           ..column = note;
       }),
@@ -129,7 +130,7 @@ abstract class Grid {
 //   final int rowInterval = 5;
 
 //   @override
-//   List<CustomPad> get list {
+//   List<CustomPad> get _list {
 //     print("refresh");
 //     final List<CustomPad> grid = [];
 //     for (int row = 0; row < settings.height; row++) {
@@ -153,7 +154,7 @@ class GridChromaticByRowInterval extends Grid {
   final int rowInterval;
 
   @override
-  List<CustomPad> get list {
+  List<CustomPad> get _list {
     final List<CustomPad> grid = [];
     for (int row = 0; row < settings.height; row++) {
       for (int note = 0; note < settings.width; note++) {
@@ -169,7 +170,7 @@ class GridChromaticByCustomIntervals extends Grid {
   GridChromaticByCustomIntervals(super.settings);
 
   @override
-  List<CustomPad> get list {
+  List<CustomPad> get _list {
     final List<CustomPad> grid = [];
 
     for (int row = 0; row < settings.height; row++) {
@@ -215,11 +216,11 @@ class GridInScaleCustom extends Grid {
       }
     }
 
-    return midiNotes.toList(); // Return a list of unique MIDI values
+    return midiNotes.toList(); // Return a _list of unique MIDI values
   }
 
   @override
-  List<CustomPad> get list {
+  List<CustomPad> get _list {
     /// applied scale pattern to currently selected root note
     /// root note is a value between 0-11
     final List<int> actualScaleNotes =
@@ -291,7 +292,7 @@ class GridMTN extends Grid {
   GridMTN(super.settings);
 
   @override
-  List<CustomPad> get list {
+  List<CustomPad> get _list {
     final List<CustomPad> grid = [];
 
     final bool sameColumn = settings.rootNote % 2 ==
@@ -330,7 +331,7 @@ class GridXpressPads extends Grid {
   final XPP xPressPads;
 
   @override
-  List<CustomPad> get list {
+  List<CustomPad> get _list {
     return xPressPads.list.map(CustomPad.new).toList();
   }
 }
