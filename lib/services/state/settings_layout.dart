@@ -147,6 +147,13 @@ final padLabelsProv =
   );
 });
 
+final gmLabelsProv = NotifierProvider<SettingBoolNotifier, bool>(() {
+  return SettingBoolNotifier(
+    key: 'gmLabels',
+    defaultValue: false,
+  );
+});
+
 final padColorsProv =
     NotifierProvider<SettingEnumNotifier<PadColors>, PadColors>(() {
   return SettingEnumNotifier<PadColors>(

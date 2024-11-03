@@ -11,7 +11,10 @@ enum PadLabels {
   @override
   String toString() => title;
 
-  static Label getLabel(PadLabels padLabels, Layout layout, int note) {
+  static Label getLabel(
+      {required PadLabels padLabels,
+      required int note,
+      required bool gmLabel}) {
     final Label label = Label();
 
     if (padLabels == PadLabels.none) return label;
@@ -22,7 +25,7 @@ enum PadLabels {
     if (padLabels == PadLabels.value) {
       label.title = note.toString();
     }
-    if (layout.gmPercussionLabels) {
+    if (gmLabel) {
       label.subtitle = MidiUtils.getNoteName(note, gmPercussionLabels: true);
     }
 

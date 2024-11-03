@@ -307,9 +307,19 @@ class MenuLayout extends ConsumerWidget {
                 ),
               ),
               ListTile(
-                title: const Text('Pad Colors'),
+                title: const Text('Midi Drum Labels'),
                 subtitle:
-                    const Text('Colorize pads by distance to the root note'),
+                    const Text('Add General Midi Percussion labels to pads'),
+                trailing: Switch(
+                  value: ref.watch(gmLabelsProv),
+                  onChanged: (bool v) =>
+                      ref.read(gmLabelsProv.notifier).setAndSave(v),
+                ),
+              ),
+              ListTile(
+                title: const Text('Color Mode'),
+                subtitle: const Text(
+                    'Choose how the RGB Color Wheel is applied to the pads'),
                 trailing: DropdownEnum<PadColors>(
                   values: PadColors.values,
                   readValue: ref.watch(padColorsProv),
@@ -318,9 +328,9 @@ class MenuLayout extends ConsumerWidget {
                 ),
               ),
               IntSliderTile(
-                label: 'Hue',
+                label: 'Base Color',
                 max: 360,
-                subtitle: 'Root Note hue on the RGB color wheel',
+                subtitle: 'Rotate the color wheel',
                 trailing: ref.watch(baseHueProv).toString(),
                 readValue: ref.watch(baseHueProv),
                 setValue: (int v) => ref.read(baseHueProv.notifier).set(v),
