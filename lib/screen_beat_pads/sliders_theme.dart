@@ -1,5 +1,5 @@
 import 'package:beat_pads/services/services.dart';
-
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 class ThemedSlider extends StatelessWidget {
@@ -28,49 +28,39 @@ class ThemedSlider extends StatelessWidget {
       quarterTurns: 3,
       child: FractionallySizedBox(
         widthFactor: 0.9,
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            if (centerLine)
-              Container(
-                decoration: BoxDecoration(
-                  color: Palette.darker(_trackColor, 0.8),
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(width * 0.01),
+        child: SliderTheme(
+          data: SliderTheme.of(context).copyWith(
+            trackHeight: width * 0.010,
+            activeTrackColor: showTrack ? Palette.cadetBlue : _trackColor,
+            inactiveTrackColor: _trackColor,
+            thumbColor: thumbColor,
+            overlayColor: Colors.transparent,
+            thumbShape: range == null
+                ? RoundSliderThumbShape(
+                    elevation: 3,
+                    enabledThumbRadius: width * 0.033,
+                  )
+                : CustomSliderThumbRect(
+                    enabledThumbRadius: width * 0.033,
+                    thumbRadius: width * 0.07,
+                    thumbHeight: range!.toDouble(),
                   ),
-                ),
-                height: double.infinity,
-                width: width * 0.015,
-              ),
-            SliderTheme(
-              data: SliderTheme.of(context).copyWith(
-                trackHeight: width * 0.015,
-                activeTrackColor: showTrack ? Palette.cadetBlue : _trackColor,
-                inactiveTrackColor: _trackColor,
-                thumbColor: thumbColor,
-                overlayColor: Colors.transparent,
-                thumbShape: range == null
-                    ? RoundSliderThumbShape(
-                        elevation: 3,
-                        enabledThumbRadius: width * 0.033,
-                      )
-                    : CustomSliderThumbRect(
-                        enabledThumbRadius: width * 0.033,
-                        thumbRadius: width * 0.07,
-                        thumbHeight: range!.toDouble(),
-                      ),
-                trackShape: CustomTrackShape(),
-              ),
-              child: child,
-            ),
-          ],
+            trackShape: CustomTrackShape(
+                centerLine: centerLine, lineWidth: width * 0.005),
+          ),
+          child: child,
         ),
       ),
     );
   }
 }
 
-class CustomTrackShape extends RoundedRectSliderTrackShape {
+class CustomTrackShape extends RectangularSliderTrackShape {
+  CustomTrackShape({this.centerLine = false, this.lineWidth = 10});
+
+  final bool centerLine;
+  final double lineWidth;
+
   @override
   void paint(
     PaintingContext context,
@@ -83,7 +73,7 @@ class CustomTrackShape extends RoundedRectSliderTrackShape {
     Offset? secondaryOffset,
     bool isDiscrete = false,
     bool isEnabled = false,
-    double additionalActiveTrackHeight = 2,
+    // double additionalActiveTrackHeight = 2,
   }) {
     super.paint(
       context,
@@ -95,8 +85,58 @@ class CustomTrackShape extends RoundedRectSliderTrackShape {
       thumbCenter: thumbCenter,
       isDiscrete: isDiscrete,
       isEnabled: isEnabled,
-      additionalActiveTrackHeight: 0,
+      // additionalActiveTrackHeight: 0,
     );
+
+    if (centerLine) {
+      final paint = Paint()
+        ..strokeWidth = lineWidth
+        // ..strokeCap = StrokeCap.round
+        ..color = Palette.darker(Palette.lightGrey, 0.5);
+
+      final double thumbWidth =
+          sliderTheme.thumbShape!.getPreferredSize(isEnabled, isDiscrete).width;
+      final double overlayWidth = sliderTheme.overlayShape!
+          .getPreferredSize(isEnabled, isDiscrete)
+          .width;
+
+      final double trackLeft =
+          offset.dx + math.max(overlayWidth / 2, thumbWidth / 2);
+      final double trackRight =
+          trackLeft + parentBox.size.width - math.max(thumbWidth, overlayWidth);
+
+      final center = (trackRight + trackLeft) / 2;
+      final topCenter = (center + trackRight) / 2;
+      final bottomCenter = (center + trackLeft) / 2;
+
+      const double padding = 2;
+
+      context.canvas.drawLine(
+        Offset(bottomCenter, padding),
+        Offset(bottomCenter, parentBox.size.height - padding),
+        paint,
+      );
+      context.canvas.drawLine(
+        Offset(topCenter, padding),
+        Offset(topCenter, parentBox.size.height - padding),
+        paint,
+      );
+      context.canvas.drawLine(
+        Offset(center, padding),
+        Offset(center, parentBox.size.height - padding),
+        paint,
+      );
+      context.canvas.drawLine(
+        Offset(trackLeft, padding),
+        Offset(trackLeft, parentBox.size.height - padding),
+        paint,
+      );
+      context.canvas.drawLine(
+        Offset(trackRight, padding),
+        Offset(trackRight, parentBox.size.height - padding),
+        paint,
+      );
+    }
   }
 }
 

@@ -27,6 +27,8 @@ class _PitchSliderEasedState extends ConsumerState<PitchSliderEased>
 
   final double fontSizeFactor = 0.3;
   final double paddingFactor = 0.1;
+  final int topAndBottomfield = 2;
+  final color = Palette.darker(Palette.laserLemon, 0.6);
 
   double _pitch = 0;
 
@@ -47,7 +49,7 @@ class _PitchSliderEasedState extends ConsumerState<PitchSliderEased>
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Flexible(
-          flex: 5,
+          flex: topAndBottomfield,
           child: LayoutBuilder(
             builder: (context, constraints) {
               return Align(
@@ -56,7 +58,7 @@ class _PitchSliderEasedState extends ConsumerState<PitchSliderEased>
                   'Pitch',
                   style: TextStyle(
                     fontSize: constraints.maxWidth * fontSizeFactor,
-                    color: Palette.darker(Palette.laserLemon, 0.6),
+                    color: color,
                   ),
                 ),
               );
@@ -127,32 +129,27 @@ class _PitchSliderEasedState extends ConsumerState<PitchSliderEased>
           ),
         ),
         Flexible(
-          flex: 5,
+          flex: topAndBottomfield,
           child: FractionallySizedBox(
             widthFactor: 0.95,
             child: LayoutBuilder(
               builder: (context, constraints) {
-                final double padSpacing = width * ThemeConst.padSpacingFactor;
-                return Container(
-                  margin: EdgeInsets.only(bottom: padSpacing),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        flex: 2,
-                        child: Center(
-                          child: Text(
-                            '${(_pitch * 12).round()}',
-                            style: TextStyle(
-                              fontSize: constraints.maxWidth * fontSizeFactor,
-                              color: Palette.darker(Palette.laserLemon, 0.6),
-                            ),
-                          ),
-                        ),
-                      ),
-                      const Expanded(
-                        child: SizedBox.expand(),
-                      ),
+                return RichText(
+                  textAlign: TextAlign.center,
+                  text: TextSpan(
+                    text: _pitch == 0 ? '-' : '${(_pitch * 100).round()}',
+                    style: TextStyle(
+                      fontSize: constraints.maxWidth * fontSizeFactor * 0.9,
+                      color: color,
+                    ),
+                    children: <TextSpan>[
+                      if (_pitch != 0)
+                        TextSpan(
+                          text: '%',
+                          style: TextStyle(
+                              fontSize:
+                                  constraints.maxWidth * fontSizeFactor * 0.6),
+                        )
                     ],
                   ),
                 );

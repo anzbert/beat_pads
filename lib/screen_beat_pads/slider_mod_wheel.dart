@@ -26,6 +26,8 @@ class ModWheel extends ConsumerStatefulWidget {
 class _ModWheelState extends ConsumerState<ModWheel> {
   final double fontSizeFactor = 0.3;
   final double paddingFactor = 0.1;
+  final int topAndBottomfield = 2;
+  final color = Palette.darker(Palette.tan, 0.6);
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +51,7 @@ class _ModWheelState extends ConsumerState<ModWheel> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Flexible(
-          flex: 5,
+          flex: topAndBottomfield,
           child: LayoutBuilder(
             builder: (context, constraints) {
               return Align(
@@ -58,7 +60,7 @@ class _ModWheelState extends ConsumerState<ModWheel> {
                   'Mod',
                   style: TextStyle(
                     fontSize: constraints.maxWidth * fontSizeFactor,
-                    color: Palette.darker(Palette.tan, 0.6),
+                    color: color,
                   ),
                 ),
               );
@@ -100,33 +102,19 @@ class _ModWheelState extends ConsumerState<ModWheel> {
           ),
         ),
         Flexible(
-          flex: 5,
+          flex: topAndBottomfield,
           child: FractionallySizedBox(
             widthFactor: 0.95,
             child: LayoutBuilder(
               builder: (context, constraints) {
-                final double padSpacing = width * ThemeConst.padSpacingFactor;
-                return Container(
-                  margin: EdgeInsets.only(bottom: padSpacing),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        flex: 2,
-                        child: Center(
-                          child: Text(
-                            '${ref.watch(_modWheelProvider)}',
-                            style: TextStyle(
-                              fontSize: constraints.maxWidth * fontSizeFactor,
-                              color: Palette.darker(Palette.tan, 0.6),
-                            ),
-                          ),
-                        ),
-                      ),
-                      const Expanded(
-                        child: SizedBox.expand(),
-                      ),
-                    ],
+                return RichText(
+                  textAlign: TextAlign.center,
+                  text: TextSpan(
+                    text: '${ref.watch(_modWheelProvider)}',
+                    style: TextStyle(
+                      fontSize: constraints.maxWidth * fontSizeFactor * 0.9,
+                      color: color,
+                    ),
                   ),
                 );
               },
