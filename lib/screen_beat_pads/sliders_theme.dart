@@ -6,6 +6,7 @@ class ThemedSlider extends StatelessWidget {
   ThemedSlider({
     required this.child,
     required this.thumbColor,
+    required this.width,
     super.key,
     this.centerLine = false,
     this.showTrack = false,
@@ -21,16 +22,17 @@ class ThemedSlider extends StatelessWidget {
   final Color _trackColor = Palette.lightGrey;
   final Color thumbColor;
 
+  final double width;
+
   @override
   Widget build(BuildContext context) {
-    final double width = MediaQuery.of(context).size.width;
     return RotatedBox(
       quarterTurns: 3,
       child: FractionallySizedBox(
         widthFactor: 0.9,
         child: SliderTheme(
           data: SliderTheme.of(context).copyWith(
-            trackHeight: width * 0.010,
+            trackHeight: width * 0.08,
             activeTrackColor: showTrack ? Palette.cadetBlue : _trackColor,
             inactiveTrackColor: _trackColor,
             thumbColor: thumbColor,
@@ -38,15 +40,15 @@ class ThemedSlider extends StatelessWidget {
             thumbShape: range == null
                 ? RoundSliderThumbShape(
                     elevation: 3,
-                    enabledThumbRadius: width * 0.033,
+                    enabledThumbRadius: width * 0.4,
                   )
                 : CustomSliderThumbRect(
-                    enabledThumbRadius: width * 0.033,
-                    thumbRadius: width * 0.07,
+                    enabledThumbRadius: width * 0.4,
+                    thumbRadius: width * 0.8,
                     thumbHeight: range!.toDouble(),
                   ),
             trackShape: CustomTrackShape(
-                centerLine: centerLine, lineWidth: width * 0.005),
+                centerLine: centerLine, lineWidth: width * 0.05),
           ),
           child: child,
         ),
@@ -172,6 +174,13 @@ class CustomSliderThumbRect extends SliderComponentShape {
   }) {
     final Canvas canvas = context.canvas;
 
+    // Circle with Shadow
+    final thumbCirclePath = Path()
+      ..addOval(Rect.fromCircle(center: center, radius: enabledThumbRadius));
+    canvas
+      ..drawShadow(thumbCirclePath, Colors.black, 3, true)
+      ..drawPath(thumbCirclePath, Paint()..color = sliderTheme.thumbColor!);
+
     // Rectangle
     final fractionHeight = parentBox.constraints.maxWidth / 127 * thumbHeight;
 
@@ -190,18 +199,5 @@ class CustomSliderThumbRect extends SliderComponentShape {
       ..style = PaintingStyle.fill;
 
     canvas.drawRRect(rRect, rectPaint);
-
-    // Circle with Shadow
-    final thumbCirclePath = Path()
-      ..addOval(Rect.fromCircle(center: center, radius: enabledThumbRadius));
-    canvas
-      ..drawShadow(thumbCirclePath, Colors.black, 3, true)
-      ..drawPath(thumbCirclePath, Paint()..color = sliderTheme.thumbColor!);
-
-    // canvas.drawCircle(
-    //   center,
-    //   enabledThumbRadius,
-    //   Paint()..color = sliderTheme.thumbColor!,
-    // );
   }
 }

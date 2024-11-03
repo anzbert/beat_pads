@@ -58,12 +58,6 @@ class SlideBeatPadState extends ConsumerState<SlideBeatPad> {
 
     final Color splashColor = Palette.splashColor;
 
-    final BorderRadius padRadius = BorderRadius.all(
-      Radius.circular(screenWidth * ThemeConst.padRadiusFactor),
-    );
-
-    final double padSpacing = screenWidth * ThemeConst.padSpacingFactor;
-
     final Label label = ref.watch(layoutProv) == Layout.progrChange
         ? Label(title: '${widget.note + 1}', subtitle: 'Program')
         : PadLabels.getLabel(
@@ -73,78 +67,86 @@ class SlideBeatPadState extends ConsumerState<SlideBeatPad> {
           );
 
     final Color padTextColor = Palette.darkGrey;
-    final double fontSize = screenWidth * 0.021;
+    final double padSpacing = screenWidth * ThemeConst.padSpacingFactor;
+    final BorderRadius padRadius = BorderRadius.all(
+      Radius.circular(screenWidth * ThemeConst.padRadiusFactor),
+    );
 
-    return Container(
-      padding: EdgeInsets.all(padSpacing),
-      height: double.infinity,
-      width: double.infinity,
-      child: Stack(
-        fit: StackFit.expand,
-        children: [
-          Material(
-            elevation: 3,
-            color: color,
-            borderRadius: padRadius,
-            shadowColor: Colors.black,
-            child: widget.note > 127 || widget.note < 0
-                ? InkWell(
-                    borderRadius: padRadius,
-                    child: Padding(
-                      padding: EdgeInsets.all(padSpacing),
-                      child: Text(
-                        '#',
-                        style: TextStyle(
-                          fontStyle: FontStyle.italic,
-                          color: Palette.lightGrey,
-                          fontSize: fontSize * 0.8,
+    return LayoutBuilder(builder: (context, constraints) {
+      final double fontSize = constraints.maxWidth * 0.08;
+      // final double padSpacing = constraints.maxWidth * 0.012;
+
+      return Container(
+        padding: EdgeInsets.all(padSpacing),
+        height: double.infinity,
+        width: double.infinity,
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            Material(
+              elevation: 3,
+              color: color,
+              borderRadius: padRadius,
+              shadowColor: Colors.black,
+              child: widget.note > 127 || widget.note < 0
+                  ? InkWell(
+                      borderRadius: padRadius,
+                      child: Padding(
+                        padding: EdgeInsets.all(padSpacing),
+                        child: Text(
+                          '#',
+                          style: TextStyle(
+                            fontStyle: FontStyle.italic,
+                            color: Palette.lightGrey,
+                            fontSize: fontSize * 0.8,
+                          ),
+                        ),
+                      ),
+                    )
+                  : InkWell(
+                      onTapDown: (_) {},
+                      borderRadius: padRadius,
+                      highlightColor: color,
+                      splashColor: splashColor,
+                      child: Padding(
+                        padding: EdgeInsets.all(padSpacing),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            if (label.subtitle != null)
+                              Flexible(
+                                child: Text(
+                                  label.subtitle!,
+                                  style: TextStyle(
+                                    color: padTextColor,
+                                    fontSize: fontSize * 0.6,
+                                  ),
+                                ),
+                              ),
+                            if (label.title != null)
+                              Flexible(
+                                child: Text(
+                                  label.title!,
+                                  style: TextStyle(
+                                    color: padTextColor,
+                                    fontSize: fontSize,
+                                  ),
+                                ),
+                              ),
+                          ],
                         ),
                       ),
                     ),
-                  )
-                : InkWell(
-                    onTapDown: (_) {},
-                    borderRadius: padRadius,
-                    highlightColor: color,
-                    splashColor: splashColor,
-                    child: Padding(
-                      padding: EdgeInsets.all(padSpacing),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          if (label.subtitle != null)
-                            Flexible(
-                              child: Text(
-                                label.subtitle!,
-                                style: TextStyle(
-                                  color: padTextColor,
-                                  fontSize: fontSize * 0.6,
-                                ),
-                              ),
-                            ),
-                          if (label.title != null)
-                            Flexible(
-                              child: Text(
-                                label.title!,
-                                style: TextStyle(
-                                  color: padTextColor,
-                                  fontSize: fontSize,
-                                ),
-                              ),
-                            ),
-                        ],
-                      ),
-                    ),
-                  ),
-          ),
-          if (ref.watch(velocityVisualProv) && widget.preview == false)
-            VelocityOverlay(
-              velocity: sustainState ? sustainedVelocity : playedVelocity,
-              padRadius: padRadius,
             ),
-        ],
-      ),
-    );
+            if (ref.watch(velocityVisualProv) && widget.preview == false)
+              VelocityOverlay(
+                velocity: sustainState ? sustainedVelocity : playedVelocity,
+                padRadius: padRadius,
+              ),
+          ],
+        ),
+      );
+    });
   }
 }

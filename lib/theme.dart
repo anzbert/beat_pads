@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 abstract class ThemeConst {
   static const double sliderWidthFactor = 0.8;
-  static const double padSpacingFactor = 0.003;
+  static const double padSpacingFactor = 0.0026;
   static const double padRadiusFactor = 0.006;
   static const double borderFactor = 0.006;
   static const double menuButtonMinWidth = 300;
