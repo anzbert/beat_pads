@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 abstract class Palette {
+  static Color menuHeaders = const Color.fromARGB(255, 45, 43, 54);
   static Color cadetBlue =
       const HSLColor.fromAHSL(1, 212, 0.31, 0.69).toColor();
   static Color yellowGreen = const HSLColor.fromAHSL(1, 90, .90, .84).toColor();

@@ -96,7 +96,7 @@ class CustomTrackShape extends RectangularSliderTrackShape {
       final paint = Paint()
         ..strokeWidth = lineWidth
         // ..strokeCap = StrokeCap.round
-        ..color = Palette.darker(Palette.lightGrey, 0.5);
+        ..color = Palette.menuHeaders;
 
       final double thumbWidth =
           sliderTheme.thumbShape!.getPreferredSize(isEnabled, isDiscrete).width;
@@ -113,7 +113,7 @@ class CustomTrackShape extends RectangularSliderTrackShape {
       final topCenter = (center + trackRight) / 2;
       final bottomCenter = (center + trackLeft) / 2;
 
-      const double padding = 2;
+      const double padding = 3;
 
       context.canvas.drawLine(
         Offset(bottomCenter, padding),
@@ -141,6 +141,18 @@ class CustomTrackShape extends RectangularSliderTrackShape {
         paint,
       );
     }
+    super.paint(
+      context,
+      offset,
+      parentBox: parentBox,
+      sliderTheme: sliderTheme,
+      enableAnimation: enableAnimation,
+      textDirection: textDirection,
+      thumbCenter: thumbCenter,
+      isDiscrete: isDiscrete,
+      isEnabled: isEnabled,
+      // additionalActiveTrackHeight: 0,
+    );
   }
 }
 

@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## 0.9.38
+
+- Add GM Percussion Drum Label switch
+- Add fixed Color Wheel mode
+- Update Slider styling and increase slider size
+- Add visual dividers to Pitch Bend slider
+- Fix responsiveness of Sustain button with custom GestureDetector
+- Add Guitar Tuning Layout. Works like Standard 6-String Guitar tuning (or 4-String Bass)
+- Update buildchain to latest Gradle for some platforms
+- Improve refresh performance when changing layout size
+- Fix missing colors in menu
+
 ## 0.9.35
 
 Nov 2, 2024

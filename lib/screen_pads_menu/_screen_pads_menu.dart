@@ -61,6 +61,7 @@ class PadMenuScreen extends ConsumerWidget {
         }
         return Scaffold(
           appBar: AppBar(
+            backgroundColor: Palette.menuHeaders,
             title: GradientText(
               'Midi Poly Grid',
               style: Theme.of(context).textTheme.headlineMedium,
@@ -123,7 +124,7 @@ class PadMenuScreen extends ConsumerWidget {
           bottomNavigationBar: BottomNavigationBar(
             type: BottomNavigationBarType.fixed,
             selectedItemColor: Palette.cadetBlue,
-            backgroundColor: Palette.darkGrey,
+            backgroundColor: Palette.menuHeaders,
             currentIndex: ref.watch(selectedMenuState).index,
             onTap: (int tappedIndex) {
               ref.read(selectedMenuState.notifier).state =

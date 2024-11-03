@@ -105,7 +105,7 @@ class MenuLayout extends ConsumerWidget {
               const DividerTitle('Layout'),
               Container(
                 margin: const EdgeInsets.only(bottom: 12),
-                color: Palette.dirtyTranslucent,
+                color: Palette.darkGrey,
                 child: ListTile(
                   title: const Text(
                     'Layout',
