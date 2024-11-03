@@ -18,7 +18,7 @@ class SliderVelocity extends ConsumerStatefulWidget {
 }
 
 class _SliderVelocityState extends ConsumerState<SliderVelocity> {
-  final double fontSizeFactor = 0.035;
+  final double fontSizeFactor = 0.037;
   final double paddingFactor = 0.05;
   final int topAndBottomfield = 2;
   final Color color = Palette.darker(Palette.cadetBlue, 0.6);

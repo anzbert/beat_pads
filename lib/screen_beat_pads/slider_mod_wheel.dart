@@ -23,7 +23,7 @@ class ModWheel extends ConsumerStatefulWidget {
 }
 
 class _ModWheelState extends ConsumerState<ModWheel> {
-  final double fontSizeFactor = 0.035;
+  final double fontSizeFactor = 0.037;
   final double paddingFactor = 0.05;
   final int topAndBottomfield = 2;
   final color = Palette.darker(Palette.tan, 0.6);
