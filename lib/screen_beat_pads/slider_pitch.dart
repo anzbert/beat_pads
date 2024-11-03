@@ -25,7 +25,7 @@ class _PitchSliderEasedState extends ConsumerState<PitchSliderEased>
   late AnimationController _controller;
   late Animation<double> _curve;
 
-  final double fontSizeFactor = 0.3;
+  final double fontSizeFactor = 0.27;
   final double paddingFactor = 0.1;
   final int topAndBottomfield = 2;
   final color = Palette.darker(Palette.laserLemon, 0.6);
@@ -54,11 +54,14 @@ class _PitchSliderEasedState extends ConsumerState<PitchSliderEased>
             builder: (context, constraints) {
               return Align(
                 alignment: Alignment.bottomCenter,
-                child: Text(
-                  'Pitch',
-                  style: TextStyle(
-                    fontSize: constraints.maxWidth * fontSizeFactor,
-                    color: color,
+                child: FittedBox(
+                  fit: BoxFit.contain,
+                  child: Text(
+                    'Pitch',
+                    style: TextStyle(
+                      fontSize: constraints.maxWidth * fontSizeFactor,
+                      color: color,
+                    ),
                   ),
                 ),
               );
@@ -139,7 +142,7 @@ class _PitchSliderEasedState extends ConsumerState<PitchSliderEased>
                   text: TextSpan(
                     text: _pitch == 0 ? '-' : '${(_pitch * 100).round()}',
                     style: TextStyle(
-                      fontSize: constraints.maxWidth * fontSizeFactor * 0.9,
+                      fontSize: constraints.maxWidth * fontSizeFactor,
                       color: color,
                     ),
                     children: <TextSpan>[

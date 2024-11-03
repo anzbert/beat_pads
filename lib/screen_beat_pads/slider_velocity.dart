@@ -19,7 +19,7 @@ class SliderVelocity extends ConsumerStatefulWidget {
 }
 
 class _SliderVelocityState extends ConsumerState<SliderVelocity> {
-  final double fontSizeFactor = 0.3;
+  final double fontSizeFactor = 0.27;
   final double paddingFactor = 0.1;
   final int topAndBottomfield = 2;
   final color = Palette.darker(Palette.cadetBlue, 0.6);
@@ -27,6 +27,7 @@ class _SliderVelocityState extends ConsumerState<SliderVelocity> {
   @override
   Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;
+    // final double width = context.findRenderObject()?.parent. ?? 0;
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -36,11 +37,14 @@ class _SliderVelocityState extends ConsumerState<SliderVelocity> {
             builder: (context, constraints) {
               return Align(
                 alignment: Alignment.bottomCenter,
-                child: Text(
-                  'Vel',
-                  style: TextStyle(
-                    fontSize: constraints.maxWidth * fontSizeFactor,
-                    color: color,
+                child: FittedBox(
+                  fit: BoxFit.contain,
+                  child: Text(
+                    'Vel',
+                    style: TextStyle(
+                      fontSize: constraints.maxWidth * fontSizeFactor,
+                      color: color,
+                    ),
                   ),
                 ),
               );
@@ -133,46 +137,44 @@ class _SliderVelocityState extends ConsumerState<SliderVelocity> {
             widthFactor: 0.95,
             child: LayoutBuilder(
               builder: (context, constraints) {
-                return Center(
-                  child: ref.watch(velocityModeProv) == VelocityMode.fixed
-                      ? Text(
-                          '${ref.watch(senderProvider.select((value) => value.playModeHandler.velocityProvider.velocityFixed))}',
-                          style: DefaultTextStyle.of(context).style.copyWith(
-                                fontSize: constraints.maxWidth * fontSizeFactor,
-                                color: color,
-                              ),
-                        )
-                      : RichText(
-                          textAlign: TextAlign.center,
-                          text: TextSpan(
-                            text:
-                                '${ref.watch(senderProvider.select((value) => value.playModeHandler.velocityProvider.velocityRandomCenter)).round()}',
-                            style: TextStyle(
-                              fontSize:
-                                  constraints.maxWidth * fontSizeFactor * 0.9,
-                              color: color,
-                            ),
-                            children: <TextSpan>[
-                              TextSpan(
-                                text:
-                                    String.fromCharCode(177), // Plus-Minus Sign
-                                style: TextStyle(
-                                    fontSize: constraints.maxWidth *
-                                        fontSizeFactor *
-                                        0.9),
-                              ),
-                              TextSpan(
-                                text:
-                                    '${ref.watch(senderProvider.select((value) => value.playModeHandler.velocityProvider.velocityRange)) ~/ 2}',
-                                style: TextStyle(
-                                    fontSize: constraints.maxWidth *
-                                        fontSizeFactor *
-                                        0.7),
-                              )
-                            ],
+                return ref.watch(velocityModeProv) == VelocityMode.fixed
+                    ? RichText(
+                        textAlign: TextAlign.center,
+                        text: TextSpan(
+                          text:
+                              '${ref.watch(senderProvider.select((value) => value.playModeHandler.velocityProvider.velocityFixed))}',
+                          style: TextStyle(
+                            fontSize: constraints.maxWidth * fontSizeFactor,
+                            color: color,
                           ),
+                        ))
+                    : RichText(
+                        textAlign: TextAlign.center,
+                        text: TextSpan(
+                          text:
+                              '${ref.watch(senderProvider.select((value) => value.playModeHandler.velocityProvider.velocityRandomCenter)).round()}',
+                          style: TextStyle(
+                            fontSize: constraints.maxWidth * fontSizeFactor,
+                            color: color,
+                          ),
+                          children: <TextSpan>[
+                            TextSpan(
+                              text: String.fromCharCode(177), // Plus-Minus Sign
+                              style: TextStyle(
+                                  fontSize:
+                                      constraints.maxWidth * fontSizeFactor),
+                            ),
+                            TextSpan(
+                              text:
+                                  '${ref.watch(senderProvider.select((value) => value.playModeHandler.velocityProvider.velocityRange)) ~/ 2}',
+                              style: TextStyle(
+                                  fontSize: constraints.maxWidth *
+                                      fontSizeFactor *
+                                      0.7),
+                            )
+                          ],
                         ),
-                );
+                      );
               },
             ),
           ),

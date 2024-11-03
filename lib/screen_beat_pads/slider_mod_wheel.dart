@@ -24,7 +24,7 @@ class ModWheel extends ConsumerStatefulWidget {
 }
 
 class _ModWheelState extends ConsumerState<ModWheel> {
-  final double fontSizeFactor = 0.3;
+  final double fontSizeFactor = 0.27;
   final double paddingFactor = 0.1;
   final int topAndBottomfield = 2;
   final color = Palette.darker(Palette.tan, 0.6);
@@ -56,11 +56,14 @@ class _ModWheelState extends ConsumerState<ModWheel> {
             builder: (context, constraints) {
               return Align(
                 alignment: Alignment.bottomCenter,
-                child: Text(
-                  'Mod',
-                  style: TextStyle(
-                    fontSize: constraints.maxWidth * fontSizeFactor,
-                    color: color,
+                child: FittedBox(
+                  fit: BoxFit.contain,
+                  child: Text(
+                    'Mod',
+                    style: TextStyle(
+                      fontSize: constraints.maxWidth * fontSizeFactor,
+                      color: color,
+                    ),
                   ),
                 ),
               );
@@ -112,7 +115,7 @@ class _ModWheelState extends ConsumerState<ModWheel> {
                   text: TextSpan(
                     text: '${ref.watch(_modWheelProvider)}',
                     style: TextStyle(
-                      fontSize: constraints.maxWidth * fontSizeFactor * 0.9,
+                      fontSize: constraints.maxWidth * fontSizeFactor,
                       color: color,
                     ),
                   ),
