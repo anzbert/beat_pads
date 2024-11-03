@@ -34,9 +34,9 @@ class ReturnToMenuButton extends StatelessWidget {
               shadowColor:
                   Palette.lightGrey.withOpacity(transparent ? 0.15 : 1),
               foregroundColor:
-                  Palette.lightGrey.withOpacity(transparent ? 0.5 : 1),
+                  Palette.lightGrey.withOpacity(transparent ? 0.15 : 1),
               backgroundColor: transparent
-                  ? Colors.transparent
+                  ? Palette.darker(Palette.cadetBlue, 0.3).withOpacity(0.4)
                   : Palette.darker(Palette.cadetBlue, 0.3),
               padding: EdgeInsets.zero,
               alignment: Alignment.center,
@@ -46,7 +46,7 @@ class ReturnToMenuButton extends StatelessWidget {
             ),
             child: Tooltip(
               decoration: BoxDecoration(
-                color: Palette.cadetBlue.withOpacity(0.7),
+                color: Palette.cadetBlue.withOpacity(0.5),
                 boxShadow: kElevationToShadow[6],
                 borderRadius: BorderRadius.circular(3),
               ),
