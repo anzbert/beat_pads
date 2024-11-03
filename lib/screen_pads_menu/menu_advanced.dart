@@ -26,7 +26,7 @@ class MenuInput extends ConsumerWidget {
             //   child: const DividerTitle('Mode'),
             // ),
             Container(
-              color: Palette.darkGrey,
+              color: Palette.dirtyTranslucent,
               child: ListTile(
                 title: const Text(
                   'Advanced Mode',
