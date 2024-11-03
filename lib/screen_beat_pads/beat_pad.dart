@@ -7,13 +7,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class SlideBeatPad extends ConsumerStatefulWidget {
   const SlideBeatPad({
-    required this.note,
+    required this.pad,
     required this.preview,
     super.key,
   });
 
   final bool preview;
-  final int note;
+  final CustomPad pad;
 
   @override
   SlideBeatPadState createState() => SlideBeatPadState();
@@ -24,9 +24,10 @@ class SlideBeatPadState extends ConsumerState<SlideBeatPad> {
 
   @override
   Widget build(BuildContext context) {
+    final note = widget.pad.padValue;
     final bool sustainState = ref.watch(sustainStateProv);
     final int playedVelocity =
-        ref.watch(senderProvider).playModeHandler.isNoteOn(widget.note);
+        ref.watch(senderProvider).playModeHandler.isNoteOn(note);
 
     if (sustainState) {
       if (sustainedVelocity < playedVelocity) {
@@ -41,7 +42,7 @@ class SlideBeatPadState extends ConsumerState<SlideBeatPad> {
               Scale.chromatic.intervals,
               ref.watch(baseHueProv),
               ref.watch(rootProv),
-              widget.note,
+              note,
               0, // no Rx Midi with PROG Change
               noteOn: false, // no NoteOn with PROG Change
             )
@@ -49,17 +50,17 @@ class SlideBeatPadState extends ConsumerState<SlideBeatPad> {
               ref.watch(scaleProv).intervals,
               ref.watch(baseHueProv),
               ref.watch(rootProv),
-              widget.note,
-              widget.preview ? 0 : ref.watch(rxNoteProvider)[widget.note],
+              note,
+              widget.preview ? 0 : ref.watch(rxNoteProvider)[note],
               noteOn: sustainState ? sustainedVelocity > 0 : playedVelocity > 0,
             );
 
     final Label label = ref.watch(layoutProv) == Layout.progrChange
-        ? Label(title: '${widget.note + 1}', subtitle: 'Program')
+        ? Label(title: '${note + 1}', subtitle: 'Program')
         : PadLabels.getLabel(
             ref.watch(padLabelsProv),
             ref.watch(layoutProv),
-            widget.note,
+            note,
           );
 
     final Color padTextColor = Palette.darkGrey;
@@ -75,6 +76,18 @@ class SlideBeatPadState extends ConsumerState<SlideBeatPad> {
       final double fontSize = constraints.maxWidth * 0.1;
 
       return Container(
+        decoration: ref.watch(layoutProv) == Layout.guitar
+            ? (widget.pad.row + 1) % 5 == 0
+                ? BoxDecoration(
+                    border: BorderDirectional(
+                      bottom: BorderSide(
+                        color: Palette.whiteLike,
+                        width: constraints.maxHeight * 0.025,
+                      ),
+                    ),
+                  )
+                : null
+            : null,
         padding: EdgeInsets.all(padSpacing),
         height: double.infinity,
         width: double.infinity,
@@ -86,7 +99,7 @@ class SlideBeatPadState extends ConsumerState<SlideBeatPad> {
               color: color,
               borderRadius: padRadius,
               shadowColor: Colors.black,
-              child: widget.note > 127 || widget.note < 0
+              child: note > 127 || note < 0
                   ? InkWell(
                       borderRadius: padRadius,
                       child: Padding(

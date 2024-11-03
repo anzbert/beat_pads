@@ -219,7 +219,7 @@ class _SlidePadsState extends ConsumerState<SlidePads>
                                     child: HitTestObject(
                                       customPad: customPad,
                                       child: SlideBeatPad(
-                                        note: customPad.padValue,
+                                        pad: customPad,
                                         preview: widget.preview,
                                       ),
                                     ),
