@@ -74,6 +74,12 @@ class SustainButtonDoubleTapState
             ref.read(sustainStateProv.notifier).sustainOff();
           }
         },
+        onPanEnd: (_) {
+          if (ref.read(sustainStateProv) && consecutiveTaps < 2) {
+            ref.read(sustainStateProv.notifier).sustainOff();
+          }
+        },
+        // onDoubleTap: () {},
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(padRadius)),
