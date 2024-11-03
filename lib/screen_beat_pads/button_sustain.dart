@@ -1,5 +1,6 @@
 import 'package:beat_pads/services/services.dart';
 import 'package:beat_pads/theme.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -41,9 +42,31 @@ class SustainButtonDoubleTap extends ConsumerStatefulWidget {
 
 class SustainButtonDoubleTapState
     extends ConsumerState<SustainButtonDoubleTap> {
-  int lastTap = DateTime.now().millisecondsSinceEpoch;
-  int consecutiveTaps = 1;
-  static const int doubleTapTime = 300;
+  static const int _doubleTapTime = 250; // in ms
+  int _lastTap = DateTime.now().millisecondsSinceEpoch;
+  int _consecutiveTaps = 1;
+
+  void on(_) {
+    int now = DateTime.now().millisecondsSinceEpoch;
+    if (now - _lastTap < _doubleTapTime) {
+      _consecutiveTaps++;
+      if (_consecutiveTaps >= 2) {
+        ref.read(sustainStateProv.notifier).sustainOn();
+      }
+    } else {
+      _consecutiveTaps = 1;
+      if (!ref.read(sustainStateProv)) {
+        ref.read(sustainStateProv.notifier).sustainOn();
+      }
+    }
+    _lastTap = now;
+  }
+
+  void off(_) {
+    if (ref.read(sustainStateProv) && _consecutiveTaps < 2) {
+      ref.read(sustainStateProv.notifier).sustainOff();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,33 +76,19 @@ class SustainButtonDoubleTapState
 
     return Padding(
       padding: EdgeInsets.fromLTRB(0, padSpacing, padSpacing, padSpacing),
-      child: GestureDetector(
-        onTapDown: (_) {
-          int now = DateTime.now().millisecondsSinceEpoch;
-          if (now - lastTap < doubleTapTime) {
-            consecutiveTaps++;
-            if (consecutiveTaps >= 2) {
-              ref.read(sustainStateProv.notifier).sustainOn();
-            }
-          } else {
-            consecutiveTaps = 1;
-            if (!ref.read(sustainStateProv)) {
-              ref.read(sustainStateProv.notifier).sustainOn();
-            }
-          }
-          lastTap = now;
+      child: RawGestureDetector(
+        gestures: <Type, GestureRecognizerFactory>{
+          TapAndPanGestureRecognizer:
+              GestureRecognizerFactoryWithHandlers<TapAndPanGestureRecognizer>(
+            () => TapAndPanGestureRecognizer(),
+            (TapAndPanGestureRecognizer instance) {
+              instance
+                ..onTapDown = on
+                ..onTapUp = off
+                ..onDragEnd = off;
+            },
+          ),
         },
-        onTapUp: (_) {
-          if (ref.read(sustainStateProv) && consecutiveTaps < 2) {
-            ref.read(sustainStateProv.notifier).sustainOff();
-          }
-        },
-        onPanEnd: (_) {
-          if (ref.read(sustainStateProv) && consecutiveTaps < 2) {
-            ref.read(sustainStateProv.notifier).sustainOff();
-          }
-        },
-        // onDoubleTap: () {},
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(padRadius)),
