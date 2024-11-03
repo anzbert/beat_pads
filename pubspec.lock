@@ -153,9 +153,11 @@ packages:
   flutter_midi_command:
     dependency: "direct main"
     description:
-      path: "/Users/anz/localDev/FlutterMidiCommand"
-      relative: false
-    source: path
+      path: "."
+      ref: build-with-gradle-8
+      resolved-ref: "4e8f33ac5ed031ba580b4991a1e572983b6dd6df"
+      url: "https://github.com/anzbert/FlutterMidiCommand.git"
+    source: git
     version: "0.5.2"
   flutter_midi_command_linux:
     dependency: transitive
