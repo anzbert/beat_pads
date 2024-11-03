@@ -81,12 +81,19 @@ class SlideBeatPadState extends ConsumerState<SlideBeatPad> {
                 ? BoxDecoration(
                     border: BorderDirectional(
                       bottom: BorderSide(
-                        color: Palette.whiteLike,
-                        width: constraints.maxHeight * 0.025,
+                        color: Palette.laserLemon,
+                        width: constraints.maxHeight * 0.022,
                       ),
                     ),
                   )
-                : null
+                : BoxDecoration(
+                    border: BorderDirectional(
+                      bottom: BorderSide(
+                        color: Palette.cadetBlue,
+                        width: constraints.maxHeight * 0.022,
+                      ),
+                    ),
+                  )
             : null,
         padding: EdgeInsets.all(padSpacing),
         height: double.infinity,
