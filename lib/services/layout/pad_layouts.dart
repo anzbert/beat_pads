@@ -5,24 +5,25 @@ enum Layout {
   scaleNotesCustom('In Key', custom: true),
   sequential('Chromatic - Sequential', chromatic: true),
   scaleNotesOnly('In Key - Sequential'),
-  guitar('Guitar Tuning', chromatic: true),
+  guitar('Guitar Tuning',
+      chromatic: true, defaultDimensions: NullableVector2Int(null, 6)),
 
   progrChange('Program Changes', chromatic: true),
 
   magicToneNetwork('Magic Tone Network™'),
   xPressPadsStandard('XpressPads™ Standard 4x4',
       resizable: false,
-      defaultDimensions: Vector2Int(4, 4),
+      defaultDimensions: NullableVector2Int(4, 4),
       gmPercussionLabels: true),
   xPressPadsLatinJazz('XpressPads™ Latin/Jazz 4x4',
       resizable: false,
-      defaultDimensions: Vector2Int(4, 4),
+      defaultDimensions: NullableVector2Int(4, 4),
       gmPercussionLabels: true),
   xPressPadsXO('XpressPads™ with XO 4x4',
-      resizable: false, defaultDimensions: Vector2Int(4, 4)),
+      resizable: false, defaultDimensions: NullableVector2Int(4, 4)),
   xPressPadsXtreme('XpressPads™ Xtreme 8x4',
       resizable: false,
-      defaultDimensions: Vector2Int(8, 4),
+      defaultDimensions: NullableVector2Int(8, 4),
       gmPercussionLabels: true),
   ;
 
@@ -39,7 +40,7 @@ enum Layout {
   final bool custom;
   final bool resizable;
   final bool gmPercussionLabels;
-  final Vector2Int? defaultDimensions;
+  final NullableVector2Int? defaultDimensions;
   final bool chromatic;
 
   @override

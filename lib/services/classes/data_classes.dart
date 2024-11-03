@@ -39,6 +39,17 @@ class Vector2Int {
   }
 }
 
+class NullableVector2Int {
+  /// A simple class that holds an integer x and y value
+  const NullableVector2Int(this.x, this.y);
+  final int? x;
+  final int? y;
+
+  List<int?> toList() {
+    return [x, y];
+  }
+}
+
 class CustomPointer {
   /// Contains a pointer position with a unique ID
   CustomPointer(this.pointer, this.position);

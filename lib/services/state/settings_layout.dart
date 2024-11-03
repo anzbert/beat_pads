@@ -28,11 +28,11 @@ class LayoutSettingNotifier extends SettingEnumNotifier<Layout> {
     }
 
     if (newState.defaultDimensions?.x != null) {
-      ref.read(widthProv.notifier).setAndSave(newState.defaultDimensions!.x);
+      ref.read(widthProv.notifier).setAndSave(newState.defaultDimensions!.x!);
     }
 
     if (newState.defaultDimensions?.y != null) {
-      ref.read(heightProv.notifier).setAndSave(newState.defaultDimensions!.y);
+      ref.read(heightProv.notifier).setAndSave(newState.defaultDimensions!.y!);
     }
     super.set(newState);
   }
