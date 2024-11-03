@@ -39,9 +39,11 @@ enum Layout {
   final String title;
   final bool custom;
   final bool resizable;
-  final bool gmPercussionLabels;
   final NullableVector2Int? defaultDimensions;
   final bool chromatic;
+
+  /// this property is NOT being used at the moment
+  final bool gmPercussionLabels;
 
   @override
   String toString() => title;

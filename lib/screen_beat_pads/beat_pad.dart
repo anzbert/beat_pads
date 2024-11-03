@@ -55,13 +55,12 @@ class SlideBeatPadState extends ConsumerState<SlideBeatPad> {
               noteOn: sustainState ? sustainedVelocity > 0 : playedVelocity > 0,
             );
 
-    final Label label = ref.watch(layoutProv) == Layout.progrChange
-        ? Label(title: '${note + 1}', subtitle: 'Program')
-        : PadLabels.getLabel(
-            note: note,
-            padLabels: ref.watch(padLabelsProv),
-            gmLabel: ref.watch(layoutProv).gmPercussionLabels ||
-                ref.watch(gmLabelsProv));
+    final Label label = PadLabels.getLabel(
+      note: note,
+      layout: ref.watch(layoutProv),
+      padLabels: ref.watch(padLabelsProv),
+      gmLabel: ref.watch(gmLabelsProv),
+    );
 
     final Color padTextColor = Palette.darkGrey;
     final Color splashColor = Palette.splashColor;
