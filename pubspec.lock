@@ -153,10 +153,9 @@ packages:
   flutter_midi_command:
     dependency: "direct main"
     description:
-      name: flutter_midi_command
-      sha256: "85f6d27f38169ebe0a9fb88257ae0d44b5dd1e773b8d7298d0cfc40be22bbf34"
-      url: "https://pub.dev"
-    source: hosted
+      path: "/Users/anz/localDev/FlutterMidiCommand"
+      relative: false
+    source: path
     version: "0.5.2"
   flutter_midi_command_linux:
     dependency: transitive

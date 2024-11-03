@@ -20,11 +20,11 @@ dependencies:
     sdk: flutter
 
   flutter_midi_command:
-    ^0.5.1
+    # ^0.5.1
     # git:
     #   url: https://github.com/InvisibleWrench/FlutterMidiCommand.git
     #   ref: master
-    # path: /Users/anz/localDev/FlutterMidiCommand
+    path: /Users/anz/localDev/FlutterMidiCommand
 
   flutter_riverpod: ^2.3.2
   rive: ^0.13.9
