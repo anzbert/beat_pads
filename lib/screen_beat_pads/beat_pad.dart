@@ -73,8 +73,7 @@ class SlideBeatPadState extends ConsumerState<SlideBeatPad> {
     );
 
     return LayoutBuilder(builder: (context, constraints) {
-      final double fontSize = constraints.maxWidth * 0.08;
-      // final double padSpacing = constraints.maxWidth * 0.012;
+      final double fontSize = constraints.maxWidth * 0.1;
 
       return Container(
         padding: EdgeInsets.all(padSpacing),
