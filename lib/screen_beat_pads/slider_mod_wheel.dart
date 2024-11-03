@@ -23,7 +23,7 @@ class ModWheel extends ConsumerStatefulWidget {
 }
 
 class _ModWheelState extends ConsumerState<ModWheel> {
-  final double fontSizeFactor = 0.27;
+  final double fontSizeFactor = 0.035;
   final double paddingFactor = 0.05;
   final int topAndBottomfield = 2;
   final color = Palette.darker(Palette.tan, 0.6);
@@ -56,7 +56,7 @@ class _ModWheelState extends ConsumerState<ModWheel> {
               child: Text(
                 'Mod',
                 style: TextStyle(
-                  fontSize: constraints.maxWidth * fontSizeFactor,
+                  fontSize: constraints.maxHeight * fontSizeFactor,
                   color: color,
                 ),
               ),
@@ -73,6 +73,7 @@ class _ModWheelState extends ConsumerState<ModWheel> {
             flex: 30,
             child: ThemedSlider(
               width: constraints.maxWidth,
+              height: constraints.maxHeight,
               thumbColor: Palette.tan,
               child: RotatedBox(
                 quarterTurns: 0,
@@ -101,19 +102,15 @@ class _ModWheelState extends ConsumerState<ModWheel> {
             flex: topAndBottomfield,
             child: FractionallySizedBox(
               widthFactor: 0.95,
-              child: LayoutBuilder(
-                builder: (context, constraints) {
-                  return RichText(
-                    textAlign: TextAlign.center,
-                    text: TextSpan(
-                      text: '${ref.watch(_modWheelProvider)}',
-                      style: TextStyle(
-                        fontSize: constraints.maxWidth * fontSizeFactor,
-                        color: color,
-                      ),
-                    ),
-                  );
-                },
+              child: RichText(
+                textAlign: TextAlign.center,
+                text: TextSpan(
+                  text: '${ref.watch(_modWheelProvider)}',
+                  style: TextStyle(
+                    fontSize: constraints.maxHeight * fontSizeFactor,
+                    color: color,
+                  ),
+                ),
               ),
             ),
           ),

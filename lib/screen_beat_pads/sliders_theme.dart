@@ -7,6 +7,7 @@ class ThemedSlider extends StatelessWidget {
     required this.child,
     required this.thumbColor,
     required this.width,
+    required this.height,
     super.key,
     this.centerLine = false,
     this.showTrack = false,
@@ -23,6 +24,7 @@ class ThemedSlider extends StatelessWidget {
   final Color thumbColor;
 
   final double width;
+  final double height;
 
   @override
   Widget build(BuildContext context) {

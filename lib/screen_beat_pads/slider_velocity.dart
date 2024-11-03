@@ -18,10 +18,10 @@ class SliderVelocity extends ConsumerStatefulWidget {
 }
 
 class _SliderVelocityState extends ConsumerState<SliderVelocity> {
-  final double fontSizeFactor = 0.27;
+  final double fontSizeFactor = 0.035;
   final double paddingFactor = 0.05;
   final int topAndBottomfield = 2;
-  final color = Palette.darker(Palette.cadetBlue, 0.6);
+  final Color color = Palette.darker(Palette.cadetBlue, 0.6);
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +36,7 @@ class _SliderVelocityState extends ConsumerState<SliderVelocity> {
               child: Text(
                 'Vel',
                 style: TextStyle(
-                  fontSize: constraints.maxWidth * fontSizeFactor,
+                  fontSize: constraints.maxHeight * fontSizeFactor,
                   color: color,
                 ),
               ),
@@ -53,6 +53,7 @@ class _SliderVelocityState extends ConsumerState<SliderVelocity> {
             Flexible(
               flex: 30,
               child: ThemedSlider(
+                height: constraints.maxHeight,
                 width: constraints.maxWidth,
                 thumbColor: Palette.cadetBlue,
                 child: Slider(
@@ -85,6 +86,7 @@ class _SliderVelocityState extends ConsumerState<SliderVelocity> {
             Flexible(
               flex: 30,
               child: ThemedSlider(
+                height: constraints.maxHeight,
                 width: constraints.maxWidth,
                 range: ref.watch(
                   senderProvider.select(
@@ -128,49 +130,44 @@ class _SliderVelocityState extends ConsumerState<SliderVelocity> {
             flex: topAndBottomfield,
             child: FractionallySizedBox(
               widthFactor: 0.95,
-              child: LayoutBuilder(
-                builder: (context, constraints) {
-                  return ref.watch(velocityModeProv) == VelocityMode.fixed
-                      ? RichText(
-                          textAlign: TextAlign.center,
-                          text: TextSpan(
-                            text:
-                                '${ref.watch(senderProvider.select((value) => value.playModeHandler.velocityProvider.velocityFixed))}',
+              child: ref.watch(velocityModeProv) == VelocityMode.fixed
+                  ? RichText(
+                      textAlign: TextAlign.center,
+                      text: TextSpan(
+                        text:
+                            '${ref.watch(senderProvider.select((value) => value.playModeHandler.velocityProvider.velocityFixed))}',
+                        style: TextStyle(
+                          fontSize: constraints.maxHeight * fontSizeFactor,
+                          color: color,
+                        ),
+                      ))
+                  : RichText(
+                      textAlign: TextAlign.center,
+                      text: TextSpan(
+                        text:
+                            '${ref.watch(senderProvider.select((value) => value.playModeHandler.velocityProvider.velocityRandomCenter)).round()}',
+                        style: TextStyle(
+                          fontSize: constraints.maxHeight * fontSizeFactor,
+                          color: color,
+                        ),
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: String.fromCharCode(177), // Plus-Minus Sign
                             style: TextStyle(
-                              fontSize: constraints.maxWidth * fontSizeFactor,
-                              color: color,
-                            ),
-                          ))
-                      : RichText(
-                          textAlign: TextAlign.center,
-                          text: TextSpan(
-                            text:
-                                '${ref.watch(senderProvider.select((value) => value.playModeHandler.velocityProvider.velocityRandomCenter)).round()}',
-                            style: TextStyle(
-                              fontSize: constraints.maxWidth * fontSizeFactor,
-                              color: color,
-                            ),
-                            children: <TextSpan>[
-                              TextSpan(
-                                text:
-                                    String.fromCharCode(177), // Plus-Minus Sign
-                                style: TextStyle(
-                                    fontSize:
-                                        constraints.maxWidth * fontSizeFactor),
-                              ),
-                              TextSpan(
-                                text:
-                                    '${ref.watch(senderProvider.select((value) => value.playModeHandler.velocityProvider.velocityRange)) ~/ 2}',
-                                style: TextStyle(
-                                    fontSize: constraints.maxWidth *
-                                        fontSizeFactor *
-                                        0.7),
-                              )
-                            ],
+                                fontSize:
+                                    constraints.maxHeight * fontSizeFactor),
                           ),
-                        );
-                },
-              ),
+                          TextSpan(
+                            text:
+                                '${ref.watch(senderProvider.select((value) => value.playModeHandler.velocityProvider.velocityRange)) ~/ 2}',
+                            style: TextStyle(
+                                fontSize: constraints.maxHeight *
+                                    fontSizeFactor *
+                                    0.7),
+                          )
+                        ],
+                      ),
+                    ),
             ),
           ),
         ],

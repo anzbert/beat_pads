@@ -24,10 +24,10 @@ class _PitchSliderEasedState extends ConsumerState<PitchSliderEased>
   late AnimationController _controller;
   late Animation<double> _curve;
 
-  final double fontSizeFactor = 0.27;
+  final double fontSizeFactor = 0.035;
   final double paddingFactor = 0.05;
   final int topAndBottomfield = 2;
-  final color = Palette.darker(Palette.laserLemon, 0.6);
+  final Color color = Palette.darker(Palette.laserLemon, 0.6);
 
   double _pitch = 0;
 
@@ -49,19 +49,15 @@ class _PitchSliderEasedState extends ConsumerState<PitchSliderEased>
         children: [
           Flexible(
             flex: topAndBottomfield,
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                return Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Text(
-                    'Pitch',
-                    style: TextStyle(
-                      fontSize: constraints.maxWidth * fontSizeFactor,
-                      color: color,
-                    ),
-                  ),
-                );
-              },
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: Text(
+                'Pitch',
+                style: TextStyle(
+                  fontSize: constraints.maxHeight * fontSizeFactor,
+                  color: color,
+                ),
+              ),
             ),
           ),
           Center(
@@ -76,6 +72,7 @@ class _PitchSliderEasedState extends ConsumerState<PitchSliderEased>
             child: ThemedSlider(
               thumbColor: Palette.laserLemon,
               width: constraints.maxWidth,
+              height: constraints.maxHeight,
               centerLine: true,
               child: Slider(
                 allowedInteraction: ref.watch(sliderTapAndSlideProv)
@@ -131,29 +128,24 @@ class _PitchSliderEasedState extends ConsumerState<PitchSliderEased>
             flex: topAndBottomfield,
             child: FractionallySizedBox(
               widthFactor: 0.95,
-              child: LayoutBuilder(
-                builder: (context, constraints) {
-                  return RichText(
-                    textAlign: TextAlign.center,
-                    text: TextSpan(
-                      text: _pitch == 0 ? '-' : '${(_pitch * 100).round()}',
-                      style: TextStyle(
-                        fontSize: constraints.maxWidth * fontSizeFactor,
-                        color: color,
-                      ),
-                      children: <TextSpan>[
-                        if (_pitch != 0)
-                          TextSpan(
-                            text: '%',
-                            style: TextStyle(
-                                fontSize: constraints.maxWidth *
-                                    fontSizeFactor *
-                                    0.6),
-                          )
-                      ],
-                    ),
-                  );
-                },
+              child: RichText(
+                textAlign: TextAlign.center,
+                text: TextSpan(
+                  text: _pitch == 0 ? '-' : '${(_pitch * 100).round()}',
+                  style: TextStyle(
+                    fontSize: constraints.maxHeight * fontSizeFactor,
+                    color: color,
+                  ),
+                  children: <TextSpan>[
+                    if (_pitch != 0)
+                      TextSpan(
+                        text: '%',
+                        style: TextStyle(
+                            fontSize:
+                                constraints.maxHeight * fontSizeFactor * 0.6),
+                      )
+                  ],
+                ),
               ),
             ),
           ),
