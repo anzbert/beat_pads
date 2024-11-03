@@ -8,6 +8,8 @@ enum Layout {
 
   progrChange('Program Changes', chromatic: true),
 
+  // guitar('Guitar String Intervals', chromatic: true),
+
   magicToneNetwork('Magic Tone Network™'),
   xPressPadsStandard('XpressPads™ Standard 4x4',
       resizable: false,
@@ -73,6 +75,8 @@ enum Layout {
         return GridXpressPads(settings, XPP.xtreme);
       case Layout.progrChange:
         return GridChromaticByRowInterval(settings, rowInterval: width);
+      // case Layout.guitar:
+      //   return GridChromaticWithGuitarShift(settings);
     }
   }
 }
@@ -117,6 +121,30 @@ abstract class Grid {
     ).reversed.toList();
   }
 }
+
+/// A chromatic Grid with variable intervals between rows
+// class GridChromaticWithGuitarShift extends Grid {
+//   GridChromaticWithGuitarShift(super.settings);
+
+//   final int rowInterval = 5;
+
+//   @override
+//   List<CustomPad> get list {
+//     print("refresh");
+//     final List<CustomPad> grid = [];
+//     for (int row = 0; row < settings.height; row++) {
+//       for (int note = 0; note < settings.width; note++) {
+//         grid.add(
+//           CustomPad(
+//             (settings.baseNote - ((row + 2) ~/ 6)) + (row * rowInterval) + note,
+//           ),
+//         );
+//       }
+//       // print(((row + 2) ~/ 6));
+//     }
+//     return grid;
+//   }
+// }
 
 /// A chromatic Grid with variable intervals between rows
 class GridChromaticByRowInterval extends Grid {

@@ -49,7 +49,7 @@ class IntCounterTile extends StatelessWidget {
             child: const Icon(Icons.remove),
           ),
           SizedBox(
-            width: 24,
+            width: 30,
             child: Text(
               modDisplay == null
                   ? readValue.toString()
