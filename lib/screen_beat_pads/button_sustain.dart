@@ -42,7 +42,7 @@ class SustainButtonDoubleTap extends ConsumerStatefulWidget {
 
 class SustainButtonDoubleTapState
     extends ConsumerState<SustainButtonDoubleTap> {
-  static const int _doubleTapTime = 250; // in ms
+  static const int _doubleTapTime = 230; // in ms
   int _lastTap = DateTime.now().millisecondsSinceEpoch;
   int _consecutiveTaps = 1;
 

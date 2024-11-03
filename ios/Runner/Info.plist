@@ -34,11 +34,9 @@
 		<key>LSRequiresIPhoneOS</key>
 		<true />
 		<key>NSBluetoothAlwaysUsageDescription</key>
-		<string>An underlying dependency requires this permission, but Bluetooth is not used in this
-			version.</string>
-		<key>NSBluetoothPeripheralUsageDescription</key>
-		<string>An underlying dependency requires this permission, but Bluetooth is not used in this
-			version.</string>
+		<string>Connect to Bluetooth MIDI Devices</string>
+		<key>NSLocalNetworkUsageDescription</key>
+		<string>Connect to Network MIDI Session</string>
 		<key>UIApplicationSupportsIndirectInputEvents</key>
 		<true />
 		<key>UILaunchStoryboardName</key>

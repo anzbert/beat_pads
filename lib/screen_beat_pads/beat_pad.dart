@@ -24,8 +24,6 @@ class SlideBeatPadState extends ConsumerState<SlideBeatPad> {
 
   @override
   Widget build(BuildContext context) {
-    final double screenWidth = MediaQuery.of(context).size.width;
-
     final bool sustainState = ref.watch(sustainStateProv);
     final int playedVelocity =
         ref.watch(senderProvider).playModeHandler.isNoteOn(widget.note);
@@ -56,8 +54,6 @@ class SlideBeatPadState extends ConsumerState<SlideBeatPad> {
               noteOn: sustainState ? sustainedVelocity > 0 : playedVelocity > 0,
             );
 
-    final Color splashColor = Palette.splashColor;
-
     final Label label = ref.watch(layoutProv) == Layout.progrChange
         ? Label(title: '${widget.note + 1}', subtitle: 'Program')
         : PadLabels.getLabel(
@@ -67,6 +63,9 @@ class SlideBeatPadState extends ConsumerState<SlideBeatPad> {
           );
 
     final Color padTextColor = Palette.darkGrey;
+    final Color splashColor = Palette.splashColor;
+
+    final double screenWidth = MediaQuery.of(context).size.width;
     final double padSpacing = screenWidth * ThemeConst.padSpacingFactor;
     final BorderRadius padRadius = BorderRadius.all(
       Radius.circular(screenWidth * ThemeConst.padRadiusFactor),
