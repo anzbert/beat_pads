@@ -5,6 +5,7 @@ enum PadColors {
   colorWheel('Base Color on Root Note'),
   fixedColorWheel('Base Color on C Note'),
   circleOfFifth('Circle of Fifths'),
+  gmDrums('GM Percussion Groups'),
   highlightRoot('Highlight Root Note');
 
   const PadColors(this.title);
@@ -47,6 +48,12 @@ enum PadColors {
         } else {
           hue = (baseHue + 210) % 360;
         }
+      case PadColors.gmDrums:
+        final PercType? type = PercType.getType(note)?.type;
+        if (type == null) return Palette.whiteLike;
+
+        final divisionSize = 360 / PercType.values.length - 1;
+        hue = (divisionSize * PercType.values.indexOf(type) + baseHue) % 360;
     }
 
     final color = HSLColor.fromAHSL(

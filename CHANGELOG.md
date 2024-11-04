@@ -2,8 +2,9 @@
 
 ## 0.9.38
 
-- Add GM Percussion Drum Label switch
 - Add fixed Color Wheel mode
+- Add colorouring by GM drum type
+- Add GM Percussion Drum Label switch
 - Update Slider styling and increase slider size
 - Add visual dividers to Pitch Bend slider
 - Fix responsiveness of Sustain button with custom GestureDetector

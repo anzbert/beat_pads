@@ -307,9 +307,8 @@ class MenuLayout extends ConsumerWidget {
                 ),
               ),
               ListTile(
-                title: const Text('Midi Drum Labels'),
-                subtitle:
-                    const Text('Add General Midi Percussion labels to pads'),
+                title: const Text('GM Drum Labels'),
+                subtitle: const Text('Add General Midi Perc labels to pads'),
                 trailing: Switch(
                   value: ref.watch(gmLabelsProv),
                   onChanged: (bool v) =>
@@ -318,8 +317,8 @@ class MenuLayout extends ConsumerWidget {
               ),
               ListTile(
                 title: const Text('Color Mode'),
-                subtitle: const Text(
-                    'Choose how the RGB Color Wheel is applied to the pads'),
+                subtitle:
+                    const Text('Choose how the RGB Color Wheel is applied'),
                 trailing: DropdownEnum<PadColors>(
                   values: PadColors.values,
                   readValue: ref.watch(padColorsProv),
