@@ -328,9 +328,9 @@ class MenuLayout extends ConsumerWidget {
                 ),
               ),
               ListTile(
-                title: const Text('GM Perc Labels'),
-                subtitle:
-                    const Text('Show standard General Midi percussion labels'),
+                title: const Text('GM Perc Names'),
+                subtitle: const Text(
+                    'Show standard General Midi percussion names on pads'),
                 trailing: Switch(
                   value: ref.watch(gmLabelsProv),
                   onChanged: (bool v) =>

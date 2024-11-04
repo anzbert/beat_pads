@@ -70,9 +70,11 @@ class SlideBeatPadState extends ConsumerState<SlideBeatPad> {
     final BorderRadius padRadius = BorderRadius.all(
       Radius.circular(screenWidth * ThemeConst.padRadiusFactor),
     );
+    // final double fontSize = screenWidth * 0.017;
 
     return LayoutBuilder(builder: (context, constraints) {
-      final double fontSize = constraints.maxWidth * 0.1;
+      final double fontSize =
+          (constraints.maxWidth * 0.1).clamp(0, screenWidth * 0.017);
 
       return Container(
         decoration: ref.watch(layoutProv) == Layout.guitar
