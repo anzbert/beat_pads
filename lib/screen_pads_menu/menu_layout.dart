@@ -296,26 +296,6 @@ class MenuLayout extends ConsumerWidget {
                 ),
               const DividerTitle('Display'),
               ListTile(
-                title: const Text('Pad Labels'),
-                subtitle:
-                    const Text('Choose between Midi values and Note names'),
-                trailing: DropdownEnum<PadLabels>(
-                  values: PadLabels.values,
-                  readValue: ref.watch<PadLabels>(padLabelsProv),
-                  setValue: (PadLabels v) =>
-                      ref.read(padLabelsProv.notifier).setAndSave(v),
-                ),
-              ),
-              ListTile(
-                title: const Text('GM Drum Labels'),
-                subtitle: const Text('Add General Midi Perc labels to pads'),
-                trailing: Switch(
-                  value: ref.watch(gmLabelsProv),
-                  onChanged: (bool v) =>
-                      ref.read(gmLabelsProv.notifier).setAndSave(v),
-                ),
-              ),
-              ListTile(
                 title: const Text('Color Mode'),
                 subtitle:
                     const Text('Choose how the RGB Color Wheel is applied'),
@@ -335,6 +315,27 @@ class MenuLayout extends ConsumerWidget {
                 setValue: (int v) => ref.read(baseHueProv.notifier).set(v),
                 resetValue: ref.read(baseHueProv.notifier).reset,
                 onChangeEnd: ref.read(baseHueProv.notifier).save,
+              ),
+              ListTile(
+                title: const Text('Pad Labels'),
+                subtitle:
+                    const Text('Choose between Midi values and Note names'),
+                trailing: DropdownEnum<PadLabels>(
+                  values: PadLabels.values,
+                  readValue: ref.watch<PadLabels>(padLabelsProv),
+                  setValue: (PadLabels v) =>
+                      ref.read(padLabelsProv.notifier).setAndSave(v),
+                ),
+              ),
+              ListTile(
+                title: const Text('GM Perc Labels'),
+                subtitle:
+                    const Text('Show standard General Midi percussion labels'),
+                trailing: Switch(
+                  value: ref.watch(gmLabelsProv),
+                  onChanged: (bool v) =>
+                      ref.read(gmLabelsProv.notifier).setAndSave(v),
+                ),
               ),
               ListTile(
                 title: const Text('Show Velocity'),

@@ -5,7 +5,7 @@ enum PadColors {
   colorWheel('Base Color on Root Note'),
   fixedColorWheel('Base Color on C Note'),
   circleOfFifth('Circle of Fifths'),
-  gmDrums('GM Percussion Groups'),
+  gmDrums('GM Percussion Type'),
   highlightRoot('Highlight Root Note');
 
   const PadColors(this.title);
