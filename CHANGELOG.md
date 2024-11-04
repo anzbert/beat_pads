@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 1.0.1
+
+- Fix screen rotation lock bug
+- I guess its time for a new major version ;)
+
 ## 0.9.40
 
 - Performance Improvements
