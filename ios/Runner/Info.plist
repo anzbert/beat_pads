@@ -35,6 +35,8 @@
 		<true />
 		<key>NSBluetoothAlwaysUsageDescription</key>
 		<string>Connect to Bluetooth MIDI Devices</string>
+		<key>NSBluetoothPeripheralUsageDescription</key>
+		<string>Connect to Bluetooth MIDI Devices</string>
 		<key>NSLocalNetworkUsageDescription</key>
 		<string>Connect to Network MIDI Session</string>
 		<key>UIApplicationSupportsIndirectInputEvents</key>
