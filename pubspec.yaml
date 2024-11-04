@@ -25,6 +25,7 @@ dependencies:
     # git:
     #   url: https://github.com/InvisibleWrench/FlutterMidiCommand.git
     #   ref: master
+    # awaiting pull request to be accepted in FlutterMidiCommand and using own git in the meantime...
     git:
       url: https://github.com/anzbert/FlutterMidiCommand.git
       ref: build-with-gradle-8
