@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.9.40
+
+- Performance Improvements
+
 ## 0.9.38
 
 - Add fixed Color Wheel mode

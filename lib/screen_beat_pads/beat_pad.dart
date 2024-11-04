@@ -106,7 +106,7 @@ class SlideBeatPadState extends ConsumerState<SlideBeatPad> {
               fit: StackFit.expand,
               children: [
                 Material(
-                  elevation: 3,
+                  elevation: 0,
                   color: color,
                   borderRadius: padRadius,
                   shadowColor: Colors.black,
