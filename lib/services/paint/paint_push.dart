@@ -61,7 +61,7 @@ class CustomPaintPushOverlay extends CustomPainter {
     // VERTICAL LINE (deadzone)
     if (xMod) {
       final double deadzoneLineWidth =
-          ((padRect.width - 2 * padSpacing) * pitchDeadzoneFraction);
+          (padRect.width - 2 * padSpacing) * pitchDeadzoneFraction;
 
       final Paint verticaldeadzoneLineStroke = Paint()
         ..style = PaintingStyle.stroke
@@ -72,9 +72,10 @@ class CustomPaintPushOverlay extends CustomPainter {
         ..strokeCap = StrokeCap.butt;
 
       canvas.drawLine(
-          padRect.topCenter + Offset(0, padSpacing),
-          padRect.bottomCenter - Offset(0, padSpacing),
-          verticaldeadzoneLineStroke);
+        padRect.topCenter + Offset(0, padSpacing),
+        padRect.bottomCenter - Offset(0, padSpacing),
+        verticaldeadzoneLineStroke,
+      );
     }
 
     final Paint centerIndicatorLinesStroke = Paint()
@@ -89,16 +90,18 @@ class CustomPaintPushOverlay extends CustomPainter {
       // horizontal:
       if (yMod) {
         canvas.drawLine(
-            Offset(padRect.left + padSpacing, origin.dy),
-            Offset(padRect.right - padSpacing, origin.dy),
-            centerIndicatorLinesStroke);
+          Offset(padRect.left + padSpacing, origin.dy),
+          Offset(padRect.right - padSpacing, origin.dy),
+          centerIndicatorLinesStroke,
+        );
       }
 
       // vertical:
       canvas.drawLine(
-          Offset(origin.dx, padRect.top + padSpacing),
-          Offset(origin.dx, padRect.bottom - padSpacing),
-          centerIndicatorLinesStroke..color);
+        Offset(origin.dx, padRect.top + padSpacing),
+        Offset(origin.dx, padRect.bottom - padSpacing),
+        centerIndicatorLinesStroke..color,
+      );
 
       // center:
       // canvas.drawCircle(origin, 3, centerIndicatorLinesStroke);
@@ -106,16 +109,18 @@ class CustomPaintPushOverlay extends CustomPainter {
       // horizontal:
       if (yMod) {
         canvas.drawLine(
-            Offset(padRect.left + padSpacing, padRect.center.dy),
-            Offset(padRect.right - padSpacing, padRect.center.dy),
-            centerIndicatorLinesStroke);
+          Offset(padRect.left + padSpacing, padRect.center.dy),
+          Offset(padRect.right - padSpacing, padRect.center.dy),
+          centerIndicatorLinesStroke,
+        );
       }
 
       // vertical:
       canvas.drawLine(
-          Offset(padRect.center.dx, padRect.top + padSpacing),
-          Offset(padRect.center.dx, padRect.bottom - padSpacing),
-          centerIndicatorLinesStroke);
+        Offset(padRect.center.dx, padRect.top + padSpacing),
+        Offset(padRect.center.dx, padRect.bottom - padSpacing),
+        centerIndicatorLinesStroke,
+      );
 
       // center:
       // canvas.drawCircle(padRect.center, 3, centerIndicatorLinesStroke);
@@ -129,8 +134,11 @@ class CustomPaintPushOverlay extends CustomPainter {
         ..color = Colors.black54
         ..strokeCap = StrokeCap.butt;
 
-      canvas.drawLine(Offset(padRect.left, change.dy),
-          Offset(padRect.right, change.dy), yModIndicatorLine);
+      canvas.drawLine(
+        Offset(padRect.left, change.dy),
+        Offset(padRect.right, change.dy),
+        yModIndicatorLine,
+      );
     }
   }
 

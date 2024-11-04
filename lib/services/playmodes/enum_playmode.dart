@@ -7,15 +7,11 @@ enum PlayMode {
   channelMod(
     'Channel Aftertouch',
     modulationOverlay: true,
-    oneDimensional: true,
-    singleChannel: true,
   ),
 
   polyAT(
     'Poly Aftertouch',
     modulationOverlay: true,
-    oneDimensional: true,
-    singleChannel: true,
   ),
 
   mpe(
@@ -27,7 +23,6 @@ enum PlayMode {
 
   mpeTargetPb(
     'MPE - Push Style',
-    modulationOverlay: false, // what?
     oneDimensional: false,
     singleChannel: false,
   );

@@ -45,67 +45,17 @@ class _ModWheelState extends ConsumerState<ModWheel> {
       }
     });
 
-    return LayoutBuilder(builder: (context, constraints) {
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Flexible(
-            flex: topAndBottomfield,
-            child: Align(
-              alignment: Alignment.bottomCenter,
-              child: Text(
-                'Mod',
-                style: TextStyle(
-                  fontSize: constraints.maxHeight * fontSizeFactor,
-                  color: color,
-                ),
-              ),
-            ),
-          ),
-          Center(
-            child: Divider(
-              indent: constraints.maxWidth * paddingFactor,
-              endIndent: constraints.maxWidth * paddingFactor,
-              thickness: constraints.maxWidth * 0.05,
-            ),
-          ),
-          Flexible(
-            flex: 30,
-            child: ThemedSlider(
-              width: constraints.maxWidth,
-              height: constraints.maxHeight,
-              thumbColor: Palette.tan,
-              child: RotatedBox(
-                quarterTurns: 0,
-                child: Slider(
-                  allowedInteraction: ref.watch(sliderTapAndSlideProv)
-                      ? SliderInteraction.tapAndSlide
-                      : SliderInteraction.slideThumb,
-                  max: 127,
-                  value: ref.watch(_modWheelProvider).toDouble(),
-                  onChanged: (v) {
-                    ref.read(_modWheelProvider.notifier).set(v.toInt());
-                    MidiUtils.sendModWheelMessage(widget.channel, v.toInt());
-                  },
-                ),
-              ),
-            ),
-          ),
-          Center(
-            child: Divider(
-              indent: constraints.maxWidth * paddingFactor,
-              endIndent: constraints.maxWidth * paddingFactor,
-              thickness: constraints.maxWidth * 0.05,
-            ),
-          ),
-          Flexible(
-            flex: topAndBottomfield,
-            child: FractionallySizedBox(
-              widthFactor: 0.95,
-              child: RichText(
-                textAlign: TextAlign.center,
-                text: TextSpan(
-                  text: '${ref.watch(_modWheelProvider)}',
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Flexible(
+              flex: topAndBottomfield,
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: Text(
+                  'Mod',
                   style: TextStyle(
                     fontSize: constraints.maxHeight * fontSizeFactor,
                     color: color,
@@ -113,9 +63,61 @@ class _ModWheelState extends ConsumerState<ModWheel> {
                 ),
               ),
             ),
-          ),
-        ],
-      );
-    });
+            Center(
+              child: Divider(
+                indent: constraints.maxWidth * paddingFactor,
+                endIndent: constraints.maxWidth * paddingFactor,
+                thickness: constraints.maxWidth * 0.05,
+              ),
+            ),
+            Flexible(
+              flex: 30,
+              child: ThemedSlider(
+                width: constraints.maxWidth,
+                height: constraints.maxHeight,
+                thumbColor: Palette.tan,
+                child: RotatedBox(
+                  quarterTurns: 0,
+                  child: Slider(
+                    allowedInteraction: ref.watch(sliderTapAndSlideProv)
+                        ? SliderInteraction.tapAndSlide
+                        : SliderInteraction.slideThumb,
+                    max: 127,
+                    value: ref.watch(_modWheelProvider).toDouble(),
+                    onChanged: (v) {
+                      ref.read(_modWheelProvider.notifier).set(v.toInt());
+                      MidiUtils.sendModWheelMessage(widget.channel, v.toInt());
+                    },
+                  ),
+                ),
+              ),
+            ),
+            Center(
+              child: Divider(
+                indent: constraints.maxWidth * paddingFactor,
+                endIndent: constraints.maxWidth * paddingFactor,
+                thickness: constraints.maxWidth * 0.05,
+              ),
+            ),
+            Flexible(
+              flex: topAndBottomfield,
+              child: FractionallySizedBox(
+                widthFactor: 0.95,
+                child: RichText(
+                  textAlign: TextAlign.center,
+                  text: TextSpan(
+                    text: '${ref.watch(_modWheelProvider)}',
+                    style: TextStyle(
+                      fontSize: constraints.maxHeight * fontSizeFactor,
+                      color: color,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 }

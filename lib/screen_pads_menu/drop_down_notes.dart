@@ -16,7 +16,9 @@ class DropdownRootNote extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<DropdownMenuItem<int>> menuItems = List.generate(12, (index) {
-      bool enabled = enabledList == null ? true : enabledList!.contains(index);
+      final bool enabled =
+          enabledList == null ? true : enabledList!.contains(index);
+      // final bool enabled = enabledList?.contains(index) ?? true;
 
       return DropdownMenuItem<int>(
         value: index,

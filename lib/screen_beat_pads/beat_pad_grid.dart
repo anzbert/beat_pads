@@ -50,8 +50,10 @@ class _SlidePadsState extends ConsumerState<SlidePads>
                   yPercentage: 1 - (position.dy / size.height).clamp(0, 1),
                   xPercentage: (position.dx / size.width).clamp(0, 1),
                   padBox: PadBox(
-                      padPosition: target.localToGlobal(Offset.zero),
-                      padSize: target.size))
+                    padPosition: target.localToGlobal(Offset.zero),
+                    padSize: target.size,
+                  ),
+                )
               : null;
         }
       }

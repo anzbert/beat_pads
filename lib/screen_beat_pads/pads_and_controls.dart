@@ -34,49 +34,59 @@ class BeatPadsAndControls extends ConsumerWidget {
             if (ref.watch(octaveButtonsProv) || ref.watch(sustainButtonProv))
               const Expanded(
                 flex: 5,
-                child: ControlButtonsRect(),
+                child: RepaintBoundary(child: ControlButtonsRect()),
               ),
             // PITCH BEND
             if (ref.watch(pitchBendProv))
               Expanded(
                 flex: 7,
-                child: PitchSliderEased(
-                  channel: ref.watch(channelUsableProv),
-                  resetTime: ref.watch(pitchBendEaseUsable),
+                child: RepaintBoundary(
+                  child: PitchSliderEased(
+                    channel: ref.watch(channelUsableProv),
+                    resetTime: ref.watch(pitchBendEaseUsable),
+                  ),
                 ),
               ),
             // MOD WHEEL
             if (ref.watch(modWheelProv))
               Expanded(
                 flex: 7,
-                child: ModWheel(
-                  preview: preview,
-                  channel: ref.watch(channelUsableProv),
+                child: RepaintBoundary(
+                  child: ModWheel(
+                    preview: preview,
+                    channel: ref.watch(channelUsableProv),
+                  ),
                 ),
               ),
             // VELOCITY
             if (ref.watch(velocitySliderProv))
               Expanded(
                 flex: 7,
-                child: SliderVelocity(
-                  channel: ref.watch(channelUsableProv),
-                  randomVelocity:
-                      ref.watch(velocityModeProv) != VelocityMode.fixed,
+                child: RepaintBoundary(
+                  child: SliderVelocity(
+                    channel: ref.watch(channelUsableProv),
+                    randomVelocity:
+                        ref.watch(velocityModeProv) != VelocityMode.fixed,
+                  ),
                 ),
               ),
             // PADS
             Expanded(
               flex: 60,
-              child: SlidePads(
-                preview: preview,
+              child: RepaintBoundary(
+                child: SlidePads(
+                  preview: preview,
+                ),
               ),
             ),
             // PRESETS
             if (ref.watch(presetButtonsProv))
               const Expanded(
                 flex: 5,
-                child: PresetButtons(
-                  clickType: ClickType.double,
+                child: RepaintBoundary(
+                  child: PresetButtons(
+                    clickType: ClickType.double,
+                  ),
                 ),
               ),
             const Expanded(
@@ -95,8 +105,10 @@ class BeatPadsAndControls extends ConsumerWidget {
                   textDirection: TextDirection.ltr,
                   child: SizedBox.square(
                     dimension: width * 0.06,
-                    child: const ReturnToMenuButton(
-                      transparent: true,
+                    child: const RepaintBoundary(
+                      child: ReturnToMenuButton(
+                        transparent: true,
+                      ),
                     ),
                   ),
                 );
@@ -106,25 +118,27 @@ class BeatPadsAndControls extends ConsumerWidget {
           Positioned(
             bottom: 15,
             right: 15,
-            child: ElevatedButton(
-              onPressed: () {
-                Scaffold.of(context).openDrawer();
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Palette.lightPink,
-                textStyle: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-              child: const Row(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Icon(
-                    Icons.cable,
-                  ),
-                  Text(
-                    'Select Midi Device',
-                  ),
-                ],
+            child: RepaintBoundary(
+              child: ElevatedButton(
+                onPressed: () {
+                  Scaffold.of(context).openDrawer();
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Palette.lightPink,
+                  textStyle: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                child: const Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Icon(
+                      Icons.cable,
+                    ),
+                    Text(
+                      'Select Midi Device',
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

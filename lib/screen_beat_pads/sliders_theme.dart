@@ -1,5 +1,6 @@
-import 'package:beat_pads/services/services.dart';
 import 'dart:math' as math;
+
+import 'package:beat_pads/services/services.dart';
 import 'package:flutter/material.dart';
 
 class ThemedSlider extends StatelessWidget {
@@ -50,7 +51,9 @@ class ThemedSlider extends StatelessWidget {
                     thumbHeight: range!.toDouble(),
                   ),
             trackShape: CustomTrackShape(
-                centerLine: centerLine, lineWidth: width * 0.05),
+              centerLine: centerLine,
+              lineWidth: width * 0.05,
+            ),
           ),
           child: child,
         ),

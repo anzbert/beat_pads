@@ -21,7 +21,8 @@ class MenuSystem extends ConsumerWidget {
         ListTile(
           title: const Text('Fader Tracks Touchable'),
           subtitle: const Text(
-              'Allow Faders to be moved by touching anywhere on their track'),
+            'Allow Faders to be moved by touching anywhere on their track',
+          ),
           trailing: Switch(
             value: ref.watch(sliderTapAndSlideProv),
             onChanged: (bool v) =>

@@ -26,6 +26,7 @@ class SlideBeatPadState extends ConsumerState<SlideBeatPad> {
   Widget build(BuildContext context) {
     final note = widget.pad.padValue;
     final bool sustainState = ref.watch(sustainStateProv);
+    // final int playedVelocity = 0;
     final int playedVelocity =
         ref.watch(senderProvider).playModeHandler.isNoteOn(note);
 
@@ -72,100 +73,104 @@ class SlideBeatPadState extends ConsumerState<SlideBeatPad> {
     );
     // final double fontSize = screenWidth * 0.017;
 
-    return LayoutBuilder(builder: (context, constraints) {
-      final double fontSize =
-          (constraints.maxWidth * 0.1).clamp(0, screenWidth * 0.017);
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final double fontSize =
+            (constraints.maxWidth * 0.1).clamp(0, screenWidth * 0.017);
 
-      return Container(
-        decoration: ref.watch(layoutProv) == Layout.guitar
-            ? (widget.pad.row + 1) % 5 == 0
-                ? BoxDecoration(
-                    border: BorderDirectional(
-                      bottom: BorderSide(
-                        color: Palette.laserLemon,
-                        width: constraints.maxHeight * 0.022,
-                      ),
-                    ),
-                  )
-                : BoxDecoration(
-                    border: BorderDirectional(
-                      bottom: BorderSide(
-                        color: Palette.cadetBlue,
-                        width: constraints.maxHeight * 0.022,
-                      ),
-                    ),
-                  )
-            : null,
-        padding: EdgeInsets.all(padSpacing),
-        height: double.infinity,
-        width: double.infinity,
-        child: Stack(
-          fit: StackFit.expand,
-          children: [
-            Material(
-              elevation: 3,
-              color: color,
-              borderRadius: padRadius,
-              shadowColor: Colors.black,
-              child: note > 127 || note < 0
-                  ? InkWell(
-                      borderRadius: padRadius,
-                      child: Padding(
-                        padding: EdgeInsets.all(padSpacing),
-                        child: Text(
-                          '#',
-                          style: TextStyle(
-                            fontStyle: FontStyle.italic,
-                            color: Palette.lightGrey,
-                            fontSize: fontSize * 0.8,
+        return RepaintBoundary(
+          child: Container(
+            decoration: ref.watch(layoutProv) == Layout.guitar
+                ? (widget.pad.row + 1) % 5 == 0
+                    ? BoxDecoration(
+                        border: BorderDirectional(
+                          bottom: BorderSide(
+                            color: Palette.laserLemon,
+                            width: constraints.maxHeight * 0.022,
                           ),
                         ),
-                      ),
-                    )
-                  : InkWell(
-                      onTapDown: (_) {},
-                      borderRadius: padRadius,
-                      highlightColor: color,
-                      splashColor: splashColor,
-                      child: Padding(
-                        padding: EdgeInsets.all(padSpacing),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            if (label.subtitle != null)
-                              Flexible(
-                                child: Text(
-                                  label.subtitle!,
-                                  style: TextStyle(
-                                    color: padTextColor,
-                                    fontSize: fontSize * 0.6,
-                                  ),
-                                ),
-                              ),
-                            if (label.title != null)
-                              Flexible(
-                                child: Text(
-                                  label.title!,
-                                  style: TextStyle(
-                                    color: padTextColor,
-                                    fontSize: fontSize,
-                                  ),
-                                ),
-                              ),
-                          ],
+                      )
+                    : BoxDecoration(
+                        border: BorderDirectional(
+                          bottom: BorderSide(
+                            color: Palette.cadetBlue,
+                            width: constraints.maxHeight * 0.022,
+                          ),
                         ),
-                      ),
-                    ),
+                      )
+                : null,
+            padding: EdgeInsets.all(padSpacing),
+            height: double.infinity,
+            width: double.infinity,
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                Material(
+                  elevation: 3,
+                  color: color,
+                  borderRadius: padRadius,
+                  shadowColor: Colors.black,
+                  child: note > 127 || note < 0
+                      ? InkWell(
+                          borderRadius: padRadius,
+                          child: Padding(
+                            padding: EdgeInsets.all(padSpacing),
+                            child: Text(
+                              '#',
+                              style: TextStyle(
+                                fontStyle: FontStyle.italic,
+                                color: Palette.lightGrey,
+                                fontSize: fontSize * 0.8,
+                              ),
+                            ),
+                          ),
+                        )
+                      : InkWell(
+                          onTapDown: (_) {},
+                          borderRadius: padRadius,
+                          highlightColor: color,
+                          splashColor: splashColor,
+                          child: Padding(
+                            padding: EdgeInsets.all(padSpacing),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                if (label.subtitle != null)
+                                  Flexible(
+                                    child: Text(
+                                      label.subtitle!,
+                                      style: TextStyle(
+                                        color: padTextColor,
+                                        fontSize: fontSize * 0.6,
+                                      ),
+                                    ),
+                                  ),
+                                if (label.title != null)
+                                  Flexible(
+                                    child: Text(
+                                      label.title!,
+                                      style: TextStyle(
+                                        color: padTextColor,
+                                        fontSize: fontSize,
+                                      ),
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          ),
+                        ),
+                ),
+                if (ref.watch(velocityVisualProv) && widget.preview == false)
+                  VelocityOverlay(
+                    velocity: sustainState ? sustainedVelocity : playedVelocity,
+                    padRadius: padRadius,
+                  ),
+              ],
             ),
-            if (ref.watch(velocityVisualProv) && widget.preview == false)
-              VelocityOverlay(
-                velocity: sustainState ? sustainedVelocity : playedVelocity,
-                padRadius: padRadius,
-              ),
-          ],
-        ),
-      );
-    });
+          ),
+        );
+      },
+    );
   }
 }

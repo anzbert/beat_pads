@@ -69,7 +69,6 @@ final baseOctaveProv = NotifierProvider<SettingIntNotifier, int>(() {
   return SettingIntNotifier(
     key: 'baseOctave',
     defaultValue: 3,
-    min: 0,
     max: 9,
   );
 });
@@ -78,7 +77,6 @@ final baseProgramProv = NotifierProvider<SettingIntNotifier, int>(() {
   return SettingIntNotifier(
     key: 'baseProgram',
     defaultValue: 0,
-    min: 0,
     max: 127,
   );
 });

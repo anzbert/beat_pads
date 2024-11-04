@@ -9,7 +9,7 @@ class PlayModeChannelMod extends PlayModeHandler {
   void handleNewTouch(PadTouchAndScreenData data) {
     if (!touchBuffer.anyOtherEventModulating(data.pointer)) {
       channelATMod.send(
-        0.0,
+        0,
         settings.channel,
         0, // note is irrelevant
       );

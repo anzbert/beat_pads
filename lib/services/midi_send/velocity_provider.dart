@@ -43,7 +43,12 @@ class VelocityProvider {
         return velocityFixed.clamp(10, 127);
       case VelocityMode.yAxis:
         final double clampedYPercentage = Utils.mapValueToTargetRange(
-            percentage.clamp(0.1, 0.9), 0.1, 0.9, 0, 1);
+          percentage.clamp(0.1, 0.9),
+          0.1,
+          0.9,
+          0,
+          1,
+        );
         final double min = _velocityRandomCenter - velocityRange / 2;
         return (min + velocityRange * clampedYPercentage).round().clamp(0, 127);
     }

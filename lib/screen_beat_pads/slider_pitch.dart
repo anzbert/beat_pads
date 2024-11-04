@@ -43,115 +43,118 @@ class _PitchSliderEasedState extends ConsumerState<PitchSliderEased>
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (context, constraints) {
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Flexible(
-            flex: topAndBottomfield,
-            child: Align(
-              alignment: Alignment.bottomCenter,
-              child: Text(
-                'Pitch',
-                style: TextStyle(
-                  fontSize: constraints.maxHeight * fontSizeFactor,
-                  color: color,
-                ),
-              ),
-            ),
-          ),
-          Center(
-            child: Divider(
-              indent: constraints.maxWidth * paddingFactor,
-              endIndent: constraints.maxWidth * paddingFactor,
-              thickness: constraints.maxWidth * 0.05,
-            ),
-          ),
-          Flexible(
-            flex: 30,
-            child: ThemedSlider(
-              thumbColor: Palette.laserLemon,
-              width: constraints.maxWidth,
-              height: constraints.maxHeight,
-              centerLine: true,
-              child: Slider(
-                allowedInteraction: ref.watch(sliderTapAndSlideProv)
-                    ? SliderInteraction.tapAndSlide
-                    : SliderInteraction.slideThumb,
-                min: -1,
-                value: _pitch,
-                onChanged: (val) {
-                  setState(() => _pitch = val);
-
-                  PitchBendMessage(
-                    channel: widget.channel,
-                    bend: _pitch,
-                  ).send();
-                },
-                onChangeEnd: (val) {
-                  if (widget.resetTime > 0) {
-                    _animation =
-                        Tween<double>(begin: val, end: 0).animate(_curve);
-                    _animation.addListener(() {
-                      setState(() => _pitch = _animation.value);
-
-                      PitchBendMessage(
-                        channel: widget.channel,
-                        bend: _pitch,
-                      ).send();
-                    });
-
-                    _controller
-                      ..reset()
-                      ..forward();
-                  } else {
-                    setState(() => _pitch = 0);
-                    PitchBendMessage(
-                      channel: widget.channel,
-                    ).send();
-                  }
-                },
-                onChangeStart: (_) {
-                  _controller.stop();
-                },
-              ),
-            ),
-          ),
-          Center(
-            child: Divider(
-              indent: constraints.maxWidth * paddingFactor,
-              endIndent: constraints.maxWidth * paddingFactor,
-              thickness: constraints.maxWidth * 0.05,
-            ),
-          ),
-          Flexible(
-            flex: topAndBottomfield,
-            child: FractionallySizedBox(
-              widthFactor: 0.95,
-              child: RichText(
-                textAlign: TextAlign.center,
-                text: TextSpan(
-                  text: _pitch == 0 ? '-' : '${(_pitch * 100).round()}',
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Flexible(
+              flex: topAndBottomfield,
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: Text(
+                  'Pitch',
                   style: TextStyle(
                     fontSize: constraints.maxHeight * fontSizeFactor,
                     color: color,
                   ),
-                  children: <TextSpan>[
-                    if (_pitch != 0)
-                      TextSpan(
-                        text: '%',
-                        style: TextStyle(
-                            fontSize:
-                                constraints.maxHeight * fontSizeFactor * 0.6),
-                      )
-                  ],
                 ),
               ),
             ),
-          ),
-        ],
-      );
-    });
+            Center(
+              child: Divider(
+                indent: constraints.maxWidth * paddingFactor,
+                endIndent: constraints.maxWidth * paddingFactor,
+                thickness: constraints.maxWidth * 0.05,
+              ),
+            ),
+            Flexible(
+              flex: 30,
+              child: ThemedSlider(
+                thumbColor: Palette.laserLemon,
+                width: constraints.maxWidth,
+                height: constraints.maxHeight,
+                centerLine: true,
+                child: Slider(
+                  allowedInteraction: ref.watch(sliderTapAndSlideProv)
+                      ? SliderInteraction.tapAndSlide
+                      : SliderInteraction.slideThumb,
+                  min: -1,
+                  value: _pitch,
+                  onChanged: (val) {
+                    setState(() => _pitch = val);
+
+                    PitchBendMessage(
+                      channel: widget.channel,
+                      bend: _pitch,
+                    ).send();
+                  },
+                  onChangeEnd: (val) {
+                    if (widget.resetTime > 0) {
+                      _animation =
+                          Tween<double>(begin: val, end: 0).animate(_curve);
+                      _animation.addListener(() {
+                        setState(() => _pitch = _animation.value);
+
+                        PitchBendMessage(
+                          channel: widget.channel,
+                          bend: _pitch,
+                        ).send();
+                      });
+
+                      _controller
+                        ..reset()
+                        ..forward();
+                    } else {
+                      setState(() => _pitch = 0);
+                      PitchBendMessage(
+                        channel: widget.channel,
+                      ).send();
+                    }
+                  },
+                  onChangeStart: (_) {
+                    _controller.stop();
+                  },
+                ),
+              ),
+            ),
+            Center(
+              child: Divider(
+                indent: constraints.maxWidth * paddingFactor,
+                endIndent: constraints.maxWidth * paddingFactor,
+                thickness: constraints.maxWidth * 0.05,
+              ),
+            ),
+            Flexible(
+              flex: topAndBottomfield,
+              child: FractionallySizedBox(
+                widthFactor: 0.95,
+                child: RichText(
+                  textAlign: TextAlign.center,
+                  text: TextSpan(
+                    text: _pitch == 0 ? '-' : '${(_pitch * 100).round()}',
+                    style: TextStyle(
+                      fontSize: constraints.maxHeight * fontSizeFactor,
+                      color: color,
+                    ),
+                    children: <TextSpan>[
+                      if (_pitch != 0)
+                        TextSpan(
+                          text: '%',
+                          style: TextStyle(
+                            fontSize:
+                                constraints.maxHeight * fontSizeFactor * 0.6,
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override

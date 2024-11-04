@@ -21,7 +21,7 @@ class MenuInput extends ConsumerWidget {
       children: [
         Column(
           children: [
-            Container(
+            ColoredBox(
               color: Palette.darkGrey,
               child: ListTile(
                 title: const Text(
@@ -42,7 +42,8 @@ class MenuInput extends ConsumerWidget {
             Expanded(
               child: ListView(
                 padding: const EdgeInsets.only(
-                    bottom: ThemeConst.listViewBottomPadding),
+                  bottom: ThemeConst.listViewBottomPadding,
+                ),
                 children: <Widget>[
                   if (ref.watch(playModeProv) == PlayMode.mpeTargetPb)
                     const StringInfoBox(
@@ -100,7 +101,8 @@ class MenuInput extends ConsumerWidget {
                     ListTile(
                       title: const Text('Row Pads only'),
                       subtitle: const Text(
-                          'Ignore modulation on pads below or above the current Row'),
+                        'Ignore modulation on pads below or above the current Row',
+                      ),
                       trailing: Switch(
                         value: ref.watch(mpeOnlyOnRowProv),
                         onChanged: (bool v) =>
@@ -109,7 +111,6 @@ class MenuInput extends ConsumerWidget {
                     ),
                   if (ref.watch(playModeProv) == PlayMode.mpeTargetPb)
                     IntSliderTile(
-                      min: 0,
                       max: 75,
                       label: 'In-Tune Zone',
                       subtitle:
@@ -125,7 +126,8 @@ class MenuInput extends ConsumerWidget {
                     ListTile(
                       title: const Text('Relative Mode'),
                       subtitle: const Text(
-                          "The initial touch position becomes the Pitch and Slide center for that pad"),
+                        'The initial touch position becomes the Pitch and Slide center for that pad',
+                      ),
                       trailing: Switch(
                         value: ref.watch(mpeRelativeModeProv),
                         onChanged: (bool v) => ref
@@ -141,7 +143,8 @@ class MenuInput extends ConsumerWidget {
                       subtitle:
                           'Modulation field width, relative to the pad screen',
                       trailing: Text(
-                          '${(ref.watch(modulationRadiusProv) * 100).toInt()}%'),
+                        '${(ref.watch(modulationRadiusProv) * 100).toInt()}%',
+                      ),
                       readValue: ref.watch(modulationRadiusProv).clamp(
                             ref.watch(modulationRadiusProv.notifier).min,
                             ref.watch(modulationRadiusProv.notifier).max,
@@ -301,12 +304,12 @@ class MenuInput extends ConsumerWidget {
                 'Advanced settings disabled when using the Program Change layout',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                    color: Palette.whiteLike,
-                    fontSize:
-                        Theme.of(context).textTheme.headlineSmall!.fontSize),
+                  color: Palette.whiteLike,
+                  fontSize: Theme.of(context).textTheme.headlineSmall!.fontSize,
+                ),
               ),
             ),
-          )
+          ),
       ],
     );
   }
