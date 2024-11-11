@@ -74,15 +74,25 @@ class SlideBeatPadState extends ConsumerState<SlideBeatPad> {
 
     return LayoutBuilder(
       builder: (context, constraints) {
+        const double textHeight = 1.11;
+
         final double fontSize = widget.preview
             ? (constraints.maxWidth * 0.3)
-                .clamp(0, screenWidth * 0.04)
-                .clamp(0, constraints.maxHeight * 0.6)
+                .clamp(0, screenWidth * 0.03)
+                .clamp(
+                    0,
+                    constraints.maxHeight *
+                        (label.subtitle == null ? 0.6 : 0.4))
                 .toDouble()
             : (constraints.maxWidth * 0.3)
                 .clamp(0, screenWidth * 0.02)
-                .clamp(0, constraints.maxHeight * 0.6)
+                .clamp(
+                    0,
+                    constraints.maxHeight *
+                        (label.subtitle == null ? 0.6 : 0.4))
                 .toDouble();
+
+        final double subtitleFontSize = fontSize * 0.5;
 
         return RepaintBoundary(
           child: Container(
@@ -127,12 +137,13 @@ class SlideBeatPadState extends ConsumerState<SlideBeatPad> {
                                 fontStyle: FontStyle.italic,
                                 color: Palette.lightGrey,
                                 fontSize: fontSize * 0.8,
+                                height: textHeight,
                               ),
                             ),
                           ),
                         )
                       : InkWell(
-                          onTapDown: (_) {},
+                          onTapDown: (_) {}, // for ink effect
                           borderRadius: padRadius,
                           highlightColor: color,
                           splashColor: splashColor,
@@ -148,7 +159,8 @@ class SlideBeatPadState extends ConsumerState<SlideBeatPad> {
                                       label.subtitle!,
                                       style: TextStyle(
                                         color: padTextColor,
-                                        fontSize: fontSize * 0.6,
+                                        fontSize: subtitleFontSize,
+                                        height: textHeight,
                                       ),
                                     ),
                                   ),
@@ -159,6 +171,7 @@ class SlideBeatPadState extends ConsumerState<SlideBeatPad> {
                                       style: TextStyle(
                                         color: padTextColor,
                                         fontSize: fontSize,
+                                        height: textHeight,
                                       ),
                                     ),
                                   ),

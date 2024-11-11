@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## 1.0.2
+## 1.0.3
 
 - Adjust label font sizing on pads to improve legibility on all screen sizes
 
