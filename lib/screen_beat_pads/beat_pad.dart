@@ -26,7 +26,7 @@ class SlideBeatPadState extends ConsumerState<SlideBeatPad> {
   Widget build(BuildContext context) {
     final note = widget.pad.padValue;
     final bool sustainState = ref.watch(sustainStateProv);
-    // final int playedVelocity = 0;
+
     final int playedVelocity =
         ref.watch(senderProvider).playModeHandler.isNoteOn(note);
 
@@ -83,8 +83,6 @@ class SlideBeatPadState extends ConsumerState<SlideBeatPad> {
                 .clamp(0, screenWidth * 0.02)
                 .clamp(0, constraints.maxHeight * 0.6)
                 .toDouble();
-
-        // final double fontSize = (constraints.maxWidth * 0.15);
 
         return RepaintBoundary(
           child: Container(
