@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.0.2
+
+- Adjust label font sizing on pads to improve legibility on all screen sizes
+
 ## 1.0.1
 
 - Fix screen rotation lock bug
