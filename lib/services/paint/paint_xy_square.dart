@@ -46,7 +46,7 @@ class CustomPaintXYSquare extends CustomPainter {
     if (!dirty) {
       canvas.drawShadow(
         pathBack,
-        Colors.black.withOpacity(radialChange),
+        Colors.black.withValues(alpha: radialChange),
         6,
         true,
       );

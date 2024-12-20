@@ -32,11 +32,12 @@ class ReturnToMenuButton extends StatelessWidget {
             onPressed: () {},
             style: ElevatedButton.styleFrom(
               shadowColor:
-                  Palette.lightGrey.withOpacity(transparent ? 0.15 : 1),
+                  Palette.lightGrey.withValues(alpha: transparent ? 0.15 : 1),
               foregroundColor:
-                  Palette.lightGrey.withOpacity(transparent ? 0.15 : 1),
+                  Palette.lightGrey.withValues(alpha: transparent ? 0.15 : 1),
               backgroundColor: transparent
-                  ? Palette.darker(Palette.cadetBlue, 0.3).withOpacity(0.4)
+                  ? Palette.darker(Palette.cadetBlue, 0.3)
+                      .withValues(alpha: 0.4)
                   : Palette.darker(Palette.cadetBlue, 0.3),
               padding: EdgeInsets.zero,
               alignment: Alignment.center,
@@ -46,7 +47,7 @@ class ReturnToMenuButton extends StatelessWidget {
             ),
             child: Tooltip(
               decoration: BoxDecoration(
-                color: Palette.cadetBlue.withOpacity(0.5),
+                color: Palette.cadetBlue.withValues(alpha: 0.5),
                 boxShadow: kElevationToShadow[6],
                 borderRadius: BorderRadius.circular(3),
               ),

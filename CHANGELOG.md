@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 1.0.4
+
+- System dark mode setting now determines the Splash Screen background
+- Added setting to disable Doggo splash screen
+- Menu layout bug fixes
+
 ## 1.0.3
 
 - Adjust label font sizing on pads to improve legibility on all screen sizes

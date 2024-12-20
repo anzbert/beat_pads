@@ -41,20 +41,23 @@ class PaintModulation extends ConsumerWidget {
                       ),
                       colorBack: touchEvent.dirty
                           ? dirtyColor
-                          : Palette.lightPink.withOpacity(
-                              touchEvent.radialChange(curve: Curves.easeOut) *
+                          : Palette.lightPink.withValues(
+                              alpha: touchEvent.radialChange(
+                                      curve: Curves.easeOut) *
                                   0.6,
                             ),
                       colorFront: touchEvent.dirty
                           ? dirtyColor
-                          : Palette.laserLemon.withOpacity(
-                              touchEvent.radialChange(curve: Curves.easeOut) *
+                          : Palette.laserLemon.withValues(
+                              alpha: touchEvent.radialChange(
+                                      curve: Curves.easeOut) *
                                   0.8,
                             ),
                       colorDeadZone: touchEvent.dirty
                           ? dirtyColor
-                          : Palette.laserLemon.withOpacity(
-                              touchEvent.radialChange(curve: Curves.easeOut) *
+                          : Palette.laserLemon.withValues(
+                              alpha: touchEvent.radialChange(
+                                      curve: Curves.easeOut) *
                                   0.4,
                             ),
                     ),
@@ -74,20 +77,23 @@ class PaintModulation extends ConsumerWidget {
                           touchEvent.radialChange(curve: Curves.linear),
                       colorBack: touchEvent.dirty
                           ? dirtyColor
-                          : Palette.lightPink.withOpacity(
-                              touchEvent.radialChange(curve: Curves.easeOut) *
+                          : Palette.lightPink.withValues(
+                              alpha: touchEvent.radialChange(
+                                      curve: Curves.easeOut) *
                                   0.6,
                             ),
                       colorFront: touchEvent.dirty
                           ? dirtyColor
-                          : Palette.laserLemon.withOpacity(
-                              touchEvent.radialChange(curve: Curves.easeOut) *
+                          : Palette.laserLemon.withValues(
+                              alpha: touchEvent.radialChange(
+                                      curve: Curves.easeOut) *
                                   0.8,
                             ),
                       colorDeadZone: touchEvent.dirty
                           ? dirtyColor
-                          : Palette.laserLemon.withOpacity(
-                              touchEvent.radialChange(curve: Curves.easeOut) *
+                          : Palette.laserLemon.withValues(
+                              alpha: touchEvent.radialChange(
+                                      curve: Curves.easeOut) *
                                   0.4,
                             ),
                     ),

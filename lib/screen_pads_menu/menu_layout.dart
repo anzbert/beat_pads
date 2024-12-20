@@ -223,7 +223,7 @@ class MenuLayout extends ConsumerWidget {
                 ),
               if (resizableGrid && ref.watch(layoutProv) != Layout.progrChange)
                 IntCounterTile(
-                  label: 'Base Octave',
+                  label: 'Octave',
                   modDisplay: (v) => '${v - 2}',
                   readValue: ref.watch(baseOctaveProv),
                   setValue: (int v) =>

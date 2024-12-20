@@ -35,7 +35,7 @@ class Preview extends ConsumerWidget {
                             Text(
                               'Preview',
                               style: TextStyle(
-                                color: Palette.lightGrey.withOpacity(0.4),
+                                color: Palette.lightGrey.withValues(alpha: 0.4),
                               ),
                             ),
                             // Text Outline

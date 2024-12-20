@@ -3,8 +3,8 @@ import 'package:beat_pads/services/services.dart';
 enum Layout {
   customIntervals('Chromatic', custom: true, chromatic: true),
   scaleNotesCustom('In Key', custom: true),
-  sequential('Chromatic - Sequential', chromatic: true),
-  scaleNotesOnly('In Key - Sequential'),
+  sequential('Chromatic: Sequential', chromatic: true),
+  scaleNotesOnly('In Key: Sequential'),
   guitar(
     'Guitar Tuning',
     chromatic: true,
@@ -13,26 +13,26 @@ enum Layout {
 
   progrChange('Program Changes', chromatic: true),
 
-  magicToneNetwork('Magic Tone Network™'),
+  magicToneNetwork('Magic Tone Network'),
   xPressPadsStandard(
-    'XpressPads™ Standard 4x4',
+    'XpressPads Standard',
     resizable: false,
     defaultDimensions: NullableVector2Int(4, 4),
     gmPercussionLabels: true,
   ),
   xPressPadsLatinJazz(
-    'XpressPads™ Latin/Jazz 4x4',
+    'XpressPads Latin/Jazz',
     resizable: false,
     defaultDimensions: NullableVector2Int(4, 4),
     gmPercussionLabels: true,
   ),
   xPressPadsXO(
-    'XpressPads™ with XO 4x4',
+    'XpressPads for XO',
     resizable: false,
     defaultDimensions: NullableVector2Int(4, 4),
   ),
   xPressPadsXtreme(
-    'XpressPads™ Xtreme 8x4',
+    'XpressPads Xtreme',
     resizable: false,
     defaultDimensions: NullableVector2Int(8, 4),
     gmPercussionLabels: true,

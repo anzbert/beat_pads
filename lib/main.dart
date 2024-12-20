@@ -1,3 +1,4 @@
+import 'package:beat_pads/screen_pads_menu/_screen_pads_menu.dart';
 import 'package:beat_pads/screen_splash/_screen_splash.dart';
 import 'package:beat_pads/services/services.dart';
 import 'package:beat_pads/theme.dart';
@@ -32,9 +33,21 @@ void main() {
             child: MaterialApp(
               debugShowCheckedModeBanner: false,
               theme: appTheme,
-              home: const SplashScreen(),
+              home: const StartUp(),
             ),
           ),
         ),
       );
+}
+
+class StartUp extends ConsumerWidget {
+  const StartUp();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    // Don't `watch` state for change. Only `read` value on startup.
+    return ref.read(splashScreenProv)
+        ? const SplashScreen()
+        : const PadMenuScreen();
+  }
 }

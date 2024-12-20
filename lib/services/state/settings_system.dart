@@ -9,3 +9,12 @@ final sliderTapAndSlideProv = NotifierProvider<SettingBoolNotifier, bool>(() {
     usesPresets: false,
   );
 });
+
+final splashScreenProv = NotifierProvider<SettingBoolNotifier, bool>(() {
+  return SettingBoolNotifier(
+    key: 'splashScreen',
+    defaultValue: true,
+    resettable: false,
+    usesPresets: false,
+  );
+});

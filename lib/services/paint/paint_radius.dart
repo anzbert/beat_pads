@@ -39,7 +39,8 @@ class CustomPaintRadius extends CustomPainter {
       );
 
     if (!dirty) {
-      canvas.drawShadow(pathBack, Colors.black.withOpacity(change), 6, true);
+      canvas.drawShadow(
+          pathBack, Colors.black.withValues(alpha: change), 6, true);
     }
     canvas.drawPath(pathBack, brushBack);
     // canvas.drawCircle(origin, maxRadius, brushBack); // background

@@ -29,8 +29,8 @@ ThemeData appTheme = ThemeData.dark().copyWith(
       foregroundColor: Palette.darkGrey,
       backgroundColor: Palette.cadetBlue,
       elevation: 6,
-      disabledForegroundColor: Palette.cadetBlue.withOpacity(0.38),
-      disabledBackgroundColor: Palette.cadetBlue.withOpacity(0.12),
+      disabledForegroundColor: Palette.cadetBlue.withValues(alpha: 0.38),
+      disabledBackgroundColor: Palette.cadetBlue.withValues(alpha: 0.12),
     ),
   ),
   textButtonTheme: TextButtonThemeData(

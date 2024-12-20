@@ -17,7 +17,10 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const HSLColor.fromAHSL(1, 240, 0.1, 0.99).toColor(),
+      backgroundColor:
+          MediaQuery.of(context).platformBrightness == Brightness.light
+              ? const HSLColor.fromAHSL(1, 240, 0.1, 0.99).toColor()
+              : Palette.menuHeaders,
       body: Listener(
         onPointerDown: (_) {
           Navigator.push(
@@ -76,7 +79,11 @@ class _SplashScreenState extends State<SplashScreen> {
                           FadeAnimatedText(
                             'Tap To Continue',
                             duration: const Duration(milliseconds: 1400),
-                            textStyle: const TextStyle(color: Colors.black),
+                            textStyle:
+                                MediaQuery.of(context).platformBrightness ==
+                                        Brightness.light
+                                    ? const TextStyle(color: Colors.black)
+                                    : TextStyle(color: Palette.whiteLike),
                           ),
                         ],
                       )

@@ -298,7 +298,7 @@ class MenuInput extends ConsumerWidget {
         if (ref.watch(layoutProv) == Layout.progrChange)
           Container(
             padding: const EdgeInsets.all(24),
-            color: Palette.darkGrey.withOpacity(0.86),
+            color: Palette.darkGrey.withValues(alpha: 0.86),
             child: Center(
               child: Text(
                 'Advanced settings disabled when using the Program Change layout',

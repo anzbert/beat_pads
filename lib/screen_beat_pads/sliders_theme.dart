@@ -211,8 +211,8 @@ class CustomSliderThumbRect extends SliderComponentShape {
     );
 
     final rectPaint = Paint()
-      ..color =
-          sliderTheme.thumbColor!.withOpacity(0.5) // Thumb Background Color
+      ..color = sliderTheme.thumbColor!
+          .withValues(alpha: 0.5) // Thumb Background Color
       ..style = PaintingStyle.fill;
 
     canvas.drawRRect(rRect, rectPaint);

@@ -29,6 +29,17 @@ class MenuSystem extends ConsumerWidget {
                 ref.read(sliderTapAndSlideProv.notifier).setAndSave(v),
           ),
         ),
+        ListTile(
+          title: const Text('Show Splash Screen'),
+          subtitle: const Text(
+            'Show Doggo splash screen on app startup',
+          ),
+          trailing: Switch(
+            value: ref.watch(splashScreenProv),
+            onChanged: (bool v) =>
+                ref.read(splashScreenProv.notifier).setAndSave(v),
+          ),
+        ),
         const DividerTitle('Reset'),
         Center(
           child: ConstrainedBox(

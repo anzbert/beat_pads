@@ -225,7 +225,9 @@ class PlayModeMPETargetPb extends PlayModeHandler {
     // Guards:
     if (data.customPad?.padValue == null ||
         data.yPercentage == null ||
-        data.xPercentage == null) return;
+        data.xPercentage == null) {
+      return;
+    }
 
     // Working Variables:
     final double realYPercentage = data.yPercentage!;

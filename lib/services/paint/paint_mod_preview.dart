@@ -31,11 +31,12 @@ class PaintModPreview extends ConsumerWidget {
           maxRadius: ref.watch(modulationRadiusProv) * screenSize.longestSide,
           deadZone: ref.watch(modulationDeadZoneProv),
           change: fixedChangeForPreview,
-          colorBack: Palette.lightPink.withOpacity(fixedChangeForPreview * 0.6),
+          colorBack:
+              Palette.lightPink.withValues(alpha: fixedChangeForPreview * 0.6),
           colorFront:
-              Palette.laserLemon.withOpacity(fixedChangeForPreview * 0.8),
+              Palette.laserLemon.withValues(alpha: fixedChangeForPreview * 0.8),
           colorDeadZone:
-              Palette.laserLemon.withOpacity(fixedChangeForPreview * 0.4),
+              Palette.laserLemon.withValues(alpha: fixedChangeForPreview * 0.4),
         ),
       );
     } else {
@@ -52,11 +53,12 @@ class PaintModPreview extends ConsumerWidget {
           deadZone: ref.watch(modulationDeadZoneProv),
           change: Offset.zero,
           radialChange: fixedChangeForPreview,
-          colorBack: Palette.lightPink.withOpacity(fixedChangeForPreview * 0.6),
+          colorBack:
+              Palette.lightPink.withValues(alpha: fixedChangeForPreview * 0.6),
           colorFront:
-              Palette.laserLemon.withOpacity(fixedChangeForPreview * 0.8),
+              Palette.laserLemon.withValues(alpha: fixedChangeForPreview * 0.8),
           colorDeadZone:
-              Palette.laserLemon.withOpacity(fixedChangeForPreview * 0.4),
+              Palette.laserLemon.withValues(alpha: fixedChangeForPreview * 0.4),
         ),
       );
     }

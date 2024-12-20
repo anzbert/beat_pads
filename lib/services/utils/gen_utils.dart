@@ -86,7 +86,7 @@ abstract class Utils {
     return list.sublist(i)..addAll(list.sublist(0, i));
   }
 
-  /// Create a range as <Iterable<int>>
+  /// Create a range as `<Iterable<int>>`
   static Iterable<int> range(int start, int end) {
     return Iterable.generate(end - start, (i) => start + i++);
   }
