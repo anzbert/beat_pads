@@ -1,7 +1,7 @@
 name: beat_pads
 description: Midi Poly Grid - A USB Midi Pad Controller for Music Production with MPE and Polyphonic Aftertouch
 publish_to: "none"
-version: 1.0.4+112
+version: 1.0.5+113
 
 # Read more about Android versioning:
 # https://developer.android.com/studio/publish/versioning
@@ -44,9 +44,29 @@ dev_dependencies:
   # austerity: ^1.0.0
   flutter_launcher_icons: ^0.14.1
   flutter_lints: ^5.0.0
+  flutter_native_splash: ^2.4.4
   flutter_test:
     sdk: flutter
   # very_good_analysis: ^6.0.0
+
+flutter_native_splash:
+  # This package generates native code to customize Flutter's default white native splash screen
+  # with background color and splash image
+
+  # Customize the parameters below, and run the following command in the terminal:
+  # dart run flutter_native_splash:create
+
+  # To restore Flutter's default white splash screen, run the following command in the terminal:
+  # dart run flutter_native_splash:remove
+
+  # IMPORTANT NOTE: These parameter do not affect the configuration of Android 12 and later, which
+  # handle splash screens differently that prior versions of Android.  Android 12 and later must be
+  # configured specifically in the android_12 section below.
+  color: "#FCFCFD" # = const HSLColor.fromAHSL(1, 240, 0.1, 0.99).toColor()
+  color_dark: "#2D2BFF" # = Palette.menuHeaders = const Color.fromARGB(255, 45, 43, 54);
+  android_12:
+    color: "#FCFCFD"
+    color_dark: "#2D2BFF"
 
 flutter_launcher_icons:
   # Recompile icons with:

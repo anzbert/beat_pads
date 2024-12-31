@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.0.5
+
+- Remove bright screen flash on app startup in dark mode
+
 ## 1.0.4
 
 - System dark mode setting now determines the Splash Screen background
