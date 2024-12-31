@@ -17,6 +17,50 @@ class MenuLayout extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final dropdownLayout = DropdownEnum<Layout>(
+      highlight: const [Layout.customIntervals, Layout.scaleNotesCustom],
+      values: Layout.values,
+      readValue: ref.watch<Layout>(layoutProv),
+      setValue: (Layout v) {
+        ref.read(layoutProv.notifier).setAndSave(v);
+      },
+    );
+
+    final dropdownProgram = DropdownInt(
+      readValue: ref.watch(baseProgramProv) + 1,
+      setValue: (int v) => ref.read(baseProgramProv.notifier).setAndSave(v - 1),
+      size: 128,
+      start: 1,
+    );
+
+    final dropdownScale = DropdownEnum<Scale>(
+      values: Scale.values,
+      readValue: ref.watch(scaleProv),
+      setValue: (Scale v) {
+        ref.read(scaleProv.notifier).setAndSave(v);
+        ref.read(baseProv.notifier).setAndSave(ref.read(rootProv));
+      },
+    );
+
+    final dropdownRootNote = DropdownRootNote(
+      setValue: (int v) {
+        ref.read(rootProv.notifier).setAndSave(v);
+        ref.read(baseProv.notifier).setAndSave(v);
+      },
+      readValue: ref.watch(rootProv),
+    );
+
+    final dropdownBaseNote = DropdownRootNote(
+      enabledList: ref.watch(layoutProv).chromatic
+          ? null
+          : MidiUtils.absoluteScaleNotes(
+              ref.watch(rootProv),
+              ref.watch(scaleProv).intervals,
+            ),
+      setValue: (int v) => ref.read(baseProv.notifier).setAndSave(v),
+      readValue: ref.watch(baseProv),
+    );
+
     final bool resizableGrid =
         ref.watch(layoutProv).resizable; // Is the layout fixed or resizable?
     final bool isPortrait =
@@ -45,6 +89,7 @@ class MenuLayout extends ConsumerWidget {
         Expanded(
           flex: 3,
           child: ListView(
+            cacheExtent: 1500,
             padding:
                 const EdgeInsets.only(bottom: ThemeConst.listViewBottomPadding),
             children: <Widget>[
@@ -111,16 +156,7 @@ class MenuLayout extends ConsumerWidget {
                     'Layout',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  trailing: DropdownEnum<Layout>(
-                      highlight: const [
-                        Layout.customIntervals,
-                        Layout.scaleNotesCustom
-                      ],
-                      values: Layout.values,
-                      readValue: ref.watch<Layout>(layoutProv),
-                      setValue: (Layout v) {
-                        ref.read(layoutProv.notifier).setAndSave(v);
-                      }),
+                  trailing: dropdownLayout,
                 ),
               ),
               if (ref.watch(layoutProv) == Layout.progrChange)
@@ -129,13 +165,7 @@ class MenuLayout extends ConsumerWidget {
                   subtitle: const Text(
                     'Lowest Program on the Grid',
                   ),
-                  trailing: DropdownInt(
-                    readValue: ref.watch(baseProgramProv) + 1,
-                    setValue: (int v) =>
-                        ref.read(baseProgramProv.notifier).setAndSave(v - 1),
-                    size: 128,
-                    start: 1,
-                  ),
+                  trailing: dropdownProgram,
                 ),
               if (resizableGrid && ref.watch(layoutProv).custom)
                 IntCounterTile(
@@ -175,28 +205,13 @@ class MenuLayout extends ConsumerWidget {
               if (resizableGrid && ref.watch(layoutProv) != Layout.progrChange)
                 ListTile(
                   title: const Text('Scale'),
-                  trailing: DropdownEnum<Scale>(
-                    values: Scale.values,
-                    readValue: ref.watch(scaleProv),
-                    setValue: (Scale v) {
-                      ref.read(scaleProv.notifier).setAndSave(v);
-                      ref
-                          .read(baseProv.notifier)
-                          .setAndSave(ref.read(rootProv));
-                    },
-                  ),
+                  trailing: dropdownScale,
                 ),
               if (resizableGrid && ref.watch(layoutProv) != Layout.progrChange)
                 ListTile(
                   title: const Text('Root Note'),
                   subtitle: const Text('Root Note of the selected scale'),
-                  trailing: DropdownRootNote(
-                    setValue: (int v) {
-                      ref.read(rootProv.notifier).setAndSave(v);
-                      ref.read(baseProv.notifier).setAndSave(v);
-                    },
-                    readValue: ref.watch(rootProv),
-                  ),
+                  trailing: dropdownRootNote,
                 ),
               if (resizableGrid && ref.watch(layoutProv) != Layout.progrChange)
                 ListTile(
@@ -204,19 +219,11 @@ class MenuLayout extends ConsumerWidget {
                   subtitle: const Text(
                     'Lowest Note on the bottom left',
                   ),
-                  trailing: DropdownRootNote(
-                    enabledList: ref.watch(layoutProv).chromatic
-                        ? null
-                        : MidiUtils.absoluteScaleNotes(ref.watch(rootProv),
-                            ref.watch(scaleProv).intervals),
-                    setValue: (int v) =>
-                        ref.read(baseProv.notifier).setAndSave(v),
-                    readValue: ref.watch(baseProv),
-                  ),
+                  trailing: dropdownBaseNote,
                 ),
               if (resizableGrid && ref.watch(layoutProv) != Layout.progrChange)
                 IntCounterTile(
-                  label: 'Base Octave',
+                  label: 'Octave',
                   modDisplay: (v) => '${v - 2}',
                   readValue: ref.watch(baseOctaveProv),
                   setValue: (int v) =>
@@ -274,7 +281,7 @@ class MenuLayout extends ConsumerWidget {
                 ),
               ),
               if (ref.watch(pitchBendProv))
-                Container(
+                ColoredBox(
                   color: Palette.dirtyTranslucent,
                   child: NonLinearSliderTile(
                     label: 'Pitch Bend Return',
@@ -296,6 +303,27 @@ class MenuLayout extends ConsumerWidget {
                 ),
               const DividerTitle('Display'),
               ListTile(
+                title: const Text('Color Mode'),
+                subtitle:
+                    const Text('Choose how the RGB Color Wheel is applied'),
+                trailing: DropdownEnum<PadColors>(
+                  values: PadColors.values,
+                  readValue: ref.watch(padColorsProv),
+                  setValue: (PadColors v) =>
+                      ref.read(padColorsProv.notifier).setAndSave(v),
+                ),
+              ),
+              IntSliderTile(
+                label: 'Base Color',
+                max: 360,
+                subtitle: 'Rotate the color wheel',
+                trailing: ref.watch(baseHueProv).toString(),
+                readValue: ref.watch(baseHueProv),
+                setValue: (int v) => ref.read(baseHueProv.notifier).set(v),
+                resetValue: ref.read(baseHueProv.notifier).reset,
+                onChangeEnd: ref.read(baseHueProv.notifier).save,
+              ),
+              ListTile(
                 title: const Text('Pad Labels'),
                 subtitle:
                     const Text('Choose between Midi values and Note names'),
@@ -307,25 +335,15 @@ class MenuLayout extends ConsumerWidget {
                 ),
               ),
               ListTile(
-                title: const Text('Pad Colors'),
-                subtitle:
-                    const Text('Colorize pads by distance to the root note'),
-                trailing: DropdownEnum<PadColors>(
-                  values: PadColors.values,
-                  readValue: ref.watch(padColorsProv),
-                  setValue: (PadColors v) =>
-                      ref.read(padColorsProv.notifier).setAndSave(v),
+                title: const Text('GM Perc Names'),
+                subtitle: const Text(
+                  'Show standard General Midi percussion names on pads',
                 ),
-              ),
-              IntSliderTile(
-                label: 'Hue',
-                max: 360,
-                subtitle: 'Root Note hue on the RGB color wheel',
-                trailing: ref.watch(baseHueProv).toString(),
-                readValue: ref.watch(baseHueProv),
-                setValue: (int v) => ref.read(baseHueProv.notifier).set(v),
-                resetValue: ref.read(baseHueProv.notifier).reset,
-                onChangeEnd: ref.read(baseHueProv.notifier).save,
+                trailing: Switch(
+                  value: ref.watch(gmLabelsProv),
+                  onChanged: (bool v) =>
+                      ref.read(gmLabelsProv.notifier).setAndSave(v),
+                ),
               ),
               ListTile(
                 title: const Text('Show Velocity'),

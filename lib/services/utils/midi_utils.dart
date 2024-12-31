@@ -110,7 +110,7 @@ abstract class MidiUtils {
     }
 
     if (gmPercussionLabels) {
-      return gm2PercStandard[value] ?? value.toString();
+      return gm2PercStandard[value]?.title ?? value.toString();
     }
 
     final int octave = value ~/ 12;

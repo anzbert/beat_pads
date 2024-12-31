@@ -17,7 +17,10 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const HSLColor.fromAHSL(1, 240, 0.1, 0.99).toColor(),
+      backgroundColor:
+          MediaQuery.of(context).platformBrightness == Brightness.light
+              ? const HSLColor.fromAHSL(1, 240, 0.1, 0.99).toColor()
+              : Palette.menuHeaders,
       body: Listener(
         onPointerDown: (_) {
           Navigator.push(
@@ -26,63 +29,83 @@ class _SplashScreenState extends State<SplashScreen> {
           );
         },
         child: Center(
-          child: Column(
-            children: [
-              const Expanded(
-                flex: 10,
-                child: RiveAnimation.asset(
-                  'assets/anim/doggo.riv',
-                  alignment: Alignment.center,
-                ),
-              ),
-              Expanded(
-                flex: 3,
-                child: FittedBox(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 50),
-                    child: AnimatedTextKit(
-                      animatedTexts: [
-                        ColorizeAnimatedText(
-                          'Midi Poly Grid',
-                          speed: const Duration(milliseconds: 250),
-                          textAlign: TextAlign.center,
-                          textStyle: const TextStyle(
-                            fontSize: 52,
-                            fontFamily: 'Righteous',
-                            letterSpacing: 4,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          colors: [
-                            Palette.cadetBlue,
-                            Palette.lightPink,
-                            Palette.darkGrey,
-                            Palette.yellowGreen,
-                          ],
-                        ),
-                      ],
-                      isRepeatingAnimation: false,
-                      onFinished: () => setState(() {
-                        showClickToContinue = true;
-                      }),
+          child: TweenAnimationBuilder<double>(
+            tween: Tween<double>(begin: 0.0, end: 1.0),
+            curve: Curves.ease,
+            duration: const Duration(
+              milliseconds: 250,
+            ), // Fade in Splash Screen Content
+            builder: (
+              BuildContext context,
+              double opacityTweenValue,
+              Widget? child,
+            ) {
+              return Opacity(
+                opacity: opacityTweenValue,
+                child: Column(
+                  children: [
+                    const Expanded(
+                      flex: 10,
+                      child: RiveAnimation.asset(
+                        'assets/anim/doggo.riv',
+                        alignment: Alignment.center,
+                      ),
                     ),
-                  ),
-                ),
-              ),
-              Expanded(
-                child: showClickToContinue
-                    ? AnimatedTextKit(
-                        repeatForever: true,
-                        animatedTexts: [
-                          FadeAnimatedText(
-                            'Tap To Continue',
-                            duration: const Duration(milliseconds: 1400),
-                            textStyle: const TextStyle(color: Colors.black),
+                    Expanded(
+                      flex: 3,
+                      child: FittedBox(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 50),
+                          child: AnimatedTextKit(
+                            animatedTexts: [
+                              ColorizeAnimatedText(
+                                'Midi Poly Grid',
+                                speed: const Duration(milliseconds: 250),
+                                textAlign: TextAlign.center,
+                                textStyle: const TextStyle(
+                                  fontSize: 52,
+                                  fontFamily: 'Righteous',
+                                  letterSpacing: 4,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                colors: [
+                                  Palette.cadetBlue,
+                                  Palette.lightPink,
+                                  Palette.darkGrey,
+                                  Palette.yellowGreen,
+                                ],
+                              ),
+                            ],
+                            isRepeatingAnimation: false,
+                            onFinished: () => setState(() {
+                              showClickToContinue = true;
+                            }),
                           ),
-                        ],
-                      )
-                    : const Text(''),
-              ),
-            ],
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: showClickToContinue
+                          ? AnimatedTextKit(
+                              repeatForever: true,
+                              animatedTexts: [
+                                FadeAnimatedText(
+                                  'Tap To Continue',
+                                  duration: const Duration(milliseconds: 1400),
+                                  textStyle: MediaQuery.of(context)
+                                              .platformBrightness ==
+                                          Brightness.light
+                                      ? const TextStyle(color: Colors.black)
+                                      : TextStyle(color: Palette.whiteLike),
+                                ),
+                              ],
+                            )
+                          : const Text(''),
+                    ),
+                  ],
+                ),
+              );
+            },
           ),
         ),
       ),

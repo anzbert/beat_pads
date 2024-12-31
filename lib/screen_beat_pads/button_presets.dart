@@ -146,7 +146,7 @@ class _ElevatedPresetButton extends ConsumerWidget {
           fontSize: screenSize * 0.066,
           color: ref.watch(presetNotifierProvider) == preset
               ? Palette.darkGrey
-              : Palette.darkGrey.withOpacity(0.1),
+              : Palette.darkGrey.withValues(alpha: 0.1),
         ),
       ),
     );

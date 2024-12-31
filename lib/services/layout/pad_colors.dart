@@ -2,10 +2,11 @@ import 'package:beat_pads/services/services.dart';
 import 'package:flutter/material.dart';
 
 enum PadColors {
-  highlightRoot('Highlight Root'),
-  colorWheel('Pitch'),
-  // halfColorWheel("In Pitch (Halfed Color Range)"),
-  circleOfFifth('Circle of Fifths');
+  colorWheel('Base Color on Root Note'),
+  fixedColorWheel('Base Color on C Note'),
+  circleOfFifth('Circle of Fifths'),
+  gmDrums('GM Percussion Type'),
+  highlightRoot('Highlight Root Note');
 
   const PadColors(this.title);
 
@@ -24,9 +25,6 @@ enum PadColors {
   }) {
     final double hue;
 
-    // note on
-    // if (noteOn) return Palette.whiteLike;
-
     // out of midi range
     if (note > 127 || note < 0) return Palette.darkGrey;
 
@@ -36,17 +34,26 @@ enum PadColors {
     }
 
     // Color Schemes
-    if (this == PadColors.colorWheel) {
-      hue = (30 * ((note - rootNote) % 12) + baseHue) % 360;
-    } else if (this == PadColors.circleOfFifth) {
-      const circleOfFifth = [0, 7, 2, 9, 4, 11, 6, 1, 8, 3, 10, 5];
-      hue = ((30 * circleOfFifth[(note - rootNote) % 12]) + baseHue) % 360;
-    } else {
-      if (note % 12 == rootNote) {
-        hue = baseHue.toDouble();
-      } else {
-        hue = (baseHue + 210) % 360;
-      }
+    switch (this) {
+      case PadColors.colorWheel:
+        hue = (30 * ((note - rootNote) % 12) + baseHue) % 360;
+      case PadColors.fixedColorWheel:
+        hue = (30 * (note % 12) + baseHue) % 360;
+      case PadColors.circleOfFifth:
+        const circleOfFifth = [0, 7, 2, 9, 4, 11, 6, 1, 8, 3, 10, 5];
+        hue = ((30 * circleOfFifth[(note - rootNote) % 12]) + baseHue) % 360;
+      case PadColors.highlightRoot:
+        if (note % 12 == rootNote) {
+          hue = baseHue.toDouble();
+        } else {
+          hue = (baseHue + 210) % 360;
+        }
+      case PadColors.gmDrums:
+        final PercType? type = PercType.getType(note)?.type;
+        if (type == null) return Palette.whiteLike;
+
+        final divisionSize = 360 / PercType.values.length - 1;
+        hue = (divisionSize * PercType.values.indexOf(type) + baseHue) % 360;
     }
 
     final color = HSLColor.fromAHSL(

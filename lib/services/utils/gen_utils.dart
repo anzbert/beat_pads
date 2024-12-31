@@ -65,14 +65,14 @@ abstract class Utils {
     if (inputRange == 0) {
       return 0;
       // ignore: dead_code
-      throw ('input range cant be zero'); // prevent dividing by 0
+      throw 'input range cant be zero'; // prevent dividing by 0
     }
     final double outputRange = outputRangeEnd - outputRangeStart;
     if (outputRange == 0) {
-      throw ('output range cant be zero'); // prevent dividing by 0
+      throw 'output range cant be zero'; // prevent dividing by 0
     }
     if (inputValue > inputRangeEnd || inputValue < inputRangeStart) {
-      throw ('input value outside of input range');
+      throw 'input value outside of input range';
     }
 
     return (inputValue - inputRangeStart) * outputRange / inputRange +
@@ -86,7 +86,7 @@ abstract class Utils {
     return list.sublist(i)..addAll(list.sublist(0, i));
   }
 
-  /// Create a range as <Iterable<int>>
+  /// Create a range as `<Iterable<int>>`
   static Iterable<int> range(int start, int end) {
     return Iterable.generate(end - start, (i) => start + i++);
   }

@@ -28,11 +28,11 @@ class LayoutSettingNotifier extends SettingEnumNotifier<Layout> {
     }
 
     if (newState.defaultDimensions?.x != null) {
-      ref.read(widthProv.notifier).setAndSave(newState.defaultDimensions!.x);
+      ref.read(widthProv.notifier).setAndSave(newState.defaultDimensions!.x!);
     }
 
     if (newState.defaultDimensions?.y != null) {
-      ref.read(heightProv.notifier).setAndSave(newState.defaultDimensions!.y);
+      ref.read(heightProv.notifier).setAndSave(newState.defaultDimensions!.y!);
     }
     super.set(newState);
   }
@@ -69,7 +69,6 @@ final baseOctaveProv = NotifierProvider<SettingIntNotifier, int>(() {
   return SettingIntNotifier(
     key: 'baseOctave',
     defaultValue: 3,
-    min: 0,
     max: 9,
   );
 });
@@ -78,7 +77,6 @@ final baseProgramProv = NotifierProvider<SettingIntNotifier, int>(() {
   return SettingIntNotifier(
     key: 'baseProgram',
     defaultValue: 0,
-    min: 0,
     max: 127,
   );
 });
@@ -144,6 +142,13 @@ final padLabelsProv =
     nameMap: PadLabels.values.asNameMap(),
     key: 'padLabels',
     defaultValue: PadLabels.note,
+  );
+});
+
+final gmLabelsProv = NotifierProvider<SettingBoolNotifier, bool>(() {
+  return SettingBoolNotifier(
+    key: 'gmLabels',
+    defaultValue: false,
   );
 });
 

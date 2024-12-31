@@ -21,11 +21,23 @@ class MenuSystem extends ConsumerWidget {
         ListTile(
           title: const Text('Fader Tracks Touchable'),
           subtitle: const Text(
-              'Allow Faders to be moved by touching anywhere on their track'),
+            'Allow Faders to be moved by touching anywhere on their track',
+          ),
           trailing: Switch(
             value: ref.watch(sliderTapAndSlideProv),
             onChanged: (bool v) =>
                 ref.read(sliderTapAndSlideProv.notifier).setAndSave(v),
+          ),
+        ),
+        ListTile(
+          title: const Text('Show Splash Screen'),
+          subtitle: const Text(
+            'Show Doggo splash screen on app startup',
+          ),
+          trailing: Switch(
+            value: ref.watch(splashScreenProv),
+            onChanged: (bool v) =>
+                ref.read(splashScreenProv.notifier).setAndSave(v),
           ),
         ),
         const DividerTitle('Reset'),

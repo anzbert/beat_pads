@@ -1,6 +1,5 @@
 import 'package:beat_pads/screen_beat_pads/sliders_theme.dart';
 import 'package:beat_pads/services/services.dart';
-import 'package:beat_pads/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -24,8 +23,10 @@ class ModWheel extends ConsumerStatefulWidget {
 }
 
 class _ModWheelState extends ConsumerState<ModWheel> {
-  final double fontSizeFactor = 0.3;
-  final double paddingFactor = 0.1;
+  final double fontSizeFactor = 0.037;
+  final double paddingFactor = 0.05;
+  final int topAndBottomfield = 2;
+  final color = Palette.darker(Palette.tan, 0.6);
 
   @override
   Widget build(BuildContext context) {
@@ -44,96 +45,79 @@ class _ModWheelState extends ConsumerState<ModWheel> {
       }
     });
 
-    final double width = MediaQuery.of(context).size.width;
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Flexible(
-          flex: 5,
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              return Align(
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Flexible(
+              flex: topAndBottomfield,
+              child: Align(
                 alignment: Alignment.bottomCenter,
                 child: Text(
                   'Mod',
                   style: TextStyle(
-                    fontSize: constraints.maxWidth * fontSizeFactor,
-                    color: Palette.darker(Palette.tan, 0.6),
+                    fontSize: constraints.maxHeight * fontSizeFactor,
+                    color: color,
                   ),
                 ),
-              );
-            },
-          ),
-        ),
-        Center(
-          child: Divider(
-            indent: width * ThemeConst.borderFactor,
-            endIndent: width * ThemeConst.borderFactor,
-            thickness: width * ThemeConst.borderFactor,
-          ),
-        ),
-        Flexible(
-          flex: 30,
-          child: ThemedSlider(
-            thumbColor: Palette.tan,
-            child: RotatedBox(
-              quarterTurns: 0,
-              child: Slider(
-                allowedInteraction: ref.watch(sliderTapAndSlideProv)
-                    ? SliderInteraction.tapAndSlide
-                    : SliderInteraction.slideThumb,
-                max: 127,
-                value: ref.watch(_modWheelProvider).toDouble(),
-                onChanged: (v) {
-                  ref.read(_modWheelProvider.notifier).set(v.toInt());
-                  MidiUtils.sendModWheelMessage(widget.channel, v.toInt());
-                },
               ),
             ),
-          ),
-        ),
-        Center(
-          child: Divider(
-            indent: width * ThemeConst.borderFactor,
-            endIndent: width * ThemeConst.borderFactor,
-            thickness: width * ThemeConst.borderFactor,
-          ),
-        ),
-        Flexible(
-          flex: 5,
-          child: FractionallySizedBox(
-            widthFactor: 0.95,
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                final double padSpacing = width * ThemeConst.padSpacingFactor;
-                return Container(
-                  margin: EdgeInsets.only(bottom: padSpacing),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        flex: 2,
-                        child: Center(
-                          child: Text(
-                            '${ref.watch(_modWheelProvider)}',
-                            style: TextStyle(
-                              fontSize: constraints.maxWidth * fontSizeFactor,
-                              color: Palette.darker(Palette.tan, 0.6),
-                            ),
-                          ),
-                        ),
-                      ),
-                      const Expanded(
-                        child: SizedBox.expand(),
-                      ),
-                    ],
-                  ),
-                );
-              },
+            Center(
+              child: Divider(
+                indent: constraints.maxWidth * paddingFactor,
+                endIndent: constraints.maxWidth * paddingFactor,
+                thickness: constraints.maxWidth * 0.05,
+              ),
             ),
-          ),
-        ),
-      ],
+            Flexible(
+              flex: 30,
+              child: ThemedSlider(
+                width: constraints.maxWidth,
+                height: constraints.maxHeight,
+                thumbColor: Palette.tan,
+                child: RotatedBox(
+                  quarterTurns: 0,
+                  child: Slider(
+                    allowedInteraction: ref.watch(sliderTapAndSlideProv)
+                        ? SliderInteraction.tapAndSlide
+                        : SliderInteraction.slideThumb,
+                    max: 127,
+                    value: ref.watch(_modWheelProvider).toDouble(),
+                    onChanged: (v) {
+                      ref.read(_modWheelProvider.notifier).set(v.toInt());
+                      MidiUtils.sendModWheelMessage(widget.channel, v.toInt());
+                    },
+                  ),
+                ),
+              ),
+            ),
+            Center(
+              child: Divider(
+                indent: constraints.maxWidth * paddingFactor,
+                endIndent: constraints.maxWidth * paddingFactor,
+                thickness: constraints.maxWidth * 0.05,
+              ),
+            ),
+            Flexible(
+              flex: topAndBottomfield,
+              child: FractionallySizedBox(
+                widthFactor: 0.95,
+                child: RichText(
+                  textAlign: TextAlign.center,
+                  text: TextSpan(
+                    text: '${ref.watch(_modWheelProvider)}',
+                    style: TextStyle(
+                      fontSize: constraints.maxHeight * fontSizeFactor,
+                      color: color,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

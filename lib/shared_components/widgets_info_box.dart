@@ -24,7 +24,7 @@ class WidgetsInfoBox extends StatelessWidget {
               if (header != null)
                 Padding(
                   padding: const EdgeInsets.only(bottom: 12),
-                  child: DividerTitle(header!),
+                  child: DividerTitle(header),
                 ),
               ...body.map(
                 (text) => Column(

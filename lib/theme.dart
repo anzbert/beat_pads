@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 
 abstract class ThemeConst {
   static const double sliderWidthFactor = 0.8;
-  static const double padSpacingFactor = 0.003;
-  static const double padRadiusFactor = 0.006;
+  static const double padSpacingFactor = 0.002;
+  static const double padRadiusFactor = 0.005;
   static const double borderFactor = 0.006;
   static const double menuButtonMinWidth = 300;
   static const double listViewBottomPadding = 100;
@@ -29,8 +29,8 @@ ThemeData appTheme = ThemeData.dark().copyWith(
       foregroundColor: Palette.darkGrey,
       backgroundColor: Palette.cadetBlue,
       elevation: 6,
-      disabledForegroundColor: Palette.cadetBlue.withOpacity(0.38),
-      disabledBackgroundColor: Palette.cadetBlue.withOpacity(0.12),
+      disabledForegroundColor: Palette.cadetBlue.withValues(alpha: 0.38),
+      disabledBackgroundColor: Palette.cadetBlue.withValues(alpha: 0.12),
     ),
   ),
   textButtonTheme: TextButtonThemeData(

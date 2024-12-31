@@ -3,7 +3,7 @@
 <plist version="1.0">
 	<dict>
 		<key>CADisableMinimumFrameDurationOnPhone</key>
-		<true />
+		<true/>
 		<key>CFBundleDevelopmentRegion</key>
 		<string>$(DEVELOPMENT_LANGUAGE)</string>
 		<key>CFBundleDisplayName</key>
@@ -25,28 +25,28 @@
 		<key>CFBundleVersion</key>
 		<string>$(CURRENT_PROJECT_VERSION)</string>
 		<key>ITSAppUsesNonExemptEncryption</key>
-		<false />
+		<false/>
 		<key>LSApplicationQueriesSchemes</key>
 		<array>
 			<string>https</string>
 			<string>http</string>
 		</array>
 		<key>LSRequiresIPhoneOS</key>
-		<true />
+		<true/>
 		<key>NSBluetoothAlwaysUsageDescription</key>
-		<string>An underlying dependency requires this permission, but Bluetooth is not used in this
-			version.</string>
+		<string>Connect to Bluetooth MIDI Devices</string>
 		<key>NSBluetoothPeripheralUsageDescription</key>
-		<string>An underlying dependency requires this permission, but Bluetooth is not used in this
-			version.</string>
+		<string>Connect to Bluetooth MIDI Devices</string>
+		<key>NSLocalNetworkUsageDescription</key>
+		<string>Connect to Network MIDI Session</string>
 		<key>UIApplicationSupportsIndirectInputEvents</key>
-		<true />
+		<true/>
 		<key>UILaunchStoryboardName</key>
 		<string>LaunchScreen</string>
 		<key>UIMainStoryboardFile</key>
 		<string>Main</string>
 		<key>UIRequiresFullScreen</key>
-		<true />
+		<true/>
 		<key>UISupportedInterfaceOrientations</key>
 		<array>
 			<string>UIInterfaceOrientationLandscapeLeft</string>
@@ -55,6 +55,8 @@
 			<string>UIInterfaceOrientationPortraitUpsideDown</string>
 		</array>
 		<key>UIViewControllerBasedStatusBarAppearance</key>
-		<false />
+		<false/>
+		<key>UIStatusBarHidden</key>
+		<false/>
 	</dict>
 </plist>

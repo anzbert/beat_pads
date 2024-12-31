@@ -3,26 +3,40 @@ import 'package:beat_pads/services/services.dart';
 enum Layout {
   customIntervals('Chromatic', custom: true, chromatic: true),
   scaleNotesCustom('In Key', custom: true),
-  sequential('Chromatic - Sequential', chromatic: true),
-  scaleNotesOnly('In Key - Sequential'),
+  sequential('Chromatic: Sequential', chromatic: true),
+  scaleNotesOnly('In Key: Sequential'),
+  guitar(
+    'Guitar Tuning',
+    chromatic: true,
+    defaultDimensions: NullableVector2Int(null, 6),
+  ),
 
   progrChange('Program Changes', chromatic: true),
 
-  magicToneNetwork('Magic Tone Network™'),
-  xPressPadsStandard('XpressPads™ Standard 4x4',
-      resizable: false,
-      defaultDimensions: Vector2Int(4, 4),
-      gmPercussionLabels: true),
-  xPressPadsLatinJazz('XpressPads™ Latin/Jazz 4x4',
-      resizable: false,
-      defaultDimensions: Vector2Int(4, 4),
-      gmPercussionLabels: true),
-  xPressPadsXO('XpressPads™ with XO 4x4',
-      resizable: false, defaultDimensions: Vector2Int(4, 4)),
-  xPressPadsXtreme('XpressPads™ Xtreme 8x4',
-      resizable: false,
-      defaultDimensions: Vector2Int(8, 4),
-      gmPercussionLabels: true),
+  magicToneNetwork('Magic Tone Network'),
+  xPressPadsStandard(
+    'XpressPads Standard',
+    resizable: false,
+    defaultDimensions: NullableVector2Int(4, 4),
+    gmPercussionLabels: true,
+  ),
+  xPressPadsLatinJazz(
+    'XpressPads Latin/Jazz',
+    resizable: false,
+    defaultDimensions: NullableVector2Int(4, 4),
+    gmPercussionLabels: true,
+  ),
+  xPressPadsXO(
+    'XpressPads for XO',
+    resizable: false,
+    defaultDimensions: NullableVector2Int(4, 4),
+  ),
+  xPressPadsXtreme(
+    'XpressPads Xtreme',
+    resizable: false,
+    defaultDimensions: NullableVector2Int(8, 4),
+    gmPercussionLabels: true,
+  ),
   ;
 
   const Layout(
@@ -37,17 +51,33 @@ enum Layout {
   final String title;
   final bool custom;
   final bool resizable;
-  final bool gmPercussionLabels;
-  final Vector2Int? defaultDimensions;
+  final NullableVector2Int? defaultDimensions;
   final bool chromatic;
+
+  /// this property is NOT being used at the moment
+  final bool gmPercussionLabels;
 
   @override
   String toString() => title;
 
-  Grid getGrid(int width, int height, int rootNote, int baseNote,
-      List<int> scaleList, int customIntervalX, int customIntervalY) {
-    final GridData settings = GridData(width, height, rootNote, baseNote,
-        scaleList, customIntervalX, customIntervalY);
+  Grid getGrid(
+    int width,
+    int height,
+    int rootNote,
+    int baseNote,
+    List<int> scaleList,
+    int customIntervalX,
+    int customIntervalY,
+  ) {
+    final GridData settings = GridData(
+      width,
+      height,
+      rootNote,
+      baseNote,
+      scaleList,
+      customIntervalX,
+      customIntervalY,
+    );
 
     switch (this) {
       case Layout.customIntervals:
@@ -58,8 +88,10 @@ enum Layout {
       case Layout.scaleNotesCustom:
         return GridInScaleCustom(settings);
       case Layout.scaleNotesOnly:
-        return GridInScaleCustom(settings,
-            fixedXY: Vector2Int(1, settings.width));
+        return GridInScaleCustom(
+          settings,
+          fixedXY: Vector2Int(1, settings.width),
+        );
 
       case Layout.magicToneNetwork:
         return GridMTN(settings);
@@ -73,14 +105,23 @@ enum Layout {
         return GridXpressPads(settings, XPP.xtreme);
       case Layout.progrChange:
         return GridChromaticByRowInterval(settings, rowInterval: width);
+      case Layout.guitar:
+        return GridChromaticWithGuitarShift(settings);
     }
   }
 }
 
 /// Holds all the settings required to build any Grid
 class GridData {
-  GridData(this.width, this.height, this.rootNote, this.baseNote,
-      this.scaleList, this.customIntervalX, this.customIntervalY);
+  GridData(
+    this.width,
+    this.height,
+    this.rootNote,
+    this.baseNote,
+    this.scaleList,
+    this.customIntervalX,
+    this.customIntervalY,
+  );
   final int width;
   final int height;
   final int rootNote;
@@ -92,7 +133,7 @@ class GridData {
 
 /// Base class that converts a List into the required rows
 /// Classes derived from this one need to implement a function that
-/// creates a list of notes
+/// creates a _list of notes
 abstract class Grid {
   /// Creates a Pad Grid generating class using the current settings
   Grid(this.settings);
@@ -100,21 +141,45 @@ abstract class Grid {
   final GridData settings;
 
   /// Get a List of all notes in the current grid
-  List<CustomPad> get list;
+  List<CustomPad> get _list;
 
   /// Convert List to Rows of all notes in the grid, starting from the top Row
   /// Useful for building the grid with a Column Widget
   List<List<CustomPad>> get rows {
-    if (settings.height * settings.width != list.length) return [[]];
+    final calculatedList = _list;
+    if (settings.height * settings.width != calculatedList.length) return [[]];
 
     return List.generate(
       settings.height,
       (row) => List.generate(settings.width, (note) {
-        return list[row * settings.width + note]
+        return calculatedList[row * settings.width + note]
           ..row = row
           ..column = note;
       }),
     ).reversed.toList();
+  }
+}
+
+/// A chromatic Grid with variable intervals between rows
+class GridChromaticWithGuitarShift extends Grid {
+  GridChromaticWithGuitarShift(super.settings);
+
+  final int rowInterval = 5;
+
+  @override
+  List<CustomPad> get _list {
+    final List<CustomPad> grid = [];
+    for (int row = 0; row < settings.height; row++) {
+      for (int note = 0; note < settings.width; note++) {
+        grid.add(
+          CustomPad(
+            (settings.baseNote - ((row + 1) ~/ 5)) + (row * rowInterval) + note,
+          ),
+        );
+      }
+      // print(((row + 1) ~/ 5)); // offset every 5 strings on imaginary unlimited height guitar
+    }
+    return grid;
   }
 }
 
@@ -125,7 +190,7 @@ class GridChromaticByRowInterval extends Grid {
   final int rowInterval;
 
   @override
-  List<CustomPad> get list {
+  List<CustomPad> get _list {
     final List<CustomPad> grid = [];
     for (int row = 0; row < settings.height; row++) {
       for (int note = 0; note < settings.width; note++) {
@@ -141,17 +206,19 @@ class GridChromaticByCustomIntervals extends Grid {
   GridChromaticByCustomIntervals(super.settings);
 
   @override
-  List<CustomPad> get list {
+  List<CustomPad> get _list {
     final List<CustomPad> grid = [];
 
     for (int row = 0; row < settings.height; row++) {
       int next = settings.baseNote;
       for (int note = 0; note < settings.width; note++) {
-        grid.add(CustomPad(
-          next + row * settings.customIntervalY,
-          pitchBendLeft: settings.customIntervalX,
-          pitchBendRight: settings.customIntervalX,
-        ));
+        grid.add(
+          CustomPad(
+            next + row * settings.customIntervalY,
+            pitchBendLeft: settings.customIntervalX,
+            pitchBendRight: settings.customIntervalX,
+          ),
+        );
         next = next + settings.customIntervalX;
       }
     }
@@ -173,13 +240,13 @@ class GridInScaleCustom extends Grid {
   /// Produces all notes in a scale between 0 and 127 given a scale of notes between 0 and 11
   List<int> getScaleNotes(List<int> scaleNotes, int root) {
     const semitonesPerOctave = 12;
-    int midiRoot = root + (root * semitonesPerOctave);
-    Set<int> midiNotes = {}; // Use a Set to ensure uniqueness
+    final int midiRoot = root + (root * semitonesPerOctave);
+    final Set<int> midiNotes = {}; // Use a Set to ensure uniqueness
 
     // Iterate through all possible MIDI values (0 to 127)
     for (int midiNote = 0; midiNote < 128; midiNote++) {
       // Calculate the equivalent scale note based on the MIDI value
-      int note = (midiNote - midiRoot) % semitonesPerOctave;
+      final int note = (midiNote - midiRoot) % semitonesPerOctave;
 
       // Check if the note is part of the provided scale pattern
       if (scaleNotes.contains(note)) {
@@ -187,11 +254,11 @@ class GridInScaleCustom extends Grid {
       }
     }
 
-    return midiNotes.toList(); // Return a list of unique MIDI values
+    return midiNotes.toList(); // Return a _list of unique MIDI values
   }
 
   @override
-  List<CustomPad> get list {
+  List<CustomPad> get _list {
     /// applied scale pattern to currently selected root note
     /// root note is a value between 0-11
     final List<int> actualScaleNotes =
@@ -206,7 +273,8 @@ class GridInScaleCustom extends Grid {
 
     /// ScaleNotes Index of first Note in the Row
     int rowStartIndex = allScaleNotes.indexOf(
-        validatedBaseCheck); // init with the index in the scalelist of the first note in the grid
+      validatedBaseCheck,
+    ); // init with the index in the scalelist of the first note in the grid
 
     /// List of all the calculated Notes in the grid
     final List<CustomPad> grid = [];
@@ -215,7 +283,7 @@ class GridInScaleCustom extends Grid {
     for (int row = 0; row < settings.height; row++) {
       // X - GET ROW
       for (int note = 0; note < settings.width; note++) {
-        int nextNote = rowStartIndex + note * fixedXY!.x;
+        final int nextNote = rowStartIndex + note * fixedXY!.x;
 
         if (nextNote >= allScaleNotes.length || nextNote.isNegative) {
           grid.add(CustomPad(999)); // an out of range pad
@@ -228,30 +296,36 @@ class GridInScaleCustom extends Grid {
               actualScaleNotes.indexOf(actualNextNote);
 
           int left = Utils.getValueAfterSteps(
-                  actualScaleNotes, actualNextNoteIndex, -fixedXY!.x)
-              .abs();
+            actualScaleNotes,
+            actualNextNoteIndex,
+            -fixedXY!.x,
+          ).abs();
           left = left > actualNextNote
               ? actualNextNote + 12 - left
               : actualNextNote - left;
           int right = Utils.getValueAfterSteps(
-                  actualScaleNotes, actualNextNoteIndex, fixedXY!.x)
-              .abs();
+            actualScaleNotes,
+            actualNextNoteIndex,
+            fixedXY!.x,
+          ).abs();
           right = right < actualNextNote
               ? right + 12 - actualNextNote
               : right - actualNextNote;
 
           // print([left, next, right]);
 
-          grid.add(CustomPad(
-            next,
-            pitchBendLeft: left,
-            pitchBendRight: right,
-          ));
+          grid.add(
+            CustomPad(
+              next,
+              pitchBendLeft: left,
+              pitchBendRight: right,
+            ),
+          );
         }
       }
 
       // Y - GET NEXT ROW START
-      rowStartIndex = (rowStartIndex + fixedXY!.y);
+      rowStartIndex = rowStartIndex + fixedXY!.y;
     }
 
     return grid;
@@ -263,7 +337,7 @@ class GridMTN extends Grid {
   GridMTN(super.settings);
 
   @override
-  List<CustomPad> get list {
+  List<CustomPad> get _list {
     final List<CustomPad> grid = [];
 
     final bool sameColumn = settings.rootNote % 2 ==
@@ -278,11 +352,13 @@ class GridMTN extends Grid {
         final int right = tickTock ? 7 : -5;
         // print([left, next, right]);
 
-        grid.add(CustomPad(
-          next + row * 4,
-          pitchBendLeft: left,
-          pitchBendRight: right,
-        ));
+        grid.add(
+          CustomPad(
+            next + row * 4,
+            pitchBendLeft: left,
+            pitchBendRight: right,
+          ),
+        );
 
         if (note.isEven) {
           next = sameColumn ? next + 7 : next - 5;
@@ -302,7 +378,7 @@ class GridXpressPads extends Grid {
   final XPP xPressPads;
 
   @override
-  List<CustomPad> get list {
+  List<CustomPad> get _list {
     return xPressPads.list.map(CustomPad.new).toList();
   }
 }

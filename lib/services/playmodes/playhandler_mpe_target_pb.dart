@@ -105,13 +105,13 @@ class PlayModeMPETargetPb extends PlayModeHandler {
       //
       // Working variables:
       /// coarse pitch adjustment to the tone that it is currently bent to in -1 to +1
-      double pitchDistance = 0;
+      const double pitchDistance = 0;
 
       /// fine adjustment of the pitch bend
       double pitchModifier = 0;
 
       /// maps the 0 to 1.0 X-axis value on pad to a range between -1.0 and +1.0
-      double pitchPercentage = realXPercentage * 2 - 1;
+      final double pitchPercentage = realXPercentage * 2 - 1;
 
       pitchModifier = 0;
       if (realXPercentage < leftDeadzoneBorder) {
@@ -196,12 +196,15 @@ class PlayModeMPETargetPb extends PlayModeHandler {
         data.customPad != null) {
       if (eventInBuffer.noteEvent.pad.row < data.customPad!.row) {
         touchPosition = Offset(
-            data.screenTouchPos.dx, eventInBuffer.originPadBox.padPosition.dy);
+          data.screenTouchPos.dx,
+          eventInBuffer.originPadBox.padPosition.dy,
+        );
       } else if (eventInBuffer.noteEvent.pad.row > data.customPad!.row) {
         touchPosition = Offset(
-            data.screenTouchPos.dx,
-            eventInBuffer.originPadBox.padPosition.dy +
-                eventInBuffer.originPadBox.padSize.height);
+          data.screenTouchPos.dx,
+          eventInBuffer.originPadBox.padPosition.dy +
+              eventInBuffer.originPadBox.padSize.height,
+        );
       }
       eventInBuffer.updatePosition(touchPosition, eventInBuffer.newPadBox);
       notifyParent();
@@ -222,7 +225,9 @@ class PlayModeMPETargetPb extends PlayModeHandler {
     // Guards:
     if (data.customPad?.padValue == null ||
         data.yPercentage == null ||
-        data.xPercentage == null) return;
+        data.xPercentage == null) {
+      return;
+    }
 
     // Working Variables:
     final double realYPercentage = data.yPercentage!;
@@ -251,10 +256,20 @@ class PlayModeMPETargetPb extends PlayModeHandler {
 
       if (clampedYPercentage <= yPercentageMiddle) {
         sendPercentage = Utils.mapValueToTargetRange(
-            clampedYPercentage, 0, yPercentageMiddle, 0, 0.5);
+          clampedYPercentage,
+          0,
+          yPercentageMiddle,
+          0,
+          0.5,
+        );
       } else {
         sendPercentage = Utils.mapValueToTargetRange(
-            clampedYPercentage, yPercentageMiddle, 1, 0.5, 1);
+          clampedYPercentage,
+          yPercentageMiddle,
+          1,
+          0.5,
+          1,
+        );
       }
       mpeMods.yMod.send(
         sendPercentage * 2 - 1,
@@ -297,20 +312,30 @@ class PlayModeMPETargetPb extends PlayModeHandler {
       double mappedPercentage = 0;
 
       if (clampedXPercentage <= xPercentageMiddle) {
-        mappedPercentage = (Utils.mapValueToTargetRange(
-                    clampedXPercentage, 0, xPercentageMiddle, 0, 0.5) *
+        mappedPercentage = Utils.mapValueToTargetRange(
+                  clampedXPercentage,
+                  0,
+                  xPercentageMiddle,
+                  0,
+                  0.5,
+                ) *
                 2 -
-            1);
+            1;
         pitchModifier =
             ((semitonePitchbendRange * data.customPad!.pitchBendLeft) *
                     mappedPercentage) /
                 0x3FFF /
                 2;
       } else {
-        mappedPercentage = (Utils.mapValueToTargetRange(
-                    clampedXPercentage, xPercentageMiddle, 1, 0.5, 1) *
+        mappedPercentage = Utils.mapValueToTargetRange(
+                  clampedXPercentage,
+                  xPercentageMiddle,
+                  1,
+                  0.5,
+                  1,
+                ) *
                 2 -
-            1);
+            1;
         pitchModifier =
             ((semitonePitchbendRange * data.customPad!.pitchBendRight) *
                     mappedPercentage) /
@@ -341,7 +366,7 @@ class PlayModeMPETargetPb extends PlayModeHandler {
       // print(["rightDZB", rightDeadzoneBorder]);
 
       /// maps the 0 to 1.0 X-axis value on pad to a range between -1.0 and +1.0
-      double pitchPercentage = realXPercentage * 2 - 1;
+      final double pitchPercentage = realXPercentage * 2 - 1;
 
       pitchModifier = 0;
       if (realXPercentage < leftDeadzoneBorder) {
