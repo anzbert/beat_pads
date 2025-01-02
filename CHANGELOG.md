@@ -1,8 +1,8 @@
 # CHANGELOG
 
-## 1.0.6
+## 1.0.7
 
-- Remove bright screen flash on app startup in dark mode
+- Remove different color screen flash on app startup in dark mode
 
 ## 1.0.4
 
