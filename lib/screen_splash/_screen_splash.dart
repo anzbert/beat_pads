@@ -16,19 +16,19 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor:
-          MediaQuery.of(context).platformBrightness == Brightness.light
-              ? const HSLColor.fromAHSL(1, 240, 0.1, 0.99).toColor()
-              : Palette.menuHeaders,
-      body: Listener(
-        onPointerDown: (_) {
-          Navigator.push(
-            context,
-            TransitionUtils.fade(PadMenuScreen()),
-          );
-        },
-        child: Center(
+    return Listener(
+      onPointerDown: (_) {
+        Navigator.push(
+          context,
+          TransitionUtils.fade(PadMenuScreen()),
+        );
+      },
+      child: Scaffold(
+        backgroundColor:
+            MediaQuery.of(context).platformBrightness == Brightness.light
+                ? const HSLColor.fromAHSL(1, 240, 0.1, 0.99).toColor()
+                : Palette.menuHeaders,
+        body: Center(
           child: TweenAnimationBuilder<double>(
             tween: Tween<double>(begin: 0.0, end: 1.0),
             curve: Curves.ease,

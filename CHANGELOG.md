@@ -3,7 +3,8 @@
 ## 1.0.8
 
 - Fix Icon color
-- Fix unpredicatable rotation lock behaviour
+- Fix unpredictable rotation lock behaviour
+- Make Splashscreen tap more responsive
 
 ## 1.0.7
 
