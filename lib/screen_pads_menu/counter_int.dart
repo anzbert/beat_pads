@@ -46,7 +46,10 @@ class IntCounterTile extends StatelessWidget {
               backgroundColor: Palette.laserLemon,
               shape: const CircleBorder(),
             ),
-            child: const Icon(Icons.remove),
+            child: Icon(
+              Icons.remove,
+              color: Palette.darkGrey,
+            ),
           ),
           SizedBox(
             width: 30,
@@ -70,7 +73,10 @@ class IntCounterTile extends StatelessWidget {
               backgroundColor: Palette.cadetBlue,
               shape: const CircleBorder(),
             ),
-            child: const Icon(Icons.add),
+            child: Icon(
+              Icons.add,
+              color: Palette.darkGrey,
+            ),
           ),
         ],
       ),

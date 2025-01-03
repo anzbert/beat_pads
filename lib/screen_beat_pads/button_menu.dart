@@ -57,8 +57,9 @@ class ReturnToMenuButton extends StatelessWidget {
               triggerMode: TooltipTriggerMode.tap,
               showDuration: const Duration(milliseconds: 1000),
               padding: const EdgeInsets.all(5),
-              child: const FittedBox(
+              child: FittedBox(
                 child: Icon(
+                  color: Palette.lightGrey,
                   Icons.menu_rounded,
                   size: 100,
                 ),

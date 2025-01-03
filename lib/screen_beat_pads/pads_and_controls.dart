@@ -127,11 +127,12 @@ class BeatPadsAndControls extends ConsumerWidget {
                   backgroundColor: Palette.lightPink,
                   textStyle: const TextStyle(fontWeight: FontWeight.bold),
                 ),
-                child: const Row(
+                child: Row(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Icon(
+                      color: Palette.darkGrey,
                       Icons.cable,
                     ),
                     Text(

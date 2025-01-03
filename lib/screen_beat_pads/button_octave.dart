@@ -30,8 +30,9 @@ class OctaveButtons extends ConsumerWidget {
                   borderRadius: BorderRadius.circular(padRadius),
                 ),
               ),
-              child: const FittedBox(
+              child: FittedBox(
                 child: Icon(
+                  color: Palette.darkGrey,
                   Icons.add,
                   size: 100,
                 ),
@@ -56,8 +57,9 @@ class OctaveButtons extends ConsumerWidget {
                   borderRadius: BorderRadius.circular(padRadius),
                 ),
               ),
-              child: const FittedBox(
+              child: FittedBox(
                 child: Icon(
+                  color: Palette.darkGrey,
                   Icons.remove,
                   size: 100,
                 ),

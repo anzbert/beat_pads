@@ -27,12 +27,13 @@ class MenuMidi extends ConsumerWidget {
                 backgroundColor: Palette.lightPink,
                 textStyle: const TextStyle(fontWeight: FontWeight.bold),
               ),
-              child: const Row(
+              child: Row(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Icon(
                     Icons.cable,
+                    color: Palette.darkGrey,
                   ),
                   SizedBox(
                     width: 10,
