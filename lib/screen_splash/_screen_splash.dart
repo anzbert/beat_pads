@@ -25,7 +25,7 @@ class _SplashScreenState extends State<SplashScreen> {
         onPointerDown: (_) {
           Navigator.push(
             context,
-            TransitionUtils.fade(const PadMenuScreen()),
+            TransitionUtils.fade(PadMenuScreen()),
           );
         },
         child: Center(

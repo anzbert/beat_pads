@@ -46,8 +46,6 @@ class StartUp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // Don't `watch` state for change. Only `read` value on startup.
-    return ref.read(splashScreenProv)
-        ? const SplashScreen()
-        : const PadMenuScreen();
+    return ref.read(splashScreenProv) ? const SplashScreen() : PadMenuScreen();
   }
 }

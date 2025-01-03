@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 1.0.8
+
+- Fix Icon color
+- Fix unpredicatable rotation lock behaviour
+
 ## 1.0.7
 
 - Remove different color screen flash on app startup in dark mode
