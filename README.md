@@ -52,7 +52,6 @@ Wifi works on iOS, but Wifi and Bluetooth support is otherwise limited due to pl
 
 ## ToDo List
 
-- Potential issue: iOS devices disconnect from Midi sometimes when screen times out and wakelock is off -> Implement auto-reconnect to last connected devices
 - Low Priority: Project still using outdated ChangeNotifier in Riverpod state management -> Refactor
 - Kind of a problem: Too much spaghetti code 😝, in a beautiful pasta bowl 🍝 of a repository!
 
