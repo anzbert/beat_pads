@@ -1,22 +1,30 @@
 import 'package:beat_pads/services/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final presetNotifierProvider = NotifierProvider<PresetNotfier, int>(() {
-  return PresetNotfier();
-});
+final presetNotifierProvider = NotifierProvider<PresetNotfier, int>(
+  () {
+    return PresetNotfier();
+  },
+);
 
-class PresetNotfier extends Notifier<int> {
+class PresetNotfier extends SettingIntNotifier {
   static const int numberOfPresets = 5;
   static const int basePreset = 1;
 
-  @override
-  int build() {
-    return basePreset;
-  }
+  PresetNotfier({
+    super.min = basePreset,
+    super.max = numberOfPresets,
+    super.key = 'last_preset',
+    super.defaultValue = basePreset,
+    super.resettable = false,
+    super.usesPresets = false,
+  });
 
   /// Set to a Preset between [basePreset] and [numberOfPresets]
-  void set(int newPreset) {
+  @override
+  void setAndSave(int newPreset) {
     ref.read(senderProvider.notifier).playModeHandler.killAllNotes();
-    state = newPreset.clamp(basePreset, numberOfPresets);
+
+    super.setAndSave(newPreset.clamp(basePreset, numberOfPresets));
   }
 }

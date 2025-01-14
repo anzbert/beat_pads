@@ -62,7 +62,7 @@ class _PresetButton extends ConsumerWidget {
   final Color color;
 
   void setPreset(WidgetRef ref) =>
-      ref.read(presetNotifierProvider.notifier).set(preset);
+      ref.read(presetNotifierProvider.notifier).setAndSave(preset);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -129,7 +129,7 @@ class _ElevatedPresetButton extends ConsumerWidget {
     return ElevatedButton(
       onPressed: () {
         if (clickType == ClickType.tap) {
-          ref.read(presetNotifierProvider.notifier).set(preset);
+          ref.read(presetNotifierProvider.notifier).setAndSave(preset);
         }
       },
       style: ElevatedButton.styleFrom(

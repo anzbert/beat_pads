@@ -80,12 +80,12 @@ class PadMenuScreen extends ConsumerWidget {
             child: DropdownButton(
               value: ref.watch(presetNotifierProvider),
               iconSize: 0,
-              // iconEnabledColor: PresetButtons
-              //     .backgoundColors[ref.watch(presetNotifierProvider) - 1],
               underline: const SizedBox.shrink(),
               onChanged: (int? newValue) {
                 if (newValue != null) {
-                  ref.read(presetNotifierProvider.notifier).set(newValue);
+                  ref
+                      .read(presetNotifierProvider.notifier)
+                      .setAndSave(newValue);
                 }
               },
               items: [

@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.0.9
+
+- Remember the last used preset when restarting the app
+
 ## 1.0.8
 
 - Fix Icon color

@@ -35,7 +35,11 @@ class _ResetAllNotifier extends Notifier<bool> {
 
   void resetAllPresets() {
     for (int i = PresetNotfier.numberOfPresets; i >= 1; i--) {
-      ref.read(presetNotifierProvider.notifier).set(i);
+      if (i > 1) {
+        ref.read(presetNotifierProvider.notifier).set(i);
+      } else {
+        ref.read(presetNotifierProvider.notifier).setAndSave(i);
+      }
       resetAll();
     }
   }
