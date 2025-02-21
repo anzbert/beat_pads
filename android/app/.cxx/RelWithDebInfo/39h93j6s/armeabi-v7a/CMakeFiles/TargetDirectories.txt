@@ -1,0 +1,2 @@
+/Users/anz/localDev/beat_pads/android/app/.cxx/RelWithDebInfo/39h93j6s/armeabi-v7a/CMakeFiles/edit_cache.dir
+/Users/anz/localDev/beat_pads/android/app/.cxx/RelWithDebInfo/39h93j6s/armeabi-v7a/CMakeFiles/rebuild_cache.dir

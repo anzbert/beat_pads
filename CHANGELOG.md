@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.0.10
+
+- Upgrade to the latest Flutter framework version 3.29. (Impeller is now the default Flutter rendering engine on both Android and iOS)
+
 ## 1.0.9
 
 - Remember the last used preset when restarting the app
