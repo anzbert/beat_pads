@@ -75,7 +75,7 @@ class MenuLayout extends ConsumerWidget {
           flex: 2,
           child: FittedBox(
             child: RepaintBoundary(
-              child: Preview(),
+              child: PreviewPads(),
             ),
           ),
         ),

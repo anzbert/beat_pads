@@ -39,7 +39,7 @@ dependencies:
 dev_dependencies:
   # austerity: ^1.0.0
   flutter_launcher_icons: ^0.14.1
-  flutter_lints: ^5.0.0
+  flutter_lints: ^6.0.0
   flutter_native_splash: ^2.4.4
   flutter_test:
     sdk: flutter

@@ -3,8 +3,8 @@ import 'package:beat_pads/services/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class Preview extends ConsumerWidget {
-  const Preview();
+class PreviewPads extends ConsumerWidget {
+  const PreviewPads();
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return FittedBox(

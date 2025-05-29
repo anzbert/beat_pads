@@ -46,7 +46,7 @@ class SustainButtonDoubleTapState
   int _lastTap = DateTime.now().millisecondsSinceEpoch;
   int _consecutiveTaps = 1;
 
-  void on(_) {
+  void on(dynamic _) {
     final int now = DateTime.now().millisecondsSinceEpoch;
     if (now - _lastTap < _doubleTapTime) {
       _consecutiveTaps++;
@@ -62,7 +62,7 @@ class SustainButtonDoubleTapState
     _lastTap = now;
   }
 
-  void off(_) {
+  void off(dynamic _) {
     if (ref.read(sustainStateProv) && _consecutiveTaps < 2) {
       ref.read(sustainStateProv.notifier).sustainOff();
     }
