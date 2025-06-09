@@ -37,7 +37,7 @@ class PadMenuScreen extends ConsumerWidget {
     }
   }
 
-  void goToPadsScreen(BuildContext context) {
+  static void goToPadsScreen(BuildContext context) {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute<BeatPadsScreen>(

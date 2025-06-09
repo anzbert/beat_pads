@@ -65,6 +65,7 @@ class MenuLayout extends ConsumerWidget {
         ref.watch(layoutProv).resizable; // Is the layout fixed or resizable?
     final bool isPortrait =
         MediaQuery.of(context).orientation.name == 'portrait';
+
     return Flex(
       direction: isPortrait ? Axis.vertical : Axis.horizontal,
       crossAxisAlignment:
@@ -75,7 +76,7 @@ class MenuLayout extends ConsumerWidget {
           flex: 2,
           child: FittedBox(
             child: RepaintBoundary(
-              child: PreviewPads(),
+              child: PreviewPads(), // PADS PREVIEW
             ),
           ),
         ),
