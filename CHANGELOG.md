@@ -1,7 +1,8 @@
 # CHANGELOG
 
-## 1.0.11
+## 1.1.1
 
+- Added Bluetooth Midi
 - Added Do Re Mi (Solfège) Note Names
 
 ## 1.0.10

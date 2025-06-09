@@ -18,3 +18,12 @@ final splashScreenProv = NotifierProvider<SettingBoolNotifier, bool>(() {
     usesPresets: false,
   );
 });
+
+// final bluetoothMidiProv = NotifierProvider<SettingBoolNotifier, bool>(() {
+//   return SettingBoolNotifier(
+//     key: 'bleMidi',
+//     defaultValue: true,
+//     resettable: false,
+//     usesPresets: false,
+//   );
+// });

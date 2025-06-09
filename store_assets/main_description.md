@@ -8,7 +8,7 @@ This App is **ONLY** usable as a Midi Controller. It does **NOT** produce any so
 
 ## Information
 
-Midi Poly Grid is a lightweight Midi Controller app for mobile phones and tablets for melodies and finger drumming at home and on the go. Connections can be made virtually to other apps via platform midi channels or via USB to other devices.
+Midi Poly Grid is a lightweight Midi Controller app for mobile phones and tablets for melodies and finger drumming at home and on the go. Connections can be made virtually to other apps via platform midi channels, or via USB or Bluetooth Midi to other devices.
 
 This app aims to be an easy-to-use pad input device featuring a variety of layouts, intuitive playability and modern modulation options, such as MPE and Polyphonic Aftertouch. It was designed for people that prefer pads to pianos! The focus of this app is not to be a jack-of-all-trades Midi swiss army knife, but instead to be a great at one thing: Intuitive and versatile pad controls.
 
@@ -20,7 +20,7 @@ This app aims to be an easy-to-use pad input device featuring a variety of layou
 - Innovative MPE and polyphonic Aftertouch modulation with graphical feedback
 - Push Style MPE pitchbend and slide
 - Send Velocity by Y position on pad, randomly or with a fixed value
-- Usable as a standard MIDI device with any PC, Mac or other USB host
+- Usable as a standard MIDI device with any PC, Mac or other USB or Bluetooth device
 - Optional controls, such as Pitch Bend, Mod Wheel and Sustain
 - Highligh a large number of musical scales
 - Receives Midi Notes, making the pads usable like a Launchpad

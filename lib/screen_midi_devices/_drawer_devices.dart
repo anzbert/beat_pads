@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:beat_pads/screen_midi_devices/button_refresh.dart';
 import 'package:beat_pads/screen_midi_devices/help_text.dart';
 import 'package:beat_pads/services/services.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_midi_command/flutter_midi_command.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,8 +15,85 @@ class MidiConfig extends ConsumerStatefulWidget {
 }
 
 class MidiConfigState extends ConsumerState<MidiConfig> {
+  StreamSubscription<String>? _setupSubscription;
+  StreamSubscription<BluetoothState>? _bluetoothStateSubscription;
   final MidiCommand _midiCommand = MidiCommand();
   bool connecting = false;
+
+  // bool _didAskForBluetoothPermissions = false;
+  // Future<void> _informUserAboutBluetoothPermissions(
+  //     BuildContext context) async {
+  //   if (_didAskForBluetoothPermissions) {
+  //     return;
+  //   }
+  //   await showDialog<void>(
+  //     context: context,
+  //     barrierDismissible: false,
+  //     builder: (BuildContext context) {
+  //       return AlertDialog(
+  //         title:
+  //             const Text('Bluetooth Permission to discover BLE MIDI Devices'),
+  //         content: const Text(
+  //             'In the next dialog we might ask you for the permission to use Bluetooth.\n'
+  //             'Please grant this permission to make Bluetooth MIDI possible.'),
+  //         actions: <Widget>[
+  //           TextButton(
+  //             child: const Text('Ok. I got it!'),
+  //             onPressed: () {
+  //               Navigator.of(context).pop();
+  //             },
+  //           ),
+  //         ],
+  //       );
+  //     },
+  //   );
+  //   _didAskForBluetoothPermissions = true;
+  //   return;
+  // }
+
+  // bool _iOSNetworkSessionEnabled = false;
+  // void _updateNetworkSessionState() async {
+  //   var nse = await _midiCommand.isNetworkSessionEnabled;
+  //   if (nse != null) {
+  //     setState(() {
+  //       _iOSNetworkSessionEnabled = nse;
+  //     });
+  //   }
+  // }
+
+  @override
+  void initState() {
+    super.initState();
+
+    _setupSubscription = _midiCommand.onMidiSetupChanged?.listen((data) async {
+      if (kDebugMode) {
+        print("setup changed $data");
+      }
+      setState(() {});
+    });
+
+    _bluetoothStateSubscription =
+        _midiCommand.onBluetoothStateChanged.listen((data) {
+      if (kDebugMode) {
+        print("bluetooth state change $data");
+      }
+      setState(() {});
+    });
+
+    // _updateNetworkSessionState();
+
+    _midiCommand.setNetworkSessionEnabled(true);
+  }
+
+  // As in example. MidiCommand.dispose() only seems to dispose of bluetooth ressources?!
+  // Disposing anyway, just to be sure.
+  @override
+  void dispose() {
+    _setupSubscription?.cancel();
+    _bluetoothStateSubscription?.cancel();
+    _midiCommand.dispose();
+    super.dispose();
+  }
 
   void setDevice(MidiDevice device) {
     if (device.connected) {
@@ -58,7 +138,83 @@ class MidiConfigState extends ConsumerState<MidiConfig> {
         ),
         actions: [
           RefreshButton(
-            onPressed: () => setState(() {}),
+            onPressed: () async {
+              // Ask for bluetooth permissions
+              // await _informUserAboutBluetoothPermissions(context);
+
+              // Start bluetooth
+              if (kDebugMode) {
+                print("start ble central");
+              }
+              await _midiCommand.startBluetoothCentral().catchError((err) {
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text(err),
+                  ));
+                }
+              });
+
+              if (kDebugMode) {
+                print("wait for init");
+              }
+              await _midiCommand
+                  .waitUntilBluetoothIsInitialized()
+                  .timeout(const Duration(seconds: 5), onTimeout: () {
+                if (kDebugMode) {
+                  print("Failed to initialize Bluetooth");
+                }
+              });
+
+              // If bluetooth is powered on, start scanning
+              if (_midiCommand.bluetoothState == BluetoothState.poweredOn) {
+                _midiCommand
+                    .startScanningForBluetoothDevices()
+                    .catchError((err) {
+                  if (kDebugMode) {
+                    print("Error $err");
+                  }
+                });
+                if (context.mounted) {
+                  // ScaffoldMessenger.of(context).showSnackBar(
+                  //   const SnackBar(
+                  //     content: Text('Scanning for bluetooth devices ...'),
+                  //   ),
+                  // );
+                }
+              } else {
+                final messages = {
+                  BluetoothState.unsupported:
+                      'Bluetooth is not supported on this device.',
+                  BluetoothState.poweredOff:
+                      'Please switch on bluetooth and try again.',
+                  BluetoothState.poweredOn: 'Everything is fine.',
+                  BluetoothState.resetting:
+                      'Currently resetting. Try again later.',
+                  BluetoothState.unauthorized:
+                      'This app needs bluetooth permissions. Please open settings, find your app and assign bluetooth access rights and start your app again.',
+                  BluetoothState.unknown:
+                      'Bluetooth is not ready yet. Try again later.',
+                  BluetoothState.other:
+                      'This should never happen. Please inform the developer of your app.',
+                };
+                if (context.mounted) {
+                  // ScaffoldMessenger.of(context).showSnackBar(
+                  //   SnackBar(
+                  //     backgroundColor: Colors.red,
+                  //     content: Text(messages[_midiCommand.bluetoothState] ??
+                  //         'Unknown bluetooth state: ${_midiCommand.bluetoothState}'),
+                  //   ),
+                  // );
+                }
+                if (kDebugMode) {
+                  print(messages);
+                  print("BL scanning done");
+                }
+              }
+
+              // If not show a message telling users what to do
+              setState(() {});
+            },
             icon: Icon(
               Icons.refresh,
               size: 30,
@@ -139,7 +295,7 @@ class MidiConfigState extends ConsumerState<MidiConfig> {
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
                                               Text(
-                                                device.name,
+                                                "${device.name}[${device.type}]",
                                                 style: Theme.of(context)
                                                     .textTheme
                                                     .titleMedium,
@@ -175,13 +331,5 @@ class MidiConfigState extends ConsumerState<MidiConfig> {
         ],
       ),
     );
-  }
-
-  // As in example. MidiCommand.dispose() only seems to dispose of bluetooth ressources?!
-  // Disposing anyway, just to be sure.
-  @override
-  void dispose() {
-    _midiCommand.dispose();
-    super.dispose();
   }
 }

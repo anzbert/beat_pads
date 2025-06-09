@@ -21,13 +21,13 @@
 
 ## Information
 
-Midi Poly Grid (formerly known as 'Beat Pads') is a lightweight Midi Controller app for mobile phones and tablets for melodies and finger drumming at home and on the go. Connections can be made virtually to other apps via platform midi channels or via USB to other devices.
+Midi Poly Grid (formerly known as 'Beat Pads') is a lightweight Midi Controller app for mobile phones and tablets for melodies and finger drumming at home and on the go. Connections can be made virtually to other apps via platform midi channels, Bluetooth or via USB to other devices.
 
 This app aims to be an easy-to-use pad input device featuring a variety of layouts, intuitive playability and modern modulation options, such as MPE and Polyphonic Aftertouch. It was designed for people that prefer pads to pianos! The focus of this app is not to be a jack-of-all-trades Midi swiss army knife, but instead to be great at one thing: Intuitive and versatile pad controls.
 
 AUv3 is unfortunately not supported at this time, as it is [currently impossible with Flutter](https://github.com/flutter/flutter/issues/16092).
 
-Wifi works on iOS, but Wifi and Bluetooth support is otherwise limited due to platform restrictions.
+Wifi works on iOS, but Wifi support is otherwise limited due to platform restrictions.
 
 ## Feature Bullet Points
 
@@ -37,7 +37,7 @@ Wifi works on iOS, but Wifi and Bluetooth support is otherwise limited due to pl
 - Innovative MPE and polyphonic Aftertouch modulation with graphical feedback
 - Push Style MPE pitchbend and slide
 - Send Velocity by Y position on pad, randomly or with a fixed value
-- Usable as a standard MIDI device with any PC, Mac or other USB host
+- Usable as a standard MIDI device with any PC, Mac or other USB or Bluetooth device
 - Optional controls, such as Pitch Bend, Mod Wheel and Sustain
 - Highligh a large number of musical scales
 - Receives Midi Notes, making the pads usable like a Launchpad
@@ -50,9 +50,12 @@ Wifi works on iOS, but Wifi and Bluetooth support is otherwise limited due to pl
 
 - Anyone is most welcome to contribute, report an issue or start a discussion in the Github repository. Thanks!
 
-## ToDo List
+## ToDo List / Potential Future Features
 
-- Low Priority: Project still using outdated ChangeNotifier in Riverpod state management -> Refactor
+- Latch mode for MPE drone type playing
+- Chords
+- Time based effects, such as arps, etc...
+- Project still using outdated ChangeNotifier in Riverpod state management -> Needs massive refactor
 - Kind of a problem: Too much spaghetti code 😝, in a beautiful pasta bowl 🍝 of a repository!
 
 ## Licence
