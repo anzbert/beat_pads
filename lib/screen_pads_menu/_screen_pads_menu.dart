@@ -6,18 +6,13 @@ import 'package:beat_pads/screen_pads_menu/menu_midi.dart';
 import 'package:beat_pads/screen_pads_menu/menu_system.dart';
 import 'package:beat_pads/services/services.dart';
 import 'package:beat_pads/shared_components/_shared.dart';
+import 'package:beat_pads/shared_components/gradient_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:simple_gradient_text/simple_gradient_text.dart';
 
 final selectedMenuState = StateProvider<Menu>((ref) => Menu.layout);
 
-enum Menu {
-  layout,
-  midi,
-  input,
-  system;
-}
+enum Menu { layout, midi, input, system }
 
 class PadMenuScreen extends ConsumerWidget {
   PadMenuScreen() {
@@ -40,9 +35,7 @@ class PadMenuScreen extends ConsumerWidget {
   static void goToPadsScreen(BuildContext context) {
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute<BeatPadsScreen>(
-        builder: (context) => BeatPadsScreen(),
-      ),
+      MaterialPageRoute<BeatPadsScreen>(builder: (context) => BeatPadsScreen()),
     );
   }
 
@@ -54,11 +47,9 @@ class PadMenuScreen extends ConsumerWidget {
         title: GradientText(
           'Midi Poly Grid',
           style: Theme.of(context).textTheme.headlineMedium,
-          colors: [
-            Palette.lightPink,
-            Palette.cadetBlue,
-            Palette.laserLemon,
-          ],
+          gradient: LinearGradient(
+            colors: [Palette.lightPink, Palette.cadetBlue, Palette.laserLemon],
+          ),
         ),
         leading: Builder(
           builder: (BuildContext context) {
@@ -66,11 +57,7 @@ class PadMenuScreen extends ConsumerWidget {
               onPressed: () {
                 Scaffold.of(context).openDrawer();
               },
-              icon: Icon(
-                Icons.cable,
-                color: Palette.lightPink,
-                size: 36,
-              ),
+              icon: Icon(Icons.cable, color: Palette.lightPink, size: 36),
             );
           },
         ),
@@ -105,9 +92,7 @@ class PadMenuScreen extends ConsumerWidget {
           ),
         ],
       ),
-      drawer: const Drawer(
-        child: MidiConfig(),
-      ),
+      drawer: const Drawer(child: MidiConfig()),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         selectedItemColor: Palette.cadetBlue,
@@ -119,33 +104,21 @@ class PadMenuScreen extends ConsumerWidget {
         items: [
           BottomNavigationBarItem(
             icon: const Icon(Icons.apps),
-            activeIcon: Icon(
-              Icons.apps,
-              color: Palette.cadetBlue,
-            ),
+            activeIcon: Icon(Icons.apps, color: Palette.cadetBlue),
             label: 'Layout',
           ),
           BottomNavigationBarItem(
-            activeIcon: Icon(
-              Icons.music_note,
-              color: Palette.cadetBlue,
-            ),
+            activeIcon: Icon(Icons.music_note, color: Palette.cadetBlue),
             icon: const Icon(Icons.music_note),
             label: 'Midi',
           ),
           BottomNavigationBarItem(
             icon: const Icon(Icons.touch_app),
-            activeIcon: Icon(
-              Icons.touch_app,
-              color: Palette.cadetBlue,
-            ),
+            activeIcon: Icon(Icons.touch_app, color: Palette.cadetBlue),
             label: 'Advanced',
           ),
           BottomNavigationBarItem(
-            activeIcon: Icon(
-              Icons.settings,
-              color: Palette.cadetBlue,
-            ),
+            activeIcon: Icon(Icons.settings, color: Palette.cadetBlue),
             icon: const Icon(Icons.settings),
             label: 'System',
           ),
@@ -155,15 +128,9 @@ class PadMenuScreen extends ConsumerWidget {
         onPressed: () => goToPadsScreen(context),
         backgroundColor: PresetButtons
             .backgoundColors[ref.watch(presetNotifierProvider) - 1],
-        child: Icon(
-          Icons.play_arrow,
-          color: Palette.darkGrey,
-          size: 36,
-        ),
+        child: Icon(Icons.play_arrow, color: Palette.darkGrey, size: 36),
       ),
-      body: SafeArea(
-        child: getMenu(ref.watch(selectedMenuState)),
-      ),
+      body: SafeArea(child: getMenu(ref.watch(selectedMenuState))),
     );
   }
 }
