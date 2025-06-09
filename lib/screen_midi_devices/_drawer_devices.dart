@@ -175,9 +175,11 @@ class MidiConfigState extends ConsumerState<MidiConfig> {
                   }
                 });
                 if (context.mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                    content: Text('Scanning for bluetooth devices ...'),
-                  ));
+                  // ScaffoldMessenger.of(context).showSnackBar(
+                  //   const SnackBar(
+                  //     content: Text('Scanning for bluetooth devices ...'),
+                  //   ),
+                  // );
                 }
               } else {
                 final messages = {
@@ -196,17 +198,20 @@ class MidiConfigState extends ConsumerState<MidiConfig> {
                       'This should never happen. Please inform the developer of your app.',
                 };
                 if (context.mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    backgroundColor: Colors.red,
-                    content: Text(messages[_midiCommand.bluetoothState] ??
-                        'Unknown bluetooth state: ${_midiCommand.bluetoothState}'),
-                  ));
+                  // ScaffoldMessenger.of(context).showSnackBar(
+                  //   SnackBar(
+                  //     backgroundColor: Colors.red,
+                  //     content: Text(messages[_midiCommand.bluetoothState] ??
+                  //         'Unknown bluetooth state: ${_midiCommand.bluetoothState}'),
+                  //   ),
+                  // );
+                }
+                if (kDebugMode) {
+                  print(messages);
+                  print("BL scanning done");
                 }
               }
 
-              if (kDebugMode) {
-                print("BL scanning done");
-              }
               // If not show a message telling users what to do
               setState(() {});
             },
@@ -290,7 +295,7 @@ class MidiConfigState extends ConsumerState<MidiConfig> {
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
                                               Text(
-                                                device.name,
+                                                "${device.name}[${device.type}]",
                                                 style: Theme.of(context)
                                                     .textTheme
                                                     .titleMedium,
