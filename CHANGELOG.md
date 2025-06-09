@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 1.1.2
+
+- Layout: Reduce gap size between pads
+- Tap Preview to go to pad screen
+- Remove dependency on a third party library
+
 ## 1.1.1
 
 - Added Bluetooth Midi
