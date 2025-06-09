@@ -8,31 +8,20 @@ plugins {
     id("dev.flutter.flutter-gradle-plugin")
 }
 
-// Create a variable called keystorePropertiesFile, and initialize it to your
-// keystore.properties file, in the rootProject folder.
-val keystorePropertiesFile = rootProject.file("keystore.properties")
-
-// Initialize a new Properties() object called keystoreProperties.
+// Added for App Signing:
 val keystoreProperties = Properties()
-
-// Load your keystore.properties file into the keystoreProperties object.
-keystoreProperties.load(FileInputStream(keystorePropertiesFile))
+val keystorePropertiesFile = rootProject.file("key.properties")
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(FileInputStream(keystorePropertiesFile))
+}
 
 android {
-    ndkVersion = "27.0.12077973"
-
-    signingConfigs {
-        create("config") {
-            keyAlias = keystoreProperties["keyAlias"] as String
-            keyPassword = keystoreProperties["keyPassword"] as String
-            storeFile = file(keystoreProperties["storeFile"] as String)
-            storePassword = keystoreProperties["storePassword"] as String
-        }
-    }
-
     namespace = "io.anzio.beat_pads"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+    
+    // ndkVersion = flutter.ndkVersion // Downloads an individual version for each dependency's requirements
+    // Use latest one instead (They are backwards compatible):
+    ndkVersion = "29.0.13113456"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
@@ -44,28 +33,33 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId = "io.anzio.beat_pads"
-        // You can update the following values to match your application needs.
-        // For more information, see: https://flutter.dev/to/review-gradle-config.
-        
+  
         // minSdk = flutter.minSdkVersion 
-        minSdk = 24 // 24 = Nougat 7.0
+        minSdk = 24 // 24 = Nougat 7.0 needed for MIDI functionality
+
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
     }
 
-    buildTypes {
-        debug {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.getByName("debug")
+    signingConfigs {
+        // Added for App Signing:
+        create("release") {
+            keyAlias = keystoreProperties["keyAlias"] as String
+            keyPassword = keystoreProperties["keyPassword"] as String
+            storeFile = keystoreProperties["storeFile"]?.let { file(it) }
+            storePassword = keystoreProperties["storePassword"] as String
         }
-        release {
-            signingConfig = signingConfigs.getByName("config")
-        }
+    }
 
+    buildTypes {
+        release {
+            signingConfig = signingConfigs.getByName("debug")
+
+            // Added for App Signing:
+            signingConfig = signingConfigs.getByName("release")
+        }
     }
 }
 
