@@ -1,11 +1,3 @@
-// Copyright 2014 The Flutter Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
-
-// Contents of this file should be generated automatically by
-// dev/tools/bin/generate_gradle_lockfiles.dart, but currently are not.
-// See #141540.
-
 allprojects {
     repositories {
         google()
@@ -13,22 +5,17 @@ allprojects {
     }
 }
 
-rootProject.buildDir = file("../build")
+val newBuildDir: Directory = rootProject.layout.buildDirectory.dir("../../build").get()
+rootProject.layout.buildDirectory.value(newBuildDir)
 
 subprojects {
-    project.buildDir = file("${rootProject.buildDir}/${project.name}")
+    val newSubprojectBuildDir: Directory = newBuildDir.dir(project.name)
+    project.layout.buildDirectory.value(newSubprojectBuildDir)
 }
 subprojects {
     project.evaluationDependsOn(":app")
-    dependencyLocking {
-        ignoredDependencies.add("io.flutter:*")
-        lockFile = file("${rootProject.projectDir}/project-${project.name}.lockfile")
-        if (!project.hasProperty("local-engine-repo")) {
-            lockAllConfigurations()
-        }
-    }
 }
 
 tasks.register<Delete>("clean") {
-    delete(rootProject.buildDir)
+    delete(rootProject.layout.buildDirectory)
 }
