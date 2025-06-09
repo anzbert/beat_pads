@@ -103,7 +103,6 @@ abstract class MidiUtils {
     // Sign sign = Sign.sharp,
     bool showOctaveIndex = true,
     bool solfege = false,
-    // bool showNoteValue = false,
     bool gmPercussionLabels = false,
   }) {
     if (value < 0 || value > 127) {
@@ -117,7 +116,6 @@ abstract class MidiUtils {
     final int octave = value ~/ 12;
     final int note = value % 12;
     final String octaveString = showOctaveIndex ? '${octave - 2}' : '';
-    // final String noteString = showNoteValue ? ' ($value)' : '';
 
     final String output = solfege
         ? '${midiSolfegeNotesSharps[note]} $octaveString'
