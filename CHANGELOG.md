@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.0.11
+
+- Added Do Re Mi (Solfège) Note Names
+
 ## 1.0.10
 
 - Upgrade to the latest Flutter framework version 3.29. (Impeller is now the default Flutter rendering engine on both Android and iOS)

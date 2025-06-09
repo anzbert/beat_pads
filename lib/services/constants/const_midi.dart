@@ -62,48 +62,48 @@ enum Inversion {
   third;
 }
 
-enum Note {
-  c('C', 0, Sign.none),
-  cSharp('C#', 1, Sign.sharp),
-  dFlat('Db', 1, Sign.flat),
-  d('D', 2, Sign.none),
-  dSharp('D#', 3, Sign.sharp),
-  eFlat('Eb', 3, Sign.flat),
-  e('E', 4, Sign.none),
-  f('F', 5, Sign.none),
-  fSharp('F#', 6, Sign.sharp),
-  gFlat('Gb', 6, Sign.flat),
-  g('G', 7, Sign.none),
-  gSharp('G#', 8, Sign.sharp),
-  aFlat('Ab', 8, Sign.flat),
-  a('A', 9, Sign.none),
-  aSharp('A#', 10, Sign.sharp),
-  bFlat('Ab', 10, Sign.flat),
-  b('B', 11, Sign.none);
+// enum Note {
+//   c('C', 0, Sign.none),
+//   cSharp('C#', 1, Sign.sharp),
+//   dFlat('Db', 1, Sign.flat),
+//   d('D', 2, Sign.none),
+//   dSharp('D#', 3, Sign.sharp),
+//   eFlat('Eb', 3, Sign.flat),
+//   e('E', 4, Sign.none),
+//   f('F', 5, Sign.none),
+//   fSharp('F#', 6, Sign.sharp),
+//   gFlat('Gb', 6, Sign.flat),
+//   g('G', 7, Sign.none),
+//   gSharp('G#', 8, Sign.sharp),
+//   aFlat('Ab', 8, Sign.flat),
+//   a('A', 9, Sign.none),
+//   aSharp('A#', 10, Sign.sharp),
+//   bFlat('Ab', 10, Sign.flat),
+//   b('B', 11, Sign.none);
 
-  const Note(this.label, this.semitone, this.sign);
-  final int semitone;
-  final String label;
-  final Sign sign;
+//   const Note(this.label, this.semitone, this.sign);
+//   final int semitone;
+//   final String label;
+//   final Sign sign;
 
-  @override
-  String toString() {
-    return label;
-  }
+//   @override
+//   String toString() {
+//     return label;
+//   }
 
-  int getInterval(Note other) {
-    return (semitone - other.semitone).abs();
-  }
+//   int getInterval(Note other) {
+//     return (semitone - other.semitone).abs();
+//   }
 
-  static Note fromSemitone(int note, [Sign sign = Sign.sharp]) {
-    for (final val in Note.values) {
-      if (val.semitone == (note % 12)) {
-        if (val.sign == sign || val.sign == Sign.none) return val;
-      }
-    }
-    throw ArgumentError('Note undefined');
-  }
-}
+//   static Note fromSemitone(int note, [Sign sign = Sign.sharp]) {
+//     for (final val in Note.values) {
+//       if (val.semitone == (note % 12)) {
+//         if (val.sign == sign || val.sign == Sign.none) return val;
+//       }
+//     }
+//     throw ArgumentError('Note undefined');
+//   }
+// }
 
 enum Sign { sharp, flat, none }
 
@@ -126,14 +126,42 @@ const Map<int, String> midiNotesSharps = {
   10: 'A#',
 };
 
-const Map<int, String> midiNotesFlats = {
-  ...midiNotes,
-  1: 'Db',
-  3: 'Eb',
-  6: 'Gb',
-  8: 'Ab',
-  10: 'Bb',
+// const Map<int, String> midiNotesFlats = {
+//   ...midiNotes,
+//   1: 'Db',
+//   3: 'Eb',
+//   6: 'Gb',
+//   8: 'Ab',
+//   10: 'Bb',
+// };
+
+const Map<int, String> midiSolfegeNotes = {
+  0: 'Do',
+  2: 'Re',
+  4: 'Mi',
+  5: 'Fa',
+  7: 'Sol',
+  9: 'La',
+  11: 'Ti',
 };
+
+const Map<int, String> midiSolfegeNotesSharps = {
+  ...midiSolfegeNotes,
+  1: 'Di',
+  3: 'Ri',
+  6: 'Fi',
+  8: 'Si',
+  10: 'Li',
+};
+
+// const Map<int, String> midiSolfegeNotesFlats = {
+//   ...midiSolfegeNotes,
+//   1: 'Ra',
+//   3: 'Me',
+//   6: 'Se',
+//   8: 'Le',
+//   10: 'Te',
+// };
 
 //(thx to gleitz [https://gist.github.com/gleitz/6845751])
 /// Selection of musical scales
@@ -410,4 +438,4 @@ MIDI CC List – Complete List
 	125 Omni Mode On
 	126 Mono Operation
 	127 Poly Mode
-*/ 
+*/

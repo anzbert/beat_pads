@@ -100,9 +100,10 @@ abstract class MidiUtils {
   /// Get note name String based on a midi value
   static String getNoteName(
     int value, {
-    Sign sign = Sign.sharp,
+    // Sign sign = Sign.sharp,
     bool showOctaveIndex = true,
-    bool showNoteValue = false,
+    bool solfege = false,
+    // bool showNoteValue = false,
     bool gmPercussionLabels = false,
   }) {
     if (value < 0 || value > 127) {
@@ -116,10 +117,11 @@ abstract class MidiUtils {
     final int octave = value ~/ 12;
     final int note = value % 12;
     final String octaveString = showOctaveIndex ? '${octave - 2}' : '';
-    final String noteString = showNoteValue ? ' ($value)' : '';
+    // final String noteString = showNoteValue ? ' ($value)' : '';
 
-    final String output =
-        '${sign == Sign.sharp ? midiNotesSharps[note] : midiNotesFlats[note]}$octaveString$noteString';
+    final String output = solfege
+        ? '${midiSolfegeNotesSharps[note]} $octaveString'
+        : '${midiNotesSharps[note]}$octaveString';
 
     return output;
   }
