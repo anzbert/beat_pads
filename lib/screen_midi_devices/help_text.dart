@@ -30,6 +30,14 @@ List<Widget> helpText = [
       ],
     ),
   StringInfoBox(
+    header: 'Bluetooth Midi',
+    body: [
+      "Advertise the Midi Instrument that you want to connect to in that Device's Midi Settings.",
+      "For example, on a Macbook you can advertise it in the 'Audio Midi Setup' app, by clicking the Bluetooth Symbol in the Midi settings. And for another example, on an IPad you often make BLE Midi available in each app individually.",
+      "You can always refresh this list to scan for available BLE Midi devices."
+    ],
+  ),
+  StringInfoBox(
     header: 'Virtual',
     body: [
       if (Platform.isIOS)
