@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 1.1.3
+
+- Fix issue with notes not playing when a gap is hit accidentally
+- Fix velocity ramping problem when in Trigger Mode when using y-based velocity values
+- Make guitar layout horizontally and vertically flippable
+- Added piano keys color scheme
+- Moved Play button to App Bar to keep the button to switch between play screen and menu screen in the same place
+
 ## 1.1.2
 
 - Layout: Reduce gap size between pads
