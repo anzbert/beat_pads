@@ -36,8 +36,7 @@ enum Layout {
     resizable: false,
     defaultDimensions: NullableVector2Int(8, 4),
     gmPercussionLabels: true,
-  ),
-  ;
+  );
 
   const Layout(
     this.title, {
@@ -149,7 +148,7 @@ abstract class Grid {
     final calculatedList = _list;
     if (settings.height * settings.width != calculatedList.length) return [[]];
 
-    return List.generate(
+    var list = List.generate(
       settings.height,
       (row) => List.generate(settings.width, (note) {
         return calculatedList[row * settings.width + note]
@@ -157,6 +156,18 @@ abstract class Grid {
           ..column = note;
       }),
     ).reversed.toList();
+
+    // // Flip horizontally (reverse each row)
+    // if (settings.flipHorizontal) {
+    //   list = list.map((row) => row.reversed.toList()).toList();
+    // }
+
+    // // Flip vertically (reverse the order of rows)
+    // if (settings.flipVertical) {
+    //   list = list.reversed.toList();
+    // }
+
+    return list;
   }
 }
 
@@ -179,6 +190,7 @@ class GridChromaticWithGuitarShift extends Grid {
       }
       // print(((row + 1) ~/ 5)); // offset every 5 strings on imaginary unlimited height guitar
     }
+
     return grid;
   }
 }
@@ -261,8 +273,10 @@ class GridInScaleCustom extends Grid {
   List<CustomPad> get _list {
     /// applied scale pattern to currently selected root note
     /// root note is a value between 0-11
-    final List<int> actualScaleNotes =
-        MidiUtils.absoluteScaleNotes(settings.rootNote, settings.scaleList);
+    final List<int> actualScaleNotes = MidiUtils.absoluteScaleNotes(
+      settings.rootNote,
+      settings.scaleList,
+    );
 
     /// baseNote that is actually part of the currently selected scale
     int validatedBaseCheck =
@@ -292,8 +306,9 @@ class GridInScaleCustom extends Grid {
 
           // calculate left and right pitch difference:
           final int actualNextNote = next % 12;
-          final int actualNextNoteIndex =
-              actualScaleNotes.indexOf(actualNextNote);
+          final int actualNextNoteIndex = actualScaleNotes.indexOf(
+            actualNextNote,
+          );
 
           int left = Utils.getValueAfterSteps(
             actualScaleNotes,
@@ -314,13 +329,7 @@ class GridInScaleCustom extends Grid {
 
           // print([left, next, right]);
 
-          grid.add(
-            CustomPad(
-              next,
-              pitchBendLeft: left,
-              pitchBendRight: right,
-            ),
-          );
+          grid.add(CustomPad(next, pitchBendLeft: left, pitchBendRight: right));
         }
       }
 
@@ -340,7 +349,8 @@ class GridMTN extends Grid {
   List<CustomPad> get _list {
     final List<CustomPad> grid = [];
 
-    final bool sameColumn = settings.rootNote % 2 ==
+    final bool sameColumn =
+        settings.rootNote % 2 ==
         settings.baseNote % 2; // in the MTN, odd and even columns alternate
 
     for (int row = 0; row < settings.height; row++) {
@@ -353,11 +363,7 @@ class GridMTN extends Grid {
         // print([left, next, right]);
 
         grid.add(
-          CustomPad(
-            next + row * 4,
-            pitchBendLeft: left,
-            pitchBendRight: right,
-          ),
+          CustomPad(next + row * 4, pitchBendLeft: left, pitchBendRight: right),
         );
 
         if (note.isEven) {
