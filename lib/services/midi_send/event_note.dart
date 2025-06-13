@@ -4,12 +4,12 @@ import 'package:flutter_midi_command/flutter_midi_command_messages.dart';
 class NoteEvent {
   /// Create and store a NoteOn event for its lifetime as well as its release time
   NoteEvent(this.channel, this.pad, this.velocity)
-      : noteOnMessage = NoteOnMessage(
-          channel: channel,
-          note: pad.padValue,
-          velocity: velocity,
-        ),
-        note = pad.padValue;
+    : noteOnMessage = NoteOnMessage(
+        channel: channel,
+        note: pad.padValue,
+        velocity: velocity,
+      ),
+      note = pad.padValue;
   int channel;
   final CustomPad pad;
   final int note;
@@ -34,11 +34,14 @@ class NoteEvent {
 
   /// Send this noteEvent's NoteOnMessage
   void noteOn({bool cc = false}) {
+    // print("send");
     noteOnMessage?.send();
     if (cc) {
-      ccMessage =
-          CCMessage(channel: (channel + 1) % 16, controller: note, value: 127)
-            ..send();
+      ccMessage = CCMessage(
+        channel: (channel + 1) % 16,
+        controller: note,
+        value: 127,
+      )..send();
     }
   }
 
