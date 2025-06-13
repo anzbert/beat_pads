@@ -57,15 +57,16 @@ enum PadColors {
         final divisionSize = 360 / PercType.values.length - 1;
         hue = (divisionSize * PercType.values.indexOf(type) + baseHue) % 360;
       case pianoKeys:
+        final moduloTwelve = note % 12;
         hue = 0;
         lightness =
-            note % 12 == 0 ||
-                note % 12 == 2 ||
-                note % 12 == 4 ||
-                note % 12 == 5 ||
-                note % 12 == 7 ||
-                note % 12 == 9 ||
-                note % 12 == 11
+            moduloTwelve == 0 ||
+                moduloTwelve == 2 ||
+                moduloTwelve == 4 ||
+                moduloTwelve == 5 ||
+                moduloTwelve == 7 ||
+                moduloTwelve == 9 ||
+                moduloTwelve == 11
             ? 0.99
             : 0.01;
     }

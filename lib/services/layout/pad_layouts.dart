@@ -157,16 +157,6 @@ abstract class Grid {
       }),
     ).reversed.toList();
 
-    // // Flip horizontally (reverse each row)
-    // if (settings.flipHorizontal) {
-    //   list = list.map((row) => row.reversed.toList()).toList();
-    // }
-
-    // // Flip vertically (reverse the order of rows)
-    // if (settings.flipVertical) {
-    //   list = list.reversed.toList();
-    // }
-
     return list;
   }
 }

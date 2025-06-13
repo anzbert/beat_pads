@@ -102,30 +102,12 @@ class SlideBeatPadState extends ConsumerState<SlideBeatPad> {
 
         return RepaintBoundary(
           child: Container(
-            decoration: ref.watch(layoutProv) == Layout.guitar
-                ? (widget.pad.row + 1) % 5 == 0
-                      ? BoxDecoration(
-                          border: BorderDirectional(
-                            bottom: BorderSide(
-                              color: Palette.laserLemon,
-                              width: constraints.maxHeight * 0.022,
-                            ),
-                          ),
-                        )
-                      : BoxDecoration(
-                          border: BorderDirectional(
-                            bottom: BorderSide(
-                              color: Palette.cadetBlue,
-                              width: constraints.maxHeight * 0.022,
-                            ),
-                          ),
-                        )
-                : BoxDecoration(
-                    border: Border.all(
-                      color: ThemeData.dark().scaffoldBackgroundColor,
-                      width: padSpacing,
-                    ),
-                  ),
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: ThemeData.dark().scaffoldBackgroundColor,
+                width: padSpacing,
+              ),
+            ),
             // padding: EdgeInsets.all(padSpacing),
             height: double.infinity,
             width: double.infinity,

@@ -61,15 +61,17 @@ class MenuLayout extends ConsumerWidget {
       readValue: ref.watch(baseProv),
     );
 
-    final bool resizableGrid =
-        ref.watch(layoutProv).resizable; // Is the layout fixed or resizable?
+    final bool resizableGrid = ref
+        .watch(layoutProv)
+        .resizable; // Is the layout fixed or resizable?
     final bool isPortrait =
         MediaQuery.of(context).orientation.name == 'portrait';
 
     return Flex(
       direction: isPortrait ? Axis.vertical : Axis.horizontal,
-      crossAxisAlignment:
-          isPortrait ? CrossAxisAlignment.center : CrossAxisAlignment.start,
+      crossAxisAlignment: isPortrait
+          ? CrossAxisAlignment.center
+          : CrossAxisAlignment.start,
       children: [
         const Flexible(
           fit: FlexFit.tight,
@@ -82,17 +84,15 @@ class MenuLayout extends ConsumerWidget {
         ),
         RotatedBox(
           quarterTurns: isPortrait ? 0 : 1,
-          child: const Divider(
-            height: 0,
-            thickness: 3,
-          ),
+          child: const Divider(height: 0, thickness: 3),
         ),
         Expanded(
           flex: 3,
           child: ListView(
             cacheExtent: 1500,
-            padding:
-                const EdgeInsets.only(bottom: ThemeConst.listViewBottomPadding),
+            padding: const EdgeInsets.only(
+              bottom: ThemeConst.listViewBottomPadding,
+            ),
             children: <Widget>[
               const DividerTitle('Presets'),
               const PresetButtons(
@@ -118,9 +118,7 @@ class MenuLayout extends ConsumerWidget {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Palette.laserLemon,
                     ),
-                    child: const Text(
-                      'Reset Preset',
-                    ),
+                    child: const Text('Reset Preset'),
                     onPressed: () {
                       showDialog<String>(
                         context: context,
@@ -160,12 +158,30 @@ class MenuLayout extends ConsumerWidget {
                   trailing: dropdownLayout,
                 ),
               ),
+              if (ref.watch(layoutProv) == Layout.guitar)
+                ListTile(
+                  title: const Text('Flip Horizontal'),
+                  trailing: Switch(
+                    value: ref.watch(flipGuitarLayoutHorizontalProv),
+                    onChanged: (bool v) => ref
+                        .read(flipGuitarLayoutHorizontalProv.notifier)
+                        .setAndSave(v),
+                  ),
+                ),
+              if (ref.watch(layoutProv) == Layout.guitar)
+                ListTile(
+                  title: const Text('Flip Vertical'),
+                  trailing: Switch(
+                    value: ref.watch(flipGuitarLayoutVerticalProv),
+                    onChanged: (bool v) => ref
+                        .read(flipGuitarLayoutVerticalProv.notifier)
+                        .setAndSave(v),
+                  ),
+                ),
               if (ref.watch(layoutProv) == Layout.progrChange)
                 ListTile(
                   title: const Text('Base Program'),
-                  subtitle: const Text(
-                    'Lowest Program on the Grid',
-                  ),
+                  subtitle: const Text('Lowest Program on the Grid'),
                   trailing: dropdownProgram,
                 ),
               if (resizableGrid && ref.watch(layoutProv).custom)
@@ -204,10 +220,7 @@ class MenuLayout extends ConsumerWidget {
               if (resizableGrid && ref.watch(layoutProv) != Layout.progrChange)
                 const DividerTitle('Scale'),
               if (resizableGrid && ref.watch(layoutProv) != Layout.progrChange)
-                ListTile(
-                  title: const Text('Scale'),
-                  trailing: dropdownScale,
-                ),
+                ListTile(title: const Text('Scale'), trailing: dropdownScale),
               if (resizableGrid && ref.watch(layoutProv) != Layout.progrChange)
                 ListTile(
                   title: const Text('Root Note'),
@@ -217,9 +230,7 @@ class MenuLayout extends ConsumerWidget {
               if (resizableGrid && ref.watch(layoutProv) != Layout.progrChange)
                 ListTile(
                   title: const Text('Base Note'),
-                  subtitle: const Text(
-                    'Lowest Note on the bottom left',
-                  ),
+                  subtitle: const Text('Lowest Note on the bottom left'),
                   trailing: dropdownBaseNote,
                 ),
               if (resizableGrid && ref.watch(layoutProv) != Layout.progrChange)
@@ -235,8 +246,9 @@ class MenuLayout extends ConsumerWidget {
               if (resizableGrid)
                 ListTile(
                   title: const Text('Octave Buttons'),
-                  subtitle:
-                      const Text('Adds Octave control buttons next to pads'),
+                  subtitle: const Text(
+                    'Adds Octave control buttons next to pads',
+                  ),
                   trailing: Switch(
                     value: ref.watch(octaveButtonsProv),
                     onChanged: (bool v) =>
@@ -291,13 +303,14 @@ class MenuLayout extends ConsumerWidget {
                     readValue: ref.watch(pitchBendEaseStepProv),
                     setValue: (int v) =>
                         ref.read(pitchBendEaseStepProv.notifier).set(v),
-                    resetFunction:
-                        ref.read(pitchBendEaseStepProv.notifier).reset,
+                    resetFunction: ref
+                        .read(pitchBendEaseStepProv.notifier)
+                        .reset,
                     displayValue: ref.watch(pitchBendEaseUsable) == 0
                         ? 'Off'
                         : ref.watch(pitchBendEaseUsable) < 1000
-                            ? '${ref.watch(pitchBendEaseUsable)} ms'
-                            : '${ref.watch(pitchBendEaseUsable) / 1000} s',
+                        ? '${ref.watch(pitchBendEaseUsable)} ms'
+                        : '${ref.watch(pitchBendEaseUsable) / 1000} s',
                     steps: Timing.releaseDelayTimes.length - 1,
                     onChangeEnd: ref.read(pitchBendEaseStepProv.notifier).save,
                   ),
@@ -305,8 +318,9 @@ class MenuLayout extends ConsumerWidget {
               const DividerTitle('Display'),
               ListTile(
                 title: const Text('Color Mode'),
-                subtitle:
-                    const Text('Choose how the RGB Color Wheel is applied'),
+                subtitle: const Text(
+                  'Choose how the RGB Color Wheel is applied',
+                ),
                 trailing: DropdownEnum<PadColors>(
                   values: PadColors.values,
                   readValue: ref.watch(padColorsProv),
@@ -326,8 +340,9 @@ class MenuLayout extends ConsumerWidget {
               ),
               ListTile(
                 title: const Text('Pad Labels'),
-                subtitle:
-                    const Text('Choose between Midi values and Note names'),
+                subtitle: const Text(
+                  'Choose between Midi values and Note names',
+                ),
                 trailing: DropdownEnum<PadLabels>(
                   values: PadLabels.values,
                   readValue: ref.watch<PadLabels>(padLabelsProv),

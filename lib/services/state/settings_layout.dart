@@ -40,45 +40,43 @@ class LayoutSettingNotifier extends SettingEnumNotifier<Layout> {
 
 // NOTES AND OCTAVES
 final rootProv = NotifierProvider<SettingIntNotifier, int>(() {
-  return SettingIntNotifier(
-    key: 'rootNote',
-    defaultValue: 0,
-    max: 11,
-  );
+  return SettingIntNotifier(key: 'rootNote', defaultValue: 0, max: 11);
 });
 
 final baseProv = NotifierProvider<SettingIntNotifier, int>(() {
-  return SettingIntNotifier(
-    key: 'base',
-    defaultValue: 0,
-    max: 11,
-  );
+  return SettingIntNotifier(key: 'base', defaultValue: 0, max: 11);
 });
 
-final baseNoteProv = Provider<int>(
-  (ref) {
-    if (ref.watch(layoutProv) == Layout.progrChange) {
-      return ref.watch(baseProgramProv);
-    } else {
-      return (ref.watch(baseOctaveProv)) * 12 + ref.watch(baseProv);
-    }
-  },
-);
+final baseNoteProv = Provider<int>((ref) {
+  if (ref.watch(layoutProv) == Layout.progrChange) {
+    return ref.watch(baseProgramProv);
+  } else {
+    return (ref.watch(baseOctaveProv)) * 12 + ref.watch(baseProv);
+  }
+});
+
+final flipGuitarLayoutHorizontalProv =
+    NotifierProvider<SettingBoolNotifier, bool>(() {
+      return SettingBoolNotifier(
+        key: 'flipGuitarLayoutHorizontal',
+        defaultValue: false,
+      );
+    });
+
+final flipGuitarLayoutVerticalProv =
+    NotifierProvider<SettingBoolNotifier, bool>(() {
+      return SettingBoolNotifier(
+        key: 'flipGuitarLayoutVertical',
+        defaultValue: false,
+      );
+    });
 
 final baseOctaveProv = NotifierProvider<SettingIntNotifier, int>(() {
-  return SettingIntNotifier(
-    key: 'baseOctave',
-    defaultValue: 3,
-    max: 9,
-  );
+  return SettingIntNotifier(key: 'baseOctave', defaultValue: 3, max: 9);
 });
 
 final baseProgramProv = NotifierProvider<SettingIntNotifier, int>(() {
-  return SettingIntNotifier(
-    key: 'baseProgram',
-    defaultValue: 0,
-    max: 127,
-  );
+  return SettingIntNotifier(key: 'baseProgram', defaultValue: 0, max: 127);
 });
 
 // CUSTOM INTERVALS
@@ -102,71 +100,65 @@ final customIntervalYProv = NotifierProvider<SettingIntNotifier, int>(() {
 
 // GRID SIZE
 final widthProv = NotifierProvider<SettingIntNotifier, int>(() {
-  return SettingIntNotifier(
-    key: 'width',
-    defaultValue: 4,
-    min: 1,
-    max: 16,
-  );
+  return SettingIntNotifier(key: 'width', defaultValue: 4, min: 1, max: 16);
 });
 final heightProv = NotifierProvider<SettingIntNotifier, int>(() {
-  return SettingIntNotifier(
-    key: 'height',
-    defaultValue: 4,
-    min: 1,
-    max: 16,
-  );
+  return SettingIntNotifier(key: 'height', defaultValue: 4, min: 1, max: 16);
 });
 
-final rowProv = Provider<List<List<CustomPad>>>(
-  (ref) {
-    return ref
-        .watch(layoutProv)
-        .getGrid(
-          ref.watch(widthProv),
-          ref.watch(heightProv),
-          ref.watch(rootProv),
-          ref.watch(baseNoteProv),
-          ref.watch(scaleProv).intervals,
-          ref.watch(customIntervalXProv),
-          ref.watch(customIntervalYProv),
-        )
-        .rows;
-  },
-);
+final rowProv = Provider<List<List<CustomPad>>>((ref) {
+  var rows = ref
+      .watch(layoutProv)
+      .getGrid(
+        ref.watch(widthProv),
+        ref.watch(heightProv),
+        ref.watch(rootProv),
+        ref.watch(baseNoteProv),
+        ref.watch(scaleProv).intervals,
+        ref.watch(customIntervalXProv),
+        ref.watch(customIntervalYProv),
+      )
+      .rows;
+
+  if (ref.watch(layoutProv) == Layout.guitar) {
+    if (ref.watch(flipGuitarLayoutHorizontalProv)) {
+      // Flip horizontally (reverse each row)
+      rows = rows.map((row) => row.reversed.toList()).toList();
+    }
+    // Flip vertically (reverse the order of rows)
+    if (ref.watch(flipGuitarLayoutVerticalProv)) {
+      rows = rows.reversed.toList();
+    }
+  }
+
+  return rows;
+});
 
 // LABELS AND COLOR
 final padLabelsProv =
     NotifierProvider<SettingEnumNotifier<PadLabels>, PadLabels>(() {
-  return SettingEnumNotifier<PadLabels>(
-    nameMap: PadLabels.values.asNameMap(),
-    key: 'padLabels',
-    defaultValue: PadLabels.note,
-  );
-});
+      return SettingEnumNotifier<PadLabels>(
+        nameMap: PadLabels.values.asNameMap(),
+        key: 'padLabels',
+        defaultValue: PadLabels.note,
+      );
+    });
 
 final gmLabelsProv = NotifierProvider<SettingBoolNotifier, bool>(() {
-  return SettingBoolNotifier(
-    key: 'gmLabels',
-    defaultValue: false,
-  );
+  return SettingBoolNotifier(key: 'gmLabels', defaultValue: false);
 });
 
 final padColorsProv =
     NotifierProvider<SettingEnumNotifier<PadColors>, PadColors>(() {
-  return SettingEnumNotifier<PadColors>(
-    nameMap: PadColors.values.asNameMap(),
-    key: 'padColors',
-    defaultValue: PadColors.colorWheel,
-  );
-});
+      return SettingEnumNotifier<PadColors>(
+        nameMap: PadColors.values.asNameMap(),
+        key: 'padColors',
+        defaultValue: PadColors.colorWheel,
+      );
+    });
 
 final baseHueProv = NotifierProvider<SettingIntNotifier, int>(() {
-  return SettingIntNotifier(
-    key: 'baseHue',
-    defaultValue: 240,
-    max: 360,
-  );
+  return SettingIntNotifier(key: 'baseHue', defaultValue: 240, max: 360);
 });
 
 // SCALES
@@ -180,39 +172,24 @@ final scaleProv = NotifierProvider<SettingEnumNotifier<Scale>, Scale>(() {
 
 // BUTTONS AND SLIDERS
 final octaveButtonsProv = NotifierProvider<SettingBoolNotifier, bool>(() {
-  return SettingBoolNotifier(
-    key: 'octaveButtons',
-    defaultValue: false,
-  );
+  return SettingBoolNotifier(key: 'octaveButtons', defaultValue: false);
 });
 
 final sustainButtonProv = NotifierProvider<SettingBoolNotifier, bool>(() {
-  return SettingBoolNotifier(
-    key: 'sustainButton',
-    defaultValue: false,
-  );
+  return SettingBoolNotifier(key: 'sustainButton', defaultValue: false);
 });
 
 final velocitySliderProv = NotifierProvider<SettingBoolNotifier, bool>(() {
-  return SettingBoolNotifier(
-    key: 'velocitySlider',
-    defaultValue: false,
-  );
+  return SettingBoolNotifier(key: 'velocitySlider', defaultValue: false);
 });
 
 final modWheelProv = NotifierProvider<SettingBoolNotifier, bool>(() {
-  return SettingBoolNotifier(
-    key: 'modWheel',
-    defaultValue: false,
-  );
+  return SettingBoolNotifier(key: 'modWheel', defaultValue: false);
 });
 
 // PITCHBEND
 final pitchBendProv = NotifierProvider<SettingBoolNotifier, bool>(() {
-  return SettingBoolNotifier(
-    key: 'pitchBend',
-    defaultValue: false,
-  );
+  return SettingBoolNotifier(key: 'pitchBend', defaultValue: false);
 });
 
 final pitchBendEaseStepProv = NotifierProvider<SettingIntNotifier, int>(() {
@@ -223,22 +200,17 @@ final pitchBendEaseStepProv = NotifierProvider<SettingIntNotifier, int>(() {
   );
 });
 
-final pitchBendEaseUsable = Provider<int>(
-  (ref) {
-    if (!ref.watch(pitchBendProv)) return 0;
+final pitchBendEaseUsable = Provider<int>((ref) {
+  if (!ref.watch(pitchBendProv)) return 0;
 
-    return Timing.releaseDelayTimes[ref
-        .watch(pitchBendEaseStepProv)
-        .clamp(0, Timing.releaseDelayTimes.length - 1)];
-  },
-);
+  return Timing.releaseDelayTimes[ref
+      .watch(pitchBendEaseStepProv)
+      .clamp(0, Timing.releaseDelayTimes.length - 1)];
+});
 
 // VELOCITY
 final velocityVisualProv = NotifierProvider<SettingBoolNotifier, bool>(() {
-  return SettingBoolNotifier(
-    key: 'velocityVisual',
-    defaultValue: false,
-  );
+  return SettingBoolNotifier(key: 'velocityVisual', defaultValue: false);
 });
 
 // PRESETS
