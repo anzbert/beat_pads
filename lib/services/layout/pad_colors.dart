@@ -6,6 +6,7 @@ enum PadColors {
   fixedColorWheel('Base Color on C Note'),
   circleOfFifth('Circle of Fifths'),
   gmDrums('GM Percussion Type'),
+  pianoKeys('Piano Keys'),
   highlightRoot('Highlight Root Note');
 
   const PadColors(this.title);
@@ -24,6 +25,7 @@ enum PadColors {
     required bool noteOn,
   }) {
     final double hue;
+    double lightness = .80;
 
     // out of midi range
     if (note > 127 || note < 0) return Palette.darkGrey;
@@ -54,14 +56,22 @@ enum PadColors {
 
         final divisionSize = 360 / PercType.values.length - 1;
         hue = (divisionSize * PercType.values.indexOf(type) + baseHue) % 360;
+      case pianoKeys:
+        final moduloTwelve = note % 12;
+        hue = 0;
+        lightness =
+            moduloTwelve == 0 ||
+                moduloTwelve == 2 ||
+                moduloTwelve == 4 ||
+                moduloTwelve == 5 ||
+                moduloTwelve == 7 ||
+                moduloTwelve == 9 ||
+                moduloTwelve == 11
+            ? 0.99
+            : 0.01;
     }
 
-    final color = HSLColor.fromAHSL(
-      1,
-      hue,
-      .95,
-      .80,
-    ).toColor();
+    final color = HSLColor.fromAHSL(1, hue, .95, lightness).toColor();
 
     if (noteOn) {
       return MidiUtils.isNoteInScale(note, scaleList, rootNote)

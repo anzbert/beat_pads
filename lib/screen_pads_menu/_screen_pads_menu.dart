@@ -44,6 +44,8 @@ class PadMenuScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Palette.menuHeaders,
+
+        centerTitle: true,
         title: GradientText(
           'Midi Poly Grid',
           style: Theme.of(context).textTheme.headlineMedium,
@@ -51,23 +53,63 @@ class PadMenuScreen extends ConsumerWidget {
             colors: [Palette.lightPink, Palette.cadetBlue, Palette.laserLemon],
           ),
         ),
+
+        leadingWidth: 110,
         leading: Builder(
           builder: (BuildContext context) {
-            return IconButton(
-              onPressed: () {
-                Scaffold.of(context).openDrawer();
-              },
-              icon: Icon(Icons.cable, color: Palette.lightPink, size: 36),
+            return Row(
+              children: [
+                SizedBox(width: 2),
+                IconButton(
+                  onPressed: () => goToPadsScreen(context),
+                  padding: EdgeInsets.all(0),
+                  style: IconButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadiusGeometry.all(
+                        Radius.circular(5),
+                      ),
+                    ),
+                    backgroundColor: PresetButtons
+                        .backgoundColors[ref.watch(presetNotifierProvider) - 1],
+                  ),
+                  icon: Icon(
+                    Icons.play_arrow,
+                    color: Palette.darkGrey,
+                    size: 42,
+                  ),
+                ),
+                SizedBox(width: 1),
+                IconButton(
+                  padding: EdgeInsets.all(0),
+                  style: IconButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadiusGeometry.all(
+                        Radius.circular(5),
+                      ),
+                    ),
+                    backgroundColor: Palette.lightPink,
+                  ),
+                  onPressed: () {
+                    Scaffold.of(context).openDrawer();
+                  },
+                  icon: Icon(Icons.cable, color: Palette.darkGrey, size: 32),
+                ),
+              ],
             );
           },
         ),
+
         actions: [
           Padding(
-            padding: const EdgeInsets.only(right: 8),
+            padding: const EdgeInsets.only(right: 2),
             child: DropdownButton(
               value: ref.watch(presetNotifierProvider),
-              iconSize: 0,
-              underline: const SizedBox.shrink(),
+              // iconSize: 0,
+              focusColor: Colors.transparent,
+
+              iconEnabledColor: PresetButtons
+                  .backgoundColors[ref.watch(presetNotifierProvider) - 1],
+              underline: SizedBox.shrink(),
               onChanged: (int? newValue) {
                 if (newValue != null) {
                   ref
@@ -75,6 +117,7 @@ class PadMenuScreen extends ConsumerWidget {
                       .setAndSave(newValue);
                 }
               },
+
               items: [
                 for (int i = 1; i <= PresetButtons.backgoundColors.length; i++)
                   DropdownMenuItem(
@@ -124,12 +167,12 @@ class PadMenuScreen extends ConsumerWidget {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => goToPadsScreen(context),
-        backgroundColor: PresetButtons
-            .backgoundColors[ref.watch(presetNotifierProvider) - 1],
-        child: Icon(Icons.play_arrow, color: Palette.darkGrey, size: 36),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () => goToPadsScreen(context),
+      //   backgroundColor: PresetButtons
+      //       .backgoundColors[ref.watch(presetNotifierProvider) - 1],
+      //   child: Icon(Icons.play_arrow, color: Palette.darkGrey, size: 36),
+      // ),
       body: SafeArea(child: getMenu(ref.watch(selectedMenuState))),
     );
   }

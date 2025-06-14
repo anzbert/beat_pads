@@ -4,10 +4,8 @@ class PlayModeSlide extends PlayModeHandler {
   /// Sliding playmode. Uses notereleasebuffer instead of touchreleasebuffer,
   /// since one touch can be the cause of many released notes in this mode.
   /// There is no modulation, hence no tracking of touch required
-  PlayModeSlide(
-    super.settings,
-    super.notifyParent,
-  ) : noteReleaseBuffer = NoteReleaseBuffer(settings, notifyParent);
+  PlayModeSlide(super.settings, super.notifyParent)
+    : noteReleaseBuffer = NoteReleaseBuffer(settings, notifyParent);
   final NoteReleaseBuffer noteReleaseBuffer;
 
   @override
@@ -60,10 +58,15 @@ class PlayModeSlide extends PlayModeHandler {
     // Play new note:
     if (data.customPad?.padValue != null &&
         eventInBuffer.noteEvent.noteOnMessage == null) {
+      // if Velocitymode is yAxis, continue with first velocity instead of getting new one.
+      int velocity = settings.velocityMode != VelocityMode.yAxis
+          ? velocityProvider.velocity(data.yPercentage ?? .5)
+          : eventInBuffer.noteEvent.velocity;
+
       eventInBuffer.noteEvent = NoteEvent(
         settings.channel,
         data.customPad!,
-        velocityProvider.velocity(data.yPercentage ?? .5),
+        velocity,
       )..noteOn(cc: settings.playMode.singleChannel && settings.sendCC);
 
       notifyParent();
