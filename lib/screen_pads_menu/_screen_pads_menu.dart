@@ -109,7 +109,7 @@ class PadMenuScreen extends ConsumerWidget {
 
               iconEnabledColor: PresetButtons
                   .backgoundColors[ref.watch(presetNotifierProvider) - 1],
-              underline: SizedBox.shrink(),
+              underline: SizedBox.shrink(), // -> hides underline
               onChanged: (int? newValue) {
                 if (newValue != null) {
                   ref

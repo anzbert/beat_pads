@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.1.4
+
+- Visual layout fixes
+
 ## 1.1.3
 
 - Fix issue with notes not playing when a gap is hit accidentally
