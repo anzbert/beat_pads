@@ -55,21 +55,18 @@ final baseNoteProv = Provider<int>((ref) {
   }
 });
 
-final flipGuitarLayoutHorizontalProv =
-    NotifierProvider<SettingBoolNotifier, bool>(() {
-      return SettingBoolNotifier(
-        key: 'flipGuitarLayoutHorizontal',
-        defaultValue: false,
-      );
-    });
+final flipLayoutHorizontalProv = NotifierProvider<SettingBoolNotifier, bool>(
+  () {
+    return SettingBoolNotifier(
+      key: 'flipLayoutHorizontal',
+      defaultValue: false,
+    );
+  },
+);
 
-final flipGuitarLayoutVerticalProv =
-    NotifierProvider<SettingBoolNotifier, bool>(() {
-      return SettingBoolNotifier(
-        key: 'flipGuitarLayoutVertical',
-        defaultValue: false,
-      );
-    });
+final flipLayoutVerticalProv = NotifierProvider<SettingBoolNotifier, bool>(() {
+  return SettingBoolNotifier(key: 'flipLayoutVertical', defaultValue: false);
+});
 
 final baseOctaveProv = NotifierProvider<SettingIntNotifier, int>(() {
   return SettingIntNotifier(key: 'baseOctave', defaultValue: 3, max: 9);
@@ -120,15 +117,13 @@ final rowProv = Provider<List<List<CustomPad>>>((ref) {
       )
       .rows;
 
-  if (ref.watch(layoutProv) == Layout.guitar) {
-    if (ref.watch(flipGuitarLayoutHorizontalProv)) {
-      // Flip horizontally (reverse each row)
-      rows = rows.map((row) => row.reversed.toList()).toList();
-    }
-    // Flip vertically (reverse the order of rows)
-    if (ref.watch(flipGuitarLayoutVerticalProv)) {
-      rows = rows.reversed.toList();
-    }
+  if (ref.watch(flipLayoutHorizontalProv)) {
+    // Flip horizontally (reverse each row)
+    rows = rows.map((row) => row.reversed.toList()).toList();
+  }
+  // Flip vertically (reverse the order of rows)
+  if (ref.watch(flipLayoutVerticalProv)) {
+    rows = rows.reversed.toList();
   }
 
   return rows;

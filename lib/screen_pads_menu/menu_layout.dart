@@ -146,6 +146,7 @@ class MenuLayout extends ConsumerWidget {
                   ),
                 ),
               ),
+              /////////////////////////////////////
               const DividerTitle('Layout'),
               Container(
                 margin: const EdgeInsets.only(bottom: 12),
@@ -158,26 +159,6 @@ class MenuLayout extends ConsumerWidget {
                   trailing: dropdownLayout,
                 ),
               ),
-              if (ref.watch(layoutProv) == Layout.guitar)
-                ListTile(
-                  title: const Text('Flip Horizontal'),
-                  trailing: Switch(
-                    value: ref.watch(flipGuitarLayoutHorizontalProv),
-                    onChanged: (bool v) => ref
-                        .read(flipGuitarLayoutHorizontalProv.notifier)
-                        .setAndSave(v),
-                  ),
-                ),
-              if (ref.watch(layoutProv) == Layout.guitar)
-                ListTile(
-                  title: const Text('Flip Vertical'),
-                  trailing: Switch(
-                    value: ref.watch(flipGuitarLayoutVerticalProv),
-                    onChanged: (bool v) => ref
-                        .read(flipGuitarLayoutVerticalProv.notifier)
-                        .setAndSave(v),
-                  ),
-                ),
               if (ref.watch(layoutProv) == Layout.progrChange)
                 ListTile(
                   title: const Text('Base Program'),
@@ -242,6 +223,7 @@ class MenuLayout extends ConsumerWidget {
                       ref.read(baseOctaveProv.notifier).setAndSave(v),
                   resetFunction: ref.read(baseOctaveProv.notifier).reset,
                 ),
+              /////////////////////////////////////
               const DividerTitle('Controls'),
               if (resizableGrid)
                 ListTile(
@@ -315,6 +297,7 @@ class MenuLayout extends ConsumerWidget {
                     onChangeEnd: ref.read(pitchBendEaseStepProv.notifier).save,
                   ),
                 ),
+              /////////////////////////////////////
               const DividerTitle('Display'),
               ListTile(
                 title: const Text('Color Mode'),
@@ -371,6 +354,25 @@ class MenuLayout extends ConsumerWidget {
                   onChanged: (bool v) {
                     ref.read(velocityVisualProv.notifier).setAndSave(v);
                   },
+                ),
+              ),
+              /////////////////////////////////////
+              const DividerTitle('Orientation'),
+              ListTile(
+                title: const Text('Flip Horizontally'),
+                // subtitle: const Text('Mirror'),
+                trailing: Switch(
+                  value: ref.watch(flipLayoutHorizontalProv),
+                  onChanged: (bool v) =>
+                      ref.read(flipLayoutHorizontalProv.notifier).setAndSave(v),
+                ),
+              ),
+              ListTile(
+                title: const Text('Flip Vertically'),
+                trailing: Switch(
+                  value: ref.watch(flipLayoutVerticalProv),
+                  onChanged: (bool v) =>
+                      ref.read(flipLayoutVerticalProv.notifier).setAndSave(v),
                 ),
               ),
             ],

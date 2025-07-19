@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.1.5
+
+- Allow all layouts to be displayed mirrored on the X and Y axis in the new Orientation section
+
 ## 1.1.4
 
 - Visual layout fixes
