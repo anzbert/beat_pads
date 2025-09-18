@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.1.6
+
+- Support 16kb page size requirement for Android apps going forward
+
 ## 1.1.5
 
 - Allow all layouts to be displayed mirrored on the X and Y axis in the new Orientation section

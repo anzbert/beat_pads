@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 // ignore: unused_import
 // import 'package:flutter/rendering.dart'; // for debug repaint rainbow, if enabled in main()
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rive/rive.dart';
 
 // SHARED PREFERENCES PROVIDER //////////////////////////////////////////
 final sharedPrefProvider = Provider<Prefs>((ref) {
@@ -15,8 +16,10 @@ final sharedPrefProvider = Provider<Prefs>((ref) {
 });
 
 // MAIN FUNCTION ////////////////////////////////////////////////////////
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await RiveNative.init(); // Call init before using Rive in the app
+
   // debugRepaintRainbowEnabled = true;
 
   DeviceUtils.hideSystemUi()
