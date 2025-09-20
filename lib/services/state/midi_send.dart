@@ -2,6 +2,7 @@ import 'package:beat_pads/services/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_midi_command/flutter_midi_command_messages.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 
 // Sending logic still uses ChangeNotifier. Could be refactored for Riverpod
 // for improved clarity and expandability.
@@ -97,8 +98,10 @@ final senderProvider = ChangeNotifierProvider.autoDispose<MidiSender>((ref) {
 class MidiSender extends ChangeNotifier {
   /// Handles Touches and Midi Message sending
   MidiSender(this.settings) {
-    playModeHandler = settings.playMode
-        .getPlayModeApi(settings, _notifyListenersOfMidiSender);
+    playModeHandler = settings.playMode.getPlayModeApi(
+      settings,
+      _notifyListenersOfMidiSender,
+    );
 
     if (settings.playMode == PlayMode.mpe) {
       MPEinitMessage(
@@ -137,7 +140,7 @@ class MidiSender extends ChangeNotifier {
     playModeHandler.markDirty();
   }
 
-// //////////////////////////////////////////////////////////////////////////////////////////
+  // //////////////////////////////////////////////////////////////////////////////////////////
 
   /// Handles a new touch on a pad, creating and sending new noteOn events
   /// in the touch buffer
@@ -145,8 +148,10 @@ class MidiSender extends ChangeNotifier {
     if (settings.layout != Layout.progrChange) {
       playModeHandler.handleNewTouch(data);
     } else {
-      PCMessage(channel: settings.channel, program: data.customPad.padValue)
-          .send();
+      PCMessage(
+        channel: settings.channel,
+        program: data.customPad.padValue,
+      ).send();
     }
   }
 

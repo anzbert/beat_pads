@@ -9,6 +9,7 @@ import 'package:beat_pads/shared_components/_shared.dart';
 import 'package:beat_pads/shared_components/gradient_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 
 final selectedMenuState = StateProvider<Menu>((ref) => Menu.layout);
 
