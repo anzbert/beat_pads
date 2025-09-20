@@ -3,6 +3,8 @@
 ## 1.1.6
 
 - Support 16kb page size requirement for Android apps going forward
+- Update state management (Riverpod) dependency to latest major version 3.0.0
+- Update Android build script to prevent build errors without a keystore file
 
 ## 1.1.5
 
