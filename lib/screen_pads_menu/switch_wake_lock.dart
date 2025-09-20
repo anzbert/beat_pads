@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
+import 'package:flutter_riverpod/legacy.dart';
 
 final _wakeLockProv = StateProvider<bool>((ref) => false);
 

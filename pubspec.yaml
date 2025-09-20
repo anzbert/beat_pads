@@ -20,7 +20,7 @@ dependencies:
     #   url: https://github.com/InvisibleWrench/FlutterMidiCommand.git
     #   ref: master
 
-  flutter_riverpod: ^2.6.1
+  flutter_riverpod: ^3.0.0
   rive: ^0.14.0-dev.6
   shared_preferences: ^2.5.3
   url_launcher: ^6.3.1

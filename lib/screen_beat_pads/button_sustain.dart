@@ -4,7 +4,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class _SustainState extends AutoDisposeNotifier<bool> {
+class _SustainState extends Notifier<bool> {
   @override
   bool build() {
     ref.onDispose(() {
@@ -30,8 +30,9 @@ class _SustainState extends AutoDisposeNotifier<bool> {
   }
 }
 
-final sustainStateProv =
-    AutoDisposeNotifierProvider<_SustainState, bool>(_SustainState.new);
+final sustainStateProv = NotifierProvider<_SustainState, bool>(
+  _SustainState.new,
+);
 
 /////
 
@@ -80,14 +81,14 @@ class SustainButtonDoubleTapState
         gestures: <Type, GestureRecognizerFactory>{
           TapAndPanGestureRecognizer:
               GestureRecognizerFactoryWithHandlers<TapAndPanGestureRecognizer>(
-            () => TapAndPanGestureRecognizer(),
-            (TapAndPanGestureRecognizer instance) {
-              instance
-                ..onTapDown = on
-                ..onTapUp = off
-                ..onDragEnd = off;
-            },
-          ),
+                () => TapAndPanGestureRecognizer(),
+                (TapAndPanGestureRecognizer instance) {
+                  instance
+                    ..onTapDown = on
+                    ..onTapUp = off
+                    ..onDragEnd = off;
+                },
+              ),
         },
         child: Container(
           decoration: BoxDecoration(
