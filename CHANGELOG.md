@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.1.7
+
+- Removed deprecated Flutter SystemUiMode variants
+
 ## 1.1.6
 
 - Support 16kb page size requirement for Android apps going forward

@@ -44,30 +44,4 @@ abstract class DeviceUtils {
     ]);
     return true;
   }
-
-  /// Hide Top and Bottom Menu Bars
-  static Future<void> hideSystemUi() {
-    return SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
-  }
-
-  /// Show Top and Bottom Menu Bars
-  static Future<void> showSystemUi() {
-    return SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-  }
-
-  /// Show Top Menu Bar only
-  static Future<void> showSystemUiTop() {
-    return SystemChrome.setEnabledSystemUIMode(
-      SystemUiMode.manual,
-      overlays: [SystemUiOverlay.top],
-    );
-  }
-
-  /// Show Bottom Menu Bar only
-  static Future<void> showSystemUiBottom() {
-    return SystemChrome.setEnabledSystemUIMode(
-      SystemUiMode.manual,
-      overlays: [SystemUiOverlay.bottom],
-    );
-  }
 }
