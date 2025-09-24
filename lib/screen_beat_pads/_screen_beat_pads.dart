@@ -9,14 +9,14 @@ class BeatPadsScreen extends StatelessWidget {
   }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: BeatPadsAndControls(
-          preview: false,
-        ),
-      ),
-      drawer: Drawer(
-        child: MidiConfig(),
+    return SafeArea(
+      // left: false,
+      // right: false,
+      top: false,
+      bottom: false,
+      child: Scaffold(
+        body: BeatPadsAndControls(preview: false),
+        drawer: Drawer(child: MidiConfig()),
       ),
     );
   }

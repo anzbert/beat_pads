@@ -2,6 +2,10 @@
 
 ## 1.1.7
 
+- Revert visual layout bug caused by last release
+
+## 1.1.7
+
 - Removed deprecated Flutter SystemUiMode variants
 
 ## 1.1.6
