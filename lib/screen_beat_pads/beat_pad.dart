@@ -1,6 +1,5 @@
-import 'dart:math';
-
 import 'package:beat_pads/screen_beat_pads/button_sustain.dart';
+import 'package:beat_pads/screen_beat_pads/chord_pie.dart';
 import 'package:beat_pads/screen_beat_pads/velocity_overlay.dart';
 import 'package:beat_pads/services/services.dart';
 import 'package:beat_pads/theme.dart';
@@ -180,36 +179,7 @@ class SlideBeatPadState extends ConsumerState<SlideBeatPad> {
                     velocity: sustainState ? sustainedVelocity : playedVelocity,
                     padRadius: padRadius,
                   ),
-                // Container(
-                //   margin: EdgeInsets.all(10),
-                //   decoration: BoxDecoration(
-                //     shape: BoxShape.circle,
-                //     gradient: SweepGradient(
-                //       center: Alignment.center,
-                //       transform: GradientRotation(
-                //         pi / 2 * 3,
-                //       ), // rotate 3/4 turn to start at 12 o'clock
-                //       startAngle: 0,
-                //       endAngle: pi * 2,
-                //       colors: [
-                //         Colors.red,
-                //         Colors.red,
-                //         Colors.yellow,
-                //         Colors.yellow,
-                //         Colors.blue,
-                //         Colors.blue,
-                //       ],
-                //       stops: [
-                //         0,
-                //         1 / 3,
-                //         1 / 3,
-                //         2 / 3,
-                //         2 / 3,
-                //         1.0,
-                //       ], // split in thirds with no gradient
-                //     ),
-                //   ),
-                // ),
+                ChordPie(),
               ],
             ),
           ),
