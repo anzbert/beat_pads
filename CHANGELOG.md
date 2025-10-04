@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 1.1.9
+
+- Revert bugs created in previous release
+- Changed layout not to clash with new app window gestures near the top of the screen in iOS 26
+- Fix Android build file to allow building without keystore file
+
 ## 1.1.6
 
 - Support 16kb page size requirement for Android apps going forward
