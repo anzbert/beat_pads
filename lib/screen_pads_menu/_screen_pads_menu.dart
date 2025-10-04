@@ -154,9 +154,12 @@ class PadMenuScreen extends ConsumerWidget {
           ],
         ),
         drawer: const Drawer(child: MidiConfig()),
+
         bottomNavigationBar:
             // BottomAppBar(color: Colors.transparent),
             BottomNavigationBar(
+              landscapeLayout: BottomNavigationBarLandscapeLayout.centered,
+
               // backgroundColor: Colors.transparent,
               backgroundColor: Palette.menuHeaders.withAlpha(180),
               elevation: 0,
@@ -176,12 +179,8 @@ class PadMenuScreen extends ConsumerWidget {
 
               items: [
                 BottomNavigationBarItem(
-                  icon: const Icon(Icons.apps),
-                  activeIcon: Icon(
-                    Icons.play_arrow,
-                    color: Palette.darkGrey,
-                    size: 0,
-                  ),
+                  icon: const Icon(Icons.play_arrow, size: 0),
+                  activeIcon: const Icon(Icons.play_arrow, size: 0),
                   label: '',
                 ),
                 BottomNavigationBarItem(
@@ -219,7 +218,8 @@ class PadMenuScreen extends ConsumerWidget {
         floatingActionButton: FloatingActionButton(
           onPressed: () => goToPadsScreen(context),
           backgroundColor: PresetButtons
-              .backgoundColors[ref.watch(presetNotifierProvider) - 1],
+              .backgoundColors[ref.watch(presetNotifierProvider) - 1]
+              .withAlpha(100),
           child: Icon(Icons.play_arrow, color: Palette.darkGrey, size: 36),
         ),
         body: getMenu(ref.watch(selectedMenuState)),

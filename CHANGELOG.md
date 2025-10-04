@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## 1.1.9
+## 1.1.10
 
 - Revert bugs created in previous release
 - Changed layout not to clash with new app window gestures near the top of the screen in iOS 26
