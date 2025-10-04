@@ -65,12 +65,12 @@ class PadMenuScreen extends ConsumerWidget {
             ),
           ),
 
-          leadingWidth: 110,
+          // leadingWidth: 90,
           leading: Builder(
             builder: (BuildContext context) {
               return Row(
                 children: [
-                  SizedBox(width: 2),
+                  SizedBox(width: 6),
                   // IconButton(
                   //   onPressed: () => goToPadsScreen(context),
                   //   padding: EdgeInsets.all(0),
@@ -92,7 +92,7 @@ class PadMenuScreen extends ConsumerWidget {
                   //     size: 42,
                   //   ),
                   // ),
-                  SizedBox(width: 1),
+                  // SizedBox(width: 1),
                   IconButton(
                     padding: EdgeInsets.all(0),
                     style: IconButton.styleFrom(
@@ -115,7 +115,7 @@ class PadMenuScreen extends ConsumerWidget {
 
           actions: [
             Padding(
-              padding: const EdgeInsets.only(right: 2),
+              padding: const EdgeInsets.only(right: 4),
               child: DropdownButton(
                 value: ref.watch(presetNotifierProvider),
                 // iconSize: 0,
