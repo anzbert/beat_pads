@@ -219,7 +219,7 @@ class PadMenuScreen extends ConsumerWidget {
           onPressed: () => goToPadsScreen(context),
           backgroundColor: PresetButtons
               .backgoundColors[ref.watch(presetNotifierProvider) - 1]
-              .withAlpha(100),
+              .withAlpha(200),
           child: Icon(Icons.play_arrow, color: Palette.darkGrey, size: 36),
         ),
         body: getMenu(ref.watch(selectedMenuState)),
