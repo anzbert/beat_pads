@@ -31,14 +31,15 @@ class ReturnToMenuButton extends StatelessWidget {
           child: ElevatedButton(
             onPressed: () {},
             style: ElevatedButton.styleFrom(
-              shadowColor:
-                  Palette.lightGrey.withValues(alpha: transparent ? 0.15 : 1),
-              foregroundColor:
-                  Palette.lightGrey.withValues(alpha: transparent ? 0.15 : 1),
+              shadowColor: Palette.lightGrey.withValues(
+                alpha: transparent ? 0.15 : 1,
+              ),
+              foregroundColor: Palette.lightGrey.withValues(
+                alpha: transparent ? 0.15 : 1,
+              ),
               backgroundColor: transparent
-                  ? Palette.darker(Palette.cadetBlue, 0.3)
-                      .withValues(alpha: 0.4)
-                  : Palette.darker(Palette.cadetBlue, 0.3),
+                  ? Palette.darkGrey.withValues(alpha: 0.4)
+                  : Palette.darkGrey,
               padding: EdgeInsets.zero,
               alignment: Alignment.center,
               shape: RoundedRectangleBorder(
@@ -51,17 +52,18 @@ class ReturnToMenuButton extends StatelessWidget {
                 boxShadow: kElevationToShadow[6],
                 borderRadius: BorderRadius.circular(3),
               ),
-              richMessage: const TextSpan(
-                text: 'Double-Tap for Menu',
-              ),
+              richMessage: const TextSpan(text: 'Double-Tap for Menu'),
               triggerMode: TooltipTriggerMode.tap,
               showDuration: const Duration(milliseconds: 1000),
               padding: const EdgeInsets.all(5),
               child: FittedBox(
-                child: Icon(
-                  color: Palette.lightGrey,
-                  Icons.menu_rounded,
-                  size: 100,
+                child: RotatedBox(
+                  quarterTurns: 2,
+                  child: Icon(
+                    color: Palette.whiteLike.withAlpha(200),
+                    Icons.play_arrow,
+                    size: 50,
+                  ),
                 ),
               ),
             ),

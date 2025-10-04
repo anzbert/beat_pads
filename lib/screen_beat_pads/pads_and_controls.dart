@@ -1,5 +1,4 @@
 import 'package:beat_pads/screen_beat_pads/beat_pad_grid.dart';
-import 'package:beat_pads/screen_beat_pads/button_menu.dart';
 import 'package:beat_pads/screen_beat_pads/button_presets.dart';
 import 'package:beat_pads/screen_beat_pads/buttons_oct_and_sustain.dart';
 import 'package:beat_pads/screen_beat_pads/slider_mod_wheel.dart';
@@ -28,7 +27,7 @@ class BeatPadsAndControls extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const Expanded(
-              child: SizedBox(),
+              child: SizedBox(child: ColoredBox(color: Colors.black)),
             ),
             // CONTROL BUTTONS
             if (ref.watch(octaveButtonsProv) || ref.watch(sustainButtonProv))
@@ -73,47 +72,39 @@ class BeatPadsAndControls extends ConsumerWidget {
             // PADS
             Expanded(
               flex: 60,
-              child: RepaintBoundary(
-                child: SlidePads(
-                  preview: preview,
-                ),
-              ),
+              child: RepaintBoundary(child: SlidePads(preview: preview)),
             ),
             // PRESETS
             if (ref.watch(presetButtonsProv))
               const Expanded(
                 flex: 5,
                 child: RepaintBoundary(
-                  child: PresetButtons(
-                    clickType: ClickType.double,
-                  ),
+                  child: PresetButtons(clickType: ClickType.double),
                 ),
               ),
             const Expanded(
-              child: SizedBox(),
+              child: SizedBox(child: ColoredBox(color: Colors.black)),
             ),
           ],
         ),
-        if (!preview)
-          if (!ref.watch(sustainButtonProv) && !ref.watch(octaveButtonsProv))
-            Builder(
-              builder: (context) {
-                final double width = MediaQuery.of(context).size.width;
-                return Positioned.directional(
-                  top: width * 0.006,
-                  start: width * 0.006,
-                  textDirection: TextDirection.ltr,
-                  child: SizedBox.square(
-                    dimension: width * 0.06,
-                    child: const RepaintBoundary(
-                      child: ReturnToMenuButton(
-                        transparent: true,
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
+        // if (!preview)
+        //   if (!ref.watch(sustainButtonProv) && !ref.watch(octaveButtonsProv))
+        //     Builder(
+        //       builder: (context) {
+        //         final double width = MediaQuery.of(context).size.width;
+        //         return Positioned.directional(
+        //           bottom: width * 0.006,
+        //           start: width * 0.006,
+        //           textDirection: TextDirection.ltr,
+        //           child: SizedBox.square(
+        //             dimension: width * 0.06,
+        //             child: const RepaintBoundary(
+        //               child: ReturnToMenuButton(transparent: true),
+        //             ),
+        //           ),
+        //         );
+        //       },
+        //     ),
         if (ref.watch(connectedDevicesProv).isEmpty && !preview)
           Positioned(
             bottom: 15,
@@ -131,13 +122,8 @@ class BeatPadsAndControls extends ConsumerWidget {
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Icon(
-                      color: Palette.darkGrey,
-                      Icons.cable,
-                    ),
-                    Text(
-                      'Select Midi Device',
-                    ),
+                    Icon(color: Palette.darkGrey, Icons.cable),
+                    Text('Select Midi Device'),
                   ],
                 ),
               ),

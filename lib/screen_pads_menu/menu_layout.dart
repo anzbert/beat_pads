@@ -72,11 +72,15 @@ class MenuLayout extends ConsumerWidget {
       crossAxisAlignment: isPortrait
           ? CrossAxisAlignment.center
           : CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+
       children: [
-        const Flexible(
+        Flexible(
           fit: FlexFit.tight,
-          flex: 2,
+          flex: isPortrait ? 4 : 7,
           child: FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: isPortrait ? Alignment.topCenter : Alignment.center,
             child: RepaintBoundary(
               child: PreviewPads(), // PADS PREVIEW
             ),
@@ -87,7 +91,7 @@ class MenuLayout extends ConsumerWidget {
           child: const Divider(height: 0, thickness: 3),
         ),
         Expanded(
-          flex: 3,
+          flex: 8,
           child: ListView(
             cacheExtent: 1500,
             padding: const EdgeInsets.only(
@@ -301,9 +305,7 @@ class MenuLayout extends ConsumerWidget {
               const DividerTitle('Display'),
               ListTile(
                 title: const Text('Color Mode'),
-                subtitle: const Text(
-                  'Choose how the RGB Color Wheel is applied',
-                ),
+                subtitle: const Text('How the Color Wheel is used'),
                 trailing: DropdownEnum<PadColors>(
                   values: PadColors.values,
                   readValue: ref.watch(padColorsProv),

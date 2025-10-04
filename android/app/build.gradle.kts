@@ -21,7 +21,9 @@ android {
     
     // ndkVersion = flutter.ndkVersion // Downloads an individual version for each dependency's requirements
     // Use latest one instead (They are backwards compatible):
-    ndkVersion = "29.0.13113456"
+    // ndkVersion = "29.0.13113456"
+    ndkVersion = "27.0.12077973"
+
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11

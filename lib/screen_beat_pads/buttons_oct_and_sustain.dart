@@ -12,17 +12,11 @@ class ControlButtonsRect extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Column(
       children: [
-        const ReturnToMenuButton(
-          transparent: false,
-        ),
         if (ref.watch(octaveButtonsProv))
-          const Expanded(
-            child: OctaveButtons(),
-          ),
+          const Expanded(child: OctaveButtons()),
         if (ref.watch(sustainButtonProv))
-          Expanded(
-            child: SustainButtonDoubleTap(),
-          ),
+          Expanded(child: SustainButtonDoubleTap()),
+        const ReturnToMenuButton(transparent: false),
       ],
     );
   }

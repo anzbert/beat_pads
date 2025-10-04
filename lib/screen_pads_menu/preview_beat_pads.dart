@@ -26,9 +26,7 @@ class PreviewPads extends ConsumerWidget {
                         aspectRatio: 16 / 9,
                         child: Padding(
                           padding: EdgeInsets.all(2),
-                          child: BeatPadsAndControls(
-                            preview: true,
-                          ),
+                          child: BeatPadsAndControls(preview: true),
                         ),
                       ),
                       Container(
@@ -41,8 +39,9 @@ class PreviewPads extends ConsumerWidget {
                               Text(
                                 'Preview',
                                 style: TextStyle(
-                                  color:
-                                      Palette.lightGrey.withValues(alpha: 0.4),
+                                  color: Palette.lightGrey.withValues(
+                                    alpha: 0.2,
+                                  ),
                                 ),
                               ),
                               // Text Outline
@@ -51,7 +50,7 @@ class PreviewPads extends ConsumerWidget {
                                 style: TextStyle(
                                   foreground: Paint()
                                     ..style = PaintingStyle.stroke
-                                    ..strokeWidth = 0.15
+                                    ..strokeWidth = 0.1
                                     ..color = Palette.darkGrey,
                                 ),
                               ),
@@ -67,23 +66,17 @@ class PreviewPads extends ConsumerWidget {
                         aspectRatio: 16 / 9,
                         child: Padding(
                           padding: EdgeInsets.all(4),
-                          child: BeatPadsAndControls(
-                            preview: true,
-                          ),
+                          child: BeatPadsAndControls(preview: true),
                         ),
                       ),
-                      const Divider(
-                        thickness: 3,
-                      ),
+                      const Divider(thickness: 3),
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 100),
                         width: double.infinity,
                         child: FittedBox(
                           child: Text(
                             'Preview',
-                            style: TextStyle(
-                              color: Palette.lightGrey,
-                            ),
+                            style: TextStyle(color: Palette.lightGrey),
                           ),
                         ),
                       ),
