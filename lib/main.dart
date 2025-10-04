@@ -20,27 +20,25 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await RiveNative.init(); // Call init before using Rive in the app
 
+  await DeviceUtils.enableRotation();
+  await DeviceUtils.hideSystemUi();
+
   // debugRepaintRainbowEnabled = true;
 
-  DeviceUtils.hideSystemUi()
-      .then((_) => DeviceUtils.enableRotation())
-      .then((_) => Prefs.initAsync())
-      .then(
-        (Prefs initialPreferences) => runApp(
-          ProviderScope(
-            // uncomment observers line to log Riverpod changes:
-            // observers: kDebugMode ? [DebugRiverpodLogger()] : null,
-            overrides: [
-              sharedPrefProvider.overrideWithValue(initialPreferences),
-            ],
-            child: MaterialApp(
-              debugShowCheckedModeBanner: false,
-              theme: appTheme,
-              home: const StartUp(),
-            ),
-          ),
+  Prefs.initAsync().then(
+    (Prefs initialPreferences) => runApp(
+      ProviderScope(
+        // uncomment observers line to log Riverpod changes:
+        // observers: kDebugMode ? [DebugRiverpodLogger()] : null,
+        overrides: [sharedPrefProvider.overrideWithValue(initialPreferences)],
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          theme: appTheme,
+          home: const StartUp(),
         ),
-      );
+      ),
+    ),
+  );
 }
 
 class StartUp extends ConsumerWidget {
