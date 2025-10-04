@@ -21,7 +21,7 @@ Future<void> main() async {
   await RiveNative.init(); // Call init before using Rive in the app
 
   await DeviceUtils.enableRotation();
-  await DeviceUtils.hideSystemUi();
+  await DeviceUtils.hideSystemUi(); // this might not work on Android once edge-to-edge is forced on that platform
 
   // debugRepaintRainbowEnabled = true;
 
