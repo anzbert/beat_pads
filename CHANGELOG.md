@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 1.1.12
+
+- EXPERIMENTAL: Added PrimeChords.com Triad Circle indicators
+- Added a neutral color scheme
+- Some menu layout fixes
+
 ## 1.1.10
 
 - Revert bugs created in previous release
