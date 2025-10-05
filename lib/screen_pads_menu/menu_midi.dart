@@ -31,16 +31,9 @@ class MenuMidi extends ConsumerWidget {
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Icon(
-                    Icons.cable,
-                    color: Palette.darkGrey,
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Text(
-                    'Connect Midi Device',
-                  ),
+                  Icon(Icons.cable, color: Palette.darkGrey),
+                  SizedBox(width: 10),
+                  Text('Connect Midi Device'),
                 ],
               ),
             ),
@@ -105,6 +98,7 @@ class MenuMidi extends ConsumerWidget {
               ref.read(velocityMinProv.notifier).save();
             },
           ),
+        SizedBox(height: 50),
       ],
     );
   }

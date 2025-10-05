@@ -1,9 +1,11 @@
 import 'package:beat_pads/screen_beat_pads/button_sustain.dart';
+import 'package:beat_pads/screen_beat_pads/triad_pie.dart';
 import 'package:beat_pads/screen_beat_pads/velocity_overlay.dart';
 import 'package:beat_pads/services/services.dart';
 import 'package:beat_pads/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rive/rive.dart';
 
 class SlideBeatPad extends ConsumerStatefulWidget {
   const SlideBeatPad({required this.pad, required this.preview, super.key});
@@ -177,6 +179,12 @@ class SlideBeatPadState extends ConsumerState<SlideBeatPad> {
                   VelocityOverlay(
                     velocity: sustainState ? sustainedVelocity : playedVelocity,
                     padRadius: padRadius,
+                  ),
+                if (ref.watch(triadCirclesProv))
+                  TriadPie(
+                    scalePattern: ref.watch(scaleProv).intervals,
+                    note: note,
+                    root: ref.watch(rootProv),
                   ),
               ],
             ),

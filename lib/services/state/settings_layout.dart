@@ -217,3 +217,8 @@ final presetButtonsProv = NotifierProvider<SettingBoolNotifier, bool>(() {
     usesPresets: false,
   );
 });
+
+// EXPERIMENTAL
+final triadCirclesProv = NotifierProvider<SettingBoolNotifier, bool>(() {
+  return SettingBoolNotifier(key: 'triadCircles', defaultValue: false);
+});

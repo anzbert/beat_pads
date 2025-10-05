@@ -313,16 +313,18 @@ class MenuLayout extends ConsumerWidget {
                       ref.read(padColorsProv.notifier).setAndSave(v),
                 ),
               ),
-              IntSliderTile(
-                label: 'Base Color',
-                max: 360,
-                subtitle: 'Rotate the color wheel',
-                trailing: ref.watch(baseHueProv).toString(),
-                readValue: ref.watch(baseHueProv),
-                setValue: (int v) => ref.read(baseHueProv.notifier).set(v),
-                resetValue: ref.read(baseHueProv.notifier).reset,
-                onChangeEnd: ref.read(baseHueProv.notifier).save,
-              ),
+              if (ref.watch(padColorsProv) != PadColors.pianoKeys &&
+                  ref.watch(padColorsProv) != PadColors.neutral)
+                IntSliderTile(
+                  label: 'Base Color',
+                  max: 360,
+                  subtitle: 'Rotate the color wheel',
+                  trailing: ref.watch(baseHueProv).toString(),
+                  readValue: ref.watch(baseHueProv),
+                  setValue: (int v) => ref.read(baseHueProv.notifier).set(v),
+                  resetValue: ref.read(baseHueProv.notifier).reset,
+                  onChangeEnd: ref.read(baseHueProv.notifier).save,
+                ),
               ListTile(
                 title: const Text('Pad Labels'),
                 subtitle: const Text(
@@ -377,6 +379,19 @@ class MenuLayout extends ConsumerWidget {
                       ref.read(flipLayoutVerticalProv.notifier).setAndSave(v),
                 ),
               ),
+              const DividerTitle('Experimental'),
+              ListTile(
+                title: const Text('Triad Circles'),
+                subtitle: const Text(
+                  'Best with western modal scales (see PrimeChords.com)',
+                ),
+                trailing: Switch(
+                  value: ref.watch(triadCirclesProv),
+                  onChanged: (bool v) =>
+                      ref.read(triadCirclesProv.notifier).setAndSave(v),
+                ),
+              ),
+              SizedBox(height: 50),
             ],
           ),
         ),

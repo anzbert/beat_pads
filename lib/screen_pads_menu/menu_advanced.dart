@@ -145,7 +145,9 @@ class MenuInput extends ConsumerWidget {
                       trailing: Text(
                         '${(ref.watch(modulationRadiusProv) * 100).toInt()}%',
                       ),
-                      readValue: ref.watch(modulationRadiusProv).clamp(
+                      readValue: ref
+                          .watch(modulationRadiusProv)
+                          .clamp(
                             ref.watch(modulationRadiusProv.notifier).min,
                             ref.watch(modulationRadiusProv.notifier).max,
                           ),
@@ -164,16 +166,20 @@ class MenuInput extends ConsumerWidget {
                       trailing: Text(
                         '${(ref.watch(modulationDeadZoneProv) * 100).toInt()}%',
                       ),
-                      readValue: ref.watch(modulationDeadZoneProv).clamp(
+                      readValue: ref
+                          .watch(modulationDeadZoneProv)
+                          .clamp(
                             ref.watch(modulationDeadZoneProv.notifier).min,
                             ref.watch(modulationDeadZoneProv.notifier).max,
                           ),
                       setValue: (double v) =>
                           ref.read(modulationDeadZoneProv.notifier).set(v),
-                      resetValue:
-                          ref.read(modulationDeadZoneProv.notifier).reset,
-                      onChangeEnd:
-                          ref.read(modulationDeadZoneProv.notifier).save,
+                      resetValue: ref
+                          .read(modulationDeadZoneProv.notifier)
+                          .reset,
+                      onChangeEnd: ref
+                          .read(modulationDeadZoneProv.notifier)
+                          .save,
                     ),
                   if (ref.watch(playModeProv) == PlayMode.mpe)
                     const DividerTitle('MPE'),
@@ -236,10 +242,12 @@ class MenuInput extends ConsumerWidget {
                         readValue: ref.watch(mpePitchbendRangeProv),
                         setValue: (int v) =>
                             ref.read(mpePitchbendRangeProv.notifier).set(v),
-                        resetValue:
-                            ref.read(mpePitchbendRangeProv.notifier).reset,
-                        onChangeEnd:
-                            ref.read(mpePitchbendRangeProv.notifier).save,
+                        resetValue: ref
+                            .read(mpePitchbendRangeProv.notifier)
+                            .reset,
+                        onChangeEnd: ref
+                            .read(mpePitchbendRangeProv.notifier)
+                            .save,
                       ),
                   const DividerTitle('Release'),
                   NonLinearSliderTile(
@@ -252,8 +260,8 @@ class MenuInput extends ConsumerWidget {
                     displayValue: ref.watch(noteReleaseUsable) == 0
                         ? 'Off'
                         : ref.watch(noteReleaseUsable) < 1000
-                            ? '${ref.watch(noteReleaseUsable)} ms'
-                            : '${ref.watch(noteReleaseUsable) / 1000} s',
+                        ? '${ref.watch(noteReleaseUsable)} ms'
+                        : '${ref.watch(noteReleaseUsable) / 1000} s',
                     steps: Timing.releaseDelayTimes.length ~/ 1.5,
                     onChangeEnd: ref.read(noteReleaseStepProv.notifier).save,
                   ),
@@ -265,13 +273,14 @@ class MenuInput extends ConsumerWidget {
                       readValue: ref.watch(modReleaseStepProv),
                       setValue: (int v) =>
                           ref.read(modReleaseStepProv.notifier).set(v),
-                      resetFunction:
-                          ref.read(modReleaseStepProv.notifier).reset,
+                      resetFunction: ref
+                          .read(modReleaseStepProv.notifier)
+                          .reset,
                       displayValue: ref.watch(modReleaseUsable) == 0
                           ? 'Off'
                           : ref.watch(modReleaseUsable) < 1000
-                              ? '${ref.watch(modReleaseUsable)} ms'
-                              : '${ref.watch(modReleaseUsable) / 1000} s',
+                          ? '${ref.watch(modReleaseUsable)} ms'
+                          : '${ref.watch(modReleaseUsable) / 1000} s',
                       steps: Timing.releaseDelayTimes.length ~/ 1.5,
                       onChangeEnd: ref.read(modReleaseStepProv.notifier).save,
                     ),
@@ -289,6 +298,7 @@ class MenuInput extends ConsumerWidget {
                             ref.read(sendCCProv.notifier).setAndSave(v),
                       ),
                     ),
+                  SizedBox(height: 50),
                 ],
               ),
             ),

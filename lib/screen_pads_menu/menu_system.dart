@@ -31,9 +31,7 @@ class MenuSystem extends ConsumerWidget {
         ),
         ListTile(
           title: const Text('Show Splash Screen'),
-          subtitle: const Text(
-            'Show Doggo splash screen on app startup',
-          ),
+          subtitle: const Text('Show Doggo splash screen on app startup'),
           trailing: Switch(
             value: ref.watch(splashScreenProv),
             onChanged: (bool v) =>
@@ -41,10 +39,12 @@ class MenuSystem extends ConsumerWidget {
           ),
         ),
         const DividerTitle('Reset'),
+        const SizedBox(height: 20),
         Center(
           child: ConstrainedBox(
-            constraints:
-                const BoxConstraints(minWidth: ThemeConst.menuButtonMinWidth),
+            constraints: const BoxConstraints(
+              minWidth: ThemeConst.menuButtonMinWidth,
+            ),
             child: SnackMessageButton(
               label: 'Reset Midi Buffers',
               message: "Midi buffer cleared & 'Stop All Notes' sent",
@@ -55,24 +55,25 @@ class MenuSystem extends ConsumerWidget {
             ),
           ),
         ),
+        const SizedBox(height: 10),
         Center(
           child: ConstrainedBox(
-            constraints:
-                const BoxConstraints(minWidth: ThemeConst.menuButtonMinWidth),
+            constraints: const BoxConstraints(
+              minWidth: ThemeConst.menuButtonMinWidth,
+            ),
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: Palette.lightPink,
               ),
-              child: const Text(
-                'Reset All Presets',
-              ),
+              child: const Text('Reset All Presets'),
               onPressed: () {
                 showDialog<String>(
                   context: context,
                   builder: (BuildContext context) => AlertDialog(
                     title: const Text('Reset'),
-                    content:
-                        const Text('Return All Presets to the default values?'),
+                    content: const Text(
+                      'Return All Presets to the default values?',
+                    ),
                     actions: <Widget>[
                       TextButton(
                         onPressed: () => Navigator.pop(context, 'Cancel'),
@@ -94,9 +95,9 @@ class MenuSystem extends ConsumerWidget {
             ),
           ),
         ),
-        const SizedBox(
-          height: 30,
-        ),
+
+        const SizedBox(height: 20),
+
         const StringInfoBox(
           header: 'Credits',
           body: [
@@ -106,6 +107,7 @@ class MenuSystem extends ConsumerWidget {
           ],
         ),
         const CreditsBox(),
+        SizedBox(height: 50),
       ],
     );
   }
