@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 1.1.13
+
+- Fixed iOS bug where the side drawer menu would close immediately after opening.
+- Added experimental visualisation mode, inspired by PrimeChords
+
 ## 1.1.12
 
 - EXPERIMENTAL: Added PrimeChords.com Triad Circle indicators

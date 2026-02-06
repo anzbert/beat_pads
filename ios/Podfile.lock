@@ -55,10 +55,10 @@ SPEC CHECKSUMS:
   flutter_midi_command: 28d867d5701407d94917c4c35ca0172d362e1611
   flutter_native_splash: c32d145d68aeda5502d5f543ee38c192065986cf
   package_info_plus: af8e2ca6888548050f16fa2f1938db7b5a5df499
-  rive_native: a57df296c558867395bfe82fafe857ec67640f58
-  shared_preferences_foundation: 9e1978ff2562383bd5676f64ec4e9aa8fa06a6f7
+  rive_native: b422cf8b48d5dea1d536b88b354f11615a638188
+  shared_preferences_foundation: 7036424c3d8ec98dfe75ff1667cb0cd531ec82bb
   universal_ble: ff19787898040d721109c6324472e5dd4bc86adc
-  url_launcher_ios: 694010445543906933d732453a59da0a173ae33d
+  url_launcher_ios: 7a95fa5b60cc718a708b8f2966718e93db0cef1b
   wakelock_plus: e29112ab3ef0b318e58cfa5c32326458be66b556
 
 PODFILE CHECKSUM: 0dbd5a87e0ace00c9610d2037ac22083a01f861d
