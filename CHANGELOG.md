@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.1.14
+
+- Reattempt fixing a Flutter iOS bug where the side drawer menu would close immediately after opening
+
 ## 1.1.13
 
 - Fixed iOS bug where the side drawer menu would close immediately after opening.
