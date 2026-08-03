@@ -182,7 +182,7 @@ class MPEinitMessage extends MidiMessage {
   int memberChannels;
 
   @override
-  void send() {
+  void send({String? deviceId, int? timestamp}) {
     data = Uint8List(12);
     // Reset all controllers:
     data[0] = 0xB0 + zone;

@@ -15,7 +15,7 @@ class MidiConfig extends ConsumerStatefulWidget {
 }
 
 class MidiConfigState extends ConsumerState<MidiConfig> {
-  StreamSubscription<String>? _setupSubscription;
+  StreamSubscription<MidiSetupChange>? _setupSubscription;
   StreamSubscription<BluetoothState>? _bluetoothStateSubscription;
   final MidiCommand _midiCommand = MidiCommand();
   bool connecting = false;
@@ -72,8 +72,9 @@ class MidiConfigState extends ConsumerState<MidiConfig> {
       setState(() {});
     });
 
-    _bluetoothStateSubscription =
-        _midiCommand.onBluetoothStateChanged.listen((data) {
+    _bluetoothStateSubscription = _midiCommand.onBluetoothStateChanged.listen((
+      data,
+    ) {
       if (kDebugMode) {
         print("bluetooth state change $data");
       }
@@ -103,7 +104,9 @@ class MidiConfigState extends ConsumerState<MidiConfig> {
       setState(() {
         connecting = true;
       });
-      _midiCommand.connectToDevice(device).then(
+      _midiCommand
+          .connectToDevice(device)
+          .then(
             (_) => setState(() {
               connecting = false;
             }),
@@ -117,10 +120,9 @@ class MidiConfigState extends ConsumerState<MidiConfig> {
       appBar: AppBar(
         title: Text(
           'Devices',
-          style: Theme.of(context)
-              .textTheme
-              .headlineSmall!
-              .copyWith(color: Palette.lightPink),
+          style: Theme.of(
+            context,
+          ).textTheme.headlineSmall!.copyWith(color: Palette.lightPink),
         ),
         leading: Builder(
           builder: (BuildContext context) {
@@ -128,11 +130,7 @@ class MidiConfigState extends ConsumerState<MidiConfig> {
               onPressed: () {
                 Navigator.pop(context);
               },
-              icon: Icon(
-                Icons.arrow_back,
-                color: Palette.lightPink,
-                size: 30,
-              ),
+              icon: Icon(Icons.arrow_back, color: Palette.lightPink, size: 30),
             );
           },
         ),
@@ -146,30 +144,31 @@ class MidiConfigState extends ConsumerState<MidiConfig> {
               if (kDebugMode) {
                 print("start ble central");
               }
-              await _midiCommand.startBluetoothCentral().catchError((err) {
+              await _midiCommand.startBluetooth().catchError((err) {
                 if (context.mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text(err),
-                  ));
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(SnackBar(content: Text(err)));
                 }
               });
 
               if (kDebugMode) {
                 print("wait for init");
               }
-              await _midiCommand
-                  .waitUntilBluetoothIsInitialized()
-                  .timeout(const Duration(seconds: 5), onTimeout: () {
-                if (kDebugMode) {
-                  print("Failed to initialize Bluetooth");
-                }
-              });
+              await _midiCommand.waitUntilBluetoothIsInitialized().timeout(
+                const Duration(seconds: 5),
+                onTimeout: () {
+                  if (kDebugMode) {
+                    print("Failed to initialize Bluetooth");
+                  }
+                },
+              );
 
               // If bluetooth is powered on, start scanning
               if (_midiCommand.bluetoothState == BluetoothState.poweredOn) {
-                _midiCommand
-                    .startScanningForBluetoothDevices()
-                    .catchError((err) {
+                _midiCommand.startScanningForBluetoothDevices().catchError((
+                  err,
+                ) {
                   if (kDebugMode) {
                     print("Error $err");
                   }
@@ -215,11 +214,7 @@ class MidiConfigState extends ConsumerState<MidiConfig> {
               // If not show a message telling users what to do
               setState(() {});
             },
-            icon: Icon(
-              Icons.refresh,
-              size: 30,
-              color: Palette.lightPink,
-            ),
+            icon: Icon(Icons.refresh, size: 30, color: Palette.lightPink),
           ),
         ],
       ),
@@ -229,102 +224,103 @@ class MidiConfigState extends ConsumerState<MidiConfig> {
             padding: const EdgeInsets.symmetric(vertical: 16),
             child: FutureBuilder(
               future: _midiCommand.devices,
-              builder: (
-                BuildContext context,
-                AsyncSnapshot<List<MidiDevice>?> snapshot,
-              ) {
-                if (snapshot.hasData && snapshot.data!.isNotEmpty) {
-                  final List<MidiDevice>? devices = snapshot.data;
-                  return connecting
-                      // WHILE CONNECTING SHOW CIRCULAR PROGRESS INDICATOR:
-                      ? Center(
-                          child: SizedBox(
-                            width: 40,
-                            height: 40,
-                            child: CircularProgressIndicator(
-                              color: Palette.cadetBlue,
-                            ),
-                          ),
-                        )
-                      :
-                      // OTHERWISE, SHOW LIST:
-                      Builder(
-                          builder: (context) {
-                            WidgetsBinding.instance.addPostFrameCallback(
-                              (_) {
-                                ref.invalidate(devicesFutureProv);
-                              },
-                            );
-                            return Column(
-                              children: [
-                                if (devices!.isEmpty)
-                                  Container(
-                                    margin: const EdgeInsets.symmetric(
-                                      vertical: 12,
-                                    ),
-                                    color: Palette.lightPink,
-                                    height: 40,
-                                    child: Center(
-                                      child: Text(
-                                        'No Midi Adapter found...',
-                                        style:
-                                            TextStyle(color: Palette.darkGrey),
-                                      ),
-                                    ),
-                                  ),
-                                ...devices.map(
-                                  (device) {
-                                    return Container(
-                                      margin: const EdgeInsets.symmetric(
-                                        vertical: 12,
-                                      ),
-                                      color: device.connected
-                                          ? Palette.cadetBlue
-                                          : Palette.darker(
-                                              Palette.cadetBlue,
-                                              0.4,
+              builder:
+                  (
+                    BuildContext context,
+                    AsyncSnapshot<List<MidiDevice>?> snapshot,
+                  ) {
+                    if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+                      final List<MidiDevice>? devices = snapshot.data;
+                      return connecting
+                          // WHILE CONNECTING SHOW CIRCULAR PROGRESS INDICATOR:
+                          ? Center(
+                              child: SizedBox(
+                                width: 40,
+                                height: 40,
+                                child: CircularProgressIndicator(
+                                  color: Palette.cadetBlue,
+                                ),
+                              ),
+                            )
+                          :
+                            // OTHERWISE, SHOW LIST:
+                            Builder(
+                              builder: (context) {
+                                WidgetsBinding.instance.addPostFrameCallback((
+                                  _,
+                                ) {
+                                  ref.invalidate(devicesFutureProv);
+                                });
+                                return Column(
+                                  children: [
+                                    if (devices!.isEmpty)
+                                      Container(
+                                        margin: const EdgeInsets.symmetric(
+                                          vertical: 12,
+                                        ),
+                                        color: Palette.lightPink,
+                                        height: 40,
+                                        child: Center(
+                                          child: Text(
+                                            'No Midi Adapter found...',
+                                            style: TextStyle(
+                                              color: Palette.darkGrey,
                                             ),
-                                      child: TextButton(
-                                        onPressed: () {
-                                          setDevice(device);
-                                        },
-                                        child: SizedBox(
-                                          height: 40,
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(
-                                                "${device.name}[${device.type}]",
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .titleMedium,
-                                              ),
-                                              if (device.connected)
-                                                const Icon(
-                                                  Icons.check,
-                                                  size: 24,
-                                                  color: Colors.white,
-                                                ),
-                                            ],
                                           ),
                                         ),
                                       ),
-                                    );
-                                  },
-                                ),
-                              ],
+                                    ...devices.map((device) {
+                                      return Container(
+                                        margin: const EdgeInsets.symmetric(
+                                          vertical: 12,
+                                        ),
+                                        color: device.connected
+                                            ? Palette.cadetBlue
+                                            : Palette.darker(
+                                                Palette.cadetBlue,
+                                                0.4,
+                                              ),
+                                        child: TextButton(
+                                          onPressed: () {
+                                            setDevice(device);
+                                          },
+                                          child: SizedBox(
+                                            height: 40,
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(
+                                                  "${device.name}[${device.type}]",
+                                                  style: Theme.of(
+                                                    context,
+                                                  ).textTheme.titleMedium,
+                                                ),
+                                                if (device.connected)
+                                                  const Icon(
+                                                    Icons.check,
+                                                    size: 24,
+                                                    color: Colors.white,
+                                                  ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    }),
+                                  ],
+                                );
+                              },
                             );
-                          },
-                        );
-                } else if (snapshot.hasError) {
-                  return Center(child: Text(snapshot.error.toString()));
-                } else {
-                  return const Center(
-                    child: Text('- No Midi Devices Detected -'),
-                  );
-                }
-              },
+                    } else if (snapshot.hasError) {
+                      return Center(child: Text(snapshot.error.toString()));
+                    } else {
+                      return const Center(
+                        child: Text('- No Midi Devices Detected -'),
+                      );
+                    }
+                  },
             ),
           ),
           ...helpText,
