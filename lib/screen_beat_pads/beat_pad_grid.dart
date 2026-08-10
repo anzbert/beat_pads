@@ -76,7 +76,7 @@ class _SlidePadsState extends ConsumerState<SlidePads>
         padBox: result.padBox,
       );
 
-      ref.read<MidiSender>(senderProvider.notifier).handleNewTouch(data);
+      ref.read(senderProvider.notifier).handleNewTouch(data);
     }
   }
 
@@ -109,7 +109,7 @@ class _SlidePadsState extends ConsumerState<SlidePads>
       if (ref.read(modReleaseUsable) > 0 &&
           ref.read(playModeProv).modulationOverlay) {
         final TouchEvent? event = ref
-            .read(senderProvider.notifier)
+            .read(senderProvider)
             .playModeHandler
             .touchReleaseBuffer
             .getByID(touch.pointer);
@@ -138,7 +138,7 @@ class _SlidePadsState extends ConsumerState<SlidePads>
 
         returnAnim.animation.addListener(() {
           final TouchReleaseBuffer touchReleaseBuffer = ref
-              .read(senderProvider.notifier)
+              .read(senderProvider)
               .playModeHandler
               .touchReleaseBuffer;
           final TouchEvent? touchEvent =

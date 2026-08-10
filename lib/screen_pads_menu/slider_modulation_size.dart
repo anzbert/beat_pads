@@ -40,10 +40,10 @@ class ModSizeSliderTile extends ConsumerWidget {
                 TextButton(
                   onPressed: () {
                     resetValue!();
-                    ref.read(showModPreview.notifier).state = true;
+                    ref.read(showModPreview.notifier).setValue(true);
                     Future.delayed(const Duration(milliseconds: 800), () {
                       if (context.mounted) {
-                        ref.read(showModPreview.notifier).state = false;
+                        ref.read(showModPreview.notifier).setValue(false);
                       }
                     });
                   },
@@ -70,9 +70,9 @@ class ModSizeSliderTile extends ConsumerWidget {
                 value: readValue.clamp(min, max),
                 onChanged: setValue,
                 onChangeStart: (_) =>
-                    ref.read(showModPreview.notifier).state = true,
+                    ref.read(showModPreview.notifier).setValue(true),
                 onChangeEnd: (_) {
-                  ref.read(showModPreview.notifier).state = false;
+                  ref.read(showModPreview.notifier).setValue(false);
                   onChangeEnd?.call();
                 },
               ),

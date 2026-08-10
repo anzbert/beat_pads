@@ -10,7 +10,17 @@ import 'package:beat_pads/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final showModPreview = StateProvider<bool>((ref) => false);
+final showModPreview = NotifierProvider<ShowModPreviewNotifier, bool>(
+  ShowModPreviewNotifier.new,
+);
+
+class ShowModPreviewNotifier extends Notifier<bool> {
+  @override
+  bool build() => false;
+
+  void toggle() => state = !state;
+  void setValue(bool value) => state = value;
+}
 
 class MenuInput extends ConsumerWidget {
   const MenuInput();

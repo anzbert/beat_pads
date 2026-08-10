@@ -90,9 +90,24 @@ final combinedSettings = Provider.autoDispose<SendSettings>((ref) {
 });
 
 /// The usable sender object, which refreshes when any relevant setting changes
-final senderProvider = ChangeNotifierProvider.autoDispose<MidiSender>((ref) {
-  return MidiSender(ref.watch(combinedSettings));
-});
+final senderProvider = NotifierProvider.autoDispose<MidiSenderNotifier, MidiSender>(
+  MidiSenderNotifier.new,
+);
+
+class MidiSenderNotifier extends Notifier<MidiSender> {
+  @override
+  MidiSender build() {
+    final sender = MidiSender(ref.watch(combinedSettings));
+    sender.addListener(ref.notifyListeners);
+    ref.onDispose(sender.dispose);
+    return sender;
+  }
+
+  void handleNewTouch(PadTouchAndScreenData data) => state.handleNewTouch(data);
+  void handlePan(NullableTouchAndScreenData data) => state.handlePan(data);
+  void handleEndTouch(CustomPointer touch) => state.handleEndTouch(touch);
+  void markEventsDirty() => state.markEventsDirty();
+}
 
 class MidiSender extends ChangeNotifier {
   /// Handles Touches and Midi Message sending

@@ -1,14 +1,14 @@
 import 'package:beat_pads/services/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class DebugRiverpodLogger extends ProviderObserver {
+final class DebugRiverpodLogger extends ProviderObserver {
   @override
   void didUpdateProvider(
-    ProviderBase<Object?> provider,
+    ProviderObserverContext context,
     Object? previousValue,
     Object? newValue,
-    ProviderContainer container,
   ) {
+    final provider = context.provider;
     Utils.logd('''
 
   Time: ${DateTime.timestamp()} Has name string?: ${provider.name != null}

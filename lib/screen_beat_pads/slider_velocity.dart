@@ -74,7 +74,7 @@ class _SliderVelocityState extends ConsumerState<SliderVelocity> {
                         .toDouble(),
                     onChanged: (v) {
                       ref
-                          .read(senderProvider.notifier)
+                          .read(senderProvider)
                           .playModeHandler
                           .velocityProvider
                           .velocityFixed = v.toInt();
@@ -112,7 +112,7 @@ class _SliderVelocityState extends ConsumerState<SliderVelocity> {
                         .clamp(10, 127),
                     onChanged: (v) {
                       ref
-                          .read(senderProvider.notifier)
+                          .read(senderProvider)
                           .playModeHandler
                           .velocityProvider
                           .velocityRandomCenter = v;
