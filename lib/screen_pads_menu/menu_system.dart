@@ -83,8 +83,9 @@ class MenuSystem extends ConsumerWidget {
                         onPressed: () {
                           Navigator.pop(context, 'OK');
                           ref.read(resetAllProv.notifier).resetAllPresets();
-                          ref.read(selectedMenuState.notifier).state =
-                              Menu.layout;
+                          ref
+                              .read(selectedMenuState.notifier)
+                              .select(Menu.layout);
                         },
                         child: const Text('OK'),
                       ),
