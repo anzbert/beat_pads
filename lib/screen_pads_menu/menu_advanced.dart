@@ -9,9 +9,19 @@ import 'package:beat_pads/shared_components/divider_title.dart';
 import 'package:beat_pads/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod/legacy.dart';
 
-final showModPreview = StateProvider<bool>((ref) => false);
+class _ShowModPreviewNotifier extends Notifier<bool> {
+  @override
+  bool build() => false;
+
+  void setVisible(bool visible) {
+    state = visible;
+  }
+}
+
+final showModPreview = NotifierProvider<_ShowModPreviewNotifier, bool>(
+  _ShowModPreviewNotifier.new,
+);
 
 class MenuInput extends ConsumerWidget {
   const MenuInput();

@@ -160,7 +160,7 @@ class MidiSender extends ChangeNotifier {
       int index = (currentPreset - PresetNotfier.basePreset);
       index = index.clamp(0, PresetNotfier.numberOfPresets - 1);
       pads[index] = padValue;
-      _ref.read(lastProgramChangePadsProv.notifier).state = pads;
+      _ref.read(lastProgramChangePadsProv.notifier).setPads(pads);
     }
   }
 

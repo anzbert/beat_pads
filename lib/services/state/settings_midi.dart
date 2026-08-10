@@ -1,6 +1,5 @@
 import 'package:beat_pads/services/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod/legacy.dart';
 
 // CHANNEL
 final channelSettingProv = NotifierProvider<SettingIntNotifier, int>(() {
@@ -63,14 +62,25 @@ final velocityCenterProv = Provider<double>((ref) {
   return (ref.watch(velocityMaxProv) + ref.watch(velocityMinProv)) / 2;
 });
 
+class _LastProgramChangePadsNotifier extends Notifier<List<int?>> {
+  @override
+  List<int?> build() {
+    return List<int?>.filled(
+      PresetNotfier.numberOfPresets,
+      null,
+      growable: false,
+    );
+  }
+
+  void setPads(List<int?> pads) {
+    state = pads;
+  }
+}
+
 /// Holds the last pressed pad value for each preset when in Program Change
 /// layout. Index 0 corresponds to preset 1. This is used to visually
 /// highlight the last program-change selection per-preset on the grid.
-final lastProgramChangePadsProv = StateProvider<List<int?>>((ref) {
-  // Initialize with nulls for each preset.
-  return List<int?>.filled(
-    PresetNotfier.numberOfPresets,
-    null,
-    growable: false,
-  );
-});
+final lastProgramChangePadsProv =
+    NotifierProvider<_LastProgramChangePadsNotifier, List<int?>>(
+      _LastProgramChangePadsNotifier.new,
+    );

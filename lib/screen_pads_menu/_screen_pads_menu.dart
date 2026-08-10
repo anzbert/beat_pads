@@ -9,9 +9,19 @@ import 'package:beat_pads/shared_components/_shared.dart';
 import 'package:beat_pads/shared_components/gradient_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod/legacy.dart';
 
-final selectedMenuState = StateProvider<Menu>((ref) => Menu.layout);
+class _SelectedMenuNotifier extends Notifier<Menu> {
+  @override
+  Menu build() => Menu.layout;
+
+  void select(Menu menu) {
+    state = menu;
+  }
+}
+
+final selectedMenuState = NotifierProvider<_SelectedMenuNotifier, Menu>(
+  _SelectedMenuNotifier.new,
+);
 
 enum Menu { layout, midi, input, system }
 
@@ -173,8 +183,9 @@ class PadMenuScreen extends ConsumerWidget {
                 if (tappedIndex == 0) {
                   // do nothing
                 } else {
-                  ref.read(selectedMenuState.notifier).state =
-                      Menu.values[tappedIndex - 1];
+                  ref
+                      .read(selectedMenuState.notifier)
+                      .select(Menu.values[tappedIndex - 1]);
                 }
               },
 
