@@ -37,29 +37,46 @@ class SlideBeatPadState extends ConsumerState<SlideBeatPad> {
       sustainedVelocity = 0;
     }
 
-    final Color color = ref.watch(layoutProv) == Layout.progrChange
+    final bool isProgChange = ref.watch(layoutProv) == Layout.progrChange;
+
+    // Read per-preset last program-change pads and current preset index.
+    final List<int?> lastPads = ref.watch(lastProgramChangePadsProv);
+    final int currentPreset = ref.watch(presetNotifierProvider);
+    int lastProgForPreset;
+
+    int? lastProg;
+    final int idx = currentPreset - PresetNotfier.basePreset;
+    if (idx >= 0 && idx < lastPads.length) {
+      lastProg = lastPads[idx];
+    } else {
+      lastProg = null;
+    }
+
+    final Color color = isProgChange
         ? ref
-              .watch(padColorsProv)
-              .colorize(
-                Scale.chromatic.intervals,
-                ref.watch(baseHueProv),
-                ref.watch(rootProv),
-                note,
-                0, // no Rx Midi with PROG Change
-                noteOn: false, // no NoteOn with PROG Change
-              )
+            .watch(padColorsProv)
+            .colorize(
+              Scale.chromatic.intervals,
+              ref.watch(baseHueProv),
+              ref.watch(rootProv),
+              note,
+              // If this pad was the last program-change pad for this preset,
+              // give it a high receivedVelocity so pad_colors returns a visible highlight.
+              lastProg != null && lastProg == note ? 127 : 0,
+              noteOn: lastProg != null && lastProg == note,
+            )
         : ref
-              .watch(padColorsProv)
-              .colorize(
-                ref.watch(scaleProv).intervals,
-                ref.watch(baseHueProv),
-                ref.watch(rootProv),
-                note,
-                widget.preview ? 0 : ref.watch(rxNoteProvider)[note],
-                noteOn: sustainState
-                    ? sustainedVelocity > 0
-                    : playedVelocity > 0,
-              );
+            .watch(padColorsProv)
+            .colorize(
+              ref.watch(scaleProv).intervals,
+              ref.watch(baseHueProv),
+              ref.watch(rootProv),
+              note,
+              widget.preview ? 0 : ref.watch(rxNoteProvider)[note],
+              noteOn: sustainState
+                  ? sustainedVelocity > 0
+                  : playedVelocity > 0,
+            );
 
     final Label label = PadLabels.getLabel(
       note: note,

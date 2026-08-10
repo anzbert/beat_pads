@@ -91,12 +91,13 @@ final combinedSettings = Provider.autoDispose<SendSettings>((ref) {
 
 /// The usable sender object, which refreshes when any relevant setting changes
 final senderProvider = ChangeNotifierProvider.autoDispose<MidiSender>((ref) {
-  return MidiSender(ref.watch(combinedSettings));
+  // Pass ref so MidiSender can update providers (e.g., last program-change per preset)
+  return MidiSender(ref, ref.watch(combinedSettings));
 });
 
 class MidiSender extends ChangeNotifier {
   /// Handles Touches and Midi Message sending
-  MidiSender(this.settings) {
+  MidiSender(this._ref, this.settings) {
     playModeHandler = settings.playMode
         .getPlayModeApi(settings, _notifyListenersOfMidiSender);
 
@@ -107,6 +108,8 @@ class MidiSender extends ChangeNotifier {
       ).send();
     }
   }
+
+  final Ref _ref;
   late PlayModeHandler playModeHandler;
   final SendSettings settings;
 
@@ -145,8 +148,21 @@ class MidiSender extends ChangeNotifier {
     if (settings.layout != Layout.progrChange) {
       playModeHandler.handleNewTouch(data);
     } else {
-      PCMessage(channel: settings.channel, program: data.customPad.padValue)
-          .send();
+      final int padValue = data.customPad.padValue;
+      PCMessage(channel: settings.channel, program: padValue).send();
+
+      // Remember the last program-change pad for the current preset so the UI can highlight it.
+      try {
+        final int currentPreset = _ref.read(presetNotifierProvider);
+        final pads = List<int?>.from(_ref.read(lastProgramChangePadsProv));
+        int index = currentPreset - PresetNotfier.basePreset;
+        if (index < 0) index = 0;
+        if (index >= PresetNotfier.numberOfPresets) index = PresetNotfier.numberOfPresets - 1;
+        pads[index] = padValue;
+        _ref.read(lastProgramChangePadsProv.notifier).state = pads;
+      } catch (_) {
+        // If the provider isn't available for some reason, ignore.
+      }
     }
   }
 

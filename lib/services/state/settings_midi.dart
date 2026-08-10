@@ -79,3 +79,16 @@ final velocityRangeProv = Provider<int>((ref) {
 final velocityCenterProv = Provider<double>((ref) {
   return (ref.watch(velocityMaxProv) + ref.watch(velocityMinProv)) / 2;
 });
+
+/// Holds the last pressed pad value for each preset when in Program Change
+/// layout. Index 0 corresponds to preset 1. This is used to visually
+/// highlight the last program-change selection per-preset on the grid.
+final lastProgramChangePadsProv = StateProvider<List<int?>>((ref) {
+  // Initialize with nulls for each preset.
+  return List<int?>.filled(
+    PresetNotfier.numberOfPresets,
+    null,
+    growable: false,
+  );
+});
+
