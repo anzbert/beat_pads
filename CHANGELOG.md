@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 1.1.15
+
+- The last pad that was used to send a ProgramChange message now stays highlighted
+- Use new major Riverpod version for state management under the hood
+- Updates to both platform build chains to comply with the latest versions
+
 ## 1.1.14
 
 - Reattempt fixing a Flutter iOS bug where the side drawer menu would close immediately after opening
