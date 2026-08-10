@@ -2,6 +2,7 @@ import 'package:beat_pads/services/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_midi_command/flutter_midi_command_messages.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 
 // Sending logic still uses ChangeNotifier. Could be refactored for Riverpod
 // for improved clarity and expandability.

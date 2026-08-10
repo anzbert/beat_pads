@@ -1,6 +1,8 @@
 import 'package:beat_pads/screen_pads_menu/_screen_pads_menu.dart';
 import 'package:beat_pads/screen_splash/_screen_splash.dart';
 import 'package:beat_pads/services/services.dart';
+// ignore: unused_import
+// import 'package:beat_pads/services/utils/logger.dart';
 import 'package:beat_pads/theme.dart';
 // ignore: unused_import
 // import 'package:flutter/foundation.dart';

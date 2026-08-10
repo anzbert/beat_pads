@@ -45,6 +45,5 @@ export 'state/settings_system.dart';
 export 'state/shared_prefs.dart';
 export 'utils/device_utils.dart';
 export 'utils/gen_utils.dart';
-export 'utils/logger.dart';
 export 'utils/midi_utils.dart';
 export 'utils/transition_utils.dart';

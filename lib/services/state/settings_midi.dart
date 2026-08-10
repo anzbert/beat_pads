@@ -1,29 +1,24 @@
 import 'package:beat_pads/services/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 
 // CHANNEL
 final channelSettingProv = NotifierProvider<SettingIntNotifier, int>(() {
-  return SettingIntNotifier(
-    key: 'channel',
-    defaultValue: 0,
-    max: 15,
-  );
+  return SettingIntNotifier(key: 'channel', defaultValue: 0, max: 15);
 });
 
-final channelUsableProv = Provider<int>(
-  (ref) {
-    final int channel = ref.watch(channelSettingProv);
+final channelUsableProv = Provider<int>((ref) {
+  final int channel = ref.watch(channelSettingProv);
 
-    if (ref.watch(layoutProv) != Layout.progrChange) {
-      if (ref.watch(playModeProv) == PlayMode.mpe ||
-          ref.watch(playModeProv) == PlayMode.mpeTargetPb) {
-        return channel > 7 ? 15 : 0;
-      }
+  if (ref.watch(layoutProv) != Layout.progrChange) {
+    if (ref.watch(playModeProv) == PlayMode.mpe ||
+        ref.watch(playModeProv) == PlayMode.mpeTargetPb) {
+      return channel > 7 ? 15 : 0;
     }
+  }
 
-    return channel;
-  },
-);
+  return channel;
+});
 
 final mpeMemberChannelsProv = NotifierProvider<SettingIntNotifier, int>(() {
   return SettingIntNotifier(
@@ -41,36 +36,24 @@ final zoneProv = Provider<bool>((ref) {
 
 // VELOCITY
 final velocityProv = NotifierProvider<SettingIntNotifier, int>(() {
-  return SettingIntNotifier(
-    key: 'velocity',
-    defaultValue: 110,
-    max: 127,
-  );
+  return SettingIntNotifier(key: 'velocity', defaultValue: 110, max: 127);
 });
 
 final velocityModeProv =
     NotifierProvider<SettingEnumNotifier<VelocityMode>, VelocityMode>(() {
-  return SettingEnumNotifier<VelocityMode>(
-    nameMap: VelocityMode.values.asNameMap(),
-    key: 'velocityMode',
-    defaultValue: VelocityMode.fixed,
-  );
-});
+      return SettingEnumNotifier<VelocityMode>(
+        nameMap: VelocityMode.values.asNameMap(),
+        key: 'velocityMode',
+        defaultValue: VelocityMode.fixed,
+      );
+    });
 
 final velocityMinProv = NotifierProvider<SettingIntNotifier, int>(() {
-  return SettingIntNotifier(
-    key: 'velocityMin',
-    defaultValue: 100,
-    max: 126,
-  );
+  return SettingIntNotifier(key: 'velocityMin', defaultValue: 100, max: 126);
 });
 
 final velocityMaxProv = NotifierProvider<SettingIntNotifier, int>(() {
-  return SettingIntNotifier(
-    key: 'velocityMax',
-    defaultValue: 110,
-    max: 127,
-  );
+  return SettingIntNotifier(key: 'velocityMax', defaultValue: 110, max: 127);
 });
 
 final velocityRangeProv = Provider<int>((ref) {
@@ -91,4 +74,3 @@ final lastProgramChangePadsProv = StateProvider<List<int?>>((ref) {
     growable: false,
   );
 });
-
